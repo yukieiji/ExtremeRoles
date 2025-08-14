@@ -1,14 +1,14 @@
-using HarmonyLib;
-
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Ability;
+using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using HarmonyLib;
 
 #nullable enable
 
@@ -78,26 +78,22 @@ public static class KillButtonDoClickPatch
 		{
 			return KillResult.PreConditionFail;
 		}
-		else if (!killerRole.TryRolePlayerKillTo(killer, target))
+		else if (isPreventKillTo(killerRole, killer, target))
 		{
 			return KillResult.BlockedToKillerSingleRoleCondition;
 		}
-		else if (
-			targetRole is IKilledFrom targetKillFromCheckRole &&
-			!targetKillFromCheckRole.TryKilledFrom(target, killer))
+		else if (isPreventKillFrom(targetRole, killer, target))
 		{
 			return KillResult.BlockedToTargetSingleRoleCondition;
 		}
 		else if (
 			killerRole is MultiAssignRoleBase killerMultiAssignRole &&
-			killerMultiAssignRole.AnotherRole != null &&
-			!killerMultiAssignRole.AnotherRole.TryRolePlayerKillTo(killer, target))
+			isPreventKillTo(killerMultiAssignRole.AnotherRole, killer, target))
 		{
 			return KillResult.BlockedToKillerOtherRoleCondition;
 		}
 		else if (targetRole is MultiAssignRoleBase targetMultiAssignRole &&
-			targetMultiAssignRole.AnotherRole is IKilledFrom targetMultiKilledFromCheckRole &&
-			!targetMultiKilledFromCheckRole.TryKilledFrom(target, killer))
+			isPreventKillFrom(targetMultiAssignRole.AnotherRole, killer, target))
 		{
 			return KillResult.BlockedToTargetOtherRoleCondition;
 		}
@@ -148,7 +144,8 @@ public static class KillButtonDoClickPatch
         PlayerControl target,
         SingleRoleBase targetRole)
     {
-        if (targetRole.Id == ExtremeRoleId.Vigilante)
+		var id = targetRole.Core.Id;
+		if (id == ExtremeRoleId.Vigilante)
         {
             var vigilante = (Vigilante)targetRole;
             if (vigilante.Condition != Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip)
@@ -156,9 +153,9 @@ public static class KillButtonDoClickPatch
                 return;
             }
         }
-        else if (targetRole.Id == ExtremeRoleId.Hero)
+        else if (id == ExtremeRoleId.Hero)
         {
-            HeroAcademia.RpcDrawHeroAndVillan(
+            HeroAcademiaRole.RpcDrawHeroAndVillan(
                 target, killer);
             return;
         }
@@ -181,4 +178,14 @@ public static class KillButtonDoClickPatch
             isAnime ? byte.MaxValue : byte.MinValue);
         instance.SetTarget(null);
     }
+
+	private static bool isPreventKillFrom(SingleRoleBase? role, PlayerControl killer, PlayerControl target)
+		=>
+			role?.AbilityClass is IKilledFrom targetKillFromCheckRole &&
+			!targetKillFromCheckRole.TryKilledFrom(target, killer);
+
+	private static bool isPreventKillTo(SingleRoleBase? role, PlayerControl killer, PlayerControl target)
+		=> 
+			role is ITryKillTo killerTryKillTo &&
+			!killerTryKillTo.TryRolePlayerKillTo(killer, target);
 }

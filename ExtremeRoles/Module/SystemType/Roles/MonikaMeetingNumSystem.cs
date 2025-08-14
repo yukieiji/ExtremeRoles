@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 
@@ -50,7 +50,7 @@ public sealed class MonikaMeetingNumSystem : IExtremeSystemType
 				return
 					val.Num > 0 &&
 					ExtremeRoleManager.TryGetRole(key, out var role) &&
-					role.Id is not ExtremeRoleId.Monika &&
+					role.Core.Id is not ExtremeRoleId.Monika &&
 					role.CanCallMeeting() &&
 					val.IsValid();
 			});

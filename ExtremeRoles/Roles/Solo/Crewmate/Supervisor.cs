@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -48,10 +48,9 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
     private TMPro.TextMeshPro chargeTime;
 
     public Supervisor() : base(
-        ExtremeRoleId.Supervisor,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Supervisor.ToString(),
-        ColorPalette.SupervisorLime,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Supervisor,
+			ColorPalette.SupervisorLime),
         false, true, false, false)
     { }
 

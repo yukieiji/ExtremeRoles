@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 using UnityEngine;
@@ -153,7 +153,8 @@ public sealed class Teleporter :
 
     public enum TeleporterOption
     {
-        CanUseOtherPlayer
+        CanUseOtherPlayer,
+		InitAbilityNum,
     }
 
     public ExtremeAbilityButton Button { get; set; }
@@ -170,10 +171,9 @@ public sealed class Teleporter :
         "ExtremeRoles.Resources.JsonData.TeleporterTeleportPartPosition.json";
 
     public Teleporter() : base(
-        ExtremeRoleId.Teleporter,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Teleporter.ToString(),
-        ColorPalette.TeleporterCherry,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Teleporter,
+			ColorPalette.TeleporterCherry),
         false, true, false, false)
     { }
 
@@ -205,13 +205,17 @@ public sealed class Teleporter :
 
 	public void RoleAbilityInit()
 	{
-		if (this.Button == null) { return; }
+		if (this.Button == null)
+		{
+			return;
+		}
 
 		this.Button.Behavior.SetCoolTime(
 			this.Loader.GetValue<RoleAbilityCommonOption, float>(
 				RoleAbilityCommonOption.AbilityCoolTime));
 
-		this.behavior.SetAbilityCount(0);
+		this.behavior.SetAbilityCount(
+			this.Loader.GetValue<TeleporterOption, int>(TeleporterOption.InitAbilityNum));
 
 		this.Button.OnMeetingEnd();
 	}
@@ -302,6 +306,9 @@ public sealed class Teleporter :
             false);
         IRoleAbility.CreateAbilityCountOption(
             factory, 1, 3);
+		factory.CreateIntOption(
+			TeleporterOption.InitAbilityNum,
+			0, 0, 10, 1);
     }
 
     protected override void RoleSpecificInit()

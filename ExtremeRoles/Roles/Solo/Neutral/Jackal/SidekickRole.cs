@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -34,10 +34,9 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 		byte jackalPlayerId,
 		bool isImpostor,
 		JackalRole.SidekickOptionHolder option) : base(
-			ExtremeRoleId.Sidekick,
-			ExtremeRoleType.Neutral,
-			ExtremeRoleId.Sidekick.ToString(),
-			ColorPalette.JackalBlue,
+			RoleCore.BuildNeutral(
+				ExtremeRoleId.Sidekick,
+				ColorPalette.JackalBlue),
 			option.CanKill, false,
 			option.UseVent, option.UseSabotage)
 	{
@@ -86,7 +85,7 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 		SingleRoleBase targetRole,
 		byte targetPlayerId)
 	{
-		if (targetRole.Id is ExtremeRoleId.Jackal &&
+		if (targetRole.Core.Id is ExtremeRoleId.Jackal &&
 			targetPlayerId == this.Parent)
 		{
 			return ColorPalette.JackalBlue;
@@ -188,6 +187,7 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 
 	private bool isSameJackalTeam(SingleRoleBase targetRole)
 	{
-		return targetRole.Id == Id || targetRole.Id == ExtremeRoleId.Jackal;
+		var id = targetRole.Core.Id;
+		return id == Core.Id || id is ExtremeRoleId.Jackal;
 	}
 }

@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using UnityEngine;
 
@@ -6,6 +6,7 @@ using ExtremeRoles.Module;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 using ExtremeRoles.Helper;
 
@@ -17,15 +18,14 @@ using ExtremeRoles.Module.SystemType.Roles;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Solo.Neutral;
+namespace ExtremeRoles.Roles.Solo.Neutral.IronMate;
 
-public sealed class IronMate :
+public sealed class IronMateRole :
 	SingleRoleBase,
 	IRoleAwake<RoleTypes>,
 	IRoleMurderPlayerHook,
 	IRoleWinPlayerModifier,
-	IDeadBodyReportOverride,
-	IKilledFrom
+	IDeadBodyReportOverride
 {
     public enum Option
     {
@@ -40,18 +40,19 @@ public sealed class IronMate :
 	public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 	public bool CanReport => false;
 
-	private IronMateGurdSystem? system;
+	private IronMateStatusModel? status;
 
 	private float playerShowTime;
 	private float deadBodyShowTime;
+    public override IStatusModel? Status => status;
 
-    public IronMate(): base(
-        ExtremeRoleId.IronMate,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.IronMate.ToString(),
-        ColorPalette.IronMateAluminium,
+    public IronMateRole(): base(
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.IronMate,
+			ColorPalette.IronMateAluminium),
         false, true, false, false)
-    { }
+    {
+    }
 
 	public override string GetColoredRoleName(bool isTruthColor = false)
 	{
@@ -71,7 +72,7 @@ public sealed class IronMate :
 		if (IsAwake)
 		{
 			return Tr.GetString(
-				$"{this.Id}FullDescription");
+				$"{this.Core.Id}FullDescription");
 		}
 		else
 		{
@@ -83,7 +84,7 @@ public sealed class IronMate :
 	public override string GetImportantText(bool isContainFakeTask = true)
 		=> Design.ColoedString(
 				Palette.White,
-				$"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
+				$"{GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
 
 	public override string GetIntroDescription()
 		=> Design.ColoedString(
@@ -100,34 +101,6 @@ public sealed class IronMate :
 		{
 			return Palette.White;
 		}
-	}
-
-	public bool TryKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
-	{
-		if (this.system is null)
-		{
-			return true;
-		}
-
-		byte playerId = rolePlayer.PlayerId;
-
-		if (!this.system.IsContains(playerId))
-		{
-			this.system.SetUp(playerId, this.Loader.GetValue<Option, int>(Option.BlockNum));
-		}
-
-		if (!this.system.TryGetShield(playerId, out int num))
-		{
-			return true;
-		}
-
-		if (fromPlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-		{
-			fromPlayer.SetKillTimer(10.0f);
-			Sound.PlaySound(Sound.Type.GuardianAngleGuard, 0.85f);
-		}
-		this.system.RpcUpdateNum(playerId, num - 1);
-		return false;
 	}
 
 	protected override void CreateSpecificOption(
@@ -159,15 +132,17 @@ public sealed class IronMate :
 
     protected override void RoleSpecificInit()
     {
-        var loader = this.Loader;
-
-		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
+        var loader = Loader;
+        status = new IronMateStatusModel(loader.GetValue<Option, int>(Option.BlockNum));
+		var system = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.IronMateGuard,
 			() => new IronMateGurdSystem(
 				loader.GetValue<Option, float>(Option.SlowMod),
 				loader.GetValue<Option, float>(Option.SlowTime)));
-		this.playerShowTime = loader.GetValue<Option, float>(Option.PlayerShowTime);
-		this.deadBodyShowTime = loader.GetValue<Option, float>(Option.DeadBodyShowTimeOnAfterPlayer);
+		AbilityClass = new IronMateAbilityHandler(status, system);
+
+		playerShowTime = loader.GetValue<Option, float>(Option.PlayerShowTime);
+		deadBodyShowTime = loader.GetValue<Option, float>(Option.DeadBodyShowTimeOnAfterPlayer);
 	}
 
     public void ResetOnMeetingStart()
@@ -221,7 +196,7 @@ public sealed class IronMate :
 				continue;
 			}
 			var newDeadBody = body.gameObject.AddComponent<IronMateDeadBody>();
-			newDeadBody.SetUp(target, this.deadBodyShowTime, this.playerShowTime);
+			newDeadBody.SetUp(target, deadBodyShowTime, playerShowTime);
 			body.myCollider.enabled = false;
 			break;
 		}

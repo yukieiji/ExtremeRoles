@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
@@ -47,10 +47,9 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 	private int abilityIncreaseNum;
 
 	public Hatter(): base(
-        ExtremeRoleId.Hatter,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Hatter.ToString(),
-        ColorPalette.HatterYanagizome,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Hatter,
+			ColorPalette.HatterYanagizome),
         false, true, false, false,
 		false, false)
     { }

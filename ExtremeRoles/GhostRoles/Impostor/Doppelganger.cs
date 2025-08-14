@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 
 using AmongUs.GameOptions;
@@ -61,7 +61,7 @@ public sealed class Doppelganger : GhostRoleBase
 			SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
 			ghostRole.fake = new FakerDummySystem.FakePlayer(
 				rolePc, targetPc,
-				role.IsImpostor() || role.Id == ExtremeRoleId.Marlin);
+				role.IsImpostor() || role.Core.Id == ExtremeRoleId.Marlin);
 
 			ghostRole.fake.Body.transform.SetParent(rolePc.transform);
 			var pet = ghostRole.fake.Body.GetComponentInChildren<PetBehaviour>();
