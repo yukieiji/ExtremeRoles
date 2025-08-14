@@ -106,48 +106,69 @@ public interface IIntroRunner
 
     private static string createRoleListString(ISpawnDataManager spawnDataManager)
     {
-        var sb = new StringBuilder();
+        var sb = new StringBuilder(2048);
+        var lineBuilder = new StringBuilder(128);
+        var roleInfoStrings = new System.Collections.Generic.List<string>(32);
+        const int rolesPerLine = 3;
 
         foreach (var (team, data) in spawnDataManager.CurrentSingleRoleSpawnData)
         {
             string teamName = Tr.GetString(team.ToString());
             sb.AppendLine($"・{teamName}");
-			foreach (var (id, spawn) in data)
-			{
-				if (!ExtremeRoleManager.NormalRole.TryGetValue(id, out var role))
-				{
-					continue;
-				}
-				sb
-					.Append(role.GetColoredRoleName(true))
-					.Append("(スポーン率:")
-					.Append(spawn.SpawnRate)
-					.Append("％ 最大割当数:")
-					.Append(spawn.SpawnSetNum)
-					.Append(" ウェイト:")
-					.Append(spawn.Weight)
-					.AppendLine(")");
-			}
+
+            roleInfoStrings.Clear();
+            foreach (var (id, spawn) in data)
+            {
+                if (!ExtremeRoleManager.NormalRole.TryGetValue(id, out var role))
+                {
+                    continue;
+                }
+                roleInfoStrings.Add(
+                    $"{role.GetColoredRoleName(true)}(スポーン率:{spawn.SpawnRate}％ 最大割当数:{spawn.SpawnSetNum} ウェイト:{spawn.Weight})");
+            }
+
+            if (roleInfoStrings.Count > 0)
+            {
+                for (int i = 0; i < roleInfoStrings.Count; i += rolesPerLine)
+                {
+                    var lineItems = roleInfoStrings.Skip(i).Take(rolesPerLine).ToList();
+                    lineBuilder.Clear();
+                    for(int j = 0; j < lineItems.Count; j++)
+                    {
+                        lineBuilder.Append($"<pos={j * 33}%>");
+                        lineBuilder.Append(lineItems[j]);
+                    }
+                    sb.AppendLine(lineBuilder.ToString());
+                }
+            }
         }
 
-		foreach (var (team, data) in spawnDataManager.CurrentCombRoleSpawnData)
-		{
-			string teamName = Tr.GetString(team.ToString());
-			sb.AppendLine($"・コンビネーション役職");
-			if (!ExtremeRoleManager.CombRole.TryGetValue(team, out var role))
-			{
-				continue;
-			}
-			sb
-				.Append(role.GetOptionName())
-				.Append("(スポーン率:")
-				.Append(data.SpawnRate)
-				.Append("％ 最大割当数:")
-				.Append(data.SpawnSetNum)
-				.Append(" ウェイト:")
-				.Append(data.Weight)
-				.AppendLine(")");
-		}
+        roleInfoStrings.Clear();
+        foreach (var (team, data) in spawnDataManager.CurrentCombRoleSpawnData)
+        {
+            if (!ExtremeRoleManager.CombRole.TryGetValue(team, out var role))
+            {
+                continue;
+            }
+            roleInfoStrings.Add(
+                $"{role.GetOptionName()}(スポーン率:{data.SpawnRate}％ 最大割当数:{data.SpawnSetNum} ウェイト:{data.Weight})");
+        }
+
+        if (roleInfoStrings.Any())
+        {
+            sb.AppendLine($"・コンビネーション役職");
+            for (int i = 0; i < roleInfoStrings.Count; i += rolesPerLine)
+            {
+                var lineItems = roleInfoStrings.Skip(i).Take(rolesPerLine).ToList();
+                lineBuilder.Clear();
+                for (int j = 0; j < lineItems.Count; j++)
+                {
+                    lineBuilder.Append($"<pos={j * 33}%>");
+                    lineBuilder.Append(lineItems[j]);
+                }
+                sb.AppendLine(lineBuilder.ToString());
+            }
+        }
 
         return sb.ToString();
     }
