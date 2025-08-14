@@ -1,30 +1,25 @@
-using System;
 using System.Collections;
 using System.Linq;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection;
 
+using TMPro;
 using UnityEngine;
 
-using ExtremeRoles.Helper;
 
+using Microsoft.Extensions.DependencyInjection;
+
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.CheckPoint;
-
 using ExtremeRoles.Performance;
-
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.Solo.Host;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.Interface;
-
-using TMPro;
-using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
-
-using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo.Host;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
@@ -49,12 +44,12 @@ public sealed class IntroText
 		if (this.roleAssignText != null)
 		{
 			this.roleAssignText.SetActive(false);
-			UnityObject.Destroy(this.roleAssignText);
+			Object.Destroy(this.roleAssignText);
 		}
 		if (this.RoleInfoText != null)
 		{
 			this.RoleInfoText.gameObject.SetActive(false);
-			UnityObject.Destroy(RoleInfoText.gameObject);
+			Object.Destroy(RoleInfoText.gameObject);
 		}
 	}
 }
@@ -93,7 +88,7 @@ public interface IIntroRunner
 		modMapObject();
 		changeWallHackTask();
 
-		UnityObject.Destroy(instance.gameObject);
+		Object.Destroy(instance.gameObject);
 
         yield break;
     }
@@ -112,38 +107,47 @@ public interface IIntroRunner
     private static string createRoleListString(ISpawnDataManager spawnDataManager)
     {
         var sb = new StringBuilder();
-        sb.AppendLine(Tr.GetString("RoleSpawnRate"));
-        sb.AppendLine();
 
-        var singleRoleData = spawnDataManager.CurrentSingleRoleSpawnData
-            .SelectMany(x => x.Value.Select(y => (team: x.Key, id: y.Key, data: y.Value)))
-            .GroupBy(x => x.team);
-
-        foreach (var group in singleRoleData)
+        foreach (var (team, data) in spawnDataManager.CurrentSingleRoleSpawnData)
         {
-            string teamName = Tr.GetString($"Team{group.Key}");
-            sb.Append($"{teamName}: ");
-
-            var roleTexts = group.Select(x => {
-                var role = ExtremeRoleManager.NormalRole[x.id];
-                return $"{role.RoleName}({x.data.SpawnRate}%)";
-            });
-
-            sb.AppendLine(string.Join(", ", roleTexts));
+            string teamName = Tr.GetString(team.ToString());
+            sb.AppendLine($"・{teamName}");
+			foreach (var (id, spawn) in data)
+			{
+				if (!ExtremeRoleManager.NormalRole.TryGetValue(id, out var role))
+				{
+					continue;
+				}
+				sb
+					.Append(role.GetColoredRoleName(true))
+					.Append("(スポーン率:")
+					.Append(spawn.SpawnRate)
+					.Append("％ 最大割当数:")
+					.Append(spawn.SpawnSetNum)
+					.Append(" ウェイト:")
+					.Append(spawn.Weight)
+					.AppendLine(")");
+			}
         }
 
-        if (spawnDataManager.CurrentCombRoleSpawnData.Any())
-        {
-            sb.AppendLine();
-            string teamName = Tr.GetString("TeamCombination");
-            sb.Append($"{teamName}: ");
-
-            var roleTexts = spawnDataManager.CurrentCombRoleSpawnData.Select(x => {
-                var role = ExtremeRoleManager.CombRole[x.Key];
-                return $"{role.RoleName}({x.Value.SpawnRate}%)";
-            });
-            sb.AppendLine(string.Join(", ", roleTexts));
-        }
+		foreach (var (team, data) in spawnDataManager.CurrentCombRoleSpawnData)
+		{
+			string teamName = Tr.GetString(team.ToString());
+			sb.AppendLine($"・コンビネーション役職");
+			if (!ExtremeRoleManager.CombRole.TryGetValue(team, out var role))
+			{
+				continue;
+			}
+			sb
+				.Append(role.GetOptionName())
+				.Append("(スポーン率:")
+				.Append(data.SpawnRate)
+				.Append("％ 最大割当数:")
+				.Append(data.SpawnSetNum)
+				.Append(" ウェイト:")
+				.Append(data.Weight)
+				.AppendLine(")");
+		}
 
         return sb.ToString();
     }
