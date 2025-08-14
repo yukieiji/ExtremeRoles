@@ -55,18 +55,21 @@ public sealed class IntroText
 	}
 }
 
-public sealed class RoleTeamStringBuilder(StringBuilder main)
+public sealed class RoleInfoStringBuilder
 {
-	private readonly StringBuilder main = main;
+	private readonly StringBuilder main = new StringBuilder(2048);
 	private readonly List<string> roleInfoString = new List<string>(32);
 	private readonly StringBuilder lineBuilder = new StringBuilder(128);
 	private const int rolesPerLine = 3;
 
-	public void Add(string text)
+	public override string ToString()
+		=> this.main.ToString();
+
+	public void AddRoleText(string text)
 	{
-		roleInfoString.Add(text);
+		this.roleInfoString.Add(text);
 	}
-	public void AddToMain(string teamText)
+	public void FixTeam(string teamText)
 	{
 		if (this.roleInfoString.Count == 0)
 		{
@@ -159,24 +162,20 @@ public interface IIntroRunner
 
 	private static string createRoleListString(ISpawnDataManager spawnDataManager)
     {
-        var sb = new StringBuilder(2048);
-		var roleTeamBuilder = new RoleTeamStringBuilder(sb);
+		var builder = new RoleInfoStringBuilder();
 
         foreach (var (team, data) in spawnDataManager.CurrentSingleRoleSpawnData)
         {
-            string teamName = Tr.GetString(team.ToString());
-            sb.AppendLine($"・{teamName}");
-
             foreach (var (id, spawn) in data)
             {
                 if (!ExtremeRoleManager.NormalRole.TryGetValue(id, out var role))
                 {
                     continue;
                 }
-				roleTeamBuilder.Add(
+				builder.AddRoleText(
                     $"{role.GetColoredRoleName(true)}(スポーン率:{spawn.SpawnRate}％ 最大割当数:{spawn.SpawnSetNum} ウェイト:{spawn.Weight})");
             }
-			roleTeamBuilder.AddToMain($"・{Tr.GetString(team.ToString())}");
+			builder.FixTeam($"・{Tr.GetString(team.ToString())}");
         }
 
         foreach (var (team, data) in spawnDataManager.CurrentCombRoleSpawnData)
@@ -185,14 +184,14 @@ public interface IIntroRunner
             {
                 continue;
             }
-			roleTeamBuilder.Add(
+			builder.AddRoleText(
                 $"{role.GetOptionName()}(スポーン率:{data.SpawnRate}％ 最大割当数:{data.SpawnSetNum} ウェイト:{data.Weight})");
         }
 
-		roleTeamBuilder.AddToMain($"・コンビネーション役職");
+		builder.FixTeam($"・コンビネーション役職");
 
-        return sb.ToString();
-    }
+        return builder.ToString();
+	}
 
     private static IEnumerator waitRoleAssign(TextMeshPro text, float minWaitTime)
     {
