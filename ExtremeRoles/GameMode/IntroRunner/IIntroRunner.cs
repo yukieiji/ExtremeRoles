@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Text;
@@ -21,49 +21,67 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.Interface;
 
-
+using TMPro;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+
+using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
 #nullable enable
 
+public sealed class IntroText
+{
+	public TextMeshPro RoleInfoText { get; }
+	private readonly GameObject roleAssignText;
+	
+	public IntroText(GameObject roleAssignText, TextMeshPro roleInfoText)
+	{
+		RoleInfoText = roleInfoText;
+		this.roleAssignText = roleAssignText;
+
+		this.roleAssignText.SetActive(true);
+		this.RoleInfoText.gameObject.SetActive(true);
+	}
+
+	public void Destroy()
+	{
+		if (this.roleAssignText != null)
+		{
+			this.roleAssignText.SetActive(false);
+			UnityObject.Destroy(this.roleAssignText);
+		}
+		if (this.RoleInfoText != null)
+		{
+			this.RoleInfoText.gameObject.SetActive(false);
+			UnityObject.Destroy(RoleInfoText.gameObject);
+		}
+	}
+}
+
 public interface IIntroRunner
 {
-    public IEnumerator CoRunModeIntro(IntroCutscene instance, GameObject roleAssignText);
+    public IEnumerator CoRunModeIntro(IntroCutscene instance, IntroText introText);
 
     public IEnumerator CoRunIntro(IntroCutscene instance)
     {
-        // Original "Assigning roles" text setup
-        GameObject roleAssignText = new GameObject("roleAssignText");
-        var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
-        text.SetFontSize(3.0f);
-        text.SetMessage(Tr.GetString("roleAssignNow"));
-        roleAssignText.SetActive(true);
+		var text = new IntroText(
+			createLoadingText(),
+			new TextMeshPro());
 
         // Turn on loading animation
         var loadingAnimation = HudManager.Instance.GameLoadAnimation;
         loadingAnimation.SetActive(true);
 
-        // Variable to hold the new text object created during role assignment
-        GameObject roleInfoObject = null;
+        yield return waitRoleAssign(text.RoleInfoText, 5f );
 
-        // This combined method handles role assignment, text creation, and waiting.
-        yield return waitRoleAssign( (g) => roleInfoObject = g, 5f );
-
-        // Hide the "Assigning roles" text
-        roleAssignText.SetActive(false);
-
-        // Clean up the role info text and animation
-        if (roleInfoObject != null) Object.Destroy(roleInfoObject);
-        loadingAnimation.SetActive(false);
 
         Logger.GlobalInstance.Info(
             "IntroCutscene :: CoBegin() :: Starting intro cutscene", null);
 
         SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
 
-        yield return CoRunModeIntro(instance, roleAssignText);
+        yield return CoRunModeIntro(instance, text);
 
 		ExtremeSystemTypeManager.AddSystem();
 
@@ -75,12 +93,23 @@ public interface IIntroRunner
 		modMapObject();
 		changeWallHackTask();
 
-		Object.Destroy(instance.gameObject);
+		UnityObject.Destroy(instance.gameObject);
 
         yield break;
     }
 
-    private static string CreateRoleListString(ISpawnDataManager spawnDataManager)
+	private static GameObject createLoadingText()
+	{
+		// Original "Assigning roles" text setup
+		GameObject roleAssignText = new GameObject("roleAssignText");
+		var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
+		text.SetFontSize(3.0f);
+		text.SetMessage(Tr.GetString("roleAssignNow"));
+
+		return roleAssignText;
+	}
+
+    private static string createRoleListString(ISpawnDataManager spawnDataManager)
     {
         var sb = new StringBuilder();
         sb.AppendLine(Tr.GetString("RoleSpawnRate"));
@@ -92,7 +121,7 @@ public interface IIntroRunner
 
         foreach (var group in singleRoleData)
         {
-            var teamName = Tr.GetString($"Team{group.Key}");
+            string teamName = Tr.GetString($"Team{group.Key}");
             sb.Append($"{teamName}: ");
 
             var roleTexts = group.Select(x => {
@@ -106,7 +135,7 @@ public interface IIntroRunner
         if (spawnDataManager.CurrentCombRoleSpawnData.Any())
         {
             sb.AppendLine();
-            var teamName = Tr.GetString("TeamCombination");
+            string teamName = Tr.GetString("TeamCombination");
             sb.Append($"{teamName}: ");
 
             var roleTexts = spawnDataManager.CurrentCombRoleSpawnData.Select(x => {
@@ -119,23 +148,7 @@ public interface IIntroRunner
         return sb.ToString();
     }
 
-    private static Module.CustomMonoBehaviour.LoadingText CreateRoleInfoTextObject()
-    {
-        GameObject roleInfoObject = new GameObject("RoleInfoText");
-        var roleInfoText = roleInfoObject.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
-        roleInfoText.SetFontSize(2.0f);
-        return roleInfoText;
-    }
-
-    private static void ShowRoleListText(Action<GameObject> onCreated)
-    {
-        var roleInfoText = CreateRoleInfoTextObject();
-        var spawnDataManager = new RoleSpawnDataManager();
-        roleInfoText.SetMessage(CreateRoleListString(spawnDataManager));
-        onCreated(roleInfoText.gameObject);
-    }
-
-    private static IEnumerator waitRoleAssign(Action<GameObject> onRoleTextCreated, float minWaitTime)
+    private static IEnumerator waitRoleAssign(TextMeshPro text, float minWaitTime)
     {
         float timer = 0f;
 
@@ -145,17 +158,19 @@ public interface IIntroRunner
 			yield break;
 		}
 
+		var provider = ExtremeRolesPlugin.Instance.Provider;
 		if (AmongUsClient.Instance.AmHost)
         {
 			RPCOperator.Call(localPlayer.NetId, RPCOperator.Command.Initialize);
 			RPCOperator.Initialize();
-
-			var assignee = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleAssignee>();
+	
+			var assignee = provider.GetRequiredService<IRoleAssignee>();
+			var spawnData = assignee.PreparationData.RoleSpawn;
 
 			if (!isAllPlyerDummy())
             {
 				RoleAssignCheckPoint.RpcCheckpoint();
-                ShowRoleListText(onRoleTextCreated);
+				text.text = createRoleListString(spawnData);
 				// ホストは全員の処理が終わるまで待つ
 				do
 				{
@@ -168,7 +183,8 @@ public interface IIntroRunner
 			}
             else
             {
-                yield return new WaitForSeconds(2.5f);
+				text.text = createRoleListString(spawnData);
+				yield return new WaitForSeconds(2.5f);
                 timer += 2.5f;
             }
 
@@ -185,7 +201,8 @@ public interface IIntroRunner
 
 			// ホスト以外はここまで処理済みである事を送信
 			RoleAssignCheckPoint.RpcCheckpoint();
-            ShowRoleListText(onRoleTextCreated);
+			text.text = createRoleListString(
+				(provider.GetRequiredService<IRoleAssignDataPreparer>().Prepare().RoleSpawn));
 		}
 
         // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
@@ -195,8 +212,11 @@ public interface IIntroRunner
             yield return null;
         }
 
-        // 割り当て完了後、最低待機時間に満たない場合は待機
-        if (timer < minWaitTime)
+		timer += Time.deltaTime;
+		yield return null;
+
+		// 割り当て完了後、最低待機時間に満たない場合は待機
+		if (timer < minWaitTime)
         {
             yield return new WaitForSeconds(minWaitTime - timer);
         }

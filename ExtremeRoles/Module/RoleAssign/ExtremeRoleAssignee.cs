@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 
 using ExtremeRoles.Module.Interface;
@@ -8,13 +8,15 @@ using ExtremeRoles.Module.Interface;
 namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class ExtremeRoleAssignee(
+	IRoleAssignDataPreparer preparer,
 	IRoleAssignDataBuilder builder) : IRoleAssignee
 {
+	public PreparationData PreparationData { get; } = preparer.Prepare();
 	private readonly IRoleAssignDataBuilder builder = builder;
 
 	public IEnumerator CoRpcAssign()
 	{
-		var data = builder.Build();
+		var data = builder.Build(this.PreparationData);
 
 		yield return null;
 

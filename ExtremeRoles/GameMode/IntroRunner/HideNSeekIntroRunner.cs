@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 
 using UnityEngine;
 using PowerTools;
@@ -14,7 +14,7 @@ namespace ExtremeRoles.GameMode.IntroRunner;
 public sealed class HideNSeekIntroRunner : IIntroRunner
 {
     public IEnumerator CoRunModeIntro(
-        IntroCutscene instance, GameObject roleAssignText)
+        IntroCutscene instance, IntroText introText)
     {
         PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
@@ -22,10 +22,8 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
             "IntroCutscene :: CoBegin() :: Game Mode: Hide and Seek", null);
         instance.LogPlayerRoleData();
 
-        roleAssignText.SetActive(false);
-        Object.Destroy(roleAssignText);
-        roleAssignText = null;
-
+		introText.Destroy();
+        
         instance.HideAndSeekPanels.SetActive(true);
         if (localPlayer.Data.Role.IsImpostor)
         {
