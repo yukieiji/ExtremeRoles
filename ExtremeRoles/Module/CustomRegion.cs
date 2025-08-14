@@ -30,7 +30,7 @@ public sealed class RegionStatus(
 	}
 }
 
-public record struct Region(
+public readonly record struct Region(
 	RegionStatus Status,
 	IRegionInfo Info);
 

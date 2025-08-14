@@ -11,7 +11,7 @@ public sealed class TextPopUpper
 {
 	private sealed class Text
 	{
-		private readonly TextMeshPro body;
+		private readonly TextMeshPro? body;
 		public Text(
 			string printString,
 			float disapearTime,
@@ -37,6 +37,10 @@ public sealed class TextPopUpper
 		public void ShiftPos(
 			Vector3 pos)
 		{
+			if (this.body == null)
+			{
+				return;
+			}
 			this.body.transform.localPosition += pos;
 		}
 
