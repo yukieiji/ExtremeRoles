@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -54,24 +55,62 @@ public sealed class IntroText
 	}
 }
 
+public sealed class RoleTeamStringBuilder(StringBuilder main)
+{
+	private readonly StringBuilder main = main;
+	private readonly List<string> roleInfoString = new List<string>(32);
+	private readonly StringBuilder lineBuilder = new StringBuilder(128);
+	private const int rolesPerLine = 3;
+
+	public void Add(string text)
+	{
+		roleInfoString.Add(text);
+	}
+	public void AddToMain(string teamText)
+	{
+		if (this.roleInfoString.Count == 0)
+		{
+			return;
+		}
+
+		this.main.Append(teamText);
+
+		for (int i = 0; i < this.roleInfoString.Count; i += rolesPerLine)
+		{
+			for (int j = 0; j < rolesPerLine && (i + j) < this.roleInfoString.Count; j++)
+			{
+				lineBuilder.Append($"<pos={j * 33}%>");
+				lineBuilder.Append(this.roleInfoString[i + j]);
+			}
+			this.main.AppendLine(lineBuilder.ToString());
+
+			this.lineBuilder.Clear();
+		}
+		this.roleInfoString.Clear();
+	}
+}
+
 public interface IIntroRunner
 {
     public IEnumerator CoRunModeIntro(IntroCutscene instance, IntroText introText);
 
     public IEnumerator CoRunIntro(IntroCutscene instance)
     {
+
 		var text = new IntroText(
 			createLoadingText(),
-			new TextMeshPro());
+			createRoleInfoText());
 
         // Turn on loading animation
         var loadingAnimation = HudManager.Instance.GameLoadAnimation;
         loadingAnimation.SetActive(true);
 
-        yield return waitRoleAssign(text.RoleInfoText, 5f );
+        yield return waitRoleAssign(text.RoleInfoText, 5f);
+
+		loadingAnimation.SetActive(false);
 
 
-        Logger.GlobalInstance.Info(
+		Logger.GlobalInstance.Info(
             "IntroCutscene :: CoBegin() :: Starting intro cutscene", null);
 
         SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
@@ -104,71 +143,53 @@ public interface IIntroRunner
 		return roleAssignText;
 	}
 
-    private static string createRoleListString(ISpawnDataManager spawnDataManager)
+	private static TextMeshPro createRoleInfoText()
+	{
+		// Original "Assigning roles" text setup
+		var hudManager = HudManager.Instance;
+		var text = Object.Instantiate(
+			hudManager.TaskPanel.taskText,
+			hudManager.transform.parent);
+		text.transform.localPosition = new Vector3(0.0f, 0.0f, -910f);
+		text.alignment = TextAlignmentOptions.MidlineLeft;
+		text.gameObject.layer = 5;
+
+		return text;
+	}
+
+	private static string createRoleListString(ISpawnDataManager spawnDataManager)
     {
         var sb = new StringBuilder(2048);
-        var lineBuilder = new StringBuilder(128);
-        var roleInfoStrings = new System.Collections.Generic.List<string>(32);
-        const int rolesPerLine = 3;
+		var roleTeamBuilder = new RoleTeamStringBuilder(sb);
 
         foreach (var (team, data) in spawnDataManager.CurrentSingleRoleSpawnData)
         {
             string teamName = Tr.GetString(team.ToString());
             sb.AppendLine($"・{teamName}");
 
-            roleInfoStrings.Clear();
             foreach (var (id, spawn) in data)
             {
                 if (!ExtremeRoleManager.NormalRole.TryGetValue(id, out var role))
                 {
                     continue;
                 }
-                roleInfoStrings.Add(
+				roleTeamBuilder.Add(
                     $"{role.GetColoredRoleName(true)}(スポーン率:{spawn.SpawnRate}％ 最大割当数:{spawn.SpawnSetNum} ウェイト:{spawn.Weight})");
             }
-
-            if (roleInfoStrings.Count > 0)
-            {
-                for (int i = 0; i < roleInfoStrings.Count; i += rolesPerLine)
-                {
-                    var lineItems = roleInfoStrings.Skip(i).Take(rolesPerLine).ToList();
-                    lineBuilder.Clear();
-                    for(int j = 0; j < lineItems.Count; j++)
-                    {
-                        lineBuilder.Append($"<pos={j * 33}%>");
-                        lineBuilder.Append(lineItems[j]);
-                    }
-                    sb.AppendLine(lineBuilder.ToString());
-                }
-            }
+			roleTeamBuilder.AddToMain($"・{Tr.GetString(team.ToString())}");
         }
 
-        roleInfoStrings.Clear();
         foreach (var (team, data) in spawnDataManager.CurrentCombRoleSpawnData)
         {
             if (!ExtremeRoleManager.CombRole.TryGetValue(team, out var role))
             {
                 continue;
             }
-            roleInfoStrings.Add(
+			roleTeamBuilder.Add(
                 $"{role.GetOptionName()}(スポーン率:{data.SpawnRate}％ 最大割当数:{data.SpawnSetNum} ウェイト:{data.Weight})");
         }
 
-        if (roleInfoStrings.Any())
-        {
-            sb.AppendLine($"・コンビネーション役職");
-            for (int i = 0; i < roleInfoStrings.Count; i += rolesPerLine)
-            {
-                var lineItems = roleInfoStrings.Skip(i).Take(rolesPerLine).ToList();
-                lineBuilder.Clear();
-                for (int j = 0; j < lineItems.Count; j++)
-                {
-                    lineBuilder.Append($"<pos={j * 33}%>");
-                    lineBuilder.Append(lineItems[j]);
-                }
-                sb.AppendLine(lineBuilder.ToString());
-            }
-        }
+		roleTeamBuilder.AddToMain($"・コンビネーション役職");
 
         return sb.ToString();
     }
