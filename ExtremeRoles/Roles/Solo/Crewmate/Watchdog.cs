@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
@@ -30,10 +30,9 @@ public sealed class Watchdog : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
     private TMPro.TextMeshPro chargeTime;
 
     public Watchdog() : base(
-        ExtremeRoleId.Watchdog,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Watchdog.ToString(),
-        ColorPalette.WatchdogViolet,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Watchdog,
+			ColorPalette.WatchdogViolet),
         false, true, false, false)
     { }
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
@@ -39,7 +39,7 @@ public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
 
         MultiAssignRoleBase role = null;
 
-        if (this.BaseRole.Id != (ExtremeRoleId)roleId) { return role; }
+        if (this.BaseRole.Core.Id != (ExtremeRoleId)roleId) { return role; }
 
         this.BaseRole.CanHasAnotherRole = true;
 
@@ -75,7 +75,7 @@ public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
 
 }
 
-public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialSetUp
+public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialSetUp, ITryKillTo
 {
     public enum AbilityType : byte
     {
@@ -109,10 +109,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
     public Traitor(
         ) : base(
-            ExtremeRoleId.Traitor,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Traitor.ToString(),
-            ColorPalette.TraitorLightShikon,
+			RoleCore.BuildNeutral(ExtremeRoleId.Traitor, ColorPalette.TraitorLightShikon),
             true, false, true, false,
             tab: OptionTab.CombinationTab)
     {
@@ -313,9 +310,9 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     {
         this.CanHasAnotherRole = false;
 
-        this.Team = ExtremeRoleType.Neutral;
-        this.crewRoleStr = this.AnotherRole.Id.ToString();
-        if (this.AnotherRole.Id == ExtremeRoleId.VanillaRole)
+        this.Core.Team = ExtremeRoleType.Neutral;
+        this.crewRoleStr = this.AnotherRole.Core.Id.ToString();
+        if (this.AnotherRole.Core.Id == ExtremeRoleId.VanillaRole)
         {
             this.crewRoleStr = this.AnotherRole.RoleName;
         }

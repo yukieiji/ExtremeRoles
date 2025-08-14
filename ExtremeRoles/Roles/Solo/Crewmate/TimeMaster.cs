@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 
 using UnityEngine;
 using Hazel;
@@ -53,10 +53,9 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility, IKilledF
     private static TimeMasterHistory history;
 
     public TimeMaster() : base(
-        ExtremeRoleId.TimeMaster,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.TimeMaster.ToString(),
-        ColorPalette.TimeMasterBlue,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.TimeMaster,
+			ColorPalette.TimeMasterBlue),
         false, true, false, false)
     { }
 

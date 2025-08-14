@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -192,10 +192,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 	private const CustomVent.Type meryVentType = CustomVent.Type.Mery;
 
     public Mery() : base(
-        ExtremeRoleId.Mery,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Mery.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Mery),
         true, false, true, true)
     { }
 
@@ -231,7 +228,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 		}
         var localPlayerRole = ExtremeRoleManager.GetLocalPlayerRole();
 
-        bool isMarlin = localPlayerRole.Id == ExtremeRoleId.Marlin;
+        bool isMarlin = localPlayerRole.Core.Id == ExtremeRoleId.Marlin;
 
 		system.Add(new Camp(
             mery.ActiveNum,

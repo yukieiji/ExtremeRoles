@@ -113,17 +113,17 @@ public class RoleAssignValidator(IServiceProvider provider) : IRoleAssignValidat
 
 			if (ExtremeRoleManager.NormalRole.TryGetValue(ngRoleId, out var roleDefinition))
 			{
-				teamToAdjust = roleDefinition.Team;
+				teamToAdjust = roleDefinition.Core.Team;
 				teamFound = true;
 			}
 			else
 			{
 				foreach (var combManager in ExtremeRoleManager.CombRole.Values)
 				{
-					var foundCombRolePart = combManager.Roles.FirstOrDefault(r => r.Id == ngRoleIdEnum);
+					var foundCombRolePart = combManager.Roles.FirstOrDefault(r => r.Core.Id == ngRoleIdEnum);
 					if (foundCombRolePart != null)
 					{
-						teamToAdjust = foundCombRolePart.Team;
+						teamToAdjust = foundCombRolePart.Core.Team;
 						teamFound = true;
 						break;
 					}
