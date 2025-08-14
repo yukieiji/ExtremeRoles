@@ -63,12 +63,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.infoText.gameObject.SetActive(false);
 		}
 
-		private void SetState(FadeState nextState)
-		{
-			this.state = nextState;
-			this.timer = 0f;
-		}
-
 		public void Update()
 		{
 			if (IntroCutscene.Instance != null ||
@@ -85,47 +79,55 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			}
 
 			this.timer += Time.deltaTime;
-			float alpha = 0f;
-
-			switch (this.state)
-			{
-				case FadeState.FadingIn:
-					alpha = this.timer / fadeInDuration;
-					if (this.timer >= fadeInDuration)
-					{
-						SetState(FadeState.Holding);
-					}
-					break;
-				case FadeState.Holding:
-					alpha = 1f;
-					if (this.timer >= holdDuration)
-					{
-						SetState(FadeState.FadingOut);
-					}
-					break;
-				case FadeState.FadingOut:
-					alpha = 1f - (this.timer / fadeOutDuration);
-					if (this.timer >= fadeOutDuration)
-					{
-						SetState(FadeState.FadingIn);
-					}
-					break;
-			}
-
-			alpha = Mathf.Clamp01(alpha);
+			float alpha = computeAlpha();
 
 			this.infoText.color = new Color(
 				this.infoText.color.r,
 				this.infoText.color.g,
 				this.infoText.color.b,
-				alpha);
+				Mathf.Clamp01(alpha));
 		}
 
 		public void ShowCanMixWepon()
 		{
 			this.infoText.gameObject.SetActive(true);
-			SetState(FadeState.FadingIn);
+			setState(FadeState.FadingIn);
 			this.isShow = true;
+		}
+
+		private void setState(FadeState nextState)
+		{
+			this.state = nextState;
+			this.timer = 0f;
+		}
+
+		private float computeAlpha()
+		{
+			switch (this.state)
+			{
+				case FadeState.FadingIn:
+					float fadeInAlpha = this.timer / fadeInDuration;
+					if (this.timer >= fadeInDuration)
+					{
+						setState(FadeState.Holding);
+					}
+					return fadeInAlpha;
+				case FadeState.Holding:
+					if (this.timer >= holdDuration)
+					{
+						setState(FadeState.FadingOut);
+					}
+					return 1.0f;
+				case FadeState.FadingOut:
+					float fadeOutAlpha = 1f - (this.timer / fadeOutDuration);
+					if (this.timer >= fadeOutDuration)
+					{
+						setState(FadeState.FadingIn);
+					}
+					return fadeOutAlpha;
+				default:
+					return 0.0f;
+			}
 		}
 	}
 
