@@ -153,10 +153,32 @@ public interface IIntroRunner
 		var text = Object.Instantiate(
 			hudManager.TaskPanel.taskText,
 			hudManager.transform.parent);
-		text.transform.localPosition = new Vector3(-2.5f, 0.0f, -910f);
+
+		// Calculate the target world-space x-coordinate based on the camera's view.
+		var worldX = -Camera.main.orthographicSize * Camera.main.aspect + 2.0f;
+
+		// The y-coordinate should be 0 in world-space to be vertically centered.
+		// The z-coordinate's reference is unclear, but we'll calculate based on the parent.
+		var parentTransform = hudManager.transform.parent;
+		var worldPosition = new Vector3(worldX, 0.0f, parentTransform.position.z);
+
+		// Convert the world position to the parent's local space to ensure correct placement
+		// regardless of the parent's own transform.
+		var localPosition = parentTransform.InverseTransformPoint(worldPosition);
+
+		// The original code used a hardcoded local z-position of -910. We preserve this value
+		// as it's likely important for UI layering.
+		localPosition.z = -910f;
+
+		text.transform.localPosition = localPosition;
+
 		text.fontSizeMin = text.fontSizeMax = text.fontSize = 1.75f;
 		text.alignment = TextAlignmentOptions.MidlineLeft;
-		text.rectTransform.sizeDelta = new Vector2(20.0f, 20.0f);
+		// Dynamically calculate the width to be the screen width minus margins.
+		float width = (Camera.main.orthographicSize * Camera.main.aspect * 2) - 4.0f;
+		// Set height to a generous value to accommodate multiple lines of team info.
+		float height = 10.0f;
+		text.rectTransform.sizeDelta = new Vector2(width, height);
 		text.gameObject.layer = 5;
 
 		return text;
