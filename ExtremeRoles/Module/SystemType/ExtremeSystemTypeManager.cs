@@ -60,6 +60,7 @@ public enum ExtremeSystemType : byte
 	MonikaTrashSystem,
 	MonikaMeetingNumSystem,
 	SurrogatorGurdSystem,
+	LiberalMoneyBank,
 }
 
 public enum ResetTiming : byte
@@ -303,6 +304,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	{
 		add<GlobalCheckpointSystem>(GlobalCheckpointSystem.Type);
 		add<MeetingCountSystem>(MeetingCountSystem.Type);
+		add<LiberalMoneyBankSystem>(LiberalMoneyBankSystem.SystemType);
 	}
 
 	private void add<T>(ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()

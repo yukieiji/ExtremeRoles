@@ -139,6 +139,7 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 				int reduceCrewmateRole = 0;
 				int reduceImpostorRole = 0;
 				int reduceNeutralRole = 0;
+				int reduceLiberalRole = 0;
 
 				foreach (var role in roleManager.Roles)
 				{
@@ -153,6 +154,9 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 							break;
 						case ExtremeRoleType.Neutral:
 							++reduceNeutralRole;
+							break;
+						case ExtremeRoleType.Liberal:
+							++reduceLiberalRole;
 							break;
 						default:
 							break;
@@ -173,6 +177,7 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 						reduceCrewmateRole,
 						reduceImpostorRole,
 						reduceNeutralRole,
+						reduceLiberalRole,
 						combSpawnData.IsMultiAssign) &&
 					!RoleAssignFilter.Instance.IsBlock(combType));
 
@@ -184,9 +189,10 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 				limiter.Reduce(ExtremeRoleType.Crewmate, reduceCrewmateRole);
 				limiter.Reduce(ExtremeRoleType.Impostor, reduceImpostorRole);
 				limiter.Reduce(ExtremeRoleType.Neutral, reduceNeutralRole);
+				limiter.Reduce(ExtremeRoleType.Liberal, reduceLiberalRole);
 
 				curImpNum = curImpNum + reduceImpostorRole;
-				curCrewNum = curCrewNum + (reduceCrewmateRole + reduceNeutralRole);
+				curCrewNum = curCrewNum + (reduceCrewmateRole + reduceNeutralRole + reduceLiberalRole);
 
 				var spawnRoles = new List<MultiAssignRoleBase>();
 				foreach (var role in roleManager.Roles)
@@ -244,6 +250,7 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 		int reduceCrewmateRoleNum,
 		int reduceImpostorRoleNum,
 		int reduceNeutralRoleNum,
+		int reduceLiberalRoleNum,
 		bool isMultiAssign)
 	{
 		int crewNotAssignPlayerNum = isMultiAssign ?
@@ -253,7 +260,7 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 			notAssignPlayer.ImpostorMultiAssignPlayerNum :
 			notAssignPlayer.ImpostorSingleAssignPlayerNum;
 
-		int totalReduceCrewmateNum = reduceCrewmateRoleNum + reduceNeutralRoleNum;
+		int totalReduceCrewmateNum = reduceCrewmateRoleNum + reduceNeutralRoleNum + reduceLiberalRoleNum;
 
 		bool isLimitCrewAssignNum = crewNotAssignPlayerNum >= totalReduceCrewmateNum;
 		bool isLimitImpAssignNum = impNotAssignPlayerNum >= reduceImpostorRoleNum;
@@ -274,6 +281,11 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 			&&
 			(
 				limiter.CanSpawn(ExtremeRoleType.Neutral, reduceNeutralRoleNum) &&
+				isLimitCrewAssignNum
+			)
+			&&
+			(
+				limiter.CanSpawn(ExtremeRoleType.Liberal, reduceLiberalRoleNum) &&
 				isLimitCrewAssignNum
 			)
 			// インポスターのスポーン上限チェック
