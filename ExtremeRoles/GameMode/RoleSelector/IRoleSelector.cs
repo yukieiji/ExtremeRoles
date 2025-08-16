@@ -21,6 +21,10 @@ public enum RoleSpawnOption : int
     MaxNeutral,
     MinImpostor,
     MaxImpostor,
+    MinLiberal,
+    MaxLiberal,
+    IsLiberalEnabled,
+    LiberalWinMoney,
 }
 
 public enum SpawnOptionCategory : int
@@ -113,5 +117,27 @@ public interface IRoleSelector
 		factory.CreateIntOption(
 			RoleSpawnOption.MaxImpostor,
 			0, 0, GameSystem.MaxImposterNum * 2, 1);
+
+		var minLiberal = factory.CreateIntOption(
+			RoleSpawnOption.MinLiberal,
+			0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
+		var maxLiberal = factory.CreateIntOption(
+			RoleSpawnOption.MaxLiberal,
+			0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
+
+        var isLiberalEnabled = factory.CreateMultiDepentOption(
+            RoleSpawnOption.IsLiberalEnabled,
+            new() { minLiberal, maxLiberal },
+            (parents) =>
+            {
+                var min = (ExtremeRoles.Module.CustomOption.Interfaces.IValueOption<int>)parents[0];
+                var max = (ExtremeRoles.Module.CustomOption.Interfaces.IValueOption<int>)parents[1];
+                return min.Value > 0 || max.Value > 0;
+            });
+
+        factory.CreateFloatOption(
+            RoleSpawnOption.LiberalWinMoney,
+            100f, 10f, 1000f, 10f,
+            isLiberalEnabled);
     }
 }

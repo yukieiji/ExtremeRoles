@@ -13,7 +13,8 @@ public enum ExtremeRoleType : int
     Null = -2,
     Neutral = -1,
     Crewmate = 0,
-    Impostor = 1
+    Impostor = 1,
+    Liberal = 2
 }
 public enum RoleCommonOption
 {

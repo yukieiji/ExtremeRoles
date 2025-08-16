@@ -13,8 +13,14 @@
 
         public bool IsNeutral() => this.Team == ExtremeRoleType.Neutral;
 
+        public bool IsLiberal() => this.Team == ExtremeRoleType.Liberal;
+
         public virtual bool IsSameTeam(SingleRoleBase targetRole)
         {
+            if (this.IsLiberal())
+            {
+                return targetRole.Team == ExtremeRoleType.Liberal;
+            }
 
             if (this.IsImpostor())
             {
