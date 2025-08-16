@@ -40,6 +40,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			{ ExtremeRoleType.Crewmate, new Dictionary<int, SingleRoleSpawnData>() },
 			{ ExtremeRoleType.Impostor, new Dictionary<int, SingleRoleSpawnData>() },
 			{ ExtremeRoleType.Neutral , new Dictionary<int, SingleRoleSpawnData>() },
+			{ ExtremeRoleType.Liberal , new Dictionary<int, SingleRoleSpawnData>() },
 		};
 
 		var opt = OptionManager.Instance;

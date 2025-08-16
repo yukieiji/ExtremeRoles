@@ -156,6 +156,14 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 			text.text = Tr.GetString("yourHost");
 			text.color = ColorPalette.XionBlue;
 		}
+		else if (role.IsLiberal())
+		{
+			instance.BackgroundBar.material.color = ColorPalette.LiberalColor;
+			instance.ImpostorText.text = Tr.GetString("liberalIntro");
+
+			text.text = Tr.GetString("Liberal");
+			text.color = ColorPalette.LiberalColor;
+		}
 	}
 
 	private static void setupRole()
@@ -188,8 +196,19 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 
+        if (role.IsLiberal())
+        {
+            yourTeam.Clear();
+            foreach (var p in Player.AllPlayerControls)
+            {
+                if (ExtremeRoleManager.TryGetRole(p.PlayerId, out var r) && r.IsLiberal())
+                {
+                    yourTeam.Add(p);
+                }
+            }
+        }
 		// Intro solo teams
-		if (role.IsNeutral() || role.Core.Id is ExtremeRoleId.Xion)
+		else if (role.IsNeutral() || role.Id is ExtremeRoleId.Xion)
 		{
 			var (main, sub) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleAwake<RoleTypes>>();
 			if ((main is not null && !main.IsAwake) || (sub is not null && !sub.IsAwake))

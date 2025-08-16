@@ -69,6 +69,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
                         return checkRole;
                     }
                     break;
+                case ExtremeRoleType.Liberal:
                 default:
                     break;
             }

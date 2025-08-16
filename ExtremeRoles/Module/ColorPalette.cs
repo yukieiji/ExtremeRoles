@@ -88,6 +88,7 @@ public static class ColorPalette
 	public readonly static Color ForasSeeSyuTin = new Color32(203, 174, 214, byte.MaxValue);
 
 	public readonly static Color NeutralColor = Color.gray;
+	public readonly static Color LiberalColor = Color.yellow;
 
 	public readonly static Color XionBlue = new Color32(109, 129, 255, byte.MaxValue);
 }

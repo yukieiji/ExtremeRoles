@@ -114,7 +114,8 @@ public sealed class Psychic :
 			this.teamCount = new Dictionary<ExtremeRoleType, TeamCounter>()
 			{
 				{ ExtremeRoleType.Neutral, new TeamCounter() },
-				{ ExtremeRoleType.Impostor, new TeamCounter() }
+				{ ExtremeRoleType.Impostor, new TeamCounter() },
+				{ ExtremeRoleType.Liberal, new TeamCounter() }
 			};
 
 			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())

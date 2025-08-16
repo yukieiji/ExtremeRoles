@@ -171,6 +171,12 @@
   <data name="RoleSpawnCategoryMaxImpostor" xml:space="preserve">
     <value>最大内鬼职业数量</value>
   </data>
+  <data name="RoleSpawnCategoryMinLiberal" xml:space="preserve">
+    <value>最小自由人职业数量</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxLiberal" xml:space="preserve">
+    <value>最大自由人职业数量</value>
+  </data>
   <data name="GhostRoleSpawnCategoryMinCrewmate" xml:space="preserve">
     <value>最小幽灵船员职业数量</value>
   </data>
@@ -373,6 +379,12 @@
   </data>
   <data name="optionOn" xml:space="preserve">
     <value>&lt;color=#33ffcc&gt;启用&lt;/color&gt;</value>
+  </data>
+  <data name="LiberalTab" xml:space="preserve">
+    <value>&lt;color=#FFFF00FF&gt;自由人角色&lt;/color&gt;</value>
+  </data>
+  <data name="GhostLiberalTab" xml:space="preserve">
+    <value>&lt;color=#FFFF00FF&gt;幽灵自由人角色&lt;/color&gt;</value>
   </data>
   <data name="optionOff" xml:space="preserve">
     <value>&lt;color=#ff3366&gt;禁用&lt;/color&gt;</value>
@@ -596,6 +608,12 @@
   </data>
   <data name="neutralShotCall" xml:space="preserve">
     <value>野心家</value>
+  </data>
+  <data name="liberalIntro" xml:space="preserve">
+    <value>为自由而活</value>
+  </data>
+  <data name="Liberal" xml:space="preserve">
+    <value>自由人</value>
   </data>
   <data name="impostorShotCall" xml:space="preserve">
     <value>杀人魔</value>

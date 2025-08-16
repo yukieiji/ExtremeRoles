@@ -19,6 +19,10 @@ public enum RoleSpawnOption : int
     MaxNeutral,
     MinImpostor,
     MaxImpostor,
+    MinLiberal,
+    MaxLiberal,
+    IsLiberalEnabled,
+    LiberalWinMoney,
 }
 
 public enum SpawnOptionCategory : int

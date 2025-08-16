@@ -189,6 +189,13 @@ public class OptionCategoryFactory(
 		optionPack.AddOption(id, option);
 	}
 
+	public void AddOption(
+		int id,
+		MultiDepentOption option)
+	{
+		optionPack.AddOption(id, option);
+	}
+
 	public int GetOptionId<T>(T option) where T : struct, IConvertible
 	{
 		enumCheck(option);
@@ -275,6 +282,27 @@ public class OptionCategoryFactory(
 			this.childRegister.Invoke(parent, opt);
 		}
 
+		return opt;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public MultiDepentOption CreateMultiDepentOption<T>(
+		T option,
+		List<IOption> parents,
+		Func<IReadOnlyList<IOption>, bool> predicate,
+		bool isHidden = true,
+		bool ignorePrefix = true) where T : struct, IConvertible
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, ignorePrefix);
+
+		var opt = new MultiDepentOption(
+			new OptionInfo(optionId, name, OptionUnit.None, isHidden),
+			parents,
+			predicate,
+			OptionRelationFactory.Create(null, false));
+
+		this.AddOption(optionId, opt);
 		return opt;
 	}
 }
