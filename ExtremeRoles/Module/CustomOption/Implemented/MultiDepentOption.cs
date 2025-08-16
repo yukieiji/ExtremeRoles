@@ -32,24 +32,9 @@ public sealed class MultiDepentOption : IOption
     public int Selection { get; set; }
 
     public bool IsEnable => this.predicate(this.parents);
-	public bool IsActiveAndEnable
-	{
-		get
-		{
-			if (Info.IsHidden)
-			{
-				return false;
-			}
+    public bool IsActiveAndEnable => this.IsEnable && this.Relation.Parent.IsActiveAndEnable;
 
-			if (Relation is not IOptionChain hasParent)
-			{
-				return true;
-			}
-			return hasParent.IsChainEnable;
-		}
-	}
-
-	public void SwitchPreset()
+    public void SwitchPreset()
     {
     }
 }
