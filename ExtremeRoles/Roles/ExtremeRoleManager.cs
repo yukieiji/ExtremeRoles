@@ -217,6 +217,8 @@ public enum RoleGameOverReason
 	AllYandereWin,
 	AllQueenWin,
 
+	LiberalRevolution,
+
 	UnKnown = 100,
 }
 

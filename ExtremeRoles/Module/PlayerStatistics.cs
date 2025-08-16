@@ -280,7 +280,6 @@ public sealed record PlayerStatistics(
 					++numNeutralAlive;
 					builder.Add(role, roleId, gameControlId);
 					break;
-
 				default:
 					break;
 			}
