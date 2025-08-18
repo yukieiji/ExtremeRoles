@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.Interface;
@@ -12,7 +12,7 @@ public sealed class AllRoleInfoModel : PanelPageModelBase
 {
 	protected override void CreateAllRoleText()
 	{
-		IOption option;
+		IOldOption option;
 		string colorRoleName;
 		string roleFullDesc;
 

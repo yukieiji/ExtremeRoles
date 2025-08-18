@@ -34,7 +34,7 @@ public class OptionCategoryFactory(
 	private readonly Action<OptionTab, OptionCategory> registerOption = action;
 	private readonly OptionPack optionPack = new OptionPack();
 
-	public IOption Get(int id)
+	public IOldOption Get(int id)
 		=> this.optionPack.Get(id);
 	public IValueOption<T> Get<T>(int id)
 		where T :
@@ -46,7 +46,7 @@ public class OptionCategoryFactory(
 	public BoolCustomOption CreateBoolOption<T>(
 		T option,
 		bool defaultValue,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -70,7 +70,7 @@ public class OptionCategoryFactory(
 		T option,
 		float defaultValue,
 		float min, float max, float step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -93,7 +93,7 @@ public class OptionCategoryFactory(
 		T option,
 		float defaultValue,
 		float min, float step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -118,7 +118,7 @@ public class OptionCategoryFactory(
 		T option,
 		int defaultValue,
 		int min, int max, int step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -141,7 +141,7 @@ public class OptionCategoryFactory(
 		T option,
 		int defaultValue,
 		int min, int step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -165,7 +165,7 @@ public class OptionCategoryFactory(
 	public SelectionCustomOption CreateSelectionOption<T>(
 		T option,
 		string[] selections,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -186,7 +186,7 @@ public class OptionCategoryFactory(
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public SelectionCustomOption CreateSelectionOption<T, W>(
 		T option,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -210,7 +210,7 @@ public class OptionCategoryFactory(
 	public SelectionMultiEnableCustomOption CreateSelectionOption<T, W>(
 		T option,
 		IReadOnlyList<W> anotherDefault,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -298,8 +298,8 @@ public class OptionCategoryFactory(
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public MultiDepentOption CreateMultiDepentOption<T>(
 		T option,
-		List<IOption> parents,
-		Func<IReadOnlyList<IOption>, bool> predicate,
+		List<IOldOption> parents,
+		Func<IReadOnlyList<IOldOption>, bool> predicate,
 		bool isHidden = true,
 		bool ignorePrefix = true) where T : struct, IConvertible
 	{

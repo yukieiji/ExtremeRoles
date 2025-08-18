@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 
 using System.Collections.Generic;
 
@@ -10,7 +10,7 @@ namespace ExtremeRoles.Module.Interface;
 
 public abstract class PanelPageModelBase : IInfoOverlayPanelModel
 {
-	protected readonly record struct RoleInfo(string RoleName, string FullDec, IOption Option);
+	protected readonly record struct RoleInfo(string RoleName, string FullDec, IOldOption Option);
 
 	public int PageNum => this.allPage.Count;
 

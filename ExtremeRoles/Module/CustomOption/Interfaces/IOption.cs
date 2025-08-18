@@ -1,7 +1,7 @@
-﻿
+
 namespace ExtremeRoles.Module.CustomOption.Interfaces;
 
-public interface IOption
+public interface IOldOption
 {
 	public IOptionInfo Info { get; }
 	public IOptionRelation Relation { get; }
