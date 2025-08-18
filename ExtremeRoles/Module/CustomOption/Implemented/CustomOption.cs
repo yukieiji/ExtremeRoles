@@ -36,13 +36,13 @@ public sealed class CustomOption : IOption
 		{
 			this.holder.Selection = value;
 
-			this.OnValueChanged?.Invoke(this.Selection);
+			this.OnValueChanged?.Invoke(value);
 
 			var amongUs = AmongUsClient.Instance;
 			if (amongUs != null &&
 				amongUs.AmHost)
 			{
-				config.Value = this.Selection;
+				config.Value = value;
 			}
 		}
 	}
