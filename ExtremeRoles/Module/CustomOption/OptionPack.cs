@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -11,14 +11,14 @@ public sealed class OptionPack
 	public IReadOnlyDictionary<int, IValueOption<int>> IntOptions => intOpt;
 	public IReadOnlyDictionary<int, IValueOption<float>> FloatOptions => floatOpt;
 	public IReadOnlyDictionary<int, IValueOption<bool>> BoolOptions => boolOpt;
-	public IReadOnlyDictionary<int, IOption> AllOptions => allOpt;
+	public IReadOnlyDictionary<int, IOldOption> AllOptions => allOpt;
 
 	private readonly Dictionary<int, IValueOption<int>> intOpt = new Dictionary<int, IValueOption<int>>();
 	private readonly Dictionary<int, IValueOption<float>> floatOpt = new Dictionary<int, IValueOption<float>>();
 	private readonly Dictionary<int, IValueOption<bool>> boolOpt = new Dictionary<int, IValueOption<bool>>();
-	private readonly Dictionary<int, IOption> allOpt = new Dictionary<int, IOption>();
+	private readonly Dictionary<int, IOldOption> allOpt = new Dictionary<int, IOldOption>();
 
-	public IOption Get(int id) => this.allOpt[id];
+	public IOldOption Get(int id) => this.allOpt[id];
 	public IValueOption<T> Get<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,

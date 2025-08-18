@@ -81,7 +81,7 @@ public abstract class RoleOptionBase
 
 	protected static void CreateKillerOption(
 		AutoParentSetOptionCategoryFactory factory,
-		IOption parent = null,
+		IOldOption parent = null,
 		bool ignorePrefix = true,
 		bool invert = false)
 	{

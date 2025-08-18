@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
@@ -23,9 +23,9 @@ public sealed class OptionLoadWrapper(in OptionCategory category, int idOffset) 
 	private readonly OptionCategory category = category;
 	private readonly int idOffset = idOffset;
 
-	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option)
+	public bool TryGet(int id, [NotNullWhen(true)] out IOldOption? option)
 		=> this.TryGet(id + idOffset, out option);
-	public IOption Get<T>(T id) where T : Enum
+	public IOldOption Get<T>(T id) where T : Enum
 			=> this.category.Get(id.FastInt() + idOffset);
 
 	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IValueOption<T>? option)
@@ -67,7 +67,7 @@ public sealed class OptionCategory(
 {
 	public Color? Color { get; } = color;
 
-	public IEnumerable<IOption> Options => allOpt.Values;
+	public IEnumerable<IOldOption> Options => allOpt.Values;
 	public int Count => allOpt.Count;
 
 	public OptionTab Tab { get; } = tab;
@@ -80,7 +80,7 @@ public sealed class OptionCategory(
 	private readonly IReadOnlyDictionary<int, IValueOption<int>> intOpt = option.IntOptions;
 	private readonly IReadOnlyDictionary<int, IValueOption<float>> floatOpt = option.FloatOptions;
 	private readonly IReadOnlyDictionary<int, IValueOption<bool>> boolOpt = option.BoolOptions;
-	private readonly IReadOnlyDictionary<int, IOption> allOpt = option.AllOptions;
+	private readonly IReadOnlyDictionary<int, IOldOption> allOpt = option.AllOptions;
 
 	public void AddHudString(in StringBuilder builder)
 	{
@@ -96,9 +96,9 @@ public sealed class OptionCategory(
 			builder.AppendLine($"{option.Title}: {option.ValueString}");
 		}
 	}
-	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option)
+	public bool TryGet(int id, [NotNullWhen(true)] out IOldOption? option)
 		=> this.allOpt.TryGetValue(id, out option) && option is not null;
-	public IOption Get<T>(T id) where T : Enum
+	public IOldOption Get<T>(T id) where T : Enum
 		=> this.Get(id.FastInt());
 
 	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IValueOption<T>? option)
@@ -173,7 +173,7 @@ public sealed class OptionCategory(
 		}
 	}
 
-	public IOption Get(int id)
+	public IOldOption Get(int id)
 	{
 		if (!TryGet(id, out var option))
 		{

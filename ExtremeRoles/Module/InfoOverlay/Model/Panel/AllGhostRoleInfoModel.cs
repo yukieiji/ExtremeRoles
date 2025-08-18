@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.Helper;
 
@@ -14,7 +14,7 @@ public sealed class AllGhostRoleInfoModel : PanelPageModelBase
 {
 	protected override void CreateAllRoleText()
 	{
-		IOption option;
+		IOldOption option;
 		string colorRoleName;
 		string roleFullDesc;
 

@@ -334,7 +334,7 @@ public sealed class Lover : MultiAssignRoleBase
 
     private void killerVisionSetting(
 		AutoParentSetOptionCategoryFactory factory,
-		IOption killerOpt)
+		IOldOption killerOpt)
     {
         var visionOption = factory.CreateBoolOption(
             LoverOption.BecomeNeutralLoverHasOtherVision,

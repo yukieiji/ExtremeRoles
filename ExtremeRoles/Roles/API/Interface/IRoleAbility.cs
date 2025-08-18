@@ -126,7 +126,7 @@ public interface IRoleAbility : IRoleResetMeeting
 	public static void CreateCommonAbilityOption(
 		AutoParentSetOptionCategoryFactory factory,
 		float defaultActiveTime = float.MaxValue,
-		IOption parentOpt = null)
+		IOldOption parentOpt = null)
 	{
 		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
@@ -153,7 +153,7 @@ public interface IRoleAbility : IRoleResetMeeting
 		int maxAbilityCount,
 		float defaultActiveTime = float.MaxValue,
 		int minAbilityCount = 1,
-		IOption parentOpt = null)
+		IOldOption parentOpt = null)
 	{
 		CreateCommonAbilityOption(
 			factory,

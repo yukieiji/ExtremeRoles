@@ -5,15 +5,15 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.CustomOption.Implemented;
 
-public sealed class MultiDepentOption : IOption
+public sealed class MultiDepentOption : IOldOption
 {
-    private readonly List<IOption> parents;
-    private readonly Func<IReadOnlyList<IOption>, bool> predicate;
+    private readonly List<IOldOption> parents;
+    private readonly Func<IReadOnlyList<IOldOption>, bool> predicate;
 
     public MultiDepentOption(
         IOptionInfo info,
-        List<IOption> parents,
-        Func<IReadOnlyList<IOption>, bool> predicate,
+        List<IOldOption> parents,
+        Func<IReadOnlyList<IOldOption>, bool> predicate,
         IOptionRelation relation)
     {
         this.Info = info;
