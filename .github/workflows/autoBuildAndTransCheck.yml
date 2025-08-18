@@ -1,4 +1,4 @@
-name: AutoBuildAndTransCheck
+﻿name: AutoBuildAndTransCheck
 
 
 on:
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build_check:
-    runs-on: windows-latest
+    runs-on: windows-2025
     if: contains(github.event.pull_request.labels.*.name, 'ReadyToMerge')
     steps:
       - name: Generate token

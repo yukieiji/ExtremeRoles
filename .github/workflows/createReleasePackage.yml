@@ -1,4 +1,4 @@
-name: CreateReleasePackage
+﻿name: CreateReleasePackage
 
 
 on:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   packing:
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
       - uses: actions/checkout@v5
         with:
