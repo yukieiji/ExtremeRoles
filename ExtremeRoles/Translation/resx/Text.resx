@@ -112,9 +112,6 @@
   <data name="NeutralTab" xml:space="preserve">
     <value>&lt;color=#7F7F7FFF&gt;ニュートラル役職設定&lt;/color&gt;</value>
   </data>
-  <data name="LiberalTab" xml:space="preserve">
-    <value>&lt;color=#FFFF00FF&gt;リベラル役職設定&lt;/color&gt;</value>
-  </data>
   <data name="CombinationTab" xml:space="preserve">
     <value>&lt;color=#8CFFFFFF&gt;コンビ&lt;/color&gt;&lt;color=#FF1919FF&gt;ネーション&lt;/color&gt;&lt;color=#7F7F7FFF&gt;役職設定&lt;/color&gt;</value>
   </data>
@@ -168,12 +165,6 @@
   </data>
   <data name="RoleSpawnCategoryMaxImpostor" xml:space="preserve">
     <value>インポスターのロール数　最大</value>
-  </data>
-  <data name="RoleSpawnCategoryMinLiberal" xml:space="preserve">
-    <value>リベラルのロール数　最少</value>
-  </data>
-  <data name="RoleSpawnCategoryMaxLiberal" xml:space="preserve">
-    <value>リベラルのロール数　最大</value>
   </data>
   <data name="GhostRoleSpawnCategory" xml:space="preserve">
     <value>幽霊役職のロール数設定</value>
@@ -703,12 +694,6 @@ option.csvを削除して再実行してください</value>
   </data>
   <data name="neutralShotCall" xml:space="preserve">
     <value>自己中</value>
-  </data>
-  <data name="liberalIntro" xml:space="preserve">
-    <value>自由のために生きろ</value>
-  </data>
-  <data name="Liberal" xml:space="preserve">
-    <value>リベラル</value>
   </data>
   <data name="impostorShotCall" xml:space="preserve">
     <value>殺人鬼</value>
