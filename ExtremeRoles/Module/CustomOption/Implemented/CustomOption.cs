@@ -48,6 +48,14 @@ public sealed class CustomOption : IOption
 	}
 
 	public bool IsEnable => this.enableCondition.IsMet;
+	public IOptionCondition EnableCondition
+	{
+		set
+		{
+			enableCondition = value;
+		}
+	}
+	private IOptionCondition enableCondition;
 
 	public bool IsActiveAndEnable
 	{
@@ -60,12 +68,17 @@ public sealed class CustomOption : IOption
 			return this.activeCondition.IsMet;
 		}
 	}
+	public IOptionCondition ActiveCondition
+	{
+		set
+		{
+			activeCondition = value;
+		}
+	}
+	private IOptionCondition activeCondition;
 
 	private readonly ConfigBinder config;
 	private readonly IValueHolder holder;
-
-	private readonly IOptionCondition activeCondition;
-	private readonly IOptionCondition enableCondition;
 
 	public event Action<int>? OnValueChanged;
 
