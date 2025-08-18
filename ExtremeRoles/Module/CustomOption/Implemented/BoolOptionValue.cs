@@ -16,5 +16,5 @@ public sealed class BoolOptionValue(bool @default) :
 
 	public string StrValue => Tr.GetString(this.RangeValue);
 
-	private static string[] boolRange = ["optionOff", "optionOn"];
+	private static readonly string[] boolRange = ["optionOff", "optionOn"];
 }
