@@ -12,7 +12,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class VoteSwapper : MonoBehaviour
 {
-	private List<SpriteRenderer> vote = [];
+	private readonly List<SpriteRenderer> vote = [];
 	
 	private FloatRange? range;
 	private Transform? target;
