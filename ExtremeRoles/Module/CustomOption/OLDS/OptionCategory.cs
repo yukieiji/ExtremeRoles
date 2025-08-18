@@ -18,9 +18,9 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module.CustomOption.OLDS;
 
-public sealed class OldOptionLoadWrapper(in OptionCategory category, int idOffset) : IOptionLoader
+public sealed class OldOptionLoadWrapper(in OldOptionCategory category, int idOffset) : IOptionLoader
 {
-	private readonly OptionCategory category = category;
+	private readonly OldOptionCategory category = category;
 	private readonly int idOffset = idOffset;
 
 	public bool TryGet(int id, [NotNullWhen(true)] out IOldOption? option)
@@ -58,7 +58,7 @@ public sealed class OldOptionLoadWrapper(in OptionCategory category, int idOffse
 		=> category.GetValue<T>(id + idOffset);
 }
 
-public sealed class OptionCategory(
+public sealed class OldOptionCategory(
 	OptionTab tab,
 	int id,
 	string name,
