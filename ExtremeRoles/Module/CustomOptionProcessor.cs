@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -12,8 +12,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Migrator;
+using ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 
 #nullable enable

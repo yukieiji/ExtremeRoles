@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -19,12 +19,11 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 
 using UnityObject = UnityEngine.Object;
-
-using ExtremeRoles.Module.CustomOption.Implemented;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.SequentialOptionCategoryFactory;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.Compat.Initializer;
+using ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 #nullable enable
 
