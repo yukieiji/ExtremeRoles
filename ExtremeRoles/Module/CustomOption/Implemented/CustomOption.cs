@@ -1,10 +1,10 @@
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Runtime.CompilerServices;
+using System.Text;
 
-using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
@@ -48,14 +48,8 @@ public sealed class CustomOption : IOption
 	}
 
 	public bool IsEnable => this.enableCondition.IsMet;
-	public IOptionCondition EnableCondition
-	{
-		set
-		{
-			enableCondition = value;
-		}
-	}
-	private IOptionCondition enableCondition;
+
+
 
 	public bool IsActiveAndEnable
 	{
@@ -72,7 +66,7 @@ public sealed class CustomOption : IOption
 	{
 		set
 		{
-			activeCondition = value;
+			this.activeCondition = this.combineCondition(value);
 		}
 	}
 	private IOptionCondition activeCondition;

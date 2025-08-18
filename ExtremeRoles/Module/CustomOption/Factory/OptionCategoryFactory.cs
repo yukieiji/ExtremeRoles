@@ -1,0 +1,324 @@
+using ExtremeRoles.GhostRoles.Neutal;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Implemented.Old;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.OLDS;
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
+using UnityEngine;
+
+#nullable enable
+
+namespace ExtremeRoles.Module.CustomOption.Factory;
+
+public class OptionCategoryFactory(
+	string name,
+	int groupId,
+	Action<OptionTab, OptionCategory> action,
+	OptionTab tab = OptionTab.GeneralTab,
+	Color? color = null) : IDisposable
+{
+	public string Name { get; set; } = name;
+	public string OptionPrefix { protected get; set; } = name;
+
+	public OptionTab Tab { get; } = tab;
+	public int IdOffset { protected get; set; } = 0;
+	protected readonly Regex NameCleaner = new Regex(@"(\|)|(<.*?>)|(\\n)", RegexOptions.Compiled);
+
+	private readonly Color? color = color;
+	private readonly int groupid = groupId;
+	private readonly Action<OptionTab, OptionCategory> registerOption = action;
+	private readonly Dictionary<int, IOption> option = [];
+
+	public IOption Get(int id)
+		=> this.option[id];
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public BoolCustomOption CreateBoolOption<T>(
+		T option,
+		bool defaultValue,
+		IOldOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false,
+		in Func<bool>? hook = null) where T : struct, IConvertible
+	{
+		var info = CreateOptionInfo(option, isHidden, format, ignorePrefix);
+		var boolValue = new BoolOptionValue(defaultValue);
+		
+
+		var opt = new BoolCustomOption(
+			new OptionInfo(optionId, name, format, isHidden),
+			defaultValue,
+			OptionRelationFactory.Create(parent, invert, hook));
+
+		AddOption(optionId, opt);
+		return opt;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public FloatCustomOption CreateFloatOption<T>(
+		T option,
+		float defaultValue,
+		float min, float max, float step,
+		IOldOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false) where T : struct, IConvertible
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, ignorePrefix);
+
+		var opt = new FloatCustomOption(
+			new OptionInfo(optionId, name, format, isHidden),
+			defaultValue, min, max, step,
+			OptionRelationFactory.Create(parent, invert));
+
+		AddOption(optionId, opt);
+		return opt;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public FloatDynamicCustomOption CreateFloatDynamicOption<T>(
+		T option,
+		float defaultValue,
+		float min, float step,
+		IOldOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		float tempMaxValue = 0.0f,
+		bool ignorePrefix = false) where T : struct, IConvertible
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, ignorePrefix);
+
+		var opt = new FloatDynamicCustomOption(
+			new OptionInfo(optionId, name, format, isHidden),
+			defaultValue, min, step,
+			OptionRelationFactory.Create(parent, invert),
+			tempMaxValue);
+
+		AddOption(optionId, opt);
+		return opt;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public IntCustomOption CreateIntOption<T>(
+		T option,
+		int defaultValue,
+		int min, int max, int step,
+		IOldOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false) where T : struct, IConvertible
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, ignorePrefix);
+
+		var opt = new IntCustomOption(
+			new OptionInfo(optionId, name, format, isHidden),
+			defaultValue, min, max, step,
+			OptionRelationFactory.Create(parent, invert));
+
+		AddOption(optionId, opt);
+		return opt;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public IntDynamicCustomOption CreateIntDynamicOption<T>(
+		T option,
+		int defaultValue,
+		int min, int step,
+		IOldOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		int tempMaxValue = 0,
+		bool ignorePrefix = false) where T : struct, IConvertible
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, ignorePrefix);
+
+		var opt = new IntDynamicCustomOption(
+			new OptionInfo(optionId, name, format, isHidden),
+			defaultValue, min, step,
+			OptionRelationFactory.Create(parent, invert),
+			tempMaxValue);
+
+		AddOption(optionId, opt);
+		return opt;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public SelectionCustomOption CreateSelectionOption<T>(
+		T option,
+		string[] selections,
+		IOldOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false) where T : struct, IConvertible
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, ignorePrefix);
+
+		var opt = new SelectionCustomOption(
+			new OptionInfo(optionId, name, format, isHidden),
+			selections,
+			OptionRelationFactory.Create(parent, invert));
+
+		AddOption(optionId, opt);
+		return opt;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public SelectionCustomOption CreateSelectionOption<T, W>(
+		T option,
+		IOldOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false,
+		in Func<bool>? hook = null)
+		where T : struct, IConvertible
+		where W : struct, Enum
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, ignorePrefix);
+
+		var opt = SelectionCustomOption.CreateFromEnum<W>(
+			new OptionInfo(optionId, name, format, isHidden),
+			OptionRelationFactory.Create(parent, invert, hook));
+
+		AddOption(optionId, opt);
+		return opt;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public SelectionMultiEnableCustomOption CreateSelectionOption<T, W>(
+		T option,
+		IReadOnlyList<W> anotherDefault,
+		IOldOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false,
+		in Func<bool>? hook = null)
+		where T : struct, IConvertible
+		where W : struct, Enum
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, ignorePrefix);
+
+		var opt = SelectionMultiEnableCustomOption.CreateFromEnum(
+			new OptionInfo(optionId, name, format, isHidden),
+			anotherDefault,
+			OptionRelationFactory.Create(parent, invert, hook));
+
+		AddOption(optionId, opt);
+		return opt;
+	}
+	/*
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public MultiDepentOption CreateMultiDepentOption<T>(
+		T option,
+		List<IOldOption> parents,
+		Func<IReadOnlyList<IOldOption>, bool> predicate,
+		bool isHidden = true,
+		bool ignorePrefix = true) where T : struct, IConvertible
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, ignorePrefix);
+
+		var opt = new MultiDepentOption(
+			new OptionInfo(optionId, name, OptionUnit.None, isHidden),
+			parents,
+			predicate,
+			OptionRelationFactory.Create(null, false));
+
+		AddOption(optionId, opt);
+		return opt;
+	}
+	*/
+
+	public IOption CreateAddOption(
+		int id,
+		IOptionInfo info,
+		IValueHolder value,
+		IOptionCondition? activeCondition,
+		IOptionCondition? enableCondition = null)
+	{
+		var option = new CustomOption.Implemented.CustomOption(
+			info, value, activeCondition, enableCondition);
+		this.option.Add(id, option);
+		return option;
+	}
+
+	public void Dispose()
+	{
+		var newGroup = new OptionCategory(new OptionPack(this.Tab, this.groupid, this.Name, this.option, this.color));
+		registerOption.Invoke(Tab, newGroup);
+	}
+
+	public int GetOptionId<T>(T option) where T : struct, IConvertible
+	{
+		enumCheck(option);
+		return Convert.ToInt32(option) + IdOffset;
+	}
+
+	protected IOptionInfo CreateOptionInfo<T>(
+		T option,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool ignorePrefix = false) where T : struct, IConvertible
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, ignorePrefix);
+
+		return new OptionInfo(optionId, name, format, isHidden);
+	}
+
+	protected string GetOptionName<T>(T option, bool ignorePrefix = false) where T : struct, IConvertible
+	{
+		string cleanedName = NameCleaner.Replace(OptionPrefix, string.Empty).Trim();
+
+		return ignorePrefix ? $"|{cleanedName}|{option}" : $"{cleanedName}{option}";
+	}
+
+	protected static string GetColoredOptionName<T>(T option, Color? color) where T : struct, IConvertible
+	{
+		string? optionName = option.ToString();
+		if (string.IsNullOrEmpty(optionName))
+		{
+			throw new ArgumentException("Can't convert string");
+		}
+		return !color.HasValue ? optionName : Design.ColoedString(color.Value, optionName);
+	}
+
+	protected static IEnumerable<string> GetEnumString<T>()
+	{
+		foreach (object enumValue in Enum.GetValues(typeof(T)))
+		{
+			string? valuse = enumValue.ToString();
+			if (string.IsNullOrEmpty(valuse)) { continue; }
+
+			yield return valuse;
+		}
+	}
+
+	private static void enumCheck<T>(T isEnum) where T : struct, IConvertible
+	{
+		if (!typeof(int).IsAssignableFrom(Enum.GetUnderlyingType(typeof(T))))
+		{
+			throw new ArgumentException(nameof(T));
+		}
+	}
+}
