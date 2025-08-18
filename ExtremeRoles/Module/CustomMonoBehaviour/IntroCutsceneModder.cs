@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 
 using UnityEngine;
@@ -16,6 +16,7 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using PlayerIl2CppList = Il2CppSystem.Collections.Generic.List<PlayerControl>;
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -199,7 +200,7 @@ public sealed class IntroCutsceneModder : MonoBehaviour
         if (role.IsLiberal())
         {
             yourTeam.Clear();
-            foreach (var p in Player.AllPlayerControls)
+            foreach (var p in PlayerCache.AllPlayerControl)
             {
                 if (ExtremeRoleManager.TryGetRole(p.PlayerId, out var r) && r.IsLiberal())
                 {
