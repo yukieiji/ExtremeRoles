@@ -16,7 +16,7 @@ using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.SystemType.Roles;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.AutoParentSetOptionCategoryFactory;
 
 
 #nullable enable

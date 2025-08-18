@@ -16,13 +16,9 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module.Ability;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.Combination.Avalon;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 

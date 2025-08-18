@@ -6,7 +6,6 @@ using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
@@ -15,6 +14,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Tucker;
 

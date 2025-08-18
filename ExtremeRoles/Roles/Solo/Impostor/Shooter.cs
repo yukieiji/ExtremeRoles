@@ -11,8 +11,7 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using TMPro;
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

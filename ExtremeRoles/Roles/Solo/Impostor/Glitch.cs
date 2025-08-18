@@ -9,7 +9,6 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
@@ -17,6 +16,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 #nullable enable

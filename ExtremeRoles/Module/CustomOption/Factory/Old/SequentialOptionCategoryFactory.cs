@@ -16,7 +16,7 @@ using ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factory;
+namespace ExtremeRoles.Module.CustomOption.Factory.Old;
 
 public sealed class SequentialOptionCategoryFactory(
 	string name,
@@ -27,7 +27,7 @@ public sealed class SequentialOptionCategoryFactory(
 	OptionCategoryFactory(name, groupId, action, tab, color)
 {
 	public int StartId => 0;
-	public int EndId => this.Offset - 1;
+	public int EndId => Offset - 1;
 
 	public int Offset { private get; set; } = 0;
 
@@ -49,7 +49,7 @@ public sealed class SequentialOptionCategoryFactory(
 			defaultValue,
 			OptionRelationFactory.Create(parent, invert));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -74,7 +74,7 @@ public sealed class SequentialOptionCategoryFactory(
 			OptionRelationFactory.Create(parent, invert),
 			tempMaxValue);
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -97,7 +97,7 @@ public sealed class SequentialOptionCategoryFactory(
 			defaultValue, min, max, step,
 			OptionRelationFactory.Create(parent, invert));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -122,7 +122,7 @@ public sealed class SequentialOptionCategoryFactory(
 			OptionRelationFactory.Create(parent, invert),
 			tempMaxValue);
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -144,7 +144,7 @@ public sealed class SequentialOptionCategoryFactory(
 			selections,
 			OptionRelationFactory.Create(parent, invert));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -165,21 +165,21 @@ public sealed class SequentialOptionCategoryFactory(
 			new OptionInfo(optionId, name, format, isHidden),
 			OptionRelationFactory.Create(parent, invert));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
 	private string getOptionName(object option, bool ignorePrefix = false)
 	{
-		string cleanedName = this.NameCleaner.Replace(this.Name, string.Empty).Trim();
+		string cleanedName = NameCleaner.Replace(Name, string.Empty).Trim();
 
 		return ignorePrefix ? $"|{cleanedName}|{option}" : $"{cleanedName}{option}";
 	}
 
 	private int getOptionIdAndUpdate()
 	{
-		int optionId = this.Offset + this.IdOffset;
-		this.Offset++;
+		int optionId = Offset + IdOffset;
+		Offset++;
 		return optionId;
 	}
 }

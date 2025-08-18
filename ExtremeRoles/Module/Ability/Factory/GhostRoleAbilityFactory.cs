@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.AutoParentSetOptionCategoryFactory;
 
 namespace ExtremeRoles.Module.Ability.Factory;
 

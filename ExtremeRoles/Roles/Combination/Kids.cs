@@ -25,10 +25,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-
-using ExtremeRoles.Module.CustomOption.Factory;
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 #nullable enable

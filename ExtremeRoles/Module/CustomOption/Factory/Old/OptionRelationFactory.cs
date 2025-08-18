@@ -6,7 +6,7 @@ using ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factory;
+namespace ExtremeRoles.Module.CustomOption.Factory.Old;
 
 public static class OptionRelationFactory
 {

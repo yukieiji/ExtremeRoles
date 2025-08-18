@@ -14,7 +14,7 @@ using ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factory;
+namespace ExtremeRoles.Module.CustomOption.Factory.Old;
 
 public class OptionCategoryFactory(
 	string name,
@@ -36,12 +36,12 @@ public class OptionCategoryFactory(
 	private readonly OptionPack optionPack = new OptionPack();
 
 	public IOldOption Get(int id)
-		=> this.optionPack.Get(id);
+		=> optionPack.Get(id);
 	public IOldValueOption<T> Get<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
-		=> this.optionPack.Get<T>(id);
+		=> optionPack.Get<T>(id);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public BoolCustomOption CreateBoolOption<T>(
@@ -62,7 +62,7 @@ public class OptionCategoryFactory(
 			defaultValue,
 			OptionRelationFactory.Create(parent, invert, hook));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -85,7 +85,7 @@ public class OptionCategoryFactory(
 			defaultValue, min, max, step,
 			OptionRelationFactory.Create(parent, invert));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -110,7 +110,7 @@ public class OptionCategoryFactory(
 			OptionRelationFactory.Create(parent, invert),
 			tempMaxValue);
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -133,7 +133,7 @@ public class OptionCategoryFactory(
 			defaultValue, min, max, step,
 			OptionRelationFactory.Create(parent, invert));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -158,7 +158,7 @@ public class OptionCategoryFactory(
 			OptionRelationFactory.Create(parent, invert),
 			tempMaxValue);
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -180,7 +180,7 @@ public class OptionCategoryFactory(
 			selections,
 			OptionRelationFactory.Create(parent, invert));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -203,7 +203,7 @@ public class OptionCategoryFactory(
 			new OptionInfo(optionId, name, format, isHidden),
 			OptionRelationFactory.Create(parent, invert, hook));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -228,7 +228,7 @@ public class OptionCategoryFactory(
 			anotherDefault,
 			OptionRelationFactory.Create(parent, invert, hook));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -256,7 +256,7 @@ public class OptionCategoryFactory(
 
 	protected string GetOptionName<T>(T option, bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		string cleanedName = this.NameCleaner.Replace(this.OptionPrefix, string.Empty).Trim();
+		string cleanedName = NameCleaner.Replace(OptionPrefix, string.Empty).Trim();
 
 		return ignorePrefix ? $"|{cleanedName}|{option}" : $"{cleanedName}{option}";
 	}
@@ -292,8 +292,8 @@ public class OptionCategoryFactory(
 
 	public void Dispose()
 	{
-		var newGroup = new OptionCategory(this.Tab, groupid, this.Name, this.optionPack, this.color);
-		this.registerOption(Tab, newGroup);
+		var newGroup = new OptionCategory(Tab, groupid, Name, optionPack, color);
+		registerOption(Tab, newGroup);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -313,7 +313,7 @@ public class OptionCategoryFactory(
 			predicate,
 			OptionRelationFactory.Create(null, false));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 }

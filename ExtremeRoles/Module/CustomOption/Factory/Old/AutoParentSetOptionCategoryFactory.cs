@@ -7,7 +7,7 @@ using ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factory;
+namespace ExtremeRoles.Module.CustomOption.Factory.Old;
 
 public sealed class AutoParentSetOptionCategoryFactory(
 	in OptionCategoryFactory factory,
@@ -20,24 +20,24 @@ public sealed class AutoParentSetOptionCategoryFactory(
 	{
 		set
 		{
-			this.internalFactory.IdOffset = value;
+			internalFactory.IdOffset = value;
 		}
 	}
 	public string OptionPrefix
 	{
 		set
 		{
-			this.internalFactory.OptionPrefix = value;
+			internalFactory.OptionPrefix = value;
 		}
 	}
 
 	public IOldOption Get(int id)
-		=> this.internalFactory.Get(id);
+		=> internalFactory.Get(id);
 	public IOldValueOption<T> Get<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
-		=> this.internalFactory.Get<T>(id);
+		=> internalFactory.Get<T>(id);
 
 	public BoolCustomOption CreateBoolOption<T>(
 		T option,
@@ -48,7 +48,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		BoolCustomOption newOption = this.internalFactory.CreateBoolOption(
+		BoolCustomOption newOption = internalFactory.CreateBoolOption(
 			option,
 			defaultValue,
 			parent is null ? this.parent : parent,
@@ -74,7 +74,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		FloatCustomOption newOption = this.internalFactory.CreateFloatOption(
+		FloatCustomOption newOption = internalFactory.CreateFloatOption(
 			option,
 			defaultValue,
 			min, max, step,
@@ -101,7 +101,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		FloatCustomOption newOption = this.internalFactory.CreateFloatOption(
+		FloatCustomOption newOption = internalFactory.CreateFloatOption(
 			option,
 			defaultValue,
 			min, max, step,
@@ -129,7 +129,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		FloatDynamicCustomOption newOption = this.internalFactory.CreateFloatDynamicOption(
+		FloatDynamicCustomOption newOption = internalFactory.CreateFloatDynamicOption(
 			option,
 			defaultValue,
 			min, step,
@@ -157,7 +157,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		IntCustomOption newOption = this.internalFactory.CreateIntOption(
+		IntCustomOption newOption = internalFactory.CreateIntOption(
 			option,
 			defaultValue,
 			min, max, step,
@@ -185,7 +185,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		int tempMaxValue = 0,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		IntDynamicCustomOption newOption = this.internalFactory.CreateIntDynamicOption(
+		IntDynamicCustomOption newOption = internalFactory.CreateIntDynamicOption(
 			option,
 			defaultValue,
 			min, step,
@@ -212,7 +212,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		SelectionCustomOption newOption = this.internalFactory.CreateSelectionOption(
+		SelectionCustomOption newOption = internalFactory.CreateSelectionOption(
 			option,
 			selections,
 			parent is null ? this.parent : parent,
@@ -238,7 +238,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		where T : struct, IConvertible
 		where W : struct, Enum
 	{
-		SelectionCustomOption newOption = this.internalFactory.CreateSelectionOption<T, W>(
+		SelectionCustomOption newOption = internalFactory.CreateSelectionOption<T, W>(
 			option,
 			parent is null ? this.parent : parent,
 			isHidden,
@@ -264,7 +264,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		where T : struct, IConvertible
 		where W : struct, Enum
 	{
-		SelectionMultiEnableCustomOption newOption = this.internalFactory.CreateSelectionOption<T, W>(
+		SelectionMultiEnableCustomOption newOption = internalFactory.CreateSelectionOption(
 			option,
 			anotherDefault,
 			parent is null ? this.parent : parent,
@@ -297,6 +297,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 	public void Dispose()
 	{
-		this.internalFactory.Dispose();
+		internalFactory.Dispose();
 	}
 }

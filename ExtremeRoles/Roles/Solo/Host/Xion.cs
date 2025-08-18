@@ -4,8 +4,7 @@ using ExtremeRoles.Module;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Host;
 
