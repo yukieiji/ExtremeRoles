@@ -1,0 +1,115 @@
+using System;
+using System.Text;
+using System.Runtime.CompilerServices;
+
+using ExtremeRoles.Module.CustomOption.Interfaces;
+
+#nullable enable
+
+namespace ExtremeRoles.Module.CustomOption.Implemented;
+
+public sealed class CustomOption : IOption
+{
+	public IOptionInfo Info { get; }
+
+	public string TransedTitle => Tr.GetString(Info.Name);
+
+	public string TransedValue
+	{
+		get
+		{
+			string format = Info.Format;
+			string value = this.holder.StrValue;
+			return string.IsNullOrEmpty(format) ?
+				value : Tr.GetString(format, value);
+		}
+	}
+
+	public int Range => this.holder.Range;
+
+	public int Selection
+	{ 
+		get => this.holder.Selection; 
+		set
+		{
+			this.holder.Selection = value;
+
+			this.OnValueChanged?.Invoke(this.Selection);
+
+			var amongUs = AmongUsClient.Instance;
+			if (amongUs != null &&
+				amongUs.AmHost)
+			{
+				config.Value = this.Selection;
+			}
+		}
+	}
+
+	public bool IsEnable => this.enableCondition.IsMet;
+
+	public bool IsActiveAndEnable
+	{
+		get
+		{
+			if (this.Info.IsHidden)
+			{
+				return false;
+			}
+			return this.activeCondition.IsMet;
+		}
+	}
+
+	private readonly ConfigBinder config;
+	private readonly IValueHolder holder;
+
+	private readonly IOptionCondition activeCondition;
+	private readonly IOptionCondition enableCondition;
+
+	public event Action<int>? OnValueChanged;
+
+	public CustomOption(
+		IOptionInfo info,
+		IValueHolder value,
+		IOptionCondition? activeCondition,
+		IOptionCondition? enableCondition = null)
+	{
+		Info = info;
+
+		this.holder = value;
+
+		this.activeCondition = activeCondition ?? new AlwaysTrueCondition();
+		this.enableCondition = enableCondition ?? new NotDefaultValueCondition(this.holder);
+
+		int defaultIndex = value.DefaultIndex;
+		config = new ConfigBinder(Info.CodeRemovedName, defaultIndex);
+
+		// 非表示のオプションは基本的に不具合や内部仕様のハックを元に作成されていることが多いため、デフォルト値に設定し変な挙動が起きにくくする
+		this.Selection = Info.IsHidden ? defaultIndex : config.Value;
+
+		ExtremeRolesPlugin.Logger.LogInfo($"---- Create new Option ----\n{this}\n--------");
+	}
+
+	public override string ToString()
+	{
+		var builder = new StringBuilder();
+		builder
+			.AppendLine(this.Info.ToString())
+			.Append(this.holder.ToString());
+		return builder.ToString();
+	}
+
+	public void SwitchPreset()
+	{
+		this.config.Rebind();
+		Selection = this.config.Value;
+	}
+
+	public T GetValue<T>() where T :
+		struct, IComparable, IConvertible,
+		IComparable<T>, IEquatable<T>
+	{
+		var holder = this.holder;
+		var value = Unsafe.As<IValueHolder, IValue<T>>(ref holder);
+		return value.Value;
+	}
+}

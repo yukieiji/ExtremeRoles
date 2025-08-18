@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,7 +14,7 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 		notnull, IComparable, IConvertible,
 		IComparable<T>, IEquatable<T>
 {
-	public T Value => _option[Selection];
+	public T RangeValue => _option[Selection];
 	public T Min => _option[0];
 	public T Max => _option[Range - 1];
 
@@ -36,7 +36,7 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 	private readonly T[] _option = option;
 	private int _selection = 0;
 
-	private OptionRange(IEnumerable<T> range) : this(range.ToArray())
+	public OptionRange(IEnumerable<T> range) : this(range.ToArray())
 	{ }
 
 	public int GetIndex(T value)
@@ -46,7 +46,7 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 	}
 
 	public override string ToString()
-		=> $"Cur:{Value} (Min:{Min}, Max:{Max}, Selected Index:{Selection})";
+		=> $"Cur:{RangeValue} (Min:{Min}, Max:{Max}, Selected Index:{Selection})";
 
 	public static OptionRange<int> Create(int min, int max, int step)
 	{
@@ -64,7 +64,7 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 		return new OptionRange<string>(range);
 	}
 
-	private static IEnumerable<string> GetEnumString<W>() where W : struct, Enum
+	protected static IEnumerable<string> GetEnumString<W>() where W : struct, Enum
 	{
 		foreach (W enumValue in Enum.GetValues<W>())
 		{
@@ -75,7 +75,7 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 		}
 	}
 
-	private static IEnumerable<int> GetIntRange(int min, int max, int step)
+	protected static IEnumerable<int> GetIntRange(int min, int max, int step)
 	{
 		for (int s = min; s <= max; s += step)
 		{
@@ -83,7 +83,7 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 		}
 	}
 
-	private static IEnumerable<float> GetFloatRange(float min, float max, float step)
+	protected static IEnumerable<float> GetFloatRange(float min, float max, float step)
 	{
 		decimal dStep = new decimal(step);
 		decimal dMin = new decimal(min);

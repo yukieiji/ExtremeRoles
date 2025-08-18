@@ -25,7 +25,7 @@ public sealed class PresetOption : IOldValueOption<int>
 	{
 		get
 		{
-			int value = optionRange.Value;
+			int value = optionRange.RangeValue;
 			string format = Info.Format;
 			return Tr.GetString(format, value);
 		}
