@@ -1,6 +1,9 @@
 using System;
 using System.Text;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
+using System.Reflection;
+using System.Linq;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
@@ -76,6 +79,10 @@ public sealed class CustomOption : IOption
 		Info = info;
 
 		this.holder = value;
+
+		Debug.Assert(
+			value.GetType().GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IValue<>)),
+			"holder must implement IValue<T>");
 
 		this.activeCondition = activeCondition ?? new AlwaysTrueCondition();
 		this.enableCondition = enableCondition ?? new NotDefaultValueCondition(this.holder);
