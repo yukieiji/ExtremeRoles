@@ -6,7 +6,7 @@ using ExtremeRoles.Helper;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Implemented;
+namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 public sealed class PresetOption : IOldValueOption<int>
 {
@@ -26,7 +26,7 @@ public sealed class PresetOption : IOldValueOption<int>
 		get
 		{
 			int value = optionRange.Value;
-			string format = this.Info.Format;
+			string format = Info.Format;
 			return Tr.GetString(format, value);
 		}
 	}

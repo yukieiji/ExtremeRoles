@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-namespace ExtremeRoles.Module.CustomOption.Implemented;
+namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 public sealed class MultiDepentOption : IOldOption
 {
@@ -16,17 +16,17 @@ public sealed class MultiDepentOption : IOldOption
         Func<IReadOnlyList<IOldOption>, bool> predicate,
         IOptionRelation relation)
     {
-        this.Info = info;
+        Info = info;
         this.parents = parents;
         this.predicate = predicate;
-        this.Relation = relation;
+        Relation = relation;
     }
 
     public IOptionInfo Info { get; }
     public IOptionRelation Relation { get; }
 
     public string Title => string.Empty;
-    public string ValueString => this.IsEnable.ToString();
+    public string ValueString => IsEnable.ToString();
 
     public int Range => 1;
     public int Selection { get; set; }

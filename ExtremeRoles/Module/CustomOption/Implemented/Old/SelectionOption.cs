@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using ExtremeRoles.Extension;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-namespace ExtremeRoles.Module.CustomOption.Implemented;
+namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 public sealed class SelectionCustomOption : CustomOptionBase<int, string>
 {
@@ -75,7 +74,7 @@ public sealed class SelectionMultiEnableCustomOption : CustomOptionBase<int, str
 			info, range,
 			relation, defaultValue)
 	{
-		this.defaults = anotherDefaults;
+		defaults = anotherDefaults;
 	}
 
 	public SelectionMultiEnableCustomOption(
@@ -87,7 +86,7 @@ public sealed class SelectionMultiEnableCustomOption : CustomOptionBase<int, str
 			info, new OptionRange<string>(range),
 			relation, defaultValue)
 	{
-		this.defaults = defaults
+		defaults = defaults
 			.Select(x => Array.IndexOf(range, x))
 			.ToHashSet();
 	}
@@ -101,7 +100,7 @@ public sealed class SelectionMultiEnableCustomOption : CustomOptionBase<int, str
 			info, new OptionRange<string>(range),
 			relation, defaultValue)
 	{
-		this.defaults = anotherDefaults;
+		defaults = anotherDefaults;
 	}
 
 	public static SelectionMultiEnableCustomOption CreateFromEnum<T>(
@@ -120,5 +119,5 @@ public sealed class SelectionMultiEnableCustomOption : CustomOptionBase<int, str
 	public override int Value => OptionRange.Selection;
 	public override bool IsEnable =>
 		base.IsEnable &&
-		!this.defaults.Contains(this.Selection);
+		!defaults.Contains(Selection);
 }
