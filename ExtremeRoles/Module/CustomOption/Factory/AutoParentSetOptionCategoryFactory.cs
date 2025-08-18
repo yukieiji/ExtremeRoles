@@ -33,7 +33,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 	public IOldOption Get(int id)
 		=> this.internalFactory.Get(id);
-	public IValueOption<T> Get<T>(int id)
+	public IOldValueOption<T> Get<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>

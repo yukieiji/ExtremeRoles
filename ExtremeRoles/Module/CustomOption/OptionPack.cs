@@ -8,18 +8,18 @@ namespace ExtremeRoles.Module.CustomOption;
 
 public sealed class OptionPack
 {
-	public IReadOnlyDictionary<int, IValueOption<int>> IntOptions => intOpt;
-	public IReadOnlyDictionary<int, IValueOption<float>> FloatOptions => floatOpt;
-	public IReadOnlyDictionary<int, IValueOption<bool>> BoolOptions => boolOpt;
+	public IReadOnlyDictionary<int, IOldValueOption<int>> IntOptions => intOpt;
+	public IReadOnlyDictionary<int, IOldValueOption<float>> FloatOptions => floatOpt;
+	public IReadOnlyDictionary<int, IOldValueOption<bool>> BoolOptions => boolOpt;
 	public IReadOnlyDictionary<int, IOldOption> AllOptions => allOpt;
 
-	private readonly Dictionary<int, IValueOption<int>> intOpt = new Dictionary<int, IValueOption<int>>();
-	private readonly Dictionary<int, IValueOption<float>> floatOpt = new Dictionary<int, IValueOption<float>>();
-	private readonly Dictionary<int, IValueOption<bool>> boolOpt = new Dictionary<int, IValueOption<bool>>();
+	private readonly Dictionary<int, IOldValueOption<int>> intOpt = new Dictionary<int, IOldValueOption<int>>();
+	private readonly Dictionary<int, IOldValueOption<float>> floatOpt = new Dictionary<int, IOldValueOption<float>>();
+	private readonly Dictionary<int, IOldValueOption<bool>> boolOpt = new Dictionary<int, IOldValueOption<bool>>();
 	private readonly Dictionary<int, IOldOption> allOpt = new Dictionary<int, IOldOption>();
 
 	public IOldOption Get(int id) => this.allOpt[id];
-	public IValueOption<T> Get<T>(int id)
+	public IOldValueOption<T> Get<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
@@ -27,17 +27,17 @@ public sealed class OptionPack
 		if (typeof(T) == typeof(int))
 		{
 			var intOption = this.intOpt[id];
-			return Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
+			return Unsafe.As<IOldValueOption<int>, IOldValueOption<T>>(ref intOption);
 		}
 		else if (typeof(T) == typeof(float))
 		{
 			var floatOption = this.floatOpt[id];
-			return Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
+			return Unsafe.As<IOldValueOption<float>, IOldValueOption<T>>(ref floatOption);
 		}
 		else if (typeof(T) == typeof(bool))
 		{
 			var boolOption = this.boolOpt[id];
-			return Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
+			return Unsafe.As<IOldValueOption<bool>, IOldValueOption<T>>(ref boolOption);
 		}
 		else
 		{
@@ -45,38 +45,38 @@ public sealed class OptionPack
 		}
 	}
 
-	public void Add(int id, IValueOption<float> option)
+	public void Add(int id, IOldValueOption<float> option)
 	{
 		this.floatOpt.Add(id, option);
 		this.allOpt.Add(id, option);
 	}
-	public void Add(int id, IValueOption<int> option)
+	public void Add(int id, IOldValueOption<int> option)
 	{
 		this.intOpt.Add(id, option);
 		this.allOpt.Add(id, option);
 	}
-	public void Add(int id, IValueOption<bool> option)
+	public void Add(int id, IOldValueOption<bool> option)
 	{
 		this.boolOpt.Add(id, option);
 		this.allOpt.Add(id, option);
 	}
 
-	public void AddOption<SelectionType>(int id, IValueOption<SelectionType> option)
+	public void AddOption<SelectionType>(int id, IOldValueOption<SelectionType> option)
 		where SelectionType :
 			struct, IComparable, IConvertible,
 			IComparable<SelectionType>, IEquatable<SelectionType>
 	{
 		if (typeof(SelectionType) == typeof(int))
 		{
-			Add(id, Unsafe.As<IValueOption<SelectionType>, IValueOption<int>>(ref option));
+			Add(id, Unsafe.As<IOldValueOption<SelectionType>, IOldValueOption<int>>(ref option));
 		}
 		else if (typeof(SelectionType) == typeof(float))
 		{
-			Add(id, Unsafe.As<IValueOption<SelectionType>, IValueOption<float>>(ref option));
+			Add(id, Unsafe.As<IOldValueOption<SelectionType>, IOldValueOption<float>>(ref option));
 		}
 		else if (typeof(SelectionType) == typeof(bool))
 		{
-			Add(id, Unsafe.As<IValueOption<SelectionType>, IValueOption<bool>>(ref option));
+			Add(id, Unsafe.As<IOldValueOption<SelectionType>, IOldValueOption<bool>>(ref option));
 		}
 		else
 		{

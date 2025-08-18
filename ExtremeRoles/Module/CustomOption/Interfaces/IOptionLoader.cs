@@ -10,23 +10,23 @@ public interface IOptionLoader
 	public bool TryGet(int id, [NotNullWhen(true)] out IOldOption? option);
 	public IOldOption Get<T>(T id) where T : Enum;
 
-	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IValueOption<T>? option)
+	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IOldValueOption<T>? option)
 		where W : Enum
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>;
 
-	public bool TryGetValueOption<T>(int id, [NotNullWhen(true)] out IValueOption<T>? option)
+	public bool TryGetValueOption<T>(int id, [NotNullWhen(true)] out IOldValueOption<T>? option)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>;
 
-	public IValueOption<T> GetValueOption<W, T>(W id)
+	public IOldValueOption<T> GetValueOption<W, T>(W id)
 		where W : Enum
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>;
-	public IValueOption<T> GetValueOption<T>(int id)
+	public IOldValueOption<T> GetValueOption<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>;

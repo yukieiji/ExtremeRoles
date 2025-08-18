@@ -36,7 +36,7 @@ public class OptionCategoryFactory(
 
 	public IOldOption Get(int id)
 		=> this.optionPack.Get(id);
-	public IValueOption<T> Get<T>(int id)
+	public IOldValueOption<T> Get<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
@@ -233,7 +233,7 @@ public class OptionCategoryFactory(
 
 	public void AddOption<SelectionType>(
 		int id,
-		IValueOption<SelectionType> option) where SelectionType :
+		IOldValueOption<SelectionType> option) where SelectionType :
 		struct, IComparable, IConvertible,
 		IComparable<SelectionType>, IEquatable<SelectionType>
 	{

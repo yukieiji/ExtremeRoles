@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
@@ -8,7 +8,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module.CustomOption.Implemented;
 
-public sealed class PresetOption : IValueOption<int>
+public sealed class PresetOption : IOldValueOption<int>
 {
 	public int Value { get; }
 	public IOptionInfo Info { get; init; }
