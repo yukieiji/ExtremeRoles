@@ -10,7 +10,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 namespace ExtremeRoles.Module.CustomOption.Implemented;
 
 public abstract class CustomOptionBase<OutType, SelectionType> :
-	IValueOption<OutType>
+	IOldValueOption<OutType>
 	where OutType :
 		struct, IComparable, IConvertible,
 		IComparable<OutType>, IEquatable<OutType>
