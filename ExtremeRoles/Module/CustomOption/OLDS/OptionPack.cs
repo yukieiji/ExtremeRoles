@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-namespace ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.CustomOption.OLDS;
 
-public sealed class OptionPack
+public sealed class OldOptionPack
 {
 	public IReadOnlyDictionary<int, IOldValueOption<int>> IntOptions => intOpt;
 	public IReadOnlyDictionary<int, IOldValueOption<float>> FloatOptions => floatOpt;
@@ -18,7 +17,7 @@ public sealed class OptionPack
 	private readonly Dictionary<int, IOldValueOption<bool>> boolOpt = new Dictionary<int, IOldValueOption<bool>>();
 	private readonly Dictionary<int, IOldOption> allOpt = new Dictionary<int, IOldOption>();
 
-	public IOldOption Get(int id) => this.allOpt[id];
+	public IOldOption Get(int id) => allOpt[id];
 	public IOldValueOption<T> Get<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,
@@ -26,17 +25,17 @@ public sealed class OptionPack
 	{
 		if (typeof(T) == typeof(int))
 		{
-			var intOption = this.intOpt[id];
+			var intOption = intOpt[id];
 			return Unsafe.As<IOldValueOption<int>, IOldValueOption<T>>(ref intOption);
 		}
 		else if (typeof(T) == typeof(float))
 		{
-			var floatOption = this.floatOpt[id];
+			var floatOption = floatOpt[id];
 			return Unsafe.As<IOldValueOption<float>, IOldValueOption<T>>(ref floatOption);
 		}
 		else if (typeof(T) == typeof(bool))
 		{
-			var boolOption = this.boolOpt[id];
+			var boolOption = boolOpt[id];
 			return Unsafe.As<IOldValueOption<bool>, IOldValueOption<T>>(ref boolOption);
 		}
 		else
@@ -47,18 +46,18 @@ public sealed class OptionPack
 
 	public void Add(int id, IOldValueOption<float> option)
 	{
-		this.floatOpt.Add(id, option);
-		this.allOpt.Add(id, option);
+		floatOpt.Add(id, option);
+		allOpt.Add(id, option);
 	}
 	public void Add(int id, IOldValueOption<int> option)
 	{
-		this.intOpt.Add(id, option);
-		this.allOpt.Add(id, option);
+		intOpt.Add(id, option);
+		allOpt.Add(id, option);
 	}
 	public void Add(int id, IOldValueOption<bool> option)
 	{
-		this.boolOpt.Add(id, option);
-		this.allOpt.Add(id, option);
+		boolOpt.Add(id, option);
+		allOpt.Add(id, option);
 	}
 
 	public void AddOption<SelectionType>(int id, IOldValueOption<SelectionType> option)

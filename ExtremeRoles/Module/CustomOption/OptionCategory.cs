@@ -13,6 +13,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Extension;
 using System.Diagnostics.CodeAnalysis;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
 
@@ -62,7 +63,7 @@ public sealed class OptionCategory(
 	OptionTab tab,
 	int id,
 	string name,
-	in OptionPack option,
+	in OldOptionPack option,
 	in Color? color = null) : IOptionLoader
 {
 	public Color? Color { get; } = color;

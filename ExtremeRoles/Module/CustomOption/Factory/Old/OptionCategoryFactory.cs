@@ -10,6 +10,7 @@ using UnityEngine;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Implemented.Old;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 
 #nullable enable
@@ -33,7 +34,7 @@ public class OptionCategoryFactory(
 	private readonly Color? color = color;
 	private readonly int groupid = groupId;
 	private readonly Action<OptionTab, OptionCategory> registerOption = action;
-	private readonly OptionPack optionPack = new OptionPack();
+	private readonly OldOptionPack optionPack = new OldOptionPack();
 
 	public IOldOption Get(int id)
 		=> optionPack.Get(id);
