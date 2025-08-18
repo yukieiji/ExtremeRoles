@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 
 using System;
 using System.Collections.Generic;
@@ -244,7 +244,7 @@ public class OptionCategoryFactory(
 		int id,
 		MultiDepentOption option)
 	{
-		optionPack.AddOption(id, option);
+		// optionPack.AddOption(id, option);
 	}
 
 	public int GetOptionId<T>(T option) where T : struct, IConvertible
