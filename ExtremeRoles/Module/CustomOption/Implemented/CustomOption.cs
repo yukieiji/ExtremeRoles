@@ -1,9 +1,8 @@
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Runtime.CompilerServices;
-using System.Diagnostics;
-using System.Reflection;
-using System.Linq;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
@@ -80,9 +79,14 @@ public sealed class CustomOption : IOption
 
 		this.holder = value;
 
+#if DEBUG
+		// value.以降の処理がReleaseで走らないようにするため全体的に無効化しておく
 		Debug.Assert(
-			value.GetType().GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IValue<>)),
+			value.GetType().GetInterfaces().Any(
+				i => 
+					i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IValue<>)),
 			"holder must implement IValue<T>");
+#endif
 
 		this.activeCondition = activeCondition ?? new AlwaysTrueCondition();
 		this.enableCondition = enableCondition ?? new NotDefaultValueCondition(this.holder);
