@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 
 using System;
 using System.Linq;
@@ -11,6 +11,7 @@ using UnityEngine;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 
 #nullable enable
@@ -34,7 +35,7 @@ public sealed class SequentialOptionCategoryFactory(
 	public BoolCustomOption CreateBoolOption(
 		object option,
 		bool defaultValue,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -57,7 +58,7 @@ public sealed class SequentialOptionCategoryFactory(
 		object option,
 		float defaultValue,
 		float min, float step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -82,7 +83,7 @@ public sealed class SequentialOptionCategoryFactory(
 		object option,
 		int defaultValue,
 		int min, int max, int step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -105,7 +106,7 @@ public sealed class SequentialOptionCategoryFactory(
 		object option,
 		int defaultValue,
 		int min, int step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -129,7 +130,7 @@ public sealed class SequentialOptionCategoryFactory(
 	public SelectionCustomOption CreateSelectionOption(
 		object option,
 		string[] selections,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -150,7 +151,7 @@ public sealed class SequentialOptionCategoryFactory(
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public SelectionCustomOption CreateSelectionOption<W>(
 		object option,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,

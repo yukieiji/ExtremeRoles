@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace ExtremeRoles.Module.CustomOption.Interfaces;
 
-public interface IValueOption<ValueType> : IOption
+public interface IOldValueOption<ValueType> : IOldOption
 	where ValueType :
 		struct, IComparable, IConvertible,
 		IComparable<ValueType>, IEquatable<ValueType>

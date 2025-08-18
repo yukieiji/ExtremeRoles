@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ExtremeRoles.Module.CustomOption.Interfaces;
 
 public interface IOptionRelation
 {
-	public List<IOption> Children { get; }
+	public List<IOldOption> Children { get; }
 }
 
 public interface IOptionChain
@@ -14,7 +14,7 @@ public interface IOptionChain
 
 public interface IOptionParent
 {
-	public IOption Parent { get; }
+	public IOldOption Parent { get; }
 }
 
 public interface IOptionInvertRelation

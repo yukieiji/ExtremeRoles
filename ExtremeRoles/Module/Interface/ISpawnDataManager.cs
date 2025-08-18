@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
@@ -32,6 +32,6 @@ public interface ISpawnDataManager
 		return RandomGenerator.Instance.Next(minSpawnNum, maxSpawnNum + 1);
 	}
 
-	protected static int ComputePercentage(IValueOption<int> self)
+	protected static int ComputePercentage(IOldValueOption<int> self)
 		=> (int)decimal.Multiply(self.Value, self.Range);
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -130,8 +130,8 @@ public interface IRoleSelector
             new() { minLiberal, maxLiberal },
             (parents) =>
             {
-                var min = (ExtremeRoles.Module.CustomOption.Interfaces.IValueOption<int>)parents[0];
-                var max = (ExtremeRoles.Module.CustomOption.Interfaces.IValueOption<int>)parents[1];
+                var min = (ExtremeRoles.Module.CustomOption.Interfaces.IOldValueOption<int>)parents[0];
+                var max = (ExtremeRoles.Module.CustomOption.Interfaces.IOldValueOption<int>)parents[1];
                 return min.Value > 0 || max.Value > 0;
             });
 

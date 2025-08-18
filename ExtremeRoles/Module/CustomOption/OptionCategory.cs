@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
@@ -23,30 +23,30 @@ public sealed class OptionLoadWrapper(in OptionCategory category, int idOffset) 
 	private readonly OptionCategory category = category;
 	private readonly int idOffset = idOffset;
 
-	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option)
+	public bool TryGet(int id, [NotNullWhen(true)] out IOldOption? option)
 		=> this.TryGet(id + idOffset, out option);
-	public IOption Get<T>(T id) where T : Enum
+	public IOldOption Get<T>(T id) where T : Enum
 			=> this.category.Get(id.FastInt() + idOffset);
 
-	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IValueOption<T>? option)
+	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IOldValueOption<T>? option)
 		where W : Enum
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
 		=> this.category.TryGetValueOption(id.FastInt() + idOffset, out option);
-	public bool TryGetValueOption<T>(int id, [NotNullWhen(true)] out IValueOption<T>? option)
+	public bool TryGetValueOption<T>(int id, [NotNullWhen(true)] out IOldValueOption<T>? option)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
 		=> this.category.TryGetValueOption(id + idOffset, out option);
 
-	public IValueOption<T> GetValueOption<W, T>(W id)
+	public IOldValueOption<T> GetValueOption<W, T>(W id)
 		where W : Enum
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
 		=> this.category.GetValueOption<T>(id.FastInt() + idOffset);
-	public IValueOption<T> GetValueOption<T>(int id)
+	public IOldValueOption<T> GetValueOption<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
@@ -67,7 +67,7 @@ public sealed class OptionCategory(
 {
 	public Color? Color { get; } = color;
 
-	public IEnumerable<IOption> Options => allOpt.Values;
+	public IEnumerable<IOldOption> Options => allOpt.Values;
 	public int Count => allOpt.Count;
 
 	public OptionTab Tab { get; } = tab;
@@ -77,10 +77,10 @@ public sealed class OptionCategory(
 
 	public bool IsDirty { get; set; } = false;
 
-	private readonly IReadOnlyDictionary<int, IValueOption<int>> intOpt = option.IntOptions;
-	private readonly IReadOnlyDictionary<int, IValueOption<float>> floatOpt = option.FloatOptions;
-	private readonly IReadOnlyDictionary<int, IValueOption<bool>> boolOpt = option.BoolOptions;
-	private readonly IReadOnlyDictionary<int, IOption> allOpt = option.AllOptions;
+	private readonly IReadOnlyDictionary<int, IOldValueOption<int>> intOpt = option.IntOptions;
+	private readonly IReadOnlyDictionary<int, IOldValueOption<float>> floatOpt = option.FloatOptions;
+	private readonly IReadOnlyDictionary<int, IOldValueOption<bool>> boolOpt = option.BoolOptions;
+	private readonly IReadOnlyDictionary<int, IOldOption> allOpt = option.AllOptions;
 
 	public void AddHudString(in StringBuilder builder)
 	{
@@ -96,19 +96,19 @@ public sealed class OptionCategory(
 			builder.AppendLine($"{option.Title}: {option.ValueString}");
 		}
 	}
-	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option)
+	public bool TryGet(int id, [NotNullWhen(true)] out IOldOption? option)
 		=> this.allOpt.TryGetValue(id, out option) && option is not null;
-	public IOption Get<T>(T id) where T : Enum
+	public IOldOption Get<T>(T id) where T : Enum
 		=> this.Get(id.FastInt());
 
-	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IValueOption<T>? option)
+	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IOldValueOption<T>? option)
 		where W : Enum
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
 		=> this.TryGetValueOption(id.FastInt(), out option);
 
-	public bool TryGetValueOption<T>(int id, [NotNullWhen(true)] out IValueOption<T>? option)
+	public bool TryGetValueOption<T>(int id, [NotNullWhen(true)] out IOldValueOption<T>? option)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
@@ -119,19 +119,19 @@ public sealed class OptionCategory(
 		if (typeof(T) == typeof(int))
 		{
 			var intOption = this.intOpt[id];
-			option = Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
+			option = Unsafe.As<IOldValueOption<int>, IOldValueOption<T>>(ref intOption);
 			return option is not null;
 		}
 		else if (typeof(T) == typeof(float))
 		{
 			var floatOption = this.floatOpt[id];
-			option = Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
+			option = Unsafe.As<IOldValueOption<float>, IOldValueOption<T>>(ref floatOption);
 			return option is not null;
 		}
 		else if (typeof(T) == typeof(bool))
 		{
 			var boolOption = this.boolOpt[id];
-			option = Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
+			option = Unsafe.As<IOldValueOption<bool>, IOldValueOption<T>>(ref boolOption);
 			return option is not null;
 		}
 		else
@@ -140,14 +140,14 @@ public sealed class OptionCategory(
 		}
 	}
 
-	public IValueOption<T> GetValueOption<W, T>(W id)
+	public IOldValueOption<T> GetValueOption<W, T>(W id)
 		where W : Enum
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
 		=> this.GetValueOption<T>(id.FastInt());
 
-	public IValueOption<T> GetValueOption<T>(int id)
+	public IOldValueOption<T> GetValueOption<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
@@ -155,17 +155,17 @@ public sealed class OptionCategory(
 		if (typeof(T) == typeof(int))
 		{
 			var intOption = this.intOpt[id];
-			return Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
+			return Unsafe.As<IOldValueOption<int>, IOldValueOption<T>>(ref intOption);
 		}
 		else if (typeof(T) == typeof(float))
 		{
 			var floatOption = this.floatOpt[id];
-			return Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
+			return Unsafe.As<IOldValueOption<float>, IOldValueOption<T>>(ref floatOption);
 		}
 		else if (typeof(T) == typeof(bool))
 		{
 			var boolOption = this.boolOpt[id];
-			return Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
+			return Unsafe.As<IOldValueOption<bool>, IOldValueOption<T>>(ref boolOption);
 		}
 		else
 		{
@@ -173,7 +173,7 @@ public sealed class OptionCategory(
 		}
 	}
 
-	public IOption Get(int id)
+	public IOldOption Get(int id)
 	{
 		if (!TryGet(id, out var option))
 		{

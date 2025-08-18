@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Implemented;
+namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 public abstract class CustomOptionBase<OutType, SelectionType> :
-	IValueOption<OutType>
+	IOldValueOption<OutType>
 	where OutType :
 		struct, IComparable, IConvertible,
 		IComparable<OutType>, IEquatable<OutType>
@@ -48,7 +47,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 	{
 		get
 		{
-			string? value = OptionRange.Value.ToString();
+			string? value = OptionRange.RangeValue.ToString();
 			if (string.IsNullOrEmpty(value))
 			{
 				value = "NOT_SUPPORT";
@@ -57,7 +56,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 			{
 				value = Tr.GetString(value);
 			}
-			string format = this.Info.Format;
+			string format = Info.Format;
 			return string.IsNullOrEmpty(format) ?
 				value : Tr.GetString(format, value);
 		}
@@ -127,7 +126,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 	public void AddWithUpdate(IDynamismOption<OutType> option)
 	{
 		withUpdate.Add(option);
-		if (!this.Info.IsHidden)
+		if (!Info.IsHidden)
 		{
 			option.Update(Value);
 		}

@@ -1,32 +1,32 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-namespace ExtremeRoles.Module.CustomOption.Implemented;
+namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
-public sealed class MultiDepentOption : IOption
+public sealed class MultiDepentOption : IOldOption
 {
-    private readonly List<IOption> parents;
-    private readonly Func<IReadOnlyList<IOption>, bool> predicate;
+    private readonly List<IOldOption> parents;
+    private readonly Func<IReadOnlyList<IOldOption>, bool> predicate;
 
     public MultiDepentOption(
         IOptionInfo info,
-        List<IOption> parents,
-        Func<IReadOnlyList<IOption>, bool> predicate,
+        List<IOldOption> parents,
+        Func<IReadOnlyList<IOldOption>, bool> predicate,
         IOptionRelation relation)
     {
-        this.Info = info;
+        Info = info;
         this.parents = parents;
         this.predicate = predicate;
-        this.Relation = relation;
+        Relation = relation;
     }
 
     public IOptionInfo Info { get; }
     public IOptionRelation Relation { get; }
 
     public string Title => string.Empty;
-    public string ValueString => this.IsEnable.ToString();
+    public string ValueString => IsEnable.ToString();
 
     public int Range => 1;
     public int Selection { get; set; }
