@@ -132,9 +132,6 @@
   <data name="NeutralTab" xml:space="preserve">
     <value>&lt;color=#7F7F7FFF&gt;NEUTRAL Roles&lt;/color&gt;</value>
   </data>
-  <data name="LiberalTab" xml:space="preserve">
-    <value>&lt;color=#FFFF00FF&gt;LIBERAL Roles&lt;/color&gt;</value>
-  </data>
   <data name="CombinationTab" xml:space="preserve">
     <value>&lt;color=#8CFFFFFF&gt;COMBI&lt;/color&gt;&lt;color=#FF1919FF&gt;NATION&lt;/color&gt;&lt;color=#7F7F7FFF&gt; Roles&lt;/color&gt;</value>
   </data>
@@ -173,12 +170,6 @@
   </data>
   <data name="RoleSpawnCategoryMaxImpostor" xml:space="preserve">
     <value>Maximum IMPOSTOR Roles</value>
-  </data>
-  <data name="RoleSpawnCategoryMinLiberal" xml:space="preserve">
-    <value>Minimum LIBERAL Roles</value>
-  </data>
-  <data name="RoleSpawnCategoryMaxLiberal" xml:space="preserve">
-    <value>Maximum LIBERAL Roles</value>
   </data>
   <data name="GhostRoleSpawnCategoryMinCrewmate" xml:space="preserve">
     <value>Minimum CREWMATE GhostRoles</value>
@@ -653,12 +644,6 @@ For LOCAL Games:
   </data>
   <data name="neutralShotCall" xml:space="preserve">
     <value>EGOISTS</value>
-  </data>
-  <data name="liberalIntro" xml:space="preserve">
-    <value>Live for freedom</value>
-  </data>
-  <data name="Liberal" xml:space="preserve">
-    <value>LIBERAL</value>
   </data>
   <data name="impostorShotCall" xml:space="preserve">
     <value>KILLERS</value>
