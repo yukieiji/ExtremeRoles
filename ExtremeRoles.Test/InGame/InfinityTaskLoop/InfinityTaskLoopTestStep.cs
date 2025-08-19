@@ -84,7 +84,7 @@ public class InfinityTaskLoopTestStep() : TestStepBase
 			{
 				yield return taskRun();
 			}
-
+			yield return runNormal();
 		}
 	}
 
