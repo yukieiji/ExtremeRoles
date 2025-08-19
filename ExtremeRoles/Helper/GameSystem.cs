@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -46,6 +46,7 @@ public static class GameSystem
 	{
 		TaskTypes.FixWiring,
 		TaskTypes.VentCleaning,
+		TaskTypes.PickUpTowels,
 	};
 
 	public static GameObject CreateNoneReportableDeadbody(
