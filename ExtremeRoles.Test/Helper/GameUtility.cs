@@ -1,16 +1,15 @@
+using AmongUs.GameOptions;
+using BepInEx.Logging;
+using ExtremeRoles.GameMode.Option.ShipGlobal;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEngine;
-using BepInEx.Logging;
-using AmongUs.GameOptions;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-
-using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Test.Helper;
 
@@ -234,6 +233,7 @@ public static class GameUtility
 			}
 		}
 
+		disableCategory(OptionTab.GeneralTab, (int)ShipGlobalOptionCategory.RandomMapOption);
 		disableXion();
 		disableSomeRole();
 
