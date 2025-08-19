@@ -80,7 +80,7 @@ public class InfinityTaskLoopTestStep() : TestStepBase
 			} while (noTask);
 
 
-			for (int j = 0; j < 100; ++j)
+			for (int j = 0; j < 256; ++j)
 			{
 				yield return taskRun();
 			}
