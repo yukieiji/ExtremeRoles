@@ -47,6 +47,7 @@ public static class GameSystem
 		TaskTypes.FixWiring,
 		TaskTypes.VentCleaning,
 		TaskTypes.PickUpTowels,
+		TaskTypes.AssembleArtifact,
 	};
 
 	public static GameObject CreateNoneReportableDeadbody(
