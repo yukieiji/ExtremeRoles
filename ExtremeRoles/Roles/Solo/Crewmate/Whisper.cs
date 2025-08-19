@@ -84,7 +84,7 @@ public sealed class Whisper :
 		Vector2 diff = target.GetTruePosition() - PlayerControl.LocalPlayer.GetTruePosition();
 		diff.Normalize();
 		float rad = Mathf.Atan2(diff.y, diff.x);
-		float deg = rad * (360 / ((float)System.Math.PI * 2));
+		float deg = rad * Mathf.Rad2Deg;
 
 		string direction;
 
