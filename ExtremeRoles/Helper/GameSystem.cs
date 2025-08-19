@@ -48,6 +48,8 @@ public static class GameSystem
 		TaskTypes.VentCleaning,
 		TaskTypes.PickUpTowels,
 		TaskTypes.AssembleArtifact,
+		TaskTypes.PutAwayRifles,
+		TaskTypes.PutAwayPistols,
 	};
 
 	public static GameObject CreateNoneReportableDeadbody(
