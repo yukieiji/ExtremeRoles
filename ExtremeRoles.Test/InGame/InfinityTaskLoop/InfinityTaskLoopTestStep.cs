@@ -138,11 +138,11 @@ public class InfinityTaskLoopTestStep() : TestStepBase
 		}
 		
 		localPc.NetTransform.SnapTo(targetConsole.transform.position);
-		HudManager.Instance.UseButton.DoClick();
 
-		int waitCount = 0;
-		while (Minigame.Instance != null)
+		int waitCount = -1;
+		do
 		{
+			HudManager.Instance.UseButton.DoClick();
 			waitCount++;
 			yield return new WaitForSeconds(1.0f);
 			if (waitCount == 30)
@@ -150,7 +150,9 @@ public class InfinityTaskLoopTestStep() : TestStepBase
 				Log.LogFatal($"Task : {targetTask.TaskType} can't start");
 				yield break;
 			}
-		}
+		} while (Minigame.Instance == null);
+
+		Log.LogInfo($"Task : {targetTask.TaskType} start");
 
 		if (Minigame.Instance == null)
 		{
