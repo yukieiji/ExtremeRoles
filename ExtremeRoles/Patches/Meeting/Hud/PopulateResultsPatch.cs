@@ -58,6 +58,7 @@ public static class MeetingHudPopulateResultsPatch
 				addVoteModRole(voteModRole, checkPlayerId, ref voteModifier);
 				addVoteModRole(voteAnotherRole, checkPlayerId, ref voteModifier);
 
+				//　投票時のHook処理
 				var (voteHook, voteHookAnotherRole) =
 					ExtremeRoleManager.GetInterfaceCastedRole<IRoleHookVoteEnd>(checkPlayerId);
 				addVoteHookRole(voteHook, checkPlayerId, allVoteHook);
