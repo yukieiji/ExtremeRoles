@@ -130,6 +130,59 @@ public static class GameUtility
 		enableRandomCombRole(logger);
 	}
 
+	public static void PrepereGameWithRandomAndNoNeutral(ManualLogSource logger)
+	{
+		logger.LogInfo("Update Option....");
+		// オプションを適当にアプデ
+		var mng = OptionManager.Instance;
+		foreach (var tab in Enum.GetValues<OptionTab>())
+		{
+			if (!mng.TryGetTab(tab, out var tabObj))
+			{
+				continue;
+			}
+
+			foreach (var cate in tabObj.Category)
+			{
+				if (cate.Id == 0) { continue; }
+
+				foreach (var opt in cate.Options)
+				{
+					int newIndex = RandomGenerator.Instance.Next(0, opt.Range);
+					string name = opt.Info.Name;
+
+					if (name.Contains(RoleCommonOption.AssignWeight.ToString()))
+					{
+						newIndex = 5;
+					}
+					else if (name.Contains(RoleCommonOption.SpawnRate.ToString()))
+					{
+						newIndex = 0;
+					}
+					mng.Update(cate, opt, newIndex);
+				}
+			}
+		}
+
+		disableXion();
+		disableSomeRole();
+
+		logger.LogInfo("Update Roles and Player....");
+
+		for (int playerId = 0; playerId < 14; ++playerId)
+		{
+			string playerName = $"TestPlayer_{playerId}";
+			logger.LogInfo($"spawn : {playerName}");
+
+			GameSystem.SpawnDummyPlayer(playerName);
+
+			enableRandomNormalRole(logger);
+		}
+
+		disableNeutralRole();
+		disableCombRole();
+	}
+
 	public static void PrepereGameWithRole(ManualLogSource logger, HashSet<ExtremeRoleId> ids)
 	{
 		logger.LogInfo("Update Option....");
@@ -275,6 +328,34 @@ public static class GameUtility
 			OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 9);
 		}
 		logger.LogInfo($"Enable:{role}");
+	}
+
+	private static void disableCombRole()
+	{
+		foreach (byte id in RandomRoleProvider.AllCombRole())
+		{
+			if (OptionManager.Instance.TryGetCategory(
+					OptionTab.CombinationTab,
+					ExtremeRoleManager.GetCombRoleGroupId((CombinationRoleType)id),
+					out var category))
+			{
+				OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 0);
+			}
+		}
+	}
+
+	private static void disableNeutralRole()
+	{
+		foreach (var id in RandomRoleProvider.AllNeutral())
+		{
+			if (OptionManager.Instance.TryGetCategory(
+					OptionTab.NeutralTab,
+					ExtremeRoleManager.GetRoleGroupId(id),
+					out var category))
+			{
+				OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 0);
+			}
+		}
 	}
 
 	private static void disableCategory(OptionTab tab, int id)
