@@ -136,8 +136,9 @@ public class InfinityTaskLoopTestStep() : TestStepBase
 			yield return null;
 			yield break;
 		}
-		
-		localPc.NetTransform.SnapTo(targetConsole.transform.position);
+
+		Vector2 consolePos = targetConsole.transform.position;
+		localPc.NetTransform.SnapTo(consolePos + localPc.GetTruePosition());
 
 		int waitCount = -1;
 		do
