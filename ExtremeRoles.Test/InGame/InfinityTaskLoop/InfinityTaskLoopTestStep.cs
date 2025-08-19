@@ -22,6 +22,17 @@ public class InfinityTaskLoopTestStep() : TestStepBase
 	private int count = 0;
 	private const int waitCount = 5;
 
+#if DEBUG
+	private const int taskNum = 256;
+#else
+	private const int taskNum = 10;
+#endif
+#if DEBUG
+	private const int repeatNum = 10;
+#else
+	private const int repeatNum = 1;
+#endif
+
 	public static void Register(IServiceCollection services)
 	{
 		services.AddTransient<InfinityTaskLoopTestStep>();
@@ -29,7 +40,7 @@ public class InfinityTaskLoopTestStep() : TestStepBase
 
 	public override IEnumerator Run()
 	{
-		for (int i= 0 ; i < 10; ++i)
+		for (int i= 0 ; i < repeatNum; ++i)
 		{
 			yield return runTestCase();
 		}
@@ -80,7 +91,7 @@ public class InfinityTaskLoopTestStep() : TestStepBase
 			} while (noTask);
 
 
-			for (int j = 0; j < 256; ++j)
+			for (int j = 0; j < taskNum; ++j)
 			{
 				yield return taskRun();
 			}
