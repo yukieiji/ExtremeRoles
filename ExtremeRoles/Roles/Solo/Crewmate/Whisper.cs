@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -76,55 +76,56 @@ public sealed class Whisper :
         PlayerControl source,
         PlayerControl target)
     {
-        if (this.isAbilityOn)
+        if (!this.isAbilityOn || MeetingHud.Instance != null)
         {
-
-            Vector2 diff = target.GetTruePosition() - PlayerControl.LocalPlayer.GetTruePosition();
-            diff.Normalize();
-            float rad = Mathf.Atan2(diff.y, diff.x);
-            float deg = rad * (360 / ((float)System.Math.PI * 2));
-
-            string direction;
-
-            if (-45.0f < deg && deg <= 45.0f )
-            {
-                direction = Tr.GetString("right");
-            }
-            else if (45.0f < deg && deg <= 135.0f)
-            {
-                direction = Tr.GetString("up");
-            }
-            else if (-135.0f < deg && deg <= -45.0f)
-            {
-                direction = Tr.GetString("down");
-            }
-            else
-            {
-                direction = Tr.GetString("left");
-            }
-
-			string showText;
-			if (this.isEnableAwakeAbility &&
-				this.isAwake &&
-				Player.TryGetPlayerRoom(target, out SystemTypes? room) &&
-				room.HasValue)
-			{
-				showText = string.Format(
-					Tr.GetString("killedTextWithRoom"),
-					direction,
-					TranslationController.Instance.GetString(room.Value),
-					System.DateTime.Now);
-			}
-			else
-			{
-				showText = string.Format(
-					Tr.GetString("killedText"),
-					direction, System.DateTime.Now);
-			}
-            this.textPopUp.AddText(showText);
-			Sound.PlaySound(Sound.Type.Kill, 0.3f);
+			return;
         }
-    }
+
+		Vector2 diff = target.GetTruePosition() - PlayerControl.LocalPlayer.GetTruePosition();
+		diff.Normalize();
+		float rad = Mathf.Atan2(diff.y, diff.x);
+		float deg = rad * (360 / ((float)System.Math.PI * 2));
+
+		string direction;
+
+		if (-45.0f < deg && deg <= 45.0f)
+		{
+			direction = Tr.GetString("right");
+		}
+		else if (45.0f < deg && deg <= 135.0f)
+		{
+			direction = Tr.GetString("up");
+		}
+		else if (-135.0f < deg && deg <= -45.0f)
+		{
+			direction = Tr.GetString("down");
+		}
+		else
+		{
+			direction = Tr.GetString("left");
+		}
+
+		string showText;
+		if (this.isEnableAwakeAbility &&
+			this.isAwake &&
+			Player.TryGetPlayerRoom(target, out SystemTypes? room) &&
+			room.HasValue)
+		{
+			showText = string.Format(
+				Tr.GetString("killedTextWithRoom"),
+				direction,
+				TranslationController.Instance.GetString(room.Value),
+				System.DateTime.Now);
+		}
+		else
+		{
+			showText = string.Format(
+				Tr.GetString("killedText"),
+				direction, System.DateTime.Now);
+		}
+		this.textPopUp.AddText(showText);
+		Sound.PlaySound(Sound.Type.Kill, 0.3f);
+	}
 
     public void Update(PlayerControl rolePlayer)
     {

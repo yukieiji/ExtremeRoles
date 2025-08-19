@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -462,6 +462,11 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
     public void HookMuderPlayer(
         PlayerControl source, PlayerControl target)
     {
+		if (MeetingHud.Instance != null)
+		{
+			return;
+		}
+
         this.deadBodyInfo.Add(target.PlayerId, DateTime.UtcNow);
     }
 

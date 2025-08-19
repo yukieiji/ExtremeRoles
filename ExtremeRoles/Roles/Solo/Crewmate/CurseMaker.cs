@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -400,7 +400,12 @@ public sealed class CurseMaker :
 
     public void HookMuderPlayer(PlayerControl source, PlayerControl target)
     {
-        if (this.isDeadBodySearchUsed || !this.isDeadBodySearch) { return; }
+        if (MeetingHud.Instance != null || 
+			this.isDeadBodySearchUsed || 
+			!this.isDeadBodySearch)
+		{
+			return;
+		}
 
         this.deadBodyData.Add(
             target.PlayerId,

@@ -1,4 +1,4 @@
-﻿using Assets.CoreScripts;
+using Assets.CoreScripts;
 
 using HarmonyLib;
 using UnityEngine;
@@ -195,7 +195,10 @@ public static class PlayerControlMurderPlayerPatch
 		in PlayerControl killer,
 		in PlayerControl target)
 	{
-		if (isLocalPlayerDead) { return; }
+		if (isLocalPlayerDead)
+		{
+			return;
+		}
 
 		if (localPlayerRole is IRoleMurderPlayerHook hookRole)
 		{
