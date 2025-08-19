@@ -10,7 +10,6 @@ using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -39,6 +38,8 @@ public static class MeetingHudPopulateResultsPatch
 		SortedList<int, (IRoleVoteModifier, NetworkedPlayerInfo)> voteModifier = new SortedList<
 			int, (IRoleVoteModifier, NetworkedPlayerInfo)>();
 
+		var allVoteHook = new List<(IRoleHookVoteEnd, NetworkedPlayerInfo)>();
+
 		int num = 0;
 		// それぞれの人に対してどんな投票があったか
 		for (int i = 0; i < __instance.playerStates.Length; i++)
@@ -56,6 +57,11 @@ public static class MeetingHudPopulateResultsPatch
 					ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(checkPlayerId);
 				addVoteModRole(voteModRole, checkPlayerId, ref voteModifier);
 				addVoteModRole(voteAnotherRole, checkPlayerId, ref voteModifier);
+
+				var (voteHook, voteHookAnotherRole) =
+					ExtremeRoleManager.GetInterfaceCastedRole<IRoleHookVoteEnd>(checkPlayerId);
+				addVoteHookRole(voteHook, checkPlayerId, allVoteHook);
+				addVoteHookRole(voteHookAnotherRole, checkPlayerId, allVoteHook);
 			}
 
 			int noneSkipVote = 0;
@@ -92,6 +98,12 @@ public static class MeetingHudPopulateResultsPatch
 				__instance, player, ref voteIndex);
 			role.ResetModifier();
 		}
+
+		foreach (var (role, player) in allVoteHook)
+		{
+			role.HookVoteEnd(__instance, player, voteIndex);
+		}
+
 		return false;
 	}
 	private static void addVoteModRole(
@@ -112,5 +124,18 @@ public static class MeetingHudPopulateResultsPatch
 			++order;
 		}
 		voteModifier.Add(order, (role, playerById));
+	}
+
+	private static void addVoteHookRole(
+		IRoleHookVoteEnd? role, byte rolePlayerId,
+		in List<(IRoleHookVoteEnd, NetworkedPlayerInfo)> voteHook)
+	{
+		if (role is null)
+		{
+			return;
+		}
+
+		NetworkedPlayerInfo playerById = GameData.Instance.GetPlayerById(rolePlayerId);
+		voteHook.Add((role, playerById));
 	}
 }

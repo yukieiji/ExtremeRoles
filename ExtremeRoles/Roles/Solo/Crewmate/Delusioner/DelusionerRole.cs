@@ -24,10 +24,8 @@ public sealed class DelusionerRole :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
-	IRoleVoteModifier
+	IRoleHookVoteEnd
 {
-    public int Order => (int)IRoleVoteModifier.ModOrder.DelusionerCheckVote;
-
     public bool IsAwake
     {
         get
@@ -119,18 +117,10 @@ public sealed class DelusionerRole :
         return IRoleAbility.IsCommonUse();
     }
 
-    public void ModifiedVote(
-        byte rolePlayerId,
-        ref Dictionary<byte, byte> voteTarget,
-        ref Dictionary<byte, int> voteResult)
-    {
-        return;
-    }
-
-    public void ModifiedVoteAnime(
+    public void HookVoteEnd(
         MeetingHud instance,
         NetworkedPlayerInfo rolePlayer,
-        ref Dictionary<byte, int> voteIndex)
+        IReadOnlyDictionary<byte, int> voteIndex)
     {
         if (voteIndex.TryGetValue(
             rolePlayer.PlayerId,
@@ -154,11 +144,6 @@ public sealed class DelusionerRole :
         {
             curVoteCount = 0;
         }
-    }
-
-    public void ResetModifier()
-    {
-        return;
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
