@@ -10,6 +10,7 @@ using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -57,7 +58,7 @@ public static class MeetingHudPopulateResultsPatch
 				addVoteModRole(voteAnotherRole, checkPlayerId, ref voteModifier);
 			}
 
-			int num2 = 0;
+			int noneSkipVote = 0;
 			foreach (MeetingHud.VoterState voterState in states)
 			{
 				NetworkedPlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
@@ -76,11 +77,11 @@ public static class MeetingHudPopulateResultsPatch
 				else if (voterState.VotedForId == checkPlayerId)
 				{
 					// 投票された人のアニメーション
-					__instance.BloopAVoteIcon(playerById, num2, playerVoteArea.transform);
-					num2++;
+					__instance.BloopAVoteIcon(playerById, noneSkipVote, playerVoteArea.transform);
+					noneSkipVote++;
 				}
 			}
-			voteIndex.Add(playerVoteArea.TargetPlayerId, num2);
+			voteIndex.Add(playerVoteArea.TargetPlayerId, noneSkipVote);
 		}
 
 		voteIndex[__instance.playerStates[0].TargetPlayerId] = num;
