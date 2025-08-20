@@ -174,7 +174,6 @@ public static class MeetingHudPopulateResultsPatch
 
 		// --- Phase 3: Animation and Final Count Calculation ---
 		var finalVoteCount = new Dictionary<byte, int>(playerNum);
-		var animationVoteCounter = new Dictionary<byte, int>(playerNum);
 		// .Voteで重複は削除されている
 		foreach (var vote in voteInfo.Vote)
 		{
