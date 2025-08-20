@@ -46,15 +46,15 @@ public sealed class VoteInfoCollector()
 
 	public void AddRange(IEnumerable<VoteInfo> votes)
 	{
-		vote.AddRange(votes);
+		this.vote.AddRange(votes);
 	}
 }
 
 public sealed class PlayerRoleInfo(int size)
 {
-	public IEnumerable<(IRoleVoteModifier, NetworkedPlayerInfo)> Modifier => voteModifier.Values;
-	public IEnumerable<(IRoleHookVoteEnd, NetworkedPlayerInfo)> Hook => voteHook;
-	public IReadOnlyDictionary<byte, NetworkedPlayerInfo> Player => playerCache;
+	public IEnumerable<(IRoleVoteModifier, NetworkedPlayerInfo)> Modifier => this.voteModifier.Values;
+	public IEnumerable<(IRoleHookVoteEnd, NetworkedPlayerInfo)> Hook => this.voteHook;
+	public IReadOnlyDictionary<byte, NetworkedPlayerInfo> Player => this.playerCache;
 
 	private readonly SortedList<int, (IRoleVoteModifier, NetworkedPlayerInfo)> voteModifier = [];
 	private readonly List<(IRoleHookVoteEnd, NetworkedPlayerInfo)> voteHook = [];
@@ -63,9 +63,9 @@ public sealed class PlayerRoleInfo(int size)
 	public void Add(NetworkedPlayerInfo player)
 	{
 		byte playerId = player.PlayerId;
-		this.playerCache.Add(player.PlayerId, player);
+		this.playerCache.Add(playerId, player);
 
-		if (!ExtremeRoleManager.GameRole.ContainsKey(player.PlayerId))
+		if (!ExtremeRoleManager.GameRole.ContainsKey(playerId))
 		{
 			return;
 		}
@@ -174,10 +174,14 @@ public static class MeetingHudPopulateResultsPatch
 
 		// --- Phase 3: Animation and Final Count Calculation ---
 		var finalVoteCount = new Dictionary<byte, int>(playerNum);
+		var animationVoteCounter = new Dictionary<byte, int>(playerNum);
+		// .Voteで重複は削除されている
 		foreach (var vote in voteInfo.Vote)
 		{
-			finalVoteCount[vote.TargetId] = vote.Count;
-			animateVote(__instance, vote, playerAreaMap, playerRoleInfo.Player);
+			byte target = vote.TargetId;
+			int curTargetCount = finalVoteCount.GetValueOrDefault(target, 0);
+			animateVote(__instance, vote, curTargetCount, playerAreaMap, playerRoleInfo.Player);
+			finalVoteCount[target] = curTargetCount + vote.Count;
 		}
 
 		// --- Final Hook Call ---
@@ -192,6 +196,7 @@ public static class MeetingHudPopulateResultsPatch
 	private static void animateVote(
 		MeetingHud instance,
 		in VoteInfo vote,
+		int startIndex,
 		IReadOnlyDictionary<byte, PlayerVoteArea> playerAreaMap,
 		IReadOnlyDictionary<byte, NetworkedPlayerInfo> playerInfoMap)
 	{
@@ -215,7 +220,7 @@ public static class MeetingHudPopulateResultsPatch
 
 		for (int i = 0; i < vote.Count; i++)
 		{
-			instance.BloopAVoteIcon(voterInfo, i, targetTransform);
+			instance.BloopAVoteIcon(voterInfo, startIndex + i, targetTransform);
 		}
 	}
 }
