@@ -1,15 +1,15 @@
+using System;
+using System.Collections.Generic;
+
+using UnityEngine;
 using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.Meeting;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -111,16 +111,20 @@ public sealed class Captain :
         ref Dictionary<byte, byte> voteTarget,
         ref Dictionary<byte, int> voteResult)
     {
-        byte voteFor = voteTarget[rolePlayerId];
-
         // 能力を使ってない
         if (this.voteTarget == byte.MaxValue)
         {
+			byte voteFor = voteTarget[rolePlayerId];
+
+			if (voteFor == PlayerVoteArea.DeadVote)
+			{
+				return;
+			}
+
             // スキップ => チャージ
-            if (voteFor == 252 ||
-                voteFor == 253 ||
-                voteFor == 254 ||
-                voteFor == byte.MaxValue)
+            if (voteFor == PlayerVoteArea.HasNotVoted ||
+                voteFor == PlayerVoteArea.MissedVote ||
+                voteFor == PlayerVoteArea.SkippedVote)
             {
                 using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.CaptainAbility))
