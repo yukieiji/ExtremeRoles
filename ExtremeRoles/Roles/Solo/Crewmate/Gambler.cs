@@ -57,20 +57,23 @@ public sealed class Gambler :
         Array.Fill(voteArray, this.minVoteNum, this.normalVoteRate, zeroVoteRate);
         Array.Fill(voteArray, this.maxVoteNum, this.normalVoteRate + zeroVoteRate, dualVoteRate);
 
-        voteCount = voteArray[RandomGenerator.Instance.Next(100)];
+        this.voteCount = voteArray[RandomGenerator.Instance.Next(100)];
 
-        if (voteCount == 1)
+        if (this.voteCount == 1)
         {
             return;
         }
 
         int newVotedNum = curVoteNum + voteCount - 1;
-        voteResult[votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
+        voteResult[this.votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
 
     public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
     {
-        if (voteCount != 1 && votedFor != 255)
+        if (this.voteCount != 1 &&
+			this.votedFor != PlayerVoteArea.HasNotVoted &&
+			this.votedFor != PlayerVoteArea.MissedVote &&
+			this.votedFor == PlayerVoteArea.DeadVote)
         {
             yield return new VoteInfo(rolePlayer.PlayerId, votedFor, voteCount - 1);
         }
