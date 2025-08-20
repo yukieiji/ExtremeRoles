@@ -46,7 +46,8 @@ public sealed class AssassinAssassinateTargetMeeting : IOnemanMeeting
 
 	public IOnemanMeeting.VoteResult CreateVoteResult(MeetingHud meeting, byte voteTarget)
 	{
-		if (voteTarget == 254 || voteTarget == byte.MaxValue)
+		if (voteTarget == PlayerVoteArea.MissedVote || 
+			voteTarget == PlayerVoteArea.HasNotVoted)
 		{
 			ExtremeRolesPlugin.Logger.LogWarning("Assassin Meeting Target is None!! start auto targeting");
 
