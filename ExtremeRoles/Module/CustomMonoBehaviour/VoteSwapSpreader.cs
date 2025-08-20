@@ -10,7 +10,7 @@ using UnityEngine;
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
 [Il2CppRegister]
-public sealed class VoteSwapper : MonoBehaviour
+public sealed class VoteSwapSpreader : MonoBehaviour
 {
 	private readonly List<SpriteRenderer> vote = [];
 	
@@ -21,7 +21,7 @@ public sealed class VoteSwapper : MonoBehaviour
 	private float counterY = -0.16f;
 	private float adjustRate = 4f;
 
-	public VoteSwapper(IntPtr ptr) : base(ptr)
+	public VoteSwapSpreader(IntPtr ptr) : base(ptr)
 	{
 	}
 

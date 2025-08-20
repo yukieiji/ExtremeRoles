@@ -233,17 +233,17 @@ public static class MeetingHudPopulateResultsPatch
 				return;
 			}
 
-			var voteRend = createVoteRenderer(instance, voterInfo, index, targetTransform);
-
 			// swapSourceがある場合
 			if (swapSource != null)
 			{
-				var swapper = swapSource.gameObject.TryAddComponent<VoteSwapper>();
-				// swapターゲットに
+				// SwapSourceからアニメーションを開始させる
+				var voteRend = createVoteRenderer(instance, voterInfo, index, swapSource);
+				var swapper = swapSource.gameObject.TryAddComponent<VoteSwapSpreader>();
 				swapper.Add(voteRend, targetTransform);
 			}
 			else if (targetTransform.TryGetComponent<VoteSpreader>(out var spreader))
 			{
+				var voteRend = createVoteRenderer(instance, voterInfo, index, targetTransform);
 				spreader.AddVote(voteRend);
 			}
 		}
