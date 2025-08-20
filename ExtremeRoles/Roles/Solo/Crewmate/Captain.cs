@@ -1,20 +1,15 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using UnityEngine;
 
+using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -82,11 +77,17 @@ public sealed class Captain :
         {
             case AbilityType.SetVoteTarget:
                 byte targetPlayerId = reader.ReadByte();
-                if (captain == null) { return; }
+                if (captain == null)
+                {
+                    return;
+                }
                 captain.SetTargetVote(targetPlayerId);
                 break;
             case AbilityType.ChargeVote:
-                if (captain == null) { return; }
+                if (captain == null)
+                {
+                    return;
+                }
                 captain.ChargeVote();
                 break;
             default:
@@ -110,16 +111,20 @@ public sealed class Captain :
         ref Dictionary<byte, byte> voteTarget,
         ref Dictionary<byte, int> voteResult)
     {
-        byte voteFor = voteTarget[rolePlayerId];
-
         // 能力を使ってない
-        if (this.voteTarget == byte.MaxValue)
+        if (this.voteTarget == PlayerVoteArea.HasNotVoted)
         {
+			byte voteFor = voteTarget[rolePlayerId];
+
+			if (voteFor == PlayerVoteArea.DeadVote)
+			{
+				return;
+			}
+
             // スキップ => チャージ
-            if (voteFor == 252 ||
-                voteFor == 253 ||
-                voteFor == 254 ||
-                voteFor == byte.MaxValue)
+            if (voteFor == PlayerVoteArea.HasNotVoted ||
+                voteFor == PlayerVoteArea.MissedVote ||
+                voteFor == PlayerVoteArea.SkippedVote)
             {
                 using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.CaptainAbility))
@@ -145,28 +150,19 @@ public sealed class Captain :
             }
         }
     }
-    public void ModifiedVoteAnime(
-        MeetingHud instance,
-        NetworkedPlayerInfo rolePlayer,
-        ref Dictionary<byte, int> voteIndex)
+    public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
     {
-        PlayerVoteArea pva = instance.playerStates.FirstOrDefault(
-            x => x.TargetPlayerId == this.voteTarget);
-
-        if (pva == null) { return; }
-
-        if (!voteIndex.TryGetValue(pva.TargetPlayerId, out int startIndex))
+        if (this.voteTarget == byte.MaxValue)
         {
-            startIndex = 0;
+			yield break;
         }
 
-        int addVoteNum = (int)Math.Floor(this.curChargedVote);
-        for (int i = 0; i < addVoteNum; ++i)
-        {
-            instance.BloopAVoteIcon(rolePlayer, startIndex + i, pva.transform);
-        }
-        voteIndex[pva.TargetPlayerId] = startIndex + addVoteNum;
-    }
+		int addVoteNum = (int)Math.Floor(this.curChargedVote);
+		if (addVoteNum > 0)
+		{
+			yield return new VoteInfo(rolePlayer.PlayerId, this.voteTarget, addVoteNum);
+		}
+	}
 
     public void ResetModifier()
     {
