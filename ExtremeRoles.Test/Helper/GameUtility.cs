@@ -77,7 +77,7 @@ public static class GameUtility
 		yield return new WaitForSeconds(10.0f);
 	}
 
-	public static void PrepereGameWithRandom(ManualLogSource logger)
+	public static void PrepareGameWithRandom(ManualLogSource logger)
 	{
 		logger.LogInfo("Update Option....");
 		// オプションを適当にアプデ
@@ -129,7 +129,7 @@ public static class GameUtility
 		enableRandomCombRole(logger);
 	}
 
-	public static void PrepereGameWithRandomAndNoNeutral(ManualLogSource logger)
+	public static void PrepareGameWithRandomAndNoNeutral(ManualLogSource logger)
 	{
 		logger.LogInfo("Update Option....");
 		// オプションを適当にアプデ

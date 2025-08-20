@@ -17,7 +17,7 @@ using UnityResource = UnityEngine.Resources;
 
 namespace ExtremeRoles.Test.InGame.InfinityTaskLoop;
 
-public class InfinityTaskLoopTestStep() : TestStepBase
+public sealed class InfinityTaskLoopTestStep() : TestStepBase
 {
 	private int count = 0;
 	private const int waitCount = 5;
@@ -58,7 +58,7 @@ public class InfinityTaskLoopTestStep() : TestStepBase
 			{
 				++count;
 
-				GameUtility.PrepereGameWithRandomAndNoNeutral(Log);
+				GameUtility.PrepareGameWithRandomAndNoNeutral(Log);
 				
 				yield return new WaitForSeconds(1.0f);
 
