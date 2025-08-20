@@ -28,7 +28,7 @@ public sealed class Gambler :
     private int minVoteNum;
     private int maxVoteNum;
 
-    private byte votedFor = 255;
+    private byte votedFor = PlayerVoteArea.HasNotVoted;
     private int voteCount = 1;
 
     public Gambler() : base(

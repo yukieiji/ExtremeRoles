@@ -36,7 +36,7 @@ public sealed class VoteInfoCollector()
 
 	public void AddSkip(byte voter)
 	{
-		this.vote.Add(new VoteInfo(voter, 255, 1));
+		this.vote.Add(new VoteInfo(voter, PlayerVoteArea.SkippedVote, 1));
 	}
 
 	public void AddTo(byte voter, byte to)
@@ -142,6 +142,7 @@ public static class MeetingHudPopulateResultsPatch
 			playerVoteArea.ClearForResults();
 			playerAreaMap[playerVoteArea.TargetPlayerId] = playerVoteArea;
 		}
+		playerAreaMap[PlayerVoteArea.SkippedVote] = __instance.playerStates[0];
 
 		// 各種表の情報
 		foreach (var voter in states)
