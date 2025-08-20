@@ -68,7 +68,7 @@ public sealed class Gambler :
         voteResult[votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
 
-    public IEnumerable<VoteInfo> GetVoteModifications(NetworkedPlayerInfo rolePlayer)
+    public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
     {
         if (voteCount != 1 && votedFor != 255)
         {

@@ -173,7 +173,7 @@ public static class MeetingHudPopulateResultsPatch
 		// --- Phase 2: Vote Modification ---
 		foreach (var (role, player) in playerRoleInfo.Modifier)
 		{
-			voteInfo.AddRange(role.GetVoteModifications(player));
+			voteInfo.AddRange(role.GetModdedVoteInfo(player));
 			role.ResetModifier();
 		}
 

@@ -146,7 +146,7 @@ public sealed class Captain :
             }
         }
     }
-    public IEnumerable<VoteInfo> GetVoteModifications(NetworkedPlayerInfo rolePlayer)
+    public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
     {
         if (this.voteTarget == byte.MaxValue)
         {

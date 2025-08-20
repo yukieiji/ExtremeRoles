@@ -21,7 +21,7 @@ public interface IRoleVoteModifier
         ref Dictionary<byte, byte> voteTarget,
         ref Dictionary<byte, int> voteResult);
 
-    public IEnumerable<VoteInfo> GetVoteModifications(
+    public IEnumerable<VoteInfo> GetModdedVoteInfo(
         NetworkedPlayerInfo rolePlayer);
         
     public void ResetModifier();
