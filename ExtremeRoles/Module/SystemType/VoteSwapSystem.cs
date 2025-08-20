@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Module.Interface;
-using System.Diagnostics.CodeAnalysis;
 
 #nullable enable
 
@@ -116,18 +116,35 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	public static bool TryGet([NotNullWhen(true)] out VoteSwapSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.VoteSwapSystem, out system);
 
-	public static void SwapVote()
+	public static Dictionary<byte, int> Swap(Dictionary<byte, int> voteInfo)
 	{
+		if (!TryGet(out var system))
+		{
+			return voteInfo;
+		}
 
+		var result = new Dictionary<byte, int>(voteInfo.Count);
+
+		foreach (var (s, t) in system.Result)
+		{
+			if (voteInfo.TryGetValue(s, out int value))
+			{
+				result[t] = value;
+			}
+		}
+
+		return result;
 	}
 
 	public static bool TryGetSwapSource(byte target, out byte source)
 	{
 		source = byte.MaxValue;
+		
 		if (!TryGet(out var system))
 		{
 			return false;
 		}
+
 		foreach (var (s, t) in system.Result)
 		{
 			if (t == target)

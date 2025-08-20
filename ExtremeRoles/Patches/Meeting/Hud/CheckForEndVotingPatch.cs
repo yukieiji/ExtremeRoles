@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -100,8 +101,10 @@ public static class MeetingHudCheckForEndVotingPatch
 		{
 			role.ModifiedVote(playerId, ref voteTarget, ref voteResult);
 		}
-		return voteResult;
 
+		voteResult = VoteSwapSystem.Swap(voteResult);
+
+		return voteResult;
 	}
 
 	private static void normalMeetingVote(MeetingHud instance)
