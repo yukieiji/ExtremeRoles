@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -554,18 +554,18 @@ public sealed class Resurrecter :
                 int taskIndex;
                 int replaceTaskId = playerInfo.Tasks[i].TypeId;
 
-                if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
-                    (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
+                if (ShipStatus.Instance.CommonTasks.Any(
+                    (NormalPlayerTask t) => t.Index == replaceTaskId))
                 {
                     taskIndex = GameSystem.GetRandomCommonTaskId();
                 }
-                else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
-                    (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
+                else if (ShipStatus.Instance.LongTasks.Any(
+                    (NormalPlayerTask t) => t.Index == replaceTaskId))
                 {
                     taskIndex = GameSystem.GetRandomLongTask();
                 }
-                else if (ShipStatus.Instance.ShortTasks.FirstOrDefault(
-                    (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
+                else if (ShipStatus.Instance.ShortTasks.Any(
+                    (NormalPlayerTask t) => t.Index == replaceTaskId))
                 {
                     taskIndex = GameSystem.GetRandomShortTaskId();
                 }

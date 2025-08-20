@@ -184,18 +184,18 @@ public class InfinityTaskLoopTestStep() : TestStepBase
 
 		int taskIndex;
 
-		if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
-			(NormalPlayerTask t) => t.Index == taskId) != null)
+		if (ShipStatus.Instance.CommonTasks.Any(
+			(NormalPlayerTask t) => t.Index == taskId))
 		{
 			taskIndex = GameSystem.GetRandomShortTaskId();
 		}
-		else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
-			(NormalPlayerTask t) => t.Index == taskId) != null)
+		else if (ShipStatus.Instance.LongTasks.Any(
+			(NormalPlayerTask t) => t.Index == taskId))
 		{
 			taskIndex = GameSystem.GetRandomLongTask();
 		}
-		else if (ShipStatus.Instance.ShortTasks.FirstOrDefault(
-			(NormalPlayerTask t) => t.Index == taskId) != null)
+		else if (ShipStatus.Instance.ShortTasks.Any(
+			(NormalPlayerTask t) => t.Index == taskId))
 		{
 			taskIndex = GameSystem.GetRandomCommonTaskId();
 		}
