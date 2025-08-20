@@ -135,7 +135,7 @@ public static class MeetingHudPopulateResultsPatch
 			playerRoleInfo.Add(player);
 		}
 
-		// スキップを含まないので1から
+		// 表の情報を初期化
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{
 			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
