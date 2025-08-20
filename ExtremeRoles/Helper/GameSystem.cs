@@ -50,6 +50,7 @@ public static class GameSystem
 		TaskTypes.AssembleArtifact,
 		TaskTypes.PutAwayRifles,
 		TaskTypes.PutAwayPistols,
+		TaskTypes.UploadData,
 	};
 
 	public static GameObject CreateNoneReportableDeadbody(
