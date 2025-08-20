@@ -112,7 +112,7 @@ public sealed class Captain :
         ref Dictionary<byte, int> voteResult)
     {
         // 能力を使ってない
-        if (this.voteTarget == byte.MaxValue)
+        if (this.voteTarget == PlayerVoteArea.HasNotVoted)
         {
 			byte voteFor = voteTarget[rolePlayerId];
 
