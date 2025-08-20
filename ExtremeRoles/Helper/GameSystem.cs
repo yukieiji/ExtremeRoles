@@ -42,7 +42,7 @@ public static class GameSystem
 
 	private static UseButtonDict useButtonSetting => HudManager.Instance.UseButton.fastUseSettings;
 
-	private static IReadOnlySet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
+	public static IReadOnlySet<TaskTypes> IgnoreTask = new HashSet<TaskTypes>()
 	{
 		TaskTypes.FixWiring,
 		TaskTypes.VentCleaning,
@@ -514,7 +514,7 @@ public static class GameSystem
 		List<int> index = new List<int>(tasks.Length);
 		for (int i = 0; i < tasks.Length; ++i)
 		{
-			if (!ignoreTask.Contains(tasks[i].TaskType))
+			if (!IgnoreTask.Contains(tasks[i].TaskType))
 			{
 				index.Add(tasks[i].Index);
 			}

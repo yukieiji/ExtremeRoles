@@ -126,6 +126,10 @@ public class InfinityTaskLoopTestStep() : TestStepBase
 		{
 			var target = localPc.myTasks.GetFastEnumerator().OrderBy(
 				x => RandomGenerator.Instance.Next()).First();
+			if (GameSystem.IgnoreTask.Contains(target.TaskType))
+			{
+				continue;
+			}
 			targetTask = target.TryCast<NormalPlayerTask>();
 
 		} while (targetTask == null);
