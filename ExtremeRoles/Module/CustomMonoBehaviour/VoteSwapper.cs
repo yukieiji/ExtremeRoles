@@ -77,7 +77,7 @@ public sealed class VoteSwapper : MonoBehaviour
 		}
 	}
 
-	public void Add(SpriteRenderer vote, Transform parent, Transform target)
+	public void Add(SpriteRenderer vote, Transform target)
 	{
 		if (this.range == null)
 		{
@@ -85,8 +85,6 @@ public sealed class VoteSwapper : MonoBehaviour
 		}
 
 		this.target = target;
-		vote.transform.SetParent(parent);
-
 		vote.transform.localPosition = new Vector3(this.range.max, this.counterY, 0f);
 		this.vote.Add(vote);
 	}

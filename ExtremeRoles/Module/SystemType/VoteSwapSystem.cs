@@ -5,6 +5,7 @@ using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Module.Interface;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable enable
 
@@ -112,9 +113,30 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	}
 	private IReadOnlyList<(byte, byte)>? result;
 
+	public static bool TryGet([NotNullWhen(true)] out VoteSwapSystem? system)
+		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.VoteSwapSystem, out system);
+
 	public static void SwapVote()
 	{
 
+	}
+
+	public static bool TryGetSwapSource(byte target, out byte source)
+	{
+		source = byte.MaxValue;
+		if (!TryGet(out var system))
+		{
+			return false;
+		}
+		foreach (var (s, t) in system.Result)
+		{
+			if (t == target)
+			{
+				source = s;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
@@ -155,6 +177,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		}
 		
 
+		/* 画像の処理 (後で追加)
 		var imgId = id.Value;
 		if (!this.img.TryGetValue(imgId, out var img))
 		{
@@ -168,6 +191,6 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		img.Target.transform.SetParent(targetPva.transform);
 		
 		this.img[imgId] = img;
-
+		*/
 	}
 }

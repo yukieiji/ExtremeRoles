@@ -25,7 +25,10 @@ public static class MeetingHudBloopAVoteIconPatch
 		[HarmonyArgument(1)] int index, [HarmonyArgument(2)] Transform parent)
 	{
 
-		if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+		if (ExtremeRoleManager.GameRole.Count == 0)
+		{
+			return true;
+		}
 
 		SpriteRenderer spriteRenderer = Object.Instantiate(__instance.PlayerVotePrefab);
 
