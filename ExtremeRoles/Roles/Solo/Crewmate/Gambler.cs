@@ -73,7 +73,7 @@ public sealed class Gambler :
         if (this.voteCount != 1 &&
 			this.votedFor != PlayerVoteArea.HasNotVoted &&
 			this.votedFor != PlayerVoteArea.MissedVote &&
-			this.votedFor == PlayerVoteArea.DeadVote)
+			this.votedFor != PlayerVoteArea.DeadVote)
         {
             yield return new VoteInfo(rolePlayer.PlayerId, votedFor, voteCount - 1);
         }
