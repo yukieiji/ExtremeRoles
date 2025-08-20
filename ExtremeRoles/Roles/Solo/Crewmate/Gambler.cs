@@ -81,7 +81,7 @@ public sealed class Gambler :
 
     public void ResetModifier()
     {
-        votedFor = 255;
+        votedFor = PlayerVoteArea.HasNotVoted;
         voteCount = 1;
     }
 
