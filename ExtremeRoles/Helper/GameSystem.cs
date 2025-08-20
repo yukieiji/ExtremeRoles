@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Extension.Linq;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
@@ -17,7 +18,6 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using UnityObject = UnityEngine.Object;
 using UseButtonDict = Il2CppSystem.Collections.Generic.Dictionary<ImageNames, UseButtonSettings>;
-using System.Diagnostics.CodeAnalysis;
 
 
 #nullable enable
@@ -178,38 +178,37 @@ public static class GameSystem
 
 	public static int GetRandomCommonTaskId()
 	{
-		if (ShipStatus.Instance == null) { return byte.MaxValue; }
+		if (ShipStatus.Instance == null)
+		{
+			return byte.MaxValue;
+		}
 
-		List<int> taskIndex = getTaskIndex(
-			ShipStatus.Instance.CommonTasks);
-
-		int index = RandomGenerator.Instance.Next(taskIndex.Count);
-
-		return taskIndex[index];
+		var taskIndex = getTaskIndex(ShipStatus.Instance.CommonTasks);
+		return taskIndex.GetRandomItem();
 	}
 
 	public static int GetRandomLongTask()
 	{
-		if (ShipStatus.Instance == null) { return byte.MaxValue; }
+		if (ShipStatus.Instance == null)
+		{
+			return byte.MaxValue;
+		}
 
-		List<int> taskIndex = getTaskIndex(
-			ShipStatus.Instance.LongTasks);
+		var taskIndex = getTaskIndex(ShipStatus.Instance.LongTasks);
 
-		int index = RandomGenerator.Instance.Next(taskIndex.Count);
-
-		return taskIndex[index];
+		return taskIndex.GetRandomItem();
 	}
 
 	public static int GetRandomShortTaskId()
 	{
-		if (ShipStatus.Instance == null) { return byte.MaxValue; }
+		if (ShipStatus.Instance == null)
+		{ 
+			return byte.MaxValue;
+		}
 
-		List<int> taskIndex = getTaskIndex(
-			ShipStatus.Instance.ShortTasks);
+		var taskIndex = getTaskIndex(ShipStatus.Instance.ShortTasks);
 
-		int index = RandomGenerator.Instance.Next(taskIndex.Count);
-
-		return taskIndex[index];
+		return taskIndex.GetRandomItem();
 	}
 
 	public static Sprite GetAdminButtonImage()
@@ -508,20 +507,12 @@ public static class GameSystem
 		dummyData.RpcSetTasks(new Il2CppStructArray<byte>(0));
 	}
 
-	private static List<int> getTaskIndex(
+	private static IReadOnlyList<int> getTaskIndex(
 		NormalPlayerTask[] tasks)
-	{
-		List<int> index = new List<int>(tasks.Length);
-		for (int i = 0; i < tasks.Length; ++i)
-		{
-			if (!IgnoreTask.Contains(tasks[i].TaskType))
-			{
-				index.Add(tasks[i].Index);
-			}
-		}
-
-		return index;
-	}
+		=> tasks
+			.Where(x => !IgnoreTask.Contains(x.TaskType))
+			.Select(x => x.Index)
+			.ToList();
 
 	public static bool TryGetKillDistance([NotNullWhen(true)] out Il2CppStructArray<float>? arr)
 	{
