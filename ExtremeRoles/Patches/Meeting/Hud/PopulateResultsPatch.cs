@@ -135,40 +135,35 @@ public static class MeetingHudPopulateResultsPatch
 			playerRoleInfo.Add(player);
 		}
 
+		// スキップを含まないので1から
+		for (int i = 0; i < __instance.playerStates.Length; i++)
+		{
+			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+			playerVoteArea.ClearForResults();
+			playerAreaMap[playerVoteArea.TargetPlayerId] = playerVoteArea;
+		}
+
 		// 各種表の情報
 		foreach (var voter in states)
 		{
 			byte voterId = voter.VoterId;
+			byte voteTo = voter.VotedForId;
 			if (voter.SkippedVote)
 			{
 				voteInfo.AddSkip(voterId);
+			}
+			else if (
+				voter.AmDead || 
+				voteTo == PlayerVoteArea.MissedVote || 
+				voteTo == PlayerVoteArea.HasNotVoted)
+			{
 				continue;
 			}
-
-			// スキップを含まないので1から
-			for (int i = 1; i < __instance.playerStates.Length; i++)
+			else
 			{
-				PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-				byte checkPlayerId = playerVoteArea.TargetPlayerId;
-				
-				if (!playerAreaMap.ContainsKey(checkPlayerId))
-				{
-					// 初期化
-					playerVoteArea.ClearForResults();
-					playerAreaMap[checkPlayerId] = playerVoteArea;
-				}
-
-				byte to = voter.VotedForId;
-				if (voter.VotedForId == checkPlayerId)
-				{
-					voteInfo.AddTo(voterId, to);
-				}
+				voteInfo.AddTo(voterId, voteTo);
 			}
 		}
-
-		var skipVote = __instance.playerStates[0];
-		skipVote.ClearForResults();
-		playerAreaMap[byte.MaxValue] = skipVote;
 
 		// --- Phase 2: Vote Modification ---
 		foreach (var (role, player) in playerRoleInfo.Modifier)

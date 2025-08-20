@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -80,9 +80,9 @@ public static class MeetingHudCheckForEndVotingPatch
 			// 投票先を全格納
 			voteTarget.Add(playerId, playerVoteArea.VotedFor);
 
-			if (playerVoteArea.VotedFor != 252 &&
-				playerVoteArea.VotedFor != 255 &&
-				playerVoteArea.VotedFor != 254)
+			if (playerVoteArea.VotedFor != PlayerVoteArea.DeadVote &&
+				playerVoteArea.VotedFor != PlayerVoteArea.HasNotVoted &&
+				playerVoteArea.VotedFor != PlayerVoteArea.MissedVote)
 			{
 				int currentVotes;
 				if (voteResult.TryGetValue(playerVoteArea.VotedFor, out currentVotes))
