@@ -82,11 +82,17 @@ public sealed class Captain :
         {
             case AbilityType.SetVoteTarget:
                 byte targetPlayerId = reader.ReadByte();
-                if (captain == null) { return; }
+                if (captain == null)
+                {
+                    return;
+                }
                 captain.SetTargetVote(targetPlayerId);
                 break;
             case AbilityType.ChargeVote:
-                if (captain == null) { return; }
+                if (captain == null)
+                {
+                    return;
+                }
                 captain.ChargeVote();
                 break;
             default:
@@ -145,27 +151,16 @@ public sealed class Captain :
             }
         }
     }
-    public void ModifiedVoteAnime(
-        MeetingHud instance,
-        NetworkedPlayerInfo rolePlayer,
-        ref Dictionary<byte, int> voteIndex)
+    public IEnumerable<VoteModification> GetVoteModifications(NetworkedPlayerInfo rolePlayer)
     {
-        PlayerVoteArea pva = instance.playerStates.FirstOrDefault(
-            x => x.TargetPlayerId == this.voteTarget);
-
-        if (pva == null) { return; }
-
-        if (!voteIndex.TryGetValue(pva.TargetPlayerId, out int startIndex))
+        if (this.voteTarget != byte.MaxValue)
         {
-            startIndex = 0;
+            int addVoteNum = (int)Math.Floor(this.curChargedVote);
+            if (addVoteNum > 0)
+            {
+                yield return new VoteModification(rolePlayer.PlayerId, this.voteTarget, addVoteNum);
+            }
         }
-
-        int addVoteNum = (int)Math.Floor(this.curChargedVote);
-        for (int i = 0; i < addVoteNum; ++i)
-        {
-            instance.BloopAVoteIcon(rolePlayer, startIndex + i, pva.transform);
-        }
-        voteIndex[pva.TargetPlayerId] = startIndex + addVoteNum;
     }
 
     public void ResetModifier()

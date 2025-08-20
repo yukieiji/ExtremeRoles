@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ExtremeRoles.Module.Meeting;
 
 namespace ExtremeRoles.Roles.API.Interface;
 
@@ -20,10 +21,8 @@ public interface IRoleVoteModifier
         ref Dictionary<byte, byte> voteTarget,
         ref Dictionary<byte, int> voteResult);
 
-    public void ModifiedVoteAnime(
-        MeetingHud instance,
-        NetworkedPlayerInfo rolePlayer,
-        ref Dictionary<byte, int> voteIndex);
+    public IEnumerable<VoteModification> GetVoteModifications(
+        NetworkedPlayerInfo rolePlayer);
         
     public void ResetModifier();
 }
