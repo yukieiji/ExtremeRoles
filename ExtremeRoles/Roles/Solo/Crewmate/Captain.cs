@@ -1,20 +1,15 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using UnityEngine;
-
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.Meeting;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -151,17 +146,19 @@ public sealed class Captain :
             }
         }
     }
-    public IEnumerable<VoteModification> GetVoteModifications(NetworkedPlayerInfo rolePlayer)
+    public IEnumerable<VoteInfo> GetVoteModifications(NetworkedPlayerInfo rolePlayer)
     {
-        if (this.voteTarget != byte.MaxValue)
+        if (this.voteTarget == byte.MaxValue)
         {
-            int addVoteNum = (int)Math.Floor(this.curChargedVote);
-            if (addVoteNum > 0)
-            {
-                yield return new VoteModification(rolePlayer.PlayerId, this.voteTarget, addVoteNum);
-            }
+			yield break;
         }
-    }
+
+		int addVoteNum = (int)Math.Floor(this.curChargedVote);
+		if (addVoteNum > 0)
+		{
+			yield return new VoteInfo(rolePlayer.PlayerId, this.voteTarget, addVoteNum);
+		}
+	}
 
     public void ResetModifier()
     {

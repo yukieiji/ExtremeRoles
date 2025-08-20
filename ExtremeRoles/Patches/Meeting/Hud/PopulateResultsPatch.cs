@@ -1,21 +1,109 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
+using UnityEngine;
 using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using ExtremeRoles.Module.Event;
+using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.Meeting;
-using ExtremeRoles.Performance.Il2Cpp;
+
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
 #nullable enable
+
+public sealed class VoteInfoCollector()
+{
+	public IEnumerable<VoteInfo> Vote =>
+		vote
+			// VoterIdとTargetIdの組み合わせでグループ化
+			.GroupBy(vote => new { vote.VoterId, vote.TargetId })
+			// 各グループから新しいVoteInfoを作成
+			.Select(
+				group => new VoteInfo(
+					group.Key.VoterId,
+					group.Key.TargetId,
+					group.Sum(vote => vote.Count) // グループ内のContを合計
+				)
+			);
+
+	private readonly List<VoteInfo> vote = new List<VoteInfo>();
+
+	public void AddSkip(byte voter)
+	{
+		this.vote.Add(new VoteInfo(voter, 255, 1));
+	}
+
+	public void AddTo(byte voter, byte to)
+	{
+		this.vote.Add(new VoteInfo(voter, to, 1));
+	}
+
+	public void AddRange(IEnumerable<VoteInfo> votes)
+	{
+		vote.AddRange(votes);
+	}
+}
+
+public sealed class PlayerRoleInfo(int size)
+{
+	public IEnumerable<(IRoleVoteModifier, NetworkedPlayerInfo)> Modifier => voteModifier.Values;
+	public IEnumerable<(IRoleHookVoteEnd, NetworkedPlayerInfo)> Hook => voteHook;
+	public IReadOnlyDictionary<byte, NetworkedPlayerInfo> Player => playerCache;
+
+	private readonly SortedList<int, (IRoleVoteModifier, NetworkedPlayerInfo)> voteModifier = [];
+	private readonly List<(IRoleHookVoteEnd, NetworkedPlayerInfo)> voteHook = [];
+	private readonly Dictionary<byte, NetworkedPlayerInfo> playerCache = new Dictionary<byte, NetworkedPlayerInfo>(size);
+
+	public void Add(NetworkedPlayerInfo player)
+	{
+		byte playerId = player.PlayerId;
+		this.playerCache.Add(player.PlayerId, player);
+
+		if (!ExtremeRoleManager.GameRole.ContainsKey(player.PlayerId))
+		{
+			return;
+		}
+		var (voteModRole, voteAnotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(playerId);
+		addVoteModRole(voteModRole, player);
+		addVoteModRole(voteAnotherRole, player);
+
+		var (voteHook, voteHookAnotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleHookVoteEnd>(playerId);
+		addVoteHookRole(voteHook, player);
+		addVoteHookRole(voteHookAnotherRole, player);
+	}
+
+	private void addVoteModRole(IRoleVoteModifier? role, NetworkedPlayerInfo playerInfo)
+	{
+		if (role is null)
+		{
+			return;
+		}
+
+		int order = role.Order;
+		while (this.voteModifier.ContainsKey(order))
+		{
+			++order;
+		}
+		this.voteModifier.Add(order, (role, playerInfo));
+	}
+
+	private void addVoteHookRole(
+		IRoleHookVoteEnd? role, NetworkedPlayerInfo playerInfo)
+	{
+		if (role is null)
+		{
+			return;
+		}
+
+		this.voteHook.Add((role, playerInfo));
+	}
+}
 
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
 public static class MeetingHudPopulateResultsPatch
@@ -36,78 +124,81 @@ public static class MeetingHudPopulateResultsPatch
 				StringNames.MeetingVotingResults, Array.Empty<Il2CppSystem.Object>());
 
 		// --- Phase 1: Data Gathering and Caching ---
+		var voteInfo = new VoteInfoCollector();
+		var playerAreaMap = new Dictionary<byte, PlayerVoteArea>(__instance.playerStates.Length);
+		int playerNum = GameData.Instance.AllPlayers.Count;
+		var playerRoleInfo = new PlayerRoleInfo(GameData.Instance.AllPlayers.Count);
 
-		var allVotes = new VoteCollection();
-		var voteModifierRoles = new SortedList<int, (IRoleVoteModifier, NetworkedPlayerInfo)>();
-		var voteHookRoles = new List<(IRoleHookVoteEnd, NetworkedPlayerInfo)>();
-
-		var playerAreaMap = new Dictionary<byte, PlayerVoteArea>();
-		var playerInfoMap = GameData.Instance.AllPlayers.GetFastEnumerator().ToDictionary(p => p.PlayerId);
-
-		for (int i = 0; i < __instance.playerStates.Length; i++)
+		// プレイヤーの情報
+		foreach (var player in GameData.Instance.AllPlayers)
 		{
-			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-			playerVoteArea.ClearForResults();
+			playerRoleInfo.Add(player);
+		}
 
-			byte checkPlayerId = playerVoteArea.TargetPlayerId;
-			if (checkPlayerId >= 0)
+		// 各種表の情報
+		foreach (var voter in states)
+		{
+			byte voterId = voter.VoterId;
+			if (voter.SkippedVote)
 			{
-				playerAreaMap[checkPlayerId] = playerVoteArea;
+				voteInfo.AddSkip(voterId);
+				continue;
 			}
 
-			if (ExtremeRoleManager.GameRole.ContainsKey(checkPlayerId) && playerInfoMap.TryGetValue(checkPlayerId, out var playerInfo))
+			// スキップを含まないので1から
+			for (int i = 1; i < __instance.playerStates.Length; i++)
 			{
-				var (voteModRole, voteAnotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(checkPlayerId);
-				addVoteModRole(voteModRole, playerInfo, ref voteModifierRoles);
-				addVoteModRole(voteAnotherRole, playerInfo, ref voteModifierRoles);
-
-				var (voteHook, voteHookAnotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleHookVoteEnd>(checkPlayerId);
-				addVoteHookRole(voteHook, playerInfo, voteHookRoles);
-				addVoteHookRole(voteHookAnotherRole, playerInfo, voteHookRoles);
-			}
-
-			foreach (var voterState in states)
-			{
-				if (i == 0 && voterState.SkippedVote)
+				PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+				byte checkPlayerId = playerVoteArea.TargetPlayerId;
+				
+				if (!playerAreaMap.ContainsKey(checkPlayerId))
 				{
-					allVotes.Add(new VoteModification(voterState.VoterId, 255, 1));
+					// 初期化
+					playerVoteArea.ClearForResults();
+					playerAreaMap[checkPlayerId] = playerVoteArea;
 				}
-				else if (voterState.VotedForId == checkPlayerId)
+
+				byte to = voter.VotedForId;
+				if (voter.VotedForId == checkPlayerId)
 				{
-					allVotes.Add(new VoteModification(voterState.VoterId, checkPlayerId, 1));
+					voteInfo.AddTo(voterId, to);
 				}
 			}
 		}
 
-		// --- Phase 2: Vote Modification ---
+		var skipVote = __instance.playerStates[0];
+		skipVote.ClearForResults();
+		playerAreaMap[byte.MaxValue] = skipVote;
 
-		foreach (var (role, player) in voteModifierRoles.Values)
+		// --- Phase 2: Vote Modification ---
+		foreach (var (role, player) in playerRoleInfo.Modifier)
 		{
-			allVotes.AddRange(role.GetVoteModifications(player));
+			voteInfo.AddRange(role.GetVoteModifications(player));
 			role.ResetModifier();
 		}
 
 		// --- Phase 3: Animation and Final Count Calculation ---
-
-		var finalVoteCounts = new Dictionary<byte, int>();
-		var skipVoteTargetId = __instance.playerStates[0].TargetPlayerId;
-
-		foreach (var vote in allVotes.GetAllVotes())
+		var finalVoteCount = new Dictionary<byte, int>(playerNum);
+		foreach (var vote in voteInfo.Vote)
 		{
-			AnimateVote(__instance, vote, finalVoteCounts, playerAreaMap, playerInfoMap, skipVoteTargetId);
+			finalVoteCount[vote.TargetId] = vote.Count;
+			animateVote(__instance, vote, playerAreaMap, playerRoleInfo.Player);
 		}
 
 		// --- Final Hook Call ---
-
-		foreach (var (role, player) in voteHookRoles)
+		foreach (var (role, player) in playerRoleInfo.Hook)
 		{
-			role.HookVoteEnd(__instance, player, finalVoteCounts);
+			role.HookVoteEnd(__instance, player, finalVoteCount);
 		}
 
 		return false;
 	}
 
-	private static void AnimateVote(MeetingHud instance, VoteModification vote, Dictionary<byte, int> voteIndex, IReadOnlyDictionary<byte, PlayerVoteArea> playerAreaMap, IReadOnlyDictionary<byte, NetworkedPlayerInfo> playerInfoMap, byte skipVoteTargetId)
+	private static void animateVote(
+		MeetingHud instance,
+		in VoteInfo vote,
+		IReadOnlyDictionary<byte, PlayerVoteArea> playerAreaMap,
+		IReadOnlyDictionary<byte, NetworkedPlayerInfo> playerInfoMap)
 	{
 		if (!playerInfoMap.TryGetValue(vote.VoterId, out var voterInfo))
 		{
@@ -125,46 +216,11 @@ public static class MeetingHudPopulateResultsPatch
 		else
 		{
 			targetTransform = instance.SkippedVoting.transform;
-			effectiveTargetId = skipVoteTargetId;
 		}
 
-		for (int i = 0; i < vote.VoteCount; i++)
+		for (int i = 0; i < vote.Count; i++)
 		{
-			if (!voteIndex.TryGetValue(effectiveTargetId, out int currentVoteCount))
-			{
-				currentVoteCount = 0;
-			}
-			instance.BloopAVoteIcon(voterInfo, currentVoteCount, targetTransform);
-			voteIndex[effectiveTargetId] = currentVoteCount + 1;
+			instance.BloopAVoteIcon(voterInfo, i, targetTransform);
 		}
-	}
-
-	private static void addVoteModRole(
-		IRoleVoteModifier? role, NetworkedPlayerInfo playerInfo,
-		ref SortedList<int, (IRoleVoteModifier, NetworkedPlayerInfo)> voteModifier)
-	{
-		if (role is null)
-		{
-			return;
-		}
-
-		int order = role.Order;
-		while (voteModifier.ContainsKey(order))
-		{
-			++order;
-		}
-		voteModifier.Add(order, (role, playerInfo));
-	}
-
-	private static void addVoteHookRole(
-		IRoleHookVoteEnd? role, NetworkedPlayerInfo playerInfo,
-		in List<(IRoleHookVoteEnd, NetworkedPlayerInfo)> voteHook)
-	{
-		if (role is null)
-		{
-			return;
-		}
-
-		voteHook.Add((role, playerInfo));
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Meeting;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -67,11 +68,11 @@ public sealed class Gambler :
         voteResult[_votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
 
-    public IEnumerable<VoteModification> GetVoteModifications(NetworkedPlayerInfo rolePlayer)
+    public IEnumerable<VoteInfo> GetVoteModifications(NetworkedPlayerInfo rolePlayer)
     {
         if (_voteCount != 1 && _votedFor != 255)
         {
-            yield return new VoteModification(rolePlayer.PlayerId, _votedFor, _voteCount - 1);
+            yield return new VoteInfo(rolePlayer.PlayerId, _votedFor, _voteCount - 1);
         }
     }
 
