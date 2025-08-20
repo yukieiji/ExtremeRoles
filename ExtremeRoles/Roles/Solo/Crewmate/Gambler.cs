@@ -28,8 +28,8 @@ public sealed class Gambler :
     private int minVoteNum;
     private int maxVoteNum;
 
-    private byte _votedFor = 255;
-    private int _voteCount = 1;
+    private byte votedFor = 255;
+    private int voteCount = 1;
 
     public Gambler() : base(
 		RoleCore.BuildCrewmate(
@@ -43,8 +43,8 @@ public sealed class Gambler :
         ref Dictionary<byte, byte> voteTarget,
         ref Dictionary<byte, int> voteResult)
     {
-        if (!voteTarget.TryGetValue(rolePlayerId, out _votedFor) ||
-            !voteResult.TryGetValue(_votedFor, out int curVoteNum))
+        if (!voteTarget.TryGetValue(rolePlayerId, out votedFor) ||
+            !voteResult.TryGetValue(votedFor, out int curVoteNum))
         {
             return;
         }
@@ -57,29 +57,29 @@ public sealed class Gambler :
         Array.Fill(voteArray, this.minVoteNum, this.normalVoteRate, zeroVoteRate);
         Array.Fill(voteArray, this.maxVoteNum, this.normalVoteRate + zeroVoteRate, dualVoteRate);
 
-        _voteCount = voteArray[RandomGenerator.Instance.Next(100)];
+        voteCount = voteArray[RandomGenerator.Instance.Next(100)];
 
-        if (_voteCount == 1)
+        if (voteCount == 1)
         {
             return;
         }
 
-        int newVotedNum = curVoteNum + _voteCount - 1;
-        voteResult[_votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
+        int newVotedNum = curVoteNum + voteCount - 1;
+        voteResult[votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
 
     public IEnumerable<VoteInfo> GetVoteModifications(NetworkedPlayerInfo rolePlayer)
     {
-        if (_voteCount != 1 && _votedFor != 255)
+        if (voteCount != 1 && votedFor != 255)
         {
-            yield return new VoteInfo(rolePlayer.PlayerId, _votedFor, _voteCount - 1);
+            yield return new VoteInfo(rolePlayer.PlayerId, votedFor, voteCount - 1);
         }
     }
 
     public void ResetModifier()
     {
-        _votedFor = 255;
-        _voteCount = 1;
+        votedFor = 255;
+        voteCount = 1;
     }
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
