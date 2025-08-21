@@ -17,13 +17,12 @@ namespace ExtremeRoles.Module.SystemType;
 
 public sealed class VoteSwapSystem : IExtremeSystemType
 {
-
-	private readonly record struct Img(SpriteRenderer Start, SpriteRenderer Target);
 	private readonly List<(byte, byte)> swapList = [];
 	private readonly Dictionary<byte, List<SpriteRenderer>> img = [];
+	
 	private Dictionary<byte, PlayerVoteArea>? pva;
-
 	private Dictionary<byte, byte>? cache;
+
 	private const float animeDuration = 1.5f;
 
 	public static bool TryGet([NotNullWhen(true)] out VoteSwapSystem? system)
