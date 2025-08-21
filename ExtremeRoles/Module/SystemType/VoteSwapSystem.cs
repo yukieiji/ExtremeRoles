@@ -24,7 +24,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	public static bool TryGet([NotNullWhen(true)] out VoteSwapSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.VoteSwapSystem, out system);
 
-	public static Dictionary<byte, int> Swap(Dictionary<byte, int> voteInfo)
+	public static IReadOnlyDictionary<byte, int> Swap(Dictionary<byte, int> voteInfo)
 	{
 		if (!TryGet(out var system))
 		{

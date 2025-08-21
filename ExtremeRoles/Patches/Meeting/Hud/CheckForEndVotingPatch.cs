@@ -20,10 +20,12 @@ public static class MeetingHudCheckForEndVotingPatch
 {
 	private readonly record struct ExiledPlayer(byte PlayerId = byte.MaxValue, int VoteNum = int.MinValue);
 
-	public static bool Prefix(
-		MeetingHud __instance)
+	public static bool Prefix(MeetingHud __instance)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		{ 
+			return true;
+		}
 
 		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
@@ -41,7 +43,10 @@ public static class MeetingHudCheckForEndVotingPatch
 		IRoleVoteModifier? role, byte rolePlayerId,
 		ref SortedList<int, (IRoleVoteModifier, byte)> voteModifier)
 	{
-		if (role is null) { return; }
+		if (role is null)
+		{
+			return;
+		}
 
 		int order = role.Order;
 		// 同じ役職は同じ優先度になるので次の優先度になるようにセット
@@ -52,20 +57,20 @@ public static class MeetingHudCheckForEndVotingPatch
 		voteModifier.Add(order, (role, rolePlayerId));
 	}
 
-	private static Dictionary<byte, int> calculateVote(MeetingHud instance)
+	private static IReadOnlyDictionary<byte, int> calculateVote(MeetingHud instance)
 	{
 
 		RPCOperator.Call(RPCOperator.Command.CloseMeetingVoteButton);
 		RPCOperator.CloseMeetingButton();
 
-		Dictionary<byte, int> voteResult = new Dictionary<byte, int>();
-		Dictionary<byte, byte> voteTarget = new Dictionary<byte, byte>();
+		int size = instance.playerStates.Count;
+		var voteResult = new Dictionary<byte, int>(size);
+		var voteTarget = new Dictionary<byte, byte>(size);
 
-		SortedList<int, (IRoleVoteModifier, byte)> voteModifier = new SortedList<int, (IRoleVoteModifier, byte)>();
+		var voteModifier = new SortedList<int, (IRoleVoteModifier, byte)>();
 
-		foreach (PlayerVoteArea playerVoteArea in instance.playerStates)
+		foreach (var playerVoteArea in instance.playerStates)
 		{
-
 			byte playerId = playerVoteArea.TargetPlayerId;
 
 			// 切断されたプレイヤーは残っている状態で役職を持たない状態になるのでキーチェックはしておく
@@ -79,20 +84,21 @@ public static class MeetingHudCheckForEndVotingPatch
 			}
 
 			// 投票先を全格納
-			voteTarget.Add(playerId, playerVoteArea.VotedFor);
+			byte votedForId = playerVoteArea.VotedFor;
+			voteTarget.Add(playerId, votedForId);
 
-			if (playerVoteArea.VotedFor != PlayerVoteArea.DeadVote &&
-				playerVoteArea.VotedFor != PlayerVoteArea.HasNotVoted &&
-				playerVoteArea.VotedFor != PlayerVoteArea.MissedVote)
+			if (votedForId != PlayerVoteArea.DeadVote &&
+				votedForId != PlayerVoteArea.HasNotVoted &&
+				votedForId != PlayerVoteArea.MissedVote)
 			{
 				int currentVotes;
-				if (voteResult.TryGetValue(playerVoteArea.VotedFor, out currentVotes))
+				if (voteResult.TryGetValue(votedForId, out currentVotes))
 				{
-					voteResult[playerVoteArea.VotedFor] = currentVotes + 1;
+					voteResult[votedForId] = currentVotes + 1;
 				}
 				else
 				{
-					voteResult[playerVoteArea.VotedFor] = 1;
+					voteResult[votedForId] = 1;
 				}
 			}
 		}
@@ -102,9 +108,9 @@ public static class MeetingHudCheckForEndVotingPatch
 			role.ModifiedVote(playerId, ref voteTarget, ref voteResult);
 		}
 
-		voteResult = VoteSwapSystem.Swap(voteResult);
+		var result = VoteSwapSystem.Swap(voteResult);
 
-		return voteResult;
+		return result;
 	}
 
 	private static void normalMeetingVote(MeetingHud instance)
@@ -121,7 +127,7 @@ public static class MeetingHudCheckForEndVotingPatch
 		var logger = ExtremeRolesPlugin.Logger;
 		logger.LogInfo(" ----- Voteing is End ----- ");
 
-		Dictionary<byte, int> voteResult = calculateVote(instance);
+		var voteResult = calculateVote(instance);
 
 		bool isTie = true;
 		var result = new ExiledPlayer();
@@ -157,16 +163,12 @@ public static class MeetingHudCheckForEndVotingPatch
 			logger.LogInfo("Exiled Player is None!!");
 		}
 
-		MeetingHud.VoterState[] array = new MeetingHud.VoterState[instance.playerStates.Length];
-		for (int i = 0; i < instance.playerStates.Length; i++)
-		{
-			PlayerVoteArea playerVoteArea = instance.playerStates[i];
-			array[i] = new MeetingHud.VoterState
+		var array = instance.playerStates.Select(
+			x => new MeetingHud.VoterState
 			{
-				VoterId = playerVoteArea.TargetPlayerId,
-				VotedForId = playerVoteArea.VotedFor
-			};
-		}
+				VoterId = x.TargetPlayerId,
+				VotedForId = x.VotedFor
+			}).ToArray();
 
 		instance.RpcVotingComplete(array, exiled, isTie);
 	}

@@ -1,4 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using AmongUs.GameOptions;
+using HarmonyLib;
+using UnityEngine;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.CustomMonoBehaviour;
@@ -10,15 +18,8 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination.Avalon;
-using HarmonyLib;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
-
 using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
@@ -177,7 +178,8 @@ public static class MeetingHudPopulateResultsPatch
 		// --- Phase 2: Vote Modification ---
 		foreach (var (role, player) in playerRoleInfo.Modifier)
 		{
-			voteInfo.AddRange(role.GetModdedVoteInfo(player));
+			var info = role.GetModdedVoteInfo(player);
+			voteInfo.AddRange(info);
 			role.ResetModifier();
 		}
 
