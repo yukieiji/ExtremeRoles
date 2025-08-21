@@ -35,6 +35,9 @@ public sealed class BarterRole :
 
 	public enum Option
 	{
+		AwakeTaskRate,
+		AwakeDeadPlayerNum,
+		AwakeKillNum,
 		CanCallMeeting,
 		CastlingNum,
 		MaxCastlingNumWhenMeeting,
@@ -48,6 +51,11 @@ public sealed class BarterRole :
 	private TextMeshPro? meetingCastlingText = null;
 	private byte? source = null;
 	private bool showOther = false;
+
+	private bool awakeHasOtherVision;
+	private bool awakeHasOtherKillCool;
+	private bool awakeHasOtherKillRange;
+
 
 	private string roleNamePrefix = "";
 
@@ -85,7 +93,10 @@ public sealed class BarterRole :
 
 		if (!this.IsAwake)
 		{
-			this.status?.UpdateAwakeStatus(rolePlayer);
+			if (this.IsCrewmate())
+			{
+				this.updateAwakeStatus(rolePlayer);
+			}
 			return;
 		}
 
@@ -141,9 +152,7 @@ public sealed class BarterRole :
 	}
 
 	public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
-	{
-
-	}
+		=> IRoleMeetingButtonAbility.DefaultButtonMod(instance, abilityButton, "barterCastling");
 
 	public Action CreateAbilityAction(PlayerVoteArea instance)
 	{
@@ -197,6 +206,18 @@ public sealed class BarterRole :
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
 		CreateKillerOption(factory, imposterSetting);
 
+		factory.CreateIntOption(
+			Option.AwakeTaskRate,
+			70, 0, 100, 10,
+			format: OptionUnit.Percentage);
+		factory.CreateIntOption(
+			Option.AwakeDeadPlayerNum,
+			7, 0, 12, 1);
+
+		factory.CreateIntOption(
+			Option.AwakeKillNum,
+			2, 0, 5, 1);
+
 		factory.CreateBoolOption(
 			Option.CanCallMeeting,
 			false);
@@ -220,17 +241,29 @@ public sealed class BarterRole :
 	{
 		var loader = Loader;
 
-		CanCallMeeting = loader.GetValue<Option, bool>(
-			Option.CanCallMeeting);
+		this.sourceMark = [];
 
-		sourceMark = [];
-
-		this.status = new BarterStatus(loader);
+		this.status = new BarterStatus(loader, this.IsImpostor());
 		this.showOther = loader.GetValue<Option, bool>(
 			Option.ShowCastlingOther);
 
-		roleNamePrefix = CreateImpCrewPrefix();
+		this.roleNamePrefix = CreateImpCrewPrefix();
 		this.system = VoteSwapSystem.CreateOrGet();
+
+		if (!this.status.IsAwake)
+		{
+			this.awakeHasOtherVision = this.HasOtherVision;
+			this.HasOtherVision = false;
+			this.CanCallMeeting = true;
+
+			if (this.IsImpostor())
+			{
+				this.awakeHasOtherKillCool = this.HasOtherKillCool;
+				this.awakeHasOtherKillRange = this.HasOtherKillRange;
+				this.HasOtherKillCool = false;
+				this.HasOtherKillRange = false;
+			}
+		}
 	}
 
 	private void meetingInfoSetActive(bool active)
@@ -243,6 +276,12 @@ public sealed class BarterRole :
 
 	public string GetFakeOptionString()
 		=> "";
+
+	public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
+	{
+		this.updateAwakeStatus(rolePlayer);
+		return true;
+	}
 
 	public override string GetColoredRoleName(bool isTruthColor = false)
 	{
@@ -326,6 +365,26 @@ public sealed class BarterRole :
 		else
 		{
 			return this.IsImpostor() ? Palette.ImpostorRed : Palette.White;
+		}
+	}
+
+	private void updateAwakeStatus(PlayerControl rolePlayer)
+	{
+		this.status?.UpdateAwakeStatus(rolePlayer);
+
+		if (!this.IsAwake)
+		{
+			return;
+		}
+
+		this.CanCallMeeting = this.Loader.GetValue<Option, bool>(
+			Option.CanCallMeeting);
+		this.HasOtherVision = this.awakeHasOtherVision;
+		if (this.IsImpostor() || 
+			(this.AnotherRole != null && this.AnotherRole.Core.Id is ExtremeRoleId.Servant))
+		{
+			this.HasOtherKillCool = this.awakeHasOtherKillCool;
+			this.HasOtherKillRange = this.awakeHasOtherKillRange;
 		}
 	}
 }
