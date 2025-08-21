@@ -115,7 +115,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	{
 		byte source = msgReader.ReadByte();
 		byte target = msgReader.ReadByte();
-		bool showImg = msgReader.ReadBoolean();
+		bool showImg = msgReader.ReadBoolean() || player.PlayerId == PlayerControl.LocalPlayer.PlayerId;
 		uint color = msgReader.ReadPackedUInt32();
 		swapVote(source, target, showImg, color);
 	}

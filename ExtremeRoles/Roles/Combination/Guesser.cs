@@ -451,11 +451,6 @@ public sealed class Guesser :
         }
     }
 
-    public void IntroEndSetUp()
-    {
-        return;
-    }
-
     public bool IsBlockMeetingButtonAbility(
         PlayerVoteArea instance)
     {
