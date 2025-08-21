@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -6,11 +5,11 @@ using System.Linq;
 using Hazel;
 using UnityEngine;
 
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
+
 
 #nullable enable
 
@@ -40,16 +39,20 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		return system.swap(voteInfo);
 	}
 
-	public static void AnimateSwap(MeetingHud instance, Dictionary<byte, PlayerVoteArea> pvaCache)
+	public static void AnimateSwap(
+		MeetingHud instance,
+		Dictionary<byte, int> voteInfo,
+		Dictionary<byte, PlayerVoteArea> pvaCache)
 	{
-		if (!TryGet(out var system) || system.cache is null)
+		if (!TryGet(out var system))
 		{
 			return;
 		}
 
-		var allAnime = new List<Il2CppIEnumerator>(system.cache.Count * 2);
+		var swapInfo = system.getSwapInfo(voteInfo);
+		var allAnime = new List<Il2CppIEnumerator>(swapInfo.Count * 2);
 
-		foreach (var (s, t) in system.cache)
+		foreach (var (s, t) in swapInfo)
 		{
 			if (s == t ||
 				!pvaCache.TryGetValue(s, out var sPva) ||
@@ -139,7 +142,20 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		*/
 	}
 
-	private Dictionary<byte, int> swap(Dictionary<byte, int> voteInfo)
+	private IReadOnlyDictionary<byte, int> swap(Dictionary<byte, int> voteInfo)
+	{
+		var swapInfo = getSwapInfo(voteInfo);
+
+		var finalData = new Dictionary<byte, int>(voteInfo.Count);
+		foreach (var (s, t) in swapInfo)
+		{
+			finalData[s] = voteInfo[t];
+		}
+
+		return finalData;
+	}
+
+	private IReadOnlyDictionary<byte, byte> getSwapInfo(Dictionary<byte, int> voteInfo)
 	{
 		if (this.cache is null)
 		{
@@ -148,7 +164,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			// 2. 各スワップ操作をシミュレートし、マップの値を更新していく
 			foreach (var (s, t) in this.swapList)
 			{
-				if (this.cache.ContainsKey(s) && 
+				if (this.cache.ContainsKey(s) &&
 					this.cache.ContainsKey(t))
 				{
 					// key1の位置とkey2の位置にある「値の出所（元のキー）」を交換する
@@ -156,13 +172,6 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 				}
 			}
 		}
-
-		var finalData = new Dictionary<byte, int>(voteInfo.Count);
-		foreach (var (s, t) in this.cache)
-		{
-			finalData[s] = voteInfo[t];
-		}
-
-		return finalData;
+		return this.cache;
 	}
 }

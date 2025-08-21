@@ -183,9 +183,6 @@ public static class MeetingHudPopulateResultsPatch
 			role.ResetModifier();
 		}
 
-
-		VoteSwapSystem.AnimateSwap(__instance, playerAreaMap);
-
 		// --- Phase 3: Animation and Final Count Calculation ---
 		var finalVoteCount = new Dictionary<byte, int>(playerNum);
 		// .Voteで重複は削除されている
@@ -196,6 +193,8 @@ public static class MeetingHudPopulateResultsPatch
 			animateVote(__instance, vote, curTargetCount, playerAreaMap, playerRoleInfo.Player);
 			finalVoteCount[target] = curTargetCount + vote.Count;
 		}
+
+		VoteSwapSystem.AnimateSwap(__instance, finalVoteCount, playerAreaMap);
 
 		// --- Final Hook Call ---
 		foreach (var (role, player) in playerRoleInfo.Hook)
