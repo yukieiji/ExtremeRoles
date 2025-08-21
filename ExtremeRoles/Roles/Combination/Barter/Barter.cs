@@ -148,7 +148,7 @@ public sealed class BarterRole :
 		}
 		return 
 			!source.HasValue || 
-			source.Value != target;
+			source.Value == target;
 	}
 
 	public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
