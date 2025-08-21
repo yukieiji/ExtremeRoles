@@ -20,7 +20,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 	private readonly record struct Img(SpriteRenderer Start, SpriteRenderer Target);
 	private readonly List<(byte, byte)> swapList = [];
-	private readonly List<Img> img = [];
+	private readonly Dictionary<byte, List<SpriteRenderer>> img = [];
 	private Dictionary<byte, PlayerVoteArea>? pva;
 
 	private Dictionary<byte, byte>? cache;
@@ -28,6 +28,12 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 	public static bool TryGet([NotNullWhen(true)] out VoteSwapSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.VoteSwapSystem, out system);
+
+	private enum ImgType : byte
+	{
+		Source,
+		Target,
+	}
 
 	public static IReadOnlyDictionary<byte, int> Swap(Dictionary<byte, int> voteInfo)
 	{
@@ -103,6 +109,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		this.img.Clear();
 
 		this.cache = null;
+		this.pva = null;
 	}
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
@@ -116,30 +123,24 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 	private void swapVote(byte source, byte target, bool showImg, uint colorUint)
 	{
-		if (this.pva is null)
-		{
-			return;
-		}
 
 		this.swapList.Add((source, target));
 
-		/* 画像の処理 (後で追加)
+		if (!showImg || 
+			(this.pva is null && MeetingHud.Instance == null))
+		{
+			return;
+		}
+		if (this.pva is null)
+		{
+			this.pva = MeetingHud.Instance.playerStates.ToDictionary(
+				x => x.TargetPlayerId);
+		}
 
 		var color = Design.ToRGBA(colorUint);
-		var imgId = id.Value;
-		if (!this.img.TryGetValue(imgId, out var img))
-		{
-			var sourceImg = new SpriteRenderer();
-			var targetImg = new SpriteRenderer();
 
-			img = new Img(sourceImg, targetImg);
-		}
-		
-		img.Start.transform.SetParent(sourcePva.transform);
-		img.Target.transform.SetParent(targetPva.transform);
-		
-		this.img[imgId] = img;
-		*/
+		addImg(source, ImgType.Source, color);
+		addImg(source, ImgType.Target, color);
 	}
 
 	private IReadOnlyDictionary<byte, int> swap(Dictionary<byte, int> voteInfo)
@@ -173,5 +174,37 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			}
 		}
 		return this.cache;
+	}
+
+	private void addImg(byte id, ImgType type, Color32 color)
+	{
+		if (this.pva == null ||
+			!this.pva.TryGetValue(id, out var pva) ||
+			pva == null)
+		{
+			return;
+		}
+		if (!this.img.TryGetValue(id, out var list) ||
+			list is null)
+		{
+			list = [];
+			this.img[id] = list;
+		}
+		var img = createImg(pva, list.Count);
+		img.color = color;
+		list.Add(img);
+	}
+
+	private static SpriteRenderer createImg(PlayerVoteArea pva, int index)
+	{
+		var img = UnityEngine.Object.Instantiate(
+			pva.Background, pva.LevelNumberText.transform);
+		img.name = $"swap_img_{pva.TargetPlayerId}_{index}";
+		img.sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
+			Resources.ObjectPath.CaptainSpecialVoteCheck);
+		img.transform.localPosition = new Vector3(7.2f + 0.05f * index, -0.5f, -2.75f);
+		img.transform.localScale = new Vector3(1.0f, 3.5f, 1.0f);
+		img.gameObject.layer = 5;
+		return img;
 	}
 }
