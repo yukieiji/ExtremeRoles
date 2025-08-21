@@ -85,7 +85,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 				x.Write(source);
 				x.Write(target);
 				x.Write(isShowImg);
-				x.Write(color);
+				x.WritePacked(color);
 			});
 	}
 
@@ -107,7 +107,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		byte source = msgReader.ReadByte();
 		byte target = msgReader.ReadByte();
 		bool showImg = msgReader.ReadBoolean();
-		uint color = msgReader.ReadUInt32();
+		uint color = msgReader.ReadPackedUInt32();
 		swapVote(source, target, showImg, color);
 	}
 
