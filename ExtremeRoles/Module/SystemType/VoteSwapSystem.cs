@@ -1,11 +1,13 @@
-using ExtremeRoles.Module.Interface;
-using Hazel;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
+using Hazel;
 using UnityEngine;
 
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
 
 #nullable enable
 
@@ -44,6 +46,21 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		return system.cache.TryGetValue(target, out source);
 	}
 
+	public void RpcSwapVote(byte source, byte target, bool isShowImg)
+	{
+		uint color = isShowImg ? Design.FromRGBA(
+			UnityEngine.Random.ColorHSV()) : 0;
+
+		ExtremeSystemTypeManager.RpcUpdateSystem(
+			ExtremeSystemType.VoteSwapSystem, x =>
+			{
+				x.Write(source);
+				x.Write(target);
+				x.Write(isShowImg);
+				x.Write(color);
+			});
+	}
+
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
 		if (timing is not ResetTiming.ExiledEnd)
@@ -62,10 +79,11 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		byte source = msgReader.ReadByte();
 		byte target = msgReader.ReadByte();
 		bool showImg = msgReader.ReadBoolean();
-		swapVote(source, target, showImg);
+		uint color = msgReader.ReadUInt32();
+		swapVote(source, target, showImg, color);
 	}
 
-	private void swapVote(byte source, byte target, bool showImg)
+	private void swapVote(byte source, byte target, bool showImg, uint colorUint)
 	{
 		if (this.pva is null)
 		{
@@ -75,6 +93,8 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		this.swapList.Add((source, target));
 
 		/* 画像の処理 (後で追加)
+
+		var color = Design.ToRGBA(colorUint);
 		var imgId = id.Value;
 		if (!this.img.TryGetValue(imgId, out var img))
 		{
