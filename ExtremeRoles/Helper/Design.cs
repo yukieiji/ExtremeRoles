@@ -7,7 +7,9 @@ namespace ExtremeRoles.Helper;
 
 public static class Design
 {
-    public static string ColoedString(Color c, string s)
+	private const byte colorMask = 0xFF;
+
+	public static string ColoedString(Color c, string s)
     {
         return string.Format(
             "<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>",
@@ -31,17 +33,15 @@ public static class Design
         return (byte)(f * 255);
     }
 
+
 	public static Color32 ToRGBA(uint value)
 	{
-		value = Math.Clamp(value, 0, 0xFFFFFFFF);
-		
-		byte colorSize = 0xFF;
-		Color32 newColor = new();
-		newColor.a = (byte)(value & colorSize);
-		newColor.b = (byte)(value >> 8 & colorSize);
-		newColor.g = (byte)(value >> 16 & colorSize);
-		newColor.r = (byte)(value >> 24 & colorSize);
-		return newColor;
+		return new Color32(
+			(byte)((value >> 24) & colorMask),
+			(byte)((value >> 16) & colorMask),
+			(byte)((value >> 8) & colorMask),
+			(byte)(value & colorMask)
+		);
 	}
 
 	public static uint FromRGBA(Color32 color)
