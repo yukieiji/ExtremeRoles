@@ -52,6 +52,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		foreach (var (s, t) in system.cache)
 		{
 			if (!(
+					s != t &&
 					pvaCache.TryGetValue(s, out var sPva) &&
 					pvaCache.TryGetValue(t, out var tPva) &&
 					sPva != null &&
