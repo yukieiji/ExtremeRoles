@@ -1,15 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using UnityEngine;
 using AmongUs.GameOptions;
 using BepInEx.Logging;
+
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 namespace ExtremeRoles.Test.Helper;
 
