@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -8,6 +9,8 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
+
+using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
 
 #nullable enable
 
@@ -22,6 +25,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	private Dictionary<byte, PlayerVoteArea>? pva;
 
 	private Dictionary<byte, byte>? cache;
+	private const float animeDuration = 1.5f;
 
 	public static bool TryGet([NotNullWhen(true)] out VoteSwapSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.VoteSwapSystem, out system);
@@ -36,14 +40,39 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		return system.swap(voteInfo);
 	}
 
-	public static bool TryGetSwapSource(byte target, out byte source)
+	public static void AnimateSwap(MeetingHud instance, Dictionary<byte, PlayerVoteArea> pvaCache)
 	{
 		if (!TryGet(out var system) || system.cache is null)
 		{
-			source = byte.MaxValue;
-			return false;
+			return;
 		}
-		return system.cache.TryGetValue(target, out source);
+
+		var allAnime = new List<Il2CppIEnumerator>(system.cache.Count * 2);
+
+		foreach (var (s, t) in system.cache)
+		{
+			if (!(
+					pvaCache.TryGetValue(s, out var sPva) &&
+					pvaCache.TryGetValue(t, out var tPva) &&
+					sPva != null &&
+					tPva != null
+				))
+			{
+				continue;
+			}
+
+			var sAnime = Effects.Slide3D(
+				sPva.transform,
+				sPva.transform.localPosition,
+				tPva.transform.localPosition, animeDuration);
+			var tAnime = Effects.Slide3D(
+				tPva.transform,
+				tPva.transform.localPosition,
+				sPva.transform.localPosition, animeDuration);
+			allAnime.Add(sAnime);
+			allAnime.Add(tAnime);
+		}
+		instance.StartCoroutine(Effects.All(allAnime.ToArray()));
 	}
 
 	public void RpcSwapVote(byte source, byte target, bool isShowImg)
