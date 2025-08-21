@@ -1,14 +1,12 @@
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
+using Hazel;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
-using Hazel;
 using UnityEngine;
-
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
-
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
+
 
 
 #nullable enable
@@ -24,6 +22,9 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	private Dictionary<byte, byte>? cache;
 
 	private const float animeDuration = 1.5f;
+
+	public static VoteSwapSystem CreateOrGet()
+		=> ExtremeSystemTypeManager.Instance.CreateOrGet<VoteSwapSystem>(ExtremeSystemType.VoteSwapSystem);
 
 	public static bool TryGet([NotNullWhen(true)] out VoteSwapSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.VoteSwapSystem, out system);

@@ -20,7 +20,7 @@ namespace ExtremeRoles.Roles.Combination.Barter;
 public sealed class BarterManager : FlexibleCombinationRoleManagerBase
 {
 	public BarterManager() : base(
-		CombinationRoleType.Guesser,
+		CombinationRoleType.Barter,
 		new BarterRole(), 1)
 	{ }
 
@@ -230,6 +230,7 @@ public sealed class BarterRole :
 			Option.ShowCastlingOther);
 
 		roleNamePrefix = CreateImpCrewPrefix();
+		this.system = VoteSwapSystem.CreateOrGet();
 	}
 
 	private void meetingInfoSetActive(bool active)
