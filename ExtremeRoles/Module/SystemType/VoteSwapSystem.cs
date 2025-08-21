@@ -139,7 +139,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		var color = Design.ToRGBA(colorUint);
 
 		addImg(source, ImgType.Source, color);
-		addImg(source, ImgType.Target, color);
+		addImg(target, ImgType.Target, color);
 	}
 
 	private IReadOnlyDictionary<byte, int> swap(Dictionary<byte, int> voteInfo)
