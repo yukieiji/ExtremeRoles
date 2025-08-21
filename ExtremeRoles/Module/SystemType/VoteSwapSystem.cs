@@ -1,11 +1,11 @@
+using ExtremeRoles.Module.Interface;
+using Hazel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-
-using Hazel;
+using System.Linq;
 using UnityEngine;
 
-using ExtremeRoles.Module.Interface;
 
 #nullable enable
 
@@ -13,105 +13,13 @@ namespace ExtremeRoles.Module.SystemType;
 
 public sealed class VoteSwapSystem : IExtremeSystemType
 {
-	private sealed class VoteSwapper
-	{
-		public enum VoteSwapResult
-		{
-			Succes,
-			Override,
-			Fail
-		}
-
-		private readonly Dictionary<byte, byte> swapList = [];
-		private readonly Dictionary<byte, Guid?> swapId = [];
-
-		public VoteSwapResult AddSwap(byte start, byte end, out Guid? id)
-		{
-			// 循環チェック
-			if (createsCycle(start, end))
-			{
-				id = null;
-				return VoteSwapResult.Fail;
-			}
-
-			// 既存の出発地があれば上書き
-			if (!this.swapId.TryGetValue(start, out id))
-			{
-				id = Guid.NewGuid();
-			}
-
-			this.swapId[start] = id;
-			var result = this.swapList.ContainsKey(start) ? VoteSwapResult.Override : VoteSwapResult.Succes;
-			this.swapList[start] = end;
-			return result;
-		}
-
-		public void Clear()
-			=> this.swapList.Clear();
-
-		public IReadOnlyList<(byte, byte)> FindShortestRoutes()
-		{
-			var shortestRoutes = new List<(byte, byte)>();
-			var visitedStarts = new HashSet<byte>();
-
-			// すべての出発地をループ
-			foreach (byte start in swapList.Keys)
-			{
-				// すでに処理済みのルートの出発地はスキップ
-				if (visitedStarts.Contains(start))
-				{
-					continue;
-				}
-
-				// ルートの終端（目的地）を見つける
-				byte current = start;
-				while (swapList.ContainsKey(current))
-				{
-					visitedStarts.Add(current);
-					current = swapList[current];
-				}
-
-				// 最短ルートとして追加
-				shortestRoutes.Add((start, current));
-			}
-
-			return shortestRoutes;
-		}
-
-		private bool createsCycle(byte start, byte end)
-		{
-			// 目的地がすでに他の場所の出発地になっているか確認
-			byte current = end;
-			while (swapList.TryGetValue(current, out byte curTarget))
-			{
-				if (curTarget == start)
-				{
-					return true; // 循環を発見
-				}
-				current = swapList[current];
-			}
-			return false;
-		}
-	}
-
-	private readonly VoteSwapper swapper = new VoteSwapper();
 
 	private readonly record struct Img(SpriteRenderer Start, SpriteRenderer Target);
-	private readonly Dictionary<Guid, Img> img = [];
+	private readonly List<(byte, byte)> swapList = [];
+	private readonly List<Img> img = [];
 	private Dictionary<byte, PlayerVoteArea>? pva;
 
-	public IReadOnlyList<(byte, byte)> Result
-	{
-		get
-		{
-			if (this.result is null)
-			{
-				this.result = this.swapper.FindShortestRoutes();
-			}
-			return this.result;
-		}
-	}
-	private IReadOnlyList<(byte, byte)>? result;
+	private Dictionary<byte, byte>? cache;
 
 	public static bool TryGet([NotNullWhen(true)] out VoteSwapSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.VoteSwapSystem, out system);
@@ -123,37 +31,17 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			return voteInfo;
 		}
 
-		var result = new Dictionary<byte, int>(voteInfo.Count);
-
-		foreach (var (s, t) in system.Result)
-		{
-			if (voteInfo.TryGetValue(s, out int value))
-			{
-				result[t] = value;
-			}
-		}
-
-		return result;
+		return system.swap(voteInfo);
 	}
 
 	public static bool TryGetSwapSource(byte target, out byte source)
 	{
-		source = byte.MaxValue;
-		
-		if (!TryGet(out var system))
+		if (!TryGet(out var system) || system.cache is null)
 		{
+			source = byte.MaxValue;
 			return false;
 		}
-
-		foreach (var (s, t) in system.Result)
-		{
-			if (t == target)
-			{
-				source = s;
-				return true;
-			}
-		}
-		return false;
+		return system.cache.TryGetValue(target, out source);
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
@@ -162,8 +50,11 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		{
 			return;
 		}
-		this.swapper.Clear();
-		this.result = null;
+		
+		this.swapList.Clear();
+		this.img.Clear();
+
+		this.cache = null;
 	}
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
@@ -181,18 +72,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			return;
 		}
 
-		var result = this.swapper.AddSwap(source, target, out var id);
-		if (result is VoteSwapper.VoteSwapResult.Fail || 
-			!showImg || 
-			!id.HasValue || 
-			!(
-				this.pva.TryGetValue(source, out var sourcePva) &&
-				this.pva.TryGetValue(target, out var targetPva)
-			))
-		{
-			return;
-		}
-		
+		this.swapList.Add((source, target));
 
 		/* 画像の処理 (後で追加)
 		var imgId = id.Value;
@@ -209,5 +89,32 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		
 		this.img[imgId] = img;
 		*/
+	}
+
+	private Dictionary<byte, int> swap(Dictionary<byte, int> voteInfo)
+	{
+		if (this.cache is null)
+		{
+			this.cache = voteInfo.Keys.ToDictionary(key => key, key => key);
+
+			// 2. 各スワップ操作をシミュレートし、マップの値を更新していく
+			foreach (var (s, t) in this.swapList)
+			{
+				if (this.cache.ContainsKey(s) && 
+					this.cache.ContainsKey(t))
+				{
+					// key1の位置とkey2の位置にある「値の出所（元のキー）」を交換する
+					(this.cache[s], this.cache[t]) = (this.cache[t], this.cache[s]);
+				}
+			}
+		}
+
+		var finalData = new Dictionary<byte, int>(voteInfo.Count);
+		foreach (var (s, t) in this.cache)
+		{
+			finalData[s] = voteInfo[t];
+		}
+
+		return finalData;
 	}
 }
