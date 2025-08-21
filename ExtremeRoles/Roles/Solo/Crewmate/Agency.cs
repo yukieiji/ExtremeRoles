@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 
 using ExtremeRoles.Helper;
@@ -146,18 +146,18 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
             int taskId = (int)targetPlayerInfo.Tasks[i].TypeId;
 
-            if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
-                (NormalPlayerTask t) => t.Index == taskId) != null)
+            if (ShipStatus.Instance.CommonTasks.Any(
+                (NormalPlayerTask t) => t.Index == taskId))
             {
                 this.TakeTask.Add(TakeTaskType.Common);
             }
-            else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
-                (NormalPlayerTask t) => t.Index == taskId) != null)
+            else if (ShipStatus.Instance.LongTasks.Any(
+                (NormalPlayerTask t) => t.Index == taskId))
             {
                 this.TakeTask.Add(TakeTaskType.Long);
             }
-            else if (ShipStatus.Instance.ShortTasks.FirstOrDefault(
-                (NormalPlayerTask t) => t.Index == taskId) != null)
+            else if (ShipStatus.Instance.ShortTasks.Any(
+                (NormalPlayerTask t) => t.Index == taskId))
             {
                 this.TakeTask.Add(TakeTaskType.Normal);
             }

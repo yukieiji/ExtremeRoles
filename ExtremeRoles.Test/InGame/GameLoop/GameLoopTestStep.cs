@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +45,7 @@ public class GameLoopTestStep(GameLoopTestCaseFactory factory) : TestStepBase
 			this.Log.LogInfo($"{testCase.GetType().Name}.{testCase.Name} - Start iteration:{i}");
 			if (testCase.Ids is null)
 			{
-				GameUtility.PrepereGameWithRandom(this.Log);
+				GameUtility.PrepareGameWithRandom(this.Log);
 			}
 			else
 			{

@@ -208,7 +208,22 @@ public sealed class Guesser :
                         add(ExtremeRoleId.Doll, ExtremeRoleType.Impostor);
                         this.separetedRoleId[ExtremeRoleType.Neutral].Add(ExtremeRoleId.Doll);
                         break;
-                    default:
+					case ExtremeRoleId.Jailer:
+						add(ExtremeRoleId.Yardbird, ExtremeRoleType.Crewmate);
+						if (OptionManager.Instance.TryGetCategory(
+								OptionTab.CrewmateTab,
+								ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Jailer),
+								out var jailer) && 
+							!jailer.GetValue<Jailer.Option, bool>(Jailer.Option.IsMissingToDead))
+						{
+							add(ExtremeRoleId.Lawbreaker, ExtremeRoleType.Neutral);
+						}
+						break;
+					case ExtremeRoleId.Tucker:
+						add(ExtremeRoleId.Chimera, ExtremeRoleType.Neutral);
+						this.separetedRoleId[ExtremeRoleType.Neutral].Add(ExtremeRoleId.Chimera);
+						break;
+					default:
                         break;
                 }
             }
