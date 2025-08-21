@@ -1,17 +1,17 @@
+using System;
+using System.Linq;
+
 using AmongUs.GameOptions;
-using ExtremeRoles.Extension.Il2Cpp;
+
+using Microsoft.Extensions.DependencyInjection;
+using UnityEngine;
+
+
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Test.Helper;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-
-
-using System.Linq;
-using UnityEngine;
 
 using UnityResource = UnityEngine.Resources;
 
@@ -154,17 +154,17 @@ public sealed class InfinityTaskLoopTestStep() : TestStepBase
 
 		localPc.NetTransform.SnapTo(targetConsole.transform.position);
 
-		int waitCount = -1;
+		int waitCount = 0;
 		do
 		{
 			HudManager.Instance.UseButton.DoClick();
-			waitCount++;
 			yield return new WaitForSeconds(1.0f);
 			if (waitCount == 30)
 			{
 				Log.LogFatal($"Task : {targetTask.TaskType} can't start");
 				yield break;
 			}
+			waitCount++;
 		} while (Minigame.Instance == null);
 
 		Log.LogInfo($"Task : {targetTask.TaskType} start");
