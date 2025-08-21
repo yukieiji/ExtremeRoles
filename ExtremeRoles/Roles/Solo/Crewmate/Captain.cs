@@ -152,7 +152,7 @@ public sealed class Captain :
     }
     public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
     {
-        if (this.voteTarget == byte.MaxValue)
+        if (this.voteTarget == PlayerVoteArea.HasNotVoted)
         {
 			yield break;
         }
@@ -166,11 +166,11 @@ public sealed class Captain :
 
     public void ResetModifier()
     {
-        if (this.voteTarget != byte.MaxValue)
+        if (this.voteTarget != PlayerVoteArea.HasNotVoted)
         {
             this.curChargedVote = this.defaultVote;
         }
-        this.voteTarget = byte.MaxValue;
+        this.voteTarget = PlayerVoteArea.HasNotVoted;
         this.voteCheckMark.Clear();
     }
 
