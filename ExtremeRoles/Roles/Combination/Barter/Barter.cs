@@ -187,6 +187,7 @@ public sealed class BarterRole :
 				rend.gameObject.SetActive(false);
 			}
 			system?.RpcSwapVote(source, target, this.showOther);
+			this.source = null;
 		}
 		return execCastling;
 	}
@@ -198,6 +199,7 @@ public sealed class BarterRole :
 	public void ResetOnMeetingStart()
 	{
 		this.status?.Reset();
+		this.source = null;
 	}
 
 	protected override void CreateSpecificOption(
