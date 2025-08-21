@@ -47,6 +47,12 @@ public sealed class BarterStatus(IOptionLoader loader) : IStatusModel
 	public bool IsRandomCastling => this.random.On;
 	public int OneCastlingNum => this.random.Num;
 
+	public bool IsAwake { get; set; }
+
+	public void UpdateAwakeStatus(PlayerControl player)
+	{
+
+	}
 
 	public string CastlingStatus()
 		=> Tr.GetString(

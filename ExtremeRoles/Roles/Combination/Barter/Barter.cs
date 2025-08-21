@@ -1,3 +1,5 @@
+using AmongUs.GameOptions;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
@@ -28,7 +30,7 @@ public sealed class BarterRole :
 	MultiAssignRoleBase,
 	IRoleResetMeeting,
 	IRoleMeetingButtonAbility,
-	IRoleUpdate
+	IRoleAwake<RoleTypes>
 {
 
 	public enum Option
@@ -55,6 +57,13 @@ public sealed class BarterRole :
 	private const float subRoleXPos = -1.5f;
 
 	public override IStatusModel? Status => this.status;
+
+	public bool IsAwake => this.status is not null && this.status.IsAwake;
+
+	public RoleTypes NoneAwakeRole => 
+		this.IsImpostor() ? 
+		RoleTypes.Impostor : RoleTypes.Crewmate;
+
 	private BarterStatus? status;
 
 
@@ -73,6 +82,13 @@ public sealed class BarterRole :
 	public void Update(PlayerControl rolePlayer)
 	{
 		var meeting = MeetingHud.Instance;
+
+		if (!this.IsAwake)
+		{
+			this.status?.UpdateAwakeStatus(rolePlayer);
+			return;
+		}
+
 		if (meeting != null && this.status is not null)
 		{
 			if (meetingCastlingText == null)
@@ -221,6 +237,94 @@ public sealed class BarterRole :
 		if (meetingCastlingText != null)
 		{
 			meetingCastlingText.gameObject.SetActive(active);
+		}
+	}
+
+	public string GetFakeOptionString()
+		=> "";
+
+	public override string GetColoredRoleName(bool isTruthColor = false)
+	{
+		if (isTruthColor || IsAwake)
+		{
+			return base.GetColoredRoleName();
+		}
+		else
+		{
+			var type = this.IsImpostor() ? RoleTypes.Impostor : RoleTypes.Crewmate;
+			return Design.ColoedString(
+				this.IsImpostor() ? Palette.ImpostorRed : Palette.White,
+				Tr.GetString(type.ToString()));
+		}
+	}
+	public override string GetFullDescription()
+	{
+		if (IsAwake)
+		{
+			return Tr.GetString(
+				$"{this.Core.Id}FullDescription");
+		}
+		else
+		{
+			var type = this.IsImpostor() ? RoleTypes.Impostor : RoleTypes.Crewmate;
+			return Tr.GetString(
+				$"{type}FullDescription");
+		}
+	}
+
+	public override string GetImportantText(bool isContainFakeTask = true)
+	{
+		if (IsAwake)
+		{
+			return base.GetImportantText(isContainFakeTask);
+
+		}
+		else if (this.IsImpostor())
+		{
+
+			return string.Concat(
+			[
+            
+                TranslationController.Instance.GetString(
+                    StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
+                "\r\n",
+                Palette.ImpostorRed.ToTextColor(),
+                TranslationController.Instance.GetString(
+                    StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()),
+                "</color>"
+            ]);
+		}
+		else
+		{
+			return Design.ColoedString(
+				Palette.White,
+				$"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
+		}
+	}
+
+	public override string GetIntroDescription()
+	{
+		if (IsAwake)
+		{
+			return base.GetIntroDescription();
+		}
+		else
+		{
+			return Design.ColoedString(
+				this.IsImpostor() ? Palette.ImpostorRed : Palette.CrewmateBlue,
+				PlayerControl.LocalPlayer.Data.Role.Blurb);
+		}
+	}
+
+	public override Color GetNameColor(bool isTruthColor = false)
+	{
+		if (isTruthColor || IsAwake)
+		{
+			return base.GetNameColor(isTruthColor);
+		}
+		else
+		{
+			return this.IsImpostor() ? Palette.ImpostorRed : Palette.White;
 		}
 	}
 }
