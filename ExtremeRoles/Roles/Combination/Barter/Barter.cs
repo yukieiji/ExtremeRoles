@@ -205,20 +205,20 @@ public sealed class BarterRole :
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
-		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
-
 		factory.CreateIntOption(
 			Option.AwakeTaskRate,
 			70, 0, 100, 10,
 			format: OptionUnit.Percentage);
-		factory.CreateIntOption(
-			Option.AwakeDeadPlayerNum,
-			7, 0, 12, 1);
+
+		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
+		CreateKillerOption(factory, imposterSetting);
 
 		factory.CreateIntOption(
+			Option.AwakeDeadPlayerNum,
+			7, 0, 12, 1, imposterSetting);
+		factory.CreateIntOption(
 			Option.AwakeKillNum,
-			2, 0, 5, 1);
+			2, 0, 5, 1, imposterSetting);
 
 		factory.CreateBoolOption(
 			Option.CanCallMeeting,
@@ -235,6 +235,7 @@ public sealed class BarterRole :
 		var randOpt = factory.CreateBoolOption(Option.RandomCastling, false);
 		factory.CreateIntOption(
 			Option.OneCastlingNum, 1, 1, 25, 1,
+			randOpt,
 			format: OptionUnit.Shot);
 		factory.CreateBoolOption(Option.ShowCastlingOther, false);
 	}
