@@ -6,6 +6,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
@@ -16,7 +17,7 @@ using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
 
-public record struct CrimeInfo(
+public readonly record struct CrimeInfo(
 	byte Target,
 	byte Killer,
 	Vector2 Pos,

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using ExtremeRoles.Module;
@@ -16,10 +16,9 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
 {
 	private Dictionary<byte, DateTime> deadBodyInfo;
 	public Assistant() : base(
-		ExtremeRoleId.Assistant,
-		ExtremeRoleType.Crewmate,
-		ExtremeRoleId.Assistant.ToString(),
-		ColorPalette.AssistantBluCapri,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Assistant,
+			ColorPalette.AssistantBluCapri),
 		false, true, false, false,
 		tab: OptionTab.CombinationTab)
 	{ }
@@ -51,9 +50,9 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
 		{
 			if (deadBodyInfo.ContainsKey(reportBody.PlayerId))
 			{
-				if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
+				if (AmongUsClient.Instance.AmClient && HudManager.Instance)
 				{
-					FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
+					HudManager.Instance.Chat.AddChat(
 						PlayerControl.LocalPlayer,
 						Tr.GetString(
 							"reportedDeadBodyInfo",
@@ -87,8 +86,11 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
 	{
 		foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
 		{
-			if (role.Id != ExtremeRoleId.Detective) { continue; }
-			if (!IsSameControlId(role)) { continue; }
+			if (role.Core.Id != ExtremeRoleId.Detective ||
+				!IsSameControlId(role))
+			{
+				continue;
+			}
 
 			var playerInfo = GameData.Instance.GetPlayerById(playerId);
 			if (!playerInfo.IsDead && !playerInfo.Disconnected)
