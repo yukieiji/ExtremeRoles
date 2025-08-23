@@ -137,7 +137,10 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 		byte playerId)
 	{
 		var prevRole = ExtremeRoleManager.GameRole[playerId] as MultiAssignRoleBase;
-		if (prevRole == null) { return; }
+		if (prevRole == null)
+		{
+			return;
+		}
 
 		var detectiveReset = prevRole as IRoleResetMeeting;
 
@@ -148,20 +151,18 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 
 		bool hasAnotherRole = prevRole.AnotherRole != null;
 
-		if (hasAnotherRole)
+		if (hasAnotherRole &&
+			playerId == PlayerControl.LocalPlayer.PlayerId)
 		{
-			if (playerId == PlayerControl.LocalPlayer.PlayerId)
+			if (prevRole.AnotherRole is IRoleAbility abilityRole)
 			{
-				if (prevRole.AnotherRole is IRoleAbility abilityRole)
-				{
-					abilityRole.Button.OnMeetingStart();
-					abilityRole.Button.OnMeetingEnd();
-				}
-				if (prevRole.AnotherRole is IRoleResetMeeting resetRole)
-				{
-					resetRole.ResetOnMeetingStart();
-					resetRole.ResetOnMeetingEnd();
-				}
+				abilityRole.Button.OnMeetingStart();
+				abilityRole.Button.OnMeetingEnd();
+			}
+			if (prevRole.AnotherRole is IRoleResetMeeting resetRole)
+			{
+				resetRole.ResetOnMeetingStart();
+				resetRole.ResetOnMeetingEnd();
 			}
 		}
 
