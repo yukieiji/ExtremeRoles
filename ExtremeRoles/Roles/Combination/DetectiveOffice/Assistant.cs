@@ -12,7 +12,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
 
-public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReportHook, IRoleSpecialReset
+public sealed class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReportHook, IRoleSpecialReset
 {
 	private Dictionary<byte, DateTime> deadBodyInfo;
 	public Assistant() : base(
@@ -46,20 +46,19 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
 		NetworkedPlayerInfo reporter,
 		NetworkedPlayerInfo reportBody)
 	{
-		if (IsSameControlId(ExtremeRoleManager.GameRole[rolePlayer.PlayerId]))
+		if (!(
+				ExtremeRoleManager.TryGetRole(rolePlayer.PlayerId, out var role) &&
+				IsSameControlId(role) &&
+				this.deadBodyInfo.TryGetValue(reportBody.PlayerId, out var info)
+			))
 		{
-			if (deadBodyInfo.ContainsKey(reportBody.PlayerId))
-			{
-				if (AmongUsClient.Instance.AmClient && HudManager.Instance)
-				{
-					HudManager.Instance.Chat.AddChat(
-						PlayerControl.LocalPlayer,
-						Tr.GetString(
-							"reportedDeadBodyInfo",
-							deadBodyInfo[reportBody.PlayerId].ToString()));
-				}
-			}
+			return;
 		}
+		HudManager.Instance.Chat.AddChat(
+			PlayerControl.LocalPlayer,
+			Tr.GetString(
+				"reportedDeadBodyInfo",
+				info.ToString()));
 		deadBodyInfo.Clear();
 	}
 

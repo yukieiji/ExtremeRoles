@@ -19,7 +19,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
 
-public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleReportHook
+public sealed class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleReportHook
 {
 
 	public struct DetectiveApprenticeOptionHolder

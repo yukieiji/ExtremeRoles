@@ -63,19 +63,19 @@ public sealed record Crime(
 
 public sealed class CrimeContainer()
 {
-	private readonly Dictionary<byte, Crime> crimerInfo = [];
+	private readonly Dictionary<byte, Crime> crimeInfo = [];
 
 	public void Clear()
 	{
-		this.crimerInfo.Clear();
+		this.crimeInfo.Clear();
 	}
 
 	public bool TryGet(byte target, [NotNullWhen(true)] out Crime? info)
-		=> this.crimerInfo.TryGetValue(target, out info);
+		=> this.crimeInfo.TryGetValue(target, out info);
 
 	public void Update(float deltaTime)
 	{
-		foreach (var info in this.crimerInfo.Values)
+		foreach (var info in this.crimeInfo.Values)
 		{
 			info.Update(deltaTime);
 		}
@@ -83,7 +83,7 @@ public sealed class CrimeContainer()
 
 	public void Add(Crime info)
 	{
-		this.crimerInfo.Add(info.Target, info);
+		this.crimeInfo.Add(info.Target, info);
 	}
 }
 
