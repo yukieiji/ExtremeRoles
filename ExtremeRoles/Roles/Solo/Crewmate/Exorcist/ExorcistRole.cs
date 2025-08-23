@@ -59,7 +59,7 @@ public sealed class ExorcistRole :
 	{
 		this.status = new ExorcistStatus(
 			this,
-			100.0f / this.Loader.GetValue<Option, int>(Option.AwakeTaskGage),
+			this.Loader.GetValue<Option, int>(Option.AwakeTaskGage) / 100.0f,
 			this.Loader.GetValue<Option, float>(Option.Range));
 	}
 
