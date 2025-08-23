@@ -1,16 +1,31 @@
-﻿using System.Collections.Generic;
+using System;
 
-using UnityEngine;
-
+using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using UnityEngine;
+using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
 
-using ExtremeRoles.Module.CustomOption.Factory;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
+
+public record struct CrimeInfo(
+	byte Target,
+	byte Killer,
+	Vector2 Pos,
+	DateTime KilledTime,
+	PlayerStatus Reason,
+	float ReportTime,
+	ExtremeRoleType KillerTeam,
+	ExtremeRoleId KillerRole,
+	RoleTypes KillerVanillaRole);
 
 public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleResetMeeting, IRoleReportHook, IRoleUpdate, IRoleSpecialReset
 {
@@ -32,35 +47,195 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		SearchAssistantTime,
 		SearchOnlyOnce,
 		SearchCanFindName,
-		SearchCanContine,
+		SearchCanContineMeetingNum,
 		TextShowTime,
 	}
 
-	private CrimeInfoOld? targetCrime;
-	private CrimeInfoContainer info;
-	private Arrow crimeArrow;
-	private float searchTime;
-	private float searchAssistantTime;
-	private float timer = 0.0f;
-	private float searchCrimeInfoTime;
+	public sealed class ProgressCrimeInfo(CrimeInfo crime, byte reporter)
+	{
+		public CrimeInfo Crime { get; } = crime;
+		public byte Reporter { get; } = reporter;
+
+		public int MeetingCount { get; set; } = 0;
+		public SearchCond Progress { get; set; } = SearchCond.None;
+		public float SearchTime { get; set; } = 0.0f;
+	}
+
+	public sealed class ProgressCrimeContainer(int maxMeetingNum)
+	{
+		private readonly Dictionary<byte, ProgressCrimeInfo> crimeInfo = [];
+		private readonly Dictionary<byte, Arrow> arrow = [];
+
+		private readonly int maxMeetingNum = maxMeetingNum;
+
+		public void IncreseMeetingNum()
+		{
+			var remove = new HashSet<byte>();
+			foreach (var (id, info) in this.crimeInfo)
+			{
+				info.MeetingCount++;
+				if (info.MeetingCount > maxMeetingNum)
+				{
+					remove.Add(id);
+				}
+			}
+
+			foreach (byte id in remove)
+			{
+				if (this.arrow.TryGetValue(id, out var arrow))
+				{
+					arrow.Clear();
+					this.arrow.Remove(id);
+				}
+
+				if (this.crimeInfo.ContainsKey(id))
+				{
+					this.crimeInfo.Remove(id);
+				}
+			}
+		}
+
+		public bool TryGetNearCrime(Vector2 pos, float range, [NotNullWhen(true)] out ProgressCrimeInfo? info)
+		{
+			info = null;
+
+			foreach (var crime in this.crimeInfo.Values)
+			{
+				Vector2 vector = pos - crime.Crime.Pos;
+				float magnitude = vector.magnitude;
+				if (magnitude <= range &&
+					!PhysicsHelpers.AnyNonTriggersBetween(
+						pos, vector.normalized,
+						magnitude, Constants.ShipAndObjectsMask))
+				{
+					// rangeを設定された値から変更していくことで最小の犯罪位置がわかる
+					range = magnitude;
+					info = crime;
+				}
+			}
+			return info is not null;
+		}
+
+		public void HideArrow()
+		{
+			foreach (var arrow in this.arrow.Values)
+			{
+				arrow.SetActive(false);
+			}
+		}
+
+		public void ShowArrow()
+		{
+			foreach (var arrow in this.arrow.Values)
+			{
+				arrow.SetActive(true);
+			}
+		}
+
+		public void Clear()
+		{
+			this.crimeInfo.Clear();
+			foreach (var arrow in this.arrow.Values)
+			{
+				arrow.SetActive(false);
+				arrow.Clear();
+			}
+			this.arrow.Clear();
+		}
+
+		public void Add(CrimeInfo info, byte reporter)
+		{
+			this.crimeInfo[info.Target] = new ProgressCrimeInfo(info, reporter);
+
+			var arrow = new Arrow(ColorPalette.DetectiveKokikou);
+			arrow.UpdateTarget(info.Pos);
+			this.arrow[info.Target] = arrow;
+		}
+
+		public void Remove(byte playerId)
+		{
+			if (this.arrow.TryGetValue(playerId, out var arrow))
+			{
+				arrow.SetActive(false);
+				arrow.Clear();
+				this.arrow.Remove(playerId);
+			}
+			this.crimeInfo.Remove(playerId);
+		}
+	}
+
+	public sealed class CrimeProgressUpdator(float searchAssistantTime, float searchCrimeInfoTime)
+	{
+		public ProgressCrimeInfo? Info
+		{
+			get
+			{
+				return this.info;
+			}
+			set
+			{
+				this.info = value;
+				if (this.info is not null &&
+					this.info.SearchTime <= 0.0f &&
+					this.info.Progress is SearchCond.None)
+				{
+					resetTimer(this.info);
+				}
+			}
+		}
+		private ProgressCrimeInfo? info = null;
+
+		private readonly float searchAssistantTime = searchAssistantTime;
+		private readonly float searchCrimeInfoTime = searchCrimeInfoTime;
+
+		public bool TryUpdate(float deltaTime)
+		{
+			if (this.info is null)
+			{
+				return false;
+			}
+			
+			this.info.SearchTime -= deltaTime;
+			
+			if (this.info.SearchTime > 0.0f)
+			{
+				return false;
+			}
+			this.info.Progress++;
+			return true;
+		}
+
+		private void resetTimer(in ProgressCrimeInfo info)
+		{
+			info.SearchTime = ExtremeRoleManager.TryGetSafeCastedRole<Assistant>(
+				info.Reporter, out var _) ?
+				this.searchAssistantTime :
+				this.searchCrimeInfoTime;
+		}
+	}
+
+	private record CrimeSearchInfo(ProgressCrimeContainer AllTarget, CrimeProgressUpdator ProgressUpdater);
+
+	public override IStatusModel? Status => this.status;
+	private DetectiveStatus? status;
+	private CrimeSearchInfo? searchInfo;
+
 	private float range;
-	private SearchCond cond;
-	private string searchStrBase;
-	private TMPro.TextMeshPro searchText;
-	private TextPopUpper textPopUp;
+
+	private TextPopUpper? textPopUp;
+	private TMPro.TextMeshPro? searchText;
+
 	private Vector2 prevPlayerPos;
 	private static readonly Vector2 defaultPos = new Vector2(100.0f, 100.0f);
-	private Dictionary<byte, SearchCond> condition = new Dictionary<byte, SearchCond>();
 
 	private bool includeName;
 	private bool onlyOnce;
 	private bool canContine;
 
 	public Detective() : base(
-		ExtremeRoleId.Detective,
-		ExtremeRoleType.Crewmate,
-		ExtremeRoleId.Detective.ToString(),
-		ColorPalette.DetectiveKokikou,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Detective,
+			ColorPalette.DetectiveKokikou),
 		false, true, false, false,
 		tab: OptionTab.CombinationTab)
 	{ }
@@ -70,26 +245,23 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		upgradeAssistant();
 	}
 
-	public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
-		info.Clear();
+
 	}
 
 	public void ResetOnMeetingStart()
 	{
-		if (crimeArrow != null)
-		{
-			crimeArrow.SetActive(false);
-		}
-		resetSearchCond();
+		hideSearchText();
+		this.searchInfo?.AllTarget.HideArrow();
+		this.textPopUp?.Clear();
 	}
 
 	public void HookReportButton(
 		PlayerControl rolePlayer,
 		NetworkedPlayerInfo reporter)
 	{
-		targetCrime = null;
-		searchCrimeInfoTime = float.MaxValue;
+		this.searchInfo?.AllTarget.IncreseMeetingNum();
 	}
 
 	public void HookBodyReport(
@@ -97,84 +269,124 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		NetworkedPlayerInfo reporter,
 		NetworkedPlayerInfo reportBody)
 	{
-		targetCrime = info.GetCrimeInfo(reportBody.PlayerId);
-		searchCrimeInfoTime = ExtremeRoleManager.TryGetSafeCastedRole<Assistant>(
-			reporter.PlayerId, out var _) ?
-				searchAssistantTime : searchTime;
+		if (this.status is null ||
+			this.searchInfo is null ||
+			!this.status.TryGetCrime(reportBody.PlayerId, out var crime))
+		{
+			return;
+		}
+		
+		this.searchInfo.AllTarget.IncreseMeetingNum();
+
+		this.status.Clear();
+		this.searchInfo.AllTarget.Add(crime, reporter.PlayerId);
 	}
 
 	public void HookMuderPlayer(
 		PlayerControl source, PlayerControl target)
 	{
-		info.AddDeadBody(source, target);
+		this.status?.AddCrime(source, target);
 	}
 
 	public void Update(PlayerControl rolePlayer)
 	{
-
-		if (prevPlayerPos == defaultPos)
+		if (this.searchInfo is null ||
+			rolePlayer == null ||
+			rolePlayer.Data == null ||
+			rolePlayer.Data.IsDead ||
+			rolePlayer.Data.Disconnected ||
+			MeetingHud.Instance != null ||
+			ExileController.Instance != null)
 		{
-			prevPlayerPos = rolePlayer.GetTruePosition();
+			return;
 		}
-		if (info != null)
+
+		this.status?.Upate(Time.deltaTime);
+
+		if (this.searchInfo.ProgressUpdater.Info is null)
 		{
-			info.Update();
-		}
-
-		if (targetCrime != null)
-		{
-			if (crimeArrow == null)
-			{
-				crimeArrow = new Arrow(
-					ColorPalette.DetectiveKokikou);
-			}
-
-			var crime = targetCrime.Value;
-			Vector2 crimePos = crime.Pos;
-
-			crimeArrow.UpdateTarget(crimePos);
-			crimeArrow.Update();
-			crimeArrow.SetActive(true);
-
-			Vector2 playerPos = rolePlayer.GetTruePosition();
-
-			if (!PhysicsHelpers.AnythingBetween(
-					crimePos, playerPos,
-					Constants.ShipAndAllObjectsMask, false) &&
-				Vector2.Distance(crimePos, playerPos) < range &&
-				prevPlayerPos == rolePlayer.GetTruePosition())
-			{
-
-				updateSearchText();
-
-				if (timer > 0.0f)
-				{
-					timer -= Time.deltaTime;
-				}
-				else
-				{
-					timer = searchCrimeInfoTime;
-					updateSearchCond(crime);
-				}
-			}
-			else
-			{
-				timer = searchCrimeInfoTime;
-				resetSearchCond();
-			}
+			updateNoneSearchCrime(this.searchInfo, rolePlayer);
 		}
 		else
 		{
-			if (crimeArrow != null)
-			{
-				crimeArrow.SetActive(false);
-			}
+			// 調査中
+			searchCrime(this.searchInfo, rolePlayer);
 		}
-		prevPlayerPos = rolePlayer.GetTruePosition();
 	}
+
+	private void updateNoneSearchCrime(
+		CrimeSearchInfo searchInfo,
+		PlayerControl rolePlayer)
+	{
+		var curPos = rolePlayer.GetTruePosition();
+		if (this.prevPlayerPos == defaultPos)
+		{
+			this.prevPlayerPos = curPos;
+		}
+
+		// 調査開始
+		if (this.prevPlayerPos == curPos &&
+			searchInfo.AllTarget.TryGetNearCrime(curPos, this.range, out var info))
+		{
+			searchInfo.AllTarget.HideArrow();
+			searchInfo.ProgressUpdater.Info = info;
+			return;
+		}
+
+		searchInfo.AllTarget.ShowArrow();
+		this.prevPlayerPos = rolePlayer.GetTruePosition();
+	}
+
+	private void searchCrime(
+		CrimeSearchInfo searchInfo,
+		PlayerControl rolePlayer)
+	{
+		if (searchInfo.ProgressUpdater.Info is null)
+		{
+			return;
+		}
+
+		var targetInfo = searchInfo.ProgressUpdater.Info;
+		var curPos = rolePlayer.GetTruePosition();
+		if (prevPlayerPos != curPos ||
+			!searchInfo.AllTarget.TryGetNearCrime(curPos, this.range, out var info) ||
+			info.Crime != targetInfo.Crime)
+		{
+			// 調査が外れたとする
+			hideSearchText();
+			if (!this.onlyOnce)
+			{
+				targetInfo.Progress = SearchCond.None;
+				targetInfo.SearchTime = 0.0f;
+			}
+			searchInfo.ProgressUpdater.Info = null;
+			return;
+		}
+
+		searchInfo.AllTarget.HideArrow();
+
+		updateSearchText(targetInfo.SearchTime);
+
+		if (!searchInfo.ProgressUpdater.TryUpdate(Time.deltaTime))
+		{
+			return;
+		}
+
+		showSearchResultText(targetInfo.Progress, targetInfo.Crime);
+		if (targetInfo.Progress is SearchCond.FindName ||
+			(targetInfo.Progress is SearchCond.FindRole && this.includeName))
+		{
+			// 調査完了
+			searchInfo.AllTarget.Remove(targetInfo.Crime.Target);
+			searchInfo.ProgressUpdater.Info = null;
+			hideSearchText();
+		}
+	}
+
 	public override void RolePlayerKilledAction(
 		PlayerControl rolePlayer, PlayerControl killerPlayer)
 	{
+		this.searchInfo?.AllTarget.HideArrow();
 		upgradeAssistant();
 	}
 
@@ -205,9 +417,9 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		factory.CreateBoolOption(
 			DetectiveOption.SearchCanFindName,
 			false);
-		factory.CreateBoolOption(
-			DetectiveOption.SearchCanContine,
-			false);
+		factory.CreateIntOption(
+			DetectiveOption.SearchCanContineMeetingNum,
+			1, 1, 10, 1);
 		factory.CreateFloatOption(
 			DetectiveOption.TextShowTime,
 			60.0f, 5.0f, 120.0f, 0.1f,
@@ -216,58 +428,44 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
 	protected override void RoleSpecificInit()
 	{
-		cond = SearchCond.None;
-		info = new CrimeInfoContainer();
-		info.Clear();
-
 		var loader = Loader;
-		range = loader.GetValue<DetectiveOption, float>(
+		this.range = loader.GetValue<DetectiveOption, float>(
 			DetectiveOption.SearchRange);
-		searchTime = loader.GetValue<DetectiveOption, float>(
-			DetectiveOption.SearchTime);
-		searchAssistantTime = loader.GetValue<DetectiveOption, float>(
-			DetectiveOption.SearchAssistantTime);
+
+
+		var container = new ProgressCrimeContainer(
+			loader.GetValue<DetectiveOption, int>(
+				DetectiveOption.SearchCanContineMeetingNum));
+		var updator = new CrimeProgressUpdator(
+			loader.GetValue<DetectiveOption, float>(
+				DetectiveOption.SearchAssistantTime),
+			loader.GetValue<DetectiveOption, float>(
+				DetectiveOption.SearchTime));
+
+		this.searchInfo = new CrimeSearchInfo(container, updator);
+		this.status = new DetectiveStatus();
 
 		textPopUp = new TextPopUpper(
 			4, loader.GetValue<DetectiveOption, float>(DetectiveOption.TextShowTime),
 			new Vector3(-3.75f, -2.5f, -250.0f),
 			TMPro.TextAlignmentOptions.BottomLeft);
-		searchCrimeInfoTime = float.MaxValue;
 		prevPlayerPos = defaultPos;
 	}
 
-	private void updateSearchCond(CrimeInfoOld info)
+	private void hideSearchText()
 	{
-		cond++;
-		showSearchResultText(info);
-		if (cond == SearchCond.FindRole)
-		{
-			targetCrime = null;
-			if (crimeArrow != null)
-			{
-				crimeArrow.SetActive(false);
-			}
-			if (searchText != null)
-			{
-				searchText.gameObject.SetActive(false);
-			}
-		}
-	}
-	private void resetSearchCond()
-	{
-		cond = SearchCond.None;
 		if (searchText != null)
 		{
 			searchText.gameObject.SetActive(false);
 		}
-		if (textPopUp != null)
-		{
-			textPopUp.Clear();
-		}
 	}
-	private void showSearchResultText(in CrimeInfoOld info)
+
+	private void showSearchResultText(SearchCond cond, in CrimeInfo info)
 	{
-		if (textPopUp == null) { return; }
+		if (textPopUp == null)
+		{
+			return;
+		}
 
 		string showStr = "";
 		string key = cond.ToString();
@@ -298,12 +496,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 				{
 					roleStr = Tr.GetString(info.KillerVanillaRole.ToString());
 				}
-				showStr = Tr.GetString(
-					key, roleStr);
-				if (!includeName)
-				{
-					cond++;
-				}
+				showStr = Tr.GetString(key, roleStr);
 				break;
 			case SearchCond.FindName:
 				var player = Player.GetPlayerControlById(info.Killer);
@@ -322,29 +515,31 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
 	}
 
-	private void updateSearchText()
+	private void updateSearchText(float timer)
 	{
-		if (searchText == null)
+		if (this.searchText == null)
 		{
-			searchText = UnityEngine.Object.Instantiate(
+			this.searchText = UnityEngine.Object.Instantiate(
 				HudManager.Instance.KillButton.cooldownTimerText,
 				Camera.main.transform, false);
-			searchText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-			searchText.enableWordWrapping = false;
-			searchStrBase = Tr.GetString("searchStrBase");
+			this.searchText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
+			this.searchText.enableWordWrapping = false;
 		}
 
-		searchText.gameObject.SetActive(true);
-		searchText.text = string.Format(
-			searchStrBase, Mathf.CeilToInt(timer));
+		this.searchText.gameObject.SetActive(true);
+		this.searchText.text = string.Format(
+			Tr.GetString("searchStrBase"), Mathf.CeilToInt(timer));
 
 	}
 	private void upgradeAssistant()
 	{
 		foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
 		{
-			if (role.Id != ExtremeRoleId.Assistant) { continue; }
-			if (!IsSameControlId(role)) { continue; }
+			if (role.Core.Id is not ExtremeRoleId.Assistant ||
+				!IsSameControlId(role))
+			{ 
+				continue;
+			}
 
 			var playerInfo = GameData.Instance.GetPlayerById(playerId);
 			if (!playerInfo.IsDead && !playerInfo.Disconnected)
