@@ -14,7 +14,6 @@ namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
 
 public sealed record Crime(
 	byte Target,
-	byte Killer,
 	Vector2 Pos,
 	ExtremeRoleType KillerTeam,
 	ExtremeRoleId KillerRole,
@@ -38,7 +37,7 @@ public sealed record Crime(
 			{
 				info = new CrimeInfo(
 					this.Target,
-					this.Killer,
+					state.Killer.PlayerId,
 					this.Pos,
 					state.DeadTime,
 					state.Reason,
@@ -118,7 +117,6 @@ public sealed class DetectiveStatus() : IStatusModel
 		this.container.Add(
 			new Crime(
 				target.PlayerId,
-				killer.PlayerId,
 				target.GetTruePosition(),
 				role.Core.Team,
 				role.Core.Id,
