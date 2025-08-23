@@ -49,6 +49,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		SearchOnlyOnce,
 		SearchCanFindName,
 		SearchCanContineMeetingNum,
+		ForceMeetingOnSearchEnd,
 		TextShowTime,
 	}
 
@@ -230,8 +231,8 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 	private static readonly Vector2 defaultPos = new Vector2(100.0f, 100.0f);
 
 	private bool includeName;
-	private bool onlyOnce;
 	private bool canContine;
+	private bool forceMeetingOnSearchEnd;
 
 	public Detective() : base(
 		RoleCore.BuildCrewmate(
@@ -355,7 +356,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		{
 			// 調査が外れたとする
 			hideSearchText();
-			if (!this.onlyOnce)
+			if (!this.canContine)
 			{
 				targetInfo.Progress = SearchCond.None;
 				targetInfo.SearchTime = 0.0f;
@@ -381,6 +382,12 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 			searchInfo.AllTarget.Remove(targetInfo.Crime.Target);
 			searchInfo.ProgressUpdater.Info = null;
 			hideSearchText();
+			if (this.forceMeetingOnSearchEnd)
+			{
+				MeetingRoomManager.Instance.AssignSelf(rolePlayer, null);
+				HudManager.Instance.OpenMeetingRoom(rolePlayer);
+				rolePlayer.RpcStartMeeting(null);
+			}
 		}
 	}
 
@@ -421,6 +428,9 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		factory.CreateIntOption(
 			DetectiveOption.SearchCanContineMeetingNum,
 			1, 1, 10, 1);
+		factory.CreateBoolOption(
+			DetectiveOption.ForceMeetingOnSearchEnd,
+			false);
 		factory.CreateFloatOption(
 			DetectiveOption.TextShowTime,
 			60.0f, 5.0f, 120.0f, 0.1f,
@@ -432,7 +442,8 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		var loader = Loader;
 		this.range = loader.GetValue<DetectiveOption, float>(
 			DetectiveOption.SearchRange);
-
+		this.forceMeetingOnSearchEnd = loader.GetValue<DetectiveOption, bool>(
+			DetectiveOption.ForceMeetingOnSearchEnd);
 
 		var container = new ProgressCrimeContainer(
 			loader.GetValue<DetectiveOption, int>(
