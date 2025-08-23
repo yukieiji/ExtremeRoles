@@ -6,7 +6,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
 

@@ -1,8 +1,10 @@
-﻿using ExtremeRoles.Module;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
+
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
@@ -13,7 +15,7 @@ public sealed class ExorcistRole :
 	IRoleUpdate,
 	IRoleAutoBuildAbility
 {
-	public IStatusModel? StatusModel => status;
+	public override IStatusModel? Status => status;
 
 	public ExtremeAbilityButton? Button { get; set; }
 
@@ -30,10 +32,9 @@ public sealed class ExorcistRole :
 	}
 
 	public ExorcistRole() : base(
-		ExtremeRoleId.Exorcist,
-		ExtremeRoleType.Crewmate,
-		ExtremeRoleId.Exorcist.ToString(),
-		ColorPalette.AgencyYellowGreen,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Exorcist,
+			ColorPalette.AgencyYellowGreen),
 		false, true, false, false)
 	{
 

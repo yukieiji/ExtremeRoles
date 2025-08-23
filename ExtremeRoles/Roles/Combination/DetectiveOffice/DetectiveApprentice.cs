@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 using UnityEngine;
@@ -110,10 +110,9 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 		int gameControlId,
 		DetectiveApprenticeOptionHolder option
 		) : base(
-			ExtremeRoleId.DetectiveApprentice,
-			ExtremeRoleType.Crewmate,
-			ExtremeRoleId.DetectiveApprentice.ToString(),
-			ColorPalette.DetectiveApprenticeKonai,
+			RoleCore.BuildCrewmate(
+				ExtremeRoleId.DetectiveApprentice,
+				ColorPalette.DetectiveApprenticeKonai),
 			false, true, false, false)
 	{
 		Loader = loader;
@@ -189,7 +188,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 			newRole.AnotherRole = null;
 			newRole.CanHasAnotherRole = true;
 			newRole.SetAnotherRole(prevRole.AnotherRole);
-			newRole.Team = prevRole.AnotherRole.Team;
+			newRole.Core.Team = prevRole.AnotherRole.Core.Team;
 		}
 
 		ExtremeRoleManager.SetNewRole(playerId, newRole);
