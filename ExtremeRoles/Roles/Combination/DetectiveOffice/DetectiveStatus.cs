@@ -1,189 +1,132 @@
-﻿using AmongUs.GameOptions;
-using UnityEngine;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
-using ExtremeRoles.Module;
+using UnityEngine;
+using AmongUs.GameOptions;
 
-using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
 
 #nullable enable
 
-public sealed class Crime(byte killer, Vector2 pos)
+public sealed record Crime(
+	byte Target,
+	byte Killer,
+	Vector2 Pos,
+	ExtremeRoleType KillerTeam,
+	ExtremeRoleId KillerRole,
+	RoleTypes KillerVanillaRole)
 {
-	public float SearchTimer { get; private set; }
-
-	public byte KillerId { get; } = killer;
-	public Vector2 Pos { get; } = pos;
-
-	public Detective.SearchCond Cond { get; set; }
-
-	private float reportTimer;
-
-	private CrimerInfo? Info
+	public CrimeInfo Info
 	{
 		get
 		{
-			if ((
-					!info.HasValue &&
-					ExtremeRolesPlugin.ShipState.DeadPlayerInfo.TryGetValue(this.KillerId, out var state) &&
+			if (info.HasValue)
+			{
+				return info.Value;
+			}
+
+			if ((					
+					ExtremeRolesPlugin.ShipState.DeadPlayerInfo.TryGetValue(this.Target, out var state) &&
 					state is not null &&
 					state.Killer != null &&
 					ExtremeRoleManager.TryGetRole(state.Killer.PlayerId, out var role)
 				))
 			{
-				info = new CrimerInfo(
+				info = new CrimeInfo(
+					this.Target,
+					this.Killer,
+					this.Pos,
 					state.DeadTime,
-					this.reportTimer,
 					state.Reason,
-					role.Team, role.Id,
-					role.Id == ExtremeRoleId.VanillaRole ?
+					this.reportTime,
+					role.Core.Team,
+					role.Core.Id,
+					role.Core.Id == ExtremeRoleId.VanillaRole ?
 						((Solo.VanillaRoleWrapper)role).VanilaRoleId : RoleTypes.Crewmate);
+				return info.Value;
 			}
-			return info;
+			throw new ArgumentException();
 		}
 	}
-	private CrimerInfo? info;
-	private Arrow? arrow;
+	private CrimeInfo? info;
 
-	public void Clear()
-	{
-		this.arrow?.Clear();
-		this.arrow = null;
-	}
+	private float reportTime = 0f;
 
-	public void ArrowSetActive(bool active)
+	public void Update(float deltaTime)
 	{
-		if (this.arrow == null)
-		{
-			this.arrow = new Arrow(ColorPalette.DetectiveApprenticeKonai);
-			this.arrow.UpdateTarget(this.Pos);
-		}
-		this.arrow.SetActive(active);
-	}
-
-	public void UpdateSearchTimer()
-	{
-		this.SearchTimer += Time.fixedDeltaTime;
-	}
-
-	public void Update()
-	{
-		this.reportTimer += Time.fixedDeltaTime;
+		this.reportTime += deltaTime;
 	}
 }
 
-public readonly record struct CrimerInfo(
-	DateTime KilledTime,
-	float ReportTime,
-	PlayerStatus Reason,
-	ExtremeRoleType KillerTeam,
-	ExtremeRoleId KillerRole,
-	RoleTypes KillerVanillaRole);
-
-public readonly record struct CrimeInfoOld(
-	Vector2 Pos,
-	DateTime KilledTime,
-	float ReportTime,
-	PlayerStatus Reason,
-	ExtremeRoleType KillerTeam,
-	ExtremeRoleId KillerRole,
-	RoleTypes KillerVanillaRole,
-	byte Killer);
-
-
-public class CrimeInfoContainer
+public sealed class CrimeContainer()
 {
-	private readonly Dictionary<byte, Vector2> deadBodyPos = new Dictionary<byte, Vector2>();
-	private readonly Dictionary<byte, float> timer = new Dictionary<byte, float>();
-
-	public CrimeInfoContainer()
-	{
-		Clear();
-	}
+	private readonly Dictionary<byte, Crime> crimerInfo = [];
 
 	public void Clear()
 	{
-		deadBodyPos.Clear();
-		timer.Clear();
+		this.crimerInfo.Clear();
 	}
 
-	public void AddDeadBody(
-		PlayerControl killerPlayer,
-		PlayerControl deadPlayer)
-	{
-		deadBodyPos.Add(
-			deadPlayer.PlayerId,
-			deadPlayer.GetTruePosition());
-		timer.Add(
-			deadPlayer.PlayerId,
-			0.0f);
-	}
+	public bool TryGet(byte target, [NotNullWhen(true)] out Crime? info)
+		=> this.crimerInfo.TryGetValue(target, out info);
 
-	public CrimeInfoOld? GetCrimeInfo(byte playerId)
+	public void Update(float deltaTime)
 	{
-		if (!(
-				deadBodyPos.TryGetValue(playerId, out var pos) &&
-				ExtremeRolesPlugin.ShipState.DeadPlayerInfo.TryGetValue(playerId, out var state) &&
-				state is not null &&
-				state.Killer != null &&
-				ExtremeRoleManager.TryGetRole(state.Killer.PlayerId, out var role)
-			))
+		foreach (var info in this.crimerInfo.Values)
 		{
-			return null;
+			info.Update(deltaTime);
 		}
-
-		return new CrimeInfoOld(
-			pos, state.DeadTime,
-			timer[playerId],
-			state.Reason,
-			role.Team, role.Id,
-			role.Id == ExtremeRoleId.VanillaRole ?
-				((Solo.VanillaRoleWrapper)role).VanilaRoleId : RoleTypes.Crewmate,
-			state.Killer.PlayerId);
 	}
 
-	public void Update()
+	public void Add(Crime info)
 	{
-
-		if (timer.Count == 0) { return; }
-
-		foreach (byte playerId in timer.Keys)
-		{
-			timer[playerId] = timer[playerId] += Time.deltaTime;
-		}
+		this.crimerInfo.Add(info.Target, info);
 	}
 }
+
 
 public sealed class DetectiveStatus() : IStatusModel
 {
-	public int CrimeSize => this.allCrime.Count;
+	private readonly CrimeContainer container = new CrimeContainer();
 
-	private readonly Dictionary<byte, Crime> allCrime = new Dictionary<byte, Crime>();
-
+	
 	public void Clear()
-		=> this.allCrime.Clear();
+		=> this.container.Clear();
 
-	public bool TryGetCrime(byte playerId, out Crime? crime)
-		=> this.allCrime.TryGetValue(playerId, out crime);
-
-	public void ArrowSetActive(bool isActive)
+	public bool TryGetCrime(byte playerId, [NotNullWhen(true)] out CrimeInfo crimeInfo)
 	{
-		foreach (var crime in this.allCrime.Values)
+		if (!this.container.TryGet(playerId, out var info))
 		{
-			crime.ArrowSetActive(isActive);
+			crimeInfo = default;
+			return false;
 		}
+		crimeInfo = info.Info;
+		return true;
 	}
 
-	public void Upate()
+	public void AddCrime(PlayerControl killer, PlayerControl target)
 	{
-		foreach (var crime in this.allCrime.Values)
+		if (!ExtremeRoleManager.TryGetRole(killer.PlayerId, out var role))
 		{
-			crime.Update();
+			return;
 		}
+
+		this.container.Add(
+			new Crime(
+				target.PlayerId,
+				killer.PlayerId,
+				target.GetTruePosition(),
+				role.Core.Team,
+				role.Core.Id,
+				killer.Data.Role.Role));
+	}
+
+	public void Upate(float deltaTime)
+	{
+		this.container.Update(deltaTime);
 	}
 }

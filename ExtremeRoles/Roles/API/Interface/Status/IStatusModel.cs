@@ -1,4 +1,5 @@
-﻿namespace ExtremeRoles.Roles.API.Interface.Status;
+﻿
+namespace ExtremeRoles.Roles.API.Interface;
 
 public interface IStatusModel
 {
