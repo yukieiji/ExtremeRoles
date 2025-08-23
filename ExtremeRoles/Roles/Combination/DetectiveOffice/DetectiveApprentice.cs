@@ -136,15 +136,15 @@ public sealed class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbi
 	public static void ChangeToDetectiveApprentice(
 		byte playerId)
 	{
-		var prevRole = ExtremeRoleManager.GameRole[playerId] as MultiAssignRoleBase;
-		if (prevRole == null)
+		if (!(
+				ExtremeRoleManager.TryGetRole(playerId, out var role) &&
+				role is MultiAssignRoleBase prevRole
+			))
 		{
 			return;
 		}
 
-		var detectiveReset = prevRole as IRoleResetMeeting;
-
-		if (detectiveReset != null)
+		if (prevRole is IRoleResetMeeting detectiveReset)
 		{
 			detectiveReset.ResetOnMeetingStart();
 		}
