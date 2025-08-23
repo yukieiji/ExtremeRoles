@@ -48,7 +48,7 @@ public sealed record Crime(
 						((Solo.VanillaRoleWrapper)role).VanilaRoleId : RoleTypes.Crewmate);
 				return info.Value;
 			}
-			throw new ArgumentException();
+			return default;
 		}
 	}
 	private CrimeInfo? info;
