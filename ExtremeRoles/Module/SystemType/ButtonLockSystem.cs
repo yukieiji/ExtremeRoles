@@ -66,7 +66,7 @@ public sealed class ButtonLockSystem(ExtremeSystemType type) : IExtremeSystemTyp
 		});
 	}
 
-	public void AddCondtion(int id, Func<bool> condtion)
+	public void AddCondition(int id, Func<bool> condtion)
 	{
 		this.blockCondition[id] = condtion;
 	}
