@@ -71,7 +71,7 @@ public sealed class TuckerRole :
 	private byte target;
 	private int targetShadowId;
 	private RemoveInfo? removeInfo;
-	private SpriteRenderer? reviveFlash;
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.TuckerMerdedoie, 0.75f, 0.5f, 0.5f);
 
 	private HashSet<byte> chimera = new HashSet<byte>();
 
@@ -209,7 +209,9 @@ public sealed class TuckerRole :
 	{ }
 
 	public void ResetOnMeetingStart()
-	{ }
+	{
+		this.flasher.Hide();
+	}
 
 	public void OnResetChimera(byte chimeraId, float killCoolTime)
 	{
@@ -526,40 +528,8 @@ public sealed class TuckerRole :
 		{
 			return;
 		}
-		var hudManager = HudManager.Instance;
 
-		if (reviveFlash == null)
-		{
-			reviveFlash = UnityEngine.Object.Instantiate(
-				 hudManager.FullScreen,
-				 hudManager.transform);
-			reviveFlash.transform.localPosition = new Vector3(0f, 0f, 20f);
-			reviveFlash.gameObject.SetActive(true);
-		}
-
-		Color32 color = Core.Color;
-
-		reviveFlash.enabled = true;
-
-		hudManager.StartCoroutine(
-			Effects.Lerp(1.0f, new Action<float>((p) =>
-			{
-				if (reviveFlash == null) { return; }
-				if (p < 0.5)
-				{
-					reviveFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
-
-				}
-				else
-				{
-					reviveFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
-				}
-				if (p == 1f)
-				{
-					reviveFlash.enabled = false;
-				}
-			}))
-		);
+		flasher.Flash();
 	}
 
 	private void disableShadow(byte playerId)

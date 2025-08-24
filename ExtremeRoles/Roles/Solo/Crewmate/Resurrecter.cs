@@ -57,8 +57,8 @@ public sealed class Resurrecter :
     public enum ResurrecterRpcOps : byte
     {
         UseResurrect,
-        ResetFlash,
-    }
+		ResetFlash,
+	}
 
     private bool awakeRole;
     private float awakeTaskGage;
@@ -84,35 +84,36 @@ public sealed class Resurrecter :
     private float resetTaskGage;
     private TMPro.TextMeshPro resurrectText;
 
-    private static SpriteRenderer flash;
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.ResurrecterBlue, 0.75f, 0.5f, 0.5f);
 
     public Resurrecter() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Resurrecter,
 			ColorPalette.ResurrecterBlue),
         false, true, false, false)
-    { }
+    {
+	}
 
     public static void RpcAbility(ref MessageReader reader)
     {
-        ResurrecterRpcOps ops = (ResurrecterRpcOps)reader.ReadByte();
+		var ops = (ResurrecterRpcOps)reader.ReadByte();
         byte resurrecterPlayerId = reader.ReadByte();
 
-        switch (ops)
+		var resurrecter = ExtremeRoleManager.GetSafeCastedRole<Resurrecter>(resurrecterPlayerId);
+		if (resurrecter == null)
+		{ 
+			return;
+		}
+
+		switch (ops)
         {
             case ResurrecterRpcOps.UseResurrect:
-                Resurrecter resurrecter = ExtremeRoleManager.GetSafeCastedRole<Resurrecter>(
-                    resurrecterPlayerId);
-                if (resurrecter == null) { return; }
                 UseResurrect(resurrecter);
                 break;
-            case ResurrecterRpcOps.ResetFlash:
-                if (flash != null)
-                {
-                    flash.enabled = false;
-                }
-                break;
-            default:
+			case ResurrecterRpcOps.ResetFlash:
+				resurrecter.flasher.Hide();
+				break;
+			default:
                 break;
         }
     }
@@ -136,18 +137,14 @@ public sealed class Resurrecter :
             this.resurrectText.gameObject.SetActive(false);
         }
 
-        using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.ResurrecterRpc))
-        {
-            caller.WriteByte((byte)ResurrecterRpcOps.ResetFlash);
-            caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
-        }
-
-        if (flash != null)
-        {
-            flash.enabled = false;
-        }
-    }
+		using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.ResurrecterRpc))
+		{
+			caller.WriteByte((byte)ResurrecterRpcOps.ResetFlash);
+			caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+		}
+		this.flasher.Hide();
+	}
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
@@ -169,40 +166,12 @@ public sealed class Resurrecter :
         }
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
-        if (!role.CanKill() || role.IsCrewmate()) { return; }
-
-        var hudManager = HudManager.Instance;
-
-        if (flash == null)
+        if (!role.CanKill() || role.IsCrewmate())
         {
-            flash = Object.Instantiate(
-                hudManager.FullScreen, hudManager.transform);
-            flash.transform.localPosition = new Vector3(0f, 0f, 20f);
-            flash.gameObject.SetActive(true);
+            return;
         }
 
-        flash.enabled = true;
-
-		var color = this.Core.Color;
-		hudManager.StartCoroutine(
-            Effects.Lerp(1.0f, new System.Action<float>((p) =>
-            {
-                if (flash == null) { return; }
-
-                float alpha = p < 0.5 ?
-                    Mathf.Clamp01(p * 2 * 0.75f) :
-                    Mathf.Clamp01((1 - p) * 2 * 0.75f);
-
-                flash.color = new Color(
-					color.r, color.g,
-					color.b, alpha);
-
-                if (p == 1f)
-                {
-                    flash.enabled = false;
-                }
-            }))
-        );
+        flasher.Flash();
     }
 
     public string GetFakeOptionString() => "";
@@ -251,7 +220,10 @@ public sealed class Resurrecter :
             }
         }
 
-        if (this.isResurrected) { return; }
+        if (this.isResurrected)
+		{ 
+			return;
+		}
 
         if (rolePlayer.Data.IsDead &&
             this.activateResurrectTimer &&
