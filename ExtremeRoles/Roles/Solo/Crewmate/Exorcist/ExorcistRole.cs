@@ -65,7 +65,7 @@ public sealed class ExorcistRole :
 		AwakeTaskGage,
 	}
 
-	private readonly ScreenFlasher flasher = new ScreenFlasher(new Color(0f, 0.8f, 0f), 0.75f, 0.5f, 0.5f);
+	private readonly FullScreenFlasher flasher;
 
 	public ExorcistRole() : base(
 		RoleCore.BuildCrewmate(
@@ -73,6 +73,7 @@ public sealed class ExorcistRole :
 			ColorPalette.AgencyYellowGreen),
 		false, true, false, false)
 	{
+		this.flasher = new FullScreenFlasher(this.Core.Color, 0.75f, 0.5f, 0.5f);
 	}
 
 	public static void RpcOps(in MessageReader reader)
