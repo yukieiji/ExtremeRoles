@@ -9,27 +9,39 @@ using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.SystemType;
 
-public sealed class ButtonLockSystem : IExtremeSystemType
+public sealed class ButtonLockSystem(ExtremeSystemType type) : IExtremeSystemType
 {
+	public enum ConditionId
+	{
+		Exorcist
+	}
+
 	public enum Ops
 	{
 		Lock,
 		Unlock,
 	}
 
-	private bool isBlocked = false;
+	private readonly ExtremeSystemType thisSystemTime = type;
 
-	private readonly Dictionary<int, Func<bool>> blockCondtion = [];
+	private bool isBlocked => this.blockedConditionId.Count > 0;
+
+	private HashSet<int> blockedConditionId = [];
+	private readonly Dictionary<int, Func<bool>> blockCondition = [];
 
 	public static ButtonLockSystem CreateOrGetAbilityButtonLockSystem()
-		=> ExtremeSystemTypeManager.Instance.CreateOrGet<ButtonLockSystem>(ExtremeSystemType.AbilityButtonLockSystem);
+		=> ExtremeSystemTypeManager.Instance.CreateOrGet(
+			ExtremeSystemType.AbilityButtonLockSystem,
+			() => new ButtonLockSystem(ExtremeSystemType.AbilityButtonLockSystem));
 	public static bool IsAbilityButtonLock()
 		=> 
 		ExtremeSystemTypeManager.Instance.TryGet<ButtonLockSystem>(ExtremeSystemType.AbilityButtonLockSystem, out var system) &&
 		system.isBlocked;
 
 	public static ButtonLockSystem CreateOrGetReportButtonLock()
-		=> ExtremeSystemTypeManager.Instance.CreateOrGet<ButtonLockSystem>(ExtremeSystemType.ReportButtonLockSystem);
+		=> ExtremeSystemTypeManager.Instance.CreateOrGet(
+			ExtremeSystemType.ReportButtonLockSystem,
+			() => new ButtonLockSystem(ExtremeSystemType.ReportButtonLockSystem));
 	public static bool IsReportButtonLock()
 		=>
 		ExtremeSystemTypeManager.Instance.TryGet<ButtonLockSystem>(ExtremeSystemType.ReportButtonLockSystem, out var system) &&
@@ -37,29 +49,26 @@ public sealed class ButtonLockSystem : IExtremeSystemType
 
 
 	public static ButtonLockSystem CreateOrGetKillButtonLockSystem()
-		=> ExtremeSystemTypeManager.Instance.CreateOrGet<ButtonLockSystem>(ExtremeSystemType.KillButtonLockSystem);
+		=> ExtremeSystemTypeManager.Instance.CreateOrGet(
+			ExtremeSystemType.KillButtonLockSystem,
+			() => new ButtonLockSystem(ExtremeSystemType.KillButtonLockSystem));
 	public static bool IsKillButtonLock()
 		=>
 		ExtremeSystemTypeManager.Instance.TryGet<ButtonLockSystem>(ExtremeSystemType.KillButtonLockSystem, out var system) &&
 		system.isBlocked;
 
-	public void RpcLock(ExtremeSystemType lockType, Action<MessageWriter> writeFunc)
+	public void RpcLock(Ops ops, int condition)
 	{
-		if (lockType is 
-				ExtremeSystemType.AbilityButtonLockSystem or 
-				ExtremeSystemType.ReportButtonLockSystem or 
-				ExtremeSystemType.KillButtonLockSystem)
+		ExtremeSystemTypeManager.RpcUpdateSystem(this.thisSystemTime, x =>
 		{
-			ExtremeRolesPlugin.Logger.LogError("Invalid Systems");
-			return;
-		}
-
-		ExtremeSystemTypeManager.RpcUpdateSystem(lockType, writeFunc.Invoke);
+			x.Write((byte)ops);
+			x.WritePacked(condition);
+		});
 	}
 
 	public void AddCondtion(int id, Func<bool> condtion)
 	{
-		blockCondtion[id] = condtion;
+		this.blockCondition[id] = condtion;
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
@@ -69,23 +78,29 @@ public sealed class ButtonLockSystem : IExtremeSystemType
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
-		var id = (Ops)msgReader.ReadByte();
-
-		switch (id)
+		var ops = (Ops)msgReader.ReadByte();
+		int condtionId = msgReader.ReadPackedInt32();
+		if (!blockCondition.TryGetValue(condtionId, out var func))
 		{
-			case Ops.Lock:
-				int condtionId = msgReader.ReadPackedInt32();
-				if (!blockCondtion.TryGetValue(condtionId, out var func))
-				{
-					return;
-				}
-				isBlocked = func.Invoke();
-				break;
-			case Ops.Unlock:
-				isBlocked = false;
-				break;
-			default:
-				break;
+			return;
+		}
+
+		lock (this.blockedConditionId)
+		{
+			switch (ops)
+			{
+				case Ops.Lock:
+					if (func.Invoke())
+					{
+						this.blockedConditionId.Add(condtionId);
+					}
+					break;
+				case Ops.Unlock:
+					this.blockedConditionId.Remove(condtionId);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 }
