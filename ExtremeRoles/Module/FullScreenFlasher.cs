@@ -86,6 +86,7 @@ public sealed class FullScreenFlasher
 		if (this.renderer != null)
 		{
 			UnityObject.Destroy(this.renderer);
+			UnityObject.Destroy(this.renderer.gameObject);
 		}
 	}
 
@@ -125,7 +126,7 @@ public sealed class FullScreenFlasher
 	}
 }
 
-public sealed class FullScreenFlusherWithAudio
+public sealed class FullScreenRepeatFlasherWithAudio
 {
 	private readonly AudioClip? audio;
 	private readonly WaitForSeconds waiter;
@@ -137,7 +138,7 @@ public sealed class FullScreenFlusherWithAudio
 
 	private static HudManager hud => HudManager.Instance;
 
-	public FullScreenFlusherWithAudio(
+	public FullScreenRepeatFlasherWithAudio(
 		AudioClip? audio, Color color,
 		float seconds = 1.0f)
 	{
