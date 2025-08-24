@@ -21,6 +21,7 @@ public class FullScreenFlasher
 	private readonly float totalDuration;
 	private readonly Action<float> defaultLerpAction;
 
+
 	public FullScreenFlasher(Color defaultColor, float maxAlpha, float fadeInTime, float fadeOutTime, float holdTime = 0.0f)
 	{
 		if (fadeInTime <= 0)
@@ -76,6 +77,14 @@ public class FullScreenFlasher
 		if (this.renderer != null)
 		{
 			this.renderer.enabled = false; ;
+		}
+	}
+
+	public void Reset()
+	{
+		if (this.renderer != null)
+		{
+			UnityObject.Destroy(this.renderer);
 		}
 	}
 

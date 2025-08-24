@@ -5,7 +5,6 @@ using UnityEngine;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
-using FloatAction = System.Action<float>;
 using Il2CppInterop.Runtime.Attributes;
 
 
@@ -16,23 +15,14 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class BaitDalayReporter : MonoBehaviour
 {
-#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
-#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
 	private TextMeshPro? text = null;
-	private readonly ScreenFlasher flasher = new ScreenFlasher(Color.clear, 0.75f, 0.5f, 0.5f);
-
 	private Coroutine? delayCorutine = null;
 
-#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(Color.clear, 0.75f, 0.5f, 0.5f);
+
 	public BaitDalayReporter(IntPtr ptr) : base(ptr)
 	{
-	}
-#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
-
-	public void Awake()
-	{
-		var hudManager = HudManager.Instance;
 	}
 
 	public void FixedUpdate()
@@ -44,6 +34,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 
 		this.stopTargetCorutine(this.delayCorutine);
 
+		this.flasher.Reset();
 
 		if (this.text != null)
 		{
