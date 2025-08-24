@@ -197,7 +197,7 @@ public sealed class ExorcistRole :
 		};
 		foreach (var s in this.lockSystem)
 		{
-			s.AddCondtion((int)ButtonLockSystem.ConditionId.Exorcist, exorcistBlockCondition);
+			s.AddCondition((int)ButtonLockSystem.ConditionId.Exorcist, exorcistBlockCondition);
 		}
 	}
 
@@ -295,14 +295,11 @@ public sealed class ExorcistRole :
 		{
 			return true;
 		}
-		var role = ExtremeRoleManager.GetLocalPlayerRole();
-		return
-			(role.IsCrewmate() && role.Core.Id is not ExtremeRoleId.Exorcist) ||
-			// もしくはサーヴァント + エクソ
-			!(
-				ExtremeRoleManager.TryGetSafeCastedLocalRole<ServantRole>(out var servant) && 
-				servant.AnotherRole != null &&
-				servant.AnotherRole.Core.Id is ExtremeRoleId.Exorcist
-			);
+
+		if (ExtremeRoleManager.TryGetSafeCastedLocalRole<ExorcistRole>(out var servant))
+		{
+			return false;
+		}
+		return ExtremeRoleManager.GetLocalPlayerRole().IsCrewmate();
 	}
 }
