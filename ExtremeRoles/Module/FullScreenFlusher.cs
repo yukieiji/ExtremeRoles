@@ -10,7 +10,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Module;
 
-public class FullScreenFlasher
+public sealed class FullScreenFlasher
 {
 	private SpriteRenderer? renderer;
 	private readonly Color defaultColor;
