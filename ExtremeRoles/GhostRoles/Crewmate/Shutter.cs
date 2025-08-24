@@ -171,7 +171,7 @@ public sealed class Shutter : GhostRoleBase
         RightPlayerNameRate
     }
 
-    private SpriteRenderer? flash;
+    private readonly ScreenFlasher flasher = new ScreenFlasher(Color.white, 0.75f, 0.25f, 0.5f, 0.25f);
 #pragma warning disable CS8618
 	private GhostPhotoCamera photoCreater;
 	public Shutter() : base(
@@ -243,42 +243,8 @@ public sealed class Shutter : GhostRoleBase
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
     {
-        var hudManager = HudManager.Instance;
-
-        if (this.flash == null)
-        {
-            this.flash = UnityEngine.Object.Instantiate(
-                 hudManager.FullScreen,
-                 hudManager.transform);
-            this.flash.transform.localPosition = new Vector3(0f, 0f, 20f);
-            this.flash.gameObject.SetActive(true);
-        }
-
-        this.flash.enabled = true;
-
         this.photoCreater.TakePhoto();
-
-        hudManager.StartCoroutine(
-            Effects.Lerp(FlashTime, new Action<float>((p) =>
-            {
-                if (this.flash == null) { return; }
-                if (p < 0.25f)
-                {
-                    this.flash.color = new Color(
-                        255f, 255f, 255f, Mathf.Clamp01(p * 5 * 0.75f));
-
-                }
-                else if (p >= 0.5f)
-                {
-                    this.flash.color = new Color(
-                        255f, 255f, 255f, Mathf.Clamp01((1 - p) * 5 * 0.75f));
-                }
-                if (p == FlashTime)
-                {
-                    this.flash.enabled = false;
-                }
-            }))
-        );
+        flasher.Flash();
     }
 
     private bool isAbilityUse() => IsCommonUse();

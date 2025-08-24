@@ -57,7 +57,6 @@ public sealed class Resurrecter :
     public enum ResurrecterRpcOps : byte
     {
         UseResurrect,
-        ResetFlash,
     }
 
     private bool awakeRole;
@@ -84,7 +83,7 @@ public sealed class Resurrecter :
     private float resetTaskGage;
     private TMPro.TextMeshPro resurrectText;
 
-    private static SpriteRenderer flash;
+    private readonly ScreenFlasher flasher = new ScreenFlasher(Color.clear, 0.75f, 0.5f, 0.5f);
 
     public Resurrecter() : base(
 		RoleCore.BuildCrewmate(
@@ -105,12 +104,6 @@ public sealed class Resurrecter :
                     resurrecterPlayerId);
                 if (resurrecter == null) { return; }
                 UseResurrect(resurrecter);
-                break;
-            case ResurrecterRpcOps.ResetFlash:
-                if (flash != null)
-                {
-                    flash.enabled = false;
-                }
                 break;
             default:
                 break;
@@ -134,18 +127,6 @@ public sealed class Resurrecter :
         if (this.resurrectText != null)
         {
             this.resurrectText.gameObject.SetActive(false);
-        }
-
-        using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.ResurrecterRpc))
-        {
-            caller.WriteByte((byte)ResurrecterRpcOps.ResetFlash);
-            caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
-        }
-
-        if (flash != null)
-        {
-            flash.enabled = false;
         }
     }
 
@@ -171,38 +152,7 @@ public sealed class Resurrecter :
         var role = ExtremeRoleManager.GetLocalPlayerRole();
         if (!role.CanKill() || role.IsCrewmate()) { return; }
 
-        var hudManager = HudManager.Instance;
-
-        if (flash == null)
-        {
-            flash = Object.Instantiate(
-                hudManager.FullScreen, hudManager.transform);
-            flash.transform.localPosition = new Vector3(0f, 0f, 20f);
-            flash.gameObject.SetActive(true);
-        }
-
-        flash.enabled = true;
-
-		var color = this.Core.Color;
-		hudManager.StartCoroutine(
-            Effects.Lerp(1.0f, new System.Action<float>((p) =>
-            {
-                if (flash == null) { return; }
-
-                float alpha = p < 0.5 ?
-                    Mathf.Clamp01(p * 2 * 0.75f) :
-                    Mathf.Clamp01((1 - p) * 2 * 0.75f);
-
-                flash.color = new Color(
-					color.r, color.g,
-					color.b, alpha);
-
-                if (p == 1f)
-                {
-                    flash.enabled = false;
-                }
-            }))
-        );
+        flasher.Flash(this.Core.Color);
     }
 
     public string GetFakeOptionString() => "";
