@@ -162,7 +162,7 @@ public sealed class ExorcistRole :
 		};
 		foreach (var s in this.lockSystem)
 		{
-			s.AddCondtion((int)ButtonLockSystem.ConditionId.Exorcist, exorcistBlockCondition);
+			s.AddCondition((int)ButtonLockSystem.ConditionId.Exorcist, exorcistBlockCondition);
 		}
 	}
 
