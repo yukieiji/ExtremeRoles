@@ -1,4 +1,4 @@
-using ExtremeRoles.Extension.Manager;
+﻿using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
@@ -151,19 +151,19 @@ public class ExtremeAbilityButton
 			setStatus(newState);
 		}
 
-		var graphic = this.Button.graphic;
-		graphic.sprite = this.Behavior.Graphic.Img;
+		var grahic = this.Button.graphic;
+		grahic.sprite = this.Behavior.Graphic.Img;
 		this.Button.OverrideText(this.Behavior.Graphic.Text);
 
 		if (this.Behavior.IsUse())
 		{
-			graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-			graphic.material.SetFloat(materialName, 0f);
+			grahic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
+			grahic.material.SetFloat(materialName, 0f);
 		}
 		else
 		{
-			graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-			graphic.material.SetFloat(materialName, 1f);
+			grahic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
+			grahic.material.SetFloat(materialName, 1f);
 		}
 
 		// チャージ中は改行をオフにしてるので
@@ -367,9 +367,9 @@ public class ExtremeAbilityButton
 
 	private void blockedUpdate()
 	{
-		var graphic = this.Button.graphic;
-		graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-		graphic.material.SetFloat(materialName, 1f);
+		var grahic = this.Button.graphic;
+		grahic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
+		grahic.material.SetFloat(materialName, 1f);
 		switch (this.State)
 		{
 			case AbilityState.Activating:
