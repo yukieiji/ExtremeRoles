@@ -136,7 +136,10 @@ public class ExtremeAbilityButton
 	{
 		bool isActive = this.activator.IsActive();
 		setActive(isActive);
-		if (!this.Button.isActiveAndEnabled) { return; }
+		if (!this.Button.isActiveAndEnabled)
+		{
+			return;
+		}
 
 		AbilityState newState = this.Behavior.Update(State);
 		if (newState != this.State)
@@ -323,7 +326,7 @@ public class ExtremeAbilityButton
 				Timer = 0.0f;
 				break;
 			case AbilityState.CoolDown:
-				if (State != AbilityState.Stop)
+				if (State is not AbilityState.Stop)
 				{
 					Timer = Behavior.CoolTime;
 				}
