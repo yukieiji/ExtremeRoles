@@ -12,13 +12,17 @@ namespace ExtremeRoles.Module;
 
 public sealed class FullScreenFlasher
 {
+	private readonly struct TimeLineInfo(float fadeInTime, float holdTime, float fadeOutTime)
+	{
+		public readonly float FadeIn = fadeInTime;
+		public readonly float Hold = fadeInTime + holdTime;
+		public readonly float FadeOutLength = fadeOutTime;
+		public readonly float Total = fadeInTime + holdTime + fadeOutTime;
+	}
 	private SpriteRenderer? renderer;
 	private readonly Color defaultColor;
-	private readonly float fadeInTime;
-	private readonly float holdTime;
-	private readonly float fadeOutTime;
 	private readonly float maxAlpha;
-	private readonly float totalDuration;
+	private readonly TimeLineInfo timeLine;
 	private readonly Action<float> defaultLerpAction;
 
 
@@ -39,10 +43,7 @@ public sealed class FullScreenFlasher
 
 		this.defaultColor = defaultColor;
 		this.maxAlpha = Mathf.Clamp01(maxAlpha);
-		this.fadeInTime = fadeInTime;
-		this.holdTime = holdTime;
-		this.fadeOutTime = fadeOutTime;
-		this.totalDuration = fadeInTime + holdTime + fadeOutTime;
+		this.timeLine = new TimeLineInfo(fadeInTime, holdTime, fadeOutTime);
 		this.defaultLerpAction = createLerpAction(this.defaultColor);
 	}
 
@@ -69,7 +70,7 @@ public sealed class FullScreenFlasher
 			? createLerpAction(overrideColor.Value)
 			: this.defaultLerpAction;
 
-		hudManager.StartCoroutine(Effects.Lerp(this.totalDuration, actionToRun));
+		hudManager.StartCoroutine(Effects.Lerp(this.timeLine.Total, actionToRun));
 	}
 
 	public void Hide()
@@ -97,21 +98,21 @@ public sealed class FullScreenFlasher
 				return;
 			}
 
-			float elapsed = p * this.totalDuration;
+			float elapsed = p * this.timeLine.Total;
 			float alpha = 0f;
 
-			if (elapsed < this.fadeInTime)
+			if (elapsed < this.timeLine.FadeIn)
 			{
-				alpha = (elapsed / this.fadeInTime) * this.maxAlpha;
+				alpha = (elapsed / this.timeLine.FadeIn) * this.maxAlpha;
 			}
-			else if (elapsed < this.fadeInTime + this.holdTime)
+			else if (elapsed < this.timeLine.Hold)
 			{
 				alpha = this.maxAlpha;
 			}
 			else
 			{
-				float fadeOutElapsed = elapsed - (this.fadeInTime + this.holdTime);
-				alpha = (1f - (fadeOutElapsed / this.fadeOutTime)) * this.maxAlpha;
+				float fadeOutElapsed = elapsed - this.timeLine.Hold;
+				alpha = (1f - (fadeOutElapsed / this.timeLine.FadeOutLength)) * this.maxAlpha;
 			}
 
 			renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha));
