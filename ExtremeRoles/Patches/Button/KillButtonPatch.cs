@@ -1,4 +1,5 @@
-﻿using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -20,6 +21,7 @@ public static class KillButtonDoClickPatch
 	public enum KillResult : byte
 	{
 		PreConditionFail,
+		BlockedToSystem,
 		BlockedToKillerSingleRoleCondition,
 		BlockedToTargetSingleRoleCondition,
 		BlockedToKillerOtherRoleCondition,
@@ -32,7 +34,10 @@ public static class KillButtonDoClickPatch
 
     public static bool Prefix(KillButton __instance)
     {
-        if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+        if (ExtremeRoleManager.GameRole.Count == 0)
+		{
+			return true;
+		}
 
         PlayerControl killer = PlayerControl.LocalPlayer;
         var role = ExtremeRoleManager.GetLocalPlayerRole();
@@ -77,6 +82,10 @@ public static class KillButtonDoClickPatch
 			!ExtremeRoleManager.TryGetRole(target.PlayerId, out var targetRole))
 		{
 			return KillResult.PreConditionFail;
+		}
+		else if (ButtonLockSystem.IsKillButtonLock())
+		{
+			return KillResult.BlockedToSystem;
 		}
 		else if (isPreventKillTo(killerRole, killer, target))
 		{
