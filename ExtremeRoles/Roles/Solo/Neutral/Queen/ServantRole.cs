@@ -29,7 +29,7 @@ public sealed class ServantRole :
 	public ExtremeAbilityButton? Button { get; set; }
 
 	private byte queenPlayerId;
-	private SpriteRenderer? killFlash;
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(new Color(0f, 0.8f, 0f), 0.75f, 0.5f, 0.5f);
 
 	public override IOptionLoader Loader { get; }
 	public override IStatusModel Status => status;
@@ -105,47 +105,14 @@ public sealed class ServantRole :
 
 		if (MeetingHud.Instance ||
 			source.PlayerId == target.PlayerId ||
-			ExtremeRoleManager.GameRole[source.PlayerId] == this) { return; }
-
-		var hudManager = HudManager.Instance;
-
-		if (killFlash == null)
+			ExtremeRoleManager.GameRole[source.PlayerId] == this)
 		{
-			killFlash = UnityEngine.Object.Instantiate(
-				 hudManager.FullScreen,
-				 hudManager.transform);
-			killFlash.transform.localPosition = new Vector3(0f, 0f, 20f);
-			killFlash.gameObject.SetActive(true);
+			return;
 		}
 
-		Color32 color = new Color(0f, 0.8f, 0f);
-
-		if (source.PlayerId == queenPlayerId)
-		{
-			color = Core.Color;
-		}
-
-		killFlash.enabled = true;
-
-		hudManager.StartCoroutine(
-			Effects.Lerp(1.0f, new Action<float>((p) =>
-			{
-				if (killFlash == null) { return; }
-				if (p < 0.5)
-				{
-					killFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
-
-				}
-				else
-				{
-					killFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
-				}
-				if (p == 1f)
-				{
-					killFlash.enabled = false;
-				}
-			}))
-		);
+		Color? flashColor = source.PlayerId == queenPlayerId ? 
+			this.Core.Color : null;
+		flasher.Flash(flashColor);
 	}
 
 	public void CreateAbility()
@@ -162,10 +129,7 @@ public sealed class ServantRole :
 
 	public void ResetOnMeetingStart()
 	{
-		if (killFlash != null)
-		{
-			killFlash.enabled = false;
-		}
+		this.flasher.Hide();
 	}
 
 	public bool UseAbility()

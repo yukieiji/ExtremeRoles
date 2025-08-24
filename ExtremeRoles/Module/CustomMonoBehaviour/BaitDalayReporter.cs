@@ -5,7 +5,6 @@ using UnityEngine;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
-using FloatAction = System.Action<float>;
 using Il2CppInterop.Runtime.Attributes;
 
 
@@ -16,39 +15,26 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class BaitDalayReporter : MonoBehaviour
 {
-#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
-	private SpriteRenderer rend;
-#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
 	private TextMeshPro? text = null;
-
-	private Coroutine? flushCorutine = null;
 	private Coroutine? delayCorutine = null;
 
-#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.BaitCyan, 0.75f, 0.5f, 0.5f);
+
 	public BaitDalayReporter(IntPtr ptr) : base(ptr)
 	{
-	}
-#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
-
-	public void Awake()
-	{
-		var hudManager = HudManager.Instance;
-
-		this.rend = Instantiate(
-			hudManager.FullScreen, hudManager.transform);
-		this.rend.transform.localPosition = new Vector3(0f, 0f, 20f);
-		this.rend.gameObject.SetActive(true);
 	}
 
 	public void FixedUpdate()
 	{
-		if (MeetingHud.Instance == null) { return; }
+		if (MeetingHud.Instance == null)
+		{
+			return;
+		}
 
-		this.stopTargetCorutine(this.flushCorutine);
 		this.stopTargetCorutine(this.delayCorutine);
 
-		Destroy(this.rend);
+		this.flasher.Reset();
 
 		if (this.text != null)
 		{
@@ -59,30 +45,10 @@ public sealed class BaitDalayReporter : MonoBehaviour
 	}
 
 	public void StartReportTimer(
-		Color color,
 		NetworkedPlayerInfo target,
 		float timer = 0.0f)
 	{
-		this.rend.enabled = true;
-
-		this.flushCorutine = this.StartCoroutine(
-			Effects.Lerp(1.0f, new FloatAction((p) =>
-			{
-				if (this.rend == null) { return; }
-
-				float progress = p < 0.5 ?　p :　(1 - p);
-				float alpha = Mathf.Clamp01(progress * 2 * 0.75f);
-
-				this.rend.color = new Color(
-					color.r, color.g,
-					color.b, alpha);
-
-				if (p == 1f)
-				{
-					this.rend.enabled = false;
-				}
-			}))
-		);
+		flasher.Flash();
 
 		var player = PlayerControl.LocalPlayer;
 		if (timer == 0)

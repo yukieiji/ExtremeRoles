@@ -167,7 +167,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		{
 			var baitReporter = HudManager.Instance.gameObject.AddComponent<BaitDalayReporter>();
 			baitReporter.StartReportTimer(
-				this.Core.Color, rolePlayer.Data,
+				rolePlayer.Data,
 				this.delayUntilForceReport);
 		}
 

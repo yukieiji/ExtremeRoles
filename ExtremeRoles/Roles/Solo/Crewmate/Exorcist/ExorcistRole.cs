@@ -65,7 +65,7 @@ public sealed class ExorcistRole :
 		AwakeTaskGage,
 	}
 
-	private SpriteRenderer? flash;
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.AgencyYellowGreen, 0.75f, 0.5f, 0.5f);
 
 	public ExorcistRole() : base(
 		RoleCore.BuildCrewmate(
@@ -90,8 +90,7 @@ public sealed class ExorcistRole :
 		{
 			case RpcOpsMode.Alert:
 				var hudManager = HudManager.Instance;
-				if (hudManager == null ||
-					PlayerControl.LocalPlayer == null)
+				if (hudManager == null || PlayerControl.LocalPlayer == null)
 				{
 					return;
 				}
@@ -100,41 +99,7 @@ public sealed class ExorcistRole :
 				{
 					return;
 				}
-				if (exorcist.flash == null)
-				{
-					exorcist.flash = UnityEngine.Object.Instantiate(
-						 hudManager.FullScreen,
-						 hudManager.transform);
-					exorcist.flash.transform.localPosition = new Vector3(0f, 0f, 20f);
-					exorcist.flash.gameObject.SetActive(true);
-				}
-
-				Color32 color = new Color(0f, 0.8f, 0f);
-
-				exorcist.flash.enabled = true;
-
-				hudManager.StartCoroutine(
-					Effects.Lerp(1.0f, new Action<float>((p) =>
-					{
-						if (exorcist.flash == null)
-						{
-							return;
-						}
-						if (p < 0.5)
-						{
-							exorcist.flash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
-
-						}
-						else
-						{
-							exorcist.flash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
-						}
-						if (p == 1f)
-						{
-							exorcist.flash.enabled = false;
-						}
-					}))
-				);
+				exorcist.flasher.Flash();
 				break;
 			case RpcOpsMode.AwakeFakeImp:
 				exorcist?.status?.UpdateToFakeImpostor();
@@ -153,7 +118,7 @@ public sealed class ExorcistRole :
 		AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.Create0To100Percentage10StepOption(Option.AwakeTaskGage);
-	
+
 		IRoleAbility.CreateAbilityCountOption(factory, 1, 5, 3.0f);
 		factory.CreateFloatOption(
 			Option.Range,
@@ -229,7 +194,9 @@ public sealed class ExorcistRole :
 	}
 
 	public bool IsAbilityActive()
-		=> this.target == this.status?.CurTarget;
+	{
+		return this.target == this.status?.CurTarget;
+	}
 
 	public void CreateAbility()
 	{
@@ -265,7 +232,6 @@ public sealed class ExorcistRole :
 			$"{killer.DefaultOutfit.PlayerName} kill {this.target.DefaultOutfit.PlayerName} with {info.Reason}" :
 			$"{this.target.DefaultOutfit.PlayerName} killed with {info.Reason} killer is Dead {killer.IsDead}");
 
-		// 能力使用後に強制的に会議発動
 		var localPlayer = PlayerControl.LocalPlayer;
 		MeetingRoomManager.Instance.AssignSelf(localPlayer, this.target);
 		HudManager.Instance.OpenMeetingRoom(localPlayer);
@@ -278,6 +244,7 @@ public sealed class ExorcistRole :
 
 	public void ResetOnMeetingStart()
 	{
+		this.flasher.Hide();
 	}
 
 	private void unlock()

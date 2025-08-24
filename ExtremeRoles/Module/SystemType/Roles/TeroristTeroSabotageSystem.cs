@@ -207,7 +207,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 	private readonly MinigameOption minigameOption;
 
 	private readonly ExtremeConsoleSystem consoleSystem;
-	private readonly FullScreenFlusherWithAudio flasher;
+	private readonly FullScreenRepeatFlasherWithAudio flasher;
 
 	private float syncTimer = 0.0f;
 
@@ -222,7 +222,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		this.minigameOption = option.MinigameOption;
 		this.isBlockOtherSabotage = isBlockOtherSabotage;
 		var audio = Sound.GetAudio(Sound.Type.TeroristSabotageAnnounce);
-		this.flasher = new FullScreenFlusherWithAudio(
+		this.flasher = new FullScreenRepeatFlasherWithAudio(
 			audio, new Color32(255, 25, 25, 50), 2.75f);
 	}
 
