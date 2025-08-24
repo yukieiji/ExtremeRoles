@@ -1,13 +1,10 @@
-using UnityEngine;
-
+﻿using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Extension.Manager;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
+using UnityEngine;
 using ArgException = System.ArgumentException;
 
 namespace ExtremeRoles.Module.Ability;
@@ -129,6 +126,13 @@ public class ExtremeAbilityButton
 		{
 			return;
 		}
+
+		if (ButtonLockSystem.IsAbilityButtonLock())
+		{
+			blockedUpdate();
+			return;
+		}
+
 		this.UpdateImp();
 	}
 
@@ -298,17 +302,20 @@ public class ExtremeAbilityButton
 
 	private void onClick()
 	{
-		if (Behavior.IsUse() &&
-			Behavior.TryUseAbility(Timer, State, out AbilityState newState))
+		if (ButtonLockSystem.IsAbilityButtonLock() ||
+			!Behavior.IsUse() ||
+			!Behavior.TryUseAbility(Timer, State, out AbilityState newState))
 		{
-			ExtremeRolesPlugin.Logger.LogInfo(
-				$"ExtremeAbilityButton : Clicking {this.Behavior.Graphic.Text}");
-			if (newState == AbilityState.CoolDown)
-			{
-				Behavior.AbilityOff();
-			}
-			setStatus(newState);
+			return;
 		}
+
+		ExtremeRolesPlugin.Logger.LogInfo(
+			$"ExtremeAbilityButton : Clicking {this.Behavior.Graphic.Text}");
+		if (newState == AbilityState.CoolDown)
+		{
+			Behavior.AbilityOff();
+		}
+		setStatus(newState);
 	}
 
 	private void setActive(bool active)
@@ -323,12 +330,12 @@ public class ExtremeAbilityButton
 		{
 			case AbilityState.None:
 			case AbilityState.Ready:
-				Timer = 0.0f;
+				this.Timer = 0.0f;
 				break;
 			case AbilityState.CoolDown:
 				if (State is not AbilityState.Stop)
 				{
-					Timer = Behavior.CoolTime;
+					this.Timer = Behavior.CoolTime;
 				}
 				break;
 			case AbilityState.Charging:
@@ -356,5 +363,22 @@ public class ExtremeAbilityButton
 		ExtremeRolesPlugin.Logger.LogInfo(
 			$"ExtremeAbilityButton : Status changed, {this.State} => {newState}");
 		State = newState;
+	}
+
+	private void blockedUpdate()
+	{
+		var grahic = this.Button.graphic;
+		grahic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
+		grahic.material.SetFloat(materialName, 1f);
+		switch (this.State)
+		{
+			case AbilityState.Activating:
+			case AbilityState.Charging:
+				this.Behavior.ForceAbilityOff();
+				setStatus(AbilityState.Ready);
+				break;
+			default:
+				break;
+		}
 	}
 }
