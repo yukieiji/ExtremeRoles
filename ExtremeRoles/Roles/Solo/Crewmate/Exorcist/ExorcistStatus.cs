@@ -46,6 +46,7 @@ public sealed class ExorcistStatus : IStatusModel
 		using (var op = RPCOperator.CreateCaller(
 			RPCOperator.Command.ExorcistOps))
 		{
+			op.WriteByte((byte)ExorcistRole.RpcOpsMode.AwakeFakeImp);
 			op.WriteByte(player.PlayerId);
 		}
 	}

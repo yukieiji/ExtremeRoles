@@ -1,17 +1,20 @@
+using System;
 using System.Collections.Generic;
 
 using Hazel;
+using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
+using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
@@ -36,6 +39,11 @@ public sealed class ExorcistRole :
 
 	private List<ButtonLockSystem> lockSystem = [];
 
+	public enum RpcOpsMode : byte
+	{
+		Alert,
+		AwakeFakeImp
+	}
 
 	public enum BlockMode
 	{
@@ -57,6 +65,8 @@ public sealed class ExorcistRole :
 		AwakeTaskGage,
 	}
 
+	private SpriteRenderer? flash;
+
 	public ExorcistRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Exorcist,
@@ -68,9 +78,70 @@ public sealed class ExorcistRole :
 
 	public static void RpcOps(in MessageReader reader)
 	{
+		var ops = (RpcOpsMode)reader.ReadByte();
 		byte player = reader.ReadByte();
 		var exorcist = ExtremeRoleManager.GetSafeCastedRole<ExorcistRole>(player);
-		exorcist?.status?.UpdateToFakeImpostor();
+		if (exorcist is null)
+		{
+			return;
+		}
+
+		switch (ops)
+		{
+			case RpcOpsMode.Alert:
+				var hudManager = HudManager.Instance;
+				if (hudManager == null ||
+					PlayerControl.LocalPlayer == null)
+				{
+					return;
+				}
+				var localRole = ExtremeRoleManager.GetLocalPlayerRole();
+				if (localRole.IsCrewmate() || !localRole.CanKill())
+				{
+					return;
+				}
+				if (exorcist.flash == null)
+				{
+					exorcist.flash = UnityEngine.Object.Instantiate(
+						 hudManager.FullScreen,
+						 hudManager.transform);
+					exorcist.flash.transform.localPosition = new Vector3(0f, 0f, 20f);
+					exorcist.flash.gameObject.SetActive(true);
+				}
+
+				Color32 color = new Color(0f, 0.8f, 0f);
+
+				exorcist.flash.enabled = true;
+
+				hudManager.StartCoroutine(
+					Effects.Lerp(1.0f, new Action<float>((p) =>
+					{
+						if (exorcist.flash == null)
+						{
+							return;
+						}
+						if (p < 0.5)
+						{
+							exorcist.flash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
+
+						}
+						else
+						{
+							exorcist.flash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+						}
+						if (p == 1f)
+						{
+							exorcist.flash.enabled = false;
+						}
+					}))
+				);
+				break;
+			case RpcOpsMode.AwakeFakeImp:
+				exorcist?.status?.UpdateToFakeImpostor();
+				break;
+			default:
+				break;
+		}
 	}
 
 	public void Update(PlayerControl rolePlayer)
@@ -132,10 +203,21 @@ public sealed class ExorcistRole :
 
 	public bool UseAbility()
 	{
+		if (PlayerControl.LocalPlayer == null)
+		{
+			return false;
+		}
+
 		this.target = this.tmpTarget;
 		foreach (var s in this.lockSystem)
 		{
 			s.RpcLock(ButtonLockSystem.Ops.Lock, (int)ButtonLockSystem.ConditionId.Exorcist);
+		}
+		using (var op = RPCOperator.CreateCaller(
+			RPCOperator.Command.ExorcistOps))
+		{
+			op.WriteByte((byte)RpcOpsMode.Alert);
+			op.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 		}
 		return true;
 	}
