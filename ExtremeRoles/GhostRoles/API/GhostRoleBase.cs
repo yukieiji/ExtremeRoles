@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -165,7 +165,7 @@ public abstract class GhostRoleBase
             isGhostRoleImpostor = targetGhostRole.IsImpostor();
         }
 
-        if ((targetRole.IsImpostor() || targetRole.FakeImposter || isGhostRoleImpostor) &&
+        if ((targetRole.IsImpostor() || targetRole.FakeImpostor || isGhostRoleImpostor) &&
             this.IsImpostor())
         {
             return Palette.ImpostorRed;

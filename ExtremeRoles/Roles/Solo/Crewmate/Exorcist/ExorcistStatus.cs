@@ -18,7 +18,7 @@ public sealed class ExorcistStatus : IStatusModel
 	{
 		this.awakeFakeImpTaskGage = awakeFakeImpTaskGage;
 		this.exorcist = exorcist;
-		this.exorcist.FakeImposter = awakeFakeImpTaskGage <= 0.0f;
+		this.exorcist.FakeImpostor = awakeFakeImpTaskGage <= 0.0f;
 		this.range = range;
 	}
 
@@ -30,8 +30,23 @@ public sealed class ExorcistStatus : IStatusModel
 		}
 		if (Player.GetPlayerTaskGage(player) >= this.awakeFakeImpTaskGage)
 		{
-			this.exorcist.FakeImposter = true;
-			this.awakeFakeImpTaskGage = -1.0f;
+			rpcUpdateToFakeImpostor(player);
+			UpdateToFakeImpostor();
+		}
+	}
+	
+	public void UpdateToFakeImpostor()
+	{
+		this.exorcist.FakeImpostor = true;
+		this.awakeFakeImpTaskGage = -1.0f;
+	}
+
+	private static void rpcUpdateToFakeImpostor(PlayerControl player)
+	{
+		using (var op = RPCOperator.CreateCaller(
+			RPCOperator.Command.ExorcistOps))
+		{
+			op.WriteByte(player.PlayerId);
 		}
 	}
 }
