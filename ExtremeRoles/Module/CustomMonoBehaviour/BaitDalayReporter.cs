@@ -17,12 +17,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 public sealed class BaitDalayReporter : MonoBehaviour
 {
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
-	private SpriteRenderer rend;
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
 	private TextMeshPro? text = null;
+	private readonly ScreenFlasher flasher = new ScreenFlasher(Color.clear, 0.75f, 0.5f, 0.5f);
 
-	private Coroutine? flushCorutine = null;
 	private Coroutine? delayCorutine = null;
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
@@ -34,21 +33,14 @@ public sealed class BaitDalayReporter : MonoBehaviour
 	public void Awake()
 	{
 		var hudManager = HudManager.Instance;
-
-		this.rend = Instantiate(
-			hudManager.FullScreen, hudManager.transform);
-		this.rend.transform.localPosition = new Vector3(0f, 0f, 20f);
-		this.rend.gameObject.SetActive(true);
 	}
 
 	public void FixedUpdate()
 	{
 		if (MeetingHud.Instance == null) { return; }
 
-		this.stopTargetCorutine(this.flushCorutine);
 		this.stopTargetCorutine(this.delayCorutine);
 
-		Destroy(this.rend);
 
 		if (this.text != null)
 		{
@@ -63,26 +55,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 		NetworkedPlayerInfo target,
 		float timer = 0.0f)
 	{
-		this.rend.enabled = true;
-
-		this.flushCorutine = this.StartCoroutine(
-			Effects.Lerp(1.0f, new FloatAction((p) =>
-			{
-				if (this.rend == null) { return; }
-
-				float progress = p < 0.5 ?　p :　(1 - p);
-				float alpha = Mathf.Clamp01(progress * 2 * 0.75f);
-
-				this.rend.color = new Color(
-					color.r, color.g,
-					color.b, alpha);
-
-				if (p == 1f)
-				{
-					this.rend.enabled = false;
-				}
-			}))
-		);
+		flasher.Flash(color);
 
 		var player = PlayerControl.LocalPlayer;
 		if (timer == 0)

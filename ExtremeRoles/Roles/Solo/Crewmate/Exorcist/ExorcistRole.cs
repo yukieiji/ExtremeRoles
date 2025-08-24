@@ -65,7 +65,7 @@ public sealed class ExorcistRole :
 		AwakeTaskGage,
 	}
 
-	private SpriteRenderer? flash;
+	private readonly ScreenFlasher flasher = new ScreenFlasher(new Color(0f, 0.8f, 0f), 0.75f, 0.5f, 0.5f);
 
 	public ExorcistRole() : base(
 		RoleCore.BuildCrewmate(
@@ -100,41 +100,7 @@ public sealed class ExorcistRole :
 				{
 					return;
 				}
-				if (exorcist.flash == null)
-				{
-					exorcist.flash = UnityEngine.Object.Instantiate(
-						 hudManager.FullScreen,
-						 hudManager.transform);
-					exorcist.flash.transform.localPosition = new Vector3(0f, 0f, 20f);
-					exorcist.flash.gameObject.SetActive(true);
-				}
-
-				Color32 color = new Color(0f, 0.8f, 0f);
-
-				exorcist.flash.enabled = true;
-
-				hudManager.StartCoroutine(
-					Effects.Lerp(1.0f, new Action<float>((p) =>
-					{
-						if (exorcist.flash == null)
-						{
-							return;
-						}
-						if (p < 0.5)
-						{
-							exorcist.flash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
-
-						}
-						else
-						{
-							exorcist.flash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
-						}
-						if (p == 1f)
-						{
-							exorcist.flash.enabled = false;
-						}
-					}))
-				);
+				exorcist.flasher.Flash();
 				break;
 			case RpcOpsMode.AwakeFakeImp:
 				exorcist?.status?.UpdateToFakeImpostor();
