@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -171,7 +171,7 @@ public sealed class Shutter : GhostRoleBase
         RightPlayerNameRate
     }
 
-    private readonly ScreenFlasher flasher = new ScreenFlasher(Color.white, 0.75f, 0.25f, 0.5f, 0.25f);
+    private readonly FullScreenFlasher flasher = new FullScreenFlasher(Color.white, 0.75f, 0.25f, 0.5f, 0.25f);
 #pragma warning disable CS8618
 	private GhostPhotoCamera photoCreater;
 	public Shutter() : base(
