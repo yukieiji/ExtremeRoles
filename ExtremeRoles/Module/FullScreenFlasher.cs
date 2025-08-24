@@ -85,7 +85,6 @@ public sealed class FullScreenFlasher
 	{
 		if (this.renderer != null)
 		{
-			UnityObject.Destroy(this.renderer);
 			UnityObject.Destroy(this.renderer.gameObject);
 		}
 	}
