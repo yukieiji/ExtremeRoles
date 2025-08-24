@@ -74,9 +74,10 @@ public static class RPCOperator
         TeleporterSetPortal,
 		BaitAwakeRole,
 		SummonerOps,
+		ExorcistOps,
 
-        // インポスター
-        CarrierAbility,
+		// インポスター
+		CarrierAbility,
         PainterPaintBody,
         OverLoaderSwitchAbility,
         CrackerCrackDeadBody,
@@ -601,7 +602,12 @@ public static class RPCOperator
 			rolePlayerId, targetPlayerId, x, y, isDead);
 	}
 
-    public static void CarrierAbility(
+	public static void ExorcistRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Crewmate.Exorcist.ExorcistRole.RpcOps(reader);
+	}
+
+	public static void CarrierAbility(
         byte callerId, float x, float y,
         byte targetId, bool deadBodyPickUp)
     {

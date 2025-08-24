@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 using UnityEngine;
@@ -268,7 +268,7 @@ public sealed class Heretic :
 		SingleRoleBase targetRole, byte targetPlayerId)
 	{
 		if (this.isSeeImpostorNow &&
-			(targetRole.IsImpostor() || targetRole.FakeImposter))
+			(targetRole.IsImpostor() || targetRole.FakeImpostor))
 		{
 			return Palette.ImpostorRed;
 		}

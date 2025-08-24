@@ -56,7 +56,7 @@ public sealed class ServantRole :
 		this.queenPlayerId = queenPlayerId;
 
 		var core = baseRole.Core;
-		FakeImposter = core.Team == ExtremeRoleType.Impostor;
+		FakeImpostor = core.Team == ExtremeRoleType.Impostor;
 
 		var id = core.Id;
 

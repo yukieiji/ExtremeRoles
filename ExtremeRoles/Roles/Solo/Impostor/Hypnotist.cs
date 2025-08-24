@@ -958,7 +958,7 @@ public sealed class Doll :
         this.dollPlayerId = dollPlayerId;
         this.hypnotistPlayerId = hypnotistPlayerId;
         this.hypnotist = parent;
-        this.FakeImposter = true;
+        this.FakeImpostor = true;
         this.canUseCrakingModule = new HashSet<AbilityType>();
         this.prevKillState = false;
 
