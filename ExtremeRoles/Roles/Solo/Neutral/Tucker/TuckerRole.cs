@@ -71,7 +71,7 @@ public sealed class TuckerRole :
 	private byte target;
 	private int targetShadowId;
 	private RemoveInfo? removeInfo;
-	private readonly ScreenFlasher flasher = new ScreenFlasher(Color.clear, 0.75f, 0.5f, 0.5f);
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.TuckerMerdedoie, 0.75f, 0.5f, 0.5f);
 
 	private HashSet<byte> chimera = new HashSet<byte>();
 
@@ -209,7 +209,9 @@ public sealed class TuckerRole :
 	{ }
 
 	public void ResetOnMeetingStart()
-	{ }
+	{
+		this.flasher.Hide();
+	}
 
 	public void OnResetChimera(byte chimeraId, float killCoolTime)
 	{
@@ -527,7 +529,7 @@ public sealed class TuckerRole :
 			return;
 		}
 
-		flasher.Flash(Core.Color);
+		flasher.Flash();
 	}
 
 	private void disableShadow(byte playerId)

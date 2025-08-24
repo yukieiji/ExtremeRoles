@@ -363,6 +363,7 @@ public sealed class Photographer :
 
     public void ResetOnMeetingStart()
     {
+		this.flasher.Hide();
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)

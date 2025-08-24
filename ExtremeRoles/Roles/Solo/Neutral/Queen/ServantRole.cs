@@ -29,7 +29,7 @@ public sealed class ServantRole :
 	public ExtremeAbilityButton? Button { get; set; }
 
 	private byte queenPlayerId;
-	private readonly ScreenFlasher flasher = new ScreenFlasher(new Color(0f, 0.8f, 0f), 0.75f, 0.5f, 0.5f);
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(new Color(0f, 0.8f, 0f), 0.75f, 0.5f, 0.5f);
 
 	public override IOptionLoader Loader { get; }
 	public override IStatusModel Status => status;
@@ -110,11 +110,8 @@ public sealed class ServantRole :
 			return;
 		}
 
-		Color? flashColor = null;
-		if (source.PlayerId == queenPlayerId)
-		{
-			flashColor = Core.Color;
-		}
+		Color? flashColor = source.PlayerId == queenPlayerId ? 
+			this.Core.Color : null;
 		flasher.Flash(flashColor);
 	}
 
@@ -132,6 +129,7 @@ public sealed class ServantRole :
 
 	public void ResetOnMeetingStart()
 	{
+		this.flasher.Hide();
 	}
 
 	public bool UseAbility()

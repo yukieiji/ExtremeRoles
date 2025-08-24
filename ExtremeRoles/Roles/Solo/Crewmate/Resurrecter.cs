@@ -57,7 +57,8 @@ public sealed class Resurrecter :
     public enum ResurrecterRpcOps : byte
     {
         UseResurrect,
-    }
+		ResetFlash,
+	}
 
     private bool awakeRole;
     private float awakeTaskGage;
@@ -83,29 +84,36 @@ public sealed class Resurrecter :
     private float resetTaskGage;
     private TMPro.TextMeshPro resurrectText;
 
-    private readonly ScreenFlasher flasher = new ScreenFlasher(Color.clear, 0.75f, 0.5f, 0.5f);
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.ResurrecterBlue, 0.75f, 0.5f, 0.5f);
 
     public Resurrecter() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Resurrecter,
 			ColorPalette.ResurrecterBlue),
         false, true, false, false)
-    { }
+    {
+	}
 
     public static void RpcAbility(ref MessageReader reader)
     {
-        ResurrecterRpcOps ops = (ResurrecterRpcOps)reader.ReadByte();
+		var ops = (ResurrecterRpcOps)reader.ReadByte();
         byte resurrecterPlayerId = reader.ReadByte();
 
-        switch (ops)
+		var resurrecter = ExtremeRoleManager.GetSafeCastedRole<Resurrecter>(resurrecterPlayerId);
+		if (resurrecter == null)
+		{ 
+			return;
+		}
+
+		switch (ops)
         {
             case ResurrecterRpcOps.UseResurrect:
-                Resurrecter resurrecter = ExtremeRoleManager.GetSafeCastedRole<Resurrecter>(
-                    resurrecterPlayerId);
-                if (resurrecter == null) { return; }
                 UseResurrect(resurrecter);
                 break;
-            default:
+			case ResurrecterRpcOps.ResetFlash:
+				resurrecter.flasher.Hide();
+				break;
+			default:
                 break;
         }
     }
@@ -128,7 +136,15 @@ public sealed class Resurrecter :
         {
             this.resurrectText.gameObject.SetActive(false);
         }
-    }
+
+		using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.ResurrecterRpc))
+		{
+			caller.WriteByte((byte)ResurrecterRpcOps.ResetFlash);
+			caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+		}
+		this.flasher.Hide();
+	}
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
@@ -155,7 +171,7 @@ public sealed class Resurrecter :
             return;
         }
 
-        flasher.Flash(this.Core.Color);
+        flasher.Flash();
     }
 
     public string GetFakeOptionString() => "";
@@ -204,7 +220,10 @@ public sealed class Resurrecter :
             }
         }
 
-        if (this.isResurrected) { return; }
+        if (this.isResurrected)
+		{ 
+			return;
+		}
 
         if (rolePlayer.Data.IsDead &&
             this.activateResurrectTimer &&

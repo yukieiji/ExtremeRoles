@@ -77,7 +77,7 @@ public sealed class FullScreenFlasher
 	{
 		if (this.renderer != null)
 		{
-			this.renderer.enabled = false; ;
+			this.renderer.enabled = false;
 		}
 	}
 
