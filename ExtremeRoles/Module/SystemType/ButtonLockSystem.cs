@@ -66,9 +66,9 @@ public sealed class ButtonLockSystem(ExtremeSystemType type) : IExtremeSystemTyp
 		});
 	}
 
-	public void AddCondition(int id, Func<bool> condition)
+	public void AddCondtion(int id, Func<bool> condtion)
 	{
-		this.blockCondition[id] = condition;
+		this.blockCondition[id] = condtion;
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
