@@ -37,6 +37,8 @@ public enum ExtremeSystemType : byte
 	OnemanMeetingSystem,
 
 	AbilityButtonLockSystem,
+	ReportButtonLockSystem,
+	KillButtonLockSystem,
 
 	WispTorch,
 
