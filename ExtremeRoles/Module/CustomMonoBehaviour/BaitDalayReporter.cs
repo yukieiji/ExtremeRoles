@@ -37,7 +37,10 @@ public sealed class BaitDalayReporter : MonoBehaviour
 
 	public void FixedUpdate()
 	{
-		if (MeetingHud.Instance == null) { return; }
+		if (MeetingHud.Instance == null)
+		{
+			return;
+		}
 
 		this.stopTargetCorutine(this.delayCorutine);
 

@@ -105,7 +105,10 @@ public sealed class ServantRole :
 
 		if (MeetingHud.Instance ||
 			source.PlayerId == target.PlayerId ||
-			ExtremeRoleManager.GameRole[source.PlayerId] == this) { return; }
+			ExtremeRoleManager.GameRole[source.PlayerId] == this)
+		{
+			return;
+		}
 
 		Color? flashColor = null;
 		if (source.PlayerId == queenPlayerId)
