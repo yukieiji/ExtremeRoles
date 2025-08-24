@@ -150,7 +150,10 @@ public sealed class Resurrecter :
         }
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
-        if (!role.CanKill() || role.IsCrewmate()) { return; }
+        if (!role.CanKill() || role.IsCrewmate())
+        {
+            return;
+        }
 
         flasher.Flash(this.Core.Color);
     }
