@@ -221,6 +221,7 @@ public sealed class Shutter : GhostRoleBase
 
 	protected override void OnMeetingStartHook()
 	{
+		this.flasher.Hide();
 		foreach (var photo in this.photoCreater.AllPhoto)
 		{
 			photo.IsRpc = true;

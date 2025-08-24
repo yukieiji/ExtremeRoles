@@ -19,7 +19,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 	private TextMeshPro? text = null;
 	private Coroutine? delayCorutine = null;
 
-	private readonly FullScreenFlasher flasher = new FullScreenFlasher(Color.clear, 0.75f, 0.5f, 0.5f);
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.BaitCyan, 0.75f, 0.5f, 0.5f);
 
 	public BaitDalayReporter(IntPtr ptr) : base(ptr)
 	{
@@ -45,11 +45,10 @@ public sealed class BaitDalayReporter : MonoBehaviour
 	}
 
 	public void StartReportTimer(
-		Color color,
 		NetworkedPlayerInfo target,
 		float timer = 0.0f)
 	{
-		flasher.Flash(color);
+		flasher.Flash();
 
 		var player = PlayerControl.LocalPlayer;
 		if (timer == 0)
