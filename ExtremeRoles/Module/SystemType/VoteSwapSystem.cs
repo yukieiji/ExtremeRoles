@@ -1,17 +1,16 @@
+using BepInEx.Unity.IL2CPP.Utils.Collections;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Resources;
+using Hazel;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
-using Hazel;
 using UnityEngine;
-using BepInEx.Unity.IL2CPP.Utils.Collections;
-
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Resources;
-
+using static UnityEngine.GraphicsBuffer;
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
+
 
 #nullable enable
 
@@ -91,7 +90,17 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			allAnime.Add(tAnime);
 		}
 		instance.StartCoroutine(Effects.All(allAnime.ToArray()));
+	}
 
+	public static bool TryGetSwapTarget(byte source, out byte target)
+	{
+		if (!TryGet(out var system))
+		{
+			target = byte.MaxValue;
+			return false;
+		}
+		var swapInfo = system.getSwapInfo();
+		return swapInfo.TryGetValue(source, out target);
 	}
 
 	public void RpcSwapVote(byte source, byte target, ShowOps show)

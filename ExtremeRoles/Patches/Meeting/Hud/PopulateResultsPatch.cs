@@ -218,15 +218,93 @@ public static class MeetingHudPopulateResultsPatch
 			return;
 		}
 
-		byte effectiveTargetId = vote.TargetId;
-		var targetTransform = 
-			playerAreaMap.TryGetValue(vote.TargetId, out var targetArea) ? 
+		var targetTransform =
+			playerAreaMap.TryGetValue(vote.TargetId, out var targetArea) ?
 			targetArea.transform : instance.SkippedVoting.transform;
+
+		var swapTarget =
+			VoteSwapSystem.TryGetSwapTarget(vote.TargetId, out byte newTarget) &&
+			playerAreaMap.TryGetValue(newTarget, out var swapTargetArea) ?
+			swapTargetArea.transform : null;
 
 		for (int i = 0; i < vote.Count; i++)
 		{
 			int index = startIndex + i;
-			instance.BloopAVoteIcon(voterInfo, index, targetTransform);
+			if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+			{
+				instance.BloopAVoteIcon(voterInfo, index, targetTransform);
+				return;
+			}
+
+			// swapTargetがある場合
+			if (swapTarget != null)
+			{
+				// SwapTargetからアニメーションを開始させる
+				var voteRend = createVoteRenderer(instance, voterInfo, index, targetTransform);
+				var swapper = targetTransform.gameObject.TryAddComponent<VoteSwapSpreader>();
+				swapper.Add(voteRend, swapTarget);
+			}
+			else if (targetTransform.TryGetComponent<VoteSpreader>(out var spreader))
+			{
+				var voteRend = createVoteRenderer(instance, voterInfo, index, targetTransform);
+				spreader.AddVote(voteRend);
+			}
 		}
+	}
+
+	private static SpriteRenderer createVoteRenderer(MeetingHud instance, NetworkedPlayerInfo voter, int index, Transform target)
+	{
+		var spriteRenderer = UnityObject.Instantiate(instance.PlayerVotePrefab);
+
+		var role = ExtremeRoleManager.GetLocalPlayerRole();
+
+		bool canSeeVote =
+			(role is Marlin marlin && marlin.CanSeeVote) ||
+			(role is Assassin assassin && assassin.CanSeeVote);
+
+		if (!GameManager.Instance.LogicOptions.GetAnonymousVotes() ||
+			canSeeVote ||
+			(
+				PlayerControl.LocalPlayer.Data.IsDead &&
+				ClientOption.Instance.GhostsSeeRole.Value &&
+				!isVoteSeeBlock(role)
+			))
+		{
+			PlayerMaterial.SetColors(voter.DefaultOutfit.ColorId, spriteRenderer);
+		}
+		else
+		{
+			PlayerMaterial.SetColors(Palette.DisabledGrey, spriteRenderer);
+		}
+
+		spriteRenderer.transform.SetParent(target);
+		spriteRenderer.transform.localScale = Vector3.zero;
+
+		if (target.TryGetComponent<PlayerVoteArea>(out var component))
+		{
+			spriteRenderer.material.SetInt(PlayerMaterial.MaskLayer, component.MaskLayer);
+		}
+
+		instance.StartCoroutine(
+			Effects.Bloop(
+				(float)index * 0.3f,
+				spriteRenderer.transform, 1f, 0.5f));
+
+		return spriteRenderer;
+	}
+
+	private static bool isVoteSeeBlock(SingleRoleBase role)
+	{
+		if (ExtremeGhostRoleManager.GameRole.ContainsKey(
+				PlayerControl.LocalPlayer.PlayerId) ||
+			PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+		{
+			return true;
+		}
+		else if (CommomSystem.IsForceInfoBlockRoleWithoutAssassin(role))
+		{
+			return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
+		}
+		return role.IsBlockShowMeetingRoleInfo();
 	}
 }
