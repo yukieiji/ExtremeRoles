@@ -1,13 +1,15 @@
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
-using Hazel;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
+using Hazel;
 using UnityEngine;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Resources;
+
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
-
-
 
 #nullable enable
 
@@ -203,18 +205,23 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			list = [];
 			this.img[id] = list;
 		}
-		var img = createImg(pva, list.Count);
+		var img = createImg(pva, list.Count, type);
 		img.color = color;
 		list.Add(img);
 	}
 
-	private static SpriteRenderer createImg(PlayerVoteArea pva, int index)
+	private static SpriteRenderer createImg(PlayerVoteArea pva, int index, ImgType type)
 	{
 		var img = UnityEngine.Object.Instantiate(
 			pva.Background, pva.LevelNumberText.transform);
 		img.name = $"swap_img_{pva.TargetPlayerId}_{index}";
-		img.sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
-			Resources.ObjectPath.CaptainSpecialVoteCheck);
+		img.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+			ObjectPath.CommonTextureAsset,
+			string.Format(
+				ObjectPath.CommonImagePathFormat,
+				type is ImgType.Source ? 
+					ObjectPath.VoteSwapSource :
+					ObjectPath.VoteSwapTarget));
 		img.transform.localPosition = new Vector3(7.2f + 0.05f * index, -0.5f, -2.75f);
 		img.transform.localScale = new Vector3(1.0f, 3.5f, 1.0f);
 		img.gameObject.layer = 5;

@@ -60,7 +60,7 @@ public sealed class BarterRole :
 
 	private string roleNamePrefix = "";
 
-	public Sprite AbilityImage => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
+	public Sprite AbilityImage => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Barter);
 
 	private const float defaultXPos = -2.85f;
 	private const float subRoleXPos = -1.5f;
@@ -178,8 +178,11 @@ public sealed class BarterRole :
 					sourceMark = UnityEngine.Object.Instantiate(
 						instance.Background, instance.LevelNumberText.transform);
 					sourceMark.name = $"captain_SpecialVoteCheckMark_{target}";
-					sourceMark.sprite = UnityObjectLoader.LoadSpriteFromResources(
-						ObjectPath.CaptainSpecialVoteCheck);
+					sourceMark.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+						ObjectPath.CommonTextureAsset,
+						string.Format(
+							ObjectPath.CommonImagePathFormat, 
+							ObjectPath.VoteSwapSource));
 					sourceMark.transform.localPosition = new Vector3(7.25f, -0.5f, -4f);
 					sourceMark.transform.localScale = new Vector3(1.0f, 3.5f, 1.0f);
 					sourceMark.gameObject.layer = 5;
@@ -212,20 +215,20 @@ public sealed class BarterRole :
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
+		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
+		CreateKillerOption(factory, imposterSetting);
+
 		factory.CreateIntOption(
 			Option.AwakeTaskRate,
 			70, 0, 100, 10,
 			format: OptionUnit.Percentage);
 
-		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
-
 		factory.CreateIntOption(
 			Option.AwakeDeadPlayerNum,
-			7, 0, 12, 1, imposterSetting);
+			7, 0, 12, 1);
 		factory.CreateIntOption(
 			Option.AwakeKillNum,
-			2, 0, 5, 1, imposterSetting);
+			2, 0, 5, 1);
 
 		factory.CreateBoolOption(
 			Option.CanCallMeeting,
