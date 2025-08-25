@@ -79,8 +79,8 @@ public sealed class ButtonLockSystem(ExtremeSystemType type) : IExtremeSystemTyp
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
 		var ops = (Ops)msgReader.ReadByte();
-		int condtionId = msgReader.ReadPackedInt32();
-		if (!blockCondition.TryGetValue(condtionId, out var func))
+		int conditionId = msgReader.ReadPackedInt32();
+		if (!blockCondition.TryGetValue(conditionId, out var func))
 		{
 			return;
 		}
@@ -92,11 +92,11 @@ public sealed class ButtonLockSystem(ExtremeSystemType type) : IExtremeSystemTyp
 				case Ops.Lock:
 					if (func.Invoke())
 					{
-						this.blockedConditionId.Add(condtionId);
+						this.blockedConditionId.Add(conditionId);
 					}
 					break;
 				case Ops.Unlock:
-					this.blockedConditionId.Remove(condtionId);
+					this.blockedConditionId.Remove(conditionId);
 					break;
 				default:
 					break;
