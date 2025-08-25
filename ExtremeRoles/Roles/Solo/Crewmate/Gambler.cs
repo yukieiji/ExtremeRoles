@@ -70,6 +70,7 @@ public sealed class Gambler :
 
     public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
     {
+		// Gamblerは見た目は変更しないのでそのままにする
 		yield break;
     }
 
