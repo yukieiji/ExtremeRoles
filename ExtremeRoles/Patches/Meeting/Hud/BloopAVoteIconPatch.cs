@@ -1,11 +1,14 @@
+using AmongUs.GameOptions;
+
 using HarmonyLib;
 using UnityEngine;
 
-using AmongUs.GameOptions;
-
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.Combination.Avalon;
+
 
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
 using ExtremeRoles.Roles.Combination.Avalon;
@@ -25,26 +28,18 @@ public static class MeetingHudBloopAVoteIconPatch
 		[HarmonyArgument(1)] int index, [HarmonyArgument(2)] Transform parent)
 	{
 
-		if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		{
+			return true;
+		}
 
 		SpriteRenderer spriteRenderer = Object.Instantiate(__instance.PlayerVotePrefab);
 
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-		bool canSeeVote = false;
-
-		var mariln = role as Marlin;
-		var assassin = role as Assassin;
-
-		if (mariln != null)
-		{
-			canSeeVote = mariln.CanSeeVote;
-		}
-		if (assassin != null)
-		{
-			canSeeVote = assassin.CanSeeVote;
-		}
-
+		bool canSeeVote =
+			(role is Marlin marlin && marlin.CanSeeVote) ||
+			(role is Assassin assassin && assassin.CanSeeVote);
 
 		if (!GameManager.Instance.LogicOptions.GetAnonymousVotes() ||
 			canSeeVote ||

@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 
 using System;
 using System.Collections.Generic;
@@ -260,7 +260,7 @@ public class OptionCategoryFactory(
 		{
 			throw new ArgumentException("Can't convert string");
 		}
-		return !color.HasValue ? optionName : Design.ColoedString(color.Value, optionName);
+		return !color.HasValue ? optionName : Design.ColoredString(color.Value, optionName);
 	}
 
 	protected static IEnumerable<string> GetEnumString<T>()

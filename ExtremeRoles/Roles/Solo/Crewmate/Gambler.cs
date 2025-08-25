@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Meeting;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -27,6 +28,9 @@ public sealed class Gambler :
     private int minVoteNum;
     private int maxVoteNum;
 
+    private byte votedFor = PlayerVoteArea.HasNotVoted;
+    private int voteCount = 1;
+
     public Gambler() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Gambler,
@@ -39,8 +43,11 @@ public sealed class Gambler :
         ref Dictionary<byte, byte> voteTarget,
         ref Dictionary<byte, int> voteResult)
     {
-        if (!voteTarget.TryGetValue(rolePlayerId, out byte voteTo) ||
-            !voteResult.TryGetValue(voteTo, out int curVoteNum)) { return; }
+        if (!voteTarget.TryGetValue(rolePlayerId, out votedFor) ||
+            !voteResult.TryGetValue(votedFor, out int curVoteNum))
+        {
+            return;
+        }
 
         int[] voteArray = new int[100];
         int dualVoteRate = (int)Math.Floor((100 - this.normalVoteRate) / 2.0d);
@@ -50,22 +57,35 @@ public sealed class Gambler :
         Array.Fill(voteArray, this.minVoteNum, this.normalVoteRate, zeroVoteRate);
         Array.Fill(voteArray, this.maxVoteNum, this.normalVoteRate + zeroVoteRate, dualVoteRate);
 
-        int playerVoteNum = voteArray[RandomGenerator.Instance.Next(100)];
+        this.voteCount = voteArray[RandomGenerator.Instance.Next(100)];
 
-        if (playerVoteNum == 1) { return; }
+        if (this.voteCount == 1)
+        {
+            return;
+        }
 
+        int newVotedNum = curVoteNum + voteCount - 1;
+        voteResult[this.votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
         int newVotedNum = curVoteNum + playerVoteNum - 1;
         voteResult[voteTo] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
 
-    public void ModifiedVoteAnime(
-        MeetingHud instance,
-        NetworkedPlayerInfo rolePlayer,
-        ref Dictionary<byte, int> voteIndex)
-    { }
+    public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
+    {
+        if (this.voteCount != 1 &&
+			this.votedFor != PlayerVoteArea.HasNotVoted &&
+			this.votedFor != PlayerVoteArea.MissedVote &&
+			this.votedFor != PlayerVoteArea.DeadVote)
+        {
+            yield return new VoteInfo(rolePlayer.PlayerId, votedFor, voteCount - 1);
+        }
+    }
 
     public void ResetModifier()
-    { }
+    {
+        votedFor = PlayerVoteArea.HasNotVoted;
+        voteCount = 1;
+    }
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {

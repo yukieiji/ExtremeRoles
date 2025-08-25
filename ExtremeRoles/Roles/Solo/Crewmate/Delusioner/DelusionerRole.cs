@@ -24,7 +24,7 @@ public sealed class DelusionerRole :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
-	IRoleVoteModifier
+	IRoleHookVoteEnd
 {
     public int Order => (int)IRoleVoteModifier.ModOrder.DelusionerCheckVote;
 
@@ -119,18 +119,10 @@ public sealed class DelusionerRole :
         return IRoleAbility.IsCommonUse();
     }
 
-    public void ModifiedVote(
-        byte rolePlayerId,
-        ref Dictionary<byte, byte> voteTarget,
-        ref Dictionary<byte, int> voteResult)
-    {
-        return;
-    }
-
-    public void ModifiedVoteAnime(
+    public void HookVoteEnd(
         MeetingHud instance,
         NetworkedPlayerInfo rolePlayer,
-        ref Dictionary<byte, int> voteIndex)
+        IReadOnlyDictionary<byte, int> voteIndex)
     {
         if (voteIndex.TryGetValue(
             rolePlayer.PlayerId,
@@ -220,7 +212,7 @@ public sealed class DelusionerRole :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.White, Tr.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
@@ -247,7 +239,7 @@ public sealed class DelusionerRole :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.White,
                 $"{GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
         }
@@ -261,7 +253,7 @@ public sealed class DelusionerRole :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.CrewmateBlue,
                 PlayerControl.LocalPlayer.Data.Role.Blurb);
         }

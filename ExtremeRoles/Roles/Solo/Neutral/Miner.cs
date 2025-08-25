@@ -320,7 +320,7 @@ public sealed class Miner :
                     // [AUER32-ACM] {プレイヤー名} 100↑
                     // AmongUs ExtremeRoles v3.2.0.0 - AntiCrewmateMine
                     this.killLogger.AddText(
-                        $"[AUER32-ACM] {Helper.Design.ColoedString(new Color32(255, 153, 51, byte.MaxValue), killPlayer.DefaultOutfit.PlayerName)} 100↑");
+                        $"[AUER32-ACM] {Helper.Design.ColoredString(new Color32(255, 153, 51, byte.MaxValue), killPlayer.DefaultOutfit.PlayerName)} 100↑");
                 }
             }
         }

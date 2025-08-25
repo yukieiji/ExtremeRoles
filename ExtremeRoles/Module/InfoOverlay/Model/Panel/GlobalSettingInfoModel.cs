@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 
 using ExtremeRoles.Helper;
@@ -130,7 +130,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		RoleSpawnOption minOptKey,
 		RoleSpawnOption maxOptKey)
 	{
-		string optionName = Design.ColoedString(
+		string optionName = Design.ColoredString(
 			new UnityEngine.Color(204f / 255f, 204f / 255f, 0, 1f),
 			Tr.GetString(transKey));
 		int min = getSpawnOptionValue(category, minOptKey);

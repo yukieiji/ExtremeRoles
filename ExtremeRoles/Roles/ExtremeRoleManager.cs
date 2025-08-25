@@ -1,9 +1,18 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+
 using AmongUs.GameOptions;
+
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Combination.Avalon;
+using ExtremeRoles.Roles.Combination.Barter;
+using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Combination.Avalon;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Combination.DetectiveOffice;
@@ -21,10 +30,6 @@ using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using ExtremeRoles.Roles.Solo.Neutral.Yoko;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ExtremeRoles.Roles;
 
@@ -52,6 +57,7 @@ public enum ExtremeRoleId : int
     Mover,
 	Accelerator,
 	Skater,
+	Barter,
 
 	SpecialCrew,
     Sheriff,
@@ -167,6 +173,7 @@ public enum CombinationRoleType : byte
     Mover,
 	Accelerator,
 	Skater,
+	Barter,
 
 	Traitor,
 }
@@ -246,6 +253,7 @@ public enum NeutralSeparateTeam
     Kids,
 	Tucker,
 	Monika,
+
 	JackalSub,
 	YandereSub,
 	QueenSub
@@ -375,6 +383,7 @@ public static class ExtremeRoleManager
             {(byte)CombinationRoleType.Mover          , new MoverManager()},
 			{(byte)CombinationRoleType.Accelerator    , new AcceleratorManager()},
 			{(byte)CombinationRoleType.Skater         , new SkaterManager()},
+			{(byte)CombinationRoleType.Barter         , new BarterManager()},
 			{(byte)CombinationRoleType.Traitor        , new TraitorManager()},
         }.ToImmutableDictionary();
 
