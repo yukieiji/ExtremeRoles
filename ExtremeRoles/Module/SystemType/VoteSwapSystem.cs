@@ -58,7 +58,6 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 	public static void AnimateSwap(
 		MeetingHud instance,
-		Dictionary<byte, int> voteInfo,
 		Dictionary<byte, PlayerVoteArea> pvaCache)
 	{
 		if (!TryGet(out var system))
@@ -66,7 +65,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			return;
 		}
 
-		var swapInfo = system.getSwapInfo(voteInfo);
+		var swapInfo = system.getSwapInfo();
 		var allAnime = new List<Il2CppIEnumerator>(swapInfo.Count * 2);
 
 		foreach (var (s, t) in swapInfo)
@@ -161,22 +160,39 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 	private IReadOnlyDictionary<byte, int> swap(Dictionary<byte, int> voteInfo)
 	{
-		var swapInfo = getSwapInfo(voteInfo);
+		var swapInfo = getSwapInfo();
 
-		var finalData = new Dictionary<byte, int>(voteInfo.Count);
+		var tempData = new Dictionary<byte, int>(voteInfo.Count);
 		foreach (var (s, t) in swapInfo)
 		{
-			finalData[s] = voteInfo[t];
+			if (!voteInfo.TryGetValue(t, out int val))
+			{
+				val = 0;
+			}
+			tempData[s] = val;
+		}
+		var finalData = new Dictionary<byte, int>(tempData.Count);
+		foreach (var (t, v) in tempData)
+		{
+			if (v > 0)
+			{
+				finalData[t] = v;
+			}
 		}
 
 		return finalData;
 	}
 
-	private IReadOnlyDictionary<byte, byte> getSwapInfo(Dictionary<byte, int> voteInfo)
+	private IReadOnlyDictionary<byte, byte> getSwapInfo()
 	{
+		if (this.pva is null)
+		{
+			return new Dictionary<byte, byte>();
+		}
+
 		if (this.cache is null)
 		{
-			this.cache = voteInfo.Keys.ToDictionary(key => key, key => key);
+			this.cache = this.pva.Keys.ToDictionary(key => key, key => key);
 
 			// 2. 各スワップ操作をシミュレートし、マップの値を更新していく
 			foreach (var (s, t) in this.swapList)

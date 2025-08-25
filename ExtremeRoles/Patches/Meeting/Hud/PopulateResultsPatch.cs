@@ -194,7 +194,7 @@ public static class MeetingHudPopulateResultsPatch
 			finalVoteCount[target] = curTargetCount + vote.Count;
 		}
 
-		VoteSwapSystem.AnimateSwap(__instance, finalVoteCount, playerAreaMap);
+		VoteSwapSystem.AnimateSwap(__instance, playerAreaMap);
 
 		// --- Final Hook Call ---
 		foreach (var (role, player) in playerRoleInfo.Hook)
