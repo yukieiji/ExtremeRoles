@@ -1,14 +1,14 @@
-using BepInEx.Unity.IL2CPP.Utils.Collections;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Resources;
-using Hazel;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
+using Hazel;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Resources;
+
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
 
 
