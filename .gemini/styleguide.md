@@ -20,7 +20,7 @@
 
 ## クラス
 * **継承をより委譲** 基本的にクラスはsealedをつけてシールし、継承を考える前に委譲できないかを考える
-* **不必要なnew** 不必要なnewを防ぐため、インスタンス変数が無いクラスstaicをつけなるべくstaticクラス化する
+* **不必要なnew** 不必要なnewを防ぐため、インスタンス変数が無いクラスstaticをつけなるべくstaticクラス化する
 
 ## 型
 * **var:** 組み込み型は型を使用し、varは型が確実にわかる時に使用する
@@ -101,8 +101,8 @@
 * **名前空間の宣言:** ファイルスコープ名前空間を使用する
 
     ```csharp
-    using System.Collection.Generic;
-    using System.Ling;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using InnerNet;
 
@@ -119,7 +119,7 @@
 # 例
 
 ```csharp
-using System.Collection.Generic;
+using System.Collections.Generic;
 
 using SemanticVersioning;
 
