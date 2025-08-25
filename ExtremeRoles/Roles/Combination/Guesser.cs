@@ -55,7 +55,7 @@ public sealed class Guesser :
     }
 
     public override string RoleName =>
-        string.Concat(this.roleNamePrefix, this.RawRoleName);
+        string.Concat(this.roleNamePrefix, this.Core.Name);
 
     private bool canGuessNoneRole;
 
@@ -182,7 +182,7 @@ public sealed class Guesser :
                 }
 
                 ExtremeRoleId exId = (ExtremeRoleId)id;
-                ExtremeRoleType team = role.Team;
+                ExtremeRoleType team = role.Core.Team;
 
                 // クイーンとサーヴァントとジャッカルとサイドキックはニュートラルの最後に追加する(役職のパターンがいくつかあるため)
                 if (exId != ExtremeRoleId.Queen &&
@@ -268,7 +268,7 @@ public sealed class Guesser :
                     }
                     if (roleMng is FlexibleCombinationRoleManagerBase flexMng)
                     {
-                        add(flexMng.BaseRole.Id, queenTeam, servantId);
+                        add(flexMng.BaseRole.Core.Id, queenTeam, servantId);
                     }
                     else
                     {
@@ -279,7 +279,7 @@ public sealed class Guesser :
 								continue;
 							}
 
-							add(role.Id, queenTeam, servantId);
+							add(role.Core.Id, queenTeam, servantId);
                         }
                     }
                 }
@@ -313,8 +313,8 @@ public sealed class Guesser :
                 if (roleMng is FlexibleCombinationRoleManagerBase flexMng &&
                     isNotTraitor)
                 {
-                    ExtremeRoleType team = flexMng.BaseRole.Team;
-                    ExtremeRoleId baseRoleId = flexMng.BaseRole.Id;
+                    ExtremeRoleType team = flexMng.BaseRole.Core.Team;
+                    ExtremeRoleId baseRoleId = flexMng.BaseRole.Core.Id;
 
                     if (multiAssign)
                     {
@@ -352,15 +352,15 @@ public sealed class Guesser :
                 {
                     foreach (var role in roleMng.Roles)
                     {
-                        ExtremeRoleType team = role.Team;
-                        listAdd(role.Id, team, this.separetedRoleId[team]);
+                        ExtremeRoleType team = role.Core.Team;
+                        listAdd(role.Core.Id, team, this.separetedRoleId[team]);
                     }
                 }
                 else
                 {
                     foreach (var role in roleMng.Roles)
                     {
-                        add(role.Id, role.Team);
+                        add(role.Core.Id, role.Core.Team);
                     }
                 }
             }
@@ -394,10 +394,9 @@ public sealed class Guesser :
 
 	public Guesser(
         ) : base(
-            ExtremeRoleId.Guesser,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Guesser.ToString(),
-            ColorPalette.GuesserRedYellow,
+			RoleCore.BuildCrewmate(
+				ExtremeRoleId.Guesser,
+				ColorPalette.GuesserRedYellow),
             false, true, false, false,
             tab: OptionTab.CombinationTab)
     { }
@@ -424,7 +423,7 @@ public sealed class Guesser :
             return;
         }
 
-        ExtremeRoleId roleId = targetRole.Id;
+        ExtremeRoleId roleId = targetRole.Core.Id;
         ExtremeRoleId anotherRoleId = ExtremeRoleId.Null;
 
         if (targetRole is VanillaRoleWrapper vanillaRole)
@@ -441,14 +440,14 @@ public sealed class Guesser :
             }
             else
             {
-                anotherRoleId = multiRole.AnotherRole.Id;
+                anotherRoleId = multiRole.AnotherRole.Core.Id;
             }
         }
 
         if ((
                 BodyGuard.IsBlockMeetingKill &&
                 BodyGuard.TryGetShiledPlayerId(playerId, out byte _)
-            ) || alwaysMissRole.Contains(targetRole.Id))
+            ) || alwaysMissRole.Contains(targetRole.Core.Id))
         {
             missGuess();
         }

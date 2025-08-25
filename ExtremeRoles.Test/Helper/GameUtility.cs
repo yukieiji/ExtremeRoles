@@ -311,12 +311,12 @@ public static class GameUtility
 
 		if (OptionManager.Instance.TryGetCategory(
 				role.Tab,
-				ExtremeRoleManager.GetRoleGroupId(role.Id),
+				ExtremeRoleManager.GetRoleGroupId(role.Core.Id),
 				out var category))
 		{
 			OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 9);
 		}
-		logger.LogInfo($"Enable:{role.Id}");
+		logger.LogInfo($"Enable:{role.Core.Id}");
 	}
 	private static void enableRandomCombRole(ManualLogSource logger)
 	{

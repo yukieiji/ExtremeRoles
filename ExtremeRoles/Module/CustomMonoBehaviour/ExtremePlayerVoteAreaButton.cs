@@ -67,8 +67,8 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			Logging.Debug($"LocalPlayer has dual meeting ability button");
 
-			bool isRecreateMain = button.IsRecreateButtn(role.Id, buttonRole, out var mainButton);
-			bool isRecreateSub = button.IsRecreateButtn(multiRole.AnotherRole.Id, anotherButtonRole, out var subButton);
+			bool isRecreateMain = button.IsRecreateButtn(role.Core.Id, buttonRole, out var mainButton);
+			bool isRecreateSub = button.IsRecreateButtn(multiRole.AnotherRole.Core.Id, anotherButtonRole, out var subButton);
 
             if (isRecreateMain || isRecreateSub)
 			{
@@ -86,7 +86,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 
 			group.ResetSecond();
 
-            if (button.IsRecreateButtn(role.Id, mainButtonRole, out var element1))
+            if (button.IsRecreateButtn(role.Core.Id, mainButtonRole, out var element1))
 			{
 				group.ResetFirst();
                 group.AddFirstRow(element1);
@@ -101,7 +101,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 
 			group.ResetSecond();
 
-			if (button.IsRecreateButtn(multiRole.AnotherRole.Id, subButtonRole, out var element1))
+			if (button.IsRecreateButtn(multiRole.AnotherRole.Core.Id, subButtonRole, out var element1))
 			{
 				group.ResetFirst();
                 group.AddFirstRow(element1);

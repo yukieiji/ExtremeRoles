@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -93,7 +93,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		ColorPalette.NeutralColor,
 		Tr.GetString("neutralShotCall"));
 	private string andShortStr => Design.ColoedString(
-		this.NameColor,
+		this.Core.Color,
 		Tr.GetString("andFirst"));
 
 	public enum TargetMode
@@ -104,10 +104,9 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	}
 
 	public Jailer() : base(
-		ExtremeRoleId.Jailer,
-		ExtremeRoleType.Crewmate,
-		ExtremeRoleId.Jailer.ToString(),
-		ColorPalette.JailerSapin,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Jailer,
+			ColorPalette.JailerSapin),
 		false, true, false, false, false)
 	{ }
 
@@ -192,7 +191,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		if (IsAwake)
 		{
 			return Tr.GetString(
-				$"{this.Id}FullDescription");
+				$"{this.Core.Id}FullDescription");
 		}
 		else
 		{
@@ -213,13 +212,15 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 				_ => "",
 			};
 
+			var core = this.Core;
+			var color = core.Color;
 			string roleName = Design.ColoedString(
-				this.NameColor,
+				color,
 				Tr.GetString(this.RoleName));
 
 			string desc = Design.ColoedString(
-				this.NameColor,
-				Tr.GetString($"{this.Id}ShortDescription"));
+				color,
+				Tr.GetString($"{core.Id}ShortDescription"));
 
 			return $"{roleName}: {shortText}{desc}";
 		}
@@ -280,8 +281,8 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 		bool isSuccess = this.mode switch
 		{
-			TargetMode.BothImpostorAndNautral => !role.IsCrewmate() && (this.canReplaceAssassin || role.Id != ExtremeRoleId.Assassin),
-			TargetMode.Impostor => role.IsImpostor() && (this.canReplaceAssassin || role.Id != ExtremeRoleId.Assassin),
+			TargetMode.BothImpostorAndNautral => !role.IsCrewmate() && (this.canReplaceAssassin || role.Core.Id != ExtremeRoleId.Assassin),
+			TargetMode.Impostor => role.IsImpostor() && (this.canReplaceAssassin || role.Core.Id != ExtremeRoleId.Assassin),
 			TargetMode.Neutral => role.IsNeutral(),
 			_ => false,
 		};
@@ -546,17 +547,16 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		in IOptionLoader loader,
 		byte targetPlayerId,
 		Option option) : base(
-		ExtremeRoleId.Yardbird,
-		ExtremeRoleType.Crewmate,
-		ExtremeRoleId.Yardbird.ToString(),
-		ColorPalette.YardbirdYenHown,
-		false, true,
-		option.Vent,
-		option.Sab,
-		false, true,
-		option.Admin,
-		option.Security,
-		option.Vital)
+			RoleCore.BuildCrewmate(
+				ExtremeRoleId.Yardbird,
+				ColorPalette.YardbirdYenHown),
+			false, true,
+			option.Vent,
+			option.Sab,
+			false, true,
+			option.Admin,
+			option.Security,
+			option.Vital)
 	{
 		this.Loader = loader;
 		this.MoveSpeed = option.SpeedMod;
@@ -635,11 +635,10 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 	public Lawbreaker(
 		IOptionLoader loader,
 		Option option) : base(
-		ExtremeRoleId.Lawbreaker,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Lawbreaker.ToString(),
-		ColorPalette.LowbreakerNoir,
-		option.Kill, false, option.Vent, option.Sab)
+			RoleCore.BuildNeutral(
+				ExtremeRoleId.Lawbreaker,
+				ColorPalette.LowbreakerNoir),
+			option.Kill, false, option.Vent, option.Sab)
 	{
 
 		this.Loader = loader;

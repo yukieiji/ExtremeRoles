@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -16,7 +16,7 @@ public sealed class UmbrerBiohazardStatusOverrider : IStatusOverrider
 	{
 		status = PlayerStatus.Zombied;
 		return !(
-			role.Id is ExtremeRoleId.Umbrer ||
+			role.Core.Id is ExtremeRoleId.Umbrer ||
 			player.IsDead ||
 			player.Disconnected);
 	}

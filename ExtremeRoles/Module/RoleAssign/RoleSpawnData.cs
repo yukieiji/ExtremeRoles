@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
@@ -53,14 +53,14 @@ public sealed class GhostRoleSpawnData(
 			return true;
 		}
 
-		var id = role.Id;
+		var id = role.Core.Id;
 
 		if (role is MultiAssignRoleBase multiRole &&
 			multiRole.AnotherRole is not null)
 		{
 			return
 				this.filter.Contains(id) ||
-				this.filter.Contains(multiRole.AnotherRole.Id);
+				this.filter.Contains(multiRole.AnotherRole.Core.Id);
 		}
 		else
 		{

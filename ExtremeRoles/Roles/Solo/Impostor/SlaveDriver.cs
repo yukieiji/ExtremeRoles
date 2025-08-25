@@ -55,10 +55,7 @@ public sealed class SlaveDriver :
     }
 
     public SlaveDriver() : base(
-        ExtremeRoleId.SlaveDriver,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.SlaveDriver.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.SlaveDriver),
         true, false, true, true)
     { }
 
@@ -66,7 +63,7 @@ public sealed class SlaveDriver :
 	{
 		if (this.effectPlayer.Contains(targetPlayerId))
 		{
-			return Design.ColoedString(this.NameColor, " ★");
+			return Design.ColoedString(this.Core.Color, " ★");
 		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
