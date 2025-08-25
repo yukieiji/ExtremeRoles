@@ -13,7 +13,7 @@ using Il2CppInterop.Runtime.Attributes;
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
 [Il2CppRegister]
-public sealed class BaitDalayReporter : MonoBehaviour
+public sealed class BaitDelayReporter : MonoBehaviour
 {
 
 	private TextMeshPro? text = null;
@@ -21,7 +21,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 
 	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.BaitCyan, 0.75f, 0.5f, 0.5f);
 
-	public BaitDalayReporter(IntPtr ptr) : base(ptr)
+	public BaitDelayReporter(IntPtr ptr) : base(ptr)
 	{
 	}
 
