@@ -231,7 +231,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 	private static readonly Vector2 defaultPos = new Vector2(100.0f, 100.0f);
 
 	private bool includeName;
-	private bool canContine;
+	private bool canContinue;
 	private bool forceMeetingOnSearchEnd;
 
 	public Detective() : base(
@@ -356,7 +356,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		{
 			// 調査が外れたとする
 			hideSearchText();
-			if (!this.canContine)
+			if (!this.canContinue)
 			{
 				targetInfo.Progress = SearchCond.None;
 				targetInfo.SearchTime = 0.0f;
