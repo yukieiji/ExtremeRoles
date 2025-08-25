@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -52,11 +52,10 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		IOptionLoader loader,
 		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
-		ExtremeRoleId.Chimera,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Chimera.ToString(),
-		ColorPalette.TuckerMerdedoie,
-		true, false, option.Vent, false)
+			RoleCore.BuildNeutral(
+				ExtremeRoleId.Chimera,
+				ColorPalette.TuckerMerdedoie),
+			true, false, option.Vent, false)
 	{
 		Loader = loader;
 		this.status = new ChimeraStatus(tuckerPlayer, this);
@@ -177,10 +176,10 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
 	{
 		if (tuckerPlayer != null &&
-			targetRole.Id is ExtremeRoleId.Tucker &&
+			targetRole.Core.Id is ExtremeRoleId.Tucker &&
 			targetPlayerId == tuckerPlayer.PlayerId)
 		{
-			return NameColor;
+			return Core.Color;
 		}
 		return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 	}
@@ -278,6 +277,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 	private bool isSameChimeraTeam(SingleRoleBase targetRole)
 	{
-		return targetRole.Id == Id || targetRole.Id == ExtremeRoleId.Tucker;
+		var id = targetRole.Core.Id;
+		return id == Core.Id || id is ExtremeRoleId.Tucker;
 	}
 }

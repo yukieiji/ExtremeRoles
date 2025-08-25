@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
@@ -40,10 +40,9 @@ public sealed class Monika :
 	private float range;
 
 	public Monika(): base(
-        ExtremeRoleId.Monika,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Monika.ToString(),
-        ColorPalette.MonikaRoseSaumon,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Monika,
+			ColorPalette.MonikaRoseSaumon),
         false, false, false, false)
     { }
 
@@ -87,7 +86,7 @@ public sealed class Monika :
 
 		if (PlayerControl.LocalPlayer != null &&
 			ExtremeRoleManager.TryGetRole(targetPlayer, out var role) &&
-			role.Id is ExtremeRoleId.Monika)
+			role.Core.Id is ExtremeRoleId.Monika)
 		{
 			// モニカに対して能力を使用したときは殺す
 			Player.RpcUncheckMurderPlayer(

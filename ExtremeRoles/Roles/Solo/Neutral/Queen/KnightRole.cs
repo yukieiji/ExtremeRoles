@@ -33,10 +33,9 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 	private bool canNotKillServant;
 
 	public KnightRole() : base(
-		ExtremeRoleId.Knight,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Knight.ToString(),
-		ColorPalette.QueenWhite,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Knight,
+			ColorPalette.QueenWhite),
 		true, false, false, false)
 	{ }
 
@@ -62,26 +61,27 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
+		var id = targetRole.Core.Id;
 		if (this.canSeeQueen(targetRole) && (
 			(
 				this.canNotKillQueen &&
-				targetRole.Id is ExtremeRoleId.Queen
+				id is ExtremeRoleId.Queen
 			)
 			||
 			(
 				this.canNotKillServant &&
-				targetRole.Id is ExtremeRoleId.Servant ||
+				id is ExtremeRoleId.Servant ||
 				(
 					targetRole is MultiAssignRoleBase multiRole &&
 					multiRole.AnotherRole != null &&
-					multiRole.AnotherRole.Id is ExtremeRoleId.Servant
+					multiRole.AnotherRole.Core.Id is ExtremeRoleId.Servant
 				)
 			)))
 		{
 			return true;
 		}
 
-		if (targetRole.Id == this.Id)
+		if (id == this.Core.Id)
 		{
 			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
 			{
@@ -144,7 +144,7 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 	private bool canSeeQueen(SingleRoleBase targetRole)
 		=>
 			this.status is not null &&
-			targetRole.Id is ExtremeRoleId.Queen &&
+			targetRole.Core.Id is ExtremeRoleId.Queen &&
 			this.status.SeeQween;
 
 }

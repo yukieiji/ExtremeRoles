@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
@@ -32,10 +32,9 @@ public sealed class FurryRole : SingleRoleBase,
 	private bool isUpdate;
 
 	public FurryRole() : base(
-		ExtremeRoleId.Furry,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Furry.ToString(),
-		ColorPalette.JackalBlue,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Furry,
+			ColorPalette.JackalBlue),
 		false, false, false, false)
 	{ }
 
@@ -159,6 +158,6 @@ public sealed class FurryRole : SingleRoleBase,
 	private bool canSeeJackal(SingleRoleBase targetRole)
 		=>
 			this.status is not null &&
-			targetRole.Id is ExtremeRoleId.Jackal &&
+			targetRole.Core.Id is ExtremeRoleId.Jackal &&
 			this.status.SeeJackal;
 }

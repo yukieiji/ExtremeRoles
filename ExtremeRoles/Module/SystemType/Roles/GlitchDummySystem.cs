@@ -376,7 +376,7 @@ public sealed class GlitchDummySystem(
 		if (this.isBlockImp &&
 			(
 				role.IsImpostor() ||
-				(this.isBlockMarlin && role.Id == ExtremeRoleId.Marlin)
+				(this.isBlockMarlin && role.Core.Id == ExtremeRoleId.Marlin)
 			))
 		{
 			return;

@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using UnityEngine;
 
@@ -46,10 +46,9 @@ public sealed class IronMate :
 	private float deadBodyShowTime;
 
     public IronMate(): base(
-        ExtremeRoleId.IronMate,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.IronMate.ToString(),
-        ColorPalette.IronMateAluminium,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.IronMate,
+			ColorPalette.IronMateAluminium),
         false, true, false, false)
     { }
 
@@ -71,7 +70,7 @@ public sealed class IronMate :
 		if (IsAwake)
 		{
 			return Tr.GetString(
-				$"{this.Id}FullDescription");
+				$"{this.Core.Id}FullDescription");
 		}
 		else
 		{

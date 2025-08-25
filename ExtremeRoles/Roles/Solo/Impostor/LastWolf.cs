@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -17,7 +17,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>
+public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>, ITryKillTo
 {
     public static float LightOffVision { get; private set; } = 0.1f;
 
@@ -64,10 +64,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
     private bool isAwakedHasOtherKillRange;
 
     public LastWolf() : base(
-        ExtremeRoleId.LastWolf,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.LastWolf.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.LastWolf),
         true, false, true, true)
     { }
 
@@ -191,7 +188,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

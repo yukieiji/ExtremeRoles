@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +40,8 @@ public sealed class Hypnotist :
     IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleMurderPlayerHook,
-    IRoleSpecialReset
+    IRoleSpecialReset,
+	ITryKillTo
 {
     public enum HypnotistOption
     {
@@ -129,10 +130,7 @@ public sealed class Hypnotist :
 		"ExtremeRoles.Resources.JsonData.HypnotistAbilityPartPosition.json";
 
 	public Hypnotist() : base(
-        ExtremeRoleId.Hypnotist,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Hypnotist.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Hypnotist),
         true, false, true, true)
     { }
 #pragma warning restore CS8618
@@ -177,7 +175,7 @@ public sealed class Hypnotist :
         foreach (byte dollPlayerId in role.doll)
         {
             SingleRoleBase doll = ExtremeRoleManager.GameRole[dollPlayerId];
-            if (doll.Id == ExtremeRoleId.Doll)
+            if (doll.Core.Id == ExtremeRoleId.Doll)
             {
                 float curKillCool = localPlayer.killTimer;
                 if (localPlayer.PlayerId == dollPlayerId &&
@@ -238,7 +236,7 @@ public sealed class Hypnotist :
         }
         ExtremeRoleManager.SetNewRole(targetPlayerId, newDoll);
 
-        if (targetRole.Id == ExtremeRoleId.Lover)
+        if (targetRole.Core.Id == ExtremeRoleId.Lover)
         {
             targetRole.RolePlayerKilledAction(targetPlayer, targetPlayer);
         }
@@ -273,7 +271,7 @@ public sealed class Hypnotist :
         foreach (byte dollPlayerId in role.doll)
         {
             SingleRoleBase doll = ExtremeRoleManager.GameRole[dollPlayerId];
-            if (doll.Id == ExtremeRoleId.Doll)
+            if (doll.Core.Id == ExtremeRoleId.Doll)
             {
                 doll.CanKill = false;
             }
@@ -473,7 +471,7 @@ public sealed class Hypnotist :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {
@@ -950,13 +948,12 @@ public sealed class Doll :
         byte dollPlayerId,
         byte hypnotistPlayerId,
         Hypnotist parent) : base(
-        ExtremeRoleId.Doll,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Doll.ToString(),
-        Palette.ImpostorRed,
-        false, false, false,
-        false, false, false,
-        false, false, false)
+			RoleCore.BuildNeutral(
+				ExtremeRoleId.Doll,
+				Palette.ImpostorRed),
+			false, false, false,
+			false, false, false,
+			false, false, false)
     {
         this.dollPlayerId = dollPlayerId;
         this.hypnotistPlayerId = hypnotistPlayerId;
@@ -1286,7 +1283,7 @@ public sealed class Doll :
 
     public override bool IsSameTeam(SingleRoleBase targetRole)
     {
-        if (targetRole.Id == this.Id)
+        if (targetRole.Core.Id == this.Core.Id)
         {
             if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
             {

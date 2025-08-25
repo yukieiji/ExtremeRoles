@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Collections.Generic;
 
 using ExtremeRoles.GameMode;
@@ -136,7 +136,7 @@ file sealed class NeutralSeparateTeamBuilder()
 	private void checkMultiAssignedServant(SingleRoleBase role)
 	{
 		if (role is MultiAssignRoleBase multiAssignRole &&
-			multiAssignRole.AnotherRole?.Id == ExtremeRoleId.Servant)
+			multiAssignRole.AnotherRole?.Core.Id == ExtremeRoleId.Servant)
 		{
 			addNeutralTeams(NeutralSeparateTeam.Queen);
 		}
@@ -214,8 +214,8 @@ public sealed record PlayerStatistics(
 			}
 
 			SingleRoleBase role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-			ExtremeRoleType team = role.Team;
-			ExtremeRoleId roleId = role.Id;
+			ExtremeRoleType team = role.Core.Team;
+			ExtremeRoleId roleId = role.Core.Id;
 
 			// クルーのカウントを数える
 			if (role.IsCrewmate())

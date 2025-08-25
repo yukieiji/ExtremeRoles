@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -41,7 +41,7 @@ public sealed class Skater :
 	}
 
     public override string RoleName =>
-        string.Concat(this.roleNamePrefix, this.RawRoleName);
+        string.Concat(this.roleNamePrefix, this.Core.Name);
 
 	public bool EnableUseButton
 		=> this.behaviour == null || !this.behaviour.enabled || this.behaviour.PrevForce.magnitude <= this.canUseSpeed;
@@ -59,10 +59,7 @@ public sealed class Skater :
 
     public Skater(
         ) : base(
-            ExtremeRoleId.Skater,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Skater.ToString(),
-            ColorPalette.SkaterMizuiro,
+			RoleCore.BuildCrewmate(ExtremeRoleId.Skater, ColorPalette.SkaterMizuiro),
             false, true, false, false,
             tab: OptionTab.CombinationTab)
     {}

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -145,10 +145,9 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     private GraphicAndActiveTimeSwitcher<UmbrerMode> mode;
 
     public Umbrer() : base(
-        ExtremeRoleId.Umbrer,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Umbrer.ToString(),
-        ColorPalette.UmbrerRed,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Umbrer,
+			ColorPalette.UmbrerRed),
         false, false, false, false)
     { }
 
@@ -317,7 +316,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 
     public override bool IsSameTeam(SingleRoleBase targetRole)
     {
-        if (this.Id == targetRole.Id)
+        if (this.Core.Id == targetRole.Core.Id)
         {
             if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
             {

@@ -38,7 +38,7 @@ public static class PlayerControlMurderPlayerPatch
 
 		bool hasOtherKillCool = role.TryGetKillCool(out float killCool);
 
-		if (role.Id == ExtremeRoleId.Villain)
+		if (role.Core.Id == ExtremeRoleId.Villain)
 		{
 			guardBreakKill(__instance, target, killCool);
 			return false;

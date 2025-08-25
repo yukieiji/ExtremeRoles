@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -19,7 +19,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class SandWorm : SingleRoleBase, IRoleAbility
+public sealed class SandWorm : SingleRoleBase, IRoleAbility, ITryKillTo
 {
     public sealed class AssaultButtonAutoActivator : IButtonAutoActivator
     {
@@ -131,10 +131,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
     private PlayerControl targetPlayer = null;
 
     public SandWorm() : base(
-        ExtremeRoleId.SandWorm,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.SandWorm.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.SandWorm),
         true, false, true, true)
     { }
 

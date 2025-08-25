@@ -1,24 +1,24 @@
-﻿namespace ExtremeRoles.Roles.API
+namespace ExtremeRoles.Roles.API
 {
     public abstract partial class SingleRoleBase
     {
 
         public int GameControlId { get; private set; } = 0;
 
-        public bool IsVanillaRole() => this.Id == ExtremeRoleId.VanillaRole;
+        public bool IsVanillaRole() => this.Core.Id == ExtremeRoleId.VanillaRole;
 
-        public bool IsCrewmate() => this.Team == ExtremeRoleType.Crewmate;
+        public bool IsCrewmate() => this.Core.Team == ExtremeRoleType.Crewmate;
 
-        public bool IsImpostor() => this.Team == ExtremeRoleType.Impostor;
+        public bool IsImpostor() => this.Core.Team == ExtremeRoleType.Impostor;
 
-        public bool IsNeutral() => this.Team == ExtremeRoleType.Neutral;
+        public bool IsNeutral() => this.Core.Team == ExtremeRoleType.Neutral;
 
         public virtual bool IsSameTeam(SingleRoleBase targetRole)
         {
 
             if (this.IsImpostor())
             {
-                return targetRole.Team == ExtremeRoleType.Impostor;
+                return targetRole.Core.Team == ExtremeRoleType.Impostor;
             }
 
             MultiAssignRoleBase multiAssignRole = targetRole as MultiAssignRoleBase;

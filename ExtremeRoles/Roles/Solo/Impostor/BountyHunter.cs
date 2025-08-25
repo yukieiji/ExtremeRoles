@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -15,7 +15,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetUp, IRoleResetMeeting
+public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetUp, IRoleResetMeeting, ITryKillTo
 {
 
     private byte targetId;
@@ -46,10 +46,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
     }
 
     public BountyHunter() : base(
-        ExtremeRoleId.BountyHunter,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.BountyHunter.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.BountyHunter),
         true, false, true, true)
     { }
 

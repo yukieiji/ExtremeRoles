@@ -1,4 +1,4 @@
-﻿
+
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.GameResult.StatusOverrider;
 using ExtremeRoles.Roles;
@@ -14,7 +14,7 @@ public sealed class AssassinAssassinateTargetMeeting : IOnemanMeeting
 		set
 		{
 			this.isSuccess = ExtremeRoleManager.TryGetRole(
-				value, out var targetRole) && targetRole.Id is ExtremeRoleId.Marlin;
+				value, out var targetRole) && targetRole.Core.Id is ExtremeRoleId.Marlin;
 			this.voteTarget = value;
 
 			if (this.isSuccess)

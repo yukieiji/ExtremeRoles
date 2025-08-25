@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Linq;
 
 using UnityEngine;
@@ -46,10 +46,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
     private ExtremeAbilityButton carryButton;
 
     public Carrier() : base(
-        ExtremeRoleId.Carrier,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Carrier.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Carrier),
         true, false, true, true)
     {
         this.canReportOnCarry = false;

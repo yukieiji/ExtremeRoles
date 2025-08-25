@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -87,13 +87,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 						foreach (var roleMng in ExtremeRoleManager.CombRole.Values)
 						{
 							if (roleMng is FlexibleCombinationRoleManagerBase flexRoleMng &&
-								flexRoleMng.BaseRole.Id == target)
+								flexRoleMng.BaseRole.Core.Id == target)
 							{
 								return flexRoleMng.BaseRole.GetNameColor(true);
 							}
 							foreach (var combRole in roleMng.Roles)
 							{
-								if (combRole.Id == target)
+								if (combRole.Core.Id == target)
 								{
 									return combRole.GetNameColor(true);
 								}

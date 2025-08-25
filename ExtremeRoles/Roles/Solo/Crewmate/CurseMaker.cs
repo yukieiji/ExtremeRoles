@@ -145,10 +145,9 @@ public sealed class CurseMaker :
     private ExtremeAbilityButton curseButton;
 
     public CurseMaker() : base(
-        ExtremeRoleId.CurseMaker,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.CurseMaker.ToString(),
-        ColorPalette.CurseMakerViolet,
+        RoleCore.BuildCrewmate(
+			ExtremeRoleId.CurseMaker,
+			ColorPalette.CurseMakerViolet),
         false, true, false, false)
     { }
 
@@ -470,7 +469,7 @@ public sealed class CurseMaker :
                 if (deadBodyInfo.ComputeDeltaTime() > this.searchDeadBodyTime &&
                     !this.deadBodyArrow.ContainsKey(playerId))
                 {
-                    var arrow = new Arrow(this.NameColor);
+                    var arrow = new Arrow(this.Core.Color);
                     this.deadBodyArrow.Add(playerId, arrow);
                     if (!this.isMultiDeadBodySearch)
                     {
