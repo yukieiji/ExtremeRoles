@@ -31,7 +31,10 @@ public sealed class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 	public void HookMuderPlayer(
 		PlayerControl source, PlayerControl target)
 	{
-		deadBodyInfo.Add(target.PlayerId, DateTime.UtcNow);
+		if (MeetingHud.Instance == null)
+		{
+			deadBodyInfo.Add(target.PlayerId, DateTime.UtcNow);
+		}
 	}
 
 	public void HookReportButton(
