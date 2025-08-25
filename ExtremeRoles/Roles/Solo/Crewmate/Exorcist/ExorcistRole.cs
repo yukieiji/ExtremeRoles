@@ -263,7 +263,7 @@ public sealed class ExorcistRole :
 			return true;
 		}
 
-		if (ExtremeRoleManager.TryGetSafeCastedLocalRole<ExorcistRole>(out var servant))
+		if (ExtremeRoleManager.TryGetSafeCastedLocalRole<ExorcistRole>(out _))
 		{
 			return false;
 		}
