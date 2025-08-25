@@ -68,13 +68,13 @@ public sealed class MissionaryRole :
 	{
 		if (this.lamb.Any(x => x.PlayerId == targetPlayerId))
 		{
-			return Design.ColoedString(Core.Color, " ×");
+			return Design.ColoredString(Core.Color, " ×");
 		}
 		else if (
 			this.status is not null &&
 			this.status.ContainsJudgementTarget(targetPlayerId))
 		{
-			return Design.ColoedString(Core.Color, " ★");
+			return Design.ColoredString(Core.Color, " ★");
 		}
 		else
 		{

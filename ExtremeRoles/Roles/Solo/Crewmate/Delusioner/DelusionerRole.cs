@@ -205,7 +205,7 @@ public sealed class DelusionerRole :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.White, Tr.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
@@ -232,7 +232,7 @@ public sealed class DelusionerRole :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.White,
                 $"{GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
         }
@@ -246,7 +246,7 @@ public sealed class DelusionerRole :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.CrewmateBlue,
                 PlayerControl.LocalPlayer.Data.Role.Blurb);
         }

@@ -385,7 +385,7 @@ public sealed class QueenRole :
 
         if (servantPlayerId.Contains(targetPlayerId))
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 ColorPalette.QueenWhite,
                 $" {RoleShowTag}");
         }

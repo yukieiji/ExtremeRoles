@@ -295,7 +295,7 @@ public sealed class BarterRole :
 		else
 		{
 			var type = this.IsImpostor() ? RoleTypes.Impostor : RoleTypes.Crewmate;
-			return Design.ColoedString(
+			return Design.ColoredString(
 				this.IsImpostor() ? Palette.ImpostorRed : Palette.White,
 				Tr.GetString(type.ToString()));
 		}
@@ -339,7 +339,7 @@ public sealed class BarterRole :
 		}
 		else
 		{
-			return Design.ColoedString(
+			return Design.ColoredString(
 				Palette.White,
 				$"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
 		}
@@ -353,7 +353,7 @@ public sealed class BarterRole :
 		}
 		else
 		{
-			return Design.ColoedString(
+			return Design.ColoredString(
 				this.IsImpostor() ? Palette.ImpostorRed : Palette.CrewmateBlue,
 				PlayerControl.LocalPlayer.Data.Role.Blurb);
 		}

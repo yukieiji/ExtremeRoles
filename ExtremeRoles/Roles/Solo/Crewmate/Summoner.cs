@@ -149,7 +149,7 @@ public sealed class Summoner :
 		if (this.summonTarget != null &&
 			this.summonTarget.PlayerId == targetPlayerId)
 		{
-			return Design.ColoedString(this.Core.Color, " ◀");
+			return Design.ColoredString(this.Core.Color, " ◀");
 		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}

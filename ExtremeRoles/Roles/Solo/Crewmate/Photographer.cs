@@ -448,7 +448,7 @@ public sealed class Photographer :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.White, Tr.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
@@ -475,7 +475,7 @@ public sealed class Photographer :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.White,
                 $"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
         }
@@ -489,7 +489,7 @@ public sealed class Photographer :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.CrewmateBlue,
                 PlayerControl.LocalPlayer.Data.Role.Blurb);
         }

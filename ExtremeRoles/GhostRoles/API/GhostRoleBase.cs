@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -130,17 +130,17 @@ public abstract class GhostRoleBase
 
     public bool IsVanillaRole() => this.Id == ExtremeGhostRoleId.VanillaRole;
 
-    public virtual string GetColoredRoleName() => Design.ColoedString(
+    public virtual string GetColoredRoleName() => Design.ColoredString(
         this.Color, Tr.GetString(this.Name));
 
     public virtual string GetFullDescription() => Tr.GetString(
        $"{this.Id}FullDescription");
 
     public virtual string GetImportantText() =>
-        Design.ColoedString(
+        Design.ColoredString(
             this.Color,
             string.Format("{0}: {1}",
-                Design.ColoedString(
+                Design.ColoredString(
                     this.Color,
                     Tr.GetString(this.Name)),
                 Tr.GetString(

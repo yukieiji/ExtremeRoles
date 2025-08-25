@@ -63,7 +63,7 @@ public sealed class SlaveDriver :
 	{
 		if (this.effectPlayer.Contains(targetPlayerId))
 		{
-			return Design.ColoedString(this.Core.Color, " ★");
+			return Design.ColoredString(this.Core.Color, " ★");
 		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}

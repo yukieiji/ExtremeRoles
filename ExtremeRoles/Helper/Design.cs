@@ -8,7 +8,7 @@ public static class Design
 {
 	private const byte colorMask = 0xFF;
 
-	public static string ColoedString(Color c, string s)
+	public static string ColoredString(Color c, string s)
     {
         return string.Format(
             "<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>",

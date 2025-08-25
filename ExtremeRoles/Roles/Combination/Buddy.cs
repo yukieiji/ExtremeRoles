@@ -174,7 +174,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.White,
                 Tr.GetString(RoleTypes.Crewmate.ToString()));
         }
@@ -205,7 +205,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.White,
                 $"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
         }
@@ -222,7 +222,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.CrewmateBlue,
                 PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
@@ -249,7 +249,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
             this.buddy is not null &&
             this.buddy.Contains(targetPlayerId))
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 ColorPalette.BuddyOrange,
                 $" {GetRoleTag()}");
         }

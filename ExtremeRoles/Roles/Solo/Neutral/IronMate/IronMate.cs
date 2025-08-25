@@ -62,7 +62,7 @@ public sealed class IronMateRole :
 		}
 		else
 		{
-			return Design.ColoedString(
+			return Design.ColoredString(
 				Palette.White,
 				Tr.GetString(RoleTypes.Crewmate.ToString()));
 		}
@@ -82,12 +82,12 @@ public sealed class IronMateRole :
 	}
 
 	public override string GetImportantText(bool isContainFakeTask = true)
-		=> Design.ColoedString(
+		=> Design.ColoredString(
 				Palette.White,
 				$"{GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
 
 	public override string GetIntroDescription()
-		=> Design.ColoedString(
+		=> Design.ColoredString(
 				Palette.CrewmateBlue,
 				PlayerControl.LocalPlayer.Data.Role.Blurb);
 

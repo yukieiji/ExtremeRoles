@@ -100,7 +100,7 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 		=> canSeeQueen(targetRole) ?
-				Design.ColoedString(
+				Design.ColoredString(
 					ColorPalette.QueenWhite,
 					$" {QueenRole.RoleShowTag}") :
 				base.GetRolePlayerNameTag(targetRole, targetPlayerId);

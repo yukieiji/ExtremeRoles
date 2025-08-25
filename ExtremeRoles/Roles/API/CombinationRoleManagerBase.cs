@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -60,7 +60,7 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
     public string GetOptionName()
 	{
 		string name = Tr.GetString(this.RoleName);
-		return this.OptionColor == DefaultColor ? name : Design.ColoedString(this.OptionColor, name);
+		return this.OptionColor == DefaultColor ? name : Design.ColoredString(this.OptionColor, name);
 	}
 
 	public abstract void AssignSetUpInit(int curImpNum);

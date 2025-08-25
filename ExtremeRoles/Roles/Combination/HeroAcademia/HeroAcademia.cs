@@ -112,7 +112,7 @@ internal sealed class AllPlayerArrows
         {
             float diss = Vector2.Distance(rolePlayerPos, playerCont.GetTruePosition());
 
-            distance[playerId].text = Design.ColoedString(
+            distance[playerId].text = Design.ColoredString(
                 Color.black, $"{diss:F1}");
             arrow[playerId].UpdateTarget(playerCont.transform.position);
         }
@@ -1000,7 +1000,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         if (this.Core.Id == ExtremeRoleId.Vigilante &&
             IsSameControlId(targetRole))
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 ColorPalette.VigilanteFujiIro,
                 getInGameTag());
         }
@@ -1090,10 +1090,10 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     private string createImportantText(bool isContainFakeTask)
     {
-        string baseString = Design.ColoedString(
+        string baseString = Design.ColoredString(
 			this.Core.Color,
             string.Format("{0}: {1}",
-                Design.ColoedString(
+                Design.ColoredString(
 					this.Core.Color,
 					Tr.GetString(RoleName)),
                 Tr.GetString(
@@ -1101,7 +1101,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
         if (isContainFakeTask && !HasTask)
         {
-            string fakeTaskString = Design.ColoedString(
+            string fakeTaskString = Design.ColoredString(
 				this.Core.Color,
 				TranslationController.Instance.GetString(
                     StringNames.FakeTasks, System.Array.Empty<Il2CppSystem.Object>()));
