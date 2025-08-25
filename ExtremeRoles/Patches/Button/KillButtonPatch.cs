@@ -1,14 +1,15 @@
-using HarmonyLib;
-
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Ability;
+using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using HarmonyLib;
 
 #nullable enable
 
@@ -20,6 +21,7 @@ public static class KillButtonDoClickPatch
 	public enum KillResult : byte
 	{
 		PreConditionFail,
+		BlockedToSystem,
 		BlockedToKillerSingleRoleCondition,
 		BlockedToTargetSingleRoleCondition,
 		BlockedToKillerOtherRoleCondition,
@@ -32,7 +34,10 @@ public static class KillButtonDoClickPatch
 
     public static bool Prefix(KillButton __instance)
     {
-        if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+        if (ExtremeRoleManager.GameRole.Count == 0)
+		{
+			return true;
+		}
 
         PlayerControl killer = PlayerControl.LocalPlayer;
         var role = ExtremeRoleManager.GetLocalPlayerRole();
@@ -78,13 +83,15 @@ public static class KillButtonDoClickPatch
 		{
 			return KillResult.PreConditionFail;
 		}
+		else if (ButtonLockSystem.IsKillButtonLock())
+		{
+			return KillResult.BlockedToSystem;
+		}
 		else if (isPreventKillTo(killerRole, killer, target))
 		{
 			return KillResult.BlockedToKillerSingleRoleCondition;
 		}
-		else if (
-			targetRole is IKilledFrom targetKillFromCheckRole &&
-			!targetKillFromCheckRole.TryKilledFrom(target, killer))
+		else if (isPreventKillFrom(targetRole, killer, target))
 		{
 			return KillResult.BlockedToTargetSingleRoleCondition;
 		}
@@ -95,8 +102,7 @@ public static class KillButtonDoClickPatch
 			return KillResult.BlockedToKillerOtherRoleCondition;
 		}
 		else if (targetRole is MultiAssignRoleBase targetMultiAssignRole &&
-			targetMultiAssignRole.AnotherRole is IKilledFrom targetMultiKilledFromCheckRole &&
-			!targetMultiKilledFromCheckRole.TryKilledFrom(target, killer))
+			isPreventKillFrom(targetMultiAssignRole.AnotherRole, killer, target))
 		{
 			return KillResult.BlockedToTargetOtherRoleCondition;
 		}
@@ -158,7 +164,7 @@ public static class KillButtonDoClickPatch
         }
         else if (id == ExtremeRoleId.Hero)
         {
-            HeroAcademia.RpcDrawHeroAndVillan(
+            HeroAcademiaRole.RpcDrawHeroAndVillan(
                 target, killer);
             return;
         }
@@ -181,6 +187,11 @@ public static class KillButtonDoClickPatch
             isAnime ? byte.MaxValue : byte.MinValue);
         instance.SetTarget(null);
     }
+
+	private static bool isPreventKillFrom(SingleRoleBase? role, PlayerControl killer, PlayerControl target)
+		=>
+			role?.AbilityClass is IKilledFrom targetKillFromCheckRole &&
+			!targetKillFromCheckRole.TryKilledFrom(target, killer);
 
 	private static bool isPreventKillTo(SingleRoleBase? role, PlayerControl killer, PlayerControl target)
 		=> 

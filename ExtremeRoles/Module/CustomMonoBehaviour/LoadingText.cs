@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 using TMPro;
@@ -45,7 +45,7 @@ public sealed class LoadingText : MonoBehaviour
 
 		if (this.frameCount % addCommaFrame == 0)
 		{
-			this.text.text += Helper.Design.ColoedString(
+			this.text.text += Helper.Design.ColoredString(
 				commaColor[RandomGenerator.Instance.Next(3)],
 				comma);
 		}

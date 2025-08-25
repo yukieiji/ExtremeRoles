@@ -41,7 +41,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				{
 					return string.Concat(
 						basicRoleName,
-						Design.ColoedString(
+						Design.ColoredString(
 							Palette.White,
 							" + "),
 						convertIdToRoleName(this.AnothorId));
@@ -57,11 +57,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				RoleTypes castedId = (RoleTypes)id;
 				bool isVanila = Enum.IsDefined(typeof(RoleTypes), castedId);
 				string roleName = isVanila ?
-					Design.ColoedString(
+					Design.ColoredString(
 						vanilaCrew.Contains(castedId) ?
 						Palette.White : Palette.ImpostorRed,
 						Tr.GetString(castedId.ToString())) :
-					Design.ColoedString(
+					Design.ColoredString(
 						getRoleColor(id),
 						Tr.GetString(id.ToString()));
 				return roleName;

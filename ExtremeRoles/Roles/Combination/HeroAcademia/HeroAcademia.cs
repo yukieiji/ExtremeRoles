@@ -8,6 +8,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
@@ -21,10 +22,11 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Roles.Combination.Avalon;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Combination;
+namespace ExtremeRoles.Roles.Combination.HeroAcademia;
 
 internal sealed class AllPlayerArrows
 {
@@ -34,9 +36,9 @@ internal sealed class AllPlayerArrows
 
     public AllPlayerArrows(byte rolePlayerId)
     {
-        this.player.Clear();
-        this.arrow.Clear();
-        this.distance.Clear();
+        player.Clear();
+        arrow.Clear();
+        distance.Clear();
 
         foreach (var player in PlayerCache.AllPlayerControl)
         {
@@ -50,11 +52,11 @@ internal sealed class AllPlayerArrows
                         byte.MaxValue));
                 playerArrow.SetActive(false);
 
-                var text = GameObject.Instantiate(
+                var text = Object.Instantiate(
                     Prefab.Text, playerArrow.Main.transform);
                 text.fontSize = text.fontSizeMax = text.fontSizeMin = 3.25f;
                 Object.Destroy(text.fontMaterial);
-                text.fontMaterial = UnityEngine.Object.Instantiate(
+                text.fontMaterial = Object.Instantiate(
                     HudManager.Instance.UseButton.buttonLabelText.fontMaterial,
                     playerArrow.Main.transform);
                 text.gameObject.layer = 5;
@@ -62,9 +64,9 @@ internal sealed class AllPlayerArrows
                 text.transform.localPosition = new Vector3(0.0f, 0.0f, -800f);
                 text.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-                this.distance.Add(player.PlayerId, text);
+                distance.Add(player.PlayerId, text);
                 this.player.Add(player.PlayerId, player);
-                this.arrow.Add(player.PlayerId, playerArrow);
+                arrow.Add(player.PlayerId, playerArrow);
             }
         }
 
@@ -73,46 +75,46 @@ internal sealed class AllPlayerArrows
     public void SetActive(bool active)
     {
         List<byte> removePlayer = new List<byte>();
-        foreach (var (playerId, playerCont) in this.player)
+        foreach (var (playerId, playerCont) in player)
         {
             if (playerCont == null)
             {
-                this.arrow[playerId].SetActive(active);
-                this.distance[playerId].gameObject.SetActive(active);
+                arrow[playerId].SetActive(active);
+                distance[playerId].gameObject.SetActive(active);
                 removePlayer.Add(playerId);
                 continue;
             }
 
-            this.arrow[playerId].SetActive(active);
-            this.distance[playerId].gameObject.SetActive(active);
+            arrow[playerId].SetActive(active);
+            distance[playerId].gameObject.SetActive(active);
 
             if (playerCont.Data.IsDead ||
                 playerCont.Data.Disconnected)
             {
-                this.arrow[playerId].SetActive(false);
-                this.distance[playerId].gameObject.SetActive(false);
+                arrow[playerId].SetActive(false);
+                distance[playerId].gameObject.SetActive(false);
             }
         }
 
         foreach (byte playerId in removePlayer)
         {
-            GameObject.Destroy(this.distance[playerId]);
-            this.arrow[playerId].Clear();
-            this.distance.Remove(playerId);
-            this.arrow.Remove(playerId);
-            this.player.Remove(playerId);
+            Object.Destroy(distance[playerId]);
+            arrow[playerId].Clear();
+            distance.Remove(playerId);
+            arrow.Remove(playerId);
+            player.Remove(playerId);
         }
     }
 
     public void Update(Vector2 rolePlayerPos)
     {
-        foreach(var (playerId, playerCont) in this.player)
+        foreach(var (playerId, playerCont) in player)
         {
             float diss = Vector2.Distance(rolePlayerPos, playerCont.GetTruePosition());
 
-            this.distance[playerId].text = Design.ColoedString(
+            distance[playerId].text = Design.ColoredString(
                 Color.black, $"{diss:F1}");
-            this.arrow[playerId].UpdateTarget(playerCont.transform.position);
+            arrow[playerId].UpdateTarget(playerCont.transform.position);
         }
     }
 }
@@ -124,35 +126,35 @@ internal sealed class PlayerTargetArrow
     private PlayerControl? targetPlayer;
     public PlayerTargetArrow(Color color)
     {
-        this.arrow = new Arrow(color);
+        arrow = new Arrow(color);
     }
     public void SetActive(bool active)
     {
-        this.isActive = active;
-        this.arrow.SetActive(active);
+        isActive = active;
+        arrow.SetActive(active);
     }
     public void ResetTarget()
     {
-        this.targetPlayer = null;
+        targetPlayer = null;
     }
 
     public void SetTargetPlayer(PlayerControl player)
     {
-        this.targetPlayer = player;
+        targetPlayer = player;
     }
 
     public void Update()
     {
-        if (this.targetPlayer == null) { return; }
+        if (targetPlayer == null) { return; }
 
-        this.arrow.UpdateTarget(
+        arrow.UpdateTarget(
             targetPlayer.GetTruePosition());
 
     }
 
 }
 
-public sealed class HeroAcademia : ConstCombinationRoleManagerBase
+public sealed class HeroAcademiaRole : ConstCombinationRoleManagerBase
 {
     public enum Command : byte
     {
@@ -169,14 +171,14 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
     }
 
     public const string Name = "HeroAca";
-    public HeroAcademia() : base(
+    public HeroAcademiaRole() : base(
 		CombinationRoleType.HeroAca,
         Name, DefaultColor, 3,
         GameSystem.MaxImposterNum)
     {
-        this.Roles.Add(new Hero());
-        this.Roles.Add(new Villain());
-        this.Roles.Add(new Vigilante());
+        Roles.Add(new Hero());
+        Roles.Add(new Villain());
+        Roles.Add(new Vigilante());
     }
 
     public static void RpcCommand(
@@ -424,7 +426,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
 
 }
 
-public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset, IKilledFrom, ITryKillTo
+public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset, ITryKillTo
 {
     public enum OneForAllCondition : byte
     {
@@ -442,9 +444,10 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 
 	private AllPlayerArrows? arrow;
     private PlayerTargetArrow? callTargetArrow;
-    private OneForAllCondition cond;
+    private HeroStatusModel status;
     private float featKillPer;
     private float featButtonAbilityPer;
+    public override IStatusModel? Status => status;
 
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
@@ -453,29 +456,30 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 			RoleCore.BuildCrewmate(
 				ExtremeRoleId.Hero,
 				ColorPalette.HeroAmaIro),
-            false, true, false, false,
+			false, true, false, false,
             tab: OptionTab.CombinationTab)
-    { }
+    {
+    }
 #pragma warning restore CS8618
 
 	public void SetCondition(
         OneForAllCondition cond)
     {
-        this.cond = cond;
+        status.Cond = cond;
     }
 
     public void CreateAbility()
     {
         this.CreateNormalActivatingAbilityButton(
             "search",
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.HiroAcaSearch),
             abilityOff: CleanUp);
-        this.Button.SetLabelToCrewmate();
+        Button.SetLabelToCrewmate();
     }
 
     public bool IsAbilityUse() =>
-        this.cond == OneForAllCondition.FeatButtonAbility &&
+        status.Cond == OneForAllCondition.FeatButtonAbility &&
         IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
@@ -485,11 +489,11 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 
     public void ResetOnMeetingStart()
     {
-        if (this.arrow != null)
+        if (arrow != null)
         {
-            this.arrow.SetActive(false);
+            arrow.SetActive(false);
         }
-        if (this.callTargetArrow != null)
+        if (callTargetArrow != null)
         {
             ResetTarget();
         }
@@ -501,33 +505,33 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
             ShipStatus.Instance == null) { return; }
         if (!ShipStatus.Instance.enabled) { return; }
 
-        if (this.callTargetArrow != null)
+        if (callTargetArrow != null)
         {
-            if (this.callTargetArrow.isActive)
+            if (callTargetArrow.isActive)
             {
-                this.callTargetArrow.Update();
+                callTargetArrow.Update();
             }
         }
 
 
-        switch (this.cond)
+        switch (status.Cond)
         {
             case OneForAllCondition.NoGuard:
             case OneForAllCondition.AwakeHero:
                 setButtonActive(false);
                 break;
             case OneForAllCondition.FeatKill:
-                this.CanKill = true;
+                CanKill = true;
                 setButtonActive(false);
                 break;
             case OneForAllCondition.FeatButtonAbility:
-                this.CanKill = true;
-                if (this.Button != null)
+                CanKill = true;
+                if (Button != null)
                 {
-                    if (this.Button.IsAbilityActive() &&
-                        this.arrow != null)
+                    if (Button.IsAbilityActive() &&
+                        arrow != null)
                     {
-                        this.arrow.Update(rolePlayer.GetTruePosition());
+                        arrow.Update(rolePlayer.GetTruePosition());
                     }
                 }
                 break;
@@ -535,7 +539,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
                 break;
         }
 
-        if (this.cond == OneForAllCondition.FeatButtonAbility) { return; }
+        if (status.Cond == OneForAllCondition.FeatButtonAbility) { return; }
 
         int allCrew = 0;
         int deadCrew = 0;
@@ -549,65 +553,65 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
             ++allCrew;
         }
 
-        if (deadCrew > 0 && this.cond == OneForAllCondition.NoGuard)
+        if (deadCrew > 0 && status.Cond == OneForAllCondition.NoGuard)
         {
-            this.cond = OneForAllCondition.AwakeHero;
-            HeroAcademia.RpcUpdateHero(rolePlayer, OneForAllCondition.AwakeHero);
+            status.Cond = OneForAllCondition.AwakeHero;
+            HeroAcademiaRole.RpcUpdateHero(rolePlayer, OneForAllCondition.AwakeHero);
         }
 
-        float deadPlayerPer = (float)deadCrew / (float)allCrew;
-        if (deadPlayerPer > this.featButtonAbilityPer && this.cond != OneForAllCondition.FeatButtonAbility)
+        float deadPlayerPer = deadCrew / (float)allCrew;
+        if (deadPlayerPer > featButtonAbilityPer && status.Cond != OneForAllCondition.FeatButtonAbility)
         {
-            this.cond = OneForAllCondition.FeatButtonAbility;
-            this.setButtonActive(true);
+            status.Cond = OneForAllCondition.FeatButtonAbility;
+            setButtonActive(true);
         }
-        else if (deadPlayerPer > this.featKillPer)
+        else if (deadPlayerPer > featKillPer)
         {
-            this.cond = OneForAllCondition.FeatKill;
+            status.Cond = OneForAllCondition.FeatKill;
         }
 
     }
 
     public bool UseAbility()
     {
-        if (this.arrow == null)
+        if (arrow == null)
         {
-            this.arrow = new AllPlayerArrows(
+            arrow = new AllPlayerArrows(
                 PlayerControl.LocalPlayer.PlayerId);
         }
-        this.arrow.SetActive(true);
+        arrow.SetActive(true);
         return true;
     }
 
     public void CleanUp()
     {
-		if (this.arrow != null)
+		if (arrow != null)
 		{
-			this.arrow.SetActive(false);
+			arrow.SetActive(false);
 		}
     }
 
     public void SetEmergencyCallTarget(PlayerControl target)
     {
-        if (this.callTargetArrow == null)
+        if (callTargetArrow == null)
         {
-            this.callTargetArrow = new PlayerTargetArrow(
+            callTargetArrow = new PlayerTargetArrow(
                 ColorPalette.VigilanteFujiIro);
         }
 
-        this.callTargetArrow.SetActive(true);
-        this.callTargetArrow.SetTargetPlayer(target);
+        callTargetArrow.SetActive(true);
+        callTargetArrow.SetTargetPlayer(target);
     }
 
     public void ResetTarget()
     {
-        this.callTargetArrow?.SetActive(false);
-        this.callTargetArrow?.ResetTarget();
+        callTargetArrow?.SetActive(false);
+        callTargetArrow?.ResetTarget();
     }
     public void AllReset(PlayerControl rolePlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.HeroDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.HeroDown,
             rolePlayer.PlayerId);
     }
 
@@ -615,7 +619,9 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     {
         Assassin? assassin = ExtremeRoleManager.GameRole[targetPlayer.PlayerId] as Assassin;
 
-        if (assassin != null && !assassin.CanKilledFromCrew)
+        if (assassin != null && 
+			assassin.Status is AssassinStatusModel status &&
+			!status.CanKilledFromCrew)
         {
             Player.RpcUncheckMurderPlayer(
                 rolePlayer.PlayerId,
@@ -632,36 +638,19 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
         return true;
     }
 
-    public bool TryKilledFrom(
-        PlayerControl rolePlayer, PlayerControl fromPlayer)
-    {
-        var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
-
-        if (fromRole.Core.Id == ExtremeRoleId.Villain)
-        {
-            HeroAcademia.RpcDrawHeroAndVillan(
-                rolePlayer, fromPlayer);
-            return false;
-        }
-        else if (fromRole.IsImpostor() && this.cond != OneForAllCondition.NoGuard)
-        {
-            return false;
-        }
-        return true;
-    }
 
     public override void ExiledAction(
         PlayerControl rolePlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.HeroDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.HeroDown,
             rolePlayer.PlayerId);
     }
     public override void RolePlayerKilledAction(
         PlayerControl rolePlayer, PlayerControl killerPlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.HeroDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.HeroDown,
             rolePlayer.PlayerId);
     }
 
@@ -682,22 +671,24 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 
     protected override void RoleSpecificInit()
     {
-		var loader = this.Loader;
-        this.featKillPer = loader.GetValue<HeroOption, int>(
+        status = new HeroStatusModel();
+        AbilityClass = new HeroAbilityHandler(status);
+		var loader = Loader;
+        featKillPer = loader.GetValue<HeroOption, int>(
             HeroOption.FeatKillPercentage) / 100.0f;
-        this.featButtonAbilityPer = loader.GetValue<HeroOption, int>(
+        featButtonAbilityPer = loader.GetValue<HeroOption, int>(
             HeroOption.FeatButtonAbilityPercentage) / 100.0f;
 
     }
     private void setButtonActive(bool active)
     {
-        if (this.Button != null)
+        if (Button != null)
         {
-            this.Button.SetButtonShow(active);
+            Button.SetButtonShow(active);
         }
     }
 }
-public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset, IKilledFrom
+public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset
 {
     public enum VillanOption
     {
@@ -716,14 +707,15 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 			RoleCore.BuildImpostor(ExtremeRoleId.Villain),
             true, false, true, true,
             tab: OptionTab.CombinationTab)
-    { }
+    {
+    }
 #pragma warning restore CS8618
 
 	public void CreateAbility()
     {
         this.CreateNormalActivatingAbilityButton(
             "search",
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.HiroAcaSearch),
             abilityOff: CleanUp);
     }
@@ -737,11 +729,11 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
     public void ResetOnMeetingStart()
     {
-        if (this.arrow != null)
+        if (arrow != null)
         {
-            this.arrow.SetActive(false);
+            arrow.SetActive(false);
         }
-        if (this.vigilanteArrow != null)
+        if (vigilanteArrow != null)
         {
             ResetVigilante();
         }
@@ -751,99 +743,83 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     {
         if (MeetingHud.Instance != null) { return; }
 
-        if (this.vigilanteArrow != null)
+        if (vigilanteArrow != null)
         {
-            if (this.vigilanteArrowTimer > 0f)
+            if (vigilanteArrowTimer > 0f)
             {
-                this.vigilanteArrowTimer -= Time.deltaTime;
+                vigilanteArrowTimer -= Time.deltaTime;
             }
-            if (this.vigilanteArrowTimer <= 0f)
+            if (vigilanteArrowTimer <= 0f)
             {
-                this.vigilanteArrow.SetActive(false);
+                vigilanteArrow.SetActive(false);
             }
         }
 
-        if (this.Button != null)
+        if (Button != null)
         {
-            if (this.Button.IsAbilityActive() && this.arrow != null)
+            if (Button.IsAbilityActive() && arrow != null)
             {
-                this.arrow.Update(rolePlayer.GetTruePosition());
+                arrow.Update(rolePlayer.GetTruePosition());
             }
         }
     }
 
     public bool UseAbility()
     {
-        if (this.arrow == null)
+        if (arrow == null)
         {
-            this.arrow = new AllPlayerArrows(
+            arrow = new AllPlayerArrows(
                 PlayerControl.LocalPlayer.PlayerId);
         }
-        this.arrow.SetActive(true);
+        arrow.SetActive(true);
         return true;
     }
 
     public void CleanUp()
     {
-		if (this.arrow != null)
+		if (arrow != null)
 		{
-			this.arrow.SetActive(false);
+			arrow.SetActive(false);
 		}
     }
 
     public void SetVigilante(PlayerControl target)
     {
-        if (this.vigilanteArrow == null)
+        if (vigilanteArrow == null)
         {
-            this.vigilanteArrow = new Arrow(
+            vigilanteArrow = new Arrow(
                 ColorPalette.VigilanteFujiIro);
         }
-        this.vigilanteArrowTimer = this.vigilanteArrowTime;
-        this.vigilanteArrow.SetActive(true);
-        this.vigilanteArrow.UpdateTarget(target.GetTruePosition());
+        vigilanteArrowTimer = vigilanteArrowTime;
+        vigilanteArrow.SetActive(true);
+        vigilanteArrow.UpdateTarget(target.GetTruePosition());
     }
 
     public void ResetVigilante()
     {
-        this.vigilanteArrowTimer = 0.0f;
-        this.vigilanteArrow?.SetActive(false);
+        vigilanteArrowTimer = 0.0f;
+        vigilanteArrow?.SetActive(false);
     }
 
     public void AllReset(PlayerControl rolePlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.VillainDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.VillainDown,
             rolePlayer.PlayerId);
     }
 
-    public bool TryKilledFrom(
-        PlayerControl rolePlayer, PlayerControl fromPlayer)
-    {
-        var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
-        if (fromRole.Core.Id == ExtremeRoleId.Hero)
-        {
-            HeroAcademia.RpcDrawHeroAndVillan(
-                fromPlayer, rolePlayer);
-            return false;
-        }
-        else if (fromRole.IsCrewmate())
-        {
-            return false;
-        }
-        return true;
-    }
     public override void ExiledAction(
         PlayerControl rolePlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.VillainDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.VillainDown,
             rolePlayer.PlayerId);
     }
     public override void RolePlayerKilledAction(
         PlayerControl rolePlayer, PlayerControl killerPlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.VillainDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.VillainDown,
             rolePlayer.PlayerId);
     }
 
@@ -860,13 +836,14 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
     protected override void RoleSpecificInit()
     {
-        this.vigilanteArrowTime = this.Loader.GetValue<VillanOption, float>(
+        vigilanteArrowTime = Loader.GetValue<VillanOption, float>(
             VillanOption.VigilanteSeeTime);
-        this.vigilanteArrowTimer = 0.0f;
+        vigilanteArrowTimer = 0.0f;
+		this.AbilityClass = new VillainAbilityHandler();
     }
 
 }
-public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleWinPlayerModifier, IKilledFrom
+public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleWinPlayerModifier
 {
     public enum VigilanteCondition : byte
     {
@@ -882,29 +859,34 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         Range,
     }
 
-    public VigilanteCondition Condition => this.condition;
-    private VigilanteCondition condition = VigilanteCondition.None;
+    public VigilanteCondition Condition => this.status is null ? VigilanteCondition.None : this.status.Condition;
+    private VigilanteStatusModel? status;
     private float range;
     private byte target;
+    public override IStatusModel? Status => status;
 
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
 	public Vigilante(
         ) : base(
-			RoleCore.BuildNeutral(
-				ExtremeRoleId.Vigilante,
-				ColorPalette.VigilanteFujiIro),
+			RoleCore.BuildNeutral(ExtremeRoleId.Vigilante, ColorPalette.VigilanteFujiIro),
             false, false, false, false,
             tab: OptionTab.CombinationTab)
-    { }
+    {
+    }
 #pragma warning restore CS8618
 	public void SetCondition(
         VigilanteCondition cond)
     {
-        if (this.condition == VigilanteCondition.None ||
+		if (this.status is null)
+		{
+			return;
+		}
+
+        if (this.Condition == VigilanteCondition.None ||
             cond == VigilanteCondition.NewLawInTheShip)
         {
-            this.condition = cond;
+            this.status.Condition = cond;
         }
     }
 
@@ -912,28 +894,28 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     {
         this.CreateNormalActivatingAbilityButton(
             "call",
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.VigilanteEmergencyCall),
             abilityOff: CleanUp);
-        this.Button.SetLabelToCrewmate();
+        Button.SetLabelToCrewmate();
     }
 
     public bool IsAbilityUse()
     {
-        this.target = byte.MaxValue;
+        target = byte.MaxValue;
 
         PlayerControl player = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this, this.range);
+            PlayerControl.LocalPlayer, this, range);
 
         if (player == null) { return false; }
-        this.target = player.PlayerId;
+        target = player.PlayerId;
 
 
-        return IRoleAbility.IsCommonUse() && this.target != byte.MaxValue;
+        return IRoleAbility.IsCommonUse() && target != byte.MaxValue;
     }
     public void CleanUp()
     {
-        HeroAcademia.RpcCleanUpEmergencyCall();
+        HeroAcademiaRole.RpcCleanUpEmergencyCall();
     }
 
     public void ModifiedWinPlayer(
@@ -941,7 +923,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         GameOverReason reason,
 		in WinnerTempData winner)
     {
-        switch (this.condition)
+        switch (this.Condition)
         {
             case VigilanteCondition.NewLawInTheShip:
                 winner.AddWithPlus(rolePlayerInfo);
@@ -983,42 +965,30 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     public bool UseAbility()
     {
-        HeroAcademia.RpcEmergencyCall(
+        HeroAcademiaRole.RpcEmergencyCall(
             PlayerControl.LocalPlayer,
-            this.target);
-        this.target = byte.MaxValue;
+            target);
+        target = byte.MaxValue;
         return true;
     }
 
-    public bool TryKilledFrom(
-        PlayerControl rolePlayer, PlayerControl fromPlayer)
-    {
-        var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
-        if (fromRole.Core.Id == ExtremeRoleId.Hero &&
-            this.condition != VigilanteCondition.NewEnemyNeutralForTheShip)
-        {
-            return false;
-        }
-        return true;
-    }
 
     public override bool IsSameTeam(SingleRoleBase targetRole) =>
         this.IsNeutralSameTeam(targetRole);
 
     public override string GetFullDescription()
     {
-		var id = Core.Id;
-		switch (this.condition)
+		switch (this.Condition)
         {
             case VigilanteCondition.NewHeroForTheShip:
                 return Tr.GetString(
-                    $"{id}CrewDescription");
+                    $"{this.Core.Id}CrewDescription");
             case VigilanteCondition.NewVillainForTheShip:
                 return Tr.GetString(
-                    $"{id}ImpDescription");
+                    $"{this.Core.Id}ImpDescription");
             case VigilanteCondition.NewEnemyNeutralForTheShip:
                 return Tr.GetString(
-                    $"{id}NeutDescription");
+                    $"{this.Core.Id}NeutDescription");
             default:
                 return base.GetFullDescription();
         }
@@ -1030,7 +1000,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         if (targetRole.Core.Id == ExtremeRoleId.Vigilante &&
             this.IsSameControlId(targetRole))
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 ColorPalette.VigilanteFujiIro,
                 getInGameTag());
         }
@@ -1040,12 +1010,12 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     public override string GetImportantText(bool isContainFakeTask = true)
     {
-        switch (this.condition)
+        switch (this.Condition)
         {
             case VigilanteCondition.NewHeroForTheShip:
             case VigilanteCondition.NewVillainForTheShip:
             case VigilanteCondition.NewEnemyNeutralForTheShip:
-                return this.createImportantText(isContainFakeTask);
+                return createImportantText(isContainFakeTask);
             default:
                 return base.GetImportantText(isContainFakeTask);
         }
@@ -1063,19 +1033,21 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     protected override void RoleSpecificInit()
     {
-        this.range = this.Loader.GetValue<VigilanteOption, float>(
+        status = new VigilanteStatusModel();
+        AbilityClass = new VigilanteAbilityHandler(status);
+        range = Loader.GetValue<VigilanteOption, float>(
             VigilanteOption.Range);
     }
 
     public void Update(PlayerControl rolePlayer)
     {
 
-        switch (this.condition)
+        switch (this.Condition)
         {
             case VigilanteCondition.None:
-                this.UseVent = false;
-                this.UseSabotage = false;
-                this.CanKill = false;
+                UseVent = false;
+                UseSabotage = false;
+                CanKill = false;
                 foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
                 {
                     var playerInfo = GameData.Instance.GetPlayerById(playerId);
@@ -1085,31 +1057,31 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 						continue;
 					}
 
-					var id = role.Core.Id;
+					var id = this.Core.Id;
                     if (id == ExtremeRoleId.Hero && playerInfo.Disconnected)
                     {
-                        HeroAcademia.RpcUpdateVigilante(
-                            HeroAcademia.Condition.HeroDown,
+                        HeroAcademiaRole.RpcUpdateVigilante(
+                            HeroAcademiaRole.Condition.HeroDown,
                             playerInfo.PlayerId);
                         return;
                     }
                     else if (id == ExtremeRoleId.Villain && playerInfo.Disconnected)
                     {
-                        HeroAcademia.RpcUpdateVigilante(
-                            HeroAcademia.Condition.VillainDown,
+                        HeroAcademiaRole.RpcUpdateVigilante(
+                            HeroAcademiaRole.Condition.VillainDown,
                             playerInfo.PlayerId);
                         return;
                     }
                 }
                 break;
             case VigilanteCondition.NewVillainForTheShip:
-                this.UseSabotage = true;
-                this.UseVent = true;
+                UseSabotage = true;
+                UseVent = true;
                 break;
             case VigilanteCondition.NewEnemyNeutralForTheShip:
-                this.UseSabotage = false;
-                this.UseVent = false;
-                this.CanKill = true;
+                UseSabotage = false;
+                UseVent = false;
+                CanKill = true;
                 break;
             default:
                 break;
@@ -1118,21 +1090,20 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     private string createImportantText(bool isContainFakeTask)
     {
-		var core = this.Core;
-        string baseString = Design.ColoedString(
-			core.Color,
+        string baseString = Design.ColoredString(
+			this.Core.Color,
             string.Format("{0}: {1}",
-                Design.ColoedString(
-					core.Color,
-                    Tr.GetString(this.RoleName)),
+                Design.ColoredString(
+					this.Core.Color,
+					Tr.GetString(RoleName)),
                 Tr.GetString(
-                    $"{core.Id}{this.condition}ShortDescription")));
+                    $"{this.Core.Id}{this.Condition}ShortDescription")));
 
-        if (isContainFakeTask && !this.HasTask)
+        if (isContainFakeTask && !HasTask)
         {
-            string fakeTaskString = Design.ColoedString(
-				core.Color,
-                TranslationController.Instance.GetString(
+            string fakeTaskString = Design.ColoredString(
+				this.Core.Color,
+				TranslationController.Instance.GetString(
                     StringNames.FakeTasks, System.Array.Empty<Il2CppSystem.Object>()));
             baseString = $"{baseString}\r\n{fakeTaskString}";
         }
@@ -1142,7 +1113,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     private string getInGameTag()
     {
-        switch (this.condition)
+        switch (this.Condition)
         {
             case VigilanteCondition.NewHeroForTheShip:
                 return " ♣";

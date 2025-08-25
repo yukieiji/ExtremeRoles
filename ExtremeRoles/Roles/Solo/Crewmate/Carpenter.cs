@@ -666,7 +666,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.White, Tr.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
@@ -693,7 +693,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.White,
                 $"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
         }
@@ -707,7 +707,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.CrewmateBlue,
                 PlayerControl.LocalPlayer.Data.Role.Blurb);
         }

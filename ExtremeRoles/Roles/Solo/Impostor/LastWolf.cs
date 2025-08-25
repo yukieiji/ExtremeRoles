@@ -179,7 +179,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
         }
     }
@@ -227,7 +227,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.ImpostorRed,
                 PlayerControl.LocalPlayer.Data.Role.Blurb);
         }

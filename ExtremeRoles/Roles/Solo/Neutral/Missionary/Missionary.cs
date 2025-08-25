@@ -18,6 +18,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Roles.Combination.Avalon;
 
 #nullable enable
 
@@ -67,13 +68,13 @@ public sealed class MissionaryRole :
 	{
 		if (this.lamb.Any(x => x.PlayerId == targetPlayerId))
 		{
-			return Design.ColoedString(Core.Color, " ×");
+			return Design.ColoredString(Core.Color, " ×");
 		}
 		else if (
 			this.status is not null &&
 			this.status.ContainsJudgementTarget(targetPlayerId))
 		{
-			return Design.ColoedString(Core.Color, " ★");
+			return Design.ColoredString(Core.Color, " ★");
 		}
 		else
 		{
@@ -236,15 +237,15 @@ public sealed class MissionaryRole :
 		if (this.targetPlayer == null) { return false; }
 
 		byte playerId = this.targetPlayer.PlayerId;
-        var assassin = ExtremeRoleManager.GameRole[playerId] as Combination.Assassin;
 
-		if (assassin != null)
+		if (ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(playerId, out var assassin) &&
+			assassin.Status is AssassinStatusModel status)
 		{
-			if (!assassin.CanKilled)
+			if (!status.CanKilled)
 			{
 				return false;
 			}
-			if (!assassin.CanKilledFromNeutral)
+			if (!status.CanKilledFromNeutral)
 			{
 				return false;
 			}

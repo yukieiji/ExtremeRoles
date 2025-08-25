@@ -8,6 +8,7 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using Hazel;
 using InnerNet;
@@ -73,9 +74,10 @@ public static class RPCOperator
         TeleporterSetPortal,
 		BaitAwakeRole,
 		SummonerOps,
+		ExorcistOps,
 
-        // インポスター
-        CarrierAbility,
+		// インポスター
+		CarrierAbility,
         PainterPaintBody,
         OverLoaderSwitchAbility,
         CrackerCrackDeadBody,
@@ -512,7 +514,7 @@ public static class RPCOperator
 	public static void HeroHeroAcademiaCommand(
         ref MessageReader reader)
     {
-        Roles.Combination.HeroAcademia.RpcCommand(
+        HeroAcademiaRole.RpcCommand(
             ref reader);
     }
 
@@ -540,7 +542,7 @@ public static class RPCOperator
 
     public static void TimeMasterAbility(ref MessageReader reader)
     {
-        Roles.Solo.Crewmate.TimeMaster.Ability(ref reader);
+        Roles.Solo.Crewmate.TimeMaster.TimeMasterRole.Ability(ref reader);
     }
 
     public static void AgencyTakeTask(
@@ -551,7 +553,7 @@ public static class RPCOperator
     }
     public static void FencerAbility(ref MessageReader reader)
     {
-        Roles.Solo.Crewmate.Fencer.Ability(ref reader);
+        Roles.Solo.Crewmate.Fencer.FencerRole.Ability(ref reader);
     }
 
     public static void CuresMakerCurseKillCool(
@@ -600,7 +602,12 @@ public static class RPCOperator
 			rolePlayerId, targetPlayerId, x, y, isDead);
 	}
 
-    public static void CarrierAbility(
+	public static void ExorcistRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Crewmate.Exorcist.ExorcistRole.RpcOps(reader);
+	}
+
+	public static void CarrierAbility(
         byte callerId, float x, float y,
         byte targetId, bool deadBodyPickUp)
     {

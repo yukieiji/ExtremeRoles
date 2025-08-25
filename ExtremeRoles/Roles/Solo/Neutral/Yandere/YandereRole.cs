@@ -219,7 +219,7 @@ public sealed class YandereRole :
 
         if (targetPlayerId == OneSidedLover.PlayerId)
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 ColorPalette.YandereVioletRed,
                 $" ♥");
         }
