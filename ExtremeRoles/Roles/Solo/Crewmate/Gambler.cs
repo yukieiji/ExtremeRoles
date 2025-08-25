@@ -70,13 +70,7 @@ public sealed class Gambler :
 
     public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
     {
-        if (this.voteCount != 1 &&
-			this.votedFor != PlayerVoteArea.HasNotVoted &&
-			this.votedFor != PlayerVoteArea.MissedVote &&
-			this.votedFor != PlayerVoteArea.DeadVote)
-        {
-            yield return new VoteInfo(rolePlayer.PlayerId, votedFor, voteCount - 1);
-        }
+		yield break;
     }
 
     public void ResetModifier()
