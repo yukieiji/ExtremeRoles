@@ -154,7 +154,7 @@ public sealed class BarterRole :
 			return true;
 		}
 		return 
-			!source.HasValue || 
+			source.HasValue && 
 			source.Value == target;
 	}
 
@@ -184,7 +184,7 @@ public sealed class BarterRole :
 							ObjectPath.CommonImagePathFormat, 
 							ObjectPath.VoteSwapSource));
 					sourceMark.transform.localPosition = new Vector3(7.25f, -0.5f, -4f);
-					sourceMark.transform.localScale = new Vector3(1.0f, 3.5f, 1.0f);
+					sourceMark.transform.localScale = new Vector3(0.5f, 3.0f, 1.0f);
 					sourceMark.gameObject.layer = 5;
 					this.sourceMark[target] = sourceMark;
 				}
@@ -256,6 +256,7 @@ public sealed class BarterRole :
 
 		this.sourceMark = [];
 
+		this.source = null;
 		this.status = new BarterStatus(loader, this.IsImpostor());
 		this.showOps = loader.GetValue<Option, bool>(
 			Option.ShowCastlingOther) ?

@@ -105,7 +105,12 @@ public sealed class BarterStatus(IOptionLoader loader, bool isImpostor) : IStatu
 	public bool IsAwake => this.awake.IsAwake;
 
 	public void UpdateAwakeStatus(PlayerControl player)
-		=> this.awake.Update(player);
+	{
+		if (!this.awake.IsAwake)
+		{
+			this.awake.Update(player);
+		}
+	}
 
 	public string CastlingStatus()
 		=> Tr.GetString(

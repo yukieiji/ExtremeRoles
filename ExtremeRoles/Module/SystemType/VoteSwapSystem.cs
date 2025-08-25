@@ -1,9 +1,11 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Hazel;
 using UnityEngine;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
@@ -89,7 +91,12 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			allAnime.Add(sAnime);
 			allAnime.Add(tAnime);
 		}
-		instance.StartCoroutine(Effects.All(allAnime.ToArray()));
+		instance.StartCoroutine(
+			Effects.Sequence([
+				Effects.All(allAnime.ToArray()),
+				system.clear().WrapToIl2Cpp(),
+			]));
+
 	}
 
 	public void RpcSwapVote(byte source, byte target, ShowOps show)
@@ -109,23 +116,16 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
-		if (timing is not ResetTiming.ExiledEnd)
+		if (timing is ResetTiming.MeetingStart)
 		{
-			return;
+			this.pva = MeetingHud.Instance.playerStates.ToDictionary(x => x.TargetPlayerId);
 		}
-		
-		this.swapList.Clear();
-		this.img.Clear();
-
-		this.cache = null;
-		this.pva = null;
 	}
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
 		byte source = msgReader.ReadByte();
 		byte target = msgReader.ReadByte();
-		var ops =(ShowOps)msgReader.ReadByte();
 		bool showImg = ((ShowOps)msgReader.ReadByte()) switch
 		{
 			ShowOps.ShowAll => true,
@@ -222,9 +222,19 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 				type is ImgType.Source ? 
 					ObjectPath.VoteSwapSource :
 					ObjectPath.VoteSwapTarget));
-		img.transform.localPosition = new Vector3(7.2f + 0.05f * index, -0.5f, -2.75f);
-		img.transform.localScale = new Vector3(1.0f, 3.5f, 1.0f);
+		img.transform.localPosition = new Vector3(6.5f + 0.05f * index, -0.5f, -2.75f);
+		img.transform.localScale = new Vector3(0.5f, 3.0f, 1.0f);
 		img.gameObject.layer = 5;
 		return img;
+	}
+
+	private IEnumerator clear()
+	{
+		this.swapList.Clear();
+		this.img.Clear();
+
+		this.cache = null;
+		this.pva = null;
+		yield break;
 	}
 }
