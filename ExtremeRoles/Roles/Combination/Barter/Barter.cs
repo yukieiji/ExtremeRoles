@@ -139,6 +139,11 @@ public sealed class BarterRole :
 	public bool IsBlockMeetingButtonAbility(
 		PlayerVoteArea instance)
 	{
+		if (!this.IsAwake)
+		{
+			return true;
+		}
+
 		byte target = instance.TargetPlayerId;
 		if (this.status is null ||
 			!this.status.CanUseCastling() ||
