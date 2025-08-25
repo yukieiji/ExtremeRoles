@@ -7,7 +7,7 @@ public class BarterAssetLoadRunner
 {
 	public override IEnumerator Run()
 	{
-		Log.LogInfo($"----- Unit:AcceleratorAssetLoad Test -----");
+		Log.LogInfo($"----- Unit:BarterAssetLoad Test -----");
 
 		LoadFromExR(ExtremeRoleId.Barter);
 		yield break;
