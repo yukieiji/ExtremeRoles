@@ -29,6 +29,13 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	public static bool TryGet([NotNullWhen(true)] out VoteSwapSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.VoteSwapSystem, out system);
 
+	public enum ShowOps : byte
+	{
+		Hide,
+		ShowOnlyCaller,
+		ShowAll,
+	}
+
 	private enum ImgType : byte
 	{
 		Source,
@@ -83,17 +90,17 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		instance.StartCoroutine(Effects.All(allAnime.ToArray()));
 	}
 
-	public void RpcSwapVote(byte source, byte target, bool isShowImg)
+	public void RpcSwapVote(byte source, byte target, ShowOps show)
 	{
-		uint color = isShowImg ? Design.FromRGBA(
-			UnityEngine.Random.ColorHSV()) : 0;
+		uint color = show is ShowOps.Hide ? 0 : Design.FromRGBA(
+			UnityEngine.Random.ColorHSV());
 
 		ExtremeSystemTypeManager.RpcUpdateSystem(
 			ExtremeSystemType.VoteSwapSystem, x =>
 			{
 				x.Write(source);
 				x.Write(target);
-				x.Write(isShowImg);
+				x.Write((byte)show);
 				x.WritePacked(color);
 			});
 	}
@@ -116,7 +123,13 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	{
 		byte source = msgReader.ReadByte();
 		byte target = msgReader.ReadByte();
-		bool showImg = msgReader.ReadBoolean() || player.PlayerId == PlayerControl.LocalPlayer.PlayerId;
+		var ops =(ShowOps)msgReader.ReadByte();
+		bool showImg = ((ShowOps)msgReader.ReadByte()) switch
+		{
+			ShowOps.ShowAll => true,
+			ShowOps.ShowOnlyCaller => player.PlayerId == PlayerControl.LocalPlayer.PlayerId,
+			_ => false,
+		};
 		uint color = msgReader.ReadPackedUInt32();
 		swapVote(source, target, showImg, color);
 	}

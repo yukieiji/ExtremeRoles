@@ -51,7 +51,7 @@ public sealed class BarterRole :
 		string.Concat(roleNamePrefix, Core.Name);
 	private TextMeshPro? meetingCastlingText = null;
 	private byte? source = null;
-	private bool showOther = false;
+	private VoteSwapSystem.ShowOps showOps = VoteSwapSystem.ShowOps.Hide;
 
 	private bool awakeHasOtherVision;
 	private bool awakeHasOtherKillCool;
@@ -83,7 +83,7 @@ public sealed class BarterRole :
 		) : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Barter,
-			ColorPalette.GuesserRedYellow),
+			ColorPalette.BarterUsusuou),
 		false, true, false, false,
 		tab: OptionTab.CombinationTab)
 	{ }
@@ -193,7 +193,7 @@ public sealed class BarterRole :
 			{
 				rend.gameObject.SetActive(false);
 			}
-			system?.RpcSwapVote(source, target, this.showOther);
+			system?.RpcSwapVote(source, target, this.showOps);
 			this.source = null;
 		}
 		return execCastling;
@@ -254,8 +254,9 @@ public sealed class BarterRole :
 		this.sourceMark = [];
 
 		this.status = new BarterStatus(loader, this.IsImpostor());
-		this.showOther = loader.GetValue<Option, bool>(
-			Option.ShowCastlingOther);
+		this.showOps = loader.GetValue<Option, bool>(
+			Option.ShowCastlingOther) ?
+			VoteSwapSystem.ShowOps.ShowAll : VoteSwapSystem.ShowOps.ShowOnlyCaller;
 
 		this.roleNamePrefix = CreateImpCrewPrefix();
 		this.system = VoteSwapSystem.CreateOrGet();
@@ -412,7 +413,7 @@ public sealed class BarterRole :
 		for (int i = 0; i < this.status.OneCastlingNum; ++i)
 		{
 			byte[] item = target.OrderBy(x => RandomGenerator.Instance.Next()).Take(2).ToArray();
-			this.system?.RpcSwapVote(item[0], item[1], this.showOther);
+			this.system?.RpcSwapVote(item[0], item[1], this.showOps);
 		}
 	}
 }
