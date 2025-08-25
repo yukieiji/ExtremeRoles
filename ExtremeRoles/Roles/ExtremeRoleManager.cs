@@ -13,8 +13,6 @@ using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Combination.Avalon;
 using ExtremeRoles.Roles.Combination.Barter;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
-using ExtremeRoles.Roles.Combination.Avalon;
-using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Combination.DetectiveOffice;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
