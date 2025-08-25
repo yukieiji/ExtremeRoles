@@ -454,6 +454,11 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 			loader.GetValue<DetectiveOption, float>(
 				DetectiveOption.SearchTime));
 
+		this.includeName = loader.GetValue<DetectiveOption, bool>(
+			DetectiveOption.SearchCanFindName);
+		this.canContinue = loader.GetValue<DetectiveOption, bool>(
+			DetectiveOption.SearchOnlyOnce);
+
 		this.searchInfo = new CrimeSearchInfo(container, updator);
 		this.status = new DetectiveStatus();
 
