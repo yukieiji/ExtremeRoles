@@ -10,7 +10,6 @@ using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>;
@@ -36,6 +35,11 @@ public enum ExtremeSystemType : byte
 	VitalDummySystem,
 	SecurityDummySystem,
 	OnemanMeetingSystem,
+	VoteSwapSystem,
+
+	AbilityButtonLockSystem,
+	ReportButtonLockSystem,
+	KillButtonLockSystem,
 
 	WispTorch,
 

@@ -56,7 +56,7 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 		Vision = option.Vision;
 		IsApplyEnvironmentVision = option.ApplyEnvironmentVisionEffect;
 
-		FakeImposter = jackal.CanSeeImpostorToSidekickImpostor && isImpostor;
+		FakeImpostor = jackal.CanSeeImpostorToSidekickImpostor && isImpostor;
 
 		recursion = jackal.CurRecursion;
 		sidekickJackalCanMakeSidekick = jackal.SidekickJackalCanMakeSidekick;

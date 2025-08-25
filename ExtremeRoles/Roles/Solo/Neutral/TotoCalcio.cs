@@ -174,7 +174,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
 
         if (targetPlayerId == this.betPlayer.PlayerId)
         {
-            return Helper.Design.ColoedString(
+            return Helper.Design.ColoredString(
                 this.Core.Color, $" ▲");
         }
 

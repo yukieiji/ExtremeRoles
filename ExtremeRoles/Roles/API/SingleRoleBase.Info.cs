@@ -9,10 +9,10 @@ namespace ExtremeRoles.Roles.API
         public virtual string GetImportantText(bool isContainFakeTask = true)
         {
 			var color = this.Core.Color;
-            string baseString = Design.ColoedString(
+            string baseString = Design.ColoredString(
 				color,
                 string.Format("{0}: {1}",
-                    Design.ColoedString(
+                    Design.ColoredString(
 					   color,
                         Tr.GetString(this.RoleName)),
                     Tr.GetString(
@@ -20,7 +20,7 @@ namespace ExtremeRoles.Roles.API
 
             if (isContainFakeTask && !this.HasTask)
             {
-                string fakeTaskString = Design.ColoedString(
+                string fakeTaskString = Design.ColoredString(
 					color,
                     TranslationController.Instance.GetString(
                         StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
@@ -36,7 +36,7 @@ namespace ExtremeRoles.Roles.API
         public virtual string GetFullDescription() => Tr.GetString(
            $"{this.Core.Id}FullDescription");
 
-        public virtual string GetColoredRoleName(bool isTruthName = false) => Design.ColoedString(
+        public virtual string GetColoredRoleName(bool isTruthName = false) => Design.ColoredString(
             this.Core.Color, Tr.GetString(this.RoleName));
         public virtual string GetRoleTag() => string.Empty;
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Hazel;
@@ -289,7 +289,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 			}
 			else
 			{
-				playerVoteArea.VotedFor = 254;
+				playerVoteArea.VotedFor = PlayerVoteArea.MissedVote;
 			}
 			meeting.SetDirtyBit(1U);
 

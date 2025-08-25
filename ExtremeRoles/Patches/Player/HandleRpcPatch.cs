@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using HarmonyLib;
 using Hazel;
@@ -245,6 +245,9 @@ public static class PlayerControlHandleRpcPatch
 				bool isDead = reader.ReadBoolean();
 				RPCOperator.SummonerRpcOps(
 					summonerPlayerId, summonTargetPlayerId, x, y, isDead);
+				break;
+			case RPCOperator.Command.ExorcistOps:
+				RPCOperator.ExorcistRpcOps(reader);
 				break;
 			case RPCOperator.Command.CarrierAbility:
 				byte carrierCarryOpCallPlayerId = reader.ReadByte();

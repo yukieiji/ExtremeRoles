@@ -23,7 +23,7 @@ public abstract partial class SingleRoleBase
 			return Palette.ImpostorRed;
 		}
 
-        if ((targetRole.IsImpostor() || targetRole.FakeImposter) &&
+        if ((targetRole.IsImpostor() || targetRole.FakeImpostor) &&
             this.IsImpostor())
         {
             return Palette.ImpostorRed;

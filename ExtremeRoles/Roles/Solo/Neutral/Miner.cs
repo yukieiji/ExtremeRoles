@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.Combination.Avalon;
 
 #nullable enable
 
@@ -254,13 +255,15 @@ public sealed class Miner :
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (playerInfo == null ||
-					killedPlayer.Contains(playerInfo.PlayerId)) { continue; }
+					killedPlayer.Contains(playerInfo.PlayerId))
+				{ 
+					continue;
+				}
 
-                var assassin = ExtremeRoleManager.GameRole[
-                    playerInfo.PlayerId] as Combination.Assassin;
-
-                if (assassin != null &&
-					(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
+                if (ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(
+						playerInfo.PlayerId, out var assassin) &&
+					assassin.Status is AssassinStatusModel status &&
+					(!status.CanKilled || !status.CanKilledFromNeutral))
                 {
 					continue;
 				}
@@ -317,7 +320,7 @@ public sealed class Miner :
                     // [AUER32-ACM] {プレイヤー名} 100↑
                     // AmongUs ExtremeRoles v3.2.0.0 - AntiCrewmateMine
                     this.killLogger.AddText(
-                        $"[AUER32-ACM] {Helper.Design.ColoedString(new Color32(255, 153, 51, byte.MaxValue), killPlayer.DefaultOutfit.PlayerName)} 100↑");
+                        $"[AUER32-ACM] {Helper.Design.ColoredString(new Color32(255, 153, 51, byte.MaxValue), killPlayer.DefaultOutfit.PlayerName)} 100↑");
                 }
             }
         }
