@@ -91,11 +91,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			allAnime.Add(sAnime);
 			allAnime.Add(tAnime);
 		}
-		instance.StartCoroutine(
-			Effects.Sequence([
-				Effects.All(allAnime.ToArray()),
-				system.clear().WrapToIl2Cpp(),
-			]));
+		instance.StartCoroutine(Effects.All(allAnime.ToArray()));
 
 	}
 
@@ -118,6 +114,11 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	{
 		if (timing is ResetTiming.MeetingStart)
 		{
+			this.swapList.Clear();
+			this.img.Clear();
+
+			this.cache = null;
+			this.pva = null;
 			this.pva = MeetingHud.Instance.playerStates.ToDictionary(x => x.TargetPlayerId);
 		}
 	}
@@ -138,7 +139,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 	private void swapVote(byte source, byte target, bool showImg, uint colorUint)
 	{
-
+		Logging.Debug($"Swap {source} to {target}");
 		this.swapList.Add((source, target));
 
 		if (!showImg || 
@@ -226,15 +227,5 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		img.transform.localScale = new Vector3(0.5f, 3.0f, 1.0f);
 		img.gameObject.layer = 5;
 		return img;
-	}
-
-	private IEnumerator clear()
-	{
-		this.swapList.Clear();
-		this.img.Clear();
-
-		this.cache = null;
-		this.pva = null;
-		yield break;
 	}
 }
