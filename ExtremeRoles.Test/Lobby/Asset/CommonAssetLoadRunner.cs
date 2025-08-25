@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ExtremeRoles.Resources;
 using UnityEngine;
 
@@ -15,6 +15,16 @@ public class CommonAssetLoadRunner
 	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:SingleImgLoad Test -----");
+		LoadFromExR(
+			ObjectPath.CommonTextureAsset,
+			string.Format(
+				ObjectPath.CommonImagePathFormat,
+				ObjectPath.VoteSwapSource));
+		LoadFromExR(
+			ObjectPath.CommonTextureAsset,
+			string.Format(
+				ObjectPath.CommonImagePathFormat,
+				ObjectPath.VoteSwapTarget));
 #if RELEASE
 		yield break;
 #elif DEBUG

@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -50,7 +51,7 @@ public sealed class BarterRole :
 		string.Concat(roleNamePrefix, Core.Name);
 	private TextMeshPro? meetingCastlingText = null;
 	private byte? source = null;
-	private bool showOther = false;
+	private VoteSwapSystem.ShowOps showOps = VoteSwapSystem.ShowOps.Hide;
 
 	private bool awakeHasOtherVision;
 	private bool awakeHasOtherKillCool;
@@ -59,7 +60,7 @@ public sealed class BarterRole :
 
 	private string roleNamePrefix = "";
 
-	public Sprite AbilityImage => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
+	public Sprite AbilityImage => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Barter);
 
 	private const float defaultXPos = -2.85f;
 	private const float subRoleXPos = -1.5f;
@@ -82,7 +83,7 @@ public sealed class BarterRole :
 		) : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Barter,
-			ColorPalette.GuesserRedYellow),
+			ColorPalette.BarterUsusuou),
 		false, true, false, false,
 		tab: OptionTab.CombinationTab)
 	{ }
@@ -139,15 +140,21 @@ public sealed class BarterRole :
 	public bool IsBlockMeetingButtonAbility(
 		PlayerVoteArea instance)
 	{
+		if (!this.IsAwake)
+		{
+			return true;
+		}
+
 		byte target = instance.TargetPlayerId;
 		if (this.status is null ||
 			!this.status.CanUseCastling() ||
-			target == PlayerVoteArea.DeadVote)
+			target == PlayerVoteArea.DeadVote ||
+			target == PlayerVoteArea.SkippedVote)
 		{
-			return false;
+			return true;
 		}
 		return 
-			!source.HasValue || 
+			source.HasValue && 
 			source.Value == target;
 	}
 
@@ -171,10 +178,13 @@ public sealed class BarterRole :
 					sourceMark = UnityEngine.Object.Instantiate(
 						instance.Background, instance.LevelNumberText.transform);
 					sourceMark.name = $"captain_SpecialVoteCheckMark_{target}";
-					sourceMark.sprite = UnityObjectLoader.LoadSpriteFromResources(
-						ObjectPath.CaptainSpecialVoteCheck);
+					sourceMark.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+						ObjectPath.CommonTextureAsset,
+						string.Format(
+							ObjectPath.CommonImagePathFormat, 
+							ObjectPath.VoteSwapSource));
 					sourceMark.transform.localPosition = new Vector3(7.25f, -0.5f, -4f);
-					sourceMark.transform.localScale = new Vector3(1.0f, 3.5f, 1.0f);
+					sourceMark.transform.localScale = new Vector3(0.5f, 3.0f, 1.0f);
 					sourceMark.gameObject.layer = 5;
 					this.sourceMark[target] = sourceMark;
 				}
@@ -186,7 +196,7 @@ public sealed class BarterRole :
 			{
 				rend.gameObject.SetActive(false);
 			}
-			system?.RpcSwapVote(source, target, this.showOther);
+			system?.RpcSwapVote(source, target, this.showOps);
 			this.source = null;
 		}
 		return execCastling;
@@ -205,20 +215,20 @@ public sealed class BarterRole :
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
+		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
+		CreateKillerOption(factory, imposterSetting);
+
 		factory.CreateIntOption(
 			Option.AwakeTaskRate,
 			70, 0, 100, 10,
 			format: OptionUnit.Percentage);
 
-		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
-
 		factory.CreateIntOption(
 			Option.AwakeDeadPlayerNum,
-			7, 0, 12, 1, imposterSetting);
+			7, 0, 12, 1);
 		factory.CreateIntOption(
 			Option.AwakeKillNum,
-			2, 0, 5, 1, imposterSetting);
+			2, 0, 5, 1);
 
 		factory.CreateBoolOption(
 			Option.CanCallMeeting,
@@ -246,9 +256,11 @@ public sealed class BarterRole :
 
 		this.sourceMark = [];
 
+		this.source = null;
 		this.status = new BarterStatus(loader, this.IsImpostor());
-		this.showOther = loader.GetValue<Option, bool>(
-			Option.ShowCastlingOther);
+		this.showOps = loader.GetValue<Option, bool>(
+			Option.ShowCastlingOther) ?
+			VoteSwapSystem.ShowOps.ShowAll : VoteSwapSystem.ShowOps.ShowOnlyCaller;
 
 		this.roleNamePrefix = CreateImpCrewPrefix();
 		this.system = VoteSwapSystem.CreateOrGet();
@@ -388,6 +400,24 @@ public sealed class BarterRole :
 		{
 			this.HasOtherKillCool = this.awakeHasOtherKillCool;
 			this.HasOtherKillRange = this.awakeHasOtherKillRange;
+		}
+	}
+
+	private void randomCastling()
+	{
+		if (MeetingHud.Instance == null ||
+			this.status is null)
+		{
+			return;
+		}
+		var target = MeetingHud.Instance.playerStates
+			.Select(x => x.TargetPlayerId)
+			.Where(x => x != PlayerVoteArea.SkippedVote && x != PlayerVoteArea.DeadVote);
+
+		for (int i = 0; i < this.status.OneCastlingNum; ++i)
+		{
+			byte[] item = target.OrderBy(x => RandomGenerator.Instance.Next()).Take(2).ToArray();
+			this.system?.RpcSwapVote(item[0], item[1], this.showOps);
 		}
 	}
 }
