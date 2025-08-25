@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -147,9 +148,10 @@ public sealed class BarterRole :
 		byte target = instance.TargetPlayerId;
 		if (this.status is null ||
 			!this.status.CanUseCastling() ||
-			target == PlayerVoteArea.DeadVote)
+			target == PlayerVoteArea.DeadVote ||
+			target == PlayerVoteArea.SkippedVote)
 		{
-			return false;
+			return true;
 		}
 		return 
 			!source.HasValue || 
@@ -393,6 +395,24 @@ public sealed class BarterRole :
 		{
 			this.HasOtherKillCool = this.awakeHasOtherKillCool;
 			this.HasOtherKillRange = this.awakeHasOtherKillRange;
+		}
+	}
+
+	private void randomCastling()
+	{
+		if (MeetingHud.Instance == null ||
+			this.status is null)
+		{
+			return;
+		}
+		var target = MeetingHud.Instance.playerStates
+			.Select(x => x.TargetPlayerId)
+			.Where(x => x != PlayerVoteArea.SkippedVote && x != PlayerVoteArea.DeadVote);
+
+		for (int i = 0; i < this.status.OneCastlingNum; ++i)
+		{
+			byte[] item = target.OrderBy(x => RandomGenerator.Instance.Next()).Take(2).ToArray();
+			this.system?.RpcSwapVote(item[0], item[1], this.showOther);
 		}
 	}
 }
