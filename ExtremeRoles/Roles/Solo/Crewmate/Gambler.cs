@@ -66,8 +66,6 @@ public sealed class Gambler :
 
         int newVotedNum = curVoteNum + voteCount - 1;
         voteResult[this.votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
-        int newVotedNum = curVoteNum + playerVoteNum - 1;
-        voteResult[voteTo] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
 
     public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
