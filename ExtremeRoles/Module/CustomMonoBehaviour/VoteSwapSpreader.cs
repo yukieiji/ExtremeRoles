@@ -59,6 +59,10 @@ public sealed class VoteSwapSpreader : MonoBehaviour
 
 				// 新しい親を設定
 				spriteRenderer.transform.parent = this.target;
+				if (this.target.TryGetComponent<PlayerVoteArea>(out var component))
+				{
+					spriteRenderer.material.SetInt(PlayerMaterial.MaskLayer, component.MaskLayer);
+				}
 
 				// ワールド座標を再適用して、位置がジャンプしないようにする
 				spriteRenderer.transform.position = currentWorldPosition;
