@@ -2,7 +2,7 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Test.Lobby.Asset;
 
-public class BarterAssetLoadRunner
+public sealed class BarterAssetLoadRunner
 	: AssetLoadRunner
 {
 	public override IEnumerator Run()
