@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Meeting;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -65,18 +65,14 @@ public sealed class Gambler :
         }
 
         int newVotedNum = curVoteNum + voteCount - 1;
-        voteResult[this.votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
+		Logging.Debug($"New vote num : {newVotedNum}");
+		voteResult[this.votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
 
     public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
     {
-        if (this.voteCount != 1 &&
-			this.votedFor != PlayerVoteArea.HasNotVoted &&
-			this.votedFor != PlayerVoteArea.MissedVote &&
-			this.votedFor != PlayerVoteArea.DeadVote)
-        {
-            yield return new VoteInfo(rolePlayer.PlayerId, votedFor, voteCount - 1);
-        }
+		// Gamblerは見た目は変更しないのでそのままにする
+		yield break;
     }
 
     public void ResetModifier()

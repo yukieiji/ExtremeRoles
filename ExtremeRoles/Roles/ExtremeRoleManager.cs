@@ -15,6 +15,7 @@ using ExtremeRoles.Roles.Combination.Barter;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Combination.DetectiveOffice;
 using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 using ExtremeRoles.Roles.Solo.Crewmate.Fencer;
 using ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
@@ -305,6 +306,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Bait        , new Bait()},
 			{(int)ExtremeRoleId.Jailer      , new Jailer()},
 			{(int)ExtremeRoleId.Summoner    , new Summoner()},
+			{(int)ExtremeRoleId.Exorcist    , new ExorcistRole()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},

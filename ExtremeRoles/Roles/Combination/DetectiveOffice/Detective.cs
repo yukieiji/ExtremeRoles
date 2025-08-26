@@ -384,9 +384,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 			hideSearchText();
 			if (this.forceMeetingOnSearchEnd)
 			{
-				MeetingRoomManager.Instance.AssignSelf(rolePlayer, null);
-				HudManager.Instance.OpenMeetingRoom(rolePlayer);
-				rolePlayer.RpcStartMeeting(null);
+				rolePlayer.CmdReportDeadBody(null);
 			}
 		}
 	}

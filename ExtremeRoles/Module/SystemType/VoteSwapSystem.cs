@@ -1,12 +1,15 @@
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
-using Hazel;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using UnityEngine;
-using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
 
+using Hazel;
+using UnityEngine;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Resources;
+
+using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
 
 
 #nullable enable
@@ -29,6 +32,13 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	public static bool TryGet([NotNullWhen(true)] out VoteSwapSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.VoteSwapSystem, out system);
 
+	public enum ShowOps : byte
+	{
+		Hide,
+		ShowOnlyCaller,
+		ShowAll,
+	}
+
 	private enum ImgType : byte
 	{
 		Source,
@@ -47,7 +57,6 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 	public static void AnimateSwap(
 		MeetingHud instance,
-		Dictionary<byte, int> voteInfo,
 		Dictionary<byte, PlayerVoteArea> pvaCache)
 	{
 		if (!TryGet(out var system))
@@ -55,7 +64,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			return;
 		}
 
-		var swapInfo = system.getSwapInfo(voteInfo);
+		var swapInfo = system.getSwapInfo();
 		var allAnime = new List<Il2CppIEnumerator>(swapInfo.Count * 2);
 
 		foreach (var (s, t) in swapInfo)
@@ -83,47 +92,61 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		instance.StartCoroutine(Effects.All(allAnime.ToArray()));
 	}
 
-	public void RpcSwapVote(byte source, byte target, bool isShowImg)
+	public static bool TryGetSwapTarget(byte source, out byte target)
 	{
-		uint color = isShowImg ? Design.FromRGBA(
-			UnityEngine.Random.ColorHSV()) : 0;
+		if (!TryGet(out var system))
+		{
+			target = byte.MaxValue;
+			return false;
+		}
+		var swapInfo = system.getSwapInfo();
+		return swapInfo.TryGetValue(source, out target);
+	}
+
+	public void RpcSwapVote(byte source, byte target, ShowOps show)
+	{
+		uint color = show is ShowOps.Hide ? 0 : Design.FromRGBA(
+			UnityEngine.Random.ColorHSV());
 
 		ExtremeSystemTypeManager.RpcUpdateSystem(
 			ExtremeSystemType.VoteSwapSystem, x =>
 			{
 				x.Write(source);
 				x.Write(target);
-				x.Write(isShowImg);
+				x.Write((byte)show);
 				x.WritePacked(color);
 			});
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
-		if (timing is not ResetTiming.ExiledEnd)
+		if (timing is ResetTiming.MeetingStart)
 		{
-			return;
-		}
-		
-		this.swapList.Clear();
-		this.img.Clear();
+			this.swapList.Clear();
+			this.img.Clear();
 
-		this.cache = null;
-		this.pva = null;
+			this.cache = null;
+			this.pva = MeetingHud.Instance.playerStates.ToDictionary(x => x.TargetPlayerId);
+		}
 	}
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
 		byte source = msgReader.ReadByte();
 		byte target = msgReader.ReadByte();
-		bool showImg = msgReader.ReadBoolean() || player.PlayerId == PlayerControl.LocalPlayer.PlayerId;
+		bool showImg = ((ShowOps)msgReader.ReadByte()) switch
+		{
+			ShowOps.ShowAll => true,
+			ShowOps.ShowOnlyCaller => player.PlayerId == PlayerControl.LocalPlayer.PlayerId,
+			_ => false,
+		};
 		uint color = msgReader.ReadPackedUInt32();
 		swapVote(source, target, showImg, color);
 	}
 
 	private void swapVote(byte source, byte target, bool showImg, uint colorUint)
 	{
-
+		Logging.Debug($"Swap {source} to {target}");
 		this.swapList.Add((source, target));
 
 		if (!showImg || 
@@ -145,22 +168,42 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 	private IReadOnlyDictionary<byte, int> swap(Dictionary<byte, int> voteInfo)
 	{
-		var swapInfo = getSwapInfo(voteInfo);
+		var swapInfo = getSwapInfo();
 
-		var finalData = new Dictionary<byte, int>(voteInfo.Count);
+		var tempData = new Dictionary<byte, int>(voteInfo.Count);
 		foreach (var (s, t) in swapInfo)
 		{
-			finalData[s] = voteInfo[t];
+			if (!voteInfo.TryGetValue(t, out int val))
+			{
+				val = 0;
+			}
+			tempData[s] = val;
+		}
+
+		Logging.Debug($"--- swaped vote info ---");
+		var finalData = new Dictionary<byte, int>(tempData.Count);
+		foreach (var (t, v) in tempData)
+		{
+			if (v > 0)
+			{
+				Logging.Debug($"Vote to {t}, Num:{v}");
+				finalData[t] = v;
+			}
 		}
 
 		return finalData;
 	}
 
-	private IReadOnlyDictionary<byte, byte> getSwapInfo(Dictionary<byte, int> voteInfo)
+	private IReadOnlyDictionary<byte, byte> getSwapInfo()
 	{
+		if (this.pva is null)
+		{
+			return new Dictionary<byte, byte>();
+		}
+
 		if (this.cache is null)
 		{
-			this.cache = voteInfo.Keys.ToDictionary(key => key, key => key);
+			this.cache = this.pva.Keys.ToDictionary(key => key, key => key);
 
 			// 2. 各スワップ操作をシミュレートし、マップの値を更新していく
 			foreach (var (s, t) in this.swapList)
@@ -190,20 +233,25 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			list = [];
 			this.img[id] = list;
 		}
-		var img = createImg(pva, list.Count);
+		var img = createImg(pva, list.Count, type);
 		img.color = color;
 		list.Add(img);
 	}
 
-	private static SpriteRenderer createImg(PlayerVoteArea pva, int index)
+	private static SpriteRenderer createImg(PlayerVoteArea pva, int index, ImgType type)
 	{
 		var img = UnityEngine.Object.Instantiate(
 			pva.Background, pva.LevelNumberText.transform);
 		img.name = $"swap_img_{pva.TargetPlayerId}_{index}";
-		img.sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
-			Resources.ObjectPath.CaptainSpecialVoteCheck);
-		img.transform.localPosition = new Vector3(7.2f + 0.05f * index, -0.5f, -2.75f);
-		img.transform.localScale = new Vector3(1.0f, 3.5f, 1.0f);
+		img.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+			ObjectPath.CommonTextureAsset,
+			string.Format(
+				ObjectPath.CommonImagePathFormat,
+				type is ImgType.Source ? 
+					ObjectPath.VoteSwapSource :
+					ObjectPath.VoteSwapTarget));
+		img.transform.localPosition = new Vector3(6.5f + 0.05f * index, -0.5f, -2.75f);
+		img.transform.localScale = new Vector3(0.5f, 3.0f, 1.0f);
 		img.gameObject.layer = 5;
 		return img;
 	}

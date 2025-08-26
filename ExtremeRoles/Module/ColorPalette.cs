@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace ExtremeRoles.Module;
 
@@ -23,6 +23,8 @@ public static class ColorPalette
 		216, 214, 213, byte.MaxValue);
 	public readonly static Color SkaterMizuiro = new Color32(
 		172, 219, 218, byte.MaxValue);
+	public readonly static Color BarterUsusuou = new Color32(
+		135, 28, 64, byte.MaxValue);
 
 	public readonly static Color TraitorLightShikon = new Color32(
 		76, 16, 80, byte.MaxValue);
