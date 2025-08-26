@@ -89,9 +89,12 @@ public sealed class Assassin : MultiAssignRoleBase
         PlayerControl rolePlayer)
     {
 
-        if (isServant()) { return; }
+        if (isServant())
+		{
+			return;
+		}
 
-		IsFirstMeeting = false;
+		this.IsFirstMeeting = false;
 		assassinMeetingTriggerOn(rolePlayer);
 	}
 
@@ -104,20 +107,20 @@ public sealed class Assassin : MultiAssignRoleBase
 
 		byte rolePlayerId = rolePlayer.PlayerId;
 
-        if (!isDeadForceMeeting || MeetingHud.Instance != null)
+        if (!this.isDeadForceMeeting || MeetingHud.Instance != null)
         {
             addDead(rolePlayerId);
             return;
         }
 
-        IsFirstMeeting = false;
+		this.IsFirstMeeting = false;
 
 		assassinMeetingTriggerOn(rolePlayer, killerPlayer);
 	}
 
     public override bool IsBlockShowPlayingRoleInfo()
     {
-        return !IsFirstMeeting && !CanSeeRoleBeforeFirstMeeting;
+        return !this.IsFirstMeeting && !this.CanSeeRoleBeforeFirstMeeting;
     }
 
     public override bool IsBlockShowMeetingRoleInfo()
@@ -127,9 +130,9 @@ public sealed class Assassin : MultiAssignRoleBase
         {
             return true;
         }
-        else if (CanSeeRoleBeforeFirstMeeting)
+        else if (this.CanSeeRoleBeforeFirstMeeting)
         {
-            return IsFirstMeeting;
+            return this.IsFirstMeeting;
         }
 
         return false;
@@ -137,24 +140,24 @@ public sealed class Assassin : MultiAssignRoleBase
     }
     protected override void RoleSpecificInit()
     {
-        var loader = Loader;
-        status = new AssassinStatusModel(
+        var loader = this.Loader;
+		this.status = new AssassinStatusModel(
             loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilled),
             loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromCrew),
             loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromNeutral)
         );
-        AbilityClass = new AssassinAbilityHandler(status);
+		this.AbilityClass = new AssassinAbilityHandler(status);
 
-        HasTask = loader.GetValue<AssassinOption, bool>(
+		this.HasTask = loader.GetValue<AssassinOption, bool>(
             AssassinOption.HasTask);
-        CanSeeVote = loader.GetValue<AssassinOption, bool>(
+		this.CanSeeVote = loader.GetValue<AssassinOption, bool>(
             AssassinOption.CanSeeVote);
 
-        isDeadForceMeeting = loader.GetValue<AssassinOption, bool>(
+		this.isDeadForceMeeting = loader.GetValue<AssassinOption, bool>(
             AssassinOption.IsDeadForceMeeting);
-        CanSeeRoleBeforeFirstMeeting = loader.GetValue<AssassinOption, bool>(
+		this.CanSeeRoleBeforeFirstMeeting = loader.GetValue<AssassinOption, bool>(
             AssassinOption.CanSeeRoleBeforeFirstMeeting);
-        IsFirstMeeting = true;
+		this.IsFirstMeeting = true;
 		_ = OnemanMeetingSystemManager.CreateOrGet();
     }
 
@@ -223,13 +226,13 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
         aspectPosition.DistanceFromEdge = new Vector3(0.375f, 0.35f);
         aspectPosition.AdjustPosition();
 
-        grid = bottomLeft.AddComponent<GridArrange>();
-        grid.CellSize = new Vector2(0.625f, 0.75f);
-        grid.MaxColumns = 10;
-        grid.Alignment = GridArrange.StartAlign.Right;
-        grid.cells = new();
+		this.grid = bottomLeft.AddComponent<GridArrange>();
+		this.grid.CellSize = new Vector2(0.625f, 0.75f);
+		this.grid.MaxColumns = 10;
+		this.grid.Alignment = GridArrange.StartAlign.Right;
+		this.grid.cells = new();
 
-        PlayerIcon = Player.CreatePlayerIcon(
+		this.PlayerIcon = Player.CreatePlayerIcon(
             bottomLeft.transform, Vector3.one * 0.275f);
         updateShowIcon();
     }
@@ -241,7 +244,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
 
     public void ResetOnMeetingStart()
     {
-        foreach (var (_, poolPlayer) in PlayerIcon)
+        foreach (var (_, poolPlayer) in this.PlayerIcon)
         {
             poolPlayer.gameObject.SetActive(false);
         }
@@ -292,26 +295,26 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
 
     protected override void RoleSpecificInit()
     {
-        IsAssassinate = false;
+		this.IsAssassinate = false;
 
-        var loader = Loader;
+        var loader = this.Loader;
 
-        HasTask = loader.GetValue<MarlinOption, bool>(
+		this.HasTask = loader.GetValue<MarlinOption, bool>(
             MarlinOption.HasTask);
-        canSeeAssassin = loader.GetValue<MarlinOption, bool>(
+		this.canSeeAssassin = loader.GetValue<MarlinOption, bool>(
             MarlinOption.CanSeeAssassin);
-        CanSeeVote = loader.GetValue<MarlinOption, bool>(
+		this.CanSeeVote = loader.GetValue<MarlinOption, bool>(
             MarlinOption.CanSeeVote);
-        CanSeeNeutral = loader.GetValue<MarlinOption, bool>(
+		this.CanSeeNeutral = loader.GetValue<MarlinOption, bool>(
             MarlinOption.CanSeeNeutral);
-        UseVent = loader.GetValue<MarlinOption, bool>(
+		this.UseVent = loader.GetValue<MarlinOption, bool>(
             MarlinOption.CanUseVent);
-        PlayerIcon = new Dictionary<byte, PoolablePlayer>();
+		this.PlayerIcon = new Dictionary<byte, PoolablePlayer>();
     }
 
     private void updateShowIcon()
     {
-        foreach (var(playerId, poolPlayer) in PlayerIcon)
+        foreach (var(playerId, poolPlayer) in this.PlayerIcon)
         {
             if (playerId == PlayerControl.LocalPlayer.PlayerId)
             {
@@ -335,10 +338,10 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
                 poolPlayer.gameObject.SetActive(true);
             }
         }
-		if (grid == null)
+		if (this.grid == null)
 		{
 			return;
 		}
-        grid.ArrangeChilds();
+		this.grid.ArrangeChilds();
     }
 }

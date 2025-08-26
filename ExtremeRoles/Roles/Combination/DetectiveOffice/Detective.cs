@@ -216,7 +216,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		}
 	}
 
-	private record CrimeSearchInfo(ProgressCrimeContainer AllTarget, CrimeProgressUpdator ProgressUpdater);
+	private sealed record CrimeSearchInfo(ProgressCrimeContainer AllTarget, CrimeProgressUpdator ProgressUpdater);
 
 	public override IStatusModel? Status => this.status;
 	private DetectiveStatus? status;
