@@ -180,11 +180,14 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			}
 			tempData[s] = val;
 		}
+
+		Logging.Debug($"--- swaped vote info ---");
 		var finalData = new Dictionary<byte, int>(tempData.Count);
 		foreach (var (t, v) in tempData)
 		{
 			if (v > 0)
 			{
+				Logging.Debug($"Vote to {t}, Num:{v}");
 				finalData[t] = v;
 			}
 		}
