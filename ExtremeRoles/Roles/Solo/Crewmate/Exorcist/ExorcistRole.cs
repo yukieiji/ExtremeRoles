@@ -13,7 +13,6 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
@@ -22,10 +21,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
 public sealed class ExorcistRole :
 	SingleRoleBase,
+	IRoleFakeIntro,
 	IDeadBodyReportOverride,
 	IRoleUpdate,
 	IRoleAutoBuildAbility
 {
+	public ExtremeRoleType FakeTeam => this.FakeImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
 	public override IStatusModel? Status => status;
 
 	public ExtremeAbilityButton? Button { get; set; }
@@ -227,15 +228,12 @@ public sealed class ExorcistRole :
 
 		var killer = info.Killer.Data;
 
-		MeetingReporter.Instance.AddMeetingStartReport(
+		MeetingReporter.Instance.AddMeetingChatReport(
 			this.withName ?
 			$"{killer.DefaultOutfit.PlayerName} kill {this.target.DefaultOutfit.PlayerName} with {info.Reason}" :
 			$"{this.target.DefaultOutfit.PlayerName} killed with {info.Reason} killer is Dead {killer.IsDead}");
-
-		var localPlayer = PlayerControl.LocalPlayer;
-		MeetingRoomManager.Instance.AssignSelf(localPlayer, this.target);
-		HudManager.Instance.OpenMeetingRoom(localPlayer);
-		localPlayer.RpcStartMeeting(this.target);
+		PlayerControl.LocalPlayer.CmdReportDeadBody(this.target);
+		this.target = null;
 	}
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)

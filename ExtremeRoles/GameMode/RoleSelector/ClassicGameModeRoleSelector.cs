@@ -97,6 +97,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Bait,
 			ExtremeRoleId.Jailer,
 			ExtremeRoleId.Summoner,
+			ExtremeRoleId.Exorcist,
 
 			ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,
