@@ -15,6 +15,9 @@ public class CommonAssetLoadRunner
 	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:SingleImgLoad Test -----");
+#if RELEASE
+		yield break;
+#elif DEBUG
 		LoadFromExR(
 			ObjectPath.CommonTextureAsset,
 			string.Format(
@@ -25,9 +28,6 @@ public class CommonAssetLoadRunner
 			string.Format(
 				ObjectPath.CommonImagePathFormat,
 				ObjectPath.VoteSwapTarget));
-#if RELEASE
-		yield break;
-#elif DEBUG
 		imgTest(ObjectPath.Bomb);
 		imgTest(ObjectPath.Meeting);
 
