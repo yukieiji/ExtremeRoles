@@ -126,7 +126,6 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			this.img.Clear();
 
 			this.cache = null;
-			this.pva = null;
 			this.pva = MeetingHud.Instance.playerStates.ToDictionary(x => x.TargetPlayerId);
 		}
 	}
