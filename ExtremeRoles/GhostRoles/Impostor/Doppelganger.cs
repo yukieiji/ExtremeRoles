@@ -1,24 +1,19 @@
-using System.Linq;
 using System.Collections.Generic;
 
-using AmongUs.GameOptions;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Extension.Il2Cpp;
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Factory;
-using ExtremeRoles.Module.CustomMonoBehaviour.Overrider;
 using ExtremeRoles.Module.SystemType.Roles;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
@@ -31,8 +26,7 @@ namespace ExtremeRoles.GhostRoles.Impostor;
 public sealed class Doppelganger : GhostRoleBase
 {
 	private FakerDummySystem.FakePlayer? fake;
-	private ShapeshifterMinigame? minigamePrefab;
-	private bool opened;
+	private ShapeShiftMinigameWrapper? minigame;
 	private byte? target;
 
 	private const AbilityType ability = AbilityType.DoppelgangerDoppel;
@@ -127,7 +121,6 @@ public sealed class Doppelganger : GhostRoleBase
 			new GhostRoleButtonActivator(),
 			KeyCode.F
 		);
-
 		this.ButtonInit();
 	}
 
@@ -145,7 +138,7 @@ public sealed class Doppelganger : GhostRoleBase
 
 	protected override void OnMeetingStartHook()
 	{
-
+		this.minigame?.Reset();
 	}
 
 	protected override void CreateSpecificOption(OptionFactory factory)
@@ -162,30 +155,8 @@ public sealed class Doppelganger : GhostRoleBase
 
 	private bool openUI()
 	{
-		if (this.opened)
-		{
-			return true;
-		}
-
-		if (this.minigamePrefab == null)
-		{
-			var shapeShifterBase = RoleManager.Instance.AllRoles.FirstOrDefault(
-				x => x.Role is RoleTypes.Shapeshifter);
-			if (!shapeShifterBase.IsTryCast<ShapeshifterRole>(out var shapeShifter))
-			{
-				return false;
-			}
-			this.minigamePrefab = Object.Instantiate(
-				shapeShifter.ShapeshifterMenu,
-				PlayerControl.LocalPlayer.transform);
-			this.minigamePrefab.gameObject.SetActive(false);
-		}
-
-		var game = MinigameSystem.Open(this.minigamePrefab);
-		var overider = game.gameObject.TryAddComponent<ShapeshifterMinigameShapeshiftOverride>();
-		overider.Add(this.abilityCall);
-		this.opened = false;
-		return true;
+		this.minigame ??= new ShapeShiftMinigameWrapper();
+		return this.minigame.IsOpen || this.minigame.OpenUi(this.abilityCall);
 	}
 
 	private bool isAbilityUse(bool isCharge, float _)
@@ -242,6 +213,5 @@ public sealed class Doppelganger : GhostRoleBase
 
 		this.target = target.PlayerId;
 		button.OnClick.Invoke();
-		this.opened = false;
 	}
 }

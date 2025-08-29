@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 
 using Il2CppInterop.Runtime.Attributes;
+using ExtremeRoles.Module.CustomMonoBehaviour.WithAction;
 
 #nullable enable
 
@@ -11,18 +12,33 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.Overrider;
 [Il2CppRegister]
 public sealed class ShapeshifterMinigameShapeshiftOverride(IntPtr ptr) : MonoBehaviour(ptr)
 {
-	private Action<PlayerControl>? destroyAction;
+	private Action<PlayerControl>? overrideAction;
+	private OnDestroyBehavior? destroyBehavior;
+
+	public void Awake()
+	{
+		this.destroyBehavior = this.gameObject.AddComponent<OnDestroyBehavior>();
+	}
 
 	[HideFromIl2Cpp]
-	public void Add(Action<PlayerControl> @delegate)
+	public void AddSelectPlayerAction(Action<PlayerControl> @delegate)
 	{
-		if (this.destroyAction is null)
+		if (this.overrideAction is null)
 		{
-			this.destroyAction = @delegate;
+			this.overrideAction = @delegate;
 		}
 		else
 		{
-			this.destroyAction += @delegate;
+			this.overrideAction += @delegate;
+		}
+	}
+
+	[HideFromIl2Cpp]
+	public void AddCloseAction(Action act)
+	{
+		if (this.destroyBehavior != null)
+		{
+			this.destroyBehavior.Add(act);
 		}
 	}
 
@@ -37,7 +53,7 @@ public sealed class ShapeshifterMinigameShapeshiftOverride(IntPtr ptr) : MonoBeh
 		}
 		if (target != null)
 		{
-			this.destroyAction?.Invoke(target);
+			this.overrideAction?.Invoke(target);
 		}
 		else
 		{
