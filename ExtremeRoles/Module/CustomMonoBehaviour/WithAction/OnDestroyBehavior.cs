@@ -20,13 +20,13 @@ public sealed class OnDestroyBehavior : MonoBehaviour
 	[HideFromIl2Cpp]
 	public void Add(Action @delegate)
 	{
-		if (destroyAction is null)
+		if (this.destroyAction is null)
 		{
-			destroyAction = @delegate;
+			this.destroyAction = @delegate;
 		}
 		else
 		{
-			destroyAction += @delegate;
+			this.destroyAction += @delegate;
 		}
 	}
 

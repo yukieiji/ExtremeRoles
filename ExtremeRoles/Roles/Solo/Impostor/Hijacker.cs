@@ -1,21 +1,21 @@
-using System.Linq;
-
 using AmongUs.GameOptions;
-using UnityEngine;
-
-using ExtremeRoles.Helper;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.Ability.AutoActivator;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour.Overrider;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Extension.Player;
+using System.Linq;
+using UnityEngine;
+
 
 #nullable enable
 
@@ -32,10 +32,10 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 	public bool CanMove { get; private set; } = true;
 
 	private FollowerCamera? camera;
-	private ShapeshifterMinigame? minigamePrefab;
+
+	private ShapeShiftMinigameWrapper? minigame;
 	private PlayerControl? target;
 
-	private bool opend = false;
 	private bool isAbilityUse = false;
 
 	public Hijacker() : base(
@@ -90,7 +90,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 
 	public void ResetOnMeetingStart()
 	{
-		this.opend = false;
+		this.minigame?.Reset();
 		repose();
 	}
 
@@ -135,32 +135,8 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 
 	private bool openUI()
 	{
-		if (this.opend)
-		{
-			return true;
-		}
-
-		if (this.minigamePrefab == null)
-		{
-			var shapeShifterBase = RoleManager.Instance.AllRoles.FirstOrDefault(
-				x => x.Role is RoleTypes.Shapeshifter);
-			if (!shapeShifterBase.IsTryCast<ShapeshifterRole>(out var shapeShifter))
-			{
-				return false;
-			}
-			this.minigamePrefab = Object.Instantiate(
-				shapeShifter.ShapeshifterMenu,
-				PlayerControl.LocalPlayer.transform);
-			this.minigamePrefab.gameObject.SetActive(false);
-		}
-
-		var game = MinigameSystem.Open(this.minigamePrefab);
-		var overider = game.gameObject.TryAddComponent<ShapeshifterMinigameShapeshiftOverride>();
-		overider.Add(this.overrideShapeshift);
-
-		this.opend = true;
-
-		return true;
+		this.minigame ??= new ShapeShiftMinigameWrapper();
+		return this.minigame.IsOpen || this.minigame.OpenUi(this.overrideShapeshift);
 	}
 
 	private void overrideShapeshift(PlayerControl player)
@@ -172,7 +148,6 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 		}
 		this.target = player;
 		button.OnClick.Invoke();
-		this.opend = false;
 	}
 
 	private void repose()
