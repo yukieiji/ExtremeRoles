@@ -1,13 +1,11 @@
+using System.Linq;
+
 using UnityEngine;
 using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour.Overrider;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 #nullable enable
 
