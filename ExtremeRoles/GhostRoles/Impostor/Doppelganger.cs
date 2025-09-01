@@ -110,6 +110,7 @@ public sealed class Doppelganger : GhostRoleBase
 				return true;
 			},
 			onCharge: openUI,
+			isCharge: () => this.minigame is not null && this.minigame.IsOpen,
 			reduceTiming: ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive,
 			abilityOff: abilityOff,
 			forceAbilityOff: abilityOff);
