@@ -5,8 +5,8 @@
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
       <!--<Version>2025.7.2.0</Version>-->
-    <VersionPrefix>2025.8.20</VersionPrefix>
-    <VersionSuffix>Reinforcement</VersionSuffix>
+    <VersionPrefix>2025.9.3</VersionPrefix>
+    <VersionSuffix>Reinforcemenst</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
