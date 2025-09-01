@@ -198,11 +198,18 @@ public static class GameUtility
 
 			foreach (var cate in tabObj.Category)
 			{
-				if (cate.Id == 0) { continue; }
+				if (cate.Id == 0)
+				{ 
+					continue;
+				}
 
 				foreach (var opt in cate.Options)
 				{
 					int length = opt.Range;
+					if (length == 0)
+					{
+						continue;
+					}
 					int newIndex = RandomGenerator.Instance.Next(0, length);
 					string name = opt.Info.Name;
 
