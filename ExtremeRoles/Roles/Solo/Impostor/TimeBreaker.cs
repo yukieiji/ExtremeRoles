@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 
 using ExtremeRoles.Module.Ability;
@@ -22,10 +22,7 @@ public sealed class TimeBreaker : SingleRoleBase, IRoleAutoBuildAbility
 	public ExtremeAbilityButton Button { get; set; }
 
 	public TimeBreaker() : base(
-		ExtremeRoleId.TimeBreaker,
-		ExtremeRoleType.Impostor,
-		ExtremeRoleId.TimeBreaker.ToString(),
-		Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.TimeBreaker),
 		true, false, true, true)
 	{ }
 

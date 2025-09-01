@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using UnityEngine;
 
@@ -53,10 +53,9 @@ public sealed class Moderator :
 	private bool awakeHasOtherVision;
 
 	public Moderator() : base(
-		ExtremeRoleId.Moderator,
-		ExtremeRoleType.Crewmate,
-		ExtremeRoleId.Moderator.ToString(),
-		ColorPalette.ModeratorByakuroku,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Moderator,
+			ColorPalette.ModeratorByakuroku),
 		false, true, false, false)
 	{ }
 
@@ -78,7 +77,7 @@ public sealed class Moderator :
 		if (IsAwake)
 		{
 			return Tr.GetString(
-				$"{this.Id}FullDescription");
+				$"{this.Core.Id}FullDescription");
 		}
 		else
 		{

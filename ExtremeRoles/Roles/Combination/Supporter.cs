@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -26,7 +26,7 @@ public sealed class SupporterManager : FlexibleCombinationRoleManagerBase
 public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
 {
     public override string RoleName =>
-        string.Concat(this.roleNamePrefix, this.RawRoleName);
+        string.Concat(this.roleNamePrefix, this.Core.Name);
 
     private byte supportTargetId;
     private string supportPlayerName = "";
@@ -37,10 +37,7 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
 
     public Supporter(
         ) : base(
-            ExtremeRoleId.Supporter,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Supporter.ToString(),
-            ColorPalette.SupporterGreen,
+			RoleCore.BuildCrewmate(ExtremeRoleId.Supporter, ColorPalette.SupporterGreen),
             false, true, false, false,
             tab: OptionTab.CombinationTab)
     {}
@@ -53,12 +50,12 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
         {
             if (playerControl == null || playerControl.Data == null ||
                 !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
-				role.Id == this.Id)
+				role.Core.Id == this.Core.Id)
             {
                 continue;
             }
 
-			var id = role.Id;
+			var id = role.Core.Id;
 
             if (((id is ExtremeRoleId.Marlin) && this.IsCrewmate()) ||
                 ((id is ExtremeRoleId.Assassin) && this.IsImpostor()))
@@ -74,7 +71,7 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
                 if (playerControl == null ||
 					playerControl.Data == null ||
                     !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
-					role.Id == this.Id)
+					role.Core.Id == this.Core.Id)
                 {
                     continue;
                 }
@@ -126,7 +123,7 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
         if (this.IsImpostor())
         {
             baseDesc = Tr.GetString(
-                $"{this.Id}ImposterFullDescription");
+                $"{this.Core.Id}ImposterFullDescription");
         }
         else
         {

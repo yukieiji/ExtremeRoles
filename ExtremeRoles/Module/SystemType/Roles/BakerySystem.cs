@@ -135,14 +135,14 @@ public sealed class BakerySystem : IDirtableSystemType
 		this.isUnion = true;
 		foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
 		{
-			if (role.Id == ExtremeRoleId.Bakary)
+			if (role.Core.Id == ExtremeRoleId.Bakary)
 			{
 				this.aliveBakary.Add(playerId);
 			}
 
 			if (role is MultiAssignRoleBase multiAssignRole &&
 				multiAssignRole.AnotherRole != null &&
-				multiAssignRole.AnotherRole.Id == ExtremeRoleId.Bakary)
+				multiAssignRole.AnotherRole.Core.Id == ExtremeRoleId.Bakary)
 			{
 				this.aliveBakary.Add(playerId);
 			}

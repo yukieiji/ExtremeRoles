@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -290,10 +290,9 @@ public sealed class BodyGuard :
 	private Sprite shildButtonImage;
 
 	public BodyGuard() : base(
-        ExtremeRoleId.BodyGuard,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.BodyGuard.ToString(),
-        ColorPalette.BodyGuardOrange,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.BodyGuard,
+			ColorPalette.BodyGuardOrange),
         false, true, false, false)
     { }
 #pragma warning restore CS8618
@@ -467,7 +466,7 @@ public sealed class BodyGuard :
         if (shilded.IsShielding(
 			PlayerControl.LocalPlayer.PlayerId, targetPlayerId))
         {
-            return Design.ColoedString(this.NameColor, $" ■");
+            return Design.ColoedString(this.Core.Color, $" ■");
         }
 
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);

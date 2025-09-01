@@ -103,14 +103,15 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
                 return null;
             }
 
+			var core = role.Core;
             return new CrimeInfo()
             {
                 Position = pos,
                 KilledTime = time,
                 ReportTime = this.timer[playerId],
-                KillerTeam = role.Team,
-                KillerRole = role.Id,
-                KillerVanillaRole = role.Id == ExtremeRoleId.VanillaRole ?
+                KillerTeam = core.Team,
+                KillerRole = core.Id,
+                KillerVanillaRole = core.Id == ExtremeRoleId.VanillaRole ?
                     ((Solo.VanillaRoleWrapper)role).VanilaRoleId : RoleTypes.Crewmate
             };
         }
@@ -160,10 +161,9 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
     private static readonly Vector2 defaultPos = new Vector2(100.0f, 100.0f);
 
     public Detective() : base(
-        ExtremeRoleId.Detective,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Detective.ToString(),
-        ColorPalette.DetectiveKokikou,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Detective,
+			ColorPalette.DetectiveKokikou),
         false, true, false, false,
         tab: OptionTab.CombinationTab)
     { }
@@ -204,7 +204,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
 		this.searchCrimeInfoTime =
 			ExtremeRoleManager.TryGetRole(reporter.PlayerId, out var reporterRole) &&
-			reporterRole.Id is ExtremeRoleId.Assistant ? this.searchAssistantTime : this.searchTime;
+			reporterRole.Core.Id is ExtremeRoleId.Assistant ? this.searchAssistantTime : this.searchTime;
     }
 
     public void HookMuderPlayer(
@@ -431,7 +431,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 				player.Data.IsDead ||
 				player.Data.Disconnected ||
                 !ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
-				role.Id is not ExtremeRoleId.Assistant ||
+				role.Core.Id is not ExtremeRoleId.Assistant ||
 				!this.IsSameControlId(role))
             {
                 continue;
@@ -446,10 +446,9 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
 {
     private Dictionary<byte, DateTime> deadBodyInfo;
     public Assistant() : base(
-        ExtremeRoleId.Assistant,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Assistant.ToString(),
-        ColorPalette.AssistantBluCapri,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Assistant,
+			ColorPalette.AssistantBluCapri),
         false, true, false, false,
         tab: OptionTab.CombinationTab)
     { }
@@ -525,7 +524,7 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
 				player.Data.IsDead ||
 				player.Data.Disconnected ||
                 !ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
-				role.Id is not ExtremeRoleId.Detective ||
+				role.Core.Id is not ExtremeRoleId.Detective ||
 				!this.IsSameControlId(role))
             {
                 continue;
@@ -627,10 +626,9 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
         int gameControlId,
         DetectiveApprenticeOptionHolder option
         ) : base(
-            ExtremeRoleId.DetectiveApprentice,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.DetectiveApprentice.ToString(),
-            ColorPalette.DetectiveApprenticeKonai,
+			RoleCore.BuildCrewmate(
+				ExtremeRoleId.DetectiveApprentice,
+				ColorPalette.DetectiveApprenticeKonai),
             false, true, false, false)
     {
 		this.Loader = loader;
@@ -705,7 +703,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
             newRole.AnotherRole = null;
             newRole.CanHasAnotherRole = true;
             newRole.SetAnotherRole(prevRole.AnotherRole);
-            newRole.Team = prevRole.AnotherRole.Team;
+            newRole.Core.Team = prevRole.AnotherRole.Core.Team;
         }
 
         ExtremeRoleManager.SetNewRole(playerId, newRole);

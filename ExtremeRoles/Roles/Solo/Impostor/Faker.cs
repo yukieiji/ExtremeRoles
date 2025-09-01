@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -33,10 +33,7 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 	private string playerDummyStr;
 
 	public Faker() : base(
-		ExtremeRoleId.Faker,
-		ExtremeRoleType.Impostor,
-		ExtremeRoleId.Faker.ToString(),
-		Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Faker),
 		true, false, true, true)
 	{ }
 

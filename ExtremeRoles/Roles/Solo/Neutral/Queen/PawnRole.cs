@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -26,10 +26,9 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 	private PawnStatus? status;
 
 	public PawnRole() : base(
-		ExtremeRoleId.Pawn,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Pawn.ToString(),
-		ColorPalette.QueenWhite,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Pawn,
+			ColorPalette.QueenWhite),
 		false, false, false, false)
 	{ }
 
@@ -88,7 +87,7 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 	private bool canSeeQueen(SingleRoleBase targetRole)
 		=>
 			this.status is not null &&
-			targetRole.Id is ExtremeRoleId.Queen &&
+			targetRole.Core.Id is ExtremeRoleId.Queen &&
 			this.status.SeeQween;
 
 }

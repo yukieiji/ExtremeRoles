@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,13 +39,16 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 		var cate = this.Loader;
 		foreach (var checkRole in this.Roles)
         {
-
-            if (checkRole.Id != (ExtremeRoleId)roleId) { continue; }
+			var core = checkRole.Core;
+            if (core.Id != (ExtremeRoleId)roleId)
+			{
+				continue;
+			}
 
             checkRole.CanHasAnotherRole = cate.GetValue<CombinationRoleCommonOption, bool>(
 				CombinationRoleCommonOption.IsMultiAssign);
 
-			switch (checkRole.Team)
+			switch (core.Team)
             {
                 case ExtremeRoleType.Crewmate:
                 case ExtremeRoleType.Neutral:
@@ -116,7 +119,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 			int offset = (item.Index + 1) * ExtremeRoleManager.OptionOffsetPerRole;
 
 			factory.IdOffset = (item.Index + 1) * ExtremeRoleManager.OptionOffsetPerRole;
-			factory.OptionPrefix = role.RawRoleName;
+			factory.OptionPrefix = role.Core.Name;
 
 			role.CreateRoleSpecificOption(factory, false);
 			role.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(

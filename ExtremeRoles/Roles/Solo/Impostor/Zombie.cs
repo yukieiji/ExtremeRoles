@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -27,7 +27,8 @@ public sealed class Zombie :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
-    IRoleOnRevive
+    IRoleOnRevive,
+	ITryKillTo
 {
     public override bool IsAssignGhostRole
     {
@@ -85,10 +86,7 @@ public sealed class Zombie :
     private Collider2D cachedColider = null;
 
     public Zombie() : base(
-        ExtremeRoleId.Zombie,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Zombie.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Zombie),
         true, false, true, true)
     { }
 
@@ -337,7 +335,7 @@ public sealed class Zombie :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

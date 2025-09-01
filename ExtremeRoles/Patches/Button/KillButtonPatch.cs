@@ -78,7 +78,7 @@ public static class KillButtonDoClickPatch
 		{
 			return KillResult.PreConditionFail;
 		}
-		else if (!killerRole.TryRolePlayerKillTo(killer, target))
+		else if (isPreventKillTo(killerRole, killer, target))
 		{
 			return KillResult.BlockedToKillerSingleRoleCondition;
 		}
@@ -90,8 +90,7 @@ public static class KillButtonDoClickPatch
 		}
 		else if (
 			killerRole is MultiAssignRoleBase killerMultiAssignRole &&
-			killerMultiAssignRole.AnotherRole != null &&
-			!killerMultiAssignRole.AnotherRole.TryRolePlayerKillTo(killer, target))
+			isPreventKillTo(killerMultiAssignRole.AnotherRole, killer, target))
 		{
 			return KillResult.BlockedToKillerOtherRoleCondition;
 		}
@@ -148,7 +147,8 @@ public static class KillButtonDoClickPatch
         PlayerControl target,
         SingleRoleBase targetRole)
     {
-        if (targetRole.Id == ExtremeRoleId.Vigilante)
+		var id = targetRole.Core.Id;
+		if (id == ExtremeRoleId.Vigilante)
         {
             var vigilante = (Vigilante)targetRole;
             if (vigilante.Condition != Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip)
@@ -156,7 +156,7 @@ public static class KillButtonDoClickPatch
                 return;
             }
         }
-        else if (targetRole.Id == ExtremeRoleId.Hero)
+        else if (id == ExtremeRoleId.Hero)
         {
             HeroAcademia.RpcDrawHeroAndVillan(
                 target, killer);
@@ -181,4 +181,9 @@ public static class KillButtonDoClickPatch
             isAnime ? byte.MaxValue : byte.MinValue);
         instance.SetTarget(null);
     }
+
+	private static bool isPreventKillTo(SingleRoleBase? role, PlayerControl killer, PlayerControl target)
+		=> 
+			role is ITryKillTo killerTryKillTo &&
+			!killerTryKillTo.TryRolePlayerKillTo(killer, target);
 }

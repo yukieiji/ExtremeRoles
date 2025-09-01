@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -125,24 +125,24 @@ public sealed class Psychic :
 					player.IsDead ||
 					player.Disconnected ||
 					!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
-					!this.teamCount.TryGetValue(role!.Team, out TeamCounter? counter) ||
+					!this.teamCount.TryGetValue(role!.Core.Team, out TeamCounter? counter) ||
 					counter is null)
 				{
 					continue;
 				}
 
-				ExtremeRoleId id = role!.Id;
+				ExtremeRoleId id = role!.Core.Id;
 				if (role is MultiAssignRoleBase multiRole &&
 					multiRole.AnotherRole != null)
 				{
 					if (role!.IsNeutral() &&
-						multiRole.AnotherRole.Id == ExtremeRoleId.Servant)
+						multiRole.AnotherRole.Core.Id == ExtremeRoleId.Servant)
 					{
 						id = ExtremeRoleId.Servant;
 					}
 					else if (role!.IsVanillaRole())
 					{
-						id = multiRole.AnotherRole.Id;
+						id = multiRole.AnotherRole.Core.Id;
 					}
 				}
 				else if (role is VanillaRoleWrapper vanillaRole)
@@ -223,10 +223,9 @@ public sealed class Psychic :
 	public ExtremeAbilityButton Button { get; set; }
 
 	public Psychic() : base(
-        ExtremeRoleId.Psychic,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Psychic.ToString(),
-        ColorPalette.PsychicSyentyietu,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Psychic,
+			ColorPalette.PsychicSyentyietu),
         false, true, false, false)
     { }
 #pragma warning restore CS8618
@@ -353,7 +352,7 @@ public sealed class Psychic :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
@@ -26,7 +26,7 @@ public interface IRoleSpecialReset
 
 	public static void ResetLover(SingleRoleBase targetRole, PlayerControl rolePlayer)
 	{
-		if (targetRole.Id != ExtremeRoleId.Lover)
+		if (targetRole.Core.Id != ExtremeRoleId.Lover)
 		{
 			return;
 		}

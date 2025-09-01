@@ -35,11 +35,20 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		public bool IsHide => !isShow;
 
 		private readonly TextMeshPro infoText;
-		private float fadeTimer = 0f;
-		private bool isFadingOut = false;
+		private enum FadeState
+		{
+			FadingIn,
+			Holding,
+			FadingOut
+		}
+
+		private FadeState state = FadeState.FadingIn;
+		private float timer = 0f;
 		private bool isShow = false;
 
-		private const float maxTimer = 0.75f;
+		private const float fadeInDuration = 0.75f;
+		private const float holdDuration = 0.5f;
+		private const float fadeOutDuration = 0.75f;
 
 		public MixWeaponInfoShower()
 		{
@@ -57,8 +66,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		public void Update()
 		{
 			if (IntroCutscene.Instance != null ||
-				MeetingHud.Instance != null ||
-				ExileController.Instance != null)
+			    MeetingHud.Instance != null ||
+			    ExileController.Instance != null)
 			{
 				this.isShow = false;
 			}
@@ -69,29 +78,56 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return;
 			}
 
-			this.fadeTimer += isFadingOut ? -Time.deltaTime : Time.deltaTime;
-			float alpha = this.fadeTimer / maxTimer;
+			this.timer += Time.deltaTime;
+			float alpha = computeAlpha();
+
 			this.infoText.color = new Color(
 				this.infoText.color.r,
 				this.infoText.color.g,
-				this.infoText.color.b, alpha);
-
-			if (fadeTimer >= maxTimer)
-			{
-				isFadingOut = true;
-			}
-			else if (fadeTimer <= 0f)
-			{
-				isFadingOut = false;
-			}
+				this.infoText.color.b,
+				Mathf.Clamp01(alpha));
 		}
 
 		public void ShowCanMixWepon()
 		{
 			this.infoText.gameObject.SetActive(true);
-			this.fadeTimer = 0f;
-			this.isFadingOut = false;
+			setState(FadeState.FadingIn);
 			this.isShow = true;
+		}
+
+		private void setState(FadeState nextState)
+		{
+			this.state = nextState;
+			this.timer = 0f;
+		}
+
+		private float computeAlpha()
+		{
+			switch (this.state)
+			{
+				case FadeState.FadingIn:
+					float fadeInAlpha = this.timer / fadeInDuration;
+					if (this.timer >= fadeInDuration)
+					{
+						setState(FadeState.Holding);
+					}
+					return fadeInAlpha;
+				case FadeState.Holding:
+					if (this.timer >= holdDuration)
+					{
+						setState(FadeState.FadingOut);
+					}
+					return 1.0f;
+				case FadeState.FadingOut:
+					float fadeOutAlpha = 1f - (this.timer / fadeOutDuration);
+					if (this.timer >= fadeOutDuration)
+					{
+						setState(FadeState.FadingIn);
+					}
+					return fadeOutAlpha;
+				default:
+					return 0.0f;
+			}
 		}
 	}
 
@@ -1156,10 +1192,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	private float weaponMixTime;
 
 	public Scavenger() : base(
-		ExtremeRoleId.Scavenger,
-		ExtremeRoleType.Impostor,
-		ExtremeRoleId.Scavenger.ToString(),
-		Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Scavenger),
 		true, false, true, true)
 	{ }
 

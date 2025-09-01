@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 
 using UnityEngine;
@@ -145,7 +145,7 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 			text.text = Tr.GetString("Neutral");
 			text.color = ColorPalette.NeutralColor;
 		}
-		else if (role.Id is ExtremeRoleId.Xion)
+		else if (role.Core.Id is ExtremeRoleId.Xion)
 		{
 			instance.BackgroundBar.material.color = ColorPalette.XionBlue;
 			instance.ImpostorText.text = Tr.GetString("youAreNewRuleEditor");
@@ -186,7 +186,7 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 
 		// Intro solo teams
-		if (role.IsNeutral() || role.Id is ExtremeRoleId.Xion)
+		if (role.IsNeutral() || role.Core.Id is ExtremeRoleId.Xion)
 		{
 			var (main, sub) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleAwake<RoleTypes>>();
 			if ((main is not null && !main.IsAwake) || (sub is not null && !sub.IsAwake))
@@ -215,7 +215,7 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 		text.color = role.GetNameColor();
 		string desc = role.GetIntroDescription();
 
-		if (role.Id is ExtremeRoleId.Lover
+		if (role.Core.Id is ExtremeRoleId.Lover
 			or ExtremeRoleId.Sharer
 			or ExtremeRoleId.Buddy)
 		{

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -60,10 +60,9 @@ public sealed class QueenRole :
 	private bool servantSucideWithQueenWhenHasKill;
 
 	public QueenRole() : base(
-        ExtremeRoleId.Queen,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Queen.ToString(),
-        ColorPalette.QueenWhite,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Queen,
+			ColorPalette.QueenWhite),
         true, false, false, false)
     { }
 
@@ -86,20 +85,21 @@ public sealed class QueenRole :
         ServantRole servant = new ServantRole(
             rolePlayerId, queen, targetRole);
 
+		var core = targetRole.Core;
         if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
             Player.ResetTarget();
             servant.SelfKillAbility(queen.ServantSelfKillCool);
-            if (targetRole.Team != ExtremeRoleType.Neutral)
+            if (core.Team != ExtremeRoleType.Neutral)
             {
                 servant.Button.HotKey = KeyCode.C;
             }
             HudManager.Instance.ReGridButtons();
         }
 
-        if (targetRole.Team != ExtremeRoleType.Neutral)
+        if (core.Team != ExtremeRoleType.Neutral)
         {
-            targetRole.Team = ExtremeRoleType.Neutral;
+			core.Team = ExtremeRoleType.Neutral;
 
             if (targetRole is VanillaRoleWrapper vanillaRole)
             {
@@ -367,7 +367,7 @@ public sealed class QueenRole :
         byte targetPlayerId)
     {
 
-        if (targetRole.Id == ExtremeRoleId.Servant &&
+        if (targetRole.Core.Id == ExtremeRoleId.Servant &&
             IsSameControlId(targetRole) &&
             servantPlayerId.Contains(targetPlayerId))
         {
@@ -488,7 +488,8 @@ public sealed class QueenRole :
 
     private bool isSameQueenTeam(SingleRoleBase targetRole)
     {
-        return targetRole.Id == Id || targetRole.Id == ExtremeRoleId.Servant;
+		var id = targetRole.Core.Id;
+		return id == Core.Id || id is ExtremeRoleId.Servant;
     }
 	private bool isNotSucideServant(byte playerId)
 		=>
