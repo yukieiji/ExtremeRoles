@@ -140,6 +140,11 @@ public sealed class Lover : MultiAssignRoleBase
 
         var lover = getAliveSameLover(PlayerControl.LocalPlayer.PlayerId);
 
+		if (lover.Count == 0)
+		{
+			ExtremeRolesPlugin.Logger.LogError("Can't find lovers!! WHY THIS CHECKED!?");
+			return "";
+		}
 		// 最初は確定
 		var firstLover = Player.GetPlayerControlById(lover[0]);
 		if (firstLover != null)
