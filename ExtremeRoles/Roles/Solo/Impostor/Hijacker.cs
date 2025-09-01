@@ -69,6 +69,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 					},
 					openUI,
 					(_) => UseAbility(),
+					isCharge: () => this.minigame is not null && this.minigame.IsOpen,
 					abilityOff: repose,
 					reduceOnCharge: false);
 		if (beha is IChargingBehavior charging)
