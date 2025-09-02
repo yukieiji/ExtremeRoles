@@ -150,17 +150,42 @@ public static class GameSystem
 	{
 		role = null;
 
-		return 
-			!player.Disconnected &&
-			player.Tasks != null &&
-			player.Object != null &&
-			(
-				GameManager.Instance.LogicOptions.GetGhostsDoTasks() ||
-				!player.IsDead
-			) &&
-			player.Role &&
-			player.Role.TasksCountTowardProgress &&
-			ExtremeRoleManager.TryGetRole(player.PlayerId, out role);
+		if (player.Disconnected)
+		{
+			return false;
+		}
+
+		if (player.Tasks == null)
+		{
+			return false;
+		}
+
+		if (player.Object == null)
+		{
+			return false;
+		}
+
+		if (!GameManager.Instance.LogicOptions.GetGhostsDoTasks() && player.IsDead)
+		{
+			return false;
+		}
+
+		if (player.Role == null)
+		{
+			return false;
+		}
+
+		if (!player.Role.TasksCountTowardProgress)
+		{
+			return false;
+		}
+
+		if (!ExtremeRoleManager.TryGetRole(player.PlayerId, out role))
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	public static (int, int) GetTaskInfo(
