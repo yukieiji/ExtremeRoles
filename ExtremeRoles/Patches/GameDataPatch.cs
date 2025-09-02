@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
@@ -6,6 +6,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Patches;
 
@@ -40,41 +41,28 @@ public static class GameDataRecomputeTaskCountsPatch
 		int completedTask = 0;
 		int doTaskCrew = 0;
 
-		foreach (NetworkedPlayerInfo playerInfo in __instance.AllPlayers.GetFastEnumerator())
+		foreach (var playerInfo in __instance.AllPlayers.GetFastEnumerator())
 		{
-			if (!playerInfo.Disconnected &&
-				playerInfo.Tasks != null &&
-				playerInfo.Object &&
-				(
-                        GameManager.Instance.LogicOptions.GetGhostsDoTasks() ||
-					!playerInfo.IsDead
-				) &&
-				playerInfo.Role &&
-				playerInfo.Role.TasksCountTowardProgress &&
-				Roles.ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var role))
+			if (!(
+					GameSystem.TryGetTaskDoRole(playerInfo, out var role) &&
+					role.HasTask() &&
+					role.IsCrewmate()
+				))
 			{
+				continue;
+			}
 
-				if (!role.HasTask())
+			++doTaskCrew;
+
+			foreach (var taskInfo in playerInfo.Tasks.GetFastEnumerator())
+			{
+				++totalTask;
+				if (taskInfo.Complete)
 				{
-					continue;
-				}
-
-				if (!role.IsCrewmate())
-                {
-					continue;
-                }
-
-				++doTaskCrew;
-
-				foreach (var taskInfo in playerInfo.Tasks.GetFastEnumerator())
-				{
-					++totalTask;
-					if (taskInfo.Complete)
-					{
-						++completedTask;
-					}
+					++completedTask;
 				}
 			}
+
 		}
 
 		if (doTaskCrew == 0 && shipOpt.DisableTaskWinWhenNoneTaskCrew)
