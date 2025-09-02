@@ -1,12 +1,11 @@
 using HarmonyLib;
 
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.GameResult;
-using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Patches;
 

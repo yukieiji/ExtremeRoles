@@ -3,7 +3,6 @@ using System.Linq;
 using HarmonyLib;
 
 using ExtremeRoles.Roles;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.SystemType;
