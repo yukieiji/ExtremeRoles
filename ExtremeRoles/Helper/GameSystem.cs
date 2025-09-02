@@ -6,20 +6,19 @@ using System.Linq;
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
+using ExtremeRoles.Compat;
+using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.Linq;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Compat;
-using ExtremeRoles.Compat.ModIntegrator;
-
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using UnityObject = UnityEngine.Object;
 using UseButtonDict = Il2CppSystem.Collections.Generic.Dictionary<ImageNames, UseButtonSettings>;
-using ExtremeRoles.Roles.API;
-
 
 #nullable enable
 
