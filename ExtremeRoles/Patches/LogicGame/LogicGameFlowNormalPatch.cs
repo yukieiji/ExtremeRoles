@@ -2,12 +2,12 @@ using System.Linq;
 
 using HarmonyLib;
 
-using ExtremeRoles.Roles;
-using ExtremeRoles.Module;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches.LogicGame;
 
