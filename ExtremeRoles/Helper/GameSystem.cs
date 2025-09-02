@@ -6,19 +6,19 @@ using System.Linq;
 using UnityEngine;
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Extension.Linq;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance.Il2Cpp;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
-
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Extension.Linq;
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.State;
 
 using UnityObject = UnityEngine.Object;
 using UseButtonDict = Il2CppSystem.Collections.Generic.Dictionary<ImageNames, UseButtonSettings>;
-
 
 #nullable enable
 
@@ -146,22 +146,31 @@ public static class GameSystem
 		return body;
 	}
 
+	public static bool TryGetTaskDoRole(NetworkedPlayerInfo player, [NotNullWhen(true)] out SingleRoleBase? role)
+	{
+		role = null;
+
+		return
+			!(
+				player.Disconnected ||
+				player.Tasks == null ||
+				player.Object == null ||
+				(
+					player.IsDead && !GameManager.Instance.LogicOptions.GetGhostsDoTasks()
+				) ||
+				player.Role == null ||
+				!player.Role.TasksCountTowardProgress ||
+				!ExtremeRoleManager.TryGetRole(player.PlayerId, out role)
+			);
+	}
+
 	public static (int, int) GetTaskInfo(
 		NetworkedPlayerInfo playerInfo)
 	{
 		int TotalTasks = 0;
 		int CompletedTasks = 0;
-		if (!(playerInfo.Disconnected) &&
-			 (playerInfo.Tasks != null) &&
-			 (playerInfo.Object) &&
-			 (playerInfo.Role) &&
-			 (playerInfo.Role.TasksCountTowardProgress) &&
-			 (
-				GameOptionsManager.Instance.CurrentGameOptions.GetBool(BoolOptionNames.GhostsDoTasks) ||
-				!playerInfo.IsDead
-			) &&
-			  ExtremeRoleManager.GameRole[playerInfo.PlayerId].HasTask()
-			)
+		if (TryGetTaskDoRole(playerInfo, out var role) &&
+			role.HasTask())
 		{
 
 			for (int j = 0; j < playerInfo.Tasks.Count; ++j)
