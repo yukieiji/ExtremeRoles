@@ -4,7 +4,7 @@ chcp 65001
 where uv >nul 2>nul
 if %errorlevel% == 0 (
     echo "uv found, using uv to install dependencies."
-    uv pip install -r requirements.txt
+    uv sync
 ) else (
     echo "uv not found, using pip to install dependencies."
     pip install -r requirements.txt

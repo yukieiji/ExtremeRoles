@@ -1,0 +1,9 @@
+[project]
+name = "extremeroles"
+version = "0.0.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pylightxl==1.61",
+]

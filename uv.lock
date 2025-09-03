@@ -1,0 +1,20 @@
+version = 1
+revision = 1
+requires-python = ">=3.11"
+
+[[package]]
+name = "extremeroles"
+version = "0.0.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "pylightxl" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pylightxl", specifier = "==1.61" }]
+
+[[package]]
+name = "pylightxl"
+version = "1.61"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ad/fa/7b139a186f0623d8980d4f6acabd51c824c42394a7ee8e69dc0819632740/pylightxl-1.61.tar.gz", hash = "sha256:2c59f12d2ae96b6ca7adcd15b053ec01bd881a8fcb592324bd56c0b223400463", size = 36057 }
