@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
-    <Version>2025.6.25.9</Version>
+    <Version>2025.6.25.10</Version>
     <!--<VersionPrefix>2025.6.25</VersionPrefix>-->
     <VersionSuffix>AmongUsV20230711</VersionSuffix>
     <Description>Extreme Voice Engine for bridging Extreme Roles and Voice Engine</Description>

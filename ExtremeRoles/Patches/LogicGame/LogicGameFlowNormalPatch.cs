@@ -2,13 +2,12 @@ using System.Linq;
 
 using HarmonyLib;
 
-using ExtremeRoles.Roles;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches.LogicGame;
 
@@ -322,8 +321,16 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
     }
     private static bool isTaskWin()
     {
-        if (GameData.Instance.TotalTasks > 0 &&
-            GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
+		var gameData = GameData.Instance;
+		if (gameData == null)
+		{
+			return false;
+		}
+
+		gameData.RecomputeTaskCounts();
+
+		if (gameData.TotalTasks > 0 &&
+			gameData.CompletedTasks >= gameData.TotalTasks)
         {
             gameIsEnd(GameOverReason.CrewmatesByTask);
             return true;
