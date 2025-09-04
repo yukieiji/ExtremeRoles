@@ -5,7 +5,7 @@ from pathlib import Path
 from hypothesis import given, strategies as st, settings, HealthCheck
 from pytest import MonkeyPatch, CaptureFixture
 
-from add_translation_key import (
+from add_role_translation_keys import (
     generate_translation_keys,
     parse_options_from_class_body,
     main,
@@ -76,7 +76,7 @@ def test_main_logic_with_valid_role(valid_env: Path, monkeypatch: MonkeyPatch, c
         capsys: pytestのキャプチャフィクスチャ。
     """
     monkeypatch.chdir(valid_env)
-    monkeypatch.setattr(sys, 'argv', ['add_translation_key.py', 'DummyRole'])
+    monkeypatch.setattr(sys, 'argv', ['add_role_translation_keys.py', 'DummyRole'])
     main()
     captured = capsys.readouterr()
     assert "役職クラス 'DummyRole' をファイル内で発見" in captured.out
@@ -92,7 +92,7 @@ def test_main_handles_discrepancy(valid_env: Path, monkeypatch: MonkeyPatch, cap
     """
     (valid_env / "ExtremeRoles/Roles/Solo/Crewmate/InvalidRole.cs").write_text(DUMMY_CS_INVALID)
     monkeypatch.chdir(valid_env)
-    monkeypatch.setattr(sys, 'argv', ['add_translation_key.py', 'InvalidRole'])
+    monkeypatch.setattr(sys, 'argv', ['add_role_translation_keys.py', 'InvalidRole'])
 
     with pytest.raises(SystemExit) as e:
         main()
@@ -118,19 +118,21 @@ def csharp_class_body_strategy(draw: st.DrawFn) -> tuple[str, str, set[str], set
     """
     class_name = draw(cs_identifier)
     defined_options = draw(st.sets(cs_identifier, min_size=0, max_size=10))
-    if not defined_options:
-        implemented_options = set()
-    else:
+
+    if defined_options:
         implemented_options = draw(st.lists(st.sampled_from(sorted(list(defined_options))), unique=True).map(set))
+        enum_options_str = ",\n            ".join(sorted(list(defined_options)))
+        enum_str = f"public enum Option {{ {enum_options_str} }}"
+    else:
+        implemented_options = set()
+        enum_str = ""
 
-    enum_options_str = ",\n            ".join(sorted(list(defined_options)))
-    enum_str = f"public enum Option {{ {enum_options_str} }}" if defined_options else ""
-
-    factory_calls = []
-    for option in sorted(list(implemented_options)):
-        factory_calls.append(f"factory.CreateBoolOption(Option.{option}, false);")
-    factory_calls_str = "\n            ".join(factory_calls)
-    factory_str = f"protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) {{ {factory_calls_str} }}" if implemented_options else ""
+    if implemented_options:
+        factory_calls = [f"factory.CreateBoolOption(Option.{option}, false);" for option in sorted(list(implemented_options))]
+        factory_calls_str = "\n            ".join(factory_calls)
+        factory_str = f"protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) {{ {factory_calls_str} }}"
+    else:
+        factory_str = ""
 
     full_body = f"{enum_str}\n{factory_str}"
     return (full_body, class_name, defined_options, implemented_options)
