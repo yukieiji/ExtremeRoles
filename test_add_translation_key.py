@@ -16,7 +16,7 @@ from add_translation_key import (
 # --- Unit Tests ---
 
 def test_generate_translation_keys() -> None:
-    """Tests that the key generation logic is correct for a simple case."""
+    """単純なケースに対してキー生成ロジックが正しいことをテストします。"""
     class_name = "TestRole"
     option_names: set[str] = {"OptionA", "OptionB"}
     expected_keys: list[str] = [
@@ -48,7 +48,14 @@ public class InvalidRole {
 
 @pytest.fixture
 def valid_env(tmp_path: Path) -> Path:
-    """Sets up a valid temporary environment for testing."""
+    """テスト用の有効な一時環境をセットアップします。
+
+    Args:
+        tmp_path: pytestが提供する一時的なパスオブジェクト。
+
+    Returns:
+        セットアップされた一時環境へのパス。
+    """
     roles_dir: Path = tmp_path / "ExtremeRoles" / "Roles" / "Solo" / "Crewmate"
     roles_dir.mkdir(parents=True)
     (roles_dir / "DummyRole.cs").write_text(DUMMY_CS_VALID, encoding="utf-8")
@@ -61,7 +68,13 @@ def valid_env(tmp_path: Path) -> Path:
 # --- Integration Tests ---
 
 def test_main_logic_with_valid_role(valid_env: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]) -> None:
-    """Tests the main script logic finds and processes a valid role."""
+    """メインスクリプトのロジックが有効なロールを見つけて処理することをテストします。
+
+    Args:
+        valid_env: テスト用の有効な環境を提供するフィクスチャ。
+        monkeypatch: pytestのモンキーパッチフィクスチャ。
+        capsys: pytestのキャプチャフィクスチャ。
+    """
     monkeypatch.chdir(valid_env)
     monkeypatch.setattr(sys, 'argv', ['add_translation_key.py', 'DummyRole'])
     main()
@@ -70,7 +83,13 @@ def test_main_logic_with_valid_role(valid_env: Path, monkeypatch: MonkeyPatch, c
     assert "定義済みのオプション 1個、実装済みのオプション 1個を発見しました。" in captured.out
 
 def test_main_handles_discrepancy(valid_env: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]) -> None:
-    """Tests that the main script correctly reports a discrepancy and exits."""
+    """メインスクリプトが矛盾を正しく報告して終了することをテストします。
+
+    Args:
+        valid_env: テスト用の有効な環境を提供するフィクスチャ。
+        monkeypatch: pytestのモンキーパッチフィクスチャ。
+        capsys: pytestのキャプチャフィクスチャ。
+    """
     (valid_env / "ExtremeRoles/Roles/Solo/Crewmate/InvalidRole.cs").write_text(DUMMY_CS_INVALID)
     monkeypatch.chdir(valid_env)
     monkeypatch.setattr(sys, 'argv', ['add_translation_key.py', 'InvalidRole'])
@@ -89,7 +108,14 @@ cs_identifier: st.SearchStrategy[str] = st.text(alphabet=st.characters(min_codep
 
 @st.composite
 def csharp_class_body_strategy(draw: st.DrawFn) -> tuple[str, str, set[str], set[str]]:
-    """A Hypothesis strategy that generates random C# class body content."""
+    """ランダムなC#クラス本体のコンテンツを生成するHypothesisストラテジ。
+
+    Args:
+        draw: HypothesisのDrawFnオブジェクト。
+
+    Returns:
+        クラス本体、クラス名、定義済みオプション、実装済みオプションのタプル。
+    """
     class_name = draw(cs_identifier)
     defined_options = draw(st.sets(cs_identifier, min_size=0, max_size=10))
     if not defined_options:
@@ -114,7 +140,11 @@ def csharp_class_body_strategy(draw: st.DrawFn) -> tuple[str, str, set[str], set
 @given(data=csharp_class_body_strategy())
 @settings(max_examples=50)
 def test_parser_options_properties(data: tuple[str, str, set[str], set[str]]) -> None:
-    """Tests the property that the option parser is consistent with the generator."""
+    """オプションパーサーがジェネレーターと一致しているというプロパティをテストします。
+
+    Args:
+        data: csharp_class_body_strategyによって生成されたデータ。
+    """
     class_body, class_name, expected_defined, expected_implemented = data
 
     result = parse_options_from_class_body(class_body, class_name)
