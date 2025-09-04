@@ -51,6 +51,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gemini", "gemini", "{DDB4EF
 		.gemini\styleguide.md = .gemini\styleguide.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{754F4E8E-6F66-4BEB-A8D6-0BADA9A0BBE1}"
+	ProjectSection(SolutionItems) = preProject
+		add_role_translation_keys.py = add_role_translation_keys.py
+		createtransdatareport.py = createtransdatareport.py
+		makelanguagejson.py = makelanguagejson.py
+		test_add_role_translation_keys.py = test_add_role_translation_keys.py
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{159E0F47-D5CD-4321-BAAF-7871D9FA4143}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitconfig = .gitconfig
+		.gitignore = .gitignore
+		.gitmodules = .gitmodules
+		.vsconfig = .vsconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C5FBD511-285E-4BE3-8344-268E6BE48A12}"
+	ProjectSection(SolutionItems) = preProject
+		test_add_role_translation_keys.py = test_add_role_translation_keys.py
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -152,6 +175,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{00B61FF2-566F-4C38-847B-D6E28E7CA474} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
 		{DDB4EF12-CC4E-5E88-E6FC-71A802F4DE97} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
+		{754F4E8E-6F66-4BEB-A8D6-0BADA9A0BBE1} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
+		{159E0F47-D5CD-4321-BAAF-7871D9FA4143} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
+		{C5FBD511-285E-4BE3-8344-268E6BE48A12} = {754F4E8E-6F66-4BEB-A8D6-0BADA9A0BBE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
