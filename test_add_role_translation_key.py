@@ -1,6 +1,9 @@
 import pytest
 import os
 import sys
+import re
+import enum
+import shutil
 from pathlib import Path
 from hypothesis import given, strategies as st, settings, HealthCheck
 from pytest import MonkeyPatch, CaptureFixture
@@ -12,6 +15,42 @@ from add_role_translation_keys import (
     ParsedRoleData,
     ParsedOptionsData
 )
+
+# --- Dynamically load ExtremeRoleId from C# source ---
+
+def get_extreme_role_ids() -> enum.Enum:
+    """C#のソースファイルからExtremeRoleIdのenum値を読み込んでPythonのEnumを生成します。
+
+    Raises:
+        FileNotFoundError: C#ソースファイルが見つからない場合。
+        ValueError: enum定義が見つからない場合。
+
+    Returns:
+        動的に生成されたExtremeRoleIdのEnum。
+    """
+    cs_file_path = Path("ExtremeRoles/Roles/ExtremeRoleManager.cs")
+    if not cs_file_path.exists():
+        raise FileNotFoundError(f"C# source file not found at {cs_file_path}")
+
+    cs_content = cs_file_path.read_text(encoding="utf-8")
+
+    match = re.search(r"public enum ExtremeRoleId\s*:\s*int\s*\{([^}]+)\}", cs_content, re.DOTALL)
+    if not match:
+        raise ValueError("ExtremeRoleId enum definition not found in C# file.")
+
+    enum_body = match.group(1)
+
+    role_names = [name for name in re.findall(r"^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*,?", enum_body, re.MULTILINE) if name not in ["Null", "VanillaRole"]]
+
+    return enum.Enum("ExtremeRoleId", {name: name for name in role_names})
+
+try:
+    ExtremeRoleId = get_extreme_role_ids()
+    extreme_role_id_strategy = st.sampled_from(list(ExtremeRoleId))
+except (FileNotFoundError, ValueError) as e:
+    print(f"Skipping property-based tests for roles: {e}", file=sys.stderr)
+    # ストラテジーをNoneに設定し、テストをスキップできるようにする
+    extreme_role_id_strategy = None
 
 # --- Unit Tests ---
 
@@ -62,6 +101,34 @@ def valid_env(tmp_path: Path) -> Path:
 
     trans_dir: Path = tmp_path / "ExtremeRoles" / "Translation" / "resx"
     trans_dir.mkdir(parents=True)
+
+    return tmp_path
+
+@pytest.fixture
+def role_test_env(tmp_path: Path) -> Path:
+    """プロパティベースの役職テスト用の一次環境をセットアップします。
+
+    - 一時的なディレクトリ構造を作成します。
+    - 実際の.resxファイルを一時ディレクトリにコピーします。
+
+    Args:
+        tmp_path: pytestが提供する一時的なパスオブジェクト。
+
+    Returns:
+        セットアップされた一時環境へのパス。
+    """
+    project_root = Path.cwd()
+    original_resx_dir = project_root / "ExtremeRoles" / "Translation" / "resx"
+
+    temp_roles_dir = tmp_path / "ExtremeRoles" / "Roles"
+    temp_roles_dir.mkdir(parents=True)
+
+    temp_trans_dir = tmp_path / "ExtremeRoles" / "Translation" / "resx"
+
+    if original_resx_dir.exists() and original_resx_dir.is_dir():
+        shutil.copytree(original_resx_dir, temp_trans_dir)
+    else:
+        temp_trans_dir.mkdir(parents=True)
 
     return tmp_path
 
@@ -153,3 +220,78 @@ def test_parser_options_properties(data: tuple[str, str, set[str], set[str]]) ->
 
     assert result.defined == expected_defined
     assert result.implemented == expected_implemented
+
+# --- Property-Based Test for Real Roles ---
+
+def find_role_file(role_name: str) -> Path | None:
+    """指定された役職名のC#ソースファイルを検索します。
+
+    Args:
+        role_name: 検索する役職名。
+
+    Returns:
+        見つかったファイルのPathオブジェクト、またはNone。
+    """
+    roles_root = Path("ExtremeRoles/Roles")
+    for filepath in roles_root.glob(f"**/{role_name}.cs"):
+        return filepath
+    return None
+
+@pytest.mark.skipif(extreme_role_id_strategy is None, reason="Could not parse ExtremeRoleId from C# source")
+@given(role_id=extreme_role_id_strategy)
+@settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None, max_examples=20)
+def test_add_translation_key_for_random_roles(role_test_env: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str], role_id: enum.Enum) -> None:
+    """ランダムに選択された実際の役職に対して、翻訳キーの追加が正しく行われることをテストします。"""
+    role_name = role_id.name
+
+    original_role_file = find_role_file(role_name)
+    if not original_role_file:
+        pytest.skip(f"Source file for role '{role_name}' not found.")
+        return
+
+    # 一時環境に役職のソースファイルをコピー
+    relative_path = original_role_file.relative_to(Path.cwd())
+    temp_role_file = role_test_env / relative_path
+    temp_role_file.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy(original_role_file, temp_role_file)
+
+    # スクリプトを実行
+    monkeypatch.chdir(role_test_env)
+    monkeypatch.setattr(sys, 'argv', ['add_role_translation_keys.py', role_name])
+
+    exit_code = 0
+    try:
+        main()
+    except SystemExit as e:
+        exit_code = e.code
+
+    # --- Verification ---
+    captured = capsys.readouterr()
+    role_file_content = temp_role_file.read_text(encoding="utf-8")
+    parsed_data = parse_options_from_class_body(role_file_content, role_name)
+
+    # スクリプトが矛盾を報告した場合、キーは追加されないはず
+    if "エラー: 定義と実装の間に矛盾が発見されました。" in captured.err:
+        assert exit_code == 1, f"Script should exit with 1 on discrepancy, but exited with {exit_code} for role {role_name}"
+        return  # エラーケースの検証はここまでで十分
+
+    assert exit_code == 0, f"Script exited with non-zero code {exit_code} for role {role_name}"
+    expected_options = parsed_data.defined
+
+    expected_keys = generate_translation_keys(role_name, expected_options)
+
+    if not expected_keys:
+        return # 検証することがない
+
+    # すべての.resxファイルにキーが追加されたか確認
+    resx_dir = role_test_env / "ExtremeRoles" / "Translation" / "resx"
+
+    # 少なくとも1つのresxファイルが存在することを確認
+    resx_files = list(resx_dir.glob("*.resx"))
+    assert resx_files, "No .resx files found in the temporary directory for verification."
+
+    for resx_file in resx_files:
+        content = resx_file.read_text(encoding="utf-8")
+        for key in expected_keys:
+            assert f'<data name="{key}"' in content, \
+                f"Key '{key}' not found in {resx_file.name} for role '{role_name}'"
