@@ -4,6 +4,7 @@ import re
 from lxml import etree as ET
 from dataclasses import dataclass, field
 
+
 @dataclass
 class ParsedOptionsData:
     """ロールに定義され、実装されたオプションのセットを保持します。
@@ -12,8 +13,10 @@ class ParsedOptionsData:
         defined (set[str]): enumで定義されたオプション名のセット。
         implemented (set[str]): CreateSpecificOptionで実装されたオプション名のセット。
     """
+
     defined: set[str] = field(default_factory=set)
     implemented: set[str] = field(default_factory=set)
+
 
 @dataclass
 class ClassParseResult:
@@ -23,8 +26,10 @@ class ClassParseResult:
         class_name (str): 見つかったクラスの名前。
         class_body (str): クラスの波括弧内の完全な内容。
     """
+
     class_name: str
     class_body: str
+
 
 @dataclass
 class ParsedRoleData:
@@ -35,9 +40,11 @@ class ParsedRoleData:
         file_path (str): 役職クラスが定義されているファイルへのパス。
         options (ParsedOptionsData): 役職の定義済みおよび実装済みオプション。
     """
+
     class_name: str
     file_path: str
     options: ParsedOptionsData
+
 
 def find_and_parse_role_in_project(role_name: str) -> ParsedRoleData | None:
     """プロジェクト内のすべてのC#ファイルをスキャンして、特定のロールクラスを見つけて解析します。
@@ -57,19 +64,22 @@ def find_and_parse_role_in_project(role_name: str) -> ParsedRoleData | None:
                     continue
 
                 file_path = os.path.join(root, file)
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, "r", encoding="utf-8") as f:
                     content = f.read()
 
                 class_parse_result = parse_class_from_content(content, role_name)
 
                 if class_parse_result and class_parse_result.class_body:
-                    options_data = parse_options_from_class_body(class_parse_result.class_body, class_parse_result.class_name)
+                    options_data = parse_options_from_class_body(
+                        class_parse_result.class_body, class_parse_result.class_name
+                    )
                     return ParsedRoleData(
                         class_name=class_parse_result.class_name,
                         file_path=file_path,
-                        options=options_data
+                        options=options_data,
                     )
     return None
+
 
 def parse_class_from_content(content: str, role_name: str) -> ClassParseResult | None:
     """C#ファイルの内容を解析してクラスを見つけ、その本体を抽出します。
@@ -82,7 +92,14 @@ def parse_class_from_content(content: str, role_name: str) -> ClassParseResult |
         ClassParseResult | None: クラスとその本体が見つかった場合はClassParseResultオブジェクト、
                                   それ以外の場合はNone。
     """
-    class_match = re.search(r'public (?:sealed )?class\s+(' + re.escape(role_name) + r'|' + re.escape(role_name) + r'Role)\b', content)
+    class_match = re.search(
+        r"public (?:sealed )?class\s+("
+        + re.escape(role_name)
+        + r"|"
+        + re.escape(role_name)
+        + r"Role)\b",
+        content,
+    )
     if not class_match:
         return None
 
@@ -90,28 +107,33 @@ def parse_class_from_content(content: str, role_name: str) -> ClassParseResult |
     class_start_index = class_match.end()
 
     try:
-        brace_start_index = content.index('{', class_start_index)
+        brace_start_index = content.index("{", class_start_index)
     except ValueError:
-        return None # { が見つからない
+        return None  # { が見つからない
 
     brace_level = 1
     scan_index = brace_start_index + 1
     while scan_index < len(content):
         char = content[scan_index]
-        if char == '{':
+        if char == "{":
             brace_level += 1
-        elif char == '}':
+        elif char == "}":
             brace_level -= 1
 
         if brace_level == 0:
             class_body_content = content[brace_start_index + 1 : scan_index]
-            return ClassParseResult(class_name=actual_class_name, class_body=class_body_content)
+            return ClassParseResult(
+                class_name=actual_class_name, class_body=class_body_content
+            )
 
         scan_index += 1
 
-    return None # マッチする } が見つからない
+    return None  # マッチする } が見つからない
 
-def parse_options_from_class_body(class_body: str, class_name: str) -> ParsedOptionsData:
+
+def parse_options_from_class_body(
+    class_body: str, class_name: str
+) -> ParsedOptionsData:
     """クラス本体の文字列の内容を解析して、定義済みおよび実装済みのオプションを見つけます。
 
     Args:
@@ -123,20 +145,29 @@ def parse_options_from_class_body(class_body: str, class_name: str) -> ParsedOpt
                            2つのセットを含むParsedOptionsDataオブジェクト。
     """
     defined_options: set[str] = set()
-    options_match = re.search(r'public enum (?:' + class_name + r'Option|Option)\s*{([^}]+)}', class_body, re.DOTALL)
+    options_match = re.search(
+        r"public enum (?:" + class_name + r"Option|Option)\s*{([^}]+)}",
+        class_body,
+        re.DOTALL,
+    )
     if options_match:
         options_block = options_match.group(1)
-        defined_options = set(re.findall(r'\b(\w+)\b', options_block))
+        defined_options = set(re.findall(r"\b(\w+)\b", options_block))
 
     # クラス本体全体で実装されたオプションを検索します。
     # これにより、CreateSpecificOptionから呼び出されるヘルパーメソッド内のオプションも確実に見つけることができます。
     enum_type_name_1 = f"{class_name}Option"
     enum_type_name_2 = "Option"
-    implemented_options_1 = set(re.findall(rf'\b{enum_type_name_1}\.(\w+)\b', class_body))
-    implemented_options_2 = set(re.findall(rf'\b{enum_type_name_2}\.(\w+)\b', class_body))
+    implemented_options_1 = set(
+        re.findall(rf"\b{enum_type_name_1}\.(\w+)\b", class_body)
+    )
+    implemented_options_2 = set(
+        re.findall(rf"\b{enum_type_name_2}\.(\w+)\b", class_body)
+    )
     implemented_options = implemented_options_1.union(implemented_options_2)
 
     return ParsedOptionsData(defined=defined_options, implemented=implemented_options)
+
 
 def generate_translation_keys(class_name: str, option_names: set[str]) -> list[str]:
     """ロールの標準的な翻訳キーのリストを生成します。
@@ -148,10 +179,16 @@ def generate_translation_keys(class_name: str, option_names: set[str]) -> list[s
     Returns:
         list[str]: 生成された翻訳キーのリスト。
     """
-    keys = [class_name, f"{class_name}FullDescription", f"{class_name}ShortDescription", f"{class_name}IntroDescription"]
+    keys = [
+        class_name,
+        f"{class_name}FullDescription",
+        f"{class_name}ShortDescription",
+        f"{class_name}IntroDescription",
+    ]
     for option in option_names:
         keys.append(f"{class_name}{option}")
     return keys
+
 
 def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
     """lxmlを使用して、新しい翻訳キーを.resxファイルに追加します。
@@ -167,7 +204,7 @@ def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
         int: 追加された新しいキーの数。
     """
     try:
-        with open(file_path, 'rb') as f:
+        with open(file_path, "rb") as f:
             parser = ET.XMLParser(recover=True)
             tree = ET.parse(f, parser)
             root = tree.getroot()
@@ -176,7 +213,7 @@ def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
         root = ET.Element("root")
         tree = ET.ElementTree(root)
 
-    existing_keys = {data.get('name') for data in root.xpath("//data[@name]")}
+    existing_keys = {data.get("name") for data in root.xpath("//data[@name]")}
 
     XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace"
     added_count = 0
@@ -192,10 +229,11 @@ def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
 
     if added_count > 0:
         ET.indent(root, space="  ")
-        with open(file_path, 'wb') as f:
-            tree.write(f, pretty_print=True, xml_declaration=True, encoding='utf-8')
+        with open(file_path, "wb") as f:
+            tree.write(f, pretty_print=True, xml_declaration=True, encoding="utf-8")
 
     return added_count
+
 
 def get_team_name_from_path(file_path: str) -> str:
     """ファイルパスからチーム名を決定します。
@@ -238,6 +276,7 @@ def get_team_name_from_path(file_path: str) -> str:
 
     return "Unknown"
 
+
 def main() -> None:
     """スクリプトのメインエントリポイント。
 
@@ -257,18 +296,27 @@ def main() -> None:
         print(f"エラー: 役職 '{role_name}' のクラス定義が見つかりませんでした。")
         sys.exit(1)
 
-    print(f"役職クラス '{parsed_data.class_name}' をファイル内で発見: {parsed_data.file_path}")
-    print(f"定義済みのオプション {len(parsed_data.options.defined)}個、実装済みのオプション {len(parsed_data.options.implemented)}個を発見しました。")
+    print(
+        f"役職クラス '{parsed_data.class_name}' をファイル内で発見: {parsed_data.file_path}"
+    )
+    print(
+        f"定義済みのオプション {len(parsed_data.options.defined)}個、実装済みのオプション {len(parsed_data.options.implemented)}個を発見しました。"
+    )
 
     unimplemented = parsed_data.options.defined - parsed_data.options.implemented
     if unimplemented:
         print("\nエラー: 定義と実装の間に矛盾が発見されました。", file=sys.stderr)
-        print("以下のオプションはenumで定義されていますが、CreateSpecificOptionで実装されていません:", file=sys.stderr)
+        print(
+            "以下のオプションはenumで定義されていますが、CreateSpecificOptionで実装されていません:",
+            file=sys.stderr,
+        )
         for opt in sorted(list(unimplemented)):
             print(f"- {opt}", file=sys.stderr)
         sys.exit(1)
 
-    keys = generate_translation_keys(parsed_data.class_name, parsed_data.options.implemented)
+    keys = generate_translation_keys(
+        parsed_data.class_name, parsed_data.options.implemented
+    )
 
     team_name = get_team_name_from_path(parsed_data.file_path)
 
@@ -278,15 +326,22 @@ def main() -> None:
         if intro_key in keys:
             keys.remove(intro_key)
 
-    default_resx_path = os.path.join("ExtremeRoles/Translation/resx", f"{team_name}.resx")
+    default_resx_path = os.path.join(
+        "ExtremeRoles/Translation/resx", f"{team_name}.resx"
+    )
     print(f"対象の翻訳ファイル: {default_resx_path}")
 
     added_count = update_resx_file(default_resx_path, keys)
 
     if added_count > 0:
-        print(f"\n{added_count}個の新しい翻訳キーを '{default_resx_path}' に正常に追加しました。")
+        print(
+            f"\n{added_count}個の新しい翻訳キーを '{default_resx_path}' に正常に追加しました。"
+        )
     else:
-        print(f"\n追加する新しいキーはありません。'{default_resx_path}' は役職 '{parsed_data.class_name}' に対して既に最新の状態です。")
+        print(
+            f"\n追加する新しいキーはありません。'{default_resx_path}' は役職 '{parsed_data.class_name}' に対して既に最新の状態です。"
+        )
+
 
 if __name__ == "__main__":
     main()
