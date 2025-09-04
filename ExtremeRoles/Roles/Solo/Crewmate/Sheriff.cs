@@ -26,7 +26,6 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
         ReduceCurKillCool,
         IsPerm,
         IsSyncTaskAndShootNum,
-        IsEnableShootTaskGageOption,
         SyncShootTaskGage
     }
 
