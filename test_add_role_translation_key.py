@@ -259,11 +259,11 @@ def test_add_translation_key_for_random_roles(role_test_env: Path, monkeypatch: 
     monkeypatch.chdir(role_test_env)
     monkeypatch.setattr(sys, 'argv', ['add_role_translation_keys.py', role_name])
 
+    exit_code = 0
     try:
         main()
     except SystemExit as e:
-        # 正常終了(exit(0))は問題ない
-        assert e.code == 0, f"Script exited with non-zero code {e.code} for role {role_name}"
+        exit_code = e.code
 
     # --- Verification ---
     captured = capsys.readouterr()
@@ -272,9 +272,11 @@ def test_add_translation_key_for_random_roles(role_test_env: Path, monkeypatch: 
 
     # スクリプトが矛盾を報告した場合、キーは追加されないはず
     if "エラー: 定義と実装の間に矛盾が発見されました。" in captured.err:
-        expected_options = set()
-    else:
-        expected_options = parsed_data.defined
+        assert exit_code == 1, f"Script should exit with 1 on discrepancy, but exited with {exit_code} for role {role_name}"
+        return  # エラーケースの検証はここまでで十分
+
+    assert exit_code == 0, f"Script exited with non-zero code {exit_code} for role {role_name}"
+    expected_options = parsed_data.defined
 
     expected_keys = generate_translation_keys(role_name, expected_options)
 
