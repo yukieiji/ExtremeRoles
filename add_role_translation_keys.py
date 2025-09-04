@@ -67,23 +67,29 @@ def parse_class_from_content(content: str, role_name: str) -> ClassParseResult |
         return None
 
     actual_class_name = class_match.group(1)
+    class_start_index = class_match.end()
 
     try:
-        class_start_index = class_match.end()
-        brace_start_index = content.find('{', class_start_index)
-        if brace_start_index != -1:
-            brace_level = 1
-            scan_index = brace_start_index + 1
-            while scan_index < len(content) and brace_level > 0:
-                if content[scan_index] == '{': brace_level += 1
-                elif content[scan_index] == '}': brace_level -= 1
-                scan_index += 1
-            class_body_content = content[brace_start_index + 1 : scan_index - 1]
-            return ClassParseResult(class_name=actual_class_name, class_body=class_body_content)
-    except Exception:
-        return None
+        brace_start_index = content.index('{', class_start_index)
+    except ValueError:
+        return None # { が見つからない
 
-    return None
+    brace_level = 1
+    scan_index = brace_start_index + 1
+    while scan_index < len(content):
+        char = content[scan_index]
+        if char == '{':
+            brace_level += 1
+        elif char == '}':
+            brace_level -= 1
+
+        if brace_level == 0:
+            class_body_content = content[brace_start_index + 1 : scan_index]
+            return ClassParseResult(class_name=actual_class_name, class_body=class_body_content)
+
+        scan_index += 1
+
+    return None # マッチする } が見つからない
 
 def parse_options_from_class_body(class_body: str, class_name: str) -> ParsedOptionsData:
     """クラス本体の文字列の内容を解析して、定義済みおよび実装済みのオプションを見つけます。
@@ -129,7 +135,7 @@ def generate_translation_keys(class_name: str, option_names: set[str]) -> list[s
     return keys
 
 def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
-    """テキストベースのアプローチを使用して、新しい翻訳キーを.resxファイルに追加します。
+    """lxmlを使用して、新しい翻訳キーを.resxファイルに追加します。
 
     Args:
         file_path: .resxファイルのパス。
@@ -138,40 +144,57 @@ def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
     Returns:
         追加された新しいキーの数。
     """
-    with open(file_path, 'r', encoding='utf-8') as f:
-        content = f.read()
+    try:
+        with open(file_path, 'rb') as f:
+            parser = ET.XMLParser(recover=True)
+            tree = ET.parse(f, parser)
+            root = tree.getroot()
+    except (IOError, ET.XMLSyntaxError):
+        # ファイルが存在しないか壊れている場合、新しいものを作成
+        root = ET.Element("root")
+        tree = ET.ElementTree(root)
 
-    parser = ET.XMLParser(recover=True)
-    root = ET.fromstring(content.encode('utf-8'), parser=parser)
-    existing_keys: set[str | None] = {data.get('name') for data in root.xpath("//*[local-name()='data']")}
+    existing_keys = {data.get('name') for data in root.xpath("//data[@name]")}
 
-    new_keys_to_insert = []
+    XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace"
+    added_count = 0
     for key in keys_to_add:
         if key not in existing_keys:
-            new_data_string = f"""  <data name="{key}" xml:space="preserve">
-    <value>STRMISS</value>
-  </data>"""
-            new_keys_to_insert.append(new_data_string)
+            data_element = ET.SubElement(root, "data")
+            data_element.set("name", key)
+            data_element.set(f"{{{XML_NAMESPACE}}}space", "preserve")
+            value_element = ET.SubElement(data_element, "value")
+            value_element.text = "STRMISS"
             print(f"  新しいキーを追加中: {key}")
+            added_count += 1
 
-    if not new_keys_to_insert:
-        return 0
+    if added_count > 0:
+        ET.indent(root, space="  ")
+        with open(file_path, 'wb') as f:
+            tree.write(f, pretty_print=True, xml_declaration=True, encoding='utf-8')
 
-    closing_root_tag_index = content.rfind("</root>")
-    if closing_root_tag_index == -1: return 0
+    return added_count
 
-    new_content = content[:closing_root_tag_index] + "\n".join(new_keys_to_insert) + "\n" + content[closing_root_tag_index:]
-    content = new_content
-
-    with open(file_path, 'w', encoding='utf-8') as f:
-        f.write(content)
-
-    return len(new_keys_to_insert)
+def get_team_name_from_path(file_path: str) -> str:
+    """
+    ファイルパスからチーム名を決定します。
+    """
+    path_parts = file_path.split(os.sep)
+    team_name = "Unknown"
+    if 'Roles' in path_parts:
+        roles_index = path_parts.index('Roles')
+        if len(path_parts) > roles_index + 2:
+            team_name = path_parts[roles_index + 2]
+    if "GhostRoles" in path_parts:
+        team_name = "Ghost" + team_name
+    if "Combination" in path_parts:
+        team_name = "Combination"
+    return team_name
 
 def main() -> None:
     """スクリプトのメインエントリポイント。"""
     if len(sys.argv) != 2:
-        print("使い方: python add_translation_key.py <役職名>")
+        print("使い方: python add_role_translation_keys.py <役職名>")
         sys.exit(1)
 
     role_name = sys.argv[1]
@@ -196,24 +219,9 @@ def main() -> None:
 
     keys = generate_translation_keys(parsed_data.class_name, parsed_data.options.implemented)
 
-    path_parts = parsed_data.file_path.split(os.sep)
-    team_name = "Unknown"
-    if 'Roles' in path_parts:
-        roles_index = path_parts.index('Roles')
-        if len(path_parts) > roles_index + 2:
-            team_name = path_parts[roles_index + 2]
-    if "GhostRoles" in path_parts: team_name = "Ghost" + team_name
-    if "Combination" in path_parts: team_name = "Combination"
-
+    team_name = get_team_name_from_path(parsed_data.file_path)
     default_resx_path = os.path.join("ExtremeRoles/Translation/resx", f"{team_name}.resx")
     print(f"対象の翻訳ファイル: {default_resx_path}")
-
-    if not os.path.exists(default_resx_path):
-        print(f"'{default_resx_path}' が見つかりません。新しい空のファイルを作成します。")
-        new_file_content = """<?xml version="1.0" encoding="utf-8"?>\n<root>\n</root>"""
-        with open(default_resx_path, 'w', encoding='utf-8') as f:
-            f.write(new_file_content)
-        print(f"新しい空の翻訳ファイルを作成しました: {default_resx_path}")
 
     added_count = update_resx_file(default_resx_path, keys)
 
