@@ -66,7 +66,7 @@ public sealed class Madmate :
         Madmate madmate = ExtremeRoleManager.GetSafeCastedRole<Madmate>(playerId);
         if (madmate == null) { return; }
 
-        madmate.FakeImposter = true;
+        madmate.FakeImpostor = true;
     }
 
     public void CreateAbility()
@@ -147,7 +147,7 @@ public sealed class Madmate :
         SingleRoleBase targetRole, byte targetPlayerId)
     {
         if (this.isSeeImpostorNow &&
-            (targetRole.IsImpostor() || targetRole.FakeImposter))
+            (targetRole.IsImpostor() || targetRole.FakeImpostor))
         {
             return Palette.ImpostorRed;
         }
@@ -192,7 +192,7 @@ public sealed class Madmate :
         var cate = this.Loader;
         this.isSeeImpostorNow = false;
         this.isUpdateMadmate = false;
-        this.FakeImposter = false;
+        this.FakeImpostor = false;
 
         this.isDontCountAliveCrew = cate.GetValue<MadmateOption, bool>(
             MadmateOption.IsDontCountAliveCrew);
@@ -218,6 +218,6 @@ public sealed class Madmate :
             this.canSeeFromImpostor &&
             this.seeFromImpostorTaskGage <= 0.0f;
 
-        this.FakeImposter = this.isUpdateMadmate;
+        this.FakeImpostor = this.isUpdateMadmate;
     }
 }

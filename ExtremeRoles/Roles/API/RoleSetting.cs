@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -34,7 +34,7 @@ public enum KillerCommonOption
 
 public abstract class RoleOptionBase
 {
-    public bool CanKill = false;
+    public virtual bool CanKill { get; set; } = false;
 
 	public abstract IOptionLoader Loader { get; }
 

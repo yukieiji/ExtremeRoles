@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
@@ -97,6 +97,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Bait,
 			ExtremeRoleId.Jailer,
 			ExtremeRoleId.Summoner,
+			ExtremeRoleId.Exorcist,
 
 			ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,
@@ -174,6 +175,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             CombinationRoleType.Mover,
 			CombinationRoleType.Accelerator,
 			CombinationRoleType.Skater,
+			CombinationRoleType.Barter,
 
 			CombinationRoleType.Traitor,
         ];

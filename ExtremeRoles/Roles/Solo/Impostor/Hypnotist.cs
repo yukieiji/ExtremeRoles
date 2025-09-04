@@ -462,7 +462,7 @@ public sealed class Hypnotist :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
         }
     }
@@ -510,7 +510,7 @@ public sealed class Hypnotist :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.ImpostorRed,
                 PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
@@ -958,7 +958,7 @@ public sealed class Doll :
         this.dollPlayerId = dollPlayerId;
         this.hypnotistPlayerId = hypnotistPlayerId;
         this.hypnotist = parent;
-        this.FakeImposter = true;
+        this.FakeImpostor = true;
         this.canUseCrakingModule = new HashSet<AbilityType>();
         this.prevKillState = false;
 

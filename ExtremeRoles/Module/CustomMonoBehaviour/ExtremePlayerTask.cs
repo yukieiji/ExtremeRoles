@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Il2CppInterop.Runtime.Attributes;
@@ -56,7 +56,7 @@ public sealed class ExtremePlayerTask : PlayerTask
 
 			var color = trigger ? Color.red : Color.yellow;
 
-			string coloredString = Design.ColoedString(color, text);
+			string coloredString = Design.ColoredString(color, text);
 			foreach (var arrow in arrowContainer)
 			{
 				if (arrow == null) { continue; }

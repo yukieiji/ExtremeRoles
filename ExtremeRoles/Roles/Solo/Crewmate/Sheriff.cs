@@ -26,7 +26,6 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
         ReduceCurKillCool,
         IsPerm,
         IsSyncTaskAndShootNum,
-        IsEnableShootTaskGageOption,
         SyncShootTaskGage
     }
 
@@ -89,7 +88,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
 
     public override string GetImportantText(bool isContainFakeTask = true)
     {
-        string shotText = Design.ColoedString(
+        string shotText = Design.ColoredString(
             Palette.ImpostorRed,
             Tr.GetString("impostorShotCall"));
 
@@ -97,10 +96,10 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
         {
             shotText = string.Concat(
                 shotText,
-                Design.ColoedString(
+                Design.ColoredString(
                     this.Core.Color,
                     Tr.GetString("andFirst")),
-                Design.ColoedString(
+                Design.ColoredString(
                     ColorPalette.NeutralColor,
                     Tr.GetString("neutralShotCall")));
         }
@@ -108,7 +107,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
         string baseString = string.Format("{0}: {1}{2}",
             this.GetColoredRoleName(),
             shotText,
-            Design.ColoedString(
+            Design.ColoredString(
                 this.Core.Color,
                 Tr.GetString(
                     $"{this.Core.Id}ShortDescription")));
