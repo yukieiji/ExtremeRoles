@@ -6,19 +6,35 @@ from dataclasses import dataclass, field
 
 @dataclass
 class ParsedOptionsData:
-    """ロールに定義され、実装されたオプションのセットを保持します。"""
+    """ロールに定義され、実装されたオプションのセットを保持します。
+
+    Attributes:
+        defined (set[str]): enumで定義されたオプション名のセット。
+        implemented (set[str]): CreateSpecificOptionで実装されたオプション名のセット。
+    """
     defined: set[str] = field(default_factory=set)
     implemented: set[str] = field(default_factory=set)
 
 @dataclass
 class ClassParseResult:
-    """ファイルの内容からクラス定義を解析した結果を保持します。"""
+    """ファイルの内容からクラス定義を解析した結果を保持します。
+
+    Attributes:
+        class_name (str): 見つかったクラスの名前。
+        class_body (str): クラスの波括弧内の完全な内容。
+    """
     class_name: str
     class_body: str
 
 @dataclass
 class ParsedRoleData:
-    """解析されたロールのすべての情報（場所を含む）を保持します。"""
+    """解析されたロールのすべての情報（場所を含む）を保持します。
+
+    Attributes:
+        class_name (str): 役職クラスの名前。
+        file_path (str): 役職クラスが定義されているファイルへのパス。
+        options (ParsedOptionsData): 役職の定義済みおよび実装済みオプション。
+    """
     class_name: str
     file_path: str
     options: ParsedOptionsData
@@ -27,10 +43,11 @@ def find_and_parse_role_in_project(role_name: str) -> ParsedRoleData | None:
     """プロジェクト内のすべてのC#ファイルをスキャンして、特定のロールクラスを見つけて解析します。
 
     Args:
-        role_name: 検索するロールクラスの英語名（大文字と小文字を区別しない）。
+        role_name (str): 検索するロールクラスの英語名（大文字と小文字を区別しない）。
 
     Returns:
-        ロールの情報が見つかった場合はParsedRoleDataオブジェクト、それ以外の場合はNone。
+        ParsedRoleData | None: ロールの情報が見つかった場合はParsedRoleDataオブジェクト、
+                                それ以外の場合はNone。
     """
     search_dirs = ["ExtremeRoles/Roles", "ExtremeRoles/GhostRoles"]
     for search_dir in search_dirs:
@@ -58,11 +75,12 @@ def parse_class_from_content(content: str, role_name: str) -> ClassParseResult |
     """C#ファイルの内容を解析してクラスを見つけ、その本体を抽出します。
 
     Args:
-        content: C#ファイルの文字列の内容。
-        role_name: 検索するロールクラスの名前。
+        content (str): C#ファイルの文字列の内容。
+        role_name (str): 検索するロールクラスの名前。
 
     Returns:
-        クラスとその本体が見つかった場合はClassParseResultオブジェクト、それ以外の場合はNone。
+        ClassParseResult | None: クラスとその本体が見つかった場合はClassParseResultオブジェクト、
+                                  それ以外の場合はNone。
     """
     class_match = re.search(r'public (?:sealed )?class\s+(' + re.escape(role_name) + r'|' + re.escape(role_name) + r'Role)\b', content)
     if not class_match:
@@ -97,11 +115,12 @@ def parse_options_from_class_body(class_body: str, class_name: str) -> ParsedOpt
     """クラス本体の文字列の内容を解析して、定義済みおよび実装済みのオプションを見つけます。
 
     Args:
-        class_body: C#クラスの文字列の内容。
-        class_name: 解析対象のクラスの名前。
+        class_body (str): C#クラスの文字列の内容。
+        class_name (str): 解析対象のクラスの名前。
 
     Returns:
-        enumで定義されたオプションとファクトリで実装されたオプションの2つのセットを含むParsedOptionsDataオブジェクト。
+        ParsedOptionsData: enumで定義されたオプションとファクトリで実装されたオプションの
+                           2つのセットを含むParsedOptionsDataオブジェクト。
     """
     defined_options: set[str] = set()
     options_match = re.search(r'public enum (?:' + class_name + r'Option|Option)\s*{([^}]+)}', class_body, re.DOTALL)
@@ -123,11 +142,11 @@ def generate_translation_keys(class_name: str, option_names: set[str]) -> list[s
     """ロールの標準的な翻訳キーのリストを生成します。
 
     Args:
-        class_name: ロールクラスの名前。
-        option_names: オプション名のセット。
+        class_name (str): ロールクラスの名前。
+        option_names (set[str]): オプション名のセット。
 
     Returns:
-        生成された翻訳キーのリスト。
+        list[str]: 生成された翻訳キーのリスト。
     """
     keys = [class_name, f"{class_name}FullDescription", f"{class_name}ShortDescription", f"{class_name}IntroDescription"]
     for option in option_names:
@@ -137,12 +156,15 @@ def generate_translation_keys(class_name: str, option_names: set[str]) -> list[s
 def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
     """lxmlを使用して、新しい翻訳キーを.resxファイルに追加します。
 
+    ファイルが存在しないか壊れている場合は、新しいファイルを作成します。
+    キーが既に存在する場合は、何もしません。
+
     Args:
-        file_path: .resxファイルのパス。
-        keys_to_add: 追加するキーのリスト。
+        file_path (str): .resxファイルのパス。
+        keys_to_add (list[str]): 追加するキーのリスト。
 
     Returns:
-        追加された新しいキーの数。
+        int: 追加された新しいキーの数。
     """
     try:
         with open(file_path, 'rb') as f:
@@ -176,8 +198,18 @@ def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
     return added_count
 
 def get_team_name_from_path(file_path: str) -> str:
-    """
-    ファイルパスからチーム名を決定します。
+    """ファイルパスからチーム名を決定します。
+
+    パスの構造に基づいてチーム名を推測します。
+    例: 'ExtremeRoles/Roles/Solo/Crewmate/Sheriff.cs' -> 'Crewmate'
+        'ExtremeRoles/GhostRoles/Impostor/SaboEvil.cs' -> 'GhostImpostor'
+        'ExtremeRoles/Roles/Combination/Lover.cs' -> 'Combination'
+
+    Args:
+        file_path (str): 役職のC#ファイルへのパス。
+
+    Returns:
+        str: 決定されたチーム名。不明な場合は "Unknown"。
     """
     path_parts = file_path.split(os.sep)
 
@@ -207,7 +239,11 @@ def get_team_name_from_path(file_path: str) -> str:
     return "Unknown"
 
 def main() -> None:
-    """スクリプトのメインエントリポイント。"""
+    """スクリプトのメインエントリポイント。
+
+    コマンドライン引数から役職名を受け取り、プロジェクト内を検索して、
+    関連する翻訳キーを適切な.resxファイルに追加します。
+    """
     if len(sys.argv) != 2:
         print("使い方: python add_role_translation_keys.py <役職名>")
         sys.exit(1)
