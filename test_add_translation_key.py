@@ -10,21 +10,16 @@ from add_translation_key import (
     parse_options_from_class_body,
     main,
     ParsedRoleData,
-    ParsedOptionsData,
-    find_and_parse_role_in_project
+    ParsedOptionsData
 )
 
 # --- Unit Tests ---
 
 def test_generate_translation_keys() -> None:
-    """Tests that the key generation logic is correct for a simple case.
-
-    Verifies that given a class name and a set of option names, the function
-    produces the correct list of standard translation key strings.
-    """
+    """Tests that the key generation logic is correct for a simple case."""
     class_name = "TestRole"
     option_names: set[str] = {"OptionA", "OptionB"}
-    expected_keys = [
+    expected_keys: list[str] = [
         "TestRole", "TestRoleFullDescription", "TestRoleShortDescription",
         "TestRoleIntroDescription", "TestRoleOptionA", "TestRoleOptionB"
     ]
@@ -53,17 +48,7 @@ public class InvalidRole {
 
 @pytest.fixture
 def valid_env(tmp_path: Path) -> Path:
-    """Sets up a valid temporary environment for most integration tests.
-
-    Creates the necessary directory structure (`/ExtremeRoles/Roles/...` and
-    `/ExtremeRoles/Translation/...`) and a valid dummy C# role file within it.
-
-    Args:
-        tmp_path: The pytest fixture for creating a temporary directory.
-
-    Returns:
-        The path to the root of the temporary environment.
-    """
+    """Sets up a valid temporary environment for testing."""
     roles_dir: Path = tmp_path / "ExtremeRoles" / "Roles" / "Solo" / "Crewmate"
     roles_dir.mkdir(parents=True)
     (roles_dir / "DummyRole.cs").write_text(DUMMY_CS_VALID, encoding="utf-8")
@@ -76,12 +61,7 @@ def valid_env(tmp_path: Path) -> Path:
 # --- Integration Tests ---
 
 def test_main_logic_with_valid_role(valid_env: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]) -> None:
-    """Tests that the main script logic finds and processes a valid role.
-
-    This test runs the main() function and checks its stdout to ensure that
-    it correctly finds the dummy role, parses its options without error, and
-    reports its actions to the user.
-    """
+    """Tests the main script logic finds and processes a valid role."""
     monkeypatch.chdir(valid_env)
     monkeypatch.setattr(sys, 'argv', ['add_translation_key.py', 'DummyRole'])
     main()
@@ -90,12 +70,7 @@ def test_main_logic_with_valid_role(valid_env: Path, monkeypatch: MonkeyPatch, c
     assert "定義済みのオプション 1個、実装済みのオプション 1個を発見しました。" in captured.out
 
 def test_main_handles_discrepancy(valid_env: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]) -> None:
-    """Tests that the main script correctly reports a discrepancy and exits.
-
-    This test adds a C# file with an unimplemented option to the environment,
-    runs main(), and asserts that the script exits with a non-zero status code
-    and prints the correct Japanese error message to stderr.
-    """
+    """Tests that the main script correctly reports a discrepancy and exits."""
     (valid_env / "ExtremeRoles/Roles/Solo/Crewmate/InvalidRole.cs").write_text(DUMMY_CS_INVALID)
     monkeypatch.chdir(valid_env)
     monkeypatch.setattr(sys, 'argv', ['add_translation_key.py', 'InvalidRole'])
@@ -114,12 +89,7 @@ cs_identifier: st.SearchStrategy[str] = st.text(alphabet=st.characters(min_codep
 
 @st.composite
 def csharp_class_body_strategy(draw: st.DrawFn) -> tuple[str, str, set[str], set[str]]:
-    """A Hypothesis strategy that generates random C# class body content.
-
-    This generates a class name, a set of enum options, a subset of those
-    to be "implemented" in a factory method, and constructs the C# code for
-    the class body as a string.
-    """
+    """A Hypothesis strategy that generates random C# class body content."""
     class_name = draw(cs_identifier)
     defined_options = draw(st.sets(cs_identifier, min_size=0, max_size=10))
     if not defined_options:
@@ -144,12 +114,7 @@ def csharp_class_body_strategy(draw: st.DrawFn) -> tuple[str, str, set[str], set
 @given(data=csharp_class_body_strategy())
 @settings(max_examples=50)
 def test_parser_options_properties(data: tuple[str, str, set[str], set[str]]) -> None:
-    """Tests the property that the option parser is consistent with the generator.
-
-    This test uses Hypothesis to generate a wide variety of C# class body
-    structures and asserts that the parser's output (defined and implemented
-    options) always matches the known-correct sets used for generation.
-    """
+    """Tests the property that the option parser is consistent with the generator."""
     class_body, class_name, expected_defined, expected_implemented = data
 
     result = parse_options_from_class_body(class_body, class_name)

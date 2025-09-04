@@ -3,13 +3,12 @@ import os
 import re
 from lxml import etree as ET
 from dataclasses import dataclass, field
-from typing import Set, List, Optional, Tuple
 
 @dataclass
 class ParsedOptionsData:
     """Holds the sets of defined and implemented options for a role."""
-    defined: Set[str] = field(default_factory=set)
-    implemented: Set[str] = field(default_factory=set)
+    defined: set[str] = field(default_factory=set)
+    implemented: set[str] = field(default_factory=set)
 
 @dataclass
 class ClassParseResult:
@@ -24,7 +23,7 @@ class ParsedRoleData:
     file_path: str
     options: ParsedOptionsData
 
-def find_and_parse_role_in_project(role_name: str) -> Optional[ParsedRoleData]:
+def find_and_parse_role_in_project(role_name: str) -> ParsedRoleData | None:
     """Scans all C# files in the project to find and parse a specific role class.
 
     Args:
@@ -45,7 +44,7 @@ def find_and_parse_role_in_project(role_name: str) -> Optional[ParsedRoleData]:
 
             class_parse_result = parse_class_from_content(content, role_name)
 
-            if class_parse_result:
+            if class_parse_result and class_parse_result.class_body:
                 options_data = parse_options_from_class_body(class_parse_result.class_body, class_parse_result.class_name)
                 return ParsedRoleData(
                     class_name=class_parse_result.class_name,
@@ -54,7 +53,7 @@ def find_and_parse_role_in_project(role_name: str) -> Optional[ParsedRoleData]:
                 )
     return None
 
-def parse_class_from_content(content: str, role_name: str) -> Optional[ClassParseResult]:
+def parse_class_from_content(content: str, role_name: str) -> ClassParseResult | None:
     """Parses C# file content to find a class and extract its body.
 
     Args:
@@ -84,7 +83,7 @@ def parse_class_from_content(content: str, role_name: str) -> Optional[ClassPars
             class_body_content = content[brace_start_index + 1 : scan_index - 1]
             return ClassParseResult(class_name=actual_class_name, class_body=class_body_content)
     except Exception:
-        return None # Return None if body parsing fails
+        return None
 
     return None
 
@@ -117,14 +116,14 @@ def parse_options_from_class_body(class_body: str, class_name: str) -> ParsedOpt
 
     return ParsedOptionsData(defined=defined_options, implemented=implemented_options)
 
-def generate_translation_keys(class_name: str, option_names: set[str]) -> List[str]:
+def generate_translation_keys(class_name: str, option_names: set[str]) -> list[str]:
     """Generates a list of standard translation keys for a role."""
     keys = [class_name, f"{class_name}FullDescription", f"{class_name}ShortDescription", f"{class_name}IntroDescription"]
     for option in option_names:
         keys.append(f"{class_name}{option}")
     return keys
 
-def update_resx_file(file_path: str, keys_to_add: List[str]) -> int:
+def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
     """Adds new translation keys to a .resx file using a text-based approach."""
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
