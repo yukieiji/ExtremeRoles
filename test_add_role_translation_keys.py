@@ -8,13 +8,13 @@ from hypothesis import given, strategies as st, settings, HealthCheck
 from pytest import MonkeyPatch, CaptureFixture
 
 from add_role_translation_keys import (
+    get_team_name_from_path,
     generate_translation_keys,
     parse_options_from_class_body,
     main,
 )
 
 # --- Dynamically load ExtremeRoleId from C# source ---
-
 
 def get_extreme_role_ids() -> enum.Enum:
     """C#のソースファイルからExtremeRoleIdのenum値を読み込んでPythonのEnumを生成します。
@@ -72,13 +72,34 @@ def get_extreme_role_ids() -> enum.Enum:
                 role_names.update(enum_role_names)
     except Exception:
         pass  # ファイルがなくてもクラススキャンでカバーできていればOK
+    
+    try:
+        cs_enum_file_path = Path("ExtremeRoles/GhostRoles/ExtremeGhostRoleManager.cs")
+        if cs_enum_file_path.exists():
+            cs_content = cs_enum_file_path.read_text(encoding="utf-8")
+            match = re.search(
+                r"public enum ExtremeGhostRoleId\s*:\s*int\s*\{([^}]+)\}",
+                cs_content,
+                re.DOTALL,
+            )
+            if match:
+                enum_body = match.group(1)
+                enum_role_names = {
+                    name
+                    for name in re.findall(
+                        r"^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*,?", enum_body, re.MULTILINE
+                    )
+                    if name not in ["VanillaRole",]
+                }
+                role_names.update(enum_role_names)
+    except Exception:
+        pass  # ファイルがなくてもクラススキャンでカバーできていればOK
 
     return enum.Enum("ExtremeRoleId", {name: name for name in sorted(list(role_names))})
 
-
 try:
-    ExtremeRoleId = get_extreme_role_ids()
-    extreme_role_id_strategy = st.sampled_from(list(ExtremeRoleId))
+    extreme_role_id = get_extreme_role_ids()
+    extreme_role_id_strategy = st.sampled_from(list(extreme_role_id))
 except (FileNotFoundError, ValueError) as e:
     print(f"Skipping property-based tests for roles: {e}", file=sys.stderr)
     # ストラテジーをNoneに設定し、テストをスキップできるようにする
@@ -295,7 +316,7 @@ def test_main_skips_intro_for_ghost_role(
 
 # --- Hypothesis Strategies ---
 
-cs_identifier: st.SearchStrategy[str] = st.text(
+cs_identifier = st.text(
     alphabet=st.characters(min_codepoint=97, max_codepoint=122), min_size=3, max_size=10
 ).map(lambda s: s.capitalize())
 
@@ -395,12 +416,12 @@ def test_add_translation_key_for_random_roles(
 ) -> None:
     """ランダムに選択された実際の役職に対して、翻訳キーの追加が正しく行われることをテストします。"""
     # mainスクリプトから import されている関数を直接呼び出す
-    from add_role_translation_keys import get_team_name_from_path
 
     role_name = role_id.name
 
     original_role_file = find_role_file(role_name)
     if not original_role_file:
+        print(f"DEBUG: Could not find source file for role: {role_name}")
         pytest.skip(f"Source file for role '{role_name}' not found.")
         return
 
@@ -442,6 +463,7 @@ def test_add_translation_key_for_random_roles(
     )
 
     if not target_resx_file.exists():
+        print(f"DEBUG: Target resx file not found at: {target_resx_file}")
         pytest.skip(
             f"Target resx file not found for team '{team_name}' of role '{role_name}'"
         )

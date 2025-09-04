@@ -151,15 +151,8 @@ def parse_options_from_class_body(
 
     # クラス本体全体で実装されたオプションを検索します。
     # これにより、CreateSpecificOptionから呼び出されるヘルパーメソッド内のオプションも確実に見つけることができます。
-    enum_type_name_1 = f"{class_name}Option"
-    enum_type_name_2 = "Option"
-    implemented_options_1 = set(
-        re.findall(rf"\b{enum_type_name_1}\.(\w+)\b", class_body)
-    )
-    implemented_options_2 = set(
-        re.findall(rf"\b{enum_type_name_2}\.(\w+)\b", class_body)
-    )
-    implemented_options = implemented_options_1.union(implemented_options_2)
+    enum_type_pattern = rf"\b(?:{class_name}Option|Option)\.(\w+)\b"
+    implemented_options = set(re.findall(enum_type_pattern, class_body))
 
     return ParsedOptionsData(defined=defined_options, implemented=implemented_options)
 
