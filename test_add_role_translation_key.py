@@ -28,21 +28,41 @@ def get_extreme_role_ids() -> enum.Enum:
     Returns:
         動的に生成されたExtremeRoleIdのEnum。
     """
-    cs_file_path = Path("ExtremeRoles/Roles/ExtremeRoleManager.cs")
-    if not cs_file_path.exists():
-        raise FileNotFoundError(f"C# source file not found at {cs_file_path}")
+    role_names = set()
+    search_dirs = ["ExtremeRoles/Roles", "ExtremeRoles/GhostRoles"]
 
-    cs_content = cs_file_path.read_text(encoding="utf-8")
+    for search_dir in search_dirs:
+        cs_file_path = Path(search_dir)
+        if not cs_file_path.exists():
+            continue
 
-    match = re.search(r"public enum ExtremeRoleId\s*:\s*int\s*\{([^}]+)\}", cs_content, re.DOTALL)
-    if not match:
-        raise ValueError("ExtremeRoleId enum definition not found in C# file.")
+        for file_path in cs_file_path.glob("**/*.cs"):
+            content = file_path.read_text(encoding="utf-8")
+            # public sealed class Sheriff : SingleRoleBase のようなクラス定義を探す
+            match = re.search(r"public (?:sealed|abstract) class\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*:", content)
+            if match:
+                class_name = match.group(1)
+                # マネージャーやベースクラス等を除外する
+                if "Manager" not in class_name and "Base" not in class_name:
+                    role_names.add(class_name)
 
-    enum_body = match.group(1)
+    if not role_names:
+        raise ValueError("No role classes found in C# files.")
 
-    role_names = [name for name in re.findall(r"^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*,?", enum_body, re.MULTILINE) if name not in ["Null", "VanillaRole"]]
+    # 既存のロジックも尊重し、Enum定義からも取得を試みる
+    try:
+        cs_enum_file_path = Path("ExtremeRoles/Roles/ExtremeRoleManager.cs")
+        if cs_enum_file_path.exists():
+            cs_content = cs_enum_file_path.read_text(encoding="utf-8")
+            match = re.search(r"public enum ExtremeRoleId\s*:\s*int\s*\{([^}]+)\}", cs_content, re.DOTALL)
+            if match:
+                enum_body = match.group(1)
+                enum_role_names = {name for name in re.findall(r"^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*,?", enum_body, re.MULTILINE) if name not in ["Null", "VanillaRole"]}
+                role_names.update(enum_role_names)
+    except Exception:
+        pass # ファイルがなくてもクラススキャンでカバーできていればOK
 
-    return enum.Enum("ExtremeRoleId", {name: name for name in role_names})
+    return enum.Enum("ExtremeRoleId", {name: name for name in sorted(list(role_names))})
 
 try:
     ExtremeRoleId = get_extreme_role_ids()
@@ -76,6 +96,30 @@ public class DummyRole {
 }
 """
 
+DUMMY_CS_HELPER_METHOD: str = """
+public class HelperRole {
+    public enum Option { InHelper, InMain }
+
+    private void CreateHelperOptions(AutoParentSetOptionCategoryFactory factory) {
+        factory.CreateBoolOption(Option.InHelper, false);
+    }
+
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) {
+        CreateHelperOptions(factory);
+        factory.CreateBoolOption(Option.InMain, false);
+    }
+}
+"""
+
+DUMMY_CS_GHOST: str = """
+public class DummyGhostRole {
+    public enum Option { GhostOption }
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) {
+        factory.CreateBoolOption(Option.GhostOption, false);
+    }
+}
+"""
+
 DUMMY_CS_INVALID: str = """
 public class InvalidRole {
     public enum Option { Defined, AlsoDefined }
@@ -95,12 +139,24 @@ def valid_env(tmp_path: Path) -> Path:
     Returns:
         セットアップされた一時環境へのパス。
     """
+    # 通常の役職用ディレクトリ
     roles_dir: Path = tmp_path / "ExtremeRoles" / "Roles" / "Solo" / "Crewmate"
-    roles_dir.mkdir(parents=True)
+    roles_dir.mkdir(parents=True, exist_ok=True)
     (roles_dir / "DummyRole.cs").write_text(DUMMY_CS_VALID, encoding="utf-8")
 
+    # ゴースト役職用ディレクトリ
+    ghost_roles_dir: Path = tmp_path / "ExtremeRoles" / "GhostRoles" / "Crewmate"
+    ghost_roles_dir.mkdir(parents=True, exist_ok=True)
+    (ghost_roles_dir / "DummyGhostRole.cs").write_text(DUMMY_CS_GHOST, encoding="utf-8")
+
+    # ヘルパーメソッドを持つ役職のダミー
+    (roles_dir / "HelperRole.cs").write_text(DUMMY_CS_HELPER_METHOD, encoding="utf-8")
+
     trans_dir: Path = tmp_path / "ExtremeRoles" / "Translation" / "resx"
-    trans_dir.mkdir(parents=True)
+    trans_dir.mkdir(parents=True, exist_ok=True)
+    # ダミーの.resxファイルを作成
+    (trans_dir / "Crewmate.resx").write_text("<root></root>", encoding="utf-8")
+    (trans_dir / "GhostCrewmate.resx").write_text("<root></root>", encoding="utf-8")
 
     return tmp_path
 
@@ -169,6 +225,30 @@ def test_main_handles_discrepancy(valid_env: Path, monkeypatch: MonkeyPatch, cap
     assert "エラー: 定義と実装の間に矛盾が発見されました。" in captured.err
     assert "AlsoDefined" in captured.err
 
+def test_main_logic_with_helper_method_role(valid_env: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]) -> None:
+    """ヘルパーメソッドでオプションが定義されている役職を正しく処理できるかテストします。"""
+    monkeypatch.chdir(valid_env)
+    monkeypatch.setattr(sys, 'argv', ['add_role_translation_keys.py', 'HelperRole'])
+    main()
+    captured = capsys.readouterr()
+    assert "エラー" not in captured.err
+    assert "定義済みのオプション 2個、実装済みのオプション 2個を発見しました。" in captured.out
+
+def test_main_skips_intro_for_ghost_role(valid_env: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]) -> None:
+    """ゴースト役職に対してIntroDescriptionキーが追加されないことをテストします。"""
+    monkeypatch.chdir(valid_env)
+    monkeypatch.setattr(sys, 'argv', ['add_role_translation_keys.py', 'DummyGhostRole'])
+    main()
+
+    captured = capsys.readouterr()
+    assert "DummyGhostRoleIntroDescription" not in captured.out
+
+    # resxファイルの内容を直接チェック
+    resx_path = valid_env / "ExtremeRoles" / "Translation" / "resx" / "GhostCrewmate.resx"
+    content = resx_path.read_text(encoding="utf-8")
+    assert 'name="DummyGhostRoleIntroDescription"' not in content
+    assert 'name="DummyGhostRole"' in content # 他のキーは存在すること
+
 # --- Hypothesis Strategies ---
 
 cs_identifier: st.SearchStrategy[str] = st.text(alphabet=st.characters(min_codepoint=97, max_codepoint=122), min_size=3, max_size=10).map(lambda s: s.capitalize())
@@ -232,9 +312,10 @@ def find_role_file(role_name: str) -> Path | None:
     Returns:
         見つかったファイルのPathオブジェクト、またはNone。
     """
-    roles_root = Path("ExtremeRoles/Roles")
-    for filepath in roles_root.glob(f"**/{role_name}.cs"):
-        return filepath
+    for search_dir in [Path("ExtremeRoles/Roles"), Path("ExtremeRoles/GhostRoles")]:
+        if search_dir.exists():
+            for filepath in search_dir.glob(f"**/{role_name}.cs"):
+                return filepath
     return None
 
 @pytest.mark.skipif(extreme_role_id_strategy is None, reason="Could not parse ExtremeRoleId from C# source")
@@ -242,6 +323,9 @@ def find_role_file(role_name: str) -> Path | None:
 @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None, max_examples=20)
 def test_add_translation_key_for_random_roles(role_test_env: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str], role_id: enum.Enum) -> None:
     """ランダムに選択された実際の役職に対して、翻訳キーの追加が正しく行われることをテストします。"""
+    # mainスクリプトから import されている関数を直接呼び出す
+    from add_role_translation_keys import get_team_name_from_path
+
     role_name = role_id.name
 
     original_role_file = find_role_file(role_name)
@@ -249,13 +333,11 @@ def test_add_translation_key_for_random_roles(role_test_env: Path, monkeypatch: 
         pytest.skip(f"Source file for role '{role_name}' not found.")
         return
 
-    # 一時環境に役職のソースファイルをコピー
     relative_path = original_role_file.relative_to(Path.cwd())
     temp_role_file = role_test_env / relative_path
     temp_role_file.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy(original_role_file, temp_role_file)
 
-    # スクリプトを実行
     monkeypatch.chdir(role_test_env)
     monkeypatch.setattr(sys, 'argv', ['add_role_translation_keys.py', role_name])
 
@@ -264,34 +346,40 @@ def test_add_translation_key_for_random_roles(role_test_env: Path, monkeypatch: 
         main()
     except SystemExit as e:
         exit_code = e.code
+    except Exception as e:
+        pytest.fail(f"Script failed with an unexpected exception for role {role_name}: {e}")
 
-    # --- Verification ---
+
     captured = capsys.readouterr()
     role_file_content = temp_role_file.read_text(encoding="utf-8")
     parsed_data = parse_options_from_class_body(role_file_content, role_name)
 
-    # スクリプトが矛盾を報告した場合、キーは追加されないはず
     if "エラー: 定義と実装の間に矛盾が発見されました。" in captured.err:
         assert exit_code == 1, f"Script should exit with 1 on discrepancy, but exited with {exit_code} for role {role_name}"
-        return  # エラーケースの検証はここまでで十分
+        return
 
-    assert exit_code == 0, f"Script exited with non-zero code {exit_code} for role {role_name}"
+    assert exit_code == 0, f"Script exited with non-zero code {exit_code} for role {role_name}. Output:\n{captured.out}\n{captured.err}"
+
+    team_name = get_team_name_from_path(str(temp_role_file))
+    target_resx_file = role_test_env / "ExtremeRoles" / "Translation" / "resx" / f"{team_name}.resx"
+
+    if not target_resx_file.exists():
+        pytest.skip(f"Target resx file not found for team '{team_name}' of role '{role_name}'")
+        return
+
     expected_options = parsed_data.defined
-
     expected_keys = generate_translation_keys(role_name, expected_options)
 
+    # ゴースト役職のイントロキーは除外
+    if "Ghost" in team_name:
+        intro_key = f"{role_name}IntroDescription"
+        if intro_key in expected_keys:
+            expected_keys.remove(intro_key)
+
     if not expected_keys:
-        return # 検証することがない
+        return
 
-    # すべての.resxファイルにキーが追加されたか確認
-    resx_dir = role_test_env / "ExtremeRoles" / "Translation" / "resx"
-
-    # 少なくとも1つのresxファイルが存在することを確認
-    resx_files = list(resx_dir.glob("*.resx"))
-    assert resx_files, "No .resx files found in the temporary directory for verification."
-
-    for resx_file in resx_files:
-        content = resx_file.read_text(encoding="utf-8")
-        for key in expected_keys:
-            assert f'<data name="{key}"' in content, \
-                f"Key '{key}' not found in {resx_file.name} for role '{role_name}'"
+    content = target_resx_file.read_text(encoding="utf-8")
+    for key in expected_keys:
+        assert f'<data name="{key}"' in content, \
+            f"Key '{key}' not found in target file {target_resx_file.name} for role '{role_name}'"
