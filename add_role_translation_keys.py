@@ -157,24 +157,24 @@ def parse_options_from_class_body(
     return ParsedOptionsData(defined=defined_options, implemented=implemented_options)
 
 
-def generate_translation_keys(class_name: str, option_names: set[str]) -> list[str]:
+def generate_translation_keys(option_name_prefix: str, option_names: set[str]) -> list[str]:
     """ロールの標準的な翻訳キーのリストを生成します。
 
     Args:
-        class_name (str): ロールクラスの名前。
+        option_name_prefix (str): オプション名のプレフィックス。
         option_names (set[str]): オプション名のセット。
 
     Returns:
         list[str]: 生成された翻訳キーのリスト。
     """
     keys = [
-        class_name,
-        f"{class_name}FullDescription",
-        f"{class_name}ShortDescription",
-        f"{class_name}IntroDescription",
+        option_name_prefix,
+        f"{option_name_prefix}FullDescription",
+        f"{option_name_prefix}ShortDescription",
+        f"{option_name_prefix}IntroDescription",
     ]
     for option in option_names:
-        keys.append(f"{class_name}{option}")
+        keys.append(f"{option_name_prefix}{option}")
     return keys
 
 
@@ -304,14 +304,14 @@ def main() -> None:
         sys.exit(1)
 
     keys = generate_translation_keys(
-        parsed_data.class_name, parsed_data.options.implemented
+        role_name, parsed_data.options.implemented
     )
 
     team_name = get_team_name_from_path(parsed_data.file_path)
 
     # ゴースト役職にはイントロダクション説明が存在しないため、キーを削除します。
     if "Ghost" in team_name:
-        intro_key = f"{parsed_data.class_name}IntroDescription"
+        intro_key = f"{role_name}IntroDescription"
         if intro_key in keys:
             keys.remove(intro_key)
 
