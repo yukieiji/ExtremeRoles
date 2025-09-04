@@ -1,5 +1,5 @@
 import sys
-import os
+from pathlib import Path
 import re
 from lxml import etree as ET
 from dataclasses import dataclass, field
@@ -56,28 +56,23 @@ def find_and_parse_role_in_project(role_name: str) -> ParsedRoleData | None:
         ParsedRoleData | None: ロールの情報が見つかった場合はParsedRoleDataオブジェクト、
                                 それ以外の場合はNone。
     """
-    search_dirs = ["ExtremeRoles/Roles", "ExtremeRoles/GhostRoles"]
+    search_dirs = [Path("ExtremeRoles/Roles"), Path("ExtremeRoles/GhostRoles")]
     for search_dir in search_dirs:
-        for root, _, files in os.walk(search_dir):
-            for file in files:
-                if not file.endswith(".cs"):
-                    continue
+        for file_path in search_dir.rglob("*.cs"):
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
 
-                file_path = os.path.join(root, file)
-                with open(file_path, "r", encoding="utf-8") as f:
-                    content = f.read()
+            class_parse_result = parse_class_from_content(content, role_name)
 
-                class_parse_result = parse_class_from_content(content, role_name)
-
-                if class_parse_result and class_parse_result.class_body:
-                    options_data = parse_options_from_class_body(
-                        class_parse_result.class_body, class_parse_result.class_name
-                    )
-                    return ParsedRoleData(
-                        class_name=class_parse_result.class_name,
-                        file_path=file_path,
-                        options=options_data,
-                    )
+            if class_parse_result and class_parse_result.class_body:
+                options_data = parse_options_from_class_body(
+                    class_parse_result.class_body, class_parse_result.class_name
+                )
+                return ParsedRoleData(
+                    class_name=class_parse_result.class_name,
+                    file_path=str(file_path),
+                    options=options_data,
+                )
     return None
 
 
@@ -249,7 +244,7 @@ def get_team_name_from_path(file_path: str) -> str:
     Returns:
         str: 決定されたチーム名。不明な場合は "Unknown"。
     """
-    path_parts = file_path.split(os.sep)
+    path_parts = Path(file_path).parts
 
     # "Combination" は "Roles" の直下にある特殊なケースです
     if "Combination" in path_parts:
@@ -260,14 +255,15 @@ def get_team_name_from_path(file_path: str) -> str:
 
     try:
         base_index = path_parts.index(base_dir)
+        check_path = path_parts[base_index + 1]
 
         if is_ghost:
             # 例: GhostRoles/Crewmate/Role.cs -> GhostCrewmate
-            team = path_parts[base_index + 1]
+            team = check_path
             return f"Ghost{team}"
         else:
             # 例: Roles/Solo/Crewmate/Role.cs -> Crewmate
-            if path_parts[base_index + 1] == "Solo":
+            if check_path == "Solo":
                 return path_parts[base_index + 2]
 
     except (ValueError, IndexError):
@@ -326,12 +322,10 @@ def main() -> None:
         if intro_key in keys:
             keys.remove(intro_key)
 
-    default_resx_path = os.path.join(
-        "ExtremeRoles/Translation/resx", f"{team_name}.resx"
-    )
+    default_resx_path = Path("ExtremeRoles/Translation/resx") / f"{team_name}.resx"
     print(f"対象の翻訳ファイル: {default_resx_path}")
 
-    added_count = update_resx_file(default_resx_path, keys)
+    added_count = update_resx_file(str(default_resx_path), keys)
 
     if added_count > 0:
         print(
