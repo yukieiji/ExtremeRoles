@@ -32,24 +32,26 @@ def find_and_parse_role_in_project(role_name: str) -> ParsedRoleData | None:
     Returns:
         ロールの情報が見つかった場合はParsedRoleDataオブジェクト、それ以外の場合はNone。
     """
-    for root, _, files in os.walk("ExtremeRoles/Roles"):
-        for file in files:
-            if not file.endswith(".cs"):
-                continue
+    search_dirs = ["ExtremeRoles/Roles", "ExtremeRoles/GhostRoles"]
+    for search_dir in search_dirs:
+        for root, _, files in os.walk(search_dir):
+            for file in files:
+                if not file.endswith(".cs"):
+                    continue
 
-            file_path = os.path.join(root, file)
-            with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
+                file_path = os.path.join(root, file)
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
 
-            class_parse_result = parse_class_from_content(content, role_name)
+                class_parse_result = parse_class_from_content(content, role_name)
 
-            if class_parse_result and class_parse_result.class_body:
-                options_data = parse_options_from_class_body(class_parse_result.class_body, class_parse_result.class_name)
-                return ParsedRoleData(
-                    class_name=class_parse_result.class_name,
-                    file_path=file_path,
-                    options=options_data
-                )
+                if class_parse_result and class_parse_result.class_body:
+                    options_data = parse_options_from_class_body(class_parse_result.class_body, class_parse_result.class_name)
+                    return ParsedRoleData(
+                        class_name=class_parse_result.class_name,
+                        file_path=file_path,
+                        options=options_data
+                    )
     return None
 
 def parse_class_from_content(content: str, role_name: str) -> ClassParseResult | None:
@@ -107,15 +109,13 @@ def parse_options_from_class_body(class_body: str, class_name: str) -> ParsedOpt
         options_block = options_match.group(1)
         defined_options = set(re.findall(r'\b(\w+)\b', options_block))
 
-    implemented_options: set[str] = set()
-    method_match = re.search(r'protected(?: override)? void CreateSpecificOption\([^)]*\)\s*{([^}]+)}', class_body, re.DOTALL)
-    if method_match:
-        method_block = method_match.group(1)
-        enum_type_name_1 = f"{class_name}Option"
-        enum_type_name_2 = "Option"
-        implemented_options_1 = set(re.findall(rf'\b{enum_type_name_1}\.(\w+)\b', method_block))
-        implemented_options_2 = set(re.findall(rf'\b{enum_type_name_2}\.(\w+)\b', method_block))
-        implemented_options = implemented_options_1.union(implemented_options_2)
+    # クラス本体全体で実装されたオプションを検索します。
+    # これにより、CreateSpecificOptionから呼び出されるヘルパーメソッド内のオプションも確実に見つけることができます。
+    enum_type_name_1 = f"{class_name}Option"
+    enum_type_name_2 = "Option"
+    implemented_options_1 = set(re.findall(rf'\b{enum_type_name_1}\.(\w+)\b', class_body))
+    implemented_options_2 = set(re.findall(rf'\b{enum_type_name_2}\.(\w+)\b', class_body))
+    implemented_options = implemented_options_1.union(implemented_options_2)
 
     return ParsedOptionsData(defined=defined_options, implemented=implemented_options)
 
@@ -180,16 +180,31 @@ def get_team_name_from_path(file_path: str) -> str:
     ファイルパスからチーム名を決定します。
     """
     path_parts = file_path.split(os.sep)
-    team_name = "Unknown"
-    if 'Roles' in path_parts:
-        roles_index = path_parts.index('Roles')
-        if len(path_parts) > roles_index + 2:
-            team_name = path_parts[roles_index + 2]
-    if "GhostRoles" in path_parts:
-        team_name = "Ghost" + team_name
+
+    # "Combination" は "Roles" の直下にある特殊なケースです
     if "Combination" in path_parts:
-        team_name = "Combination"
-    return team_name
+        return "Combination"
+
+    is_ghost = "GhostRoles" in path_parts
+    base_dir = "GhostRoles" if is_ghost else "Roles"
+
+    try:
+        base_index = path_parts.index(base_dir)
+
+        if is_ghost:
+            # 例: GhostRoles/Crewmate/Role.cs -> GhostCrewmate
+            team = path_parts[base_index + 1]
+            return f"Ghost{team}"
+        else:
+            # 例: Roles/Solo/Crewmate/Role.cs -> Crewmate
+            if path_parts[base_index + 1] == "Solo":
+                return path_parts[base_index + 2]
+
+    except (ValueError, IndexError):
+        # 予期しないパス構造の場合に返されます
+        return "Unknown"
+
+    return "Unknown"
 
 def main() -> None:
     """スクリプトのメインエントリポイント。"""
@@ -220,6 +235,13 @@ def main() -> None:
     keys = generate_translation_keys(parsed_data.class_name, parsed_data.options.implemented)
 
     team_name = get_team_name_from_path(parsed_data.file_path)
+
+    # ゴースト役職にはイントロダクション説明が存在しないため、キーを削除します。
+    if "Ghost" in team_name:
+        intro_key = f"{parsed_data.class_name}IntroDescription"
+        if intro_key in keys:
+            keys.remove(intro_key)
+
     default_resx_path = os.path.join("ExtremeRoles/Translation/resx", f"{team_name}.resx")
     print(f"対象の翻訳ファイル: {default_resx_path}")
 
