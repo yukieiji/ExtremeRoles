@@ -6,32 +6,31 @@ from dataclasses import dataclass, field
 
 @dataclass
 class ParsedOptionsData:
-    """Holds the sets of defined and implemented options for a role."""
+    """ロールに定義され、実装されたオプションのセットを保持します。"""
     defined: set[str] = field(default_factory=set)
     implemented: set[str] = field(default_factory=set)
 
 @dataclass
 class ClassParseResult:
-    """Holds the result of parsing a class definition from a file's content."""
+    """ファイルの内容からクラス定義を解析した結果を保持します。"""
     class_name: str
     class_body: str
 
 @dataclass
 class ParsedRoleData:
-    """Holds all the parsed information about a role, including its location."""
+    """解析されたロールのすべての情報（場所を含む）を保持します。"""
     class_name: str
     file_path: str
     options: ParsedOptionsData
 
 def find_and_parse_role_in_project(role_name: str) -> ParsedRoleData | None:
-    """Scans all C# files in the project to find and parse a specific role class.
+    """プロジェクト内のすべてのC#ファイルをスキャンして、特定のロールクラスを見つけて解析します。
 
     Args:
-        role_name: The English name of the role class to find (case-insensitive).
+        role_name: 検索するロールクラスの英語名（大文字と小文字を区別しない）。
 
     Returns:
-        A ParsedRoleData object containing the role's information if found,
-        otherwise None.
+        ロールの情報が見つかった場合はParsedRoleDataオブジェクト、それ以外の場合はNone。
     """
     for root, _, files in os.walk("ExtremeRoles/Roles"):
         for file in files:
@@ -54,15 +53,14 @@ def find_and_parse_role_in_project(role_name: str) -> ParsedRoleData | None:
     return None
 
 def parse_class_from_content(content: str, role_name: str) -> ClassParseResult | None:
-    """Parses C# file content to find a class and extract its body.
+    """C#ファイルの内容を解析してクラスを見つけ、その本体を抽出します。
 
     Args:
-        content: The string content of the C# file.
-        role_name: The name of the role class to find.
+        content: C#ファイルの文字列の内容。
+        role_name: 検索するロールクラスの名前。
 
     Returns:
-        A ClassParseResult object if the class and its body are found,
-        otherwise None.
+        クラスとその本体が見つかった場合はClassParseResultオブジェクト、それ以外の場合はNone。
     """
     class_match = re.search(r'public (?:sealed )?class\s+(' + re.escape(role_name) + r'|' + re.escape(role_name) + r'Role)\b', content)
     if not class_match:
@@ -88,15 +86,14 @@ def parse_class_from_content(content: str, role_name: str) -> ClassParseResult |
     return None
 
 def parse_options_from_class_body(class_body: str, class_name: str) -> ParsedOptionsData:
-    """Parses the string content of a class body to find defined and implemented options.
+    """クラス本体の文字列の内容を解析して、定義済みおよび実装済みのオプションを見つけます。
 
     Args:
-        class_body: The string content of the C# class.
-        class_name: The name of the class being parsed.
+        class_body: C#クラスの文字列の内容。
+        class_name: 解析対象のクラスの名前。
 
     Returns:
-        A ParsedOptionsData object containing two sets: one for options
-        defined in the enum, and one for options implemented in the factory.
+        enumで定義されたオプションとファクトリで実装されたオプションの2つのセットを含むParsedOptionsDataオブジェクト。
     """
     defined_options: set[str] = set()
     options_match = re.search(r'public enum (?:' + class_name + r'Option|Option)\s*{([^}]+)}', class_body, re.DOTALL)
@@ -117,14 +114,30 @@ def parse_options_from_class_body(class_body: str, class_name: str) -> ParsedOpt
     return ParsedOptionsData(defined=defined_options, implemented=implemented_options)
 
 def generate_translation_keys(class_name: str, option_names: set[str]) -> list[str]:
-    """Generates a list of standard translation keys for a role."""
+    """ロールの標準的な翻訳キーのリストを生成します。
+
+    Args:
+        class_name: ロールクラスの名前。
+        option_names: オプション名のセット。
+
+    Returns:
+        生成された翻訳キーのリスト。
+    """
     keys = [class_name, f"{class_name}FullDescription", f"{class_name}ShortDescription", f"{class_name}IntroDescription"]
     for option in option_names:
         keys.append(f"{class_name}{option}")
     return keys
 
 def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
-    """Adds new translation keys to a .resx file using a text-based approach."""
+    """テキストベースのアプローチを使用して、新しい翻訳キーを.resxファイルに追加します。
+
+    Args:
+        file_path: .resxファイルのパス。
+        keys_to_add: 追加するキーのリスト。
+
+    Returns:
+        追加された新しいキーの数。
+    """
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
@@ -156,7 +169,7 @@ def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
     return len(new_keys_to_insert)
 
 def main() -> None:
-    """The main entry point of the script."""
+    """スクリプトのメインエントリポイント。"""
     if len(sys.argv) != 2:
         print("使い方: python add_translation_key.py <役職名>")
         sys.exit(1)
