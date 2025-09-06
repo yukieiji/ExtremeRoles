@@ -426,7 +426,7 @@ public sealed class TuckerRole :
 			return false;
 		}
 		removeInfo = new RemoveInfo(targetShadowId, local.GetTruePosition());
-		return false;
+		return true;
 	}
 
 	private bool isRemoving()

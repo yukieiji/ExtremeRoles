@@ -117,6 +117,8 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		private float time;
 		private int num;
 
+		private float multipleBlockTimer;
+
 		public Gui(
 			UiParameter parameter,
 			ExtremeAbilityButton button)
@@ -158,6 +160,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				this.IsOpen = false;
 			});
 
+			this.multipleBlockTimer = 0.0f;
 			this.execute = UnityObjectLoader.CreateSimpleButton(hud.transform);
 			this.execute.Awake();
 			this.execute.Layer = targetLayer;
@@ -168,11 +171,12 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			updateText();
 			this.execute.ClickedEvent.AddListener(() =>
 			{
-				if (this.num <= 0)
+				if (this.num <= 0 || this.multipleBlockTimer > 0.0f)
 				{
 					return;
 				}
 				--this.num;
+				this.multipleBlockTimer = 0.15f;
 				RaiderBombSystem.RpcSetBomb(this.camera.gameObject.transform.position);
 				updateText();
 			});
@@ -181,7 +185,9 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		public void Update(float deltaTime)
 		{
 			this.uiOpenTime -= deltaTime;
+			this.multipleBlockTimer -= deltaTime;
 			this.back.Text.text = Tr.GetString("CloseBombUI", Mathf.CeilToInt(this.uiOpenTime));
+			
 			if (Input.GetKeyDown(KeyCode.Escape) ||
 				this.uiOpenTime <= 0.0f ||
 				(
@@ -191,23 +197,26 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				))
 			{
 				this.IsOpen = false;
+				return;
 			}
-			if (this.IsOpen &&
-				PlayerControl.LocalPlayer != null &&
-				PlayerControl.LocalPlayer.MyPhysics != null)
+
+			if (PlayerControl.LocalPlayer == null ||
+				PlayerControl.LocalPlayer.MyPhysics == null)
 			{
-				Vector2 cameraPos = this.camera.transform.position;
-				this.time += deltaTime;
-				if (this.time >= 0.05f)
-				{
-                    Vector2 del = HudManager.Instance.joystick.DeltaL.normalized;
-                    this.camera.transform.position = cameraPos + (del * 0.25f);
-					this.time = 0.0f;
-                }
-				var pc = PlayerControl.LocalPlayer;
-				pc.transform.position = this.curPos;
-				pc.MyPhysics.FlipX = this.curFlip;
+				return;
 			}
+
+			Vector2 cameraPos = this.camera.transform.position;
+			this.time += deltaTime;
+			if (this.time >= 0.05f)
+			{
+				Vector2 del = HudManager.Instance.joystick.DeltaL.normalized;
+				this.camera.transform.position = cameraPos + (del * 0.25f);
+				this.time = 0.0f;
+			}
+			var pc = PlayerControl.LocalPlayer;
+			pc.transform.position = this.curPos;
+			pc.MyPhysics.FlipX = this.curFlip;
 		}
 
 		private void updateText()
@@ -299,7 +308,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		factory.CreateIntOption(Option.BombNum, 5, 2, 100, 1, type);
 		factory.CreateFloatOption(Option.BombTargetRange, 1.7f, 0.1f, 25.0f, 0.1f, type);
 		factory.CreateFloatOption(Option.BombRange, 1.7f, 0.1f, 5.0f, 0.1f);
-		factory.CreateFloatOption(Option.BombAliveTime, 5.0f, 0.5f, 30.0f, 0.1f);
+		factory.CreateFloatOption(Option.BombAliveTime, 5.0f, 0.5f, 30.0f, 0.1f, format: OptionUnit.Second);
 
 		factory.CreateBoolOption(Option.BombShowOtherPlayer, true);
 	}
