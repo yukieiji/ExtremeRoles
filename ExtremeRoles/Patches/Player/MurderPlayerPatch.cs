@@ -162,6 +162,11 @@ public static class PlayerControlMurderPlayerPatch
 			{
 				pva.Cancel();
 			}
+			if (pva.VotedFor == targetPlayerId)
+			{
+				pva.Cancel();
+				pva.Flag.enabled = false;
+			}
 		}
 	}
 
