@@ -1,19 +1,20 @@
 import sys
 import re
 
-def add_keys_to_resx_text_based(file_path, keys_str):
+def add_keys_to_resx_text_based(file_path: str, keys: list[str]) -> None:
     """
     .resxファイルに新しいキーを追加します。
+
     テキストベースの操作で、コメントとスキーマを完全に保持します。
 
-    :param file_path: .resxファイルのパス
-    :param keys_str: コンマ区切りのキーの文字列
+    Args:
+        file_path (str): .resxファイルへのパス。
+        keys (list[str]): 追加するキーのリスト。
     """
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
 
-        keys = [key.strip() for key in keys_str.split(',') if key.strip()]
         if not keys:
             print("追加するキーが指定されていません。")
             return
@@ -65,11 +66,33 @@ def add_keys_to_resx_text_based(file_path, keys_str):
         print(f"予期せぬエラーが発生しました: {e}")
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print("使用法: python add_keys_to_resx.py <resxファイルパス> <キー1,キー2,...>")
-        sys.exit(1)
+    try:
+        resx_file = input("resxファイルのパスを入力してください: ").strip()
 
-    resx_file = sys.argv[1]
-    keys_to_add = sys.argv[2]
+        if not resx_file:
+            print("ファイルパスが入力されていません。")
+        else:
+            keys_list = []
+            print("追加するキーを1つずつ、またはカンマ区切りで入力してください (入力が終わったら何も入力せずにEnter):")
+            while True:
+                line_input = input("キー: ").strip()
+                if not line_input:
+                    break
 
-    add_keys_to_resx_text_based(resx_file, keys_to_add)
+                # If input contains commas, treat as a list; otherwise, as a single key
+                if ',' in line_input:
+                    keys_from_line = [key.strip() for key in line_input.split(',') if key.strip()]
+                    keys_list.extend(keys_from_line)
+                    print(f"  -> {len(keys_from_line)}個のキーを追加しました。")
+                else:
+                    keys_list.append(line_input)
+
+            if not keys_list:
+                print("追加するキーが入力されませんでした。")
+            else:
+                add_keys_to_resx_text_based(resx_file, keys_list)
+
+    except KeyboardInterrupt:
+        print("\n操作が中断されました。")
+    except Exception as e:
+        print(f"予期せぬエラーが発生しました: {e}")
