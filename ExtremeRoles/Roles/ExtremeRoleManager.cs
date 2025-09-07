@@ -87,6 +87,7 @@ public enum ExtremeRoleId : int
 	Yardbird,
 	Summoner,
 	Exorcist,
+	Loner,
 
 	SpecialImpostor,
     Evolver,
