@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using UnityEngine;
@@ -485,6 +485,7 @@ public static class Player
             targetPlayer.Object &&
             !targetPlayer.Object.inVent &&
 			!targetPlayer.Object.inMovingPlat &&
+			!targetPlayer.Object.onLadder &&
 			ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
             !role.IsSameTeam(targetRole) &&
 			!MonikaTrashSystem.InvalidTarget(targetRole, sourcePlayerId)
