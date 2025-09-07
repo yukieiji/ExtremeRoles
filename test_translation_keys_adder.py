@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 # テスト対象の関数をインポート
-from add_keys_to_resx import add_keys_to_resx_text_based
+from translation_keys_adder import add_keys_to_resx_text_based
 
 # テスト対象とする実際の.resxファイル
 # Note: これらのファイルがリポジトリに存在することを前提としています
@@ -38,7 +38,7 @@ def test_add_single_new_key(real_resx_file_copy: Path):
     content = real_resx_file_copy.read_text(encoding="utf-8")
 
     assert f'name="{new_key}"' in content
-    assert f"<value>{new_key}</value>" in content
+    assert f"<value>STRMISS</value>" in content
 
 def test_add_multiple_new_keys(real_resx_file_copy: Path):
     """複数の新しいキーを追加するテスト。"""

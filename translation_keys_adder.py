@@ -28,7 +28,7 @@ def add_keys_to_resx_text_based(file_path: str, keys: list[str]) -> None:
                 continue
 
             # 新しいdata要素の文字列を作成
-            new_element = f'  <data name="{key}" xml:space="preserve">\n    <value>{key}</value>\n  </data>'
+            new_element = f'  <data name="{key}" xml:space="preserve">\n    <value>STRMISS</value>\n  </data>'
             new_data_elements.append(new_element)
             print(f"キー '{key}' を追加します。")
 
