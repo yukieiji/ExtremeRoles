@@ -18,6 +18,7 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 using ExtremeRoles.Roles.Solo.Crewmate.Fencer;
+using ExtremeRoles.Roles.Solo.Crewmate.Loner;
 using ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Roles.Solo.Impostor;
@@ -87,6 +88,7 @@ public enum ExtremeRoleId : int
 	Yardbird,
 	Summoner,
 	Exorcist,
+	Loner,
 
 	SpecialImpostor,
     Evolver,
@@ -307,6 +309,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Jailer      , new Jailer()},
 			{(int)ExtremeRoleId.Summoner    , new Summoner()},
 			{(int)ExtremeRoleId.Exorcist    , new ExorcistRole()},
+			{(int)ExtremeRoleId.Loner       , new LonerRole()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
