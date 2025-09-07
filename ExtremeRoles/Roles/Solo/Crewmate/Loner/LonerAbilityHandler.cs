@@ -44,6 +44,12 @@ public sealed class ArrowController(int arrowNum, bool isShowOnVentPlayer)
 		{
 			if (!isValidPlayer(rolePlayer, playerInfo))
 			{
+				if (playerInfo != null &&
+					this.arrow.TryGetValue(playerInfo.PlayerId, out var arrow) &&
+					arrow is not null)
+				{
+					arrow.SetActive(false);
+				}
 				continue;
 			}
 
