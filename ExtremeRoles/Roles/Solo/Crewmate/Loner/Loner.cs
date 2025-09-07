@@ -51,8 +51,8 @@ public sealed class LonerRole : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
 		factory.CreateBoolOption(Option.StressProgressOnMovingPlatPlayer, false);
 		
 		var arrowOpt = factory.CreateBoolOption(Option.IsShowArrow, true);
-		factory.CreateIntOption(Option.ArrowNum, 1, 1, 5, 1);
-		factory.CreateBoolOption(Option.ArrowShowVentPlayer, true);
+		factory.CreateIntOption(Option.ArrowNum, 1, 1, 5, 1, arrowOpt, invert: true);
+		factory.CreateBoolOption(Option.ArrowShowVentPlayer, true, arrowOpt, invert: true);
 	}
 
 	protected override void RoleSpecificInit()

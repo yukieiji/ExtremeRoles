@@ -56,11 +56,12 @@ public sealed class ArrowController(int arrowNum, bool isShowOnVentPlayer)
 		foreach (var player in this.cache.Values)
 		{
 			num++;
-
-			if (!this.arrow.TryGetValue(player.PlayerId, out var arrow) ||
+			byte playerId = player.PlayerId;
+			if (!this.arrow.TryGetValue(playerId, out var arrow) ||
 				arrow is null)
 			{
 				arrow = new Arrow(Color.white);
+				this.arrow[playerId] = arrow;
 			}
 			arrow.SetActive(num <= this.arrowNum);
 			arrow.UpdateTarget(player.GetTruePosition());
@@ -79,7 +80,6 @@ public sealed class ArrowController(int arrowNum, bool isShowOnVentPlayer)
 		byte sourcePlayerId = sourcePlayer.PlayerId;
 
 		return (
-			targetPlayer != null &&
 			targetPlayer.PlayerId != sourcePlayer.PlayerId &&
 			!targetPlayer.Disconnected &&
 			!targetPlayer.IsDead &&
@@ -89,7 +89,7 @@ public sealed class ArrowController(int arrowNum, bool isShowOnVentPlayer)
 	}
 }
 
-public class LonerAbilityHandler(
+public sealed class LonerAbilityHandler(
 	float maxStressGage,
 	int arrowNum, bool arrowIsShowOnVentPlayer,
 	LonerStatusModel status) : IAbility

@@ -1,5 +1,6 @@
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Status;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Loner;
 
@@ -58,8 +59,8 @@ public sealed class StressProgress(float range, float waitTime, StressProgress.O
 		}
 		
 		stressDeltaNum = stressDeltaNum <= 0.0f ? -deltaTime : stressDeltaNum;
-		
-		this.StressGage += stressDeltaNum;
+
+		this.StressGage = Mathf.Max(0.0f, this.StressGage + stressDeltaNum);
 	}
 
 	private bool isValidPlayer(

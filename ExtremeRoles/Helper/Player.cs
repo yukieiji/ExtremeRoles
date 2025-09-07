@@ -478,7 +478,6 @@ public static class Player
 		byte sourcePlayerId = sourcePlayer.PlayerId;
 
         return (
-            targetPlayer != null &&
 			targetPlayer.PlayerId != sourcePlayer.PlayerId &&
 			!targetPlayer.Disconnected &&
             !targetPlayer.IsDead &&
