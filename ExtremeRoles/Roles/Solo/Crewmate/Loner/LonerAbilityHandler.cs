@@ -72,7 +72,7 @@ public sealed class ArrowController(int arrowNum, bool isShowOnVentPlayer)
 			if (!this.arrow.TryGetValue(playerId, out var arrow) ||
 				arrow is null)
 			{
-				arrow = new Arrow(ColorPalette.LonerDarkAzure);
+				arrow = new Arrow(ColorPalette.LonerMidnightblue);
 				this.arrow[playerId] = arrow;
 			}
 			arrow.SetActive(num <= this.arrowNum);

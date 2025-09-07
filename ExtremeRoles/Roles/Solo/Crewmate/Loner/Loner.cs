@@ -39,7 +39,7 @@ public sealed class LonerRole : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     public LonerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Loner,
-			ColorPalette.LonerDarkAzure),
+			ColorPalette.LonerMidnightblue),
         false, true, false, false)
     {
     }
