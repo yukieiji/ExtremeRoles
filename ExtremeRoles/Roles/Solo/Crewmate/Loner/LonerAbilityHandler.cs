@@ -60,7 +60,7 @@ public sealed class ArrowController(int arrowNum, bool isShowOnVentPlayer)
 			if (!this.arrow.TryGetValue(playerId, out var arrow) ||
 				arrow is null)
 			{
-				arrow = new Arrow(Color.white);
+				arrow = new Arrow(ColorPalette.LonerDarkAzure);
 				this.arrow[playerId] = arrow;
 			}
 			arrow.SetActive(num <= this.arrowNum);
@@ -94,7 +94,7 @@ public sealed class LonerAbilityHandler(
 	int arrowNum, bool arrowIsShowOnVentPlayer,
 	LonerStatusModel status) : IAbility
 {
-	private readonly float maxStressGage = maxStressGage;
+	public float MaxStressGage { get; } = maxStressGage;
 	private readonly LonerStatusModel status = status;
 	private readonly ArrowController arrow = new ArrowController(arrowNum, arrowIsShowOnVentPlayer);
 
@@ -118,9 +118,7 @@ public sealed class LonerAbilityHandler(
 		this.status.Update(rolePlayer, Time.deltaTime);
 		this.arrow.Update(rolePlayer);
 
-		// 表示処理を書く
-
-		if (this.status.StressGage >= this.maxStressGage)
+		if (this.status.StressGage >= this.MaxStressGage)
 		{
 			byte playerId = rolePlayer.PlayerId;
 			Player.RpcUncheckMurderPlayer(
