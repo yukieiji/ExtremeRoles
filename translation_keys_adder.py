@@ -74,9 +74,9 @@ if __name__ == '__main__':
             print("陣営名が入力されていません。")
         else:
             # 陣営名からファイルパスを構築
-            resx_file = os.path.join("ExtremeRoles", "Translation", "resx", f"{faction_name}.resx")
+            resx_file = Path("ExtremeRoles") / "Translation" / "resx" / f"{faction_name}.resx"
 
-            if not os.path.exists(resx_file):
+            if not resx_file.exists():
                 print(f"エラー: 対応する.resxファイルが見つかりません - {resx_file}")
             else:
                 keys_list = []
