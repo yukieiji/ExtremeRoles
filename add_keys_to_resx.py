@@ -1,5 +1,6 @@
 import sys
 import re
+import os
 
 def add_keys_to_resx_text_based(file_path: str, keys: list[str]) -> None:
     """
@@ -61,36 +62,42 @@ def add_keys_to_resx_text_based(file_path: str, keys: list[str]) -> None:
         print(f"\nファイルの更新が完了しました: {file_path}")
 
     except FileNotFoundError:
+        # このエラーはメインブロックで処理されるようになったため、ここに来ることはないはず
         print(f"エラー: ファイルが見つかりません - {file_path}")
     except Exception as e:
         print(f"予期せぬエラーが発生しました: {e}")
 
 if __name__ == '__main__':
     try:
-        resx_file = input("resxファイルのパスを入力してください: ").strip()
+        faction_name = input("陣営名 (例: Crewmate, Impostor, Text) を入力してください: ").strip()
 
-        if not resx_file:
-            print("ファイルパスが入力されていません。")
+        if not faction_name:
+            print("陣営名が入力されていません。")
         else:
-            keys_list = []
-            print("追加するキーを1つずつ、またはカンマ区切りで入力してください (入力が終わったら何も入力せずにEnter):")
-            while True:
-                line_input = input("キー: ").strip()
-                if not line_input:
-                    break
+            # 陣営名からファイルパスを構築
+            resx_file = os.path.join("ExtremeRoles", "Translation", "resx", f"{faction_name}.resx")
 
-                # If input contains commas, treat as a list; otherwise, as a single key
-                if ',' in line_input:
-                    keys_from_line = [key.strip() for key in line_input.split(',') if key.strip()]
-                    keys_list.extend(keys_from_line)
-                    print(f"  -> {len(keys_from_line)}個のキーを追加しました。")
-                else:
-                    keys_list.append(line_input)
-
-            if not keys_list:
-                print("追加するキーが入力されませんでした。")
+            if not os.path.exists(resx_file):
+                print(f"エラー: 対応する.resxファイルが見つかりません - {resx_file}")
             else:
-                add_keys_to_resx_text_based(resx_file, keys_list)
+                keys_list = []
+                print("追加するキーを1つずつ、またはカンマ区切りで入力してください (入力が終わったら何も入力せずにEnter):")
+                while True:
+                    line_input = input("キー: ").strip()
+                    if not line_input:
+                        break
+
+                    if ',' in line_input:
+                        keys_from_line = [key.strip() for key in line_input.split(',') if key.strip()]
+                        keys_list.extend(keys_from_line)
+                        print(f"  -> {len(keys_from_line)}個のキーを追加しました。")
+                    else:
+                        keys_list.append(line_input)
+
+                if not keys_list:
+                    print("追加するキーが入力されませんでした。")
+                else:
+                    add_keys_to_resx_text_based(resx_file, keys_list)
 
     except KeyboardInterrupt:
         print("\n操作が中断されました。")
