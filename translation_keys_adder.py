@@ -1,5 +1,5 @@
+from pathlib import Path
 import re
-import os
 
 def add_keys_to_resx_text_based(file_path: str, keys: list[str]) -> None:
     """
