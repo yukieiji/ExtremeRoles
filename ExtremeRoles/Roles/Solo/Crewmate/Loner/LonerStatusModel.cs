@@ -75,7 +75,6 @@ public sealed class StressProgress(float range, float waitTime, StressProgress.O
 		byte sourcePlayerId = sourcePlayer.PlayerId;
 
 		return (
-			targetPlayer != null &&
 			targetPlayer.PlayerId != sourcePlayer.PlayerId &&
 			!targetPlayer.Disconnected &&
 			!targetPlayer.IsDead &&
