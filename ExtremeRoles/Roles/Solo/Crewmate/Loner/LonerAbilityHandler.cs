@@ -83,7 +83,7 @@ public sealed class ArrowController(int arrowNum, bool isShowOnVentPlayer)
 			targetPlayer.PlayerId != sourcePlayer.PlayerId &&
 			!targetPlayer.Disconnected &&
 			!targetPlayer.IsDead &&
-			targetPlayer.Object &&
+			targetPlayer.Object != null &&
 			(this.isShowOnVentPlayer || !targetPlayer.Object.inVent)
 		);
 	}

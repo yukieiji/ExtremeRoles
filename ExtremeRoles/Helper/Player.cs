@@ -481,7 +481,7 @@ public static class Player
 			targetPlayer.PlayerId != sourcePlayer.PlayerId &&
 			!targetPlayer.Disconnected &&
             !targetPlayer.IsDead &&
-            targetPlayer.Object &&
+            targetPlayer.Object != null &&
             !targetPlayer.Object.inVent &&
 			!targetPlayer.Object.inMovingPlat &&
 			!targetPlayer.Object.onLadder &&
