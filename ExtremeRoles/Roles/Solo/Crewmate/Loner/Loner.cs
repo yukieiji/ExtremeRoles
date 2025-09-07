@@ -69,7 +69,7 @@ public sealed class LonerRole : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
 		var loader = this.Loader;
         status = new LonerStatusModel(
 			loader.GetValue<Option, float>(Option.StressRange),
-			loader.GetValue<Option, float>(Option.StressIgnoreTime),
+			loader.GetValue<Option, int>(Option.StressIgnoreTime),
 			new StressProgress.Option(
 				loader.GetValue<Option, bool>(Option.StressProgressOnTask),
 				loader.GetValue<Option, bool>(Option.StressProgressOnVentPlayer),
@@ -83,11 +83,14 @@ public sealed class LonerRole : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
         AbilityClass = this.ability;
     }
 
-	public override string GetRoleTag()
+	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 	{
-		updateStressInfo();
-
-		return $"({this.info.Cur}/{this.info.Max})";
+		if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
+		{
+			updateStressInfo();
+			return $"({this.info.Cur}/{this.info.Max})";
+		}
+		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
 
 	public override string GetFullDescription()

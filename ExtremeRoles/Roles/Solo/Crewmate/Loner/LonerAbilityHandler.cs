@@ -42,14 +42,20 @@ public sealed class ArrowController(int arrowNum, bool isShowOnVentPlayer)
 		foreach (var playerInfo in
 			GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			if (isValidPlayer(rolePlayer, playerInfo))
+			if (!isValidPlayer(rolePlayer, playerInfo))
 			{
-				PlayerControl target = playerInfo.Object;
-
-				var vector = target.GetTruePosition() - truePos;
-				float magnitude = vector.magnitude;
-				this.cache.Add(magnitude, target);
+				continue;
 			}
+
+			PlayerControl target = playerInfo.Object;
+
+			var vector = target.GetTruePosition() - truePos;
+			float magnitude = vector.magnitude;
+			if (this.cache.ContainsKey(magnitude))
+			{
+				continue;
+			}
+			this.cache.Add(magnitude, target);
 		}
 
 		int num = 0;
