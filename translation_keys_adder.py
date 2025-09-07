@@ -23,7 +23,7 @@ def add_keys_to_resx_text_based(file_path: str, keys: list[str]) -> None:
         new_data_elements = []
         for key in keys:
             # 既存のキーがないかチェック (簡易的なテキスト検索)
-            if f'name="{key}"' in content:
+            if f'<data name="{key}"' in content:
                 print(f"キー '{key}' は既に存在するため、スキップします。")
                 continue
 
