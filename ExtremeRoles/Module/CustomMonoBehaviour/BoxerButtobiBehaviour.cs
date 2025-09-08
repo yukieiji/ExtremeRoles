@@ -5,7 +5,6 @@ using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Roles.Solo.Impostor;
 
 #nullable enable
 
@@ -14,48 +13,35 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class BoxerButtobiBehaviour : MonoBehaviour
 {
-	public enum CollisionPlayerMode
-	{
-		Reflect,
-		ReflectWith,
-		Kill,
-		WithKill
-	}
+	public const float SpeedOffset = 64.0f;
 
-	public const float SpeedOffset = 32.0f;
-
-	public readonly record struct Parameter(float Acceleration, float E, CollisionPlayerMode CollisionPlayerMode);
+	public readonly record struct Parameter(float Acceleration, float E);
 
 	[HideFromIl2Cpp]
 	public Vector2 PrevForce { get; private set; } = Vector2.zero;
 
 	private float speed;
 	private float killSpeed;
-	private float deltaTimeSpeedOffset;
+	private float detaTimeSpeedOfsset;
 	private float e;
 	private readonly Vector2 offset = new Vector2(0.275f, 0.5f);
 	private Vector2 prevPos = Vector2.zero;
-	private CollisionPlayerMode playerMode;
-	private byte rolePlayerId;
 
 	public BoxerButtobiBehaviour(IntPtr ptr) : base(ptr) { }
 
 	[HideFromIl2Cpp]
-	public void Initialize(byte rolePlayerId, Vector2 prevForce, float killSpeed, in Parameter param)
+	public void Initialize(Vector2 prevForce, float killSpeed, in Parameter param)
 	{
-		this.rolePlayerId = rolePlayerId;
-		this.deltaTimeSpeedOffset = SpeedOffset * Time.fixedDeltaTime;
-		this.speed = param.Acceleration * this.deltaTimeSpeedOffset;
-		this.killSpeed = killSpeed * this.deltaTimeSpeedOffset;
+		this.speed = param.Acceleration * Time.fixedDeltaTime * SpeedOffset;
+		this.killSpeed = killSpeed * SpeedOffset;
 		this.e = param.E;
-		this.playerMode = param.CollisionPlayerMode;
 		this.PrevForce = prevForce;
 	}
 
 	[HideFromIl2Cpp]
-	public void Initialize(byte rolePlayerId, Vector2 direction, float speed, float killSpeed, in Parameter param)
+	public void Initialize(Vector2 direction, float speed, float killSpeed, in Parameter param)
 	{
-		this.Initialize(rolePlayerId, speed * SpeedOffset * Time.fixedDeltaTime * direction, killSpeed, param);
+		this.Initialize(speed * SpeedOffset * direction, killSpeed, param);
 	}
 
 	public void FixedUpdate()
@@ -70,7 +56,8 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 			pc.inMovingPlat ||
 			pc.onLadder ||
 			MeetingHud.Instance != null ||
-			ExileController.Instance != null)
+			ExileController.Instance != null ||
+			this.PrevForce.sqrMagnitude <= 0.01f)
 		{
 			Destroy(this);
 			return;
@@ -97,7 +84,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 		}
 
 		Vector2 forceVector =
-			this.PrevForce + (this.deltaTimeSpeedOffset * directionVector) + (this.PrevForce.normalized * this.speed);
+			this.PrevForce + (this.detaTimeSpeedOfsset * directionVector) + (this.PrevForce.normalized * this.speed);
 
 		var rigidBody = pc.rigidbody2D;
 		Vector2 curPos = pc.transform.position;
@@ -111,6 +98,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 			))
 		{
 			forceVector = -forceVector * this.e;
+			playerKill(pc.PlayerId);
 		}
 
 		this.prevPos = curPos;
@@ -118,58 +106,12 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 
 		rigidBody.AddForce(forceVector);
 	}
-	public void OnTriggerEnter2D(Collider2D other)
+
+	private void playerKill(byte killer)
 	{
-		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
-		if (ScavengerWeaponHitHelper.IsHitPlayer(other, out var pc))
-		{
-			byte hitPlayer = pc.PlayerId;
-			if (hitPlayer == localPlayerId)
-			{
-				return;
-			}
-
-			switch (this.playerMode)
-			{
-				case CollisionPlayerMode.Reflect:
-					return;
-				case CollisionPlayerMode.ReflectWith:
-					var targetForce = -this.PrevForce;
-					using (var op = RPCOperator.CreateCaller(RPCOperator.Command.BoxerRpcOps))
-					{
-						op.WriteByte((byte)Boxer.RpcOps.Reflection);
-						op.WriteByte(this.rolePlayerId);
-						op.WriteByte(hitPlayer);
-						op.WriteFloat(targetForce.x);
-						op.WriteFloat(targetForce.y);
-					}
-					return;
-				case CollisionPlayerMode.Kill:
-					playerKill(localPlayerId, localPlayerId);
-					break;
-				case CollisionPlayerMode.WithKill:
-					playerKill(localPlayerId, hitPlayer);
-					playerKill(localPlayerId, localPlayerId);
-					break;
-				default:
-					break;
-			}
-			Destroy(this);
-		}
-		else
-		{
-			playerKill(localPlayerId);
-			Destroy(this);
-		}
-	}
-
-	private void playerKill(byte killer, byte? target=null)
-	{
-		target ??= killer;
-
 		if (this.PrevForce.magnitude > this.killSpeed)
 		{
-			Player.RpcUncheckMurderPlayer(killer, target.Value, byte.MaxValue);
+			Player.RpcUncheckMurderPlayer(killer, killer, byte.MaxValue);
 		}
 	}
 }

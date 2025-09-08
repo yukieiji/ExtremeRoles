@@ -2,23 +2,15 @@ using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.Solo.Crewmate;
 
 #nullable enable
 
@@ -34,7 +26,6 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		StraightAcceleration,
 		StraightKillSpeed,
 		StraightReflectionE,
-		StraightReflectPlayerMode,
 	}
 
 	public enum RpcOps : byte
@@ -132,40 +123,8 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		}
 
 		var directionOrSpeed = new Vector2(x, y);
-
-		switch (ops)
-		{
-			case RpcOps.Straight:
-				straightOps(targetPlayer, rolePlayerId, directionOrSpeed, role);
-				break;
-			case RpcOps.Reflection:
-				reflectionOps(targetPlayer, rolePlayerId, directionOrSpeed, role);
-				break;
-			default:
-				break;
-		}
-	}
-
-	private static void straightOps(
-		PlayerControl targetPlayer,
-		byte rolePlayerId,
-		Vector2 direction,
-		Boxer role)
-	{
 		var beha = targetPlayer.gameObject.TryAddComponent<BoxerButtobiBehaviour>();
-		beha.Initialize(rolePlayerId, direction, role.speed, role.killSpeed, role.param);
-	}
-	private static void reflectionOps(
-		PlayerControl targetPlayer,
-		byte rolePlayerId,
-		Vector2 initSpeed,
-		Boxer role)
-	{
-		var beha = targetPlayer.gameObject.TryAddComponent<BoxerButtobiBehaviour>();
-		beha.Initialize(
-			rolePlayerId,
-			initSpeed,
-			role.killSpeed, role.param);
+		beha.Initialize(directionOrSpeed, role.speed, role.killSpeed, role.param);
 	}
 
 	protected override void CreateSpecificOption(
@@ -178,7 +137,6 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		factory.CreateFloatOption(Option.StraightAcceleration, -2.5f, -10.0f, 10.0f, 0.25f);
 		factory.CreateFloatOption(Option.StraightKillSpeed, 10.0f, 1.0f, 200.0f, 0.5f);
 		factory.CreateFloatOption(Option.StraightReflectionE, 0.5f, 0.0f, 2.0f, 0.1f);
-		factory.CreateSelectionOption<Option, BoxerButtobiBehaviour.CollisionPlayerMode>(Option.StraightReflectPlayerMode);
 	}
 
     protected override void RoleSpecificInit()
@@ -190,8 +148,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		this.killSpeed = cate.GetValue<Option, float>(Option.StraightKillSpeed);
 		this.param = new BoxerButtobiBehaviour.Parameter(
 			cate.GetValue<Option, float>(Option.StraightAcceleration),
-			cate.GetValue<Option, float>(Option.StraightReflectionE),
-			(BoxerButtobiBehaviour.CollisionPlayerMode)cate.GetValue<Option, int>(Option.StraightReflectPlayerMode));
+			cate.GetValue<Option, float>(Option.StraightReflectionE));
     }
 
     public void ResetOnMeetingStart()
