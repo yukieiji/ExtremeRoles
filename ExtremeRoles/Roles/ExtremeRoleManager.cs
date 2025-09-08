@@ -121,6 +121,7 @@ public enum ExtremeRoleId : int
 	Hijacker,
 	TimeBreaker,
 	Scavenger,
+	Boxer,
 
 	Alice,
     Jackal,
@@ -342,6 +343,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Hijacker       , new Hijacker()},
 			{(int)ExtremeRoleId.TimeBreaker    , new TimeBreaker()},
 			{(int)ExtremeRoleId.Scavenger      , new Scavenger()},
+			{(int)ExtremeRoleId.Boxer          , new Boxer()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new JackalRole()},

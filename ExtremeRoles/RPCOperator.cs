@@ -89,6 +89,7 @@ public static class RPCOperator
         SlimeAbility,
         ZombieRpc,
 		ThiefAddDeadbodyEffect,
+		BoxerRpcOps,
 
 		// ニュートラル
 		AliceShipBroken,
@@ -674,6 +675,10 @@ public static class RPCOperator
 	public static void ThiefAddEffect(byte addEffectTargetDeadBody)
 	{
 		Roles.Solo.Impostor.Thief.AddEffect(addEffectTargetDeadBody);
+	}
+	public static void BoxerRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Impostor.Boxer.AbilityOps(reader);
 	}
 
 	public static void AliceShipBroken(

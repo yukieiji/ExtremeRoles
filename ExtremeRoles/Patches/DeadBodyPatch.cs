@@ -1,5 +1,6 @@
 using HarmonyLib;
 
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
@@ -19,6 +20,12 @@ public static class DeadBodyOnClickPatch
 		}
 
 		if (ButtonLockSystem.IsReportButtonLock())
+		{
+			return false;
+		}
+
+		if (PlayerControl.LocalPlayer == null ||
+			PlayerControl.LocalPlayer.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _))
 		{
 			return false;
 		}

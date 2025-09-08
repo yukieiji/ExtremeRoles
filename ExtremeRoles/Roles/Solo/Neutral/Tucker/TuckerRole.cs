@@ -128,8 +128,6 @@ public sealed class TuckerRole :
 		float coolTime = loader.GetValue<RoleAbilityCommonOption, float>(
 			RoleAbilityCommonOption.AbilityCoolTime);
 
-		var img = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton);
-
 		createBehavior = new CountBehavior(
 			Tr.GetString("createChimera"),
 			UnityObjectLoader.LoadFromResources(
