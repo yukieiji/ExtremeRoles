@@ -1135,4 +1135,11 @@
   <data name="BarterIntroDescription" xml:space="preserve">
     <value>票の行き先は私の気分次第</value>
   </data>
+  <data name="BarterCastlingInfo" xml:space="preserve">
+    <value>残り使用回数：{0}回
+この会議で{1}回可能</value>
+  </data>
+  <data name="BarterRandomCstling" xml:space="preserve">
+    <value>ランダムキャスリング</value>
+  </data>
 </root>
