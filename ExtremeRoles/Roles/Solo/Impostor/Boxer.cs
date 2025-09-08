@@ -64,7 +64,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 			(isCharge, _) => {
 				if (isCharge)
 				{
-					return IRoleAbility.IsCommonUseWithMinigame();
+					return IsAbilityUse();
 				}
 				return IRoleAbility.IsCommonUse();
 			},
@@ -96,7 +96,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 			return false;
 		}
 
-		var direction = local.GetTruePosition() - this.target.GetTruePosition();
+		var direction = this.target.GetTruePosition() - local.GetTruePosition();
 		direction = direction.normalized * x;
 
 		using (var op = RPCOperator.CreateCaller(RPCOperator.Command.BoxerRpcOps))
@@ -175,7 +175,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		factory.CreateFloatOption(Option.StraightChargeTime, 3.0f, 0.1f, 30.0f, 0.1f, format: OptionUnit.Second);
 		factory.CreateFloatOption(Option.StraightRange, 1.2f, 0.1f, 3.0f, 0.1f);
 		factory.CreateIntOption(Option.StraightFirstSpeed, 15, 1, 100, 1);
-		factory.CreateFloatOption(Option.StraightAcceleration, -5.0f, -10.0f, 10.0f, 0.25f);
+		factory.CreateFloatOption(Option.StraightAcceleration, -2.5f, -10.0f, 10.0f, 0.25f);
 		factory.CreateFloatOption(Option.StraightKillSpeed, 10.0f, 1.0f, 200.0f, 0.5f);
 		factory.CreateFloatOption(Option.StraightReflectionE, 0.5f, 0.0f, 2.0f, 0.1f);
 		factory.CreateSelectionOption<Option, BoxerButtobiBehaviour.CollisionPlayerMode>(Option.StraightReflectPlayerMode);
@@ -187,7 +187,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 
 		this.range = cate.GetValue<Option, float>(Option.StraightRange);
 		this.speed = cate.GetValue<Option, int>(Option.StraightFirstSpeed);
-		this.killSpeed = cate.GetValue<Option, int>(Option.StraightKillSpeed);
+		this.killSpeed = cate.GetValue<Option, float>(Option.StraightKillSpeed);
 		this.param = new BoxerButtobiBehaviour.Parameter(
 			cate.GetValue<Option, float>(Option.StraightAcceleration),
 			cate.GetValue<Option, float>(Option.StraightReflectionE),
