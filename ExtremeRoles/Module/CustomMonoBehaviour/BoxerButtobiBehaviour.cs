@@ -55,7 +55,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 	[HideFromIl2Cpp]
 	public void Initialize(byte rolePlayerId, Vector2 direction, float speed, float killSpeed, in Parameter param)
 	{
-		this.Initialize(rolePlayerId, speed * this.detaTimeSpeedOfsset * direction, killSpeed, param);
+		this.Initialize(rolePlayerId, speed * SpeedOffset * Time.fixedDeltaTime * direction, killSpeed, param);
 	}
 
 	public void FixedUpdate()
