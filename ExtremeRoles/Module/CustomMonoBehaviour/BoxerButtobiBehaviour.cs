@@ -33,7 +33,6 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 	private float killSpeed;
 	private float detaTimeSpeedOfsset;
 	private float e;
-	private float maxSpeed;
 	private readonly Vector2 offset = new Vector2(0.275f, 0.5f);
 	private Vector2 prevPos = Vector2.zero;
 	private CollisionPlayerMode playerMode;
@@ -113,11 +112,11 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 		{
 			forceVector = -forceVector * this.e;
 		}
-		Vector2 clampedVector = Vector2.ClampMagnitude(forceVector, this.maxSpeed);
-		this.prevPos = curPos;
-		this.PrevForce = clampedVector;
 
-		rigidBody.AddForce(clampedVector);
+		this.prevPos = curPos;
+		this.PrevForce = forceVector;
+
+		rigidBody.AddForce(forceVector);
 	}
 	public void OnTriggerEnter2D(Collider2D other)
 	{
