@@ -1,10 +1,12 @@
 using System;
 
 using UnityEngine;
-
 using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Helper;
+
+using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
+
 
 #nullable enable
 
@@ -112,6 +114,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 		if (this.PrevForce.magnitude > this.killSpeed)
 		{
 			Player.RpcUncheckMurderPlayer(killer, killer, byte.MaxValue);
+			ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(killer, PlayerStatus.Clashed);
 		}
 	}
 }
