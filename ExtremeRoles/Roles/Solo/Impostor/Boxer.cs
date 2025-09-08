@@ -28,12 +28,6 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		StraightReflectionE,
 	}
 
-	public enum RpcOps : byte
-	{
-		Straight,
-		Reflection,
-	}
-
 	private float range;
     private PlayerControl? target;
 	private float speed;
@@ -92,7 +86,6 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 
 		using (var op = RPCOperator.CreateCaller(RPCOperator.Command.BoxerRpcOps))
 		{
-			op.WriteByte((byte)RpcOps.Straight);
 			op.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 			op.WriteByte(this.target.PlayerId);
 			op.WriteFloat(direction.x);
@@ -104,7 +97,6 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 
 	public static void AbilityOps(in MessageReader reader)
 	{
-		var ops = (RpcOps)reader.ReadByte();
 		byte rolePlayerId = reader.ReadByte();
 		byte targetPlayerId = reader.ReadByte();
 
