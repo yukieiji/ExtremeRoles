@@ -1424,4 +1424,13 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="LonerIntroDescription" xml:space="preserve">
     <value>孤高だけど何処か淋しい一匹クルー</value>
   </data>
+  <data name="GamblerMinVoteNum" xml:space="preserve">
+    <value>最大票数</value>
+  </data>
+  <data name="GamblerMaxVoteNum" xml:space="preserve">
+    <value>最小標数</value>
+  </data>
+  <data name="TeleporterInitAbilityNum" xml:space="preserve">
+    <value>「セットポータル」の初期使用回数</value>
+  </data>
 </root>
