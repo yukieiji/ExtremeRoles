@@ -1,0 +1,202 @@
+using Hazel;
+using UnityEngine;
+
+using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.AutoActivator;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo.Crewmate;
+
+#nullable enable
+
+namespace ExtremeRoles.Roles.Solo.Impostor;
+
+public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
+{
+    public enum Option
+    {
+        StraightChargeTime,
+		StraightFirstSpeed,
+		StraightAcceleration,
+		StraightKillSpeed,
+		StraightReflectionE,
+		StraightReflectPlayerMode,
+	}
+
+	public enum RpcOps : byte
+	{
+		Straight,
+		Reflection,
+	}
+
+	private float range;
+    private PlayerControl? target;
+	private float speed;
+	private float killSpeed;
+	private BoxerButtobiBehaviour.Parameter param;
+
+    public ExtremeAbilityButton? Button { get; set; }
+
+
+    public Boxer() : base(
+		RoleCore.BuildImpostor(ExtremeRoleId.Boxer),
+        true, false, true, true)
+    { }
+
+    public void CreateAbility()
+    {
+		var beha = new ChargingAndReclickCountBehavior(
+			"ストレート", UnityObjectLoader.LoadFromResources(ExtremeRoleId.Boxer),
+			(isCharge, _) => {
+				if (isCharge)
+				{
+					return IRoleAbility.IsCommonUseWithMinigame();
+				}
+				return IRoleAbility.IsCommonUse();
+			},
+			UseAbility,
+			UseChargedAbility,
+			reduceOnCharge: false);
+		this.Button = new ExtremeAbilityButton(
+			beha,
+			new RoleButtonActivator(),
+			KeyCode.F);
+		((IRoleAbility)this).RoleAbilityInit();
+
+		beha.ChargeTime = this.Loader.GetValue<Option, float>(Option.StraightChargeTime);
+	}
+
+    public bool IsAbilityUse()
+    {
+		this.target = Player.GetClosestPlayerInRange(PlayerControl.LocalPlayer, this, this.range);
+        return IRoleAbility.IsCommonUse() && this.target != null;
+    }
+
+	public bool UseAbility() => true;
+
+	public bool UseChargedAbility(float x)
+	{
+		var local = PlayerControl.LocalPlayer;
+		if (this.target == null || local == null)
+		{
+			return false;
+		}
+
+		var direction = local.GetTruePosition() - this.target.GetTruePosition();
+		direction = direction.normalized;
+
+		using (var op = RPCOperator.CreateCaller(RPCOperator.Command.BoxerRpcOps))
+		{
+			op.WriteByte((byte)RpcOps.Straight);
+			op.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+			op.WriteByte(this.target.PlayerId);
+			op.WriteFloat(direction.x);
+			op.WriteFloat(direction.y);
+		}
+
+		return true;
+	}
+
+	public static void AbilityOps(in MessageReader reader)
+	{
+		var ops = (RpcOps)reader.ReadByte();
+		byte rolePlayerId = reader.ReadByte();
+		byte targetPlayerId = reader.ReadByte();
+
+		float x = reader.ReadSingle();
+		float y = reader.ReadSingle();
+
+		if (targetPlayerId != PlayerControl.LocalPlayer.PlayerId ||
+			!ExtremeRoleManager.TryGetSafeCastedRole<Boxer>(rolePlayerId, out var role))
+		{
+			return;
+		}
+		var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
+		if (targetPlayer == null)
+		{
+			return;
+		}
+
+		var directionOrSpeed = new Vector2(x, y);
+
+		switch (ops)
+		{
+			case RpcOps.Straight:
+				straightOps(targetPlayer, rolePlayerId, directionOrSpeed, role);
+				break;
+			case RpcOps.Reflection:
+				reflectionOps(targetPlayer, rolePlayerId, directionOrSpeed, role);
+				break;
+			default:
+				break;
+		}
+	}
+
+	private static void straightOps(
+		PlayerControl targetPlayer,
+		byte rolePlayerId,
+		Vector2 direction,
+		Boxer role)
+	{
+		var beha = targetPlayer.gameObject.TryAddComponent<BoxerButtobiBehaviour>();
+		beha.Initialize(rolePlayerId, direction, role.speed, role.killSpeed, role.param);
+	}
+	private static void reflectionOps(
+		PlayerControl targetPlayer,
+		byte rolePlayerId,
+		Vector2 initSpeed,
+		Boxer role)
+	{
+		var beha = targetPlayer.gameObject.TryAddComponent<BoxerButtobiBehaviour>();
+		beha.Initialize(
+			rolePlayerId,
+			initSpeed,
+			1, role.killSpeed, role.param);
+	}
+
+	protected override void CreateSpecificOption(
+        AutoParentSetOptionCategoryFactory factory)
+    {
+        IRoleAbility.CreateAbilityCountOption(factory, 2, 5);
+		factory.CreateFloatOption(Option.StraightChargeTime, 3.0f, 0.1f, 30.0f, 0.1f, format: OptionUnit.Second);
+		factory.CreateIntOption(Option.StraightFirstSpeed, 15, 1, 100, 1);
+		factory.CreateFloatOption(Option.StraightAcceleration, -5.0f, -10.0f, 10.0f, 0.25f);
+		factory.CreateFloatOption(Option.StraightKillSpeed, 10.0f, 1.0f, 200.0f, 0.5f);
+		factory.CreateFloatOption(Option.StraightReflectionE, 0.5f, 0.0f, 2.0f, 0.1f);
+		factory.CreateSelectionOption<Option, BoxerButtobiBehaviour.CollisionPlayerMode>(Option.StraightReflectPlayerMode);
+	}
+
+    protected override void RoleSpecificInit()
+    {
+        var cate = this.Loader;
+
+		this.speed = cate.GetValue<Option, int>(Option.StraightFirstSpeed);
+		this.killSpeed = cate.GetValue<Option, int>(Option.StraightKillSpeed);
+		this.param = new BoxerButtobiBehaviour.Parameter(
+			cate.GetValue<Option, float>(Option.StraightAcceleration),
+			cate.GetValue<Option, float>(Option.StraightReflectionE),
+			(BoxerButtobiBehaviour.CollisionPlayerMode)cate.GetValue<Option, int>(Option.StraightReflectPlayerMode));
+    }
+
+    public void ResetOnMeetingStart()
+    {
+
+    }
+
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
+    {
+    }
+}

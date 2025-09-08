@@ -121,6 +121,7 @@ public enum ExtremeRoleId : int
 	Hijacker,
 	TimeBreaker,
 	Scavenger,
+	Boxer,
 
 	Alice,
     Jackal,

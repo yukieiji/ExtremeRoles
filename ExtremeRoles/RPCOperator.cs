@@ -89,6 +89,7 @@ public static class RPCOperator
         SlimeAbility,
         ZombieRpc,
 		ThiefAddDeadbodyEffect,
+		BoxerRpcOps,
 
 		// ニュートラル
 		AliceShipBroken,
