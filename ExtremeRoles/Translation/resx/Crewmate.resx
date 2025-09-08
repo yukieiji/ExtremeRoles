@@ -1376,4 +1376,52 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="ExorcistReportWithName" xml:space="preserve">
     <value>「{0}」の手によって{1}が殺された、原因は「{2}」である</value>
   </data>
+  <data name="Loner" xml:space="preserve">
+    <value>ロウワー</value>
+  </data>
+  <data name="LonerStressMaxGage" xml:space="preserve">
+    <value>自決する「ストレス値」</value>
+  </data>
+  <data name="LonerStressRange" xml:space="preserve">
+    <value>「ストレス値」が増加する範囲</value>
+  </data>
+  <data name="LonerStressIgnoreTime" xml:space="preserve">
+    <value>スポーン後、「ストレス値」が増加しない時間</value>
+  </data>
+  <data name="LonerStressProgressOnTask" xml:space="preserve">
+    <value>タスク中に「ストレス値」が上昇するか</value>
+  </data>
+  <data name="LonerStressProgressOnVentPlayer" xml:space="preserve">
+    <value>ベント内のプレイヤーに対して
+「ストレス値」が上昇するか</value>
+  </data>
+  <data name="LonerStressProgressOnMovingPlatPlayer" xml:space="preserve">
+    <value>はしご等を使用しているプレイヤーに対して
+「ストレス値」が上昇するか</value>
+  </data>
+  <data name="LonerIsShowArrow" xml:space="preserve">
+    <value>近くのプレイヤーに対して矢印を表示するか</value>
+  </data>
+  <data name="LonerArrowNum" xml:space="preserve">
+    <value>表示する数</value>
+  </data>
+  <data name="LonerArrowShowVentPlayer" xml:space="preserve">
+    <value>ベント内のプレイヤーに対しての矢印表示</value>
+  </data>
+  <data name="LonerFullDescription" xml:space="preserve">
+    <value>プレイヤーが近くにいると「ストレス値」が上がって、一定値を超えると自決するクルー
+
+ストレス値 : {0}/{1}
+
+パッシブ能力「ストレス」
+　・一定範囲内にプレイヤーが居ると「ストレス値」が上がっていく
+　・上昇率は1ストレス値/秒/人である
+　・範囲内にプレイヤーがいないと1秒あたり1ずつ「ストレス値」が下がっていく</value>
+  </data>
+  <data name="LonerShortDescription" xml:space="preserve">
+    <value>「ストレス値」を上げすぎないように</value>
+  </data>
+  <data name="LonerIntroDescription" xml:space="preserve">
+    <value>孤高だけど何処か淋しい一匹クルー</value>
+  </data>
 </root>
