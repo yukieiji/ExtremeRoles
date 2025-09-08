@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-
 using Hazel;
-using UnityEngine;
+using System.Collections.Generic;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
@@ -11,9 +8,12 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Roles.API.Extension.State;
+
+
+using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
@@ -202,7 +202,7 @@ public sealed class ExorcistRole :
 	public void CreateAbility()
 	{
 		this.CreateActivatingAbilityCountButton(
-			"悪魔祓い",
+			Tr.GetString("ExorcistAbility"),
 			Resources.UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.TestButton),
 			checkAbility: IsAbilityActive,
@@ -228,10 +228,13 @@ public sealed class ExorcistRole :
 
 		var killer = info.Killer.Data;
 
+		string reason = Tr.GetString(info.Reason.ToString());
 		MeetingReporter.Instance.AddMeetingChatReport(
 			this.withName ?
-			$"{killer.DefaultOutfit.PlayerName} kill {this.target.DefaultOutfit.PlayerName} with {info.Reason}" :
-			$"{this.target.DefaultOutfit.PlayerName} killed with {info.Reason} killer is Dead {killer.IsDead}");
+			Tr.GetString("ExorcistReportWithName", killer.DefaultOutfit.PlayerName, this.target.DefaultOutfit.PlayerName, reason) :
+			Tr.GetString(
+				"ExorcistReport", this.target.DefaultOutfit.PlayerName, reason,
+				killer.IsDead ? Tr.GetString(PlayerStatus.Dead.ToString()) : Tr.GetString(PlayerStatus.Alive.ToString())));
 		PlayerControl.LocalPlayer.CmdReportDeadBody(this.target);
 		this.target = null;
 	}

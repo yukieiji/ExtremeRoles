@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -58,7 +58,7 @@
 			: using a System.ComponentModel.TypeConverter
 			: and then encoded with base64 encoding.
 	-->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -1324,5 +1324,56 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   </data>
   <data name="Summon" xml:space="preserve">
     <value>召喚</value>
+  </data>
+  <data name="Exorcist" xml:space="preserve">
+    <value>エクソシスト</value>
+  </data>
+  <data name="ExorcistAwakeTaskGage" xml:space="preserve">
+    <value>インポスターから誤視認になるタスク進捗率</value>
+  </data>
+  <data name="ExorcistAbilityCoolTime" xml:space="preserve">
+    <value>「悪魔祓い」のクールタイム</value>
+  </data>
+  <data name="ExorcistAbilityActiveTime" xml:space="preserve">
+    <value>「悪魔祓い」にかかる時間</value>
+  </data>
+  <data name="ExorcistAbilityCount" xml:space="preserve">
+    <value>「悪魔祓い」が使用できる回数</value>
+  </data>
+  <data name="ExorcistRange" xml:space="preserve">
+    <value>「悪魔祓い」が発動できる死体からの距離</value>
+  </data>
+  <data name="ExorcistWithName" xml:space="preserve">
+    <value>「悪魔祓い」の情報にキルしたプレイヤーの名前を含めるか</value>
+  </data>
+  <data name="ExorcistCrewBlockSystemType" xml:space="preserve">
+    <value>「悪魔祓い」の発動中のデメリット</value>
+  </data>
+  <data name="ExorcistFullDescription" xml:space="preserve">
+    <value>インポスターからはインポスターとして表示されるクルーメイト
+ただし、「インポスターから誤視認になるタスク進捗率」以上のタスクをこなす必要がある
+
+通報ボタンは使用できない
+
+ボタン能力「悪魔祓い」
+　・近くの「死体」を対象として発動
+　・一定時間経過後、自動通報が発生しチャット欄に死体の情報が出力される
+　・能力発動中はクルーメイト陣営全体に「「悪魔祓い」の発動中のデメリット」が適用される
+</value>
+  </data>
+  <data name="ExorcistShortDescription" xml:space="preserve">
+    <value>「悪魔祓い」で有利な情報を得よう</value>
+  </data>
+  <data name="ExorcistIntroDescription" xml:space="preserve">
+    <value>インポスターを聖なる力で成敗せよ</value>
+  </data>
+  <data name="ExorcistAbility" xml:space="preserve">
+    <value>悪魔祓い</value>
+  </data>
+  <data name="ExorcistReport" xml:space="preserve">
+    <value>「{0}」は「{1}」によって死んだようだ、犯人は「{2}」している</value>
+  </data>
+  <data name="ExorcistReportWithName" xml:space="preserve">
+    <value>「{0}」の手によって{1}が殺された、原因は「{2}」である</value>
   </data>
 </root>
