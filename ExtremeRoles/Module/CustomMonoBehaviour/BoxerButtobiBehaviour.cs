@@ -23,7 +23,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 	public Vector2 PrevForce { get; private set; } = Vector2.zero;
 
 	private float speed;
-	private float killSpeed;
+	private float killSpeedSqr;
 	private float detaTimeSpeedOfsset;
 	private float e;
 	private readonly Vector2 offset = new Vector2(0.275f, 0.5f);
@@ -34,8 +34,12 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 	[HideFromIl2Cpp]
 	public void Initialize(Vector2 prevForce, float killSpeed, in Parameter param)
 	{
+		this.detaTimeSpeedOfsset = 32.0f * Time.fixedDeltaTime;
 		this.speed = param.Acceleration * Time.fixedDeltaTime * SpeedOffset;
-		this.killSpeed = killSpeed * SpeedOffset;
+		
+		float offsetedKillSpeed = killSpeed * SpeedOffset;
+		this.killSpeedSqr = offsetedKillSpeed * offsetedKillSpeed;
+		
 		this.e = param.E;
 		this.PrevForce = prevForce;
 	}
@@ -48,7 +52,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 
 	public void FixedUpdate()
 	{
-		PlayerControl pc = PlayerControl.LocalPlayer;
+		var pc = PlayerControl.LocalPlayer;
 
 		if (pc == null ||
 			pc.Data == null ||
@@ -111,7 +115,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 
 	private void playerKill(byte killer)
 	{
-		if (this.PrevForce.magnitude > this.killSpeed)
+		if (this.PrevForce.sqrMagnitude > this.killSpeedSqr)
 		{
 			Player.RpcUncheckMurderPlayer(killer, killer, byte.MaxValue);
 			ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(killer, PlayerStatus.Clashed);
