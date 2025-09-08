@@ -46,7 +46,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		SearchRange,
 		SearchTime,
 		SearchAssistantTime,
-		SearchOnlyOnce,
+		ContinueSearch,
 		SearchCanFindName,
 		SearchCanContineMeetingNum,
 		ForceMeetingOnSearchEnd,
@@ -356,7 +356,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		{
 			// 調査が外れたとする
 			hideSearchText();
-			if (!this.canContinue)
+			if (this.canContinue)
 			{
 				targetInfo.Progress = SearchCond.None;
 				targetInfo.SearchTime = 0.0f;
@@ -418,8 +418,8 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 			4.0f, 2.0f, 7.5f, 0.1f,
 			format: OptionUnit.Second);
 		factory.CreateBoolOption(
-			DetectiveOption.SearchOnlyOnce,
-			true);
+			DetectiveOption.ContinueSearch,
+			false);
 		factory.CreateBoolOption(
 			DetectiveOption.SearchCanFindName,
 			false);
@@ -455,7 +455,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		this.includeName = loader.GetValue<DetectiveOption, bool>(
 			DetectiveOption.SearchCanFindName);
 		this.canContinue = loader.GetValue<DetectiveOption, bool>(
-			DetectiveOption.SearchOnlyOnce);
+			DetectiveOption.ContinueSearch);
 
 		this.searchInfo = new CrimeSearchInfo(container, updator);
 		this.status = new DetectiveStatus();

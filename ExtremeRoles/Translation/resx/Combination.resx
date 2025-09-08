@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -58,7 +58,7 @@
 			: using a System.ComponentModel.TypeConverter
 			: and then encoded with base64 encoding.
 	-->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -1072,5 +1072,18 @@
   </data>
   <data name="SkaterSkateOff" xml:space="preserve">
     <value>スケート解除</value>
+  </data>
+  <data name="DetectiveSearchOnlyOnce" xml:space="preserve">
+    <value>「犯行現場」の調査を継続出来るか</value>
+  </data>
+  <data name="DetectiveSearchCanFindName" xml:space="preserve">
+    <value>「犯行現場」の調査で犯人がわかるか</value>
+  </data>
+  <data name="DetectiveForceMeetingOnSearchEnd" xml:space="preserve">
+    <value>「犯行現場」の調査完了後
+強制的に会議を起こすか</value>
+  </data>
+  <data name="DetectiveSearchCanContineMeetingNum" xml:space="preserve">
+    <value>「犯行現場」が残る会議数</value>
   </data>
 </root>
