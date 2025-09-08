@@ -29,6 +29,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
     public enum Option
     {
         StraightChargeTime,
+		StraightRange,
 		StraightFirstSpeed,
 		StraightAcceleration,
 		StraightKillSpeed,
@@ -172,6 +173,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
     {
         IRoleAbility.CreateAbilityCountOption(factory, 2, 5);
 		factory.CreateFloatOption(Option.StraightChargeTime, 3.0f, 0.1f, 30.0f, 0.1f, format: OptionUnit.Second);
+		factory.CreateFloatOption(Option.StraightRange, 1.2f, 0.1f, 3.0f, 0.1f);
 		factory.CreateIntOption(Option.StraightFirstSpeed, 15, 1, 100, 1);
 		factory.CreateFloatOption(Option.StraightAcceleration, -5.0f, -10.0f, 10.0f, 0.25f);
 		factory.CreateFloatOption(Option.StraightKillSpeed, 10.0f, 1.0f, 200.0f, 0.5f);
@@ -183,6 +185,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
     {
         var cate = this.Loader;
 
+		this.range = cate.GetValue<Option, float>(Option.StraightRange);
 		this.speed = cate.GetValue<Option, int>(Option.StraightFirstSpeed);
 		this.killSpeed = cate.GetValue<Option, int>(Option.StraightKillSpeed);
 		this.param = new BoxerButtobiBehaviour.Parameter(
