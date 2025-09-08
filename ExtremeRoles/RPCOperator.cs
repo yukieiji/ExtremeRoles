@@ -676,6 +676,10 @@ public static class RPCOperator
 	{
 		Roles.Solo.Impostor.Thief.AddEffect(addEffectTargetDeadBody);
 	}
+	public static void BoxerRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Impostor.Boxer.AbilityOps(reader);
+	}
 
 	public static void AliceShipBroken(
         byte callerId, byte targetPlayerId, List<int> taskId)

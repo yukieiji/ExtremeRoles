@@ -311,6 +311,9 @@ public static class PlayerControlHandleRpcPatch
 				byte addEffectTargetDeadBody = reader.ReadByte();
 				RPCOperator.ThiefAddEffect(addEffectTargetDeadBody);
 				break;
+			case RPCOperator.Command.BoxerRpcOps:
+				RPCOperator.BoxerRpcOps(reader);
+				break;
 			case RPCOperator.Command.AliceShipBroken:
 				byte alicePlayerId = reader.ReadByte();
 				byte newTaskSetPlayerId = reader.ReadByte();
