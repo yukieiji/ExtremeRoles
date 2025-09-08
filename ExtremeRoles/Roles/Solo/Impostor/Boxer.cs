@@ -165,7 +165,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		beha.Initialize(
 			rolePlayerId,
 			initSpeed,
-			1, role.killSpeed, role.param);
+			role.killSpeed, role.param);
 	}
 
 	protected override void CreateSpecificOption(
