@@ -1086,4 +1086,53 @@
   <data name="DetectiveSearchCanContineMeetingNum" xml:space="preserve">
     <value>「犯行現場」が残る会議数</value>
   </data>
+  <data name="Barter" xml:space="preserve">
+    <value>バーター</value>
+  </data>
+  <data name="NiceBarter" xml:space="preserve">
+    <value>ナイスバーター</value>
+  </data>
+  <data name="EvilBarter" xml:space="preserve">
+    <value>イビルバーター</value>
+  </data>
+  <data name="BarterAwakeTaskRate" xml:space="preserve">
+    <value>「ナイスバーター」に覚醒するタスク進捗率(覚醒条件:1)</value>
+  </data>
+  <data name="BarterAwakeDeadPlayerNum" xml:space="preserve">
+    <value>「ナイスバーター」に覚醒するプレイヤー死亡数(覚醒条件:2)</value>
+  </data>
+  <data name="BarterAwakeKillNum" xml:space="preserve">
+    <value>「イビルバーター」に覚醒するキル数</value>
+  </data>
+  <data name="BarterCanCallMeeting" xml:space="preserve">
+    <value>会議を起こせるか</value>
+  </data>
+  <data name="BarterCastlingNum" xml:space="preserve">
+    <value>1会議あたりの「キャスリング」回数</value>
+  </data>
+  <data name="BarterMaxCastlingNumWhenMeeting" xml:space="preserve">
+    <value>全体の「キャスリング」回数</value>
+  </data>
+  <data name="BarterRandomCastling" xml:space="preserve">
+    <value>「キャスリング」をランダムにするか</value>
+  </data>
+  <data name="BarterOneCastlingNum" xml:space="preserve">
+    <value>「キャスリング」をランダムに発動したときの交換数</value>
+  </data>
+  <data name="BarterShowCastlingOther" xml:space="preserve">
+    <value>「キャスリング」先を他のプレイヤーに表示させるか</value>
+  </data>
+  <data name="BarterFullDescription" xml:space="preserve">
+    <value>「キャスリング」で投票先を入れ替えることが出来る役職
+
+会議能力「キャスリング」
+　・プレイヤーを選択して発動
+　・2つ目に選択したプレイヤーと1つ目に選択したプレイヤーの票を入れ替える</value>
+  </data>
+  <data name="BarterShortDescription" xml:space="preserve">
+    <value>「キャスリング」で投票をグチャグチャにしよう</value>
+  </data>
+  <data name="BarterIntroDescription" xml:space="preserve">
+    <value>票の行き先は私の気分次第</value>
+  </data>
 </root>
