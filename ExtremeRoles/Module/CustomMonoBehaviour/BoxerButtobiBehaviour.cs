@@ -1,7 +1,7 @@
 using System;
 
-using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 
@@ -24,7 +24,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 
 	private float speed;
 	private float killSpeedSqr;
-	private float detaTimeSpeedOfsset;
+	private float deltaTimeSpeedOffset;
 	private float e;
 	private readonly Vector2 offset = new Vector2(0.275f, 0.5f);
 	private Vector2 prevPos = Vector2.zero;
@@ -34,7 +34,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 	[HideFromIl2Cpp]
 	public void Initialize(Vector2 prevForce, float killSpeed, in Parameter param)
 	{
-		this.detaTimeSpeedOfsset = 32.0f * Time.fixedDeltaTime;
+		this.deltaTimeSpeedOffset = 32.0f * Time.fixedDeltaTime;
 		this.speed = param.Acceleration * Time.fixedDeltaTime * SpeedOffset;
 		
 		float offsetedKillSpeed = killSpeed * SpeedOffset;
@@ -90,7 +90,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 		}
 
 		Vector2 forceVector =
-			this.PrevForce + (this.detaTimeSpeedOfsset * directionVector) + (this.PrevForce.normalized * this.speed);
+			this.PrevForce + (this.deltaTimeSpeedOffset * directionVector) + (this.PrevForce.normalized * this.speed);
 
 		var rigidBody = pc.rigidbody2D;
 		Vector2 curPos = pc.transform.position;
