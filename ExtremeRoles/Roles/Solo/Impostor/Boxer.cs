@@ -97,7 +97,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		}
 
 		var direction = local.GetTruePosition() - this.target.GetTruePosition();
-		direction = direction.normalized;
+		direction = direction.normalized * x;
 
 		using (var op = RPCOperator.CreateCaller(RPCOperator.Command.BoxerRpcOps))
 		{
