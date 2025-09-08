@@ -45,8 +45,10 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
     public void CreateAbility()
     {
 		var beha = new ChargingAndReclickCountBehavior(
-			"ストレート", UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton),
-			(isCharge, _) => {
+			Tr.GetString("BoxerAbility"),
+			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton),
+			(isCharge, _) =>
+			{
 				if (isCharge)
 				{
 					return IsAbilityUse();
