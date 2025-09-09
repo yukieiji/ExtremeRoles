@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using HarmonyLib;
 
@@ -219,7 +219,12 @@ public static class PlayerControlFixedUpdatePatch
 			case RoleTypes.Shapeshifter:
 			case RoleTypes.Tracker:
 			case RoleTypes.Phantom:
+			case RoleTypes.Viper:
 				abilityButton.Hide();
+				break;
+			case RoleTypes.Detective:
+				abilityButton.Hide();
+				HudManager.Instance.SecondaryAbilityButton.Hide();
 				break;
 			case RoleTypes.CrewmateGhost:
 			case RoleTypes.ImpostorGhost:

@@ -32,6 +32,7 @@ public sealed class NotAssignPlayerData
 				case RoleTypes.Engineer:
 				case RoleTypes.Noisemaker:
 				case RoleTypes.Tracker:
+				case RoleTypes.Detective:
 					++crewMultiAssignNum;
 					break;
 				case RoleTypes.Impostor:
@@ -40,6 +41,7 @@ public sealed class NotAssignPlayerData
 					break;
 				case RoleTypes.Shapeshifter:
 				case RoleTypes.Phantom:
+				case RoleTypes.Viper:
 					++impMultiAssignNum;
 					break;
 				default:

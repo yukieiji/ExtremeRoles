@@ -222,7 +222,8 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 						RoleTypes.Engineer or
 						RoleTypes.Scientist or
 						RoleTypes.Noisemaker or
-						RoleTypes.Tracker
+						RoleTypes.Tracker or
+						RoleTypes.Detective
 				)
 				&& hasAnotherRole && isAssignToCrewmate
 			)
@@ -231,7 +232,8 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 				(
 					roleType is
 						RoleTypes.Shapeshifter or
-						RoleTypes.Phantom
+						RoleTypes.Phantom or
+						RoleTypes.Viper
 				) &&
 				hasAnotherRole && isImpostor
 			);

@@ -148,10 +148,12 @@ public sealed class Guesser :
                         case RoleTypes.Scientist:
 						case RoleTypes.Noisemaker:
 						case RoleTypes.Tracker:
+						case RoleTypes.Detective:
                             team = ExtremeRoleType.Crewmate;
                             break;
                         case RoleTypes.Shapeshifter:
 						case RoleTypes.Phantom:
+						case RoleTypes.Viper:
                             team = ExtremeRoleType.Impostor;
                             break;
                         default:
