@@ -1096,10 +1096,12 @@
     <value>イビルバーター</value>
   </data>
   <data name="BarterAwakeTaskRate" xml:space="preserve">
-    <value>「ナイスバーター」に覚醒するタスク進捗率(覚醒条件:1)</value>
+    <value>「ナイスバーター」に覚醒する
+タスク進捗率(覚醒条件:1)</value>
   </data>
   <data name="BarterAwakeDeadPlayerNum" xml:space="preserve">
-    <value>「ナイスバーター」に覚醒するプレイヤー死亡数(覚醒条件:2)</value>
+    <value>「ナイスバーター」に覚醒する
+プレイヤー死亡数(覚醒条件:2)</value>
   </data>
   <data name="BarterAwakeKillNum" xml:space="preserve">
     <value>「イビルバーター」に覚醒するキル数</value>
@@ -1117,7 +1119,8 @@
     <value>「キャスリング」をランダムにするか</value>
   </data>
   <data name="BarterOneCastlingNum" xml:space="preserve">
-    <value>「キャスリング」をランダムに発動したときの交換数</value>
+    <value>「キャスリング」をランダムに
+発動したときの交換数</value>
   </data>
   <data name="BarterShowCastlingOther" xml:space="preserve">
     <value>「キャスリング」先を他のプレイヤーに表示させるか</value>
