@@ -1,17 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using AmongUs.GameOptions;
+using TMPro;
+using UnityEngine;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
-using UnityEngine;
 
 
 #nullable enable
@@ -94,7 +97,7 @@ public sealed class BarterRole :
 
 		if (!this.IsAwake)
 		{
-			if (this.IsCrewmate())
+			if (this.HasTask())
 			{
 				this.updateAwakeStatus(rolePlayer);
 			}
