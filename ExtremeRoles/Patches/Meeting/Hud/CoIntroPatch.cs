@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles;
@@ -9,11 +9,11 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 
 #nullable enable
 
-[HarmonyPatch(typeof(MeetingHud._CoIntro_d__52), nameof(MeetingHud._CoIntro_d__52.MoveNext))]
+[HarmonyPatch(typeof(MeetingHud._CoIntro_d__53), nameof(MeetingHud._CoIntro_d__53.MoveNext))]
 public static class MeetingHudCoIntroPatch
 {
 	public static void Postfix(
-		MeetingHud._CoIntro_d__52 __instance, ref bool __result)
+		MeetingHud._CoIntro_d__53 __instance, ref bool __result)
 	{
 		if (__result || ExtremeRoleManager.GameRole.Count == 0)
 		{

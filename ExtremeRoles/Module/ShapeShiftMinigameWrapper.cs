@@ -1,5 +1,6 @@
 using System.Linq;
 
+
 using UnityEngine;
 using AmongUs.GameOptions;
 
@@ -20,7 +21,7 @@ public sealed class ShapeShiftMinigameWrapper
 	{
 		if (this.prefab == null)
 		{
-			var shapeShifterBase = RoleManager.Instance.AllRoles.FirstOrDefault(
+			var shapeShifterBase = RoleManager.Instance.AllRoles.ToArray().FirstOrDefault(
 				x => x.Role is RoleTypes.Shapeshifter);
 			if (!shapeShifterBase.IsTryCast<ShapeshifterRole>(out var shapeShifter))
 			{

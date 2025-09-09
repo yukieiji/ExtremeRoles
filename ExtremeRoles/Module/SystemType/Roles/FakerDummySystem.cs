@@ -40,7 +40,8 @@ public sealed class FakerDummySystem(bool seeDummyMerlin) : IExtremeSystemType
 			PlayerControl targetPlayer)
 		{
 			this.body = GameSystem.CreateNoneReportableDeadbody(
-				targetPlayer, rolePlayer.transform.position);
+				targetPlayer, rolePlayer.Data.Role,
+				rolePlayer.transform.position);
 
 			this.ColorId = targetPlayer.Data.DefaultOutfit.ColorId;
 
