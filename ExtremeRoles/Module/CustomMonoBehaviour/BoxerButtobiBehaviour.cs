@@ -104,7 +104,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 			))
 		{
 			forceVector = -forceVector * this.e;
-			playerKill(pc.PlayerId);
+			playerKill(pc);
 		}
 
 		this.prevPos = curPos;
@@ -113,12 +113,16 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 		rigidBody.AddForce(forceVector);
 	}
 
-	private void playerKill(byte killer)
+	private void playerKill(PlayerControl killer)
 	{
-		if (this.PrevForce.sqrMagnitude > this.killSpeedSqr)
+		if (this.PrevForce.sqrMagnitude <= this.killSpeedSqr)
 		{
-			Player.RpcUncheckMurderPlayer(killer, killer, byte.MaxValue);
-			ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(killer, PlayerStatus.Clashed);
+			return;
 		}
+
+		byte killerId = killer.PlayerId;
+		Player.RpcUncheckSnap(killerId, killer.transform.position);
+		Player.RpcUncheckMurderPlayer(killerId, killerId, byte.MaxValue);
+		ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(killerId, PlayerStatus.Clashed);
 	}
 }
