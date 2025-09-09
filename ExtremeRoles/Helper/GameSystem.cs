@@ -54,11 +54,12 @@ public static class GameSystem
 	};
 
 	public static GameObject CreateNoneReportableDeadbody(
-		PlayerControl targetPlayer, RoleBehaviour role, Vector3 pos)
+		PlayerControl targetPlayer, Vector3 pos)
 	{
 		var killAnimation = targetPlayer.KillAnimations[0];
-		DeadBody deadbody = UnityObject.Instantiate(
-			GameManager.Instance.GetDeadBody(role));
+
+		// なんかGetDeadBodyで返してるのが1番目のやつなため・・・・
+		DeadBody deadbody = UnityObject.Instantiate(GameManager.Instance.deadBodyPrefab[0]);
 		deadbody.enabled = false;
 
 		foreach (var rend in deadbody.bodyRenderers)
