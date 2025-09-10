@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -165,9 +165,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 colorChip.Button.ClickMask = __instance.scroller.Hitbox;
                 colorChip.Tag = vi.ProdId;
 
-                int color = __instance.HasLocalPlayer() ?
-                    PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
-					DataManager.Player.Customization.Color;
+				int color = __instance.GetDisplayColor();
 
 				__instance.UpdateMaterials(colorChip.Inner.FrontLayer, vi);
 				if (CosmicStorage<CustomVisor>.TryGet(
