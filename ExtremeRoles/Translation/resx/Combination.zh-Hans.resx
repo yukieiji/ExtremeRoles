@@ -455,19 +455,19 @@
     <value>龙套体质</value>
   </data>
   <data name="DetectiveOffice" xml:space="preserve">
-    <value>&lt;color=#9E5C46&gt;大&lt;/color&gt;侦&lt;color=#008A99&gt;探&lt;/color&gt;</value>
+    <value>&lt;color=#9E5C46&gt;大&lt;/color&gt;调查员&lt;color=#008A99&gt;探&lt;/color&gt;</value>
   </data>
   <data name="Detective" xml:space="preserve">
-    <value>侦探</value>
+    <value>调查员</value>
   </data>
   <data name="Assistant" xml:space="preserve">
     <value>助手</value>
   </data>
   <data name="DetectiveApprentice" xml:space="preserve">
-    <value>见习侦探</value>
+    <value>见习调查员</value>
   </data>
   <data name="DetectiveHasOtherVision" xml:space="preserve">
-    <value>侦探拥有独立视野</value>
+    <value>调查员拥有独立视野</value>
   </data>
   <data name="DetectiveVision" xml:space="preserve">
     <value>视野范围</value>
@@ -476,13 +476,13 @@
     <value>受到照明破坏影响</value>
   </data>
   <data name="DetectiveSearchRange" xml:space="preserve">
-    <value>侦探调查时与案发现场的最大距离</value>
+    <value>调查员调查时与案发现场的最大距离</value>
   </data>
   <data name="DetectiveSearchTime" xml:space="preserve">
     <value>调查所需时间</value>
   </data>
   <data name="DetectiveSearchAssistantTime" xml:space="preserve">
-    <value>侦探在助手支持下对案发现场进行1次调查所需的时间</value>
+    <value>调查员在助手支持下对案发现场进行1次调查所需的时间</value>
   </data>
   <data name="DetectiveTextShowTime" xml:space="preserve">
     <value>调查结果显示时间</value>
@@ -497,7 +497,7 @@
     <value>受到照明破坏影响</value>
   </data>
   <data name="DetectiveApprenticeHasOtherVision" xml:space="preserve">
-    <value>见习侦探拥有独立视野</value>
+    <value>见习调查员拥有独立视野</value>
   </data>
   <data name="DetectiveApprenticeVision" xml:space="preserve">
     <value>视野范围</value>
@@ -506,16 +506,16 @@
     <value>受到照明破坏影响</value>
   </data>
   <data name="DetectiveApprenticeAbilityCount" xml:space="preserve">
-    <value>见习侦探紧急召集技能使用次数</value>
+    <value>见习调查员紧急召集技能使用次数</value>
   </data>
   <data name="DetectiveApprenticeAbilityCoolTime" xml:space="preserve">
     <value>紧急召集的冷却时间</value>
   </data>
   <data name="DetectiveApprenticeAbilityActiveTime" xml:space="preserve">
-    <value>见习侦探“紧急召集”按下紧急会议按钮的时间</value>
+    <value>见习调查员“紧急召集”按下紧急会议按钮的时间</value>
   </data>
   <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
-    <value>见习侦探紧急召集的会议不计入紧急会议次数限制</value>
+    <value>见习调查员紧急召集的会议不计入紧急会议次数限制</value>
   </data>
   <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>不计入次数限制的次数</value>
@@ -527,14 +527,14 @@
     <value>调查案发现场留下的蛛丝马迹</value>
   </data>
   <data name="DetectiveFullDescription" xml:space="preserve">
-    <value>侦探属于船员阵营。
+    <value>调查员属于船员阵营。
 可以从案发现场搜寻线索。
 
 ·主动技能“尸检报告”
 当有尸体被报告时，那尸体所在的地点直到下一轮会议阶段开始为止记录为案发现场。
-侦探可以通过箭头确认案发现场的位置。
-侦探在案发现场周围停留时，可以进行调查。
-若侦探在调查过程中离开，调查进程会被重置。
+调查员可以通过箭头确认案发现场的位置。
+调查员在案发现场周围停留时，可以进行调查。
+若调查员在调查过程中离开，调查进程会被重置。
 通过调查得知的信息如下。
 每一次的调查都需要一定的时间。
 在第四次调查完成时，案发现场被移除。
@@ -547,40 +547,40 @@
 若尸体是助手报告的，则每次调查所需的时间将缩短。
 
 ·被动技能“传承”
-侦探死亡等情况下，助手的职业变为见习侦探。</value>
+调查员死亡等情况下，助手的职业变为见习调查员。</value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
-    <value>侦探的最佳搭档</value>
+    <value>调查员的最佳搭档</value>
   </data>
   <data name="AssistantShortDescription" xml:space="preserve">
-    <value>辅助侦探的行动</value>
+    <value>辅助调查员的行动</value>
   </data>
   <data name="AssistantFullDescription" xml:space="preserve">
     <value>助手属于船员阵营。
-可以暗中帮助侦探。
+可以暗中帮助调查员。
 
 ·被动技能“尸检报告”
 自己报告尸体的会议阶段开始时，助手可以在聊天框内确认尸体的死亡时间。
 
 ·被动技能“传承”
-助手死亡时，侦探的职业变为见习侦探。</value>
+助手死亡时，调查员的职业变为见习调查员。</value>
   </data>
   <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
     <value>接过逝去的搭档的衣钵</value>
   </data>
   <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
-    <value>见习侦探属于船员阵营。
-见习侦探是由侦探或助手转变而来的。
+    <value>见习调查员属于船员阵营。
+见习调查员是由调查员或助手转变而来的。
 
 ·主动技能“尸检报告”
-自己报告尸体的会议阶段开始时，见习侦探可以在聊天框内确认尸体的死亡时间。
+自己报告尸体的会议阶段开始时，见习调查员可以在聊天框内确认尸体的死亡时间。
 
 ·主动技能“紧急召集”:
 可以打开紧急会议界面，远程召开紧急会议。
 紧急会议界面不能持续开启。
-如果紧急会议次数用完，即使见习侦探打开界面也不能召开紧急会议。
-根据设置，该技能见习侦探可能共享紧急会议次数。
-不过，在紧急会议次数耗尽的情况下，见习侦探仍然不能发动紧急会议。</value>
+如果紧急会议次数用完，即使见习调查员打开界面也不能召开紧急会议。
+根据设置，该技能见习调查员可能共享紧急会议次数。
+不过，在紧急会议次数耗尽的情况下，见习调查员仍然不能发动紧急会议。</value>
   </data>
   <data name="FindKillTime" xml:space="preserve">
     <value>死者好像是在{0} (UTC±0)被杀害的!</value>

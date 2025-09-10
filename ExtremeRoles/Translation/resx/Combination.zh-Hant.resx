@@ -455,19 +455,19 @@
     <value>龍套體質</value>
   </data>
   <data name="DetectiveOffice" xml:space="preserve">
-    <value>&lt;color=#9E5C46&gt;大&lt;/color&gt;偵&lt;color=#008A99&gt;探&lt;/color&gt;</value>
+    <value>&lt;color=#9E5C46&gt;大&lt;/color&gt;調查員&lt;color=#008A99&gt;探&lt;/color&gt;</value>
   </data>
   <data name="Detective" xml:space="preserve">
-    <value>偵探</value>
+    <value>調查員</value>
   </data>
   <data name="Assistant" xml:space="preserve">
     <value>助手</value>
   </data>
   <data name="DetectiveApprentice" xml:space="preserve">
-    <value>見習偵探</value>
+    <value>見習調查員</value>
   </data>
   <data name="DetectiveHasOtherVision" xml:space="preserve">
-    <value>偵探擁有獨立視野</value>
+    <value>調查員擁有獨立視野</value>
   </data>
   <data name="DetectiveVision" xml:space="preserve">
     <value>視野範圍</value>
@@ -476,13 +476,13 @@
     <value>受到照明破壞影響</value>
   </data>
   <data name="DetectiveSearchRange" xml:space="preserve">
-    <value>偵探調查時與案發現場的最大距離</value>
+    <value>調查員調查時與案發現場的最大距離</value>
   </data>
   <data name="DetectiveSearchTime" xml:space="preserve">
     <value>調查所需時間</value>
   </data>
   <data name="DetectiveSearchAssistantTime" xml:space="preserve">
-    <value>偵探在助手支持下對案發現場進行1次調查所需的時間</value>
+    <value>調查員在助手支持下對案發現場進行1次調查所需的時間</value>
   </data>
   <data name="DetectiveTextShowTime" xml:space="preserve">
     <value>調查結果顯示時間</value>
@@ -497,7 +497,7 @@
     <value>受到照明破壞影響</value>
   </data>
   <data name="DetectiveApprenticeHasOtherVision" xml:space="preserve">
-    <value>見習偵探擁有獨立視野</value>
+    <value>見習調查員擁有獨立視野</value>
   </data>
   <data name="DetectiveApprenticeVision" xml:space="preserve">
     <value>視野範圍</value>
@@ -506,16 +506,16 @@
     <value>受到照明破壞影響</value>
   </data>
   <data name="DetectiveApprenticeAbilityCount" xml:space="preserve">
-    <value>見習偵探緊急召集技能使用次數</value>
+    <value>見習調查員緊急召集技能使用次數</value>
   </data>
   <data name="DetectiveApprenticeAbilityCoolTime" xml:space="preserve">
     <value>緊急召集的冷卻時間</value>
   </data>
   <data name="DetectiveApprenticeAbilityActiveTime" xml:space="preserve">
-    <value>見習偵探“緊急召集”按下緊急會議按鈕的時間</value>
+    <value>見習調查員“緊急召集”按下緊急會議按鈕的時間</value>
   </data>
   <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
-    <value>見習偵探緊急召集的會議不計入緊急會議次數限制</value>
+    <value>見習調查員緊急召集的會議不計入緊急會議次數限制</value>
   </data>
   <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>不計入次數限制的次數</value>
@@ -527,14 +527,14 @@
     <value>調查案發現場留下的蛛絲馬跡</value>
   </data>
   <data name="DetectiveFullDescription" xml:space="preserve">
-    <value>偵探屬於船員陣營。
+    <value>調查員屬於船員陣營。
 可以從案發現場搜尋線索。
 
 ·主動技能“屍檢報告”
 當有屍體被報告時，那屍體所在的地點直到下一輪會議階段開始為止記錄為案發現場。
-偵探可以通過箭頭確認案發現場的位置。
-偵探在案發現場周圍停留時，可以進行調查。
-若偵探在調查過程中離開，調查進程會被重置。
+調查員可以通過箭頭確認案發現場的位置。
+調查員在案發現場周圍停留時，可以進行調查。
+若調查員在調查過程中離開，調查進程會被重置。
 通過調查得知的信息如下。
 每一次的調查都需要一定的時間。
 在第四次調查完成時，案發現場被移除。
@@ -547,40 +547,40 @@
 若屍體是助手報告的，則每次調查所需的時間將縮短。
 
 ·被動技能“傳承”
-偵探死亡等情況下，助手的職業變為見習偵探。</value>
+調查員死亡等情況下，助手的職業變為見習調查員。</value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
-    <value>偵探的最佳搭檔</value>
+    <value>調查員的最佳搭檔</value>
   </data>
   <data name="AssistantShortDescription" xml:space="preserve">
-    <value>輔助偵探的行動</value>
+    <value>輔助調查員的行動</value>
   </data>
   <data name="AssistantFullDescription" xml:space="preserve">
     <value>助手屬於船員陣營。
-可以暗中幫助偵探。
+可以暗中幫助調查員。
 
 ·被動技能“屍檢報告”
 自己報告屍體的會議階段開始時，助手可以在聊天框內確認屍體的死亡時間。
 
 ·被動技能“傳承”
-助手死亡時，偵探的職業變為見習偵探。</value>
+助手死亡時，調查員的職業變為見習調查員。</value>
   </data>
   <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
     <value>接過逝去的搭檔的衣缽</value>
   </data>
   <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
-    <value>見習偵探屬於船員陣營。
-見習偵探是由偵探或助手轉變而來的。
+    <value>見習調查員屬於船員陣營。
+見習調查員是由調查員或助手轉變而來的。
 
 ·主動技能“屍檢報告”
-自己報告屍體的會議階段開始時，見習偵探可以在聊天框內確認屍體的死亡時間。
+自己報告屍體的會議階段開始時，見習調查員可以在聊天框內確認屍體的死亡時間。
 
 ·主動技能“緊急召集”:
 可以打開緊急會議界面，遠程召開緊急會議。
 緊急會議界面不能持續開啓。
-如果緊急會議次數用完，即使見習偵探打開界面也不能召開緊急會議。
-根據設置，該技能見習偵探可能共享緊急會議次數。
-不過，在緊急會議次數耗盡的情況下，見習偵探仍然不能發動緊急會議。</value>
+如果緊急會議次數用完，即使見習調查員打開界面也不能召開緊急會議。
+根據設置，該技能見習調查員可能共享緊急會議次數。
+不過，在緊急會議次數耗盡的情況下，見習調查員仍然不能發動緊急會議。</value>
   </data>
   <data name="FindKillTime" xml:space="preserve">
     <value>死者好像是在{0} (UTC±0)被殺害的!</value>
@@ -651,7 +651,7 @@
 ·被動技能“額外的勝利條件”
 船員勝利時，戀人可以一同獲勝，但戀人中的非船員陣營玩家不可以獲勝。
 若剩餘的存活玩家全部在同一組戀人中，且這一組的所有玩家都完成了所有任務，戀人陣營獲勝。
-戀人中的非船員陣營玩家也可以通過這種方式獲勝。
+戀人中的非船員陣營玩家也可以通過這種方式獲胜。
 當以下所有條件都滿足的場合：
 ①：剩餘的存活玩家全部在同一組戀人中；
 ②：存活的內鬼數量為0；
@@ -665,7 +665,7 @@
 ·被動技能“額外的勝利條件”
 內鬼勝利時，戀人可以一同獲勝，但戀人中的非內鬼陣營玩家不可以獲勝。
 若剩餘的存活玩家全部在同一組戀人中，且這一組的所有玩家都完成了所有任務，戀人陣營獲勝。
-戀人中的非船員陣營玩家也可以通過這種方式獲勝。
+戀人中的非船員陣營玩家也可以通過這種方式獲胜。
 當以下所有條件都滿足的場合：
 ①：剩餘的存活玩家全部在同一組戀人中；
 ②：戀人中存在非船員陣營的玩家； 
