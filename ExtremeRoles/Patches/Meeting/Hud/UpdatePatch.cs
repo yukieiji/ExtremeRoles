@@ -17,6 +17,15 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
 public static class MeetingHudUpdatePatch
 {
+	public static void Prefix(MeetingHud __instance)
+	{
+		// 探偵の能力をアサマリ会議中非表示に設定
+		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var _))
+		{
+			__instance.MeetingAbilityButton.gameObject.SetActive(false);
+		}
+	}
+
 	public static void Postfix(MeetingHud __instance)
 	{
 
