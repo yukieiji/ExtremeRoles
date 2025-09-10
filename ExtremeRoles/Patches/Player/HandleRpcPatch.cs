@@ -378,5 +378,5 @@ public static class PlayerControlHandleRpcPatch
 public static class PlayerControlHandleRoleRpcPatch
 {
 	public static bool Prefix(PlayerControl __instance)
-		=>　__instance.Data != null && __instance.Data.Role != null;
+		=> __instance.Data != null && __instance.Data.Role != null;
 }
