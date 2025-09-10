@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using HarmonyLib;
 using Hazel;
@@ -19,7 +19,10 @@ public static class PlayerControlHandleRpcPatch
 		[HarmonyArgument(1)] MessageReader reader)
 	{
 
-		if (__instance == null || reader == null) { return; }
+		if (reader == null)
+		{
+			return;
+		}
 
 		switch ((RPCOperator.Command)callId)
 		{
@@ -368,4 +371,12 @@ public static class PlayerControlHandleRpcPatch
 				break;
 		}
 	}
+}
+
+// ロビーで大量のNullエラーが出るバニラの不具合の修正(Nullチェックちゃんとしろ！！！！！！)
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRoleRpc))]
+public static class PlayerControlHandleRoleRpcPatch
+{
+	public static bool Prefix(PlayerControl __instance)
+		=>　__instance.Data != null && __instance.Data.Role != null;
 }
