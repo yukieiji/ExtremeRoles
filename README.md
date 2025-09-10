@@ -50,7 +50,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 
 ## 追加役職一覧
 
-- Extreme Roles v2025.6.25.0時点、今後も追加予定
+- Extreme Roles v2025.9.10.0時点、今後も追加予定
 
 ### ホスト役職
 - シオン
