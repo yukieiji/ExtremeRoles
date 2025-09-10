@@ -413,34 +413,34 @@
     <value>エマージェンシーコール</value>
   </data>
   <data name="DetectiveOffice" xml:space="preserve">
-    <value>&lt;color=#9E5C46&gt;探偵&lt;/color&gt;と&lt;color=#008A99&gt;助手&lt;/color&gt;</value>
+    <value>&lt;color=#9E5C46&gt;捜査官&lt;/color&gt;と&lt;color=#008A99&gt;助手&lt;/color&gt;</value>
   </data>
   <data name="Detective" xml:space="preserve">
-    <value>探偵</value>
+    <value>捜査官</value>
   </data>
   <data name="Assistant" xml:space="preserve">
     <value>助手</value>
   </data>
   <data name="DetectiveApprentice" xml:space="preserve">
-    <value>見習い探偵</value>
+    <value>見習い捜査官</value>
   </data>
   <data name="DetectiveHasOtherVision" xml:space="preserve">
-    <value>探偵が別の視界設定を持つか</value>
+    <value>捜査官が別の視界設定を持つか</value>
   </data>
   <data name="DetectiveVision" xml:space="preserve">
-    <value>探偵のビジョン</value>
+    <value>捜査官のビジョン</value>
   </data>
   <data name="DetectiveApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>探偵が視界効果を受けるか</value>
+    <value>捜査官が視界効果を受けるか</value>
   </data>
   <data name="DetectiveSearchRange" xml:space="preserve">
-    <value>探偵が「犯行現場」を調べれる距離</value>
+    <value>捜査官が「犯行現場」を調べれる距離</value>
   </data>
   <data name="DetectiveSearchTime" xml:space="preserve">
-    <value>探偵が「犯行現場」の1調査にかかる時間</value>
+    <value>捜査官が「犯行現場」の1調査にかかる時間</value>
   </data>
   <data name="DetectiveSearchAssistantTime" xml:space="preserve">
-    <value>探偵が助手のサポートを受けた「犯行現場」の1調査にかかる時間</value>
+    <value>捜査官が助手のサポートを受けた「犯行現場」の1調査にかかる時間</value>
   </data>
   <data name="DetectiveTextShowTime" xml:space="preserve">
     <value>調査結果の画面表示時間</value>
@@ -455,31 +455,31 @@
     <value>助手が視界効果を受けるか</value>
   </data>
   <data name="DetectiveApprenticeHasOtherVision" xml:space="preserve">
-    <value>見習い探偵が別の視界設定を持つか</value>
+    <value>見習い捜査官が別の視界設定を持つか</value>
   </data>
   <data name="DetectiveApprenticeVision" xml:space="preserve">
-    <value>見習い探偵のビジョン</value>
+    <value>見習い捜査官のビジョン</value>
   </data>
   <data name="DetectiveApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>見習い探偵が視界効果を受けるか</value>
+    <value>見習い捜査官が視界効果を受けるか</value>
   </data>
   <data name="DetectiveApprenticeAbilityCount" xml:space="preserve">
-    <value>見習い探偵「緊急招集」の使用回数</value>
+    <value>見習い捜査官「緊急招集」の使用回数</value>
   </data>
   <data name="DetectiveApprenticeAbilityCoolTime" xml:space="preserve">
-    <value>見習い探偵「緊急招集」のクールタイム</value>
+    <value>見習い捜査官「緊急招集」のクールタイム</value>
   </data>
   <data name="DetectiveApprenticeAbilityActiveTime" xml:space="preserve">
-    <value>見習い探偵「緊急招集」によって緊急会議ボタンを押せる時間</value>
+    <value>見習い捜査官「緊急招集」によって緊急会議ボタンを押せる時間</value>
   </data>
   <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
-    <value>見習い探偵「緊急招集」によって緊急会議ボタンを消費しないか</value>
+    <value>見習い捜査官「緊急招集」によって緊急会議ボタンを消費しないか</value>
   </data>
   <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>消費されない回数</value>
   </data>
   <data name="DetectiveIntroDescription" xml:space="preserve">
-    <value>どんな難事件もこの"探偵"にお任せあれ</value>
+    <value>どんな難事件もこの"捜査官"にお任せあれ</value>
   </data>
   <data name="DetectiveShortDescription" xml:space="preserve">
     <value>「犯行現場」に残る小さな証拠を見逃すな</value>
@@ -502,25 +502,25 @@
 　・調査4回目：キルした役職
 「助手」が通報した死体の「犯行現場」であれば「調査」に
 かかる時間が短縮される
-「探偵」が死亡等した場合、「助手」が「見習い探偵」になる</value>
+「捜査官」が死亡等した場合、「助手」が「見習い捜査官」になる</value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
-    <value>優秀な探偵になるため切磋琢磨しよう</value>
+    <value>優秀な捜査官になるため切磋琢磨しよう</value>
   </data>
   <data name="AssistantShortDescription" xml:space="preserve">
-    <value>探偵のサポートを行おう</value>
+    <value>捜査官のサポートを行おう</value>
   </data>
   <data name="AssistantFullDescription" xml:space="preserve">
-    <value>探偵の力を引き出す秘めた力を持つクルー役職
+    <value>捜査官の力を引き出す秘めた力を持つクルー役職
 自分の通報した死体の完全な死亡時間を会議開始時チャットにて
 知ることができる
-「助手」が死亡した場合、「探偵」が「見習い探偵」になる</value>
+「助手」が死亡した場合、「捜査官」が「見習い捜査官」になる</value>
   </data>
   <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
-    <value>”見習い”でも1人前の探偵として頑張ろう</value>
+    <value>”見習い”でも1人前の捜査官として頑張ろう</value>
   </data>
   <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
-    <value>探偵や助手が何らかの理由で変化したクルー役職
+    <value>捜査官や助手が何らかの理由で変化したクルー役職
 自分の通報した死体の完全な死亡時間を会議開始時チャットにて
 知ることができる
 ボタン能力「緊急招集」：
@@ -528,7 +528,7 @@
 　・画面は一定時間しか開くことが出来ない
 　・役職の人の「緊急会議」のボタンが残っていない場合
 　画面を開いても押すことは出来ない
-　・設定「見習い探偵「緊急招集」によって緊急会議ボタンを
+　・設定「見習い捜査官「緊急招集」によって緊急会議ボタンを
 　消費するか」がオンの場合、「緊急招集」によって発生した
 　「緊急会議」で役職の人の「緊急会議」のボタンの数が一定
 　回数消費されない（押すためには役職の人の「緊急会議」の
