@@ -1238,4 +1238,10 @@ Do you want to continue Installing?</value>
   <data name="SpawnRate" xml:space="preserve">
     <value>Spawn Rate</value>
   </data>
+  <data name="Detective" xml:space="preserve">
+    <value>Detective</value>
+  </data>
+  <data name="Viper" xml:space="preserve">
+    <value>Viper</value>
+  </data>
 </root>
