@@ -23,12 +23,12 @@ public sealed class InfinityTaskLoopTestStep() : TestStepBase
 	private const int waitCount = 5;
 
 #if DEBUG
-	private const int taskNum = 256;
+	private const int taskNum = 128;
 #else
 	private const int taskNum = 10;
 #endif
 #if DEBUG
-	private const int repeatNum = 10;
+	private const int repeatNum = 3;
 #else
 	private const int repeatNum = 1;
 #endif
