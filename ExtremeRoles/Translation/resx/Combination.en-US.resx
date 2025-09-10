@@ -458,35 +458,35 @@ Your ROLE status: You're the New Neutral!
   <data name="DetectiveOffice" xml:space="preserve">
     <value>&lt;color=#9E5C46&gt;Investigator&lt;/color&gt;&amp;amp;&lt;color=#008A99&gt;Assistant&lt;/color&gt;</value>
   </data>
-  <data name="Detective" xml:space="preserve">
+  <data name="Investigator" xml:space="preserve">
     <value>Investigator</value>
   </data>
   <data name="Assistant" xml:space="preserve">
     <value>Assistant</value>
   </data>
-  <data name="DetectiveApprentice" xml:space="preserve">
+  <data name="InvestigatorApprentice" xml:space="preserve">
     <value>Apprentice</value>
   </data>
-  <data name="DetectiveHasOtherVision" xml:space="preserve">
+  <data name="InvestigatorHasOtherVision" xml:space="preserve">
     <value>Investigator: Has special vision settings</value>
   </data>
-  <data name="DetectiveVision" xml:space="preserve">
+  <data name="InvestigatorVision" xml:space="preserve">
     <value>Investigator: Vision</value>
   </data>
-  <data name="DetectiveApplyEnvironmentVisionEffect" xml:space="preserve">
+  <data name="InvestigatorApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Investigator: Does sabotage effect their vision</value>
   </data>
-  <data name="DetectiveSearchRange" xml:space="preserve">
+  <data name="InvestigatorSearchRange" xml:space="preserve">
     <value>Investigator: "INVESTIGATE" : Ability Range</value>
   </data>
-  <data name="DetectiveSearchTime" xml:space="preserve">
+  <data name="InvestigatorSearchTime" xml:space="preserve">
     <value>Investigator: "INVESTIGATE" : Ability Duration</value>
   </data>
-  <data name="DetectiveSearchAssistantTime" xml:space="preserve">
+  <data name="InvestigatorSearchAssistantTime" xml:space="preserve">
     <value>Investigator: "INVESTIGATE" : Ability Duration when
 supported by Assistant</value>
   </data>
-  <data name="DetectiveTextShowTime" xml:space="preserve">
+  <data name="InvestigatorTextShowTime" xml:space="preserve">
     <value>Investigator: Duration of Investigation stats</value>
   </data>
   <data name="AssistantHasOtherVision" xml:space="preserve">
@@ -523,13 +523,13 @@ player's emergency meeting</value>
   <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>Does not count up to</value>
   </data>
-  <data name="DetectiveIntroDescription" xml:space="preserve">
+  <data name="InvestigatorIntroDescription" xml:space="preserve">
     <value>Always determining the one truth!</value>
   </data>
-  <data name="DetectiveShortDescription" xml:space="preserve">
+  <data name="InvestigatorShortDescription" xml:space="preserve">
     <value>Investigate the scene and solve the case</value>
   </data>
-  <data name="DetectiveFullDescription" xml:space="preserve">
+  <data name="InvestigatorFullDescription" xml:space="preserve">
     <value> A CREWMATE role with the ability to investigate clues.
  "INVESTIGATE" : Find clues left behind at the site!
    - After a dead body is reported, the reported body's position is 

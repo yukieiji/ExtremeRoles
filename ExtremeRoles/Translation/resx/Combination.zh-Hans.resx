@@ -457,34 +457,34 @@
   <data name="DetectiveOffice" xml:space="preserve">
     <value>&lt;color=#9E5C46&gt;大&lt;/color&gt;调查员&lt;color=#008A99&gt;探&lt;/color&gt;</value>
   </data>
-  <data name="Detective" xml:space="preserve">
+  <data name="Investigator" xml:space="preserve">
     <value>调查员</value>
   </data>
   <data name="Assistant" xml:space="preserve">
     <value>助手</value>
   </data>
-  <data name="DetectiveApprentice" xml:space="preserve">
+  <data name="InvestigatorApprentice" xml:space="preserve">
     <value>见习调查员</value>
   </data>
-  <data name="DetectiveHasOtherVision" xml:space="preserve">
+  <data name="InvestigatorHasOtherVision" xml:space="preserve">
     <value>调查员拥有独立视野</value>
   </data>
-  <data name="DetectiveVision" xml:space="preserve">
+  <data name="InvestigatorVision" xml:space="preserve">
     <value>视野范围</value>
   </data>
-  <data name="DetectiveApplyEnvironmentVisionEffect" xml:space="preserve">
+  <data name="InvestigatorApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>受到照明破坏影响</value>
   </data>
-  <data name="DetectiveSearchRange" xml:space="preserve">
+  <data name="InvestigatorSearchRange" xml:space="preserve">
     <value>调查员调查时与案发现场的最大距离</value>
   </data>
-  <data name="DetectiveSearchTime" xml:space="preserve">
+  <data name="InvestigatorSearchTime" xml:space="preserve">
     <value>调查所需时间</value>
   </data>
-  <data name="DetectiveSearchAssistantTime" xml:space="preserve">
+  <data name="InvestigatorSearchAssistantTime" xml:space="preserve">
     <value>调查员在助手支持下对案发现场进行1次调查所需的时间</value>
   </data>
-  <data name="DetectiveTextShowTime" xml:space="preserve">
+  <data name="InvestigatorTextShowTime" xml:space="preserve">
     <value>调查结果显示时间</value>
   </data>
   <data name="AssistantHasOtherVision" xml:space="preserve">
@@ -520,13 +520,13 @@
   <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>不计入次数限制的次数</value>
   </data>
-  <data name="DetectiveIntroDescription" xml:space="preserve">
+  <data name="InvestigatorIntroDescription" xml:space="preserve">
     <value>真相只有一个</value>
   </data>
-  <data name="DetectiveShortDescription" xml:space="preserve">
+  <data name="InvestigatorShortDescription" xml:space="preserve">
     <value>调查案发现场留下的蛛丝马迹</value>
   </data>
-  <data name="DetectiveFullDescription" xml:space="preserve">
+  <data name="InvestigatorFullDescription" xml:space="preserve">
     <value>调查员属于船员阵营。
 可以从案发现场搜寻线索。
 

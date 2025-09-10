@@ -34,7 +34,7 @@ public enum ExtremeRoleId : int
     Hero,
     Villain,
     Vigilante,
-    Detective,
+    Investigator,
     Assistant,
     DetectiveApprentice,
     Sharer,

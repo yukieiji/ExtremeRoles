@@ -415,34 +415,34 @@
   <data name="DetectiveOffice" xml:space="preserve">
     <value>&lt;color=#9E5C46&gt;捜査官&lt;/color&gt;と&lt;color=#008A99&gt;助手&lt;/color&gt;</value>
   </data>
-  <data name="Detective" xml:space="preserve">
+  <data name="Investigator" xml:space="preserve">
     <value>捜査官</value>
   </data>
   <data name="Assistant" xml:space="preserve">
     <value>助手</value>
   </data>
-  <data name="DetectiveApprentice" xml:space="preserve">
+  <data name="InvestigatorApprentice" xml:space="preserve">
     <value>見習い捜査官</value>
   </data>
-  <data name="DetectiveHasOtherVision" xml:space="preserve">
+  <data name="InvestigatorHasOtherVision" xml:space="preserve">
     <value>捜査官が別の視界設定を持つか</value>
   </data>
-  <data name="DetectiveVision" xml:space="preserve">
+  <data name="InvestigatorVision" xml:space="preserve">
     <value>捜査官のビジョン</value>
   </data>
-  <data name="DetectiveApplyEnvironmentVisionEffect" xml:space="preserve">
+  <data name="InvestigatorApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>捜査官が視界効果を受けるか</value>
   </data>
-  <data name="DetectiveSearchRange" xml:space="preserve">
+  <data name="InvestigatorSearchRange" xml:space="preserve">
     <value>捜査官が「犯行現場」を調べれる距離</value>
   </data>
-  <data name="DetectiveSearchTime" xml:space="preserve">
+  <data name="InvestigatorSearchTime" xml:space="preserve">
     <value>捜査官が「犯行現場」の1調査にかかる時間</value>
   </data>
-  <data name="DetectiveSearchAssistantTime" xml:space="preserve">
+  <data name="InvestigatorSearchAssistantTime" xml:space="preserve">
     <value>捜査官が助手のサポートを受けた「犯行現場」の1調査にかかる時間</value>
   </data>
-  <data name="DetectiveTextShowTime" xml:space="preserve">
+  <data name="InvestigatorTextShowTime" xml:space="preserve">
     <value>調査結果の画面表示時間</value>
   </data>
   <data name="AssistantHasOtherVision" xml:space="preserve">
@@ -478,13 +478,13 @@
   <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>消費されない回数</value>
   </data>
-  <data name="DetectiveIntroDescription" xml:space="preserve">
+  <data name="InvestigatorIntroDescription" xml:space="preserve">
     <value>どんな難事件もこの"捜査官"にお任せあれ</value>
   </data>
-  <data name="DetectiveShortDescription" xml:space="preserve">
+  <data name="InvestigatorShortDescription" xml:space="preserve">
     <value>「犯行現場」に残る小さな証拠を見逃すな</value>
   </data>
-  <data name="DetectiveFullDescription" xml:space="preserve">
+  <data name="InvestigatorFullDescription" xml:space="preserve">
     <value>通報された死体の場所から様々な情報を得ることができるクルー役職
 通報された死体のある場所は「犯行現場」として登録される
 登録された「犯行現場」は通報があった会議終了後から次の会議
