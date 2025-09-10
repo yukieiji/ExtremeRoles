@@ -1,4 +1,3 @@
-
 <div><img src="../img/burner.png" /></div>
 
 <div align="center"><h1>Extreme Roles, Extreme Skins and EngineVoiceEngine</h1></div>
@@ -60,9 +59,9 @@ As a main characteristic, there are the following:
 |  Moderator |  Slime  |  |
 |  Merlin  |  Theif  |  |
 |  Hero  |  Assasin  |  |
-|  Detective  | Villain  |   |
+|  Investigator  | Villain  |   |
 |  Assistant  | Shares  |   |
-|  Apperentice  |   |   |
+|  Apprentice  |   |   |
 |  Buddies  |  |  |
 |  Lovers  |  |  |
 |  Supporter |  |  |
@@ -79,8 +78,8 @@ As a main characteristic, there are the following:
 
 - “Neet” and “Lovers” can also be Neutral by optional options(Default is crewmate)
 - “Lovers“, “Supporter“, “Guesser“ and “Mover“ can also be Impostor by optional options(Default is crewmate).
-- “SideKick” and “SquaredDetective”, “Servant” and “Doll” aren't assigned at the startting game and are assigned when they meet the requirements.
-- “Marilyn” and “Assassin”, “Hero” and “Villain” and “Vijalante”, “Detective” and “Assistant”,  “Walgaki” and “Whisper” are all a pair of relationships.
+- “SideKick” and “Apprentice”, “Servant” and “Doll” aren't assigned at the startting game and are assigned when they meet the requirements.
+- “Marilyn” and “Assassin”, “Hero” and “Villain” and “Vijalante”, “Investigator” and “Assistant”,  “Walgaki” and “Whisper” are all a pair of relationships.
 
 ## Extreme Skins
 
