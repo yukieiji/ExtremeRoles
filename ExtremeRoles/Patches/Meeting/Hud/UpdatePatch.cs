@@ -3,10 +3,8 @@ using UnityEngine;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType.Roles;
 
 
@@ -173,11 +171,18 @@ public static class MeetingHudUpdatePatch
 			localPlayer.Data.IsDead ||
 			localPlayer.Data.Disconnected ||
 			!ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
-				ExtremeSystemType.RaiseHandSystem, out var raiseHand) ||
-			raiseHand.IsInit)
+				ExtremeSystemType.RaiseHandSystem, out var raiseHand))
 		{
 			return;
 		}
-		raiseHand.CreateRaiseHandButton();
+
+		if (raiseHand.IsInit)
+		{
+			raiseHand.SetActive(Minigame.Instance == null);
+		}
+		else
+		{
+			raiseHand.CreateRaiseHandButton();
+		}
 	}
 }
