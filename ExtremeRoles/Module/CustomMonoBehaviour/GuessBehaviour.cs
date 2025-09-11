@@ -20,7 +20,7 @@ public sealed class GuessBehaviour : MonoBehaviour
 		public ExtremeRoleId AnothorId;
 		public ExtremeRoleType Team;
 
-		private static HashSet<RoleTypes> vanilaCrew = new HashSet<RoleTypes>()
+		private static HashSet<RoleTypes> vanillaCrew = new HashSet<RoleTypes>()
 		{
 			RoleTypes.Crewmate,
 			RoleTypes.Scientist,
@@ -59,7 +59,7 @@ public sealed class GuessBehaviour : MonoBehaviour
 				bool isVanila = Enum.IsDefined(typeof(RoleTypes), castedId);
 				string roleName = isVanila ?
 					Design.ColoredString(
-						vanilaCrew.Contains(castedId) ?
+						vanillaCrew.Contains(castedId) ?
 						Palette.White : Palette.ImpostorRed,
 						Tr.GetString(castedId.ToString())) :
 					Design.ColoredString(
