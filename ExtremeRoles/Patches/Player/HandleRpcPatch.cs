@@ -249,6 +249,9 @@ public static class PlayerControlHandleRpcPatch
 				RPCOperator.SummonerRpcOps(
 					summonerPlayerId, summonTargetPlayerId, x, y, isDead);
 				break;
+			case RPCOperator.Command.ExorcistOps:
+				RPCOperator.ExorcistRpcOps(reader);
+				break;
 			case RPCOperator.Command.CarrierAbility:
 				byte carrierCarryOpCallPlayerId = reader.ReadByte();
 				float carrierPlayerPosX = reader.ReadSingle();
@@ -310,6 +313,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.ThiefAddDeadbodyEffect:
 				byte addEffectTargetDeadBody = reader.ReadByte();
 				RPCOperator.ThiefAddEffect(addEffectTargetDeadBody);
+				break;
+			case RPCOperator.Command.BoxerRpcOps:
+				RPCOperator.BoxerRpcOps(reader);
 				break;
 			case RPCOperator.Command.AliceShipBroken:
 				byte alicePlayerId = reader.ReadByte();

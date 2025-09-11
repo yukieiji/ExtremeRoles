@@ -84,7 +84,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         if (!isTruthColor &&
             (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole && !awakeRole.IsAwake))
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 this.Core.Color,
                 Tr.GetString(this.RoleName));
         }
@@ -94,7 +94,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
 
     public override string GetIntroDescription()
     {
-        string baseIntro = Design.ColoedString(
+        string baseIntro = Design.ColoredString(
             this.IsImpostor() ? Palette.ImpostorRed : Palette.CrewmateBlue,
             PlayerControl.LocalPlayer.Data.Role.Blurb);
 
@@ -105,12 +105,12 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
             return baseIntro;
         }
 
-        string concat = Design.ColoedString(
+        string concat = Design.ColoredString(
             Palette.White,
             string.Concat(
                 "\n ", Tr.GetString("introAnd")));
 
-        return string.Concat(baseIntro, concat, Design.ColoedString(
+        return string.Concat(baseIntro, concat, Design.ColoredString(
             this.AnotherRole.GetNameColor(),
             this.AnotherRole.GetIntroDescription()));
 
@@ -132,7 +132,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
 
         if (isContainFakeTask && (!this.HasTask || !this.AnotherRole.HasTask))
         {
-            string fakeTaskString = Design.ColoedString(
+            string fakeTaskString = Design.ColoredString(
                 this.Core.Color,
                 TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
@@ -175,9 +175,9 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         }
 
 		var color = this.Core.Color;
-        return Design.ColoedString(
+        return Design.ColoredString(
 			color,
-            $"{Design.ColoedString(
+            $"{Design.ColoredString(
 				color, Tr.GetString(this.RoleName))}: {Tr.GetString("crewImportantText")}");
     }
 }

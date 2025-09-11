@@ -140,7 +140,7 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
     {
         if (targetPlayerId == this.supportTargetId)
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 ColorPalette.SupporterGreen,
                 " ★");
         }
@@ -164,7 +164,7 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
     {
         return string.Format(
             base.GetIntroDescription(),
-            Design.ColoedString(
+            Design.ColoredString(
                 Palette.White,
                 supportPlayerName),
             supportRoleName);

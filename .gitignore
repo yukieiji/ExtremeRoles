@@ -372,3 +372,6 @@ ExtremeRoles/Resources/JsonData/Language.json
 ExtremeSkins/Resources/LangData/stringData.json
 /workspace
 /ExtremeRoles/Resources/*.manifest
+
+# Hypothesis cache
+.hypothesis/

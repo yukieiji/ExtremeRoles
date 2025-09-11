@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -33,6 +33,9 @@ public static class ObjectPath
 	public const string SettingTab = "settingtab";
     public const string HelpActiveImage = "HelpActive";
 	public const string HelpNoneActiveImage = "HelpNoActive";
+
+	public const string VoteSwapSource = "VoteSwap.Source";
+	public const string VoteSwapTarget = "VoteSwap.Target";
 
 	public const string AssetPlace = "ExtremeRoles.Resources.{0}.asset";
 

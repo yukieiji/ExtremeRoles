@@ -134,7 +134,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 
         if (isContainFakeTask && (!this.HasTask || !this.AnotherRole.HasTask))
         {
-            string fakeTaskString = Design.ColoedString(
+            string fakeTaskString = Design.ColoredString(
                 this.Core.Color,
                 TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
@@ -155,13 +155,13 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
             return baseIntro;
         }
 
-        string concat = Design.ColoedString(
+        string concat = Design.ColoredString(
             Palette.White,
             string.Concat(
                 "\n ", Tr.GetString("introAnd")));
 
 
-        return string.Concat(baseIntro, concat, Design.ColoedString(
+        return string.Concat(baseIntro, concat, Design.ColoredString(
             this.AnotherRole.GetNameColor(),
             this.AnotherRole.GetIntroDescription()));
 
@@ -173,13 +173,13 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
             return base.GetColoredRoleName(isTruthColor);
         }
 
-        string baseRole = Design.ColoedString(
+        string baseRole = Design.ColoredString(
             this.Core.Color,
             Tr.GetString(this.RoleName));
 
         string anotherRole = this.AnotherRole.GetColoredRoleName(isTruthColor);
 
-        string concat = Design.ColoedString(
+        string concat = Design.ColoredString(
             Palette.White, " + ");
 
         return string.Concat(

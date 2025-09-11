@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -466,11 +466,6 @@ public sealed class Guesser :
         {
             missGuess();
         }
-    }
-
-    public void IntroEndSetUp()
-    {
-        return;
     }
 
     public bool IsBlockMeetingButtonAbility(

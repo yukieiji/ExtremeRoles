@@ -326,7 +326,7 @@ public sealed class Zombie :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
         }
     }
@@ -376,7 +376,7 @@ public sealed class Zombie :
         }
         else
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.CrewmateBlue,
                 PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
