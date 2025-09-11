@@ -8,7 +8,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Status;
 
-namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
+namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 
 #nullable enable
 
@@ -88,7 +88,7 @@ public sealed class CrimeContainer()
 }
 
 
-public sealed class DetectiveStatus() : IStatusModel
+public sealed class InvestigatorStatus() : IStatusModel
 {
 	private readonly CrimeContainer container = new CrimeContainer();
 

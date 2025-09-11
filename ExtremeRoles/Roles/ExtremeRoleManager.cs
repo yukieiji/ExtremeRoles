@@ -13,7 +13,7 @@ using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Combination.Avalon;
 using ExtremeRoles.Roles.Combination.Barter;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
-using ExtremeRoles.Roles.Combination.DetectiveOffice;
+using ExtremeRoles.Roles.Combination.InvestigatorOffice;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
@@ -378,7 +378,7 @@ public static class ExtremeRoleManager
         {
             {(byte)CombinationRoleType.Avalon         , new AvalonRole()},
             {(byte)CombinationRoleType.HeroAca        , new HeroAcademiaRole()},
-            {(byte)CombinationRoleType.DetectiveOffice, new DetectiveOfficeManager()},
+            {(byte)CombinationRoleType.DetectiveOffice, new InvestigatorOfficeManager()},
             {(byte)CombinationRoleType.Kids           , new Kids()},
             {(byte)CombinationRoleType.Buddy          , new BuddyManager()},
             {(byte)CombinationRoleType.Lover          , new LoverManager()},

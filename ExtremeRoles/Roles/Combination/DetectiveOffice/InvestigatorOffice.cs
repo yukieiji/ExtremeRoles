@@ -1,20 +1,20 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
+namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 
-public sealed class DetectiveOfficeManager : ConstCombinationRoleManagerBase
+public sealed class InvestigatorOfficeManager : ConstCombinationRoleManagerBase
 {
 
     public const string Name = "DetectiveOffice";
 
-    public DetectiveOfficeManager() : base(
+    public InvestigatorOfficeManager() : base(
 		CombinationRoleType.DetectiveOffice,
         Name, DefaultColor, 2,
         (GameSystem.VanillaMaxPlayerNum - 1) / 2)
     {
-        Roles.Add(new Detective());
+        Roles.Add(new Investigator());
         Roles.Add(new Assistant());
     }
 
@@ -24,7 +24,7 @@ public sealed class DetectiveOfficeManager : ConstCombinationRoleManagerBase
         base.CreateSpecificOption(factory);
 		factory.IdOffset = Roles.Count * ExtremeRoleManager.OptionOffsetPerRole;
 		factory.OptionPrefix = ExtremeRoleId.DetectiveApprentice.ToString();
-		DetectiveApprentice.DetectiveApprenticeOptionHolder.CreateOption(factory);
+		InvestigatorApprentice.InvestigatorApprenticeOptionHolder.CreateOption(factory);
     }
 
 }

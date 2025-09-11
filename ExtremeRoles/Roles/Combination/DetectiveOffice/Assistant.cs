@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
+namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 
 public sealed class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReportHook, IRoleSpecialReset
 {
@@ -88,7 +88,7 @@ public sealed class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 	{
 		foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
 		{
-			if (role.Core.Id != ExtremeRoleId.Detective ||
+			if (role.Core.Id != ExtremeRoleId.Investigator ||
 				!IsSameControlId(role))
 			{
 				continue;
@@ -97,7 +97,7 @@ public sealed class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 			var playerInfo = GameData.Instance.GetPlayerById(playerId);
 			if (!playerInfo.IsDead && !playerInfo.Disconnected)
 			{
-				DetectiveApprentice.ChangeToDetectiveApprentice(playerId);
+				InvestigatorApprentice.ChangeToDetectiveApprentice(playerId);
 				break;
 			}
 		}

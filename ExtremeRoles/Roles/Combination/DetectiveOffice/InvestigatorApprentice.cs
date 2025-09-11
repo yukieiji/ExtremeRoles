@@ -17,12 +17,12 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
+namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 
-public sealed class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleReportHook
+public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleReportHook
 {
 
-	public struct DetectiveApprenticeOptionHolder
+	public struct InvestigatorApprenticeOptionHolder
 	{
 		public int OptionOffset;
 		public bool HasOtherVision;
@@ -31,7 +31,7 @@ public sealed class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbi
 		public bool HasOtherButton;
 		public int HasOtherButtonNum;
 
-		public enum DetectiveApprenticeOption
+		public enum InvestigatorApprenticeOption
 		{
 			HasOtherVision,
 			Vision,
@@ -44,45 +44,45 @@ public sealed class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbi
 			AutoParentSetOptionCategoryFactory factory)
 		{
 			var visionOpt = factory.CreateBoolOption(
-				DetectiveApprenticeOption.HasOtherVision,
+				InvestigatorApprenticeOption.HasOtherVision,
 				false);
 
 			factory.CreateFloatOption(
-				DetectiveApprenticeOption.Vision,
+				InvestigatorApprenticeOption.Vision,
 				2f, 0.25f, 5f, 0.25f,
 				visionOpt,
 				format: OptionUnit.Multiplier);
 
 			factory.CreateBoolOption(
-				DetectiveApprenticeOption.ApplyEnvironmentVisionEffect,
+				InvestigatorApprenticeOption.ApplyEnvironmentVisionEffect,
 				false, visionOpt);
 
 			IRoleAbility.CreateAbilityCountOption(
 				factory, 1, 10, 3.0f);
 
 			var buttonOpt = factory.CreateBoolOption(
-				DetectiveApprenticeOption.HasOtherButton,
+				InvestigatorApprenticeOption.HasOtherButton,
 				false);
 			factory.CreateIntOption(
-				DetectiveApprenticeOption.HasOtherButtonNum,
+				InvestigatorApprenticeOption.HasOtherButtonNum,
 				1, 1, 10, 1, buttonOpt,
 				format: OptionUnit.Shot);
 		}
 
-		public static DetectiveApprenticeOptionHolder LoadOptions(in OptionLoadWrapper loader)
+		public static InvestigatorApprenticeOptionHolder LoadOptions(in OptionLoadWrapper loader)
 		{
-			return new DetectiveApprenticeOptionHolder()
+			return new InvestigatorApprenticeOptionHolder()
 			{
-				HasOtherVision = loader.GetValue<DetectiveApprenticeOption, bool>(
-					DetectiveApprenticeOption.HasOtherVision),
-				Vision = loader.GetValue<DetectiveApprenticeOption, float>(
-					DetectiveApprenticeOption.Vision),
-				ApplyEnvironmentVisionEffect = loader.GetValue<DetectiveApprenticeOption, bool>(
-					DetectiveApprenticeOption.ApplyEnvironmentVisionEffect),
-				HasOtherButton = loader.GetValue<DetectiveApprenticeOption, bool>(
-					DetectiveApprenticeOption.HasOtherButton),
-				HasOtherButtonNum = loader.GetValue<DetectiveApprenticeOption, int>(
-					DetectiveApprenticeOption.HasOtherButtonNum),
+				HasOtherVision = loader.GetValue<InvestigatorApprenticeOption, bool>(
+					InvestigatorApprenticeOption.HasOtherVision),
+				Vision = loader.GetValue<InvestigatorApprenticeOption, float>(
+					InvestigatorApprenticeOption.Vision),
+				ApplyEnvironmentVisionEffect = loader.GetValue<InvestigatorApprenticeOption, bool>(
+					InvestigatorApprenticeOption.ApplyEnvironmentVisionEffect),
+				HasOtherButton = loader.GetValue<InvestigatorApprenticeOption, bool>(
+					InvestigatorApprenticeOption.HasOtherButton),
+				HasOtherButtonNum = loader.GetValue<InvestigatorApprenticeOption, int>(
+					InvestigatorApprenticeOption.HasOtherButtonNum),
 			};
 		}
 	}
@@ -105,10 +105,10 @@ public sealed class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbi
 
 	public override IOptionLoader Loader { get; }
 
-	public DetectiveApprentice(
+	public InvestigatorApprentice(
 		IOptionLoader loader,
 		int gameControlId,
-		DetectiveApprenticeOptionHolder option
+		InvestigatorApprenticeOptionHolder option
 		) : base(
 			RoleCore.BuildCrewmate(
 				ExtremeRoleId.DetectiveApprentice,
@@ -176,10 +176,10 @@ public sealed class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbi
 
 		int offset = 2 * ExtremeRoleManager.OptionOffsetPerRole;
 		var loader = new OptionLoadWrapper(cate, offset);
-		DetectiveApprentice newRole = new DetectiveApprentice(
+		InvestigatorApprentice newRole = new InvestigatorApprentice(
 			loader,
 			prevRole.GameControlId,
-			DetectiveApprenticeOptionHolder.LoadOptions(loader));
+			InvestigatorApprenticeOptionHolder.LoadOptions(loader));
 		if (playerId == PlayerControl.LocalPlayer.PlayerId)
 		{
 			newRole.CreateAbility();

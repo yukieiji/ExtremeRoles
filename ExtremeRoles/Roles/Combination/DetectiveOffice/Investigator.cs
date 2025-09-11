@@ -15,7 +15,7 @@ using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Combination.DetectiveOffice;
+namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 
 public readonly record struct CrimeInfo(
 	byte Target,
@@ -28,7 +28,7 @@ public readonly record struct CrimeInfo(
 	ExtremeRoleId KillerRole,
 	RoleTypes KillerVanillaRole);
 
-public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleResetMeeting, IRoleReportHook, IRoleUpdate, IRoleSpecialReset
+public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleResetMeeting, IRoleReportHook, IRoleUpdate, IRoleSpecialReset
 {
 	public enum SearchCond : byte
 	{
@@ -219,7 +219,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 	private sealed record CrimeSearchInfo(ProgressCrimeContainer AllTarget, CrimeProgressUpdator ProgressUpdater);
 
 	public override IStatusModel? Status => this.status;
-	private DetectiveStatus? status;
+	private InvestigatorStatus? status;
 	private CrimeSearchInfo? searchInfo;
 
 	private float range;
@@ -234,9 +234,9 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 	private bool canContinue;
 	private bool forceMeetingOnSearchEnd;
 
-	public Detective() : base(
+	public Investigator() : base(
 		RoleCore.BuildCrewmate(
-			ExtremeRoleId.Detective,
+			ExtremeRoleId.Investigator,
 			ColorPalette.DetectiveKokikou),
 		false, true, false, false,
 		tab: OptionTab.CombinationTab)
@@ -458,7 +458,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 			DetectiveOption.ContinueSearch);
 
 		this.searchInfo = new CrimeSearchInfo(container, updator);
-		this.status = new DetectiveStatus();
+		this.status = new InvestigatorStatus();
 
 		textPopUp = new TextPopUpper(
 			4, loader.GetValue<DetectiveOption, float>(DetectiveOption.TextShowTime),
@@ -559,7 +559,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 			var playerInfo = GameData.Instance.GetPlayerById(playerId);
 			if (!playerInfo.IsDead && !playerInfo.Disconnected)
 			{
-				DetectiveApprentice.ChangeToDetectiveApprentice(playerId);
+				InvestigatorApprentice.ChangeToDetectiveApprentice(playerId);
 				break;
 			}
 		}
