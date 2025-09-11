@@ -1,19 +1,18 @@
-using Assets.CoreScripts;
-
 using HarmonyLib;
 using UnityEngine;
-
 using AmongUs.Data;
 using AmongUs.GameOptions;
+using Assets.CoreScripts;
 
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Patches.Manager;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.RoleAssign;
+
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -43,7 +42,11 @@ public static class PlayerControlMurderPlayerPatch
 			guardBreakKill(__instance, target, killCool);
 			return false;
 		}
-		if (!hasOtherKillCool) { return true; }
+		if (!hasOtherKillCool)
+		{
+			updateDeadbody(__instance, target);
+			return true;
+		}
 
 		__instance.logger.Debug(
 			$"{__instance.PlayerId} trying to murder {target.PlayerId}", null);
@@ -104,7 +107,10 @@ public static class PlayerControlMurderPlayerPatch
 			hideRaiseHandButton(isLocalPlayerDead);
 		}
 
-		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+		if (ExtremeRoleManager.GameRole.Count == 0)
+		{
+			return;
+		}
 
 		ExtremeRolesPlugin.ShipState.AddDeadInfo(
 			target, DeathReason.Kill, __instance);
@@ -280,14 +286,27 @@ public static class PlayerControlMurderPlayerPatch
 			instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted,
 			instance.shapeshiftTargetPlayerId, target.PlayerId);
 
+		updateDeadbody(instance, target);
 		var killAnimation = instance.KillAnimations;
 		var useKillAnimation = killAnimation[
 			RandomGenerator.Instance.Next(0, killAnimation.Count)];
+
 		instance.MyPhysics.StartCoroutine(
 			useKillAnimation.CoPerformKill(instance, target));
 
 		instance.logger.Debug(
 			string.Format("{0} succeeded in murdering {1}", instance.PlayerId, target.PlayerId), null);
+	}
+
+	// バイパー自決時にバイパーでキルした死体であるとわかってしまう => 自決時、強制的にデフォルトの死体を使うようにする
+	private static void updateDeadbody(
+		PlayerControl instance,
+		PlayerControl target)
+	{
+		NormalGameManagerGetDeadBodyPatch.ForceDefault =
+			instance.Data.Role.Role == RoleTypes.Viper &&
+			instance.PlayerId == target.PlayerId &&
+			ExtremeGameModeManager.Instance.CurrentGameMode is GameModes.Normal or GameModes.NormalFools;
 	}
 }
 #pragma warning restore Harmony003 // Harmony non-ref patch parameters modified
