@@ -8,9 +8,9 @@ public static class ColorPalette
 
 	public readonly static Color HeroAmaIro = new Color32(0, 134, 204, byte.MaxValue);
 	public readonly static Color VigilanteFujiIro = new Color32(186, 167, 204, byte.MaxValue);
-	public readonly static Color DetectiveKokikou = new Color32(158, 92, 70, byte.MaxValue);
+	public readonly static Color InvestigatorKokikou = new Color32(158, 92, 70, byte.MaxValue);
 	public readonly static Color AssistantBluCapri = new Color32(0, 138, 153, byte.MaxValue);
-	public readonly static Color DetectiveApprenticeKonai = new Color32(
+	public readonly static Color InvestigatorApprenticeKonai = new Color32(
 		65, 65, 116, byte.MaxValue);
 	public readonly static Color KidsYellowGreen = new Color32(140, 170, 0, byte.MaxValue);
 

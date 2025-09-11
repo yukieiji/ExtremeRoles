@@ -149,7 +149,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 		{
 			this.crimeInfo[info.Target] = new ProgressCrimeInfo(info, reporter);
 
-			var arrow = new Arrow(ColorPalette.DetectiveKokikou);
+			var arrow = new Arrow(ColorPalette.InvestigatorKokikou);
 			arrow.UpdateTarget(info.Pos);
 			this.arrow[info.Target] = arrow;
 		}
@@ -237,7 +237,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 	public Investigator() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Investigator,
-			ColorPalette.DetectiveKokikou),
+			ColorPalette.InvestigatorKokikou),
 		false, true, false, false,
 		tab: OptionTab.CombinationTab)
 	{ }

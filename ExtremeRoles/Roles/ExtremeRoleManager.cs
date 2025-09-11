@@ -49,7 +49,7 @@ public enum ExtremeRoleId : int
     Vigilante,
     Investigator,
     Assistant,
-    DetectiveApprentice,
+    InvestigatorApprentice,
     Sharer,
     Guesser,
     Delinquent,
@@ -162,7 +162,7 @@ public enum CombinationRoleType : byte
 {
     Avalon,
     HeroAca,
-    DetectiveOffice,
+    InvestigatorOffice,
     Kids,
 
     Lover,
@@ -378,7 +378,7 @@ public static class ExtremeRoleManager
         {
             {(byte)CombinationRoleType.Avalon         , new AvalonRole()},
             {(byte)CombinationRoleType.HeroAca        , new HeroAcademiaRole()},
-            {(byte)CombinationRoleType.DetectiveOffice, new InvestigatorOfficeManager()},
+            {(byte)CombinationRoleType.InvestigatorOffice, new InvestigatorOfficeManager()},
             {(byte)CombinationRoleType.Kids           , new Kids()},
             {(byte)CombinationRoleType.Buddy          , new BuddyManager()},
             {(byte)CombinationRoleType.Lover          , new LoverManager()},

@@ -412,7 +412,7 @@
   <data name="call" xml:space="preserve">
     <value>エマージェンシーコール</value>
   </data>
-  <data name="DetectiveOffice" xml:space="preserve">
+  <data name="InvestigatorOffice" xml:space="preserve">
     <value>&lt;color=#9E5C46&gt;捜査官&lt;/color&gt;と&lt;color=#008A99&gt;助手&lt;/color&gt;</value>
   </data>
   <data name="Investigator" xml:space="preserve">
@@ -454,28 +454,28 @@
   <data name="AssistantApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>助手が視界効果を受けるか</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherVision" xml:space="preserve">
     <value>見習い捜査官が別の視界設定を持つか</value>
   </data>
-  <data name="DetectiveApprenticeVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeVision" xml:space="preserve">
     <value>見習い捜査官のビジョン</value>
   </data>
-  <data name="DetectiveApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
+  <data name="InvestigatorApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>見習い捜査官が視界効果を受けるか</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCount" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCount" xml:space="preserve">
     <value>見習い捜査官「緊急招集」の使用回数</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCoolTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCoolTime" xml:space="preserve">
     <value>見習い捜査官「緊急招集」のクールタイム</value>
   </data>
-  <data name="DetectiveApprenticeAbilityActiveTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityActiveTime" xml:space="preserve">
     <value>見習い捜査官「緊急招集」によって緊急会議ボタンを押せる時間</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButton" xml:space="preserve">
     <value>見習い捜査官「緊急招集」によって緊急会議ボタンを消費しないか</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>消費されない回数</value>
   </data>
   <data name="InvestigatorIntroDescription" xml:space="preserve">
@@ -516,10 +516,10 @@
 知ることができる
 「助手」が死亡した場合、「捜査官」が「見習い捜査官」になる</value>
   </data>
-  <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeShortDescription" xml:space="preserve">
     <value>”見習い”でも1人前の捜査官として頑張ろう</value>
   </data>
-  <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeFullDescription" xml:space="preserve">
     <value>捜査官や助手が何らかの理由で変化したクルー役職
 自分の通報した死体の完全な死亡時間を会議開始時チャットにて
 知ることができる
@@ -1073,17 +1073,17 @@
   <data name="SkaterSkateOff" xml:space="preserve">
     <value>スケート解除</value>
   </data>
-  <data name="DetectiveSearchOnlyOnce" xml:space="preserve">
+  <data name="InvestigatorContinueSearch" xml:space="preserve">
     <value>「犯行現場」の調査を継続出来るか</value>
   </data>
-  <data name="DetectiveSearchCanFindName" xml:space="preserve">
+  <data name="InvestigatorSearchCanFindName" xml:space="preserve">
     <value>「犯行現場」の調査で犯人がわかるか</value>
   </data>
-  <data name="DetectiveForceMeetingOnSearchEnd" xml:space="preserve">
+  <data name="InvestigatorForceMeetingOnSearchEnd" xml:space="preserve">
     <value>「犯行現場」の調査完了後
 強制的に会議を起こすか</value>
   </data>
-  <data name="DetectiveSearchCanContineMeetingNum" xml:space="preserve">
+  <data name="InvestigatorSearchCanContineMeetingNum" xml:space="preserve">
     <value>「犯行現場」が残る会議数</value>
   </data>
   <data name="Barter" xml:space="preserve">

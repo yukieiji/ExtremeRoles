@@ -111,8 +111,8 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 		InvestigatorApprenticeOptionHolder option
 		) : base(
 			RoleCore.BuildCrewmate(
-				ExtremeRoleId.DetectiveApprentice,
-				ColorPalette.DetectiveApprenticeKonai),
+				ExtremeRoleId.InvestigatorApprentice,
+				ColorPalette.InvestigatorApprenticeKonai),
 			false, true, false, false)
 	{
 		Loader = loader;
@@ -168,7 +168,7 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 
 		if (!OptionManager.Instance.TryGetCategory(
 				OptionTab.CombinationTab,
-				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.DetectiveOffice),
+				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.InvestigatorOffice),
 				out var cate))
 		{
 			return;

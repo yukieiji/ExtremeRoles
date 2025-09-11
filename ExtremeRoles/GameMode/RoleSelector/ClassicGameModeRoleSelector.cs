@@ -164,7 +164,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 		[
             CombinationRoleType.Avalon,
             CombinationRoleType.HeroAca,
-            CombinationRoleType.DetectiveOffice,
+            CombinationRoleType.InvestigatorOffice,
             CombinationRoleType.Kids,
 
             CombinationRoleType.Lover,
