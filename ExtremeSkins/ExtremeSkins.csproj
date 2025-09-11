@@ -3,8 +3,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
-		<!--<Version>2025.9.9.0</Version>-->
-    <VersionPrefix>2025.9.9</VersionPrefix>
+		<!--<Version>2025.9.10.0</Version>-->
+    <VersionPrefix>2025.9.10</VersionPrefix>
     <VersionSuffix>AmongUsv1700</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>
     <Authors>yukieiji</Authors>
