@@ -162,7 +162,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
     public Detective() : base(
 		RoleCore.BuildCrewmate(
-			ExtremeRoleId.Detective,
+			ExtremeRoleId.Investigator,
 			ColorPalette.DetectiveKokikou),
         false, true, false, false,
         tab: OptionTab.CombinationTab)
@@ -524,7 +524,7 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
 				player.Data.IsDead ||
 				player.Data.Disconnected ||
                 !ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
-				role.Core.Id is not ExtremeRoleId.Detective ||
+				role.Core.Id is not ExtremeRoleId.Investigator ||
 				!this.IsSameControlId(role))
             {
                 continue;

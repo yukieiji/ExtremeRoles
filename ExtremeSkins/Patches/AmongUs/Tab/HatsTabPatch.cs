@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -172,9 +172,8 @@ public static class HatsTabPatch
 			colorChip.Inner.SetMaskType(PlayerMaterial.MaskType.SimpleUI);
 			colorChip.Tag = hat;
 
-			int color = __instance.HasLocalPlayer() ?
-				PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
-				DataManager.Player.Customization.Color;
+			int color = __instance.GetDisplayColor();
+
 			__instance.UpdateMaterials(colorChip.Inner.FrontLayer, hat);
 			if (CosmicStorage<CustomHat>.TryGet(
 					hat.ProductId, out var customHat) &&

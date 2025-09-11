@@ -66,6 +66,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 			case RoleTypes.Scientist:
 			case RoleTypes.Noisemaker:
 			case RoleTypes.Tracker:
+			case RoleTypes.Detective:
 				this.CanKill = false;
 				this.UseVent = false;
 				this.UseSabotage = false;
@@ -74,6 +75,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 			case RoleTypes.Impostor:
 			case RoleTypes.Shapeshifter:
 			case RoleTypes.Phantom:
+			case RoleTypes.Viper:
                 this.Core.Team = ExtremeRoleType.Impostor;
                 this.Core.Color = Palette.ImpostorRed;
                 this.CanKill = true;

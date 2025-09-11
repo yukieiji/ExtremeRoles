@@ -34,7 +34,7 @@ public enum ExtremeRoleId : int
     Hero,
     Villain,
     Vigilante,
-    Detective,
+    Investigator,
     Assistant,
     DetectiveApprentice,
     Sharer,
@@ -480,7 +480,9 @@ public static class ExtremeRoleManager
 			RoleTypes.Shapeshifter or
 			RoleTypes.Noisemaker or
 			RoleTypes.Phantom or
-			RoleTypes.Tracker;
+			RoleTypes.Tracker or
+			RoleTypes.Detective or 
+			RoleTypes.Viper;
 
 		var role = CombRole[combType].GetRole(roleId, roleType);
 

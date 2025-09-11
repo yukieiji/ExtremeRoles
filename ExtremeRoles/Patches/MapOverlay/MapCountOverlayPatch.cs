@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -77,6 +77,11 @@ public static class MapCountOverlayUpdatePatch
 		for (int i = 0; i < __instance.CountAreas.Length; i++)
 		{
 			CounterArea counterArea = __instance.CountAreas[i];
+
+			if (counterArea.DetectiveExclusiveLocation)
+			{
+				continue;
+			}
 
 			if (isHudOverrideTaskActive)
             {

@@ -57,8 +57,9 @@ public static class GameSystem
 		PlayerControl targetPlayer, Vector3 pos)
 	{
 		var killAnimation = targetPlayer.KillAnimations[0];
-		DeadBody deadbody = UnityObject.Instantiate(
-			GameManager.Instance.DeadBodyPrefab);
+
+		// なんかGetDeadBodyで返してるのが1番目のやつなため・・・・
+		DeadBody deadbody = UnityObject.Instantiate(GameManager.Instance.deadBodyPrefab[0]);
 		deadbody.enabled = false;
 
 		foreach (var rend in deadbody.bodyRenderers)

@@ -67,6 +67,13 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 	public static RaiseHandSystem Get()
 		=> ExtremeSystemTypeManager.Instance.CreateOrGet<RaiseHandSystem>(Type);
 
+	public void SetActive(bool active)
+	{
+		if (this.raiseHandButton != null)
+		{
+			this.raiseHandButton.gameObject.SetActive(active);
+		}
+	}
 	public void CreateRaiseHandButton()
 	{
 		this.raiseHandButton = Resources.UnityObjectLoader.CreateSimpleButton(

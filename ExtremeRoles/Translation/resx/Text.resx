@@ -1234,4 +1234,10 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="ThreeToThree" xml:space="preserve">
     <value>3:3</value>
   </data>
+  <data name="Detective" xml:space="preserve">
+    <value>探偵</value>
+  </data>
+  <data name="Viper" xml:space="preserve">
+    <value>バイパー</value>
+  </data>
 </root>

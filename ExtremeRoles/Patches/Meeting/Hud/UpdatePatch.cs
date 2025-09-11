@@ -3,10 +3,8 @@ using UnityEngine;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType.Roles;
 
 
@@ -17,6 +15,16 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
 public static class MeetingHudUpdatePatch
 {
+	public static void Prefix(MeetingHud __instance)
+	{
+		// 探偵の能力をアサマリ会議中非表示に設定
+		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var _) &&
+			__instance.MeetingAbilityButton != null)
+		{
+			__instance.MeetingAbilityButton.gameObject.SetActive(false);
+		}
+	}
+
 	public static void Postfix(MeetingHud __instance)
 	{
 
@@ -164,11 +172,18 @@ public static class MeetingHudUpdatePatch
 			localPlayer.Data.IsDead ||
 			localPlayer.Data.Disconnected ||
 			!ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
-				ExtremeSystemType.RaiseHandSystem, out var raiseHand) ||
-			raiseHand.IsInit)
+				ExtremeSystemType.RaiseHandSystem, out var raiseHand))
 		{
 			return;
 		}
-		raiseHand.CreateRaiseHandButton();
+
+		if (raiseHand.IsInit)
+		{
+			raiseHand.SetActive(Minigame.Instance == null);
+		}
+		else
+		{
+			raiseHand.CreateRaiseHandButton();
+		}
 	}
 }
