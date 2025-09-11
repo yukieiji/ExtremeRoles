@@ -158,7 +158,9 @@ public static class PlayerControlMurderPlayerPatch
 	private static void hidePlayerVoteAreaButton(
 		in bool isLocalPlayerDead, in byte targetPlayerId)
 	{
-		foreach (var pva in MeetingHud.Instance.playerStates)
+		var meeting = MeetingHud.Instance;
+		bool isReset = false;
+		foreach (var pva in meeting.playerStates)
 		{
 			// 死んだ人が投票ボタンを開いている場合、それをすべて閉じる
 			if (isLocalPlayerDead && pva.Buttons.activeSelf)
@@ -171,13 +173,22 @@ public static class PlayerControlMurderPlayerPatch
 			{
 				pva.Cancel(); // 生きている人目線 : 死んだ人の投票ボタンを強制的に閉じる
 				pva.UnsetVote(); // 死んだ人目線 : 死んだ人の投票自体を消す
+				if (pva.ThumbsDown != null)
+				{
+					pva.ThumbsDown.enabled = false;
+				}
 			}
 
 			// 死んだ人に投票していた場合、その投票をキャンセル
 			if (pva.VotedFor == targetPlayerId)
 			{
 				pva.UnsetVote();
+				isReset = true;
 			}
+		}
+		if (isReset)
+		{
+			meeting.ClearVote();
 		}
 	}
 
