@@ -18,7 +18,8 @@ public static class MeetingHudUpdatePatch
 	public static void Prefix(MeetingHud __instance)
 	{
 		// 探偵の能力をアサマリ会議中非表示に設定
-		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var _))
+		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var _) &&
+			__instance.MeetingAbilityButton != null)
 		{
 			__instance.MeetingAbilityButton.gameObject.SetActive(false);
 		}

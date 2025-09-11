@@ -14,6 +14,7 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 [HarmonyPatch(typeof(MeetingHud._CoIntro_d__53), nameof(MeetingHud._CoIntro_d__53.MoveNext))]
 public static class MeetingHudCoIntroPatch
 {
+	public const float MeetingAbilityButtonXOffset = 1.0f;
 	public static void Postfix(
 		MeetingHud._CoIntro_d__53 __instance, ref bool __result)
 	{
@@ -71,7 +72,7 @@ public static class MeetingHudCoIntroPatch
 			var button = __instance.__4__this.MeetingAbilityButton;
 			ExtremeRolesPlugin.Logger.LogInfo("Change: MeetingAbilityButton Pos");
 			var curPos = button.transform.localPosition;
-			button.transform.localPosition = curPos + new UnityEngine.Vector3(1.0f, 0.0f);
+			button.transform.localPosition = curPos + new UnityEngine.Vector3(MeetingAbilityButtonXOffset, 0.0f);
 		}
 	}
 }
