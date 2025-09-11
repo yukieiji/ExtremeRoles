@@ -31,11 +31,11 @@ public sealed class LazyOptionSyncer : MonoBehaviour
 
 	public void SyncOption()
 	{
-		if (this.Wait || this.timer > 0.0f)
+		if (this.timer > 0.0f)
 		{
-			this.timer = maxTimer;
 			return;
 		}
+		this.Wait = true;
 		syncOption();
 	}
 
@@ -50,7 +50,7 @@ public sealed class LazyOptionSyncer : MonoBehaviour
 			return;
 		}
 
-		this.Wait = true;
+		this.Wait = false;
 		this.timer = maxTimer;
 
 		var opti = mng.LogicOptions;
