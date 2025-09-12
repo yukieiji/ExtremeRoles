@@ -48,7 +48,8 @@ public sealed class LazyOptionSyncer : MonoBehaviour
 	{
 		var mng = GameManager.Instance;
 
-		if (!AmongUsClient.Instance.AmHost ||
+		if (AmongUsClient.Instance == null ||
+			!AmongUsClient.Instance.AmHost ||
 			mng == null ||
 			mng.LogicOptions == null)
 		{
