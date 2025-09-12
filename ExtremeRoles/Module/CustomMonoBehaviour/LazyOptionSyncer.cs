@@ -33,10 +33,14 @@ public sealed class LazyOptionSyncer : MonoBehaviour
 	{
 		if (this.timer > 0.0f)
 		{
+			this.timer = maxTimer;
 			return;
 		}
-		this.Wait = true;
+
 		syncOption();
+		
+		this.timer = maxTimer;
+		this.Wait = true;
 	}
 
 	private void syncOption()
@@ -51,7 +55,6 @@ public sealed class LazyOptionSyncer : MonoBehaviour
 		}
 
 		this.Wait = false;
-		this.timer = maxTimer;
 
 		var opti = mng.LogicOptions;
 		opti.SetDirty();
