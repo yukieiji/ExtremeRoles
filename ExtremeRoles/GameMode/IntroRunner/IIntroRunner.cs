@@ -1,26 +1,22 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Linq;
 
+using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 using ExtremeRoles.Helper;
-
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.CheckPoint;
-
 using ExtremeRoles.Performance;
-
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.Solo.Host;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.Interface;
-
-
-using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
-using Microsoft.Extensions.DependencyInjection;
+using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo.Host;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
@@ -83,6 +79,17 @@ public interface IIntroRunner
 
 			if (!isAllPlyerDummy())
             {
+				// オプションのSync待ち
+				var mng = GameManager.Instance;
+				if (mng != null &&
+					mng.TryGetComponent<LazyOptionSyncer>(out var syncer))
+				{
+					while (syncer.Wait)
+					{
+						yield return null;
+					}
+				}
+
 				RoleAssignCheckPoint.RpcCheckpoint();
 				// ホストは全員の処理が終わるまで待つ
 				do
