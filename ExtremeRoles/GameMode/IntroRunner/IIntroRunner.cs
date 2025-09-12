@@ -4,10 +4,8 @@ using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 
-using ExtremeRoles.Helper;
-
-
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
