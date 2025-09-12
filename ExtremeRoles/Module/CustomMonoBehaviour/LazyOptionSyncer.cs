@@ -26,7 +26,10 @@ public sealed class LazyOptionSyncer : MonoBehaviour
 			this.timer -= Time.deltaTime;
 			return;
 		}
+
 		syncOption();
+		
+		this.Wait = false;
 	}
 
 	public void SyncOption()
@@ -53,8 +56,6 @@ public sealed class LazyOptionSyncer : MonoBehaviour
 		{
 			return;
 		}
-
-		this.Wait = false;
 
 		var opti = mng.LogicOptions;
 		opti.SetDirty();
