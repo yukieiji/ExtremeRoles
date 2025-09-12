@@ -28,7 +28,6 @@ public sealed class LazyOptionSyncer : MonoBehaviour
 		}
 
 		syncOption();
-		
 		this.Wait = false;
 	}
 
@@ -36,14 +35,13 @@ public sealed class LazyOptionSyncer : MonoBehaviour
 	{
 		if (this.timer > 0.0f)
 		{
+			this.Wait = true;
 			this.timer = maxTimer;
 			return;
 		}
 
 		syncOption();
-		
 		this.timer = maxTimer;
-		this.Wait = true;
 	}
 
 	private void syncOption()

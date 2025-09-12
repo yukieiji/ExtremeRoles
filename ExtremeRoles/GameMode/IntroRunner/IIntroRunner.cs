@@ -13,10 +13,10 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.CheckPoint;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.Solo.Host;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo.Host;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
@@ -84,11 +84,10 @@ public interface IIntroRunner
 				if (mng != null &&
 					mng.TryGetComponent<LazyOptionSyncer>(out var syncer))
 				{
-					do
+					while (syncer.Wait)
 					{
 						yield return null;
-
-					} while (syncer.Wait);
+					}
 				}
 
 				RoleAssignCheckPoint.RpcCheckpoint();
