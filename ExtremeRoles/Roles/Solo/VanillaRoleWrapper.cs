@@ -2,13 +2,12 @@ using System;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
-
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo;
 
@@ -49,11 +48,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
     public VanillaRoleWrapper(
         RoleTypes id) :
         this(id, 
-			id is 
-				RoleTypes.Impostor or 
-				RoleTypes.Shapeshifter or 
-				RoleTypes.Phantom or 
-				RoleTypes.Viper)
+			VanillaRoleProvider.IsImpostorRole(id))
     { }
 
     public override void OverrideAnotherRoleSetting()

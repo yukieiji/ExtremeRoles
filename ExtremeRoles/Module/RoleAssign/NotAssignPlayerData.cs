@@ -22,30 +22,24 @@ public sealed class NotAssignPlayerData
 
 		foreach (PlayerControl player in PlayerCache.AllPlayerControl)
 		{
-			switch (player.Data.Role.Role)
+			var role = player.Data.Role.Role;
+			if (VanillaRoleProvider.IsDefaultCrewmateRole(role))
 			{
-				case RoleTypes.Crewmate:
-					++crewSingleAssignNum;
-					++crewMultiAssignNum;
-					break;
-				case RoleTypes.Scientist:
-				case RoleTypes.Engineer:
-				case RoleTypes.Noisemaker:
-				case RoleTypes.Tracker:
-				case RoleTypes.Detective:
-					++crewMultiAssignNum;
-					break;
-				case RoleTypes.Impostor:
-					++impMultiAssignNum;
-					++impSingleAssignNum;
-					break;
-				case RoleTypes.Shapeshifter:
-				case RoleTypes.Phantom:
-				case RoleTypes.Viper:
-					++impMultiAssignNum;
-					break;
-				default:
-					break;
+				++crewSingleAssignNum;
+				++crewMultiAssignNum;
+			}
+			else if (VanillaRoleProvider.IsCrewmateAdditionalRole(role))
+			{
+				++crewMultiAssignNum;
+			}
+			else if (VanillaRoleProvider.IsDefaultImpostorRole(role))
+			{
+				++impMultiAssignNum;
+				++impSingleAssignNum;
+			}
+			else if (VanillaRoleProvider.IsImpostorAdditionalRole(role))
+			{
+				++impMultiAssignNum;
 			}
 		}
 

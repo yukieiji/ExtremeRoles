@@ -1,6 +1,7 @@
 using AmongUs.GameOptions;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
@@ -474,15 +475,9 @@ public static class ExtremeRoleManager
     {
         RoleTypes roleType = (RoleTypes)bytedRoleType;
 
-		bool hasVanilaRole = roleType is
-			RoleTypes.Engineer or
-			RoleTypes.Scientist or
-			RoleTypes.Shapeshifter or
-			RoleTypes.Noisemaker or
-			RoleTypes.Phantom or
-			RoleTypes.Tracker or
-			RoleTypes.Detective or 
-			RoleTypes.Viper;
+		bool hasVanilaRole = 
+			VanillaRoleProvider.IsCrewmateAdditionalRole(roleType) || 
+			VanillaRoleProvider.IsImpostorAdditionalRole(roleType);
 
 		var role = CombRole[combType].GetRole(roleId, roleType);
 

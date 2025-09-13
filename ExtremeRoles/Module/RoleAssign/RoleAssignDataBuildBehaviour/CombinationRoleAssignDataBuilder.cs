@@ -65,7 +65,12 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 						Logging.Debug($"Assign missing!!");
 						continue;
 					}
-					if (role.CanHasAnotherRole)
+
+					if (role.CanHasAnotherRole && 
+						(
+							VanillaRoleProvider.IsDefaultCrewmateRole(vanillaRole) ||
+							VanillaRoleProvider.IsDefaultImpostorRole(vanillaRole)
+						))
 					{
 						anotherRoleAssignPlayer.Add(player);
 					}
@@ -171,7 +176,10 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 						combSpawnData.IsMultiAssign) &&
 					!RoleAssignFilter.Instance.IsBlock(combType));
 
-				if (!isSpawn) { continue; }
+				if (!isSpawn)
+				{
+					continue;
+				}
 
 				limiter.Reduce(ExtremeRoleType.Crewmate, reduceCrewmateRole);
 				limiter.Reduce(ExtremeRoleType.Impostor, reduceImpostorRole);
@@ -209,32 +217,20 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 
 		return
 			(
-				roleType is RoleTypes.Crewmate && isAssignToCrewmate
+				VanillaRoleProvider.IsDefaultCrewmateRole(roleType) && isAssignToCrewmate
 			)
 			||
 			(
-				roleType is RoleTypes.Impostor && isImpostor
+				VanillaRoleProvider.IsDefaultImpostorRole(roleType) && isImpostor
 			)
 			||
 			(
-				(
-					roleType is
-						RoleTypes.Engineer or
-						RoleTypes.Scientist or
-						RoleTypes.Noisemaker or
-						RoleTypes.Tracker or
-						RoleTypes.Detective
-				)
-				&& hasAnotherRole && isAssignToCrewmate
+				VanillaRoleProvider.IsCrewmateAdditionalRole(roleType) && 
+				hasAnotherRole && isAssignToCrewmate
 			)
 			||
 			(
-				(
-					roleType is
-						RoleTypes.Shapeshifter or
-						RoleTypes.Phantom or
-						RoleTypes.Viper
-				) &&
+				VanillaRoleProvider.IsImpostorAdditionalRole(roleType) &&
 				hasAnotherRole && isImpostor
 			);
 	}

@@ -6,6 +6,7 @@ using Il2CppInterop.Runtime.Attributes;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -59,7 +60,7 @@ public sealed class GuessBehaviour : MonoBehaviour
 			bool isVanila = Enum.IsDefined(typeof(RoleTypes), castedId);
 			string roleName = isVanila ?
 				Design.ColoedString(
-					vanilaCrew.Contains(castedId) ?
+					VanillaRoleProvider.IsCrewmateRole(castedId) ?
 					Palette.White : Palette.ImpostorRed,
 					Tr.GetString(castedId.ToString())) :
 				Design.ColoedString(

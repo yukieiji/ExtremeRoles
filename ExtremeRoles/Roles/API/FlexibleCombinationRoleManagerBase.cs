@@ -149,16 +149,9 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
 		MultiAssignRoleBase role = (MultiAssignRoleBase)this.BaseRole.Clone();
 
-        switch (playerRoleType)
-        {
-            case RoleTypes.Impostor:
-            case RoleTypes.Shapeshifter:
-			case RoleTypes.Phantom:
-				roleToImpostor(role);
-                return role;
-            default:
-                return role;
-        }
+		return 
+			VanillaRoleProvider.IsImpostorRole(playerRoleType) ? 
+			roleToImpostor(role) : role;
     }
 
     protected override AutoParentSetOptionCategoryFactory CreateSpawnOption()
@@ -266,14 +259,9 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			for (int i = 0; i < roleAssignNum; ++i)
 			{
 				var role = (MultiAssignRoleBase)this.BaseRole.Clone();
-				if (i < ratio.CrewmateNum)
-				{
-					roleToCrewmate(role);
-				}
-				else
-				{
-					roleToImpostor(role);
-				}
+				
+				role = i < ratio.CrewmateNum ? roleToCrewmate(role) : roleToImpostor(role);
+
 				this.Roles.Add(role);
 			}
 
@@ -287,7 +275,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		}
     }
 
-	private static void roleToImpostor(MultiAssignRoleBase role)
+	private static MultiAssignRoleBase roleToImpostor(MultiAssignRoleBase role)
 	{
 		role.Core.Team = ExtremeRoleType.Impostor;
 		role.Core.Color = Palette.ImpostorRed;
@@ -295,14 +283,16 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		role.UseVent = true;
 		role.UseSabotage = true;
 		role.HasTask = false;
+		return role;
 	}
 
-	private static void roleToCrewmate(MultiAssignRoleBase role)
+	private static MultiAssignRoleBase roleToCrewmate(MultiAssignRoleBase role)
 	{
 		role.Core.Team = ExtremeRoleType.Crewmate;
 		role.CanKill = false;
 		role.UseVent = false;
 		role.UseSabotage = false;
 		role.HasTask = true;
+		return role;
 	}
 }
