@@ -65,7 +65,12 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 						Logging.Debug($"Assign missing!!");
 						continue;
 					}
-					if (role.CanHasAnotherRole)
+
+					if (role.CanHasAnotherRole && 
+						(
+							VanillaRoleProvider.IsDefaultCrewmateRole(vanillaRole) ||
+							VanillaRoleProvider.IsDefaultImpostorRole(vanillaRole)
+						))
 					{
 						anotherRoleAssignPlayer.Add(player);
 					}
@@ -171,7 +176,10 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 						combSpawnData.IsMultiAssign) &&
 					!RoleAssignFilter.Instance.IsBlock(combType));
 
-				if (!isSpawn) { continue; }
+				if (!isSpawn)
+				{
+					continue;
+				}
 
 				limiter.Reduce(ExtremeRoleType.Crewmate, reduceCrewmateRole);
 				limiter.Reduce(ExtremeRoleType.Impostor, reduceImpostorRole);
