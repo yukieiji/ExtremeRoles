@@ -64,7 +64,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
                     }
                     break;
                 case ExtremeRoleType.Impostor:
-                    if (VanillaRoleProvider.IsImpostorlRole(playerRoleType))
+                    if (VanillaRoleProvider.IsImpostorRole(playerRoleType))
                     {
                         return checkRole;
                     }

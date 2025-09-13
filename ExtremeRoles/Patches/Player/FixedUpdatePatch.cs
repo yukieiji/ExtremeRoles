@@ -168,7 +168,7 @@ public static class PlayerControlFixedUpdatePatch
 		var ship = ExtremeGameModeManager.Instance.ShipOption;
 
 		if (!role.TryGetVanillaRoleId(out RoleTypes roleId) ||
-			VanillaRoleProvider.IsImpostorlRole(roleId))
+			VanillaRoleProvider.IsImpostorRole(roleId))
 		{
 			if (ventButtonShow && ship.IsEnableImpostorVent)
 			{

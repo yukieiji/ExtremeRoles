@@ -33,7 +33,7 @@ public sealed class VanillaRoleProvider : IVanillaRoleProvider
 			{
 				crewRole.Add(role);
 			}
-			if (IsImpostorlRole(role))
+			if (IsImpostorRole(role))
 			{
 				allImp.Add(role);
 			}
@@ -63,7 +63,7 @@ public sealed class VanillaRoleProvider : IVanillaRoleProvider
 			RoleTypes.Tracker or
 			RoleTypes.Detective;
 
-	public static bool IsImpostorlRole(RoleTypes role)
+	public static bool IsImpostorRole(RoleTypes role)
 		=> IsDefaultImpostorRole(role) || IsImpostorAdditionalRole(role);
 
 	public static bool IsDefaultImpostorRole(RoleTypes role)

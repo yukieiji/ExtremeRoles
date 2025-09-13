@@ -48,7 +48,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
     public VanillaRoleWrapper(
         RoleTypes id) :
         this(id, 
-			VanillaRoleProvider.IsImpostorlRole(id))
+			VanillaRoleProvider.IsImpostorRole(id))
     { }
 
     public override void OverrideAnotherRoleSetting()

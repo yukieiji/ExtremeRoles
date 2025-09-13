@@ -150,7 +150,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		MultiAssignRoleBase role = (MultiAssignRoleBase)this.BaseRole.Clone();
 
 		return 
-			VanillaRoleProvider.IsImpostorlRole(playerRoleType) ? 
+			VanillaRoleProvider.IsImpostorRole(playerRoleType) ? 
 			roleToImpostor(role) : role;
     }
 

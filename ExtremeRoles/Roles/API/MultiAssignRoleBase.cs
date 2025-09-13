@@ -67,7 +67,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 			this.UseSabotage = false;
 			this.HasTask = true;
 		}
-		else if (VanillaRoleProvider.IsImpostorlRole(roleType))
+		else if (VanillaRoleProvider.IsImpostorRole(roleType))
 		{
 			this.Core.Team = ExtremeRoleType.Impostor;
 			this.Core.Color = Palette.ImpostorRed;
