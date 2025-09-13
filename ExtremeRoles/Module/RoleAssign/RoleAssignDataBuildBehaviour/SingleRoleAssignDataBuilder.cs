@@ -62,8 +62,10 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 					team != ExtremeRoleType.Neutral
 				)
 				||
-				!ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign ||
-				!VanillaRoleProvider.IsDefaultCrewmateRole(vanillaRoleId))
+				!(
+					ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign ||
+					VanillaRoleProvider.IsDefaultCrewmateRole(vanillaRoleId)
+				))
 			{
 				continue;
 			}
