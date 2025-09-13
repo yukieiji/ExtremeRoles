@@ -1,8 +1,11 @@
-﻿using ExtremeRoles.Module.RoleAssign;
+using HarmonyLib;
+
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
-using HarmonyLib;
 
 namespace ExtremeRoles.Patches;
 
@@ -11,7 +14,21 @@ public static class DeadBodyOnClickPatch
 {
 	public static bool Prefix()
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		{
+			return true;
+		}
+
+		if (ButtonLockSystem.IsReportButtonLock())
+		{
+			return false;
+		}
+
+		if (PlayerControl.LocalPlayer == null ||
+			PlayerControl.LocalPlayer.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _))
+		{
+			return false;
+		}
 
 		var (role, another) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IDeadBodyReportOverride>();
 

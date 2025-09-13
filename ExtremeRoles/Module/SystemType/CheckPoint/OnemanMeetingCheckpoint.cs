@@ -1,4 +1,4 @@
-﻿using Hazel;
+using Hazel;
 
 using ExtremeRoles.Performance;
 using ExtremeRoles.Helper;
@@ -28,10 +28,9 @@ public sealed class OnemanMeetingCheckpoint : GlobalCheckpointSystem.CheckpointH
 	public override void HandleChecked()
 	{
 		if (this.rolePlayer == null) { return; }
-		ExtremeRolesPlugin.Logger.LogInfo("StartMeeting");
+		ExtremeRolesPlugin.Logger.LogInfo("--- StartOnemanMeeting ---");
 		MeetingRoomManager.Instance.AssignSelf(this.rolePlayer, null);
-		HudManager.Instance.OpenMeetingRoom(
-			this.rolePlayer);
+		HudManager.Instance.OpenMeetingRoom(this.rolePlayer);
 		this.rolePlayer.RpcStartMeeting(null);
 	}
 }

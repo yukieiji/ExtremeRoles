@@ -7,31 +7,29 @@ using ExtremeRoles.Module;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
-using ExtremeRoles.Performance;
-
+using ExtremeRoles.Roles.API.Interface.Status;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Combination;
+namespace ExtremeRoles.Roles.Combination.Avalon;
 
-public sealed class Avalon : ConstCombinationRoleManagerBase
+public sealed class AvalonRole : ConstCombinationRoleManagerBase
 {
     public const string Name = "AvalonsRoles";
-    public Avalon() : base(
+    public AvalonRole() : base(
 		CombinationRoleType.Avalon,
         Name, DefaultColor, 2,
         GameSystem.MaxImposterNum)
     {
-        this.Roles.Add(new Assassin());
-        this.Roles.Add(new Marlin());
+        Roles.Add(new Assassin());
+        Roles.Add(new Marlin());
     }
 }
 
-public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
+public sealed class Assassin : MultiAssignRoleBase
 {
     public enum AssassinOption
     {
@@ -48,39 +46,16 @@ public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
     public bool CanSeeRoleBeforeFirstMeeting = false;
     public bool CanSeeVote = false;
 
-    public bool CanKilled { get; private set; } = false;
-    public bool CanKilledFromCrew { get; private set; } = false;
-    public bool CanKilledFromNeutral { get; private set; } = false;
+    private AssassinStatusModel? status;
     private bool isDeadForceMeeting = true;
+    public override IStatusModel? Status => status;
 
     public Assassin(
         ) : base(
 			RoleCore.BuildImpostor(ExtremeRoleId.Assassin),
             true, false, true, true,
             tab: OptionTab.CombinationTab)
-    {}
-
-    public bool TryKilledFrom(
-        PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
-        if (!(
-				this.CanKilled &&
-				ExtremeRoleManager.TryGetRole(fromPlayer.PlayerId, out var fromPlayerRole)
-			))
-		{
-			return false;
-		}
-
-        if (fromPlayerRole.IsNeutral())
-        {
-            return this.CanKilledFromNeutral;
-        }
-        else if (fromPlayerRole.IsCrewmate())
-        {
-            return this.CanKilledFromCrew;
-        }
-
-        return false;
     }
 
     protected override void CreateSpecificOption(
@@ -114,7 +89,10 @@ public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
         PlayerControl rolePlayer)
     {
 
-        if (isServant()) { return; }
+        if (isServant())
+		{
+			return;
+		}
 
 		this.IsFirstMeeting = false;
 		assassinMeetingTriggerOn(rolePlayer);
@@ -135,7 +113,7 @@ public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
             return;
         }
 
-        this.IsFirstMeeting = false;
+		this.IsFirstMeeting = false;
 
 		assassinMeetingTriggerOn(rolePlayer, killerPlayer);
 	}
@@ -163,23 +141,23 @@ public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
     protected override void RoleSpecificInit()
     {
         var loader = this.Loader;
+		this.status = new AssassinStatusModel(
+            loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilled),
+            loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromCrew),
+            loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromNeutral)
+        );
+		this.AbilityClass = new AssassinAbilityHandler(status);
 
-        this.HasTask = loader.GetValue<AssassinOption, bool>(
+		this.HasTask = loader.GetValue<AssassinOption, bool>(
             AssassinOption.HasTask);
-        this.CanKilled = loader.GetValue<AssassinOption, bool>(
-            AssassinOption.CanKilled);
-        this.CanKilledFromCrew = loader.GetValue<AssassinOption, bool>(
-            AssassinOption.CanKilledFromCrew);
-        this.CanKilledFromNeutral = loader.GetValue<AssassinOption, bool>(
-            AssassinOption.CanKilledFromNeutral);
-        this.CanSeeVote = loader.GetValue<AssassinOption, bool>(
+		this.CanSeeVote = loader.GetValue<AssassinOption, bool>(
             AssassinOption.CanSeeVote);
 
-        this.isDeadForceMeeting = loader.GetValue<AssassinOption, bool>(
+		this.isDeadForceMeeting = loader.GetValue<AssassinOption, bool>(
             AssassinOption.IsDeadForceMeeting);
-        this.CanSeeRoleBeforeFirstMeeting = loader.GetValue<AssassinOption, bool>(
+		this.CanSeeRoleBeforeFirstMeeting = loader.GetValue<AssassinOption, bool>(
             AssassinOption.CanSeeRoleBeforeFirstMeeting);
-        this.IsFirstMeeting = true;
+		this.IsFirstMeeting = true;
 		_ = OnemanMeetingSystemManager.CreateOrGet();
     }
 
@@ -248,20 +226,20 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
         aspectPosition.DistanceFromEdge = new Vector3(0.375f, 0.35f);
         aspectPosition.AdjustPosition();
 
-        this.grid = bottomLeft.AddComponent<GridArrange>();
-        this.grid.CellSize = new Vector2(0.625f, 0.75f);
-        this.grid.MaxColumns = 10;
-        this.grid.Alignment = GridArrange.StartAlign.Right;
-        this.grid.cells = new();
+		this.grid = bottomLeft.AddComponent<GridArrange>();
+		this.grid.CellSize = new Vector2(0.625f, 0.75f);
+		this.grid.MaxColumns = 10;
+		this.grid.Alignment = GridArrange.StartAlign.Right;
+		this.grid.cells = new();
 
-        this.PlayerIcon = Player.CreatePlayerIcon(
+		this.PlayerIcon = Player.CreatePlayerIcon(
             bottomLeft.transform, Vector3.one * 0.275f);
-        this.updateShowIcon();
+        updateShowIcon();
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
-        this.updateShowIcon();
+        updateShowIcon();
     }
 
     public void ResetOnMeetingStart()
@@ -284,7 +262,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
         {
             return Palette.ImpostorRed;
         }
-        else if (targetRole.IsNeutral() && this.CanSeeNeutral)
+        else if (targetRole.IsNeutral() && CanSeeNeutral)
         {
             return ColorPalette.NeutralColor;
         }
@@ -317,21 +295,21 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
 
     protected override void RoleSpecificInit()
     {
-        this.IsAssassinate = false;
+		this.IsAssassinate = false;
 
         var loader = this.Loader;
 
-        this.HasTask = loader.GetValue<MarlinOption, bool>(
+		this.HasTask = loader.GetValue<MarlinOption, bool>(
             MarlinOption.HasTask);
-        this.canSeeAssassin = loader.GetValue<MarlinOption, bool>(
+		this.canSeeAssassin = loader.GetValue<MarlinOption, bool>(
             MarlinOption.CanSeeAssassin);
-        this.CanSeeVote = loader.GetValue<MarlinOption, bool>(
+		this.CanSeeVote = loader.GetValue<MarlinOption, bool>(
             MarlinOption.CanSeeVote);
-        this.CanSeeNeutral = loader.GetValue<MarlinOption, bool>(
+		this.CanSeeNeutral = loader.GetValue<MarlinOption, bool>(
             MarlinOption.CanSeeNeutral);
-        this.UseVent = loader.GetValue<MarlinOption, bool>(
+		this.UseVent = loader.GetValue<MarlinOption, bool>(
             MarlinOption.CanUseVent);
-        this.PlayerIcon = new Dictionary<byte, PoolablePlayer>();
+		this.PlayerIcon = new Dictionary<byte, PoolablePlayer>();
     }
 
     private void updateShowIcon()
@@ -364,6 +342,6 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
 		{
 			return;
 		}
-        this.grid.ArrangeChilds();
+		this.grid.ArrangeChilds();
     }
 }

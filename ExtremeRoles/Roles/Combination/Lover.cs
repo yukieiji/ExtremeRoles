@@ -112,7 +112,7 @@ public sealed class Lover : MultiAssignRoleBase
         }
 
 		var core = this.Core;
-        string killerText = Design.ColoedString(
+        string killerText = Design.ColoredString(
 			core.Color,
             $"{this.GetColoredRoleName()}: {Tr.GetString($"{core.Id}KillerShortDescription")}");
 
@@ -136,7 +136,7 @@ public sealed class Lover : MultiAssignRoleBase
 
 		builder
 			.AppendLine(base.GetIntroDescription())
-			.Append(Design.ColoedString(ColorPalette.LoverPink, "♥ "));
+			.Append(Design.ColoredString(ColorPalette.LoverPink, "♥ "));
 
         var lover = getAliveSameLover(PlayerControl.LocalPlayer.PlayerId);
 
@@ -173,7 +173,7 @@ public sealed class Lover : MultiAssignRoleBase
 
 		builder
 			.Append(Tr.GetString("LoverIntoPlus"))
-			.Append(Design.ColoedString(ColorPalette.LoverPink, " ♥"));
+			.Append(Design.ColoredString(ColorPalette.LoverPink, " ♥"));
 
 		return builder.ToString();
     }
@@ -187,7 +187,7 @@ public sealed class Lover : MultiAssignRoleBase
         if (targetRole.Core.Id == ExtremeRoleId.Lover &&
             this.IsSameControlId(targetRole))
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 ColorPalette.LoverPink,
                 $" {GetRoleTag()}");
         }
@@ -381,7 +381,7 @@ public sealed class Lover : MultiAssignRoleBase
     {
         if (isContainFakeTask)
         {
-            string fakeTaskString = Design.ColoedString(
+            string fakeTaskString = Design.ColoredString(
                 this.Core.Color,
                 TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));

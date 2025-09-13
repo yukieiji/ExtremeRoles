@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using ExtremeRoles.Performance;
@@ -21,6 +21,7 @@ public sealed partial class ExtremeShipStatus
 		Departure,
 		Martyrdom,
 		Eatting,
+		Clashed,
 
 		Explosion,
 

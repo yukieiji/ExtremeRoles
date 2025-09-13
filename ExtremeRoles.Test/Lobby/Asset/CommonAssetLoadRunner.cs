@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ExtremeRoles.Resources;
 using UnityEngine;
 
@@ -18,6 +18,16 @@ public class CommonAssetLoadRunner
 #if RELEASE
 		yield break;
 #elif DEBUG
+		LoadFromExR(
+			ObjectPath.CommonTextureAsset,
+			string.Format(
+				ObjectPath.CommonImagePathFormat,
+				ObjectPath.VoteSwapSource));
+		LoadFromExR(
+			ObjectPath.CommonTextureAsset,
+			string.Format(
+				ObjectPath.CommonImagePathFormat,
+				ObjectPath.VoteSwapTarget));
 		imgTest(ObjectPath.Bomb);
 		imgTest(ObjectPath.Meeting);
 

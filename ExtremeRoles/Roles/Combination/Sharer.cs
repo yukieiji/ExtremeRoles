@@ -161,7 +161,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
     public override string GetIntroDescription()
     {
         string baseString = base.GetIntroDescription();
-        baseString += Design.ColoedString(
+        baseString += Design.ColoredString(
             Palette.ImpostorRed, "\n▽ ");
 
         List<byte> sharer = getAliveSameSharer();
@@ -197,7 +197,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
         return string.Concat(
             baseString,
             Tr.GetString("SharerIntoPlus"),
-            Design.ColoedString(Palette.ImpostorRed, " ▽"));
+            Design.ColoredString(Palette.ImpostorRed, " ▽"));
     }
 
 
@@ -209,7 +209,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
         if (targetRole.Core.Id == ExtremeRoleId.Sharer &&
             this.IsSameControlId(targetRole))
         {
-            return Design.ColoedString(
+            return Design.ColoredString(
                 Palette.ImpostorRed,
                 $" {GetRoleTag()}");
         }

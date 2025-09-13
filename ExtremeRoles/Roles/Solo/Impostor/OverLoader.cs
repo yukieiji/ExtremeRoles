@@ -164,7 +164,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 
     public override string GetColoredRoleName(bool isTruthColor = false)
 		=> isTruthColor || IsAwake ?
-			 base.GetColoredRoleName() : Design.ColoedString(
+			 base.GetColoredRoleName() : Design.ColoredString(
 				Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
 
 	public override string GetFullDescription()
@@ -180,7 +180,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 					StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>())}</color>";
 
 	public override string GetIntroDescription()
-		=> IsAwake ? base.GetIntroDescription() : Design.ColoedString(
+		=> IsAwake ? base.GetIntroDescription() : Design.ColoredString(
 				Palette.ImpostorRed,
 				PlayerControl.LocalPlayer.Data.Role.Blurb);
 
