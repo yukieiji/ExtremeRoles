@@ -209,32 +209,20 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 
 		return
 			(
-				roleType is RoleTypes.Crewmate && isAssignToCrewmate
+				VanillaRoleProvider.IsDefaultCrewmateRole(roleType) && isAssignToCrewmate
 			)
 			||
 			(
-				roleType is RoleTypes.Impostor && isImpostor
+				VanillaRoleProvider.IsDefaultImpostorRole(roleType) && isImpostor
 			)
 			||
 			(
-				(
-					roleType is
-						RoleTypes.Engineer or
-						RoleTypes.Scientist or
-						RoleTypes.Noisemaker or
-						RoleTypes.Tracker or
-						RoleTypes.Detective
-				)
-				&& hasAnotherRole && isAssignToCrewmate
+				VanillaRoleProvider.IsCrewmateAdditionalRole(roleType) && 
+				hasAnotherRole && isAssignToCrewmate
 			)
 			||
 			(
-				(
-					roleType is
-						RoleTypes.Shapeshifter or
-						RoleTypes.Phantom or
-						RoleTypes.Viper
-				) &&
+				VanillaRoleProvider.IsImpostorAdditionalRole(roleType) &&
 				hasAnotherRole && isImpostor
 			);
 	}

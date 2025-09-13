@@ -90,13 +90,11 @@ public interface IRoleSpecialReset
         SingleRoleBase targetRole)
     {
         // シェイプシフターのリセット処理
-        if (targetRole.TryGetVanillaRoleId(out RoleTypes roleId))
+        if (targetRole.TryGetVanillaRoleId(out RoleTypes roleId) ||
+			roleId is RoleTypes.Shapeshifter)
         {
-            if (roleId == RoleTypes.Shapeshifter)
-            {
-                targetPlayer.Shapeshift(targetPlayer, false);
-            }
-        }
+			targetPlayer.Shapeshift(targetPlayer, false);
+		}
     }
 
     private static void specialResetRoleReset(

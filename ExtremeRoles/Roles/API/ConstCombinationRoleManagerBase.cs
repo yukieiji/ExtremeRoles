@@ -8,6 +8,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.RoleAssign;
 
 
 namespace ExtremeRoles.Roles.API;
@@ -51,15 +52,19 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 			switch (core.Team)
             {
                 case ExtremeRoleType.Crewmate:
+					if (VanillaRoleProvider.IsCrewmateRole(playerRoleType))
+					{
+						return checkRole;
+					}
+					break;
                 case ExtremeRoleType.Neutral:
-                    if (playerRoleType == RoleTypes.Crewmate)
+                    if (VanillaRoleProvider.IsDefaultCrewmateRole(playerRoleType))
                     {
                         return checkRole;
                     }
                     break;
                 case ExtremeRoleType.Impostor:
-                    if ((playerRoleType == RoleTypes.Impostor) ||
-                        (playerRoleType == RoleTypes.Shapeshifter))
+                    if (VanillaRoleProvider.IsImpostorlRole(playerRoleType))
                     {
                         return checkRole;
                     }

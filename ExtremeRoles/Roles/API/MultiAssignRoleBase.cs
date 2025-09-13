@@ -8,6 +8,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
@@ -59,33 +60,22 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 
     public void SetRoleType(RoleTypes roleType)
     {
-        switch (roleType)
-        {
-			case RoleTypes.Crewmate:
-			case RoleTypes.Engineer:
-			case RoleTypes.Scientist:
-			case RoleTypes.Noisemaker:
-			case RoleTypes.Tracker:
-			case RoleTypes.Detective:
-				this.CanKill = false;
-				this.UseVent = false;
-				this.UseSabotage = false;
-				this.HasTask = true;
-				break;
-			case RoleTypes.Impostor:
-			case RoleTypes.Shapeshifter:
-			case RoleTypes.Phantom:
-			case RoleTypes.Viper:
-                this.Core.Team = ExtremeRoleType.Impostor;
-                this.Core.Color = Palette.ImpostorRed;
-                this.CanKill = true;
-                this.UseVent = true;
-                this.UseSabotage = true;
-                this.HasTask = false;
-                break;
-            default:
-                break;
-        };
+		if (VanillaRoleProvider.IsCrewmateRole(roleType))
+		{
+			this.CanKill = false;
+			this.UseVent = false;
+			this.UseSabotage = false;
+			this.HasTask = true;
+		}
+		else if (VanillaRoleProvider.IsImpostorlRole(roleType))
+		{
+			this.Core.Team = ExtremeRoleType.Impostor;
+			this.Core.Color = Palette.ImpostorRed;
+			this.CanKill = true;
+			this.UseVent = true;
+			this.UseSabotage = true;
+			this.HasTask = false;
+		}
     }
 
 	public override SingleRoleBase Clone()

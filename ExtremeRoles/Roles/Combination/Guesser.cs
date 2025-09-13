@@ -10,16 +10,15 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
-using ExtremeRoles.Performance;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
+
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -130,35 +129,26 @@ public sealed class Guesser :
 
             foreach (RoleTypes role in Enum.GetValues(typeof(RoleTypes)))
             {
-                if (role is
-						RoleTypes.Crewmate or
-						RoleTypes.Impostor or
+				if (VanillaRoleProvider.IsDefaultCrewmateRole(role) ||
+					VanillaRoleProvider.IsDefaultImpostorRole(role) ||
+					role is 
 						RoleTypes.GuardianAngel or
 						RoleTypes.CrewmateGhost or
 						RoleTypes.ImpostorGhost)
-                {
-                    continue;
-                }
+				{
+					continue;
+				}
                 if (roleOptions.GetChancePerGame(role) > 0)
                 {
                     ExtremeRoleType team = ExtremeRoleType.Null;
-                    switch (role)
-                    {
-                        case RoleTypes.Engineer:
-                        case RoleTypes.Scientist:
-						case RoleTypes.Noisemaker:
-						case RoleTypes.Tracker:
-						case RoleTypes.Detective:
-                            team = ExtremeRoleType.Crewmate;
-                            break;
-                        case RoleTypes.Shapeshifter:
-						case RoleTypes.Phantom:
-						case RoleTypes.Viper:
-                            team = ExtremeRoleType.Impostor;
-                            break;
-                        default:
-                            continue;
-                    }
+					if (VanillaRoleProvider.IsCrewmateAdditionalRole(role))
+					{
+						team = ExtremeRoleType.Crewmate;
+					}
+					else if (VanillaRoleProvider.IsImpostorAdditionalRole(role))
+					{
+						team = ExtremeRoleType.Impostor;
+					}
                     add((ExtremeRoleId)role, team);
                     this.separetedRoleId[team].Add((ExtremeRoleId)role);
                 }

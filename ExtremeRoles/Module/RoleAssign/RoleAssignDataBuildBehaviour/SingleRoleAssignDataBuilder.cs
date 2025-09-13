@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -62,10 +62,8 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 					team != ExtremeRoleType.Neutral
 				)
 				||
-				(
-					!ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign &&
-					vanillaRoleId != RoleTypes.Crewmate
-				))
+				!ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign ||
+				!VanillaRoleProvider.IsDefaultCrewmateRole(vanillaRoleId))
 			{
 				continue;
 			}
