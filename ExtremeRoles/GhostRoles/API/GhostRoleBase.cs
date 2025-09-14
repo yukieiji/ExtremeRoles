@@ -1,18 +1,18 @@
-using System;
-using System.Collections.Generic;
-
-using UnityEngine;
-
-using ExtremeRoles.Helper;
+using AmongUs.GameOptions;
 using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
+using Il2CppSystem.Xml;
+using Rewired.Utils.Classes.Data;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -27,8 +27,6 @@ public abstract class GhostRoleBase
 {
 
 	public int GameControlId { get; protected set; }
-
-	public string Name { get; protected set; }
 	public bool HasTask { get; protected set; }
 
 	public ExtremeAbilityButton? Button { get; protected set; }
@@ -49,6 +47,14 @@ public abstract class GhostRoleBase
 			}
 			return cate;
 		}
+	}
+
+	public GhostRoleBase(
+		bool hasTask,
+		in GhostRoleCore core)
+	{
+		this.Core = core;
+		this.HasTask = hasTask;
 	}
 
 	public GhostRoleBase(
@@ -75,7 +81,6 @@ public abstract class GhostRoleBase
 			id, color, team, tab);
 
         this.HasTask = hasTask;
-        this.Name = roleName;
     }
 
     public virtual GhostRoleBase Clone()
@@ -121,7 +126,7 @@ public abstract class GhostRoleBase
     public bool IsVanillaRole() => this.Core.Id == ExtremeGhostRoleId.VanillaRole;
 
     public virtual string GetColoredRoleName() => Design.ColoredString(
-        this.Core.Color, Tr.GetString(this.Name));
+        this.Core.Color, Tr.GetString(this.Core.Name));
 
     public virtual string GetFullDescription() => Tr.GetString(
        $"{this.Core.Id}FullDescription");
@@ -132,7 +137,7 @@ public abstract class GhostRoleBase
             string.Format("{0}: {1}",
                 Design.ColoredString(
                     this.Core.Color,
-                    Tr.GetString(this.Name)),
+                    Tr.GetString(this.Core.Name)),
                 Tr.GetString(
                     $"{this.Core.Id}ShortDescription")));
 
@@ -219,7 +224,7 @@ public abstract class GhostRoleBase
     {
 		var factory = OptionManager.CreateAutoParentSetOptionCategory(
 			ExtremeGhostRoleManager.GetRoleGroupId(this.Core.Id),
-			this.Name, this.Core.Tab, this.Core.Color);
+			this.Core.Name, this.Core.Tab, this.Core.Color);
 		factory.Create0To100Percentage10StepOption(
 			RoleCommonOption.SpawnRate,
 			ignorePrefix: true);

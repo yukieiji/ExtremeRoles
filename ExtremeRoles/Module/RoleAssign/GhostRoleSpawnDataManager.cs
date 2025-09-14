@@ -103,7 +103,7 @@ public sealed class GhostRoleSpawnDataManager :
 			int roleNum = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 
 			logger.LogInfo(
-				$"GhostRoleSpawnInfo,  Name:{role.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
+				$"GhostRoleSpawnInfo,  Name:{role.Core.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
 
 			if (roleNum <= 0 || spawnRate <= 0)
 			{

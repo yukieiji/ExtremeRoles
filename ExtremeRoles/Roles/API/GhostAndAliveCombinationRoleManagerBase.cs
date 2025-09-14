@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -51,7 +51,7 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
 
 			int offset = (item.Index + 1) * ExtremeGhostRoleManager.IdOffset;
 			factory.IdOffset = offset;
-			factory.OptionPrefix = role.Name;
+			factory.OptionPrefix = role.Core.Name;
 
 			role.CreateRoleSpecificOption(factory);
 			if (role is ICombination combGhost)

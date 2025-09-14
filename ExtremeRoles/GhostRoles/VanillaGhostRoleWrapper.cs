@@ -14,29 +14,10 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
 
     public VanillaGhostRoleWrapper(
         RoleTypes vanillaRoleId) : base(
-            true, Roles.API.ExtremeRoleType.Crewmate,
-            ExtremeGhostRoleId.VanillaRole,
-            "", Color.white)
+			vanillaRoleId is not RoleTypes.Impostor,
+            createCore(vanillaRoleId))
     {
-        this.vanillaRoleId = vanillaRoleId;
-        this.Name = vanillaRoleId.ToString();
-
-        switch (vanillaRoleId)
-        {
-            case RoleTypes.GuardianAngel:
-            case RoleTypes.CrewmateGhost:
-                this.HasTask = true;
-                this.Team = Roles.API.ExtremeRoleType.Crewmate;
-                this.Color = Palette.White;
-                break;
-            case RoleTypes.ImpostorGhost:
-                this.HasTask = false;
-                this.Team = Roles.API.ExtremeRoleType.Impostor;
-                this.Color = Palette.ImpostorRed;
-                break;
-            default:
-                break;
-        }
+		this.vanillaRoleId = vanillaRoleId;
     }
 
     public override string GetImportantText()
@@ -50,7 +31,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
             _ => string.Empty,
         };
         return Helper.Design.ColoredString(
-            this.Color,
+            this.Core.Color,
             $"{this.GetColoredRoleName()}: {addText}");
     }
 
@@ -93,4 +74,10 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
     {
         throw new System.Exception("Don't call this class method!!");
     }
+	private static GhostRoleCore createCore(RoleTypes vanillaRoleId)
+		=> vanillaRoleId switch
+		{ 
+			RoleTypes.ImpostorGhost => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.ImpostorRed, Roles.API.ExtremeRoleType.Impostor),
+			_ => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.White, Roles.API.ExtremeRoleType.Crewmate)
+		};
 }
