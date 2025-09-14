@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 
 using ExtremeRoles.Module.Ability.Factory;
@@ -12,12 +12,12 @@ using ExtremeRoles.Extension.Il2Cpp;
 
 #nullable enable
 
-namespace ExtremeRoles.GhostRoles.Impostor;
+namespace ExtremeRoles.GhostRoles.Impostor.SaboEvil;
 
-public sealed class SaboEvil : GhostRoleBase
+public sealed class SaboEvilRole : GhostRoleBase
 {
 
-    public SaboEvil() : base(
+    public SaboEvilRole() : base(
         false,
         ExtremeRoleType.Impostor,
         ExtremeGhostRoleId.SaboEvil,
@@ -60,11 +60,6 @@ public sealed class SaboEvil : GhostRoleBase
     protected override void OnMeetingStartHook()
     {
         return;
-    }
-
-    protected override void CreateSpecificOption(OptionFactory factory)
-    {
-		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 20);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

@@ -5,5 +5,7 @@ namespace ExtremeRoles.GhostRoles.API;
 
 public interface IGhostRoleCoreProvider
 {
-	public IEnumerable<KeyValuePair<ExtremeGhostRoleId, GhostRoleCore>> Core { get; }
+	public IEnumerable<KeyValuePair<ExtremeGhostRoleId, GhostRoleCore>> All { get; }
+
+	public GhostRoleCore Get(ExtremeGhostRoleId id);
 }

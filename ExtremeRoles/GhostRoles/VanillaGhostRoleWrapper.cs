@@ -65,11 +65,6 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
-    {
-        throw new System.Exception("Don't call this class method!!");
-    }
-
     protected override void UseAbility(
         RPCOperator.RpcCaller caller)
     {

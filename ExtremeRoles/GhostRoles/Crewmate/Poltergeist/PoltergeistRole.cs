@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -9,15 +9,12 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-
-namespace ExtremeRoles.GhostRoles.Crewmate;
+namespace ExtremeRoles.GhostRoles.Crewmate.Poltergeist;
 
 #nullable enable
 
-public sealed class Poltergeist : GhostRoleBase
+public sealed class PoltergeistRole : GhostRoleBase
 {
     public enum Option
     {
@@ -29,7 +26,7 @@ public sealed class Poltergeist : GhostRoleBase
 	private DeadBody? carringBody;
 	private NetworkedPlayerInfo? targetBody;
 
-    public Poltergeist() : base(
+    public PoltergeistRole() : base(
         true,
         ExtremeRoleType.Crewmate,
         ExtremeGhostRoleId.Poltergeist,
@@ -43,7 +40,7 @@ public sealed class Poltergeist : GhostRoleBase
     {
 
         var rolePlayer = Player.GetPlayerControlById(playerId);
-        var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Poltergeist>(playerId);
+        var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<PoltergeistRole>(playerId);
         if (role == null || rolePlayer == null) { return; }
 
         rolePlayer.NetTransform.SnapTo(new Vector2(x, y));
@@ -59,7 +56,7 @@ public sealed class Poltergeist : GhostRoleBase
     }
     private static void pickUpDeadBody(
         PlayerControl rolePlayer,
-        Poltergeist role,
+        PoltergeistRole role,
         byte targetPlayerId)
     {
 
@@ -78,7 +75,7 @@ public sealed class Poltergeist : GhostRoleBase
 
     private static void setDeadBody(
         PlayerControl rolePlayer,
-        Poltergeist role)
+        PoltergeistRole role)
     {
         if (role.carringBody == null) { return; }
         if (role.carringBody.transform.parent != rolePlayer.transform) { return; }
@@ -122,14 +119,6 @@ public sealed class Poltergeist : GhostRoleBase
     protected override void OnMeetingStartHook()
     {
         this.targetBody = null;
-    }
-
-    protected override void CreateSpecificOption(OptionFactory factory)
-    {
-		factory.CreateFloatOption(
-            Option.Range, 1.0f,
-            0.2f, 3.0f, 0.1f);
-		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 1, 5, 3.0f);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

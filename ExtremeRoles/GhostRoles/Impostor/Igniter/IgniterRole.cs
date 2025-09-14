@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
@@ -6,15 +6,12 @@ using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 #nullable enable
 
-namespace ExtremeRoles.GhostRoles.Impostor;
+namespace ExtremeRoles.GhostRoles.Impostor.Igniter;
 
-public sealed class Igniter : GhostRoleBase
+public sealed class IgniterRole : GhostRoleBase
 {
     public enum IgniterOption
     {
@@ -25,7 +22,7 @@ public sealed class Igniter : GhostRoleBase
     private static bool isEffectImp;
     private static bool isEffectNeut;
 
-    public Igniter() : base(
+    public IgniterRole() : base(
         false,
         ExtremeRoleType.Impostor,
         ExtremeGhostRoleId.Igniter,
@@ -108,13 +105,6 @@ public sealed class Igniter : GhostRoleBase
     protected override void OnMeetingStartHook()
     {
 
-    }
-
-    protected override void CreateSpecificOption(OptionFactory factory)
-    {
-		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10, 15.0f);
-		factory.CreateBoolOption(IgniterOption.IsEffectImpostor, false);
-		factory.CreateBoolOption(IgniterOption.IsEffectNeutral, false);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

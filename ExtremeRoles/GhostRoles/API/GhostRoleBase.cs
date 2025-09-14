@@ -1,18 +1,13 @@
-using AmongUs.GameOptions;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using Il2CppSystem.Xml;
-using Rewired.Utils.Classes.Data;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -108,18 +103,6 @@ public abstract class GhostRoleBase
         return copy;
     }
 
-    public void CreateRoleAllOption()
-    {
-        using var parentOps = createOptionFactory();
-        CreateSpecificOption(parentOps);
-    }
-
-    public void CreateRoleSpecificOption(
-		OptionFactory factory)
-    {
-        CreateSpecificOption(factory);
-    }
-
     public virtual string GetColoredRoleName() => Design.ColoredString(
         this.Core.Color, Tr.GetString(this.Core.Name));
 
@@ -213,27 +196,6 @@ public abstract class GhostRoleBase
 
     protected bool IsReportAbility() => this.Loader.GetValue<GhostRoleOption, bool>(GhostRoleOption.IsReportAbility);
 
-    private OptionFactory createOptionFactory()
-    {
-		var factory = OptionManager.CreateAutoParentSetOptionCategory(
-			ExtremeGhostRoleManager.GetRoleGroupId(this.Core.Id),
-			this.Core.Name, this.Core.Tab, this.Core.Color);
-		factory.Create0To100Percentage10StepOption(
-			RoleCommonOption.SpawnRate,
-			ignorePrefix: true);
-
-        int spawnNum = this.Team.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
-
-		factory.CreateIntOption(
-            RoleCommonOption.RoleNum,
-            1, 1, spawnNum, 1,
-			ignorePrefix: true);
-
-		factory.CreateIntOption(RoleCommonOption.AssignWeight, 500, 1, 1000, 1, ignorePrefix: true);
-
-		return factory;
-    }
-
     public abstract void CreateAbility();
 
     public abstract HashSet<Roles.ExtremeRoleId> GetRoleFilter();
@@ -243,8 +205,6 @@ public abstract class GhostRoleBase
     protected abstract void OnMeetingEndHook();
 
     protected abstract void OnMeetingStartHook();
-
-    protected abstract void CreateSpecificOption(OptionFactory parentOps);
 
     protected abstract void UseAbility(RPCOperator.RpcCaller caller);
 

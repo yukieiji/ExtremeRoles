@@ -1,24 +1,19 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
-using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 
-
-
-#nullable enable
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Extension.VentModule;
 using ExtremeRoles.Module.Ability.Factory;
 
-namespace ExtremeRoles.GhostRoles.Impostor;
+#nullable enable
 
-public sealed class Ventgeist : GhostRoleBase
+namespace ExtremeRoles.GhostRoles.Impostor.Ventgeist;
+
+public sealed class VentgeistRole : GhostRoleBase
 {
     public enum Option
     {
@@ -28,7 +23,7 @@ public sealed class Ventgeist : GhostRoleBase
     private float range;
     private Vent? targetVent;
 
-    public Ventgeist() : base(
+    public VentgeistRole() : base(
         false,
         ExtremeRoleType.Impostor,
         ExtremeGhostRoleId.Ventgeist,
@@ -69,14 +64,6 @@ public sealed class Ventgeist : GhostRoleBase
     protected override void OnMeetingStartHook()
     {
         this.targetVent = null;
-    }
-
-    protected override void CreateSpecificOption(OptionFactory factory)
-    {
-		factory.CreateFloatOption(
-            Option.Range, 1.0f,
-            0.2f, 3.0f, 0.1f);
-		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 2, 10);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

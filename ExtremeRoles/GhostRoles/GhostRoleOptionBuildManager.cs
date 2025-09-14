@@ -14,7 +14,7 @@ public sealed class GhostRoleOptionBuildManager(
 	private readonly IGhostRoleOptionBuilderProvider builderProvider = buildProvider;
 	public void Build()
 	{
-		foreach (var (id, core) in coreProvider.Core)
+		foreach (var (id, core) in coreProvider.All)
 		{
 			var factory = getFactory(core);
 			var builder = builderProvider.Get(id);

@@ -53,7 +53,8 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
 			factory.IdOffset = offset;
 			factory.OptionPrefix = role.Core.Name;
 
-			role.CreateRoleSpecificOption(factory);
+			//　現状はWispのみのため
+			Combination.Wisp.CreateSpecificOption(factory);
 			if (role is ICombination combGhost)
 			{
 				combGhost.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(

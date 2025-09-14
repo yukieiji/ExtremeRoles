@@ -524,7 +524,8 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 		return;
     }
 
-    protected override void CreateSpecificOption(OptionFactory factory)
+	// API 変更に伴い
+    public static void CreateSpecificOption(OptionFactory factory)
     {
 		factory.CreateIntOption(
             WispOption.WinNum,

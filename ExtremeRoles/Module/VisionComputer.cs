@@ -1,8 +1,7 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 using UnityEngine;
 
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.GhostRoles.Impostor;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -12,6 +11,7 @@ using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.GhostRoles.Impostor.Igniter;
 
 namespace ExtremeRoles.Module;
 
@@ -72,7 +72,7 @@ public class VisionComputer
 				}
 				break;
 			case Modifier.IgniterLightOff:
-				if (Igniter.TryComputeVison(playerInfo, out float effectVison))
+				if (IgniterRole.TryComputeVison(playerInfo, out float effectVison))
 				{
 					vision = effectVison;
 					return false;

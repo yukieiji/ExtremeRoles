@@ -5,18 +5,12 @@ using System.Text;
 using UnityEngine;
 using Hazel;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-
-
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
 using ExtremeRoles.Module.Ability.Factory;
@@ -24,9 +18,9 @@ using ExtremeRoles.Module.Ability.Factory;
 
 #nullable enable
 
-namespace ExtremeRoles.GhostRoles.Crewmate;
+namespace ExtremeRoles.GhostRoles.Crewmate.Shutter;
 
-public sealed class Shutter : GhostRoleBase
+public sealed class ShutterRole : GhostRoleBase
 {
 	public sealed class GhostPhotoSerializer : IStringSerializer
 	{
@@ -174,7 +168,7 @@ public sealed class Shutter : GhostRoleBase
     private readonly FullScreenFlasher flasher = new FullScreenFlasher(Color.white, 0.75f, 0.25f, 0.5f, 0.25f);
 #pragma warning disable CS8618
 	private GhostPhotoCamera photoCreater;
-	public Shutter() : base(
+	public ShutterRole() : base(
         true,
         ExtremeRoleType.Crewmate,
         ExtremeGhostRoleId.Shutter,
@@ -228,19 +222,6 @@ public sealed class Shutter : GhostRoleBase
 			MeetingReporter.Instance.AddMeetingChatReport(photo);
 		}
 	}
-
-    protected override void CreateSpecificOption(OptionFactory factory)
-    {
-		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10);
-		factory.CreateFloatOption(
-            ShutterOption.PhotoRange,
-            7.5f, 0.5f, 25f, 0.5f);
-
-		factory.CreateIntOption(
-            ShutterOption.RightPlayerNameRate,
-            50, 25, 100, 5,
-            format: OptionUnit.Percentage);
-    }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
     {

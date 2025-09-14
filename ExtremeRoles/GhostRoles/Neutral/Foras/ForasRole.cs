@@ -19,11 +19,11 @@ using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
-namespace ExtremeRoles.GhostRoles.Neutal;
+namespace ExtremeRoles.GhostRoles.Neutral.Foras;
 
 #nullable enable
 
-public sealed class Foras : GhostRoleBase
+public sealed class ForasRole : GhostRoleBase
 {
     private ArrowControler? arrowControler;
     private PlayerControl? targetPlayer;
@@ -39,7 +39,7 @@ public sealed class Foras : GhostRoleBase
         MissingTargetRate,
     }
 
-    public Foras() : base(
+    public ForasRole() : base(
         false,
         ExtremeRoleType.Neutral,
         ExtremeGhostRoleId.Foras,
@@ -68,7 +68,7 @@ public sealed class Foras : GhostRoleBase
         var arrowTargetPlayer = Helper.Player.GetPlayerControlById(arrowTargetPlayerId);
 
         if (!forasPlayer || !arrowTargetPlayer) { return; }
-        Foras foras = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Foras>(forasPlayerId);
+        ForasRole foras = ExtremeGhostRoleManager.GetSafeCastedGhostRole<ForasRole>(forasPlayerId);
         var (status, anotherStatus) = ExtremeRoleManager.GetRoleStatus<IParentChainStatus>(
             forasPlayerId);
 
@@ -96,7 +96,7 @@ public sealed class Foras : GhostRoleBase
     }
     private static void hideArrow(byte forasPlayerId)
     {
-        Foras foras = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Foras>(forasPlayerId);
+        ForasRole foras = ExtremeGhostRoleManager.GetSafeCastedGhostRole<ForasRole>(forasPlayerId);
         if (foras.arrowControler != null)
         {
             foras.arrowControler.Hide();
@@ -144,22 +144,6 @@ public sealed class Foras : GhostRoleBase
     protected override void OnMeetingStartHook()
     {
 
-    }
-
-    protected override void CreateSpecificOption(OptionFactory factory)
-    {
-		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10, 25.0f);
-		factory.CreateFloatOption(
-            ForasOption.Range,
-            1.0f, 0.1f, 3.6f, 0.1f);
-		factory.CreateFloatOption(
-            ForasOption.DelayTime,
-            3.0f, 0.0f, 10.0f, 0.5f,
-            format: OptionUnit.Second);
-		factory.CreateIntOption(
-            ForasOption.MissingTargetRate,
-            10, 0, 90, 5,
-            format: OptionUnit.Percentage);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
