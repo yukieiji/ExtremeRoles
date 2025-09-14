@@ -1,4 +1,5 @@
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 

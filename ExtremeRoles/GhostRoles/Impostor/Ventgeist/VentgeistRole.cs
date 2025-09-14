@@ -4,10 +4,10 @@ using UnityEngine;
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 
 using ExtremeRoles.Extension.VentModule;
 using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 #nullable enable
 
@@ -15,21 +15,16 @@ namespace ExtremeRoles.GhostRoles.Impostor.Ventgeist;
 
 public sealed class VentgeistRole : GhostRoleBase
 {
-    public enum Option
-    {
-        Range,
-    }
 
     private float range;
     private Vent? targetVent;
 
-    public VentgeistRole() : base(
+    public VentgeistRole(IGhostRoleCoreProvider provider) : base(
         false,
-        ExtremeRoleType.Impostor,
-        ExtremeGhostRoleId.Ventgeist,
-        ExtremeGhostRoleId.Ventgeist.ToString(),
-        Palette.ImpostorRed)
-    { }
+		provider.Get(ExtremeGhostRoleId.Ventgeist))
+    {
+		this.range = this.Loader.GetValue<Option, float>(Option.Range);
+	}
 
     public static void VentAnime(int ventId)
     {
@@ -50,11 +45,6 @@ public sealed class VentgeistRole : GhostRoleBase
     }
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
-
-    public override void Initialize()
-    {
-        this.range = this.Loader.GetValue<Option, float>(Option.Range);
-    }
 
     protected override void OnMeetingEndHook()
     {

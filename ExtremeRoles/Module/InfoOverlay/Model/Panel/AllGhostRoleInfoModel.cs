@@ -1,10 +1,11 @@
-using System.Collections.Generic;
-
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Helper;
-
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Roles.API;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
@@ -12,6 +13,9 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 public sealed class AllGhostRoleInfoModel : PanelPageModelBase
 {
+	private readonly IEnumerable<ExtremeGhostRoleId> ids =
+		ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGhostRoleInfoContainer>().Core.Keys;
+	private readonly IGhostRoleProvider provider = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGhostRoleProvider>();
 	protected override void CreateAllRoleText()
 	{
 		IOption option;
@@ -38,8 +42,9 @@ public sealed class AllGhostRoleInfoModel : PanelPageModelBase
 		}
 
 
-		foreach (var role in GhostRoles.ExtremeGhostRoleManager.AllGhostRole.Values)
+		foreach (var roleId in ids)
 		{
+			var role = this.provider.Get(roleId);
 			option = role.Loader.Get(RoleCommonOption.SpawnRate);
 			colorRoleName = role.GetColoredRoleName();
 

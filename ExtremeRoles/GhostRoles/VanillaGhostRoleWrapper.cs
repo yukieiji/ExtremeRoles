@@ -60,11 +60,6 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         throw new System.Exception("Don't call this class method!!");
     }
 
-    public override void Initialize()
-    {
-        return;
-    }
-
     protected override void UseAbility(
         RPCOperator.RpcCaller caller)
     {

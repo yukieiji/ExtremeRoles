@@ -1,14 +1,14 @@
 using System;
-using ExtremeRoles.GhostRoles.API;
 using System.Collections.Generic;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.GhostRoles;
 
 public sealed class GhostRoleOptionBuilderProvider(
 	IServiceProvider provider,
-	IReadOnlyDictionary<ExtremeGhostRoleId, Type> builder) : IGhostRoleOptionBuilderProvider
+	IGhostRoleInfoContainer info) : IGhostRoleOptionBuilderProvider
 {
-	private readonly IReadOnlyDictionary<ExtremeGhostRoleId, Type> builder = builder;
+	private readonly IReadOnlyDictionary<ExtremeGhostRoleId, Type> builder = info.OptionBuilder;
 	public IGhostRoleOptionBuilder Get(ExtremeGhostRoleId id)
 	{
 		var type = this.builder[id];

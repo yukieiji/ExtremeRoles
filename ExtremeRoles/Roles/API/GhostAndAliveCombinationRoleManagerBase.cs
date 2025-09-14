@@ -6,6 +6,7 @@ using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.Roles.Combination;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -68,7 +69,7 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
 
         foreach (var role in this.CombGhostRole.Values)
         {
-            role.Initialize();
+            (role as Wisp).Initialize();
         }
     }
 }

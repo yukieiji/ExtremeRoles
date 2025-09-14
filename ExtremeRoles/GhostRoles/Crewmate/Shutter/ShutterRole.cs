@@ -14,6 +14,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
 using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 
 #nullable enable
@@ -166,16 +167,17 @@ public sealed class ShutterRole : GhostRoleBase
     }
 
     private readonly FullScreenFlasher flasher = new FullScreenFlasher(Color.white, 0.75f, 0.25f, 0.5f, 0.25f);
-#pragma warning disable CS8618
 	private GhostPhotoCamera photoCreater;
-	public ShutterRole() : base(
+	public ShutterRole(IGhostRoleCoreProvider provider) : base(
         true,
-        ExtremeRoleType.Crewmate,
-        ExtremeGhostRoleId.Shutter,
-        ExtremeGhostRoleId.Shutter.ToString(),
-        ColorPalette.PhotographerVerdeSiena)
-    { }
-#pragma warning restore CS8618
+		provider.Get(ExtremeGhostRoleId.Shutter))
+    {
+		var loader = this.Loader;
+
+		this.photoCreater = new GhostPhotoCamera(
+			loader.GetValue<ShutterOption, float>(ShutterOption.PhotoRange),
+			loader.GetValue<ShutterOption, int>(ShutterOption.RightPlayerNameRate));
+	}
 
 	public override void CreateAbility()
     {
@@ -198,15 +200,6 @@ public sealed class ShutterRole : GhostRoleBase
     {
         ExtremeRoleId.Photographer
     };
-
-    public override void Initialize()
-    {
-		var loader = this.Loader;
-
-        this.photoCreater = new GhostPhotoCamera(
-			loader.GetValue<ShutterOption, float>(ShutterOption.PhotoRange),
-			loader.GetValue<ShutterOption, int>(ShutterOption.RightPlayerNameRate));
-    }
 
     protected override void OnMeetingEndHook()
     {

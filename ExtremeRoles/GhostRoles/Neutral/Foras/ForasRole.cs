@@ -11,13 +11,10 @@ using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.GhostRoles.API.Interface;
 
-
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 namespace ExtremeRoles.GhostRoles.Neutral.Foras;
 
@@ -39,13 +36,15 @@ public sealed class ForasRole : GhostRoleBase
         MissingTargetRate,
     }
 
-    public ForasRole() : base(
+    public ForasRole(IGhostRoleCoreProvider provider) : base(
         false,
-        ExtremeRoleType.Neutral,
-        ExtremeGhostRoleId.Foras,
-        ExtremeGhostRoleId.Foras.ToString(),
-        ColorPalette.ForasSeeSyuTin)
-    { }
+		provider.Get(ExtremeGhostRoleId.Foras))
+    {
+		var loader = this.Loader;
+		this.delayTime = loader.GetValue<ForasOption, float>(ForasOption.DelayTime);
+		this.range = loader.GetValue<ForasOption, float>(ForasOption.Range);
+		this.rate = loader.GetValue<ForasOption, int>(ForasOption.MissingTargetRate);
+	}
 
     public static void SwitchArrow(ref MessageReader reader)
     {
@@ -127,14 +126,6 @@ public sealed class ForasRole : GhostRoleBase
         ExtremeRoleId.Sidekick,
         ExtremeRoleId.Servant
     };
-
-    public override void Initialize()
-    {
-		var loader = this.Loader;
-        this.delayTime = loader.GetValue<ForasOption, float>(ForasOption.DelayTime);
-        this.range = loader.GetValue<ForasOption, float>(ForasOption.Range);
-        this.rate = loader.GetValue<ForasOption, int>(ForasOption.MissingTargetRate);
-    }
 
     protected override void OnMeetingEndHook()
     {

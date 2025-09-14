@@ -13,6 +13,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 #nullable enable
 
@@ -35,13 +36,13 @@ public sealed class FaunusRole : GhostRoleBase
     private Minigame? saboGame;
     private bool isOpen = false;
 
-    public FaunusRole() : base(
+    public FaunusRole(IGhostRoleCoreProvider provider) : base(
         true,
-        ExtremeRoleType.Crewmate,
-        ExtremeGhostRoleId.Faunus,
-        ExtremeGhostRoleId.Faunus.ToString(),
-        ColorPalette.FaunusAntiquewhite)
-    { }
+		provider.Get(ExtremeGhostRoleId.Faunus))
+    {
+		this.saboActive = false;
+		this.isOpen = false;
+	}
 
     public override void CreateAbility()
     {
@@ -62,12 +63,6 @@ public sealed class FaunusRole : GhostRoleBase
     }
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
-
-    public override void Initialize()
-    {
-        this.saboActive = false;
-        this.isOpen = false;
-    }
 
     protected override void OnMeetingEndHook()
     {

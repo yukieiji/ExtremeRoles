@@ -9,6 +9,8 @@ using ExtremeRoles.Module.Interface;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -22,6 +24,8 @@ public sealed class GhostRoleSpawnDataManager :
 
 	private Dictionary<ExtremeRoleType, List<GhostRoleSpawnData>> useGhostRole = new Dictionary<
 		ExtremeRoleType, List<GhostRoleSpawnData>>();
+
+	private readonly IGhostRoleProvider provider = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGhostRoleProvider>();
 
 	public GhostRoleSpawnDataManager()
 	{
@@ -81,7 +85,7 @@ public sealed class GhostRoleSpawnDataManager :
 		foreach (ExtremeGhostRoleId roleId in
 			ExtremeGameModeManager.Instance.RoleSelector.UseGhostRoleId)
 		{
-			var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
+			var role = provider.Get(roleId);
 
 			if (!opt.TryGetCategory(
 					role.Core.Tab, ExtremeGhostRoleManager.GetRoleGroupId(role.Core.Id),

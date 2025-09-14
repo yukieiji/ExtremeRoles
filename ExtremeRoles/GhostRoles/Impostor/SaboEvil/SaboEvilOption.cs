@@ -1,4 +1,4 @@
-using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.CustomOption.Factory;
 

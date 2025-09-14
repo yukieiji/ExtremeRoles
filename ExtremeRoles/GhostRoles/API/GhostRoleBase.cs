@@ -200,8 +200,6 @@ public abstract class GhostRoleBase
 
     public abstract HashSet<Roles.ExtremeRoleId> GetRoleFilter();
 
-    public abstract void Initialize();
-
     protected abstract void OnMeetingEndHook();
 
     protected abstract void OnMeetingStartHook();

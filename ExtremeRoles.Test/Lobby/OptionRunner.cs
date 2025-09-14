@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using ExtremeRoles.GameMode.Option.ShipGlobal;
@@ -44,9 +44,6 @@ public class OptionRunner
 
 			Log.LogInfo($"Load.NormalRole.Iteration.{i}");
 			loadNormalRole();
-
-			Log.LogInfo($"Load.GhostRole.Iteration.{i}");
-			loadGhostRole();
 
 			yield return GameUtility.WaitForStabilize();
 		}
@@ -149,20 +146,6 @@ public class OptionRunner
 	private void loadNormalRole()
 	{
 		foreach (var role in ExtremeRoleManager.NormalRole.Values)
-		{
-			try
-			{
-				role.Initialize();
-			}
-			catch (Exception ex)
-			{
-				Log.LogError($"{role}   {ex.Message}");
-			}
-		}
-	}
-	private void loadGhostRole()
-	{
-		foreach (var role in ExtremeGhostRoleManager.AllGhostRole.Values)
 		{
 			try
 			{

@@ -497,7 +497,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
 
-    public override void Initialize()
+    public void Initialize()
     {
 		var loader = this.Loader;
         this.abilityNum = loader.GetValue<WispOption, int>(

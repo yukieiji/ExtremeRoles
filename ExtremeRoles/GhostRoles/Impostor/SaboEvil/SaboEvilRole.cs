@@ -4,11 +4,9 @@ using System.Collections.Generic;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 #nullable enable
 
@@ -17,12 +15,9 @@ namespace ExtremeRoles.GhostRoles.Impostor.SaboEvil;
 public sealed class SaboEvilRole : GhostRoleBase
 {
 
-    public SaboEvilRole() : base(
+    public SaboEvilRole(IGhostRoleCoreProvider provider) : base(
         false,
-        ExtremeRoleType.Impostor,
-        ExtremeGhostRoleId.SaboEvil,
-        ExtremeGhostRoleId.SaboEvil.ToString(),
-        Palette.ImpostorRed)
+		provider.Get(ExtremeGhostRoleId.SaboEvil))
     { }
 
     public static void ResetCool()
@@ -48,9 +43,6 @@ public sealed class SaboEvilRole : GhostRoleBase
     }
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
-
-    public override void Initialize()
-    { }
 
     protected override void OnMeetingEndHook()
     {

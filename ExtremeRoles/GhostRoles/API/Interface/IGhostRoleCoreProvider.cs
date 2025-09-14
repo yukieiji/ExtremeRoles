@@ -1,7 +1,6 @@
-using ExtremeRoles.Roles.API;
 using System.Collections.Generic;
 
-namespace ExtremeRoles.GhostRoles.API;
+namespace ExtremeRoles.GhostRoles.API.Interface;
 
 public interface IGhostRoleCoreProvider
 {

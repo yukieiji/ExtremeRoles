@@ -14,6 +14,7 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 
 #nullable enable
@@ -28,13 +29,12 @@ public sealed class DoppelgangerRole : GhostRoleBase
 
 	private const AbilityType ability = AbilityType.DoppelgangerDoppel;
 
-	public DoppelgangerRole() : base(
+	public DoppelgangerRole(IGhostRoleCoreProvider provider) : base(
 		false,
-		ExtremeRoleType.Impostor,
-		ExtremeGhostRoleId.Doppelganger,
-		ExtremeGhostRoleId.Doppelganger.ToString(),
-		Palette.ImpostorRed)
-	{ }
+		provider.Get(ExtremeGhostRoleId.Doppelganger))
+	{
+
+	}
 
 	public static void Doppl(byte rolePlayer, byte targetPlayer)
 	{
@@ -123,11 +123,6 @@ public sealed class DoppelgangerRole : GhostRoleBase
 	}
 
 	public override HashSet<ExtremeRoleId> GetRoleFilter() => [];
-
-	public override void Initialize()
-	{
-
-	}
 
 	protected override void OnMeetingEndHook()
 	{

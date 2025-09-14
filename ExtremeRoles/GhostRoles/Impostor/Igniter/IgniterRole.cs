@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Roles;
@@ -13,22 +14,17 @@ namespace ExtremeRoles.GhostRoles.Impostor.Igniter;
 
 public sealed class IgniterRole : GhostRoleBase
 {
-    public enum IgniterOption
-    {
-        IsEffectImpostor,
-        IsEffectNeutral
-    }
-
     private static bool isEffectImp;
     private static bool isEffectNeut;
 
-    public IgniterRole() : base(
+    public IgniterRole(IGhostRoleCoreProvider provider) : base(
         false,
-        ExtremeRoleType.Impostor,
-        ExtremeGhostRoleId.Igniter,
-        ExtremeGhostRoleId.Igniter.ToString(),
-        Palette.ImpostorRed)
-    { }
+		provider.Get(ExtremeGhostRoleId.Igniter))
+    {
+		var loader = this.Loader;
+		isEffectImp = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectImpostor);
+		isEffectNeut = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectNeutral);
+	}
 
     public static bool TryComputeVison(NetworkedPlayerInfo player, out float vison)
     {
@@ -89,13 +85,6 @@ public sealed class IgniterRole : GhostRoleBase
     {
         ExtremeRoleId.LastWolf
     };
-
-    public override void Initialize()
-    {
-		var loader = this.Loader;
-        isEffectImp = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectImpostor);
-        isEffectNeut = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectNeutral);
-    }
 
     protected override void OnMeetingEndHook()
     {

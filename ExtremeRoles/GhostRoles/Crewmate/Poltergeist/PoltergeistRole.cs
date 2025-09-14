@@ -9,6 +9,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.GhostRoles.Crewmate.Poltergeist;
 
@@ -16,23 +17,17 @@ namespace ExtremeRoles.GhostRoles.Crewmate.Poltergeist;
 
 public sealed class PoltergeistRole : GhostRoleBase
 {
-    public enum Option
-    {
-        Range,
-    }
-
     private float range;
 
 	private DeadBody? carringBody;
 	private NetworkedPlayerInfo? targetBody;
 
-    public PoltergeistRole() : base(
+    public PoltergeistRole(IGhostRoleCoreProvider provider) : base(
         true,
-        ExtremeRoleType.Crewmate,
-        ExtremeGhostRoleId.Poltergeist,
-        ExtremeGhostRoleId.Poltergeist.ToString(),
-        ColorPalette.PoltergeistLightKenpou)
-    { }
+		provider.Get(ExtremeGhostRoleId.Poltergeist))
+    {
+		this.range = this.Loader.GetValue<Option, float>(Option.Range);
+	}
 
     public static void DeadbodyMove(
         byte playerId, byte targetPlayerId,
@@ -105,11 +100,6 @@ public sealed class PoltergeistRole : GhostRoleBase
     }
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
-
-    public override void Initialize()
-    {
-        this.range = this.Loader.GetValue<Option, float>(Option.Range);
-    }
 
     protected override void OnMeetingEndHook()
     {

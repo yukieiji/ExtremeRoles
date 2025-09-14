@@ -1,6 +1,6 @@
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
-namespace ExtremeRoles.GhostRoles.API;
+namespace ExtremeRoles.GhostRoles.API.Interface;
 
 public interface IGhostRoleOptionBuilder
 {
