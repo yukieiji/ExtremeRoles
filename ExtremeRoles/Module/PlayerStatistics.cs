@@ -8,10 +8,11 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Roles.Combination;
 
 using Monika = ExtremeRoles.Roles.Solo.Neutral.Monika;
 using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate;
+using ExtremeRoles.Roles.Combination.Avalon;
+using ExtremeRoles.Roles.Combination.HeroAcademia;
 
 
 #nullable enable
@@ -259,10 +260,11 @@ public sealed record PlayerStatistics(
 
 					// アサシンがニュートラルを切れない時
 					if (roleId == ExtremeRoleId.Assassin &&
-						role is Assassin assassin)
+						role is Assassin assassin &&
+						assassin.Status is AssassinStatusModel status)
 					{
-						bool canNeutralKill = assassin.CanKilledFromNeutral;
-						if (!canNeutralKill || (canNeutralKill && !assassin.CanKilled))
+						bool canNeutralKill = status.CanKilledFromNeutral;
+						if (!canNeutralKill || (canNeutralKill && !status.CanKilled))
 						{
 							++numAssassinAlive;
 						}

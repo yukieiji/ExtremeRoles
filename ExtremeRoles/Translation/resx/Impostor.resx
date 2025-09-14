@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -58,7 +58,7 @@
 			: using a System.ComponentModel.TypeConverter
 			: and then encoded with base64 encoding.
 	-->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -1622,5 +1622,51 @@ Lv2能力「ビームセーバー」
   </data>
   <data name="GetNextWeapon" xml:space="preserve">
     <value>「{0}」を入手、ホイールスクロールで切り替え可能</value>
+  </data>
+  <data name="Boxer" xml:space="preserve">
+    <value>ボクサー</value>
+  </data>
+  <data name="BoxerAbilityCoolTime" xml:space="preserve">
+    <value>「ストレート」のクールタイム</value>
+  </data>
+  <data name="BoxerAbilityCount" xml:space="preserve">
+    <value>「ストレート」が使える回数</value>
+  </data>
+  <data name="BoxerStraightChargeTime" xml:space="preserve">
+    <value>「ストレート」のチャージ時間</value>
+  </data>
+  <data name="BoxerStraightRange" xml:space="preserve">
+    <value>「ストレート」が使える距離</value>
+  </data>
+  <data name="BoxerStraightFirstSpeed" xml:space="preserve">
+    <value>飛ばされたクルーの初速度</value>
+  </data>
+  <data name="BoxerStraightAcceleration" xml:space="preserve">
+    <value>飛ばされたクルーの加速度</value>
+  </data>
+  <data name="BoxerStraightKillSpeed" xml:space="preserve">
+    <value>壁に激突時に死亡する速度</value>
+  </data>
+  <data name="BoxerStraightReflectionE" xml:space="preserve">
+    <value>壁に反発時の衝突径数</value>
+  </data>
+  <data name="BoxerFullDescription" xml:space="preserve">
+    <value>「ストレート」によってクルーを飛ばしてキル出来るインポスター
+
+ボタン能力「ストレート」
+　・発動するとチャージが始まる
+　・チャージ中に近くにプレイヤーがいると再度押せる
+　・再度押した時、そのプレイヤーを飛ばす
+　・飛ばされたプレイヤーが一定速度以上で壁に当たるとキルされる
+　・飛ばす速度はチャージ率に応じて変化する</value>
+  </data>
+  <data name="BoxerShortDescription" xml:space="preserve">
+    <value>「ストレート」でクルーを飛ばしてキルしよう</value>
+  </data>
+  <data name="BoxerIntroDescription" xml:space="preserve">
+    <value>必殺の「ストレート」をおみまいしろ</value>
+  </data>
+  <data name="BoxerAbility" xml:space="preserve">
+    <value>ストレート</value>
   </data>
 </root>

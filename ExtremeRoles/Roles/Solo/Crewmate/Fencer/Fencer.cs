@@ -7,15 +7,17 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Solo.Crewmate;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Fencer;
 
-public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IKilledFrom
+#nullable enable
+
+public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
     public enum FencerOption
     {
@@ -29,34 +31,37 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
         ActivateKillButton
     }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.takeTaskButton;
-        set
-        {
-            this.takeTaskButton = value;
-        }
-    }
+    public ExtremeAbilityButton? Button { get; set; }
 
-    public bool IsCounter = false;
-    public float Timer = 0.0f;
-    public float MaxTime = 120f;
+    public override IStatusModel? Status => status;
+    private FencerStatusModel? status;
 
-    private ExtremeAbilityButton takeTaskButton;
+    public override bool CanKill
+	{ 
+		get => this.status is not null && status.CanKill;
+		set
+		{
+			if (this.status is not null)
+			{
+				this.status.CanKill = value;
+			}
+		}
+	}
 
-    public Fencer() : base(
+    public FencerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Fencer,
 			ColorPalette.FencerPin),
         false, true, false, false)
-    { }
+    {
+    }
 
     public static void Ability(ref MessageReader reader)
     {
         byte rolePlayerId = reader.ReadByte();
         FencerAbility abilityType = (FencerAbility)reader.ReadByte();
 
-        var fencer = ExtremeRoleManager.GetSafeCastedRole<Fencer>(rolePlayerId);
+        var fencer = ExtremeRoleManager.GetSafeCastedRole<FencerRole>(rolePlayerId);
         if (fencer == null) { return; }
 
         switch (abilityType)
@@ -68,7 +73,10 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
                 counterOff(fencer);
                 break;
             case FencerAbility.ActivateKillButton:
-                enableKillButton(fencer, rolePlayerId);
+				if (fencer.AbilityClass is FencerAbilityHandler fencerAbility)
+				{
+					fencerAbility.EnableKillButton(rolePlayerId);
+				}
                 break;
             default:
                 break;
@@ -76,36 +84,20 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 
     }
 
-    private static void counterOn(Fencer fencer)
+    private static void counterOn(FencerRole fencer)
     {
-        fencer.IsCounter = true;
+		if (fencer.status is not null)
+		{
+			fencer.status.IsCounter = true;
+		}
     }
 
-    public static void counterOff(Fencer fencer)
+    public static void counterOff(FencerRole fencer)
     {
-        fencer.IsCounter = false;
-    }
-
-    private static void enableKillButton(
-        Fencer fencer, byte rolePlayerId)
-    {
-        PlayerControl localPlayer = PlayerControl.LocalPlayer;
-
-        if (localPlayer.PlayerId != rolePlayerId) { return; }
-
-        if (MapBehaviour.Instance)
-        {
-            MapBehaviour.Instance.Close();
-        }
-        if (Minigame.Instance)
-        {
-            Minigame.Instance.ForceClose();
-        }
-
-        fencer.CanKill = true;
-        localPlayer.killTimer = 0.1f;
-
-        fencer.Timer = fencer.MaxTime;
+		if (fencer.status is not null)
+		{
+			fencer.status.IsCounter = false;
+		}
     }
 
     public void CreateAbility()
@@ -116,7 +108,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 				ObjectPath.FencerCounter),
             abilityOff: this.CleanUp,
             isReduceOnActive: true);
-        this.Button.SetLabelToCrewmate();
+        this.Button?.SetLabelToCrewmate();
     }
     public void CleanUp()
     {
@@ -154,42 +146,26 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
         this.CanKill = false;
     }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (this.Timer <= 0.0f)
+		if (this.status is null)
+		{
+			return;
+		}
+
+        if (this.status.Timer <= 0.0f)
         {
             this.CanKill = false;
             return;
         }
 
-        this.Timer -= Time.deltaTime;
+		this.status.Timer -= Time.deltaTime;
 
-    }
-
-    public bool TryKilledFrom(
-        PlayerControl rolePlayer, PlayerControl fromPlayer)
-    {
-
-        if (this.IsCounter)
-        {
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.FencerAbility))
-            {
-                caller.WriteByte(
-                    rolePlayer.PlayerId);
-                caller.WriteByte((byte)FencerAbility.ActivateKillButton);
-            }
-            enableKillButton(this, rolePlayer.PlayerId);
-            Sound.PlaySound(Sound.Type.GuardianAngleGuard, 0.85f);
-            return false;
-        }
-
-        return true;
     }
 
     protected override void CreateSpecificOption(
@@ -205,8 +181,9 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 
     protected override void RoleSpecificInit()
     {
-        this.Timer = 0.0f;
-        this.MaxTime = this.Loader.GetValue<FencerOption, float>(
-            FencerOption.ResetTime);
+        status = new FencerStatusModel(
+			this.Loader.GetValue<FencerOption, float>(FencerOption.ResetTime));
+        AbilityClass = new FencerAbilityHandler(status);
+        this.status.Timer = 0.0f;
     }
 }

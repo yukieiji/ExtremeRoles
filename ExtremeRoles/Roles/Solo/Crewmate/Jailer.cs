@@ -86,13 +86,13 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	private Yardbird.Option? yardBirdOption;
 	private Lawbreaker.Option? lawBreakerOption;
 
-	private static string impShortStr => Design.ColoedString(
+	private static string impShortStr => Design.ColoredString(
 		Palette.ImpostorRed,
 		Tr.GetString("impostorShotCall"));
-	private static string neutShortStr => Design.ColoedString(
+	private static string neutShortStr => Design.ColoredString(
 		ColorPalette.NeutralColor,
 		Tr.GetString("neutralShotCall"));
-	private string andShortStr => Design.ColoedString(
+	private string andShortStr => Design.ColoredString(
 		this.Core.Color,
 		Tr.GetString("andFirst"));
 
@@ -181,7 +181,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		}
 		else
 		{
-			return Design.ColoedString(
+			return Design.ColoredString(
 				Palette.White,
 				Tr.GetString(RoleTypes.Crewmate.ToString()));
 		}
@@ -214,11 +214,11 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 			var core = this.Core;
 			var color = core.Color;
-			string roleName = Design.ColoedString(
+			string roleName = Design.ColoredString(
 				color,
 				Tr.GetString(this.RoleName));
 
-			string desc = Design.ColoedString(
+			string desc = Design.ColoredString(
 				color,
 				Tr.GetString($"{core.Id}ShortDescription"));
 
@@ -227,7 +227,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 		else
 		{
-			return Design.ColoedString(
+			return Design.ColoredString(
 				Palette.White,
 				$"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
 		}
@@ -241,7 +241,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		}
 		else
 		{
-			return Design.ColoedString(
+			return Design.ColoredString(
 				Palette.CrewmateBlue,
 				PlayerControl.LocalPlayer.Data.Role.Blurb);
 		}

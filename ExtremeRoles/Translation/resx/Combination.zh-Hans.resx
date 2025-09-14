@@ -454,7 +454,7 @@
   <data name="call" xml:space="preserve">
     <value>龙套体质</value>
   </data>
-  <data name="DetectiveOffice" xml:space="preserve">
+  <data name="InvestigatorOffice" xml:space="preserve">
     <value>&lt;color=#9E5C46&gt;大&lt;/color&gt;调查员&lt;color=#008A99&gt;探&lt;/color&gt;</value>
   </data>
   <data name="Investigator" xml:space="preserve">
@@ -496,28 +496,28 @@
   <data name="AssistantApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>受到照明破坏影响</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherVision" xml:space="preserve">
     <value>见习调查员拥有独立视野</value>
   </data>
-  <data name="DetectiveApprenticeVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeVision" xml:space="preserve">
     <value>视野范围</value>
   </data>
-  <data name="DetectiveApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
+  <data name="InvestigatorApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>受到照明破坏影响</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCount" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCount" xml:space="preserve">
     <value>见习调查员紧急召集技能使用次数</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCoolTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCoolTime" xml:space="preserve">
     <value>紧急召集的冷却时间</value>
   </data>
-  <data name="DetectiveApprenticeAbilityActiveTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityActiveTime" xml:space="preserve">
     <value>见习调查员“紧急召集”按下紧急会议按钮的时间</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButton" xml:space="preserve">
     <value>见习调查员紧急召集的会议不计入紧急会议次数限制</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>不计入次数限制的次数</value>
   </data>
   <data name="InvestigatorIntroDescription" xml:space="preserve">
@@ -565,10 +565,10 @@
 ·被动技能“传承”
 助手死亡时，调查员的职业变为见习调查员。</value>
   </data>
-  <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeShortDescription" xml:space="preserve">
     <value>接过逝去的搭档的衣钵</value>
   </data>
-  <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeFullDescription" xml:space="preserve">
     <value>见习调查员属于船员阵营。
 见习调查员是由调查员或助手转变而来的。
 

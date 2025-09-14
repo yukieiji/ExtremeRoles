@@ -29,7 +29,7 @@ public sealed class TagPainter(string[] tags)
 	{
 		int index = controlId % size;
 		tag = tag != string.Empty ? tag : randomTags[index];
-		return Design.ColoedString(randomColor[index], tag);
+		return Design.ColoredString(randomColor[index], tag);
 	}
 
 	private static IEnumerable<Color> createRandomColor(int size)

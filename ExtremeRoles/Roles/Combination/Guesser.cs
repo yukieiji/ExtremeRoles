@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using UnityEngine;
-using AmongUs.GameOptions;
 using TMPro;
+using UnityEngine;
+
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.RoleAssign;
@@ -18,7 +17,6 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
-
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -274,6 +272,11 @@ public sealed class Guesser :
 							add(role.Core.Id, queenTeam, servantId);
                         }
                     }
+					// 見習い捜査官の追加
+					if (isInvestigatorOffice(id))
+					{
+						add(ExtremeRoleId.InvestigatorApprentice, queenTeam, servantId);
+					}
                 }
 
                 this.separetedRoleId[queenTeam].Add(ExtremeRoleId.Queen);
@@ -347,18 +350,33 @@ public sealed class Guesser :
                         ExtremeRoleType team = role.Core.Team;
                         listAdd(role.Core.Id, team, this.separetedRoleId[team]);
                     }
-                }
+					// 見習い捜査官の追加
+					if (isInvestigatorOffice(id))
+					{
+						listAdd(ExtremeRoleId.InvestigatorApprentice, ExtremeRoleType.Crewmate, this.separetedRoleId[ExtremeRoleType.Crewmate]);
+					}
+				}
                 else
                 {
                     foreach (var role in roleMng.Roles)
                     {
                         add(role.Core.Id, role.Core.Team);
                     }
-                }
+
+					// 見習い捜査官の追加
+					if (isInvestigatorOffice(id))
+					{
+						add(ExtremeRoleId.InvestigatorApprentice, ExtremeRoleType.Crewmate);
+					}
+				}
             }
         }
 
-        private void addVanillaRole(bool includeNoneRole)
+		private bool isInvestigatorOffice(byte checkId)
+			=> checkId == (byte)CombinationRoleType.InvestigatorOffice;
+
+
+		private void addVanillaRole(bool includeNoneRole)
         {
             if (includeNoneRole)
             {
@@ -456,11 +474,6 @@ public sealed class Guesser :
         {
             missGuess();
         }
-    }
-
-    public void IntroEndSetUp()
-    {
-        return;
     }
 
     public bool IsBlockMeetingButtonAbility(

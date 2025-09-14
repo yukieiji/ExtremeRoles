@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -66,19 +66,19 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 
 		if (KeyboardJoystick.player.GetButton(40))
 		{
-			directionVector.x = directionVector.x + 1f;
+			directionVector.x++;
 		}
 		if (KeyboardJoystick.player.GetButton(39))
 		{
-			directionVector.x = directionVector.x - 1f;
+			directionVector.x--;
 		}
 		if (KeyboardJoystick.player.GetButton(44))
 		{
-			directionVector.y = directionVector.y + 1f;
+			directionVector.y++;
 		}
 		if (KeyboardJoystick.player.GetButton(42))
 		{
-			directionVector.y = directionVector.y - 1f;
+			directionVector.y--;
 		}
 
 		Vector2 forceVector =

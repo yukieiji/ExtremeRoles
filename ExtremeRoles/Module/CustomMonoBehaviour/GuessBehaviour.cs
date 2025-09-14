@@ -21,7 +21,7 @@ public sealed class GuessBehaviour : MonoBehaviour
 		public ExtremeRoleId AnothorId;
 		public ExtremeRoleType Team;
 
-		private static HashSet<RoleTypes> vanilaCrew = new HashSet<RoleTypes>()
+		private static HashSet<RoleTypes> vanillaCrew = new HashSet<RoleTypes>()
 		{
 			RoleTypes.Crewmate,
 			RoleTypes.Scientist,
@@ -35,39 +35,39 @@ public sealed class GuessBehaviour : MonoBehaviour
 		{
 			string basicRoleName = convertIdToRoleName(this.Id);
 
-			if (this.AnothorId == ExtremeRoleId.Null)
-			{
-				return basicRoleName;
+				if (this.AnothorId == ExtremeRoleId.Null)
+				{
+					return basicRoleName;
+				}
+				else
+				{
+					return string.Concat(
+						basicRoleName,
+						Design.ColoredString(
+							Palette.White,
+							" + "),
+						convertIdToRoleName(this.AnothorId));
+				}
 			}
-			else
+			public override string ToString()
 			{
-				return string.Concat(
-					basicRoleName,
-					Design.ColoedString(
-						Palette.White,
-						" + "),
-					convertIdToRoleName(this.AnothorId));
+				return $"Team:{this.Team}  Role:{this.Id}＆{this.AnothorId}";
 			}
-		}
-		public override string ToString()
-		{
-			return $"Team:{this.Team}  Role:{this.Id}＆{this.AnothorId}";
-		}
 
-		private static string convertIdToRoleName(ExtremeRoleId id)
-		{
-			RoleTypes castedId = (RoleTypes)id;
-			bool isVanila = Enum.IsDefined(typeof(RoleTypes), castedId);
-			string roleName = isVanila ?
-				Design.ColoedString(
-					VanillaRoleProvider.IsCrewmateRole(castedId) ?
-					Palette.White : Palette.ImpostorRed,
-					Tr.GetString(castedId.ToString())) :
-				Design.ColoedString(
-					getRoleColor(id),
-					Tr.GetString(id.ToString()));
-			return roleName;
-		}
+			private static string convertIdToRoleName(ExtremeRoleId id)
+			{
+				RoleTypes castedId = (RoleTypes)id;
+				bool isVanila = Enum.IsDefined(typeof(RoleTypes), castedId);
+				string roleName = isVanila ?
+					Design.ColoredString(
+						VanillaRoleProvider.IsCrewmateRole(castedId) ?
+						Palette.White : Palette.ImpostorRed,
+						Tr.GetString(castedId.ToString())) :
+					Design.ColoredString(
+						getRoleColor(id),
+						Tr.GetString(id.ToString()));
+				return roleName;
+			}
 
 		private static Color getRoleColor(ExtremeRoleId target)
 		{
