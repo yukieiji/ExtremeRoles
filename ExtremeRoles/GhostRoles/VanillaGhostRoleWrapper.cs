@@ -16,7 +16,6 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
     public VanillaGhostRoleWrapper(
         RoleTypes vanillaRoleId) : base(
 			vanillaRoleId is not RoleTypes.ImpostorGhost,
-			vanillaRoleId is RoleTypes.ImpostorGhost ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate,
 			createCore(vanillaRoleId))
     {
 		this.vanillaRoleId = vanillaRoleId;
@@ -79,7 +78,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
 	private static GhostRoleCore createCore(RoleTypes vanillaRoleId)
 		=> vanillaRoleId switch
 		{ 
-			RoleTypes.ImpostorGhost => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.ImpostorRed),
-			_ => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.White)
+			RoleTypes.ImpostorGhost => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.ImpostorRed, ExtremeRoleType.Impostor),
+			_ => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.White, ExtremeRoleType.Crewmate)
 		};
 }

@@ -52,10 +52,9 @@ public abstract class GhostRoleBase
 
 	public GhostRoleBase(
 		bool hasTask,
-		ExtremeRoleType team,
 		in GhostRoleCore core)
 	{
-		this.Team = new GhostTeam(team);
+		this.Team = new GhostTeam(core.Team);
 		this.Core = core;
 		this.HasTask = hasTask;
 	}
