@@ -99,6 +99,7 @@ public sealed class BarterStatus(IOptionLoader loader, bool isImpostor) : IStatu
 				loader.GetValue<BarterRole.Option, int>(BarterRole.Option.AwakeTaskRate),
 				loader.GetValue<BarterRole.Option, int>(BarterRole.Option.AwakeDeadPlayerNum));
 
+	public int MaxNum => this.castlingNum.MaxNum;
 	public bool IsRandomCastling => this.random.On;
 	public int OneCastlingNum => this.random.Num;
 
@@ -114,7 +115,7 @@ public sealed class BarterStatus(IOptionLoader loader, bool isImpostor) : IStatu
 
 	public string CastlingStatus()
 		=> Tr.GetString(
-			"castlingInfo",
+			"BarterCastlingInfo",
 			castlingNum.MaxNum, castlingNum.All);
 
 	public void UseCastling()
@@ -122,8 +123,10 @@ public sealed class BarterStatus(IOptionLoader loader, bool isImpostor) : IStatu
 		this.castlingNum.Use();
 	}
 
-	public bool CanUseCastling()
+	public bool CanUseNoneRandomCastling()
 		=> this.castlingNum.CanUse() && !this.random.On;
+	public bool CanUseRandomCastling()
+		=> this.castlingNum.CanUse();
 
 	public void Reset()
 	{

@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using AmongUs.GameOptions;
-using TMPro;
-using UnityEngine;
-
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -15,6 +9,13 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using Il2CppSystem.Xml;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 
 #nullable enable
@@ -72,8 +73,8 @@ public sealed class BarterRole :
 
 	public bool IsAwake => this.status is not null && this.status.IsAwake;
 
-	public RoleTypes NoneAwakeRole => 
-		this.IsImpostor() ? 
+	public RoleTypes NoneAwakeRole =>
+		this.IsImpostor() ?
 		RoleTypes.Impostor : RoleTypes.Crewmate;
 
 	private BarterStatus? status;
@@ -81,6 +82,7 @@ public sealed class BarterRole :
 
 	private Dictionary<byte, SpriteRenderer> sourceMark = [];
 	private VoteSwapSystem? system;
+	private AbilityButton? randomButton;
 
 	public BarterRole(
 		) : base(
@@ -104,11 +106,16 @@ public sealed class BarterRole :
 			return;
 		}
 
-		if (meeting != null && this.status is not null)
+
+		if (rolePlayer.Data != null &&
+			!rolePlayer.Data.IsDead &&
+			!rolePlayer.Data.Disconnected &&
+			meeting != null &&
+			this.status is not null)
 		{
 			if (meetingCastlingText == null)
 			{
-				meetingCastlingText = UnityEngine.Object.Instantiate(
+				meetingCastlingText = UnityObject.Instantiate(
 					HudManager.Instance.TaskPanel.taskText,
 					meeting.transform);
 				meetingCastlingText.alignment = TextAlignmentOptions.BottomLeft;
@@ -120,18 +127,48 @@ public sealed class BarterRole :
 				meetingCastlingText.transform.localScale *= 0.9f;
 				meetingCastlingText.color = Palette.White;
 				meetingCastlingText.gameObject.SetActive(false);
+
+				if (this.status.IsRandomCastling)
+				{
+					this.randomButton = UnityObject.Instantiate(meeting.MeetingAbilityButton, meeting.transform);
+					this.randomButton.graphic.sprite = AbilityImage;
+					if (this.randomButton.TryGetComponent<PassiveButton>(out var passive))
+					{
+						passive.OnClick.RemoveAllPersistentAndListeners();
+						passive.OnClick.AddListener(randomCastling);
+						passive.OnClick.AddListener(() =>
+						{
+							if (!this.status.CanUseRandomCastling() && this.randomButton != null)
+							{
+								this.randomButton.SetDisabled();
+							}
+						});
+					}
+					this.randomButton.SetInfiniteUses();
+					this.randomButton.gameObject.SetActive(true);
+					this.randomButton.buttonLabelText.text = Tr.GetString("BarterRandomCstling");
+
+					var curPos = this.randomButton.transform.localPosition;
+					this.randomButton.transform.localPosition = curPos + new Vector3(-1.5f, 0.0f);
+				}
 			}
 
 			meetingCastlingText.text = this.status.CastlingStatus();
-			if (this.status.IsRandomCastling)
-			{
-				// ランダムキャスリングのボタン等の設定
-			}
 			meetingInfoSetActive(true);
 		}
 		else
 		{
 			meetingInfoSetActive(false);
+		}
+		if (this.randomButton != null)
+		{
+			this.randomButton.gameObject.SetActive(
+				meeting != null && 
+					(
+						meeting.state == MeetingHud.VoteStates.Discussion ||
+						meeting.state == MeetingHud.VoteStates.NotVoted ||
+						meeting.state == MeetingHud.VoteStates.Voted
+					));
 		}
 	}
 
@@ -150,14 +187,14 @@ public sealed class BarterRole :
 
 		byte target = instance.TargetPlayerId;
 		if (this.status is null ||
-			!this.status.CanUseCastling() ||
+			!this.status.CanUseNoneRandomCastling() ||
 			target == PlayerVoteArea.DeadVote ||
 			target == PlayerVoteArea.SkippedVote)
 		{
 			return true;
 		}
-		return 
-			source.HasValue && 
+		return
+			source.HasValue &&
 			source.Value == target;
 	}
 
@@ -184,7 +221,7 @@ public sealed class BarterRole :
 					sourceMark.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
 						ObjectPath.CommonTextureAsset,
 						string.Format(
-							ObjectPath.CommonImagePathFormat, 
+							ObjectPath.CommonImagePathFormat,
 							ObjectPath.VoteSwapSource));
 					sourceMark.transform.localPosition = new Vector3(7.25f, -0.5f, -4f);
 					sourceMark.transform.localScale = new Vector3(0.5f, 3.0f, 1.0f);
@@ -199,6 +236,7 @@ public sealed class BarterRole :
 			{
 				rend.gameObject.SetActive(false);
 			}
+			this.status?.UseCastling();
 			system?.RpcSwapVote(source, target, this.showOps);
 			this.source = null;
 		}
@@ -288,8 +326,9 @@ public sealed class BarterRole :
 	{
 		if (meetingCastlingText != null)
 		{
-			meetingCastlingText.gameObject.SetActive(active);
+			this.meetingCastlingText.gameObject.SetActive(active);
 		}
+	}
 	}
 
 	public string GetFakeOptionString()
@@ -413,6 +452,10 @@ public sealed class BarterRole :
 		{
 			return;
 		}
+
+
+		this.status.UseCastling();
+
 		var target = MeetingHud.Instance.playerStates
 			.Select(x => x.TargetPlayerId)
 			.Where(x => x != PlayerVoteArea.SkippedVote && x != PlayerVoteArea.DeadVote);
