@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -81,8 +81,7 @@ public static class GhostRoleAbilityFactory
 
 		return new ExtremeAbilityButton(
 			new ReusableActivatingBehavior(
-				text: Tr.GetString(
-					string.Concat(type.ToString(), "Button")),
+				text: Tr.GetString($"{type}Button"),
 				img: img,
 				canUse: CreateGhostRoleUseFunc(canUse),
 				ability: CreateGhostRoleAbility(
@@ -111,8 +110,7 @@ public static class GhostRoleAbilityFactory
 
 		return new ExtremeAbilityButton(
 			new ReusableActivatingBehavior(
-				text: Tr.GetString(
-					string.Concat(type.ToString(), "Button")),
+				text: Tr.GetString($"{type}Button"),
 				img: img,
 				canUse: CreateGhostRoleUseFunc(canUse),
 				ability: CreateGhostRoleAbility(
@@ -174,8 +172,7 @@ public static class GhostRoleAbilityFactory
 
 		return new ExtremeAbilityButton(
 			new ActivatingCountBehavior(
-				text: Tr.GetString(
-					string.Concat(type.ToString(), "Button")),
+				text: Tr.GetString($"{type}Button"),
 				img: img,
 				canUse: CreateGhostRoleUseFunc(canUse),
 				ability: CreateGhostRoleAbility(
