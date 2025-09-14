@@ -83,16 +83,8 @@ public sealed class GhostRoleSpawnDataManager :
 		{
 			var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
 
-			var tab = role.Team.Id switch
-			{
-				ExtremeRoleType.Neutral => OptionTab.GhostNeutralTab,
-				ExtremeRoleType.Crewmate => OptionTab.GhostCrewmateTab,
-				ExtremeRoleType.Impostor => OptionTab.GhostImpostorTab,
-				_ => throw new System.ArgumentOutOfRangeException(),
-			};
-
 			if (!opt.TryGetCategory(
-					tab, ExtremeGhostRoleManager.GetRoleGroupId(role.Core.Id),
+					role.Core.Tab, ExtremeGhostRoleManager.GetRoleGroupId(role.Core.Id),
 					out var roleCate))
 			{
 				continue;
@@ -113,7 +105,7 @@ public sealed class GhostRoleSpawnDataManager :
 			var addData = new GhostRoleSpawnData(
 				roleId, roleNum, spawnRate, weight, role.GetRoleFilter());
 
-			ExtremeRoleType team = role.Team.Id;
+			ExtremeRoleType team = role.Core.DefaultTeam;
 
 			if (!tmpUseData.ContainsKey(team))
 			{
