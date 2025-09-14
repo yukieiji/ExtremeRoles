@@ -6,7 +6,7 @@ namespace ExtremeRoles.GhostRoles.API;
 public sealed record GhostRoleCore(
 	string Name, ExtremeGhostRoleId Id,
 	Color Color, 
-	ExtremeRoleType Team, 
+	ExtremeRoleType DefaultTeam, 
 	OptionTab Tab=OptionTab.GeneralTab)
 {
 	public bool IsVanillaRole() => this.Id == ExtremeGhostRoleId.VanillaRole;
