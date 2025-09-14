@@ -80,7 +80,7 @@ public abstract class GhostRoleBase
 
 		this.Core = new GhostRoleCore(
 			roleName,
-			id, color, tab);
+			id, color, team, tab);
 		this.Team = new GhostTeam(team);
 
         this.HasTask = hasTask;
