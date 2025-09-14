@@ -265,19 +265,4 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		img.gameObject.layer = 5;
 		return img;
 	}
-	public static IEnumerator MovedSlide3D(Transform target, Vector3 source, Vector3 dest, float duration = 0.75f)
-	{
-		Vector3 vector = default(Vector3);
-		for (float time = 0f; time < duration; time += Time.deltaTime)
-		{
-			float num = time / duration;
-			vector.x = Mathf.SmoothStep(source.x, dest.x, num);
-			vector.y = Mathf.SmoothStep(source.y, dest.y, num);
-			vector.z = Mathf.Lerp(source.z, dest.z, num);
-			target.localPosition = vector;
-			yield return null;
-		}
-		target.localPosition = dest;
-		yield break;
-	}
 }
