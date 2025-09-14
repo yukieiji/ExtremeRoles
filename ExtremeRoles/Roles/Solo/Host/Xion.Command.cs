@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
@@ -202,13 +202,11 @@ namespace ExtremeRoles.Roles.Solo.Host
             SingleRoleBase targetRole)
         {
             // シェイプシフターのリセット処理
-            if (targetRole.IsVanillaRole())
+            if (targetRole.IsVanillaRole() &&
+				((VanillaRoleWrapper)targetRole).VanilaRoleId == RoleTypes.Shapeshifter)
             {
-                if (((VanillaRoleWrapper)targetRole).VanilaRoleId == RoleTypes.Shapeshifter)
-                {
-                    targetPlayer.Shapeshift(targetPlayer, false);
-                }
-            }
+				targetPlayer.Shapeshift(targetPlayer, false);
+			}
         }
 
         private static void specialResetRoleReset(
