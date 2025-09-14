@@ -7,7 +7,7 @@ public sealed record GhostRoleCore(
 	string Name, ExtremeGhostRoleId Id,
 	Color Color, 
 	ExtremeRoleType DefaultTeam, 
-	OptionTab Tab=OptionTab.GeneralTab)
+	OptionTab Tab = OptionTab.GeneralTab)
 {
 	public bool IsVanillaRole() => this.Id == ExtremeGhostRoleId.VanillaRole;
 
@@ -17,5 +17,5 @@ public sealed record GhostRoleCore(
 	public static GhostRoleCore CreateNeutral(ExtremeGhostRoleId id, Color color)
 		=> new GhostRoleCore(id.ToString(), id, color, ExtremeRoleType.Neutral, OptionTab.GhostNeutralTab);
 	public static GhostRoleCore CreateImpostor(ExtremeGhostRoleId id)
-		=> new GhostRoleCore(id.ToString(), id, Palette.ImpostorRed, ExtremeRoleType.Impostor, OptionTab.GhostCrewmateTab);
+		=> new GhostRoleCore(id.ToString(), id, Palette.ImpostorRed, ExtremeRoleType.Impostor, OptionTab.GhostImpostorTab);
 }

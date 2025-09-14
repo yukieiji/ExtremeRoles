@@ -17,9 +17,11 @@ public sealed class GhostRoleOptionBuildManager(
 	{
 		foreach (var (id, core) in coreProvider.All)
 		{
-			var factory = getFactory(core);
-			var builder = builderProvider.Get(id);
-			builder.Build(factory);
+			using (var factory = getFactory(core))
+			{
+				var builder = builderProvider.Get(id);
+				builder.Build(factory);
+			}
 		}
 	}
 
