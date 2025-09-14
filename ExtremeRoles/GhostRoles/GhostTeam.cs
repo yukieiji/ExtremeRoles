@@ -1,7 +1,7 @@
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Roles.API;
 
-namespace ExtremeRoles.GhostRoles.API;
+namespace ExtremeRoles.GhostRoles;
 
 public sealed class GhostTeam(ExtremeRoleType team) : IGhostTeam
 {
