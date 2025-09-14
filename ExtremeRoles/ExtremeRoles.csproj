@@ -5,8 +5,8 @@
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
       <!--<Version>2025.7.2.0</Version>-->
-    <VersionPrefix>2025.9.14</VersionPrefix>
-    <VersionSuffix>AmongUsv1700</VersionSuffix>
+    <VersionPrefix>2025.9.26</VersionPrefix>
+    <VersionSuffix>ReBirth</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
