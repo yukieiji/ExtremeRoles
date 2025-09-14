@@ -1,23 +1,22 @@
-using AmongUs.GameOptions;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.RoleAssign
-using ExtremeRoles.Performance;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.Solo;
-using ExtremeRoles.Roles.Solo.Crewmate;
-using ExtremeRoles.Roles.Solo.Neutral.Jackal;
-using Rewired.Utils.Classes.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 
+using AmongUs.GameOptions;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo;
+using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Roles.Solo.Neutral.Jackal;
 
 namespace ExtremeRoles.Roles.Combination;
 
