@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using TMPro;
 
@@ -68,10 +68,9 @@ public static class MeetingIntroAnimationInitPatch
 			{
 				builder.AppendLine();
 			}
-			//builder.AppendLine(); (改行)
 
             builder.Append(
-				MeetingReporter.Instance.GetMeetingEndReport());
+				MeetingReporter.Instance.GetMeetingStartReport());
 		}
 
 		if (builder.Length <= 0)
