@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace ExtremeRoles.GhostRoles.API;
 
-public readonly record struct GhostRoleCore(
+public sealed record GhostRoleCore(
 	string Name, ExtremeGhostRoleId Id,
-	Color Color, ExtremeRoleType Team, OptionTab Tab=OptionTab.GeneralTab);
+	Color Color, 
+	OptionTab Tab=OptionTab.GeneralTab)
+{
+	public bool IsVanillaRole() => this.Id == ExtremeGhostRoleId.VanillaRole;
+}

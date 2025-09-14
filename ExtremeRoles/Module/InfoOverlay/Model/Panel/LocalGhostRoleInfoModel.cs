@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -28,7 +28,7 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 		string roleOptionString = "";
 		string colorRoleName = role.GetColoredRoleName();
 
-		if (!role.IsVanillaRole())
+		if (!role.Core.IsVanillaRole())
 		{
 			var useLoader =
 				role is ICombination combGhost &&

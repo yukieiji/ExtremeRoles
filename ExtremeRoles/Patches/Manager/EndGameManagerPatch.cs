@@ -205,7 +205,7 @@ public static class EndGameManagerSetUpPatch
         {
             if (!ExtremeGhostRoleManager.GameRole.TryGetValue(
 					player.PlayerId, out GhostRoleBase ghostRole) ||
-                !ghostRole.IsNeutral() ||
+                !ghostRole.Team.IsNeutral() ||
                 !(ghostRole is IGhostRoleWinable ghostWin)) { continue; }
 
             winPlayer.Add(player.PlayerId);

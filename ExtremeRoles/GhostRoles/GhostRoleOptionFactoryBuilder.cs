@@ -19,7 +19,7 @@ public sealed class GhostRoleOptionFactoryBuilder(GhostRoleBase role)
 			RoleCommonOption.SpawnRate,
 			ignorePrefix: true);
 
-		int spawnNum = this.role.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
+		int spawnNum = this.role.Team.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
 		factory.CreateIntOption(
 			RoleCommonOption.RoleNum,

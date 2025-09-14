@@ -32,6 +32,7 @@ public abstract class GhostRoleBase
 	public ExtremeAbilityButton? Button { get; protected set; }
 
 	public GhostRoleCore Core { get; }
+	public IGhostTeam Team { get; }
     private int controlId;
 
 	public virtual IOptionLoader Loader
@@ -51,8 +52,10 @@ public abstract class GhostRoleBase
 
 	public GhostRoleBase(
 		bool hasTask,
+		ExtremeRoleType team,
 		in GhostRoleCore core)
 	{
+		this.Team = new GhostTeam(team);
 		this.Core = core;
 		this.HasTask = hasTask;
 	}
@@ -78,7 +81,8 @@ public abstract class GhostRoleBase
 
 		this.Core = new GhostRoleCore(
 			roleName,
-			id, color, team, tab);
+			id, color, tab);
+		this.Team = new GhostTeam(team);
 
         this.HasTask = hasTask;
     }
@@ -117,14 +121,6 @@ public abstract class GhostRoleBase
         CreateSpecificOption(factory);
     }
 
-    public bool IsCrewmate() => this.Core.Team == ExtremeRoleType.Crewmate;
-
-    public bool IsImpostor() => this.Core.Team == ExtremeRoleType.Impostor;
-
-    public bool IsNeutral() => this.Core.Team == ExtremeRoleType.Neutral;
-
-    public bool IsVanillaRole() => this.Core.Id == ExtremeGhostRoleId.VanillaRole;
-
     public virtual string GetColoredRoleName() => Design.ColoredString(
         this.Core.Color, Tr.GetString(this.Core.Name));
 
@@ -146,22 +142,20 @@ public abstract class GhostRoleBase
     {
         var overLoader = targetRole as Roles.Solo.Impostor.OverLoader;
 
-        if (overLoader != null)
+        if (overLoader != null &&
+			overLoader.IsOverLoad)
         {
-            if (overLoader.IsOverLoad)
-            {
-                return Palette.ImpostorRed;
-            }
-        }
+			return Palette.ImpostorRed;
+		}
 
         bool isGhostRoleImpostor = false;
         if (targetGhostRole != null)
         {
-            isGhostRoleImpostor = targetGhostRole.IsImpostor();
+            isGhostRoleImpostor = targetGhostRole.Team.IsImpostor();
         }
 
         if ((targetRole.IsImpostor() || targetRole.FakeImpostor || isGhostRoleImpostor) &&
-            this.IsImpostor())
+            this.Team.IsImpostor())
         {
             return Palette.ImpostorRed;
         }
@@ -229,7 +223,7 @@ public abstract class GhostRoleBase
 			RoleCommonOption.SpawnRate,
 			ignorePrefix: true);
 
-        int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
+        int spawnNum = this.Team.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
 		factory.CreateIntOption(
             RoleCommonOption.RoleNum,

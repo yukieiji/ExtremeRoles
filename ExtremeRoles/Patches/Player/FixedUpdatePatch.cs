@@ -225,7 +225,7 @@ public static class PlayerControlFixedUpdatePatch
 				break;
 			case RoleTypes.CrewmateGhost:
 			case RoleTypes.ImpostorGhost:
-				if (playerGhostRole.IsVanillaRole() &&
+				if (playerGhostRole.Core.IsVanillaRole() &&
 					MeetingHud.Instance == null &&
 					ExileController.Instance == null)
 				{

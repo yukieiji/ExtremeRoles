@@ -83,7 +83,7 @@ public sealed class GhostRoleSpawnDataManager :
 		{
 			var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
 
-			var tab = role.Core.Team switch
+			var tab = role.Team.Id switch
 			{
 				ExtremeRoleType.Neutral => OptionTab.GhostNeutralTab,
 				ExtremeRoleType.Crewmate => OptionTab.GhostCrewmateTab,
@@ -113,7 +113,7 @@ public sealed class GhostRoleSpawnDataManager :
 			var addData = new GhostRoleSpawnData(
 				roleId, roleNum, spawnRate, weight, role.GetRoleFilter());
 
-			ExtremeRoleType team = role.Core.Team;
+			ExtremeRoleType team = role.Team.Id;
 
 			if (!tmpUseData.ContainsKey(team))
 			{

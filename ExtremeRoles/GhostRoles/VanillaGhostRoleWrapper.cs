@@ -5,6 +5,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.GhostRoles;
 
@@ -14,8 +15,9 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
 
     public VanillaGhostRoleWrapper(
         RoleTypes vanillaRoleId) : base(
-			vanillaRoleId is not RoleTypes.Impostor,
-            createCore(vanillaRoleId))
+			vanillaRoleId is not RoleTypes.ImpostorGhost,
+			vanillaRoleId is RoleTypes.ImpostorGhost ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate,
+			createCore(vanillaRoleId))
     {
 		this.vanillaRoleId = vanillaRoleId;
     }
@@ -77,7 +79,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
 	private static GhostRoleCore createCore(RoleTypes vanillaRoleId)
 		=> vanillaRoleId switch
 		{ 
-			RoleTypes.ImpostorGhost => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.ImpostorRed, Roles.API.ExtremeRoleType.Impostor),
-			_ => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.White, Roles.API.ExtremeRoleType.Crewmate)
+			RoleTypes.ImpostorGhost => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.ImpostorRed),
+			_ => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.White)
 		};
 }
