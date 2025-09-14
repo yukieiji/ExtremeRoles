@@ -206,7 +206,7 @@ public sealed class IntroCutsceneModder : MonoBehaviour
             }
         }
 		// Intro solo teams
-		else if (role.IsNeutral() || role.Id is ExtremeRoleId.Xion)
+		else if (role.IsNeutral() || role.Core.Id is ExtremeRoleId.Xion)
 		{
 			var (main, sub) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleAwake<RoleTypes>>();
 			if ((main is not null && !main.IsAwake) || (sub is not null && !sub.IsAwake))
