@@ -6,6 +6,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.RoleAssign;

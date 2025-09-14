@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using TMPro;
 using UnityEngine;
@@ -6,6 +6,7 @@ using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
 
@@ -18,7 +19,7 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 	private TextMeshPro? valueText;
 
 	[HideFromIl2Cpp]
-	public IOption? OptionModel { private get; set; }
+	public IOldOption? OptionModel { private get; set; }
 
 	[HideFromIl2Cpp]
 	public OptionCategory? OptionCategoryModel { private get; set; }

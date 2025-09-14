@@ -1,7 +1,8 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 

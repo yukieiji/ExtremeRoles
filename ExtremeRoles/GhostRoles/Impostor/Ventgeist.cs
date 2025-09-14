@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 #nullable enable
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Extension.VentModule;
 using ExtremeRoles.Module.Ability.Factory;
 

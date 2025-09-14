@@ -15,6 +15,8 @@ namespace ExtremeRoles.Roles.API
 
         public bool IsLiberal() => this.Team == ExtremeRoleType.Liberal;
 
+        public bool IsLiberal() => this.Team == ExtremeRoleType.Liberal;
+
         public virtual bool IsSameTeam(SingleRoleBase targetRole)
         {
             if (this.IsLiberal())

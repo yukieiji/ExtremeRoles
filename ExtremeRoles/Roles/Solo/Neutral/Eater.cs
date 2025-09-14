@@ -8,7 +8,6 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.ModeSwitcher;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -18,6 +17,7 @@ using ExtremeRoles.Resources;
 
 using BepInEx.Unity.IL2CPP.Utils;
 using ExtremeRoles.Roles.Combination.Avalon;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 #nullable enable

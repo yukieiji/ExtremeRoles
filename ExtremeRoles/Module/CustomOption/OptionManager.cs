@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -7,12 +7,13 @@ using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Extension;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.CustomOption.Implemented.Old;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 
 #nullable enable
@@ -87,7 +88,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	public bool TryGetTab(OptionTab tab, [NotNullWhen(true)] out OptionTabContainer? container)
 		=> this.options.TryGetValue(tab, out container) && container is not null;
 
-	public bool TryGetCategory(OptionTab tab, int categoryId, [NotNullWhen(true)] out OptionCategory? category)
+	public bool TryGetCategory(OptionTab tab, int categoryId, [NotNullWhen(true)] out OldOptionCategory? category)
 	{
 		category = null;
 		return this.TryGetTab(tab, out var container) && container.TryGetCategory(categoryId, out category) && category is not null;
@@ -120,7 +121,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		string name,
 		in OptionTab tab,
 		Color? color = null,
-		in IOption? parent = null)
+		in IOldOption? parent = null)
 	{
 		var internalFactory = CreateOptionCategory(id, name, tab, color);
 		var factory = new AutoParentSetOptionCategoryFactory(internalFactory, parent);
@@ -132,19 +133,19 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		T option,
 		in OptionTab tab = OptionTab.GeneralTab,
 		Color? color = null,
-		in IOption? parent = null) where T : Enum
+		in IOldOption? parent = null) where T : Enum
 		=> CreateAutoParentSetOptionCategory(
 			option.FastInt(),
 			option.ToString(),
 			tab, color, parent);
 
-	public void UpdateToStep(in OptionCategory category, in int id, int step)
+	public void UpdateToStep(in OldOptionCategory category, in int id, int step)
 	{
 		var option = category.Get(id);
 		UpdateToStep(category, option, step);
 	}
 
-	public void UpdateToStep(in OptionCategory category, in IOption option, int step)
+	public void UpdateToStep(in OldOptionCategory category, in IOldOption option, int step)
 	{
 		int newSelection = 0;
 		if (Key.IsControlDown())
@@ -158,13 +159,13 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		Update(category, option, newSelection);
 	}
 
-	public void Update(in OptionCategory category, in int id, int newIndex)
+	public void Update(in OldOptionCategory category, in int id, int newIndex)
 	{
 		var option = category.Get(id);
 		Update(category, option, newIndex);
 	}
 
-	public void Update(in OptionCategory category, in IOption option, int newIndex)
+	public void Update(in OldOptionCategory category, in IOldOption option, int newIndex)
 	{
 		option.Selection = newIndex;
 
@@ -195,7 +196,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		}
 	}
 
-	private void registerOptionGroup(OptionTab tab, OptionCategory group)
+	private void registerOptionGroup(OptionTab tab, OldOptionCategory group)
 	{
 		if (!this.options.TryGetValue(tab, out var container))
 		{
@@ -205,7 +206,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	}
 
 	private static void shareOptionCategory(
-		in OptionCategory category, bool isShow = true)
+		in OldOptionCategory category, bool isShow = true)
 	{
 		int size = category.Count;
 
@@ -226,7 +227,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	}
 
 	private static void shareOptionCategoryWithSize(
-		in OptionCategory category, int size, bool isShow=true)
+		in OldOptionCategory category, int size, bool isShow=true)
 	{
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.ShareOption))

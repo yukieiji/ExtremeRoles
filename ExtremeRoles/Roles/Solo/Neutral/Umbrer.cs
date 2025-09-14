@@ -16,8 +16,7 @@ using ExtremeRoles.Module.Ability.ModeSwitcher;
 
 
 using ButtonGraphic = ExtremeRoles.Module.Ability.Behavior.ButtonGraphic;
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 

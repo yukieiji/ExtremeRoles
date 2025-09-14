@@ -7,8 +7,7 @@ using ExtremeRoles.Module.Meeting;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -71,7 +70,7 @@ public sealed class Gambler :
 
     public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
     {
-		// Gamblerは見た目は変更しないのでそのままにする
+		// Gambler�͌����ڂ͕ύX���Ȃ��̂ł��̂܂܂ɂ���
 		yield break;
     }
 

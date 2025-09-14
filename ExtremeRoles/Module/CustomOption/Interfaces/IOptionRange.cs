@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace ExtremeRoles.Module.CustomOption.Interfaces;
 
@@ -7,7 +7,7 @@ public interface IOptionRange<SelectionType>
 		notnull, IComparable, IConvertible,
 		IComparable<SelectionType>, IEquatable<SelectionType>
 {
-	public SelectionType Value { get; }
+	public SelectionType RangeValue { get; }
 	public SelectionType Min { get; }
 	public SelectionType Max { get; }
 

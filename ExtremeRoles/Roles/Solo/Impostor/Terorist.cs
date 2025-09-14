@@ -8,9 +8,7 @@ using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.Ability;
 using UnityEngine;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 

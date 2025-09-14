@@ -16,7 +16,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Combination;
 

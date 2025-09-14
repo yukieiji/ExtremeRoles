@@ -6,7 +6,6 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -19,6 +18,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 

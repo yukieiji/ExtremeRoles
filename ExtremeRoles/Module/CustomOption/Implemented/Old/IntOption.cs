@@ -1,8 +1,7 @@
 using BepInEx.Configuration;
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-namespace ExtremeRoles.Module.CustomOption.Implemented;
+namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 public sealed class IntCustomOption : CustomOptionBase<int, int>, IDynamismOption<int>
 {
@@ -18,20 +17,20 @@ public sealed class IntCustomOption : CustomOptionBase<int, int>, IDynamismOptio
 			info, OptionRange<int>.Create(min, max, step),
 			relation, defaultValue)
 	{
-		this.maxValue = this.OptionRange.Max;
-		this.minValue = this.OptionRange.Min;
+		maxValue = OptionRange.Max;
+		minValue = OptionRange.Min;
 		this.step = step;
 	}
 	public void Update(int newValue)
 	{
-		int newMaxValue = this.maxValue / newValue;
+		int newMaxValue = maxValue / newValue;
 		var newRange = OptionRange<int>.Create(OptionRange.Min, newMaxValue, step);
 		int prevValue = OptionRange.Selection;
 		OptionRange = newRange;
 		Selection = prevValue;
 	}
 
-	public override int Value => OptionRange.Value;
+	public override int Value => OptionRange.RangeValue;
 }
 
 public sealed class IntDynamicCustomOption : CustomOptionBase<int, int>, IDynamismOption<int>
@@ -49,7 +48,7 @@ public sealed class IntDynamicCustomOption : CustomOptionBase<int, int>, IDynami
 		this.step = step;
 	}
 
-	public override int Value => OptionRange.Value;
+	public override int Value => OptionRange.RangeValue;
 
 
 	public void Update(int newValue)

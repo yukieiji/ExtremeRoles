@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 
 using System;
 using System.Linq;
@@ -11,22 +11,24 @@ using UnityEngine;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Implemented.Old;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factory;
+namespace ExtremeRoles.Module.CustomOption.Factory.Old;
 
 public sealed class SequentialOptionCategoryFactory(
 	string name,
 	int groupId,
-	in Action<OptionTab, OptionCategory> action,
+	in Action<OptionTab, OldOptionCategory> action,
 	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) :
 	OptionCategoryFactory(name, groupId, action, tab, color)
 {
 	public int StartId => 0;
-	public int EndId => this.Offset - 1;
+	public int EndId => Offset - 1;
 
 	public int Offset { private get; set; } = 0;
 
@@ -34,7 +36,7 @@ public sealed class SequentialOptionCategoryFactory(
 	public BoolCustomOption CreateBoolOption(
 		object option,
 		bool defaultValue,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -48,7 +50,7 @@ public sealed class SequentialOptionCategoryFactory(
 			defaultValue,
 			OptionRelationFactory.Create(parent, invert));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -57,7 +59,7 @@ public sealed class SequentialOptionCategoryFactory(
 		object option,
 		float defaultValue,
 		float min, float step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -73,7 +75,7 @@ public sealed class SequentialOptionCategoryFactory(
 			OptionRelationFactory.Create(parent, invert),
 			tempMaxValue);
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -82,7 +84,7 @@ public sealed class SequentialOptionCategoryFactory(
 		object option,
 		int defaultValue,
 		int min, int max, int step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -96,7 +98,7 @@ public sealed class SequentialOptionCategoryFactory(
 			defaultValue, min, max, step,
 			OptionRelationFactory.Create(parent, invert));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -105,7 +107,7 @@ public sealed class SequentialOptionCategoryFactory(
 		object option,
 		int defaultValue,
 		int min, int step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -121,7 +123,7 @@ public sealed class SequentialOptionCategoryFactory(
 			OptionRelationFactory.Create(parent, invert),
 			tempMaxValue);
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
@@ -129,7 +131,7 @@ public sealed class SequentialOptionCategoryFactory(
 	public SelectionCustomOption CreateSelectionOption(
 		object option,
 		string[] selections,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -143,14 +145,14 @@ public sealed class SequentialOptionCategoryFactory(
 			selections,
 			OptionRelationFactory.Create(parent, invert));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public SelectionCustomOption CreateSelectionOption<W>(
 		object option,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -164,21 +166,21 @@ public sealed class SequentialOptionCategoryFactory(
 			new OptionInfo(optionId, name, format, isHidden),
 			OptionRelationFactory.Create(parent, invert));
 
-		this.AddOption(optionId, opt);
+		AddOption(optionId, opt);
 		return opt;
 	}
 
 	private string getOptionName(object option, bool ignorePrefix = false)
 	{
-		string cleanedName = this.NameCleaner.Replace(this.Name, string.Empty).Trim();
+		string cleanedName = NameCleaner.Replace(Name, string.Empty).Trim();
 
 		return ignorePrefix ? $"|{cleanedName}|{option}" : $"{cleanedName}{option}";
 	}
 
 	private int getOptionIdAndUpdate()
 	{
-		int optionId = this.Offset + this.IdOffset;
-		this.Offset++;
+		int optionId = Offset + IdOffset;
+		Offset++;
 		return optionId;
 	}
 }

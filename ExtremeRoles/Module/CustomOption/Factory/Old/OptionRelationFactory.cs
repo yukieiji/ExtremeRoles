@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factory;
+namespace ExtremeRoles.Module.CustomOption.Factory.Old;
 
 public static class OptionRelationFactory
 {
 	public static IOptionRelation Create(
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool invert=false,
 		in Func<bool>? hook = null)
 	{

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
 

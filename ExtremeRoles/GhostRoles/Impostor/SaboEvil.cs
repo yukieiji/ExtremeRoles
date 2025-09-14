@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 
 using ExtremeRoles.Module.Ability.Factory;
@@ -7,7 +7,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Extension.Il2Cpp;
 
 #nullable enable

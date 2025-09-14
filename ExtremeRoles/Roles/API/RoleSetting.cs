@@ -1,7 +1,5 @@
 using System;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -81,7 +79,7 @@ public abstract class RoleOptionBase
 
 	protected static void CreateKillerOption(
 		AutoParentSetOptionCategoryFactory factory,
-		IOption parent = null,
+		IOldOption parent = null,
 		bool ignorePrefix = true,
 		bool invert = false)
 	{
