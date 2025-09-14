@@ -394,7 +394,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 		{
 			if (OffsetInfo is null ||
 				!OptionManager.Instance.TryGetCategory(
-					this.Tab,
+					this.Core.Tab,
 					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
 					out var cate))
 			{

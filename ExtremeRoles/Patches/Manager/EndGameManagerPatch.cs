@@ -210,7 +210,10 @@ public static class EndGameManagerSetUpPatch
 
             winPlayer.Add(player.PlayerId);
 
-            if (textAddedGhostRole.Contains(ghostRole.Id)) { continue; }
+            if (textAddedGhostRole.Contains(ghostRole.Core.Id))
+			{
+				continue;
+			}
 
             AddPrefixs(
                 ref winDetailTextBuilder,
@@ -218,7 +221,7 @@ public static class EndGameManagerSetUpPatch
 
 			winDetailTextBuilder.Append(Tr.GetString(
                 ghostRole.GetColoredRoleName()));
-            textAddedGhostRole.Add(ghostRole.Id);
+            textAddedGhostRole.Add(ghostRole.Core.Id);
         }
 
         if (ExtremeGameModeManager.Instance.ShipOption.DisableNeutralSpecialForceEnd &&

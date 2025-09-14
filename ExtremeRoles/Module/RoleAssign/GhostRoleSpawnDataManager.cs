@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using ExtremeRoles.Helper;
@@ -83,7 +83,7 @@ public sealed class GhostRoleSpawnDataManager :
 		{
 			var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
 
-			var tab = role.Team switch
+			var tab = role.Core.Team switch
 			{
 				ExtremeRoleType.Neutral => OptionTab.GhostNeutralTab,
 				ExtremeRoleType.Crewmate => OptionTab.GhostCrewmateTab,
@@ -92,7 +92,7 @@ public sealed class GhostRoleSpawnDataManager :
 			};
 
 			if (!opt.TryGetCategory(
-					tab, ExtremeGhostRoleManager.GetRoleGroupId(role.Id),
+					tab, ExtremeGhostRoleManager.GetRoleGroupId(role.Core.Id),
 					out var roleCate))
 			{
 				continue;
@@ -113,7 +113,7 @@ public sealed class GhostRoleSpawnDataManager :
 			var addData = new GhostRoleSpawnData(
 				roleId, roleNum, spawnRate, weight, role.GetRoleFilter());
 
-			ExtremeRoleType team = role.Team;
+			ExtremeRoleType team = role.Core.Team;
 
 			if (!tmpUseData.ContainsKey(team))
 			{

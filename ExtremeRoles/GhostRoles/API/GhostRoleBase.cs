@@ -25,10 +25,6 @@ public enum GhostRoleOption
 
 public abstract class GhostRoleBase
 {
-	public Color Color { get; protected set; }
-
-	public ExtremeRoleType Team { get; protected set; }
-	public ExtremeGhostRoleId Id { get; protected set; }
 
 	public int GameControlId { get; protected set; }
 
@@ -37,7 +33,7 @@ public abstract class GhostRoleBase
 
 	public ExtremeAbilityButton? Button { get; protected set; }
 
-    protected readonly OptionTab Tab = OptionTab.GeneralTab;
+	public GhostRoleCore Core { get; }
     private int controlId;
 
 	public virtual IOptionLoader Loader
@@ -45,8 +41,8 @@ public abstract class GhostRoleBase
 		get
 		{
 			if (!OptionManager.Instance.TryGetCategory(
-					this.Tab,
-					ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
+					this.Core.Tab,
+					ExtremeGhostRoleManager.GetRoleGroupId(this.Core.Id),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");
@@ -63,37 +59,29 @@ public abstract class GhostRoleBase
         Color color,
         OptionTab tab = OptionTab.GeneralTab)
     {
-        this.HasTask = hasTask;
-        this.Team = team;
-        this.Id = id;
-        this.Name = roleName;
-        this.Color = color;
+		if (tab == OptionTab.GeneralTab)
+		{
+			tab = team switch
+			{
+				ExtremeRoleType.Crewmate => OptionTab.GhostCrewmateTab,
+				ExtremeRoleType.Impostor => OptionTab.GhostImpostorTab,
+				ExtremeRoleType.Neutral => OptionTab.GhostNeutralTab,
+				_ => OptionTab.GeneralTab,
+			};
+		}
 
-        if (tab == OptionTab.GeneralTab)
-        {
-            switch (team)
-            {
-                case ExtremeRoleType.Crewmate:
-                    this.Tab = OptionTab.GhostCrewmateTab;
-                    break;
-                case ExtremeRoleType.Impostor:
-                    this.Tab = OptionTab.GhostImpostorTab;
-                    break;
-                case ExtremeRoleType.Neutral:
-                    this.Tab = OptionTab.GhostNeutralTab;
-                    break;
-            }
-        }
-        else
-        {
-            this.Tab = tab;
-        }
+		this.Core = new GhostRoleCore(
+			roleName,
+			id, color, team, tab);
+
+        this.HasTask = hasTask;
+        this.Name = roleName;
     }
 
     public virtual GhostRoleBase Clone()
     {
         GhostRoleBase copy = (GhostRoleBase)this.MemberwiseClone();
-        Color baseColor = this.Color;
+        Color baseColor = this.Core.Color;
 
 		if (this is ICombination combRole &&
 			copy is ICombination copyComb)
@@ -101,11 +89,13 @@ public abstract class GhostRoleBase
 			copyComb.OffsetInfo = combRole.OffsetInfo;
 		}
 
+		/*
         copy.Color = new Color(
             baseColor.r,
             baseColor.g,
             baseColor.b,
             baseColor.a);
+		*/
 
         return copy;
     }
@@ -122,29 +112,29 @@ public abstract class GhostRoleBase
         CreateSpecificOption(factory);
     }
 
-    public bool IsCrewmate() => this.Team == ExtremeRoleType.Crewmate;
+    public bool IsCrewmate() => this.Core.Team == ExtremeRoleType.Crewmate;
 
-    public bool IsImpostor() => this.Team == ExtremeRoleType.Impostor;
+    public bool IsImpostor() => this.Core.Team == ExtremeRoleType.Impostor;
 
-    public bool IsNeutral() => this.Team == ExtremeRoleType.Neutral;
+    public bool IsNeutral() => this.Core.Team == ExtremeRoleType.Neutral;
 
-    public bool IsVanillaRole() => this.Id == ExtremeGhostRoleId.VanillaRole;
+    public bool IsVanillaRole() => this.Core.Id == ExtremeGhostRoleId.VanillaRole;
 
     public virtual string GetColoredRoleName() => Design.ColoredString(
-        this.Color, Tr.GetString(this.Name));
+        this.Core.Color, Tr.GetString(this.Name));
 
     public virtual string GetFullDescription() => Tr.GetString(
-       $"{this.Id}FullDescription");
+       $"{this.Core.Id}FullDescription");
 
     public virtual string GetImportantText() =>
         Design.ColoredString(
-            this.Color,
+            this.Core.Color,
             string.Format("{0}: {1}",
                 Design.ColoredString(
-                    this.Color,
+                    this.Core.Color,
                     Tr.GetString(this.Name)),
                 Tr.GetString(
-                    $"{this.Id}ShortDescription")));
+                    $"{this.Core.Id}ShortDescription")));
 
     public virtual Color GetTargetRoleSeeColor(
         byte targetPlayerId, SingleRoleBase targetRole, GhostRoleBase? targetGhostRole)
@@ -228,8 +218,8 @@ public abstract class GhostRoleBase
     private OptionFactory createOptionFactory()
     {
 		var factory = OptionManager.CreateAutoParentSetOptionCategory(
-			ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
-			this.Name, this.Tab, this.Color);
+			ExtremeGhostRoleManager.GetRoleGroupId(this.Core.Id),
+			this.Name, this.Core.Tab, this.Core.Color);
 		factory.Create0To100Percentage10StepOption(
 			RoleCommonOption.SpawnRate,
 			ignorePrefix: true);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -84,7 +84,7 @@ public sealed class Foras : GhostRoleBase
             {
                 GameObject obj = new GameObject("Foras Arrow");
                 foras.arrowControler = obj.AddComponent<ArrowControler>();
-                foras.arrowControler.SetColor(foras.Color);
+                foras.arrowControler.SetColor(foras.Core.Color);
             }
             foras.arrowControler.SetTarget(arrowTargetPlayer.gameObject);
             foras.arrowControler.SetDelayActiveTimer(foras.delayTime);

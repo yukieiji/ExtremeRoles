@@ -76,7 +76,7 @@ public sealed class LocalPlayerMeetingVisualUpdateEvent(
 			local.IsDead);
 		if (ghostRole is not null)
 		{
-			Color ghostRoleColor = ghostRole.Color;
+			Color ghostRoleColor = ghostRole.Core.Color;
 			paintColor = (paintColor / 2.0f) + (ghostRoleColor / 2.0f);
 		}
 		if (paintColor == Palette.ClearWhite)
