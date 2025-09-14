@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -66,7 +67,9 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 		var swapInfo = system.getSwapInfo();
 		var allAnime = new List<Il2CppIEnumerator>(swapInfo.Count * 2);
+		var voteSwapedPos = new Dictionary<byte, Vector3>(pvaCache.Count);
 
+		// 交換をシミュレートし、最終的なtとsの位置を計算
 		foreach (var (s, t) in swapInfo)
 		{
 			if (s == t ||
@@ -78,16 +81,23 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 				continue;
 			}
 
-			var sAnime = Effects.Slide3D(
-				sPva.transform,
-				sPva.transform.localPosition,
-				tPva.transform.localPosition, animeDuration);
-			var tAnime = Effects.Slide3D(
-				tPva.transform,
-				tPva.transform.localPosition,
-				sPva.transform.localPosition, animeDuration);
-			allAnime.Add(sAnime);
-			allAnime.Add(tAnime);
+			var sTruePos = voteSwapedPos.TryGetValue(s, out var sSwaped) ? sSwaped : sPva.transform.localPosition;
+			var tTruePos = voteSwapedPos.TryGetValue(t, out var tSwaped) ? tSwaped : tPva.transform.localPosition; 
+			
+			voteSwapedPos[s] = tTruePos;
+			voteSwapedPos[t] = sTruePos;
+		}
+
+		//最終的な位置に向かってスワップ
+		foreach (var (id, pos) in voteSwapedPos)
+		{
+			if (!pvaCache.TryGetValue(id, out var pva) ||
+				pva.transform.localPosition == pos)
+			{
+				continue;
+			}
+			allAnime.Add(
+				Effects.Slide3D(pva.transform, pva.transform.localPosition, pos, animeDuration));
 		}
 		instance.StartCoroutine(Effects.All(allAnime.ToArray()));
 	}
@@ -254,5 +264,20 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		img.transform.localScale = new Vector3(0.5f, 3.0f, 1.0f);
 		img.gameObject.layer = 5;
 		return img;
+	}
+	public static IEnumerator MovedSlide3D(Transform target, Vector3 source, Vector3 dest, float duration = 0.75f)
+	{
+		Vector3 vector = default(Vector3);
+		for (float time = 0f; time < duration; time += Time.deltaTime)
+		{
+			float num = time / duration;
+			vector.x = Mathf.SmoothStep(source.x, dest.x, num);
+			vector.y = Mathf.SmoothStep(source.y, dest.y, num);
+			vector.z = Mathf.Lerp(source.z, dest.z, num);
+			target.localPosition = vector;
+			yield return null;
+		}
+		target.localPosition = dest;
+		yield break;
 	}
 }

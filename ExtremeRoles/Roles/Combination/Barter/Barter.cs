@@ -329,7 +329,6 @@ public sealed class BarterRole :
 			this.meetingCastlingText.gameObject.SetActive(active);
 		}
 	}
-	}
 
 	public string GetFakeOptionString()
 		=> "";
