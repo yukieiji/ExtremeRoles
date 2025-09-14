@@ -145,11 +145,8 @@ public sealed class BarterRole :
 						});
 					}
 					this.randomButton.SetInfiniteUses();
-					this.randomButton.gameObject.SetActive(true);
 					this.randomButton.buttonLabelText.text = Tr.GetString("BarterRandomCstling");
-
-					var curPos = this.randomButton.transform.localPosition;
-					this.randomButton.transform.localPosition = curPos + new Vector3(-1.5f, 0.0f);
+					this.randomButton.gameObject.SetActive(false);
 				}
 			}
 
@@ -162,13 +159,19 @@ public sealed class BarterRole :
 		}
 		if (this.randomButton != null)
 		{
-			this.randomButton.gameObject.SetActive(
-				meeting != null && 
-					(
-						meeting.state == MeetingHud.VoteStates.Discussion ||
-						meeting.state == MeetingHud.VoteStates.NotVoted ||
-						meeting.state == MeetingHud.VoteStates.Voted
-					));
+			bool newState = meeting != null &&
+				(
+					meeting.state == MeetingHud.VoteStates.Discussion ||
+					meeting.state == MeetingHud.VoteStates.NotVoted ||
+					meeting.state == MeetingHud.VoteStates.Voted
+				);
+			bool prevState = this.randomButton.gameObject.activeSelf;
+			this.randomButton.gameObject.SetActive(newState);
+			if (newState != prevState)
+			{
+				var curPos = this.randomButton.transform.localPosition;
+				this.randomButton.transform.localPosition = curPos + new Vector3(-1.0f, 0.0f);
+			}
 		}
 	}
 
