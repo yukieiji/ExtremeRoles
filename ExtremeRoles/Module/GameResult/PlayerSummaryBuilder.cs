@@ -39,7 +39,7 @@ public sealed class PlayerSummaryBuilder(
 	public PlayerSummary? Create(
 		NetworkedPlayerInfo playerInfo,
 		SingleRoleBase role,
-		GhostRoleBase ghostRole)
+		GhostRoleBase? ghostRole)
 	{
 		byte playerId = playerInfo.PlayerId;
 		if (!this.taskInfo.TryGetValue(playerId, out var taskInfo))

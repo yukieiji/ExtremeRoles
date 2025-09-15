@@ -16,6 +16,8 @@ using ExtremeRoles.Module.GameResult;
 
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
 public sealed class TagPainter(string[] tags)
@@ -86,8 +88,8 @@ public sealed class FinalSummary : MonoBehaviour
 	private int curPage;
 	private int maxPage;
 
-	private TMP_Text showText;
-	private RectTransform rect;
+	private TMP_Text? showText;
+	private RectTransform? rect;
 	private bool isCreated = false;
 	private bool isHide = false;
 
@@ -119,7 +121,7 @@ public sealed class FinalSummary : MonoBehaviour
 
 	public void Update()
 	{
-		if (!this.isCreated)
+		if (!this.isCreated || this.showText == null)
 		{
 			return;
 		}
@@ -181,7 +183,7 @@ public sealed class FinalSummary : MonoBehaviour
 			}
 
 
-			GhostRoleBase ghostRole = summary.GhostRole;
+			GhostRoleBase? ghostRole = summary.GhostRole;
 			string ghostRoleName = ghostRole != null ?
 				ghostRole.GetColoredRoleName() :
 				Tr.GetString("noGhostRole");
@@ -217,8 +219,10 @@ public sealed class FinalSummary : MonoBehaviour
 
 	public void SetAnchorPoint(Vector2 position)
 	{
-		this.rect.anchoredPosition = new Vector2(
-			position.x + 3.5f, position.y - 0.1f);
+		if (this.rect != null)
+		{
+			this.rect.anchoredPosition = new Vector2(position.x + 3.5f, position.y - 0.1f);
+		}
 	}
 
 	[HideFromIl2Cpp]
@@ -264,14 +268,17 @@ public sealed class FinalSummary : MonoBehaviour
 
 	private void updateShowText()
 	{
-		this.showText.text = this.summaryText[this.curPage];
+		if (this.showText != null)
+		{
+			this.showText.text = this.summaryText[this.curPage];
+		}
 	}
 
 	public readonly record struct PlayerSummary(
 		byte PlayerId,
 		string PlayerName,
 		SingleRoleBase Role,
-		GhostRoleBase GhostRole,
+		GhostRoleBase? GhostRole,
 		int CompletedTask,
 		int TotalTask,
 		PlayerStatus StatusInfo);
