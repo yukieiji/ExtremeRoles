@@ -1,3 +1,5 @@
+using HarmonyLib;
+
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
@@ -9,7 +11,6 @@ using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
-using HarmonyLib;
 
 #nullable enable
 
