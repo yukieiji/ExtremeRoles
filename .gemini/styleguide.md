@@ -74,7 +74,7 @@
         * Null条件演算子やisによる比較は絶対に行わない
     * Unityのクラスもしくは継承されたクラスの変数のみのは使用しない
     ```csharp
-    public sealed class MyMono :  MonoBehaviour
+    public sealed class MyMono : MonoBehaviour
     {
     }
 
