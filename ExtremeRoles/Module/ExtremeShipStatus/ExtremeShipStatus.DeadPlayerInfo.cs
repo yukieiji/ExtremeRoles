@@ -7,28 +7,37 @@ namespace ExtremeRoles.Module.ExtremeShipStatus;
 
 public sealed partial class ExtremeShipStatus
 {
-	public enum PlayerStatus
+	public enum PlayerStatus : byte
 	{
+		// -- 特殊勝利 --
+		// モニカ
 		LoveYou = 0,
+
+		// アサマリ周り
+		Assassinate,
+		DeadAssassinate,
+		Surrender,
+
+		// アンブレイヤー勝利
+		Zombied,
+		// -- 特殊性終了 --
+
+		// 基本
 		Alive,
 		Exiled,
 		Dead,
 		Killed,
 
+		// MOD追加
 		Suicide,
 		MissShot,
 		Retaliate,
 		Departure,
 		Martyrdom,
 		Eatting,
-		Clashed,
-
 		Explosion,
-
-		Assassinate,
-		DeadAssassinate,
-		Surrender,
-		Zombied,
+		Clashed,
+		Despair,
 
 		Disconnected,
 	}

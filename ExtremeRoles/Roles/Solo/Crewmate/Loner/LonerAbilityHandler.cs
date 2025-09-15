@@ -130,13 +130,15 @@ public sealed class LonerAbilityHandler(
 		this.status.Update(rolePlayer, Time.deltaTime);
 		this.arrow.Update(rolePlayer);
 
-		if (this.status.StressGage >= this.MaxStressGage)
+		if (this.status.StressGage < this.MaxStressGage)
 		{
-			byte playerId = rolePlayer.PlayerId;
-			Player.RpcUncheckMurderPlayer(
-				playerId, playerId,
-				byte.MinValue);
+			return;
 		}
+		byte playerId = rolePlayer.PlayerId;
+		Player.RpcUncheckMurderPlayer(
+			playerId, playerId,
+			byte.MinValue);
+		ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(playerId, Module.ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.Despair);
 	}
 	public void Reset()
 	{
