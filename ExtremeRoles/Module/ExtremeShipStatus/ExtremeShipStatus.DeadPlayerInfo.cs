@@ -43,7 +43,10 @@ public sealed partial class ExtremeShipStatus
 		PlayerControl killer)
 	{
 
-		if (this.deadPlayerInfo.ContainsKey(deadPlayer.PlayerId)) { return; }
+		if (this.deadPlayerInfo.ContainsKey(deadPlayer.PlayerId))
+		{
+			return;
+		}
 
 		PlayerStatus newReson = PlayerStatus.Dead;
 
@@ -69,12 +72,7 @@ public sealed partial class ExtremeShipStatus
 
 		this.deadPlayerInfo.Add(
 			deadPlayer.PlayerId,
-			new DeadInfo
-			{
-				DeadTime = DateTime.UtcNow,
-				Reason = newReson,
-				Killer = killer
-			});
+			new DeadInfo(newReson, DateTime.UtcNow, killer));
 	}
 
 	public void RemoveDeadInfo(byte targetPlayerId)
@@ -97,8 +95,11 @@ public sealed partial class ExtremeShipStatus
 	public void ReplaceDeadReason(
 		byte playerId, PlayerStatus newReason)
 	{
-		if (!this.deadPlayerInfo.ContainsKey(playerId)) { return; }
-		this.deadPlayerInfo[playerId].Reason = newReason;
+		if (!this.deadPlayerInfo.TryGetValue(playerId, out var old))
+		{
+			return;
+		}
+		this.deadPlayerInfo[playerId] = new DeadInfo(newReason, old.DeadTime, old.Killer);
 	}
 
 	private void resetDeadPlayerInfo()
@@ -106,13 +107,5 @@ public sealed partial class ExtremeShipStatus
 		this.deadPlayerInfo.Clear();
 	}
 
-	public sealed class DeadInfo
-	{
-		public PlayerStatus Reason { get; set; }
-
-		public DateTime DeadTime { get; set; }
-
-		public PlayerControl Killer { get; set; }
-	}
-
+	public readonly record struct DeadInfo(PlayerStatus Reason, DateTime DeadTime, PlayerControl Killer);
 }

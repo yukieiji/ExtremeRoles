@@ -30,7 +30,6 @@ public sealed record Crime(
 
 			if ((					
 					ExtremeRolesPlugin.ShipState.DeadPlayerInfo.TryGetValue(this.Target, out var state) &&
-					state is not null &&
 					state.Killer != null &&
 					ExtremeRoleManager.TryGetRole(state.Killer.PlayerId, out var role)
 				))

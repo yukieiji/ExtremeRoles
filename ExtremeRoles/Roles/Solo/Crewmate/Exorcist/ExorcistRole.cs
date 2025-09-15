@@ -219,7 +219,6 @@ public sealed class ExorcistRole :
 		if (this.target == null ||
 			!ExtremeRolesPlugin.ShipState.DeadPlayerInfo.TryGetValue(
 				this.target.PlayerId, out var info) ||
-			info is null ||
 			info.Killer == null ||
 			info.Killer.Data == null)
 		{
