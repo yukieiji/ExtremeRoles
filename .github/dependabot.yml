@@ -9,9 +9,9 @@ updates:
     directories: ["/ExtremeRoles", "/ExtremeSkins", "/ExtremeVoiceEngine"] # Location of package manifests
     schedule:
       interval: "weekly"
-    target-branch: develop
+    target-branch: develop/next-release
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-    target-branch: develop
+    target-branch: develop/next-release
