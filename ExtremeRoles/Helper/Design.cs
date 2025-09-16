@@ -33,6 +33,11 @@ public static class Design
     }
 
 
+	/// <summary>
+	///  Converts 32-bit uint to Color32.
+	/// The format is 0x|RR|GG|BB|AA|, store 4 bits as a single value
+	/// </summary>
+	/// <param name="value">32-bit uinted color</param>
 	public static Color32 ToRGBA(uint value)
 	{
 		return new Color32(
@@ -43,6 +48,11 @@ public static class Design
 		);
 	}
 
+	/// <summary>
+	/// Converts Color32 to 32-bit uint.
+	/// The format is 0x|RR|GG|BB|AA|, store 4 bits as a single value
+	/// </summary>
+	/// <param name="color">Unity color32</param>
 	public static uint FromRGBA(Color32 color)
 	{
 		uint newColor = 0;
