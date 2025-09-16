@@ -47,6 +47,10 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 		{
 			return;
 		}
+		else if (isLiberalWin())
+		{
+			return;
+		}
 
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
@@ -114,6 +118,17 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 			))
         {
             gameIsEnd(GameOverReason.CrewmatesByVote);
+            return true;
+        }
+        return false;
+    }
+
+    private static bool isLiberalWin()
+    {
+        if(ExtremeSystemTypeManager.Instance.TryGet<LiberalMoneyBankSystem>(LiberalMoneyBankSystem.SystemType, out var system) &&
+            system.IsDirty)
+        {
+            gameIsEnd((GameOverReason)RoleGameOverReason.LiberalRevolution);
             return true;
         }
         return false;
