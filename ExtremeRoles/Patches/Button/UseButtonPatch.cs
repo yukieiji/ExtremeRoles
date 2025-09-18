@@ -1,8 +1,9 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Patches.Button;
 
@@ -12,7 +13,16 @@ public static class UseButtonReceiveClickDownPatch
     public static bool Prefix()
     {
         if (ExtremeRoleManager.GameRole.Count == 0 ||
-            !RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+            !RoleAssignState.Instance.IsRoleSetUpEnd)
+		{
+			return true;
+		}
+
+		if (PlayerControl.LocalPlayer == null ||
+			PlayerControl.LocalPlayer.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _))
+		{
+			return false;
+		}
 
         var (useRole, anotherUseRole) = 
             ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleUsableOverride>();

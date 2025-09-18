@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
@@ -98,7 +98,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 			roleOptionString = IInfoOverlayPanelModel.ToHudStringWithChildren(option);
 		}
 
-		string colorRoleName = Design.ColoedString(
+		string colorRoleName = Design.ColoredString(
 			role.GetNameColor(),
 			Tr.GetString(role.RoleName));
 		string roleFullDesc = role.GetFullDescription();

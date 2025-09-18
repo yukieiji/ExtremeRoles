@@ -1240,4 +1240,10 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="Viper" xml:space="preserve">
     <value>バイパー</value>
   </data>
+  <data name="Despair" xml:space="preserve">
+    <value>失望</value>
+  </data>
+  <data name="Clashed" xml:space="preserve">
+    <value>激突</value>
+  </data>
 </root>

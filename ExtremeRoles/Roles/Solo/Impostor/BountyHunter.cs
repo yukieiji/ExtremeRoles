@@ -239,7 +239,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
             SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];
 
             if (role.IsImpostor() ||
-                role.FakeImposter ||
+                role.FakeImpostor ||
                 this.targetId == player.PlayerId) { continue; }
 
             this.targetId = player.PlayerId;

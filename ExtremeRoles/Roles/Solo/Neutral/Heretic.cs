@@ -259,7 +259,7 @@ public sealed class Heretic :
 		if (this.meetingTarget != byte.MaxValue &&
 			targetPlayerId == this.meetingTarget)
 		{
-			return Design.ColoedString(Palette.ImpostorRed, " ×");
+			return Design.ColoredString(Palette.ImpostorRed, " ×");
 		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
@@ -268,7 +268,7 @@ public sealed class Heretic :
 		SingleRoleBase targetRole, byte targetPlayerId)
 	{
 		if (this.isSeeImpostorNow &&
-			(targetRole.IsImpostor() || targetRole.FakeImposter))
+			(targetRole.IsImpostor() || targetRole.FakeImpostor))
 		{
 			return Palette.ImpostorRed;
 		}

@@ -1,8 +1,8 @@
-﻿using HarmonyLib;
-
+using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
@@ -14,15 +14,24 @@ public static class PassiveButtonReceiveClickDownPatch
 {
     public static bool Prefix(PassiveButton __instance)
     {
-        GameObject obj = __instance.gameObject;
+        var obj = __instance.gameObject;
 
         if (obj == null ||
             obj.transform.parent == null ||
             obj.transform.parent.name == GameSystem.BottomRightButtonGroupObjectName ||
             ExtremeRoleManager.GameRole.Count == 0 ||
-            !RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+            !RoleAssignState.Instance.IsRoleSetUpEnd)
+		{
+			return true;
+		}
 
-        var (useRole, anotherUseRole) =
+		if (PlayerControl.LocalPlayer == null ||
+			PlayerControl.LocalPlayer.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _))
+		{
+			return false;
+		}
+
+		var (useRole, anotherUseRole) =
             ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleUsableOverride>();
 
         return

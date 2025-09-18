@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -49,7 +49,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
                 Tr.GetString("impImportantText"),
             _ => string.Empty,
         };
-        return Helper.Design.ColoedString(
+        return Helper.Design.ColoredString(
             this.Color,
             $"{this.GetColoredRoleName()}: {addText}");
     }

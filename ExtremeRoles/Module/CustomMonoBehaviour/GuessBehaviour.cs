@@ -21,16 +21,6 @@ public sealed class GuessBehaviour : MonoBehaviour
 		public ExtremeRoleId AnothorId;
 		public ExtremeRoleType Team;
 
-		private static HashSet<RoleTypes> vanilaCrew = new HashSet<RoleTypes>()
-		{
-			RoleTypes.Crewmate,
-			RoleTypes.Scientist,
-			RoleTypes.Engineer,
-			RoleTypes.Noisemaker,
-			RoleTypes.Tracker,
-			RoleTypes.Detective,
-		};
-
 		public string GetRoleName()
 		{
 			string basicRoleName = convertIdToRoleName(this.Id);
@@ -43,7 +33,7 @@ public sealed class GuessBehaviour : MonoBehaviour
 			{
 				return string.Concat(
 					basicRoleName,
-					Design.ColoedString(
+					Design.ColoredString(
 						Palette.White,
 						" + "),
 					convertIdToRoleName(this.AnothorId));
@@ -59,11 +49,11 @@ public sealed class GuessBehaviour : MonoBehaviour
 			RoleTypes castedId = (RoleTypes)id;
 			bool isVanila = Enum.IsDefined(typeof(RoleTypes), castedId);
 			string roleName = isVanila ?
-				Design.ColoedString(
+				Design.ColoredString(
 					VanillaRoleProvider.IsCrewmateRole(castedId) ?
 					Palette.White : Palette.ImpostorRed,
 					Tr.GetString(castedId.ToString())) :
-				Design.ColoedString(
+				Design.ColoredString(
 					getRoleColor(id),
 					Tr.GetString(id.ToString()));
 			return roleName;

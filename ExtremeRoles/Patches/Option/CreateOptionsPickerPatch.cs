@@ -1,17 +1,16 @@
-﻿using System;
+using System;
 
 using HarmonyLib;
 
-namespace ExtremeRoles.Patches.Option
+namespace ExtremeRoles.Patches.Option;
+
+[HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Awake))]
+public static class CreateOptionsPickerPatch
 {
-    [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Awake))]
-    public static class CreateOptionsPickerPatch
+    public static void Postfix(CreateOptionsPicker __instance)
     {
-        public static void Postfix(CreateOptionsPicker __instance)
-        {
-            int numImpostors = Math.Clamp(
-                __instance.GetTargetOptions().NumImpostors, 1, 3);
-            __instance.SetImpostorButtons(numImpostors);
-        }
+        int numImpostors = Math.Clamp(
+            __instance.GetTargetOptions().NumImpostors, 1, 3);
+        __instance.SetImpostorButtons(numImpostors);
     }
 }
