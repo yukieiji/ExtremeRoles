@@ -22,6 +22,8 @@ using UnityHelper = ExtremeRoles.Helper.Unity;
 
 namespace ExtremeRoles.Patches.Manager;
 
+
+// GetAdjustedNumImpostorsのパッチが動作しないのでバニラの実装を完コピしてインポスターの人数だけ強制的にパッチを当てる
 [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.SelectRoles))]
 public static class RoleManagerAssignSelectRolesPatch
 {
