@@ -26,7 +26,7 @@ public sealed class ButtonLockSystem(ExtremeSystemType type) : IExtremeSystemTyp
 
 	private bool isBlocked => this.blockedConditionId.Count > 0;
 
-	private HashSet<int> blockedConditionId = [];
+	private readonly HashSet<int> blockedConditionId = [];
 	private readonly Dictionary<int, Func<bool>> blockCondition = [];
 
 	public static ButtonLockSystem CreateOrGetAbilityButtonLockSystem()
