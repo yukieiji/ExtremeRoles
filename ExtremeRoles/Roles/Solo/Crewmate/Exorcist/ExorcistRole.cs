@@ -203,8 +203,7 @@ public sealed class ExorcistRole :
 	{
 		this.CreateActivatingAbilityCountButton(
 			Tr.GetString("ExorcistAbility"),
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
-				ObjectPath.TestButton),
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Exorcist),
 			checkAbility: IsAbilityActive,
 			forceAbilityOff: unlock,
 			abilityOff: this.CleanUp,
