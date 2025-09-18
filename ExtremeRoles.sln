@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31919.166
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11012.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeRoles", "ExtremeRoles\ExtremeRoles.csproj", "{11FBC798-BAF5-4EE5-9511-BE6DB0592F99}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -22,21 +22,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeRoles.Analyzers", "E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		.gitattributes = .gitattributes
-		.gitconfig = .gitconfig
-		.gitignore = .gitignore
-		.gitmodules = .gitmodules
-		.vsconfig = .vsconfig
-		createtransdatareport.py = createtransdatareport.py
-		.github\dependabot.yml = .github\dependabot.yml
 		ExtremeSkinsTransData.xlsx = ExtremeSkinsTransData.xlsx
 		LICENSE.md = LICENSE.md
 		MakeEnv.bat = MakeEnv.bat
-		makelanguagejson.py = makelanguagejson.py
 		packing.ps1 = packing.ps1
 		README.md = README.md
-		requirements.txt = requirements.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHubActions", "GitHubActions", "{00B61FF2-566F-4C38-847B-D6E28E7CA474}"
@@ -57,7 +47,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{754F
 		add_role_translation_keys.py = add_role_translation_keys.py
 		createtransdatareport.py = createtransdatareport.py
 		makelanguagejson.py = makelanguagejson.py
+		pyproject.toml = pyproject.toml
+		requirements.txt = requirements.txt
 		test_add_role_translation_keys.py = test_add_role_translation_keys.py
+		uv.lock = uv.lock
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{159E0F47-D5CD-4321-BAAF-7871D9FA4143}"
