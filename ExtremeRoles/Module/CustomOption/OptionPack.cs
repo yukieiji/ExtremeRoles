@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -17,6 +17,8 @@ public sealed class OptionPack
 	private readonly Dictionary<int, IValueOption<float>> floatOpt = new Dictionary<int, IValueOption<float>>();
 	private readonly Dictionary<int, IValueOption<bool>> boolOpt = new Dictionary<int, IValueOption<bool>>();
 	private readonly Dictionary<int, IOption> allOpt = new Dictionary<int, IOption>();
+
+	public bool Contain(int id) => this.allOpt.ContainsKey(id);
 
 	public IOption Get(int id) => this.allOpt[id];
 	public IValueOption<T> Get<T>(int id)

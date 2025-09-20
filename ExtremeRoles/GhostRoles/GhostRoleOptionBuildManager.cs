@@ -2,7 +2,7 @@ using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
-
+using System;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 namespace ExtremeRoles.GhostRoles;
@@ -21,6 +21,12 @@ public sealed class GhostRoleOptionBuildManager(
 			{
 				var builder = builderProvider.Get(id);
 				builder.Build(factory);
+#if DEBUG
+				if (!factory.Contain((int)GhostRoleOption.IsReportAbility))
+				{
+					throw new ArgumentException("Can't create [GhostRoleOption.IsReportAbility] option!!");
+				}
+#endif
 			}
 		}
 	}

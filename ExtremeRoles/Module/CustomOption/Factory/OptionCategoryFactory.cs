@@ -34,6 +34,8 @@ public class OptionCategoryFactory(
 	private readonly Action<OptionTab, OptionCategory> registerOption = action;
 	private readonly OptionPack optionPack = new OptionPack();
 
+	public bool Contain(int id) => this.optionPack.Contain(id);
+
 	public IOption Get(int id)
 		=> this.optionPack.Get(id);
 	public IValueOption<T> Get<T>(int id)
@@ -285,6 +287,6 @@ public class OptionCategoryFactory(
 	public void Dispose()
 	{
 		var newGroup = new OptionCategory(this.Tab, groupid, this.Name, this.optionPack, this.color);
-		this.registerOption(Tab, newGroup);
+		this.registerOption.Invoke(Tab, newGroup);
 	}
 }
