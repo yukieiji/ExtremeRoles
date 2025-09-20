@@ -88,7 +88,7 @@ public sealed class GhostRoleSpawnDataManager :
 			var role = provider.Get(roleId);
 
 			if (!opt.TryGetCategory(
-					role.Core.Tab, ExtremeGhostRoleManager.GetRoleGroupId(role.Core.Id),
+					role.Core.Tab, ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(role.Core.Id),
 					out var roleCate))
 			{
 				continue;

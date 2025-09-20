@@ -1,34 +1,31 @@
-using System;
-using System.Collections.Generic;
-
-using Hazel;
-using UnityEngine;
-
-using TMPro;
-
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.ModeSwitcher;
-using ExtremeRoles.Module.Ability.Factory;
-using ExtremeRoles.Module.Ability.AutoActivator;
-using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.AutoActivator;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
-
+using Hazel;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+
 
 
 #nullable enable
@@ -395,7 +392,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 			if (OffsetInfo is null ||
 				!OptionManager.Instance.TryGetCategory(
 					this.Core.Tab,
-					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(this.OffsetInfo.RoleId),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");

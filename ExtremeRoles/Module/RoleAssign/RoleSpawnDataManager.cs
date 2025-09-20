@@ -1,11 +1,10 @@
-using System.Collections.Generic;
-using System.Text;
-
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.GameMode;
-
-using ExtremeRoles.Module.Interface;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Text;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -58,7 +57,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			byte combType = (byte)roleId;
 			if (!opt.TryGetCategory(
 					OptionTab.CombinationTab,
-					ExtremeRoleManager.GetCombRoleGroupId(roleId),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(roleId),
 					out var conbCate))
 			{
 				continue;
@@ -101,7 +100,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			SingleRoleBase role = ExtremeRoleManager.NormalRole[intedRoleId];
 			if (!opt.TryGetCategory(
 					role.Tab,
-					ExtremeRoleManager.GetRoleGroupId(roleId),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(roleId),
 					out var roleCate))
 			{
 				continue;

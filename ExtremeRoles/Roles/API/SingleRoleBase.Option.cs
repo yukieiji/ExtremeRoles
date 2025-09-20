@@ -1,8 +1,9 @@
 
 
-using ExtremeRoles.Module.CustomOption.Factory;
-
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.Interface;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -11,7 +12,7 @@ public abstract partial class SingleRoleBase
     protected sealed override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
 		var factory = OptionManager.CreateAutoParentSetOptionCategory(
-			ExtremeRoleManager.GetRoleGroupId(this.Core.Id),
+			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(this.Core.Id),
 			this.Core.Name, this.Tab, this.Core.Color);
 
 		var roleSetOption = factory.Create0To100Percentage10StepOption(

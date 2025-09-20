@@ -3,8 +3,10 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,7 +39,7 @@ public abstract class GhostRoleBase
 		{
 			if (!OptionManager.Instance.TryGetCategory(
 					this.Core.Tab,
-					ExtremeGhostRoleManager.GetRoleGroupId(this.Core.Id),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(this.Core.Id),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");

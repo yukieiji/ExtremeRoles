@@ -1,7 +1,9 @@
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles.API;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
@@ -34,7 +36,7 @@ public sealed class GhostRoleOptionBuildManager(
 	private static OptionFactory getFactory(GhostRoleCore core)
 	{
 		var factory = OptionManager.CreateAutoParentSetOptionCategory(
-			ExtremeGhostRoleManager.GetRoleGroupId(core.Id),
+			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(core.Id),
 			core.Name, core.Tab, core.Color);
 		factory.Create0To100Percentage10StepOption(
 			RoleCommonOption.SpawnRate,
