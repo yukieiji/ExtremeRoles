@@ -8,6 +8,13 @@ public sealed class DefaultGhostRoleVisual(GhostRoleCore core) : IGhostRoleVisua
 	private readonly GhostRoleCore core = core;
 	public string ColoredRoleName => GetDefaultColoredRoleName(this.core);
 
+	public string ImportantText => GetDefaultImportantText(this.core);
+
 	public string GetDefaultColoredRoleName(GhostRoleCore core)
 		=> Design.ColoredString(core.Color, Tr.GetString(core.Name));
+
+	public string GetDefaultImportantText(GhostRoleCore core)
+		=> Design.ColoredString(
+			core.Color,
+			$"{Tr.GetString(core.Name)}: {Tr.GetString($"{core.Id}ShortDescription")}");
 }

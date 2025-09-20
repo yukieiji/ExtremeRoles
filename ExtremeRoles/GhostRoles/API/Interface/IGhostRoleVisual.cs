@@ -9,4 +9,6 @@ namespace ExtremeRoles.GhostRoles.API.Interface;
 public interface IGhostRoleVisual
 {
 	public string ColoredRoleName { get; }
+
+	public string ImportantText { get; }
 }
