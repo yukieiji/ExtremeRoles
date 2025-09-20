@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Implemented;
@@ -31,6 +31,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		}
 	}
 
+	public bool Contain(int id) => this.internalFactory.Contain(id);
 	public IOption Get(int id)
 		=> this.internalFactory.Get(id);
 	public IValueOption<T> Get<T>(int id)

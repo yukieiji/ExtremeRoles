@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 
@@ -280,7 +280,7 @@ public static class HudManagerUpdatePatch
 
         if (playerGhostRole != null)
         {
-            Color ghostRoleColor = playerGhostRole.Color;
+            Color ghostRoleColor = playerGhostRole.Core.Color;
             localRoleColor = (localRoleColor / 2.0f) + (ghostRoleColor / 2.0f);
         }
         localPlayer.cosmetics.SetNameColor(localRoleColor);
@@ -436,8 +436,7 @@ public static class HudManagerUpdatePatch
 
         if (ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out var ghostRole))
         {
-            string ghostRoleName = ghostRole.GetColoredRoleName();
-            roleNames = $"{ghostRoleName}({roleNames})";
+            roleNames = $"{ghostRole.Visual.ColoredRoleName}({roleNames})";
         }
 
         string completedStr = commonActive ? "?" : tasksCompleted.ToString();

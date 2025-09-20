@@ -138,7 +138,7 @@ public sealed class WinnerBuilder : IDisposable
 			if (ExtremeGhostRoleManager.GameRole.TryGetValue(
 					playerId, out GhostRoleBase? ghostRole) &&
 				ghostRole is not null &&
-				ghostRole.IsNeutral() &&
+				ghostRole.Team.IsNeutral() &&
 				ghostRole is IGhostRoleWinable winCheckGhostRole)
 			{
 				this.ghostWinCheckRole.Add((playerInfo, winCheckGhostRole));

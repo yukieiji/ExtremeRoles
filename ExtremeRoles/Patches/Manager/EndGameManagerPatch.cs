@@ -205,20 +205,23 @@ public static class EndGameManagerSetUpPatch
         {
             if (!ExtremeGhostRoleManager.GameRole.TryGetValue(
 					player.PlayerId, out GhostRoleBase ghostRole) ||
-                !ghostRole.IsNeutral() ||
+                !ghostRole.Team.IsNeutral() ||
                 !(ghostRole is IGhostRoleWinable ghostWin)) { continue; }
 
             winPlayer.Add(player.PlayerId);
 
-            if (textAddedGhostRole.Contains(ghostRole.Id)) { continue; }
+            if (textAddedGhostRole.Contains(ghostRole.Core.Id))
+			{
+				continue;
+			}
 
             AddPrefixs(
                 ref winDetailTextBuilder,
                 textAddedRole.Count == 0 && textAddedGhostRole.Count == 0);
 
 			winDetailTextBuilder.Append(Tr.GetString(
-                ghostRole.GetColoredRoleName()));
-            textAddedGhostRole.Add(ghostRole.Id);
+                ghostRole.Visual.ColoredRoleName));
+            textAddedGhostRole.Add(ghostRole.Core.Id);
         }
 
         if (ExtremeGameModeManager.Instance.ShipOption.DisableNeutralSpecialForceEnd &&

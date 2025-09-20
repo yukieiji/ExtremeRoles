@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using Assets.CoreScripts;
 
 using UnityEngine;
-using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -12,17 +11,15 @@ using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat;
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 #nullable enable
 
-namespace ExtremeRoles.GhostRoles.Crewmate;
+namespace ExtremeRoles.GhostRoles.Crewmate.Faunus;
 
-public sealed class Faunus : GhostRoleBase
+public sealed class FaunusRole : GhostRoleBase
 {
     public enum SaboType
     {
@@ -39,13 +36,13 @@ public sealed class Faunus : GhostRoleBase
     private Minigame? saboGame;
     private bool isOpen = false;
 
-    public Faunus() : base(
+    public FaunusRole(IGhostRoleCoreProvider provider) : base(
         true,
-        ExtremeRoleType.Crewmate,
-        ExtremeGhostRoleId.Faunus,
-        ExtremeGhostRoleId.Faunus.ToString(),
-        ColorPalette.FaunusAntiquewhite)
-    { }
+		provider.Get(ExtremeGhostRoleId.Faunus))
+    {
+		this.saboActive = false;
+		this.isOpen = false;
+	}
 
     public override void CreateAbility()
     {
@@ -67,12 +64,6 @@ public sealed class Faunus : GhostRoleBase
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
 
-    public override void Initialize()
-    {
-        this.saboActive = false;
-        this.isOpen = false;
-    }
-
     protected override void OnMeetingEndHook()
     {
         this.isOpen = false;
@@ -81,12 +72,6 @@ public sealed class Faunus : GhostRoleBase
     protected override void OnMeetingStartHook()
     {
         this.saboGame = null;
-    }
-
-    protected override void CreateSpecificOption(
-		OptionFactory factory)
-    {
-        GhostRoleAbilityFactory.CreateCountButtonOption(factory, 1, 5, 3.0f);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

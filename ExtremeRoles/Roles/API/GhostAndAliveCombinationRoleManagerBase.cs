@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -6,6 +6,7 @@ using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.Roles.Combination;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -51,9 +52,10 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
 
 			int offset = (item.Index + 1) * ExtremeGhostRoleManager.IdOffset;
 			factory.IdOffset = offset;
-			factory.OptionPrefix = role.Name;
+			factory.OptionPrefix = role.Core.Name;
 
-			role.CreateRoleSpecificOption(factory);
+			//　現状はWispのみのため
+			Combination.Wisp.CreateSpecificOption(factory);
 			if (role is ICombination combGhost)
 			{
 				combGhost.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(
@@ -67,7 +69,7 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
 
         foreach (var role in this.CombGhostRole.Values)
         {
-            role.Initialize();
+            (role as Wisp).Initialize();
         }
     }
 }

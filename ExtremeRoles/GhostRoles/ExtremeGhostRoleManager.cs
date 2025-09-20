@@ -1,19 +1,25 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using Hazel;
 using AmongUs.GameOptions;
-
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.GhostRoles.Crewmate;
-using ExtremeRoles.GhostRoles.Impostor;
-using ExtremeRoles.GhostRoles.Neutal;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.GhostRoles.Crewmate.Faunus;
+using ExtremeRoles.GhostRoles.Crewmate.Poltergeist;
+using ExtremeRoles.GhostRoles.Crewmate.Shutter;
+using ExtremeRoles.GhostRoles.Impostor.Doppelganger;
+using ExtremeRoles.GhostRoles.Impostor.Igniter;
+using ExtremeRoles.GhostRoles.Impostor.SaboEvil;
+using ExtremeRoles.GhostRoles.Impostor.Ventgeist;
+using ExtremeRoles.GhostRoles.Neutral.Foras;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.Combination;
+using Hazel;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ExtremeRoles.GhostRoles;
 
@@ -57,20 +63,29 @@ public static class ExtremeGhostRoleManager
 
     public static Dictionary<byte, GhostRoleBase> GameRole = new Dictionary<byte, GhostRoleBase>();
 
-    public static readonly Dictionary<
-        ExtremeGhostRoleId, GhostRoleBase> AllGhostRole = new Dictionary<ExtremeGhostRoleId, GhostRoleBase>()
-        {
-            { ExtremeGhostRoleId.Poltergeist, new Poltergeist() },
-            { ExtremeGhostRoleId.Faunus,      new Faunus()      },
-            { ExtremeGhostRoleId.Shutter,     new Shutter()     },
+	public static void RegisterService(IServiceCollection service)
+	{
+		service
+			.AddTransient<IGhostRoleCoreProvider, GhostRoleCoreProvider>()
+			.AddTransient<IGhostRoleOptionBuilderProvider, GhostRoleOptionBuilderProvider>()
+			.AddTransient<IGhostRoleOptionBuildManager, GhostRoleOptionBuildManager>();
 
-            { ExtremeGhostRoleId.Ventgeist   , new Ventgeist()    },
-            { ExtremeGhostRoleId.SaboEvil    , new SaboEvil()     },
-            { ExtremeGhostRoleId.Igniter     , new Igniter()      },
-			{ ExtremeGhostRoleId.Doppelganger, new Doppelganger() },
+		service
+			.AddTransient<PoltergeistOptionBuilder>()
+			.AddTransient<FaunusOptionBuilder>()
+			.AddTransient<ShutterOptionBuilder>()
 
-			{ ExtremeGhostRoleId.Foras    , new Foras()   },
-        };
+			.AddTransient<VentgeistOptionBuilder>()
+			.AddTransient<SaboEvilOptionBuilder>()
+			.AddTransient<IgniterOptionBuilder>()
+			.AddTransient<DoppelgangerOptionBuilder>()
+			
+			.AddTransient<ForasOptionBuilder>();
+
+		service
+			.AddSingleton<IGhostRoleInfoContainer, GhostRoleInfo>()
+			.AddSingleton<IGhostRoleProvider, GhostRoleProvider>();
+	}
 
     private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
     {
@@ -151,10 +166,8 @@ public static class ExtremeGhostRoleManager
 
     public static void CreateGhostRoleOption()
     {
-        foreach (var ghost in AllGhostRole.Values)
-		{
-			ghost.CreateRoleAllOption();
-		}
+		var builder = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGhostRoleOptionBuildManager>();
+		builder.Build();
     }
 
     public static GhostRoleBase GetLocalPlayerGhostRole()
@@ -206,10 +219,6 @@ public static class ExtremeGhostRoleManager
     public static void Initialize()
     {
         GameRole.Clear();
-        foreach (var role in AllGhostRole.Values)
-        {
-            role.Initialize();
-        }
 
         if (GhostRoleSpawnDataManager.IsExist)
         {
@@ -253,7 +262,7 @@ public static class ExtremeGhostRoleManager
         {
             case AbilityType.VentgeistVentAnime:
                 int ventId = reader.ReadInt32();
-                Ventgeist.VentAnime(ventId);
+                VentgeistRole.VentAnime(ventId);
                 break;
             case AbilityType.PoltergeistMoveDeadbody:
                 byte poltergeistPlayerId = reader.ReadByte();
@@ -261,24 +270,24 @@ public static class ExtremeGhostRoleManager
                 float x = reader.ReadSingle();
                 float y = reader.ReadSingle();
                 bool pickUp = reader.ReadBoolean();
-                Poltergeist.DeadbodyMove(
+                PoltergeistRole.DeadbodyMove(
                     poltergeistPlayerId,
                     poltergeistMoveDeadbodyPlayerId,
                     x, y, pickUp);
                 break;
             case AbilityType.SaboEvilResetSabotageCool:
-                SaboEvil.ResetCool();
+                SaboEvilRole.ResetCool();
                 break;
             case AbilityType.IgniterSwitchLight:
-                Igniter.SetVison(reader.ReadBoolean());
+                IgniterRole.SetVison(reader.ReadBoolean());
                 break;
 			case AbilityType.DoppelgangerDoppel:
 				byte doppelgangerPlayerId = reader.ReadByte();
 				byte doppelTargetPlayerId = reader.ReadByte();
-				Doppelganger.Doppl(doppelgangerPlayerId, doppelTargetPlayerId);
+				DoppelgangerRole.Doppl(doppelgangerPlayerId, doppelTargetPlayerId);
 				break;
 			case AbilityType.ForasShowArrow:
-                Foras.SwitchArrow(ref reader);
+                ForasRole.SwitchArrow(ref reader);
                 break;
 			default:
                 break;
@@ -332,10 +341,10 @@ public static class ExtremeGhostRoleManager
             return;
         }
 
-        GhostRoleBase role = AllGhostRole[ghostRoleId].Clone();
+		var provider = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGhostRoleProvider>();
+		GhostRoleBase role = provider.Get(ghostRoleId);
 
-        role.SetGameControlId(gameControlId);
-        role.Initialize();
+		role.SetGameControlId(gameControlId);
         if (playerId == PlayerControl.LocalPlayer.PlayerId)
         {
             role.CreateAbility();
@@ -359,7 +368,7 @@ public static class ExtremeGhostRoleManager
         GhostRoleBase role = ghostCombManager.GetGhostRole((ExtremeRoleId)baseRoleId).Clone();
 
         role.SetGameControlId(gameControlId);
-        role.Initialize();
+        (role as Wisp).Initialize();
         if (playerId == PlayerControl.LocalPlayer.PlayerId)
         {
             role.CreateAbility();

@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 
 using Hazel;
 
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
-using ExtremeRoles.GhostRoles.Crewmate;
+using ExtremeRoles.GhostRoles.Crewmate.Shutter;
 
 namespace ExtremeRoles.Module.Interface;
 
@@ -41,7 +41,7 @@ public interface IStringSerializer
 		{
 			StringSerializerType.PhotographerPhoto => new Photographer.PhotoSerializer(),
 			StringSerializerType.SlaveDriverHarassment => new SlaveDriver.HarassmentReportSerializer(),
-			StringSerializerType.ShutterPhoto => new Shutter.GhostPhotoSerializer(),
+			StringSerializerType.ShutterPhoto => new ShutterRole.GhostPhotoSerializer(),
 			_ => throw new ArgumentException("Invalided Type"),
 		};
 

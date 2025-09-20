@@ -13,17 +13,15 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.SystemType.Roles;
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 
 #nullable enable
 
-namespace ExtremeRoles.GhostRoles.Impostor;
+namespace ExtremeRoles.GhostRoles.Impostor.Doppelganger;
 
-public sealed class Doppelganger : GhostRoleBase
+public sealed class DoppelgangerRole : GhostRoleBase
 {
 	private FakerDummySystem.FakePlayer? fake;
 	private ShapeShiftMinigameWrapper? minigame;
@@ -31,20 +29,19 @@ public sealed class Doppelganger : GhostRoleBase
 
 	private const AbilityType ability = AbilityType.DoppelgangerDoppel;
 
-	public Doppelganger() : base(
+	public DoppelgangerRole(IGhostRoleCoreProvider provider) : base(
 		false,
-		ExtremeRoleType.Impostor,
-		ExtremeGhostRoleId.Doppelganger,
-		ExtremeGhostRoleId.Doppelganger.ToString(),
-		Palette.ImpostorRed)
-	{ }
+		provider.Get(ExtremeGhostRoleId.Doppelganger))
+	{
+
+	}
 
 	public static void Doppl(byte rolePlayer, byte targetPlayer)
 	{
 		var rolePc = Player.GetPlayerControlById(rolePlayer);
 		var targetPc = Player.GetPlayerControlById(targetPlayer);
 
-		var ghostRole = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Doppelganger>(rolePlayer);
+		var ghostRole = ExtremeGhostRoleManager.GetSafeCastedGhostRole<DoppelgangerRole>(rolePlayer);
 		if (ghostRole is null)
 		{
 			return;
@@ -127,11 +124,6 @@ public sealed class Doppelganger : GhostRoleBase
 
 	public override HashSet<ExtremeRoleId> GetRoleFilter() => [];
 
-	public override void Initialize()
-	{
-
-	}
-
 	protected override void OnMeetingEndHook()
 	{
 		return;
@@ -140,11 +132,6 @@ public sealed class Doppelganger : GhostRoleBase
 	protected override void OnMeetingStartHook()
 	{
 		this.minigame?.Reset();
-	}
-
-	protected override void CreateSpecificOption(OptionFactory factory)
-	{
-		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 2, 10, 5.0f);
 	}
 
 	protected override void UseAbility(RPCOperator.RpcCaller caller)

@@ -68,7 +68,7 @@ public static class PlayerControlFixedUpdatePatch
 		string addText = playerRole.GetImportantText();
 		if (playerGhostRole != null)
 		{
-			addText = $"{addText}\n{playerGhostRole.GetImportantText()}";
+			addText = $"{addText}\n{playerGhostRole.Visual.ImportantText}";
 		}
 		importantTextTask.Text = addText;
 		player.myTasks.Insert(0, importantTextTask);
@@ -225,7 +225,7 @@ public static class PlayerControlFixedUpdatePatch
 				break;
 			case RoleTypes.CrewmateGhost:
 			case RoleTypes.ImpostorGhost:
-				if (playerGhostRole.IsVanillaRole() &&
+				if (playerGhostRole.Core.IsVanillaRole() &&
 					MeetingHud.Instance == null &&
 					ExileController.Instance == null)
 				{

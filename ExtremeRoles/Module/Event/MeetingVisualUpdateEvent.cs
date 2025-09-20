@@ -76,7 +76,7 @@ public sealed class LocalPlayerMeetingVisualUpdateEvent(
 			local.IsDead);
 		if (ghostRole is not null)
 		{
-			Color ghostRoleColor = ghostRole.Color;
+			Color ghostRoleColor = ghostRole.Core.Color;
 			paintColor = (paintColor / 2.0f) + (ghostRoleColor / 2.0f);
 		}
 		if (paintColor == Palette.ClearWhite)
@@ -110,8 +110,7 @@ public sealed class LocalPlayerMeetingVisualUpdateEvent(
 
 		if (ghostRole is not null)
 		{
-			string ghostRoleName = ghostRole.GetColoredRoleName();
-			roleNames = $"{ghostRoleName}({roleNames})";
+			roleNames = $"{ghostRole.Visual.ColoredRoleName}({roleNames})";
 		}
 
 		string completedStr = isCommActive ? "?" : tasksCompleted.ToString();
@@ -291,8 +290,7 @@ public sealed class OtherPlayerMeetingVisualUpdateEvent(
 
 		if (targetGhostRole is not null)
 		{
-			string ghostRoleName = targetGhostRole.GetColoredRoleName();
-			roleNames = $"{ghostRoleName}({roleNames})";
+			roleNames = $"{targetGhostRole.Visual.ColoredRoleName}({roleNames})";
 		}
 
 		string completedStr = this.status.IsCommActive ? "?" : tasksCompleted.ToString();

@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -26,9 +26,8 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 		}
 
 		string roleOptionString = "";
-		string colorRoleName = role.GetColoredRoleName();
 
-		if (!role.IsVanillaRole())
+		if (!role.Core.IsVanillaRole())
 		{
 			var useLoader =
 				role is ICombination combGhost &&
@@ -42,6 +41,7 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 		}
 
 		string roleFullDesc = role.GetFullDescription();
+		string colorRoleName = role.Visual.ColoredRoleName;
 
 		return (
 			$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}\n",

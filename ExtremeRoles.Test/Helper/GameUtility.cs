@@ -1,16 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
 using AmongUs.GameOptions;
 using BepInEx.Logging;
-
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace ExtremeRoles.Test.Helper;
 
@@ -289,7 +289,7 @@ public static class GameUtility
 	{
 		if (OptionManager.Instance.TryGetCategory(
 				OptionTab.GeneralTab,
-				ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
+				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Xion),
 				out var category))
 		{
 			OptionManager.Instance.Update(category, 0, 0);
@@ -298,17 +298,17 @@ public static class GameUtility
 
 	private static void disableSomeRole()
 	{
+		var gen = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>();
 		foreach (var role in RandomRoleProvider.IgnoreRole)
 		{
 			disableCategory(
 				OptionTab.NeutralTab,
-				ExtremeRoleManager.GetRoleGroupId(role));
+				gen.Get(role));
 		}
 		foreach (var role in RandomRoleProvider.IgnoreCombRole)
 		{
 			disableCategory(
-				OptionTab.GeneralTab,
-				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.Avalon));
+				OptionTab.GeneralTab, gen.Get(CombinationRoleType.Avalon));
 		}
 	}
 
@@ -318,7 +318,7 @@ public static class GameUtility
 
 		if (OptionManager.Instance.TryGetCategory(
 				role.Tab,
-				ExtremeRoleManager.GetRoleGroupId(role.Core.Id),
+				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(role.Core.Id),
 				out var category))
 		{
 			OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 9);
@@ -330,7 +330,7 @@ public static class GameUtility
 		CombinationRoleType role = (CombinationRoleType)RandomRoleProvider.GetCombRole();
 		if (OptionManager.Instance.TryGetCategory(
 				OptionTab.CombinationTab,
-				ExtremeRoleManager.GetCombRoleGroupId(role),
+				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(role),
 				out var category))
 		{
 			OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 9);
@@ -344,7 +344,7 @@ public static class GameUtility
 		{
 			if (OptionManager.Instance.TryGetCategory(
 					OptionTab.CombinationTab,
-					ExtremeRoleManager.GetCombRoleGroupId((CombinationRoleType)id),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get((CombinationRoleType)id),
 					out var category))
 			{
 				OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 0);
@@ -358,7 +358,7 @@ public static class GameUtility
 		{
 			if (OptionManager.Instance.TryGetCategory(
 					OptionTab.NeutralTab,
-					ExtremeRoleManager.GetRoleGroupId(id),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(id),
 					out var category))
 			{
 				OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 0);

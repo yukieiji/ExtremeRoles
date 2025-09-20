@@ -183,7 +183,7 @@ public sealed class FinalSummary : MonoBehaviour
 
 			GhostRoleBase ghostRole = summary.GhostRole;
 			string ghostRoleName = ghostRole != null ?
-				ghostRole.GetColoredRoleName() :
+				ghostRole.Visual.ColoredRoleName :
 				Tr.GetString("noGhostRole");
 
 			if (finalSummary.TryGetValue(SummaryType.GhostRole, out var ghostRoleSummary) &&

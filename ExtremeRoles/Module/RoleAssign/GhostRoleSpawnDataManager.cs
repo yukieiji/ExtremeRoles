@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using ExtremeRoles.Helper;
@@ -9,6 +9,8 @@ using ExtremeRoles.Module.Interface;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -22,6 +24,8 @@ public sealed class GhostRoleSpawnDataManager :
 
 	private Dictionary<ExtremeRoleType, List<GhostRoleSpawnData>> useGhostRole = new Dictionary<
 		ExtremeRoleType, List<GhostRoleSpawnData>>();
+
+	private readonly IGhostRoleProvider provider = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGhostRoleProvider>();
 
 	public GhostRoleSpawnDataManager()
 	{
@@ -81,18 +85,10 @@ public sealed class GhostRoleSpawnDataManager :
 		foreach (ExtremeGhostRoleId roleId in
 			ExtremeGameModeManager.Instance.RoleSelector.UseGhostRoleId)
 		{
-			var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
-
-			var tab = role.Team switch
-			{
-				ExtremeRoleType.Neutral => OptionTab.GhostNeutralTab,
-				ExtremeRoleType.Crewmate => OptionTab.GhostCrewmateTab,
-				ExtremeRoleType.Impostor => OptionTab.GhostImpostorTab,
-				_ => throw new System.ArgumentOutOfRangeException(),
-			};
+			var role = provider.Get(roleId);
 
 			if (!opt.TryGetCategory(
-					tab, ExtremeGhostRoleManager.GetRoleGroupId(role.Id),
+					role.Core.Tab, ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(role.Core.Id),
 					out var roleCate))
 			{
 				continue;
@@ -103,7 +99,7 @@ public sealed class GhostRoleSpawnDataManager :
 			int roleNum = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 
 			logger.LogInfo(
-				$"GhostRoleSpawnInfo,  Name:{role.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
+				$"GhostRoleSpawnInfo,  Name:{role.Core.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
 
 			if (roleNum <= 0 || spawnRate <= 0)
 			{
@@ -113,7 +109,7 @@ public sealed class GhostRoleSpawnDataManager :
 			var addData = new GhostRoleSpawnData(
 				roleId, roleNum, spawnRate, weight, role.GetRoleFilter());
 
-			ExtremeRoleType team = role.Team;
+			ExtremeRoleType team = role.Core.DefaultTeam;
 
 			if (!tmpUseData.ContainsKey(team))
 			{

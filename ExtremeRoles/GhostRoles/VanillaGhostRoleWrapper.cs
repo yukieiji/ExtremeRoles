@@ -4,9 +4,35 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.GhostRoles;
+
+public sealed class VanillaGhostRoleVisual(GhostRoleCore core, RoleTypes roleId) : IGhostRoleVisual
+{
+	private readonly GhostRoleCore core = core;
+	private readonly RoleTypes roleId = roleId;
+	public string ColoredRoleName => DefaultGhostRoleVisual.GetDefaultColoredRoleName(core);
+
+	public string ImportantText
+	{
+		get
+		{
+			string addText = roleId switch
+			{
+				RoleTypes.GuardianAngel or RoleTypes.CrewmateGhost =>
+					Tr.GetString("crewImportantText"),
+				RoleTypes.ImpostorGhost =>
+					Tr.GetString("impImportantText"),
+				_ => string.Empty,
+			};
+			return Helper.Design.ColoredString(
+				this.core.Color,
+				$"{this.ColoredRoleName}: {addText}");
+		}
+	}
+}
 
 public sealed class VanillaGhostRoleWrapper : GhostRoleBase
 {
@@ -14,45 +40,12 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
 
     public VanillaGhostRoleWrapper(
         RoleTypes vanillaRoleId) : base(
-            true, Roles.API.ExtremeRoleType.Crewmate,
-            ExtremeGhostRoleId.VanillaRole,
-            "", Color.white)
+			vanillaRoleId is not RoleTypes.ImpostorGhost,
+			createCore(vanillaRoleId))
     {
-        this.vanillaRoleId = vanillaRoleId;
-        this.Name = vanillaRoleId.ToString();
-
-        switch (vanillaRoleId)
-        {
-            case RoleTypes.GuardianAngel:
-            case RoleTypes.CrewmateGhost:
-                this.HasTask = true;
-                this.Team = Roles.API.ExtremeRoleType.Crewmate;
-                this.Color = Palette.White;
-                break;
-            case RoleTypes.ImpostorGhost:
-                this.HasTask = false;
-                this.Team = Roles.API.ExtremeRoleType.Impostor;
-                this.Color = Palette.ImpostorRed;
-                break;
-            default:
-                break;
-        }
-    }
-
-    public override string GetImportantText()
-    {
-        string addText = this.vanillaRoleId switch
-        {
-            RoleTypes.GuardianAngel or RoleTypes.CrewmateGhost =>
-                Tr.GetString("crewImportantText"),
-            RoleTypes.ImpostorGhost =>
-                Tr.GetString("impImportantText"),
-            _ => string.Empty,
-        };
-        return Helper.Design.ColoredString(
-            this.Color,
-            $"{this.GetColoredRoleName()}: {addText}");
-    }
+		this.vanillaRoleId = vanillaRoleId;
+		this.Visual = new VanillaGhostRoleVisual(this.Core, this.vanillaRoleId);
+	}
 
     public override string GetFullDescription()
     {
@@ -78,19 +71,15 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         throw new System.Exception("Don't call this class method!!");
     }
 
-    public override void Initialize()
-    {
-        return;
-    }
-
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
-    {
-        throw new System.Exception("Don't call this class method!!");
-    }
-
     protected override void UseAbility(
         RPCOperator.RpcCaller caller)
     {
         throw new System.Exception("Don't call this class method!!");
     }
+	private static GhostRoleCore createCore(RoleTypes vanillaRoleId)
+		=> vanillaRoleId switch
+		{ 
+			RoleTypes.ImpostorGhost => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.ImpostorRed, ExtremeRoleType.Impostor),
+			_ => new GhostRoleCore(vanillaRoleId.ToString(), ExtremeGhostRoleId.VanillaRole, Palette.White, ExtremeRoleType.Crewmate)
+		};
 }

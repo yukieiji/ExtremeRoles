@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
+using ExtremeRoles.GhostRoles;
+
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
@@ -50,6 +48,13 @@ public partial class ExtremeRolesPlugin
 
 		// EventManager
 		collection.AddSingleton<IEventManager, Module.Event.EventManager>();
+
+
+		collection.AddSingleton<IRoleParentOptionIdGenerator, OldRoleParentOptionIdGenerator>();
+
+		// collection.AddSingleton(x => new RoleParentOptionIdGenerator(256));
+
+		ExtremeGhostRoleManager.RegisterService(collection);
 
 		return collection.BuildServiceProvider();
 	}

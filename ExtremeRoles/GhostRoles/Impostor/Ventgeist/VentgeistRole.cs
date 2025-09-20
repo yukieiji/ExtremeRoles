@@ -1,40 +1,30 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
-using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 
-
+using ExtremeRoles.Extension.VentModule;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 #nullable enable
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Extension.VentModule;
-using ExtremeRoles.Module.Ability.Factory;
+namespace ExtremeRoles.GhostRoles.Impostor.Ventgeist;
 
-namespace ExtremeRoles.GhostRoles.Impostor;
-
-public sealed class Ventgeist : GhostRoleBase
+public sealed class VentgeistRole : GhostRoleBase
 {
-    public enum Option
-    {
-        Range,
-    }
 
     private float range;
     private Vent? targetVent;
 
-    public Ventgeist() : base(
+    public VentgeistRole(IGhostRoleCoreProvider provider) : base(
         false,
-        ExtremeRoleType.Impostor,
-        ExtremeGhostRoleId.Ventgeist,
-        ExtremeGhostRoleId.Ventgeist.ToString(),
-        Palette.ImpostorRed)
-    { }
+		provider.Get(ExtremeGhostRoleId.Ventgeist))
+    {
+		this.range = this.Loader.GetValue<Option, float>(Option.Range);
+	}
 
     public static void VentAnime(int ventId)
     {
@@ -56,11 +46,6 @@ public sealed class Ventgeist : GhostRoleBase
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
 
-    public override void Initialize()
-    {
-        this.range = this.Loader.GetValue<Option, float>(Option.Range);
-    }
-
     protected override void OnMeetingEndHook()
     {
         return;
@@ -69,14 +54,6 @@ public sealed class Ventgeist : GhostRoleBase
     protected override void OnMeetingStartHook()
     {
         this.targetVent = null;
-    }
-
-    protected override void CreateSpecificOption(OptionFactory factory)
-    {
-		factory.CreateFloatOption(
-            Option.Range, 1.0f,
-            0.2f, 3.0f, 0.1f);
-		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 2, 10);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

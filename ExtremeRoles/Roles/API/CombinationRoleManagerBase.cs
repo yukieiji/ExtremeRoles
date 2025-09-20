@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-
-using UnityEngine;
 using AmongUs.GameOptions;
-
-
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -38,7 +37,7 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
 		{
 			if (!OptionManager.Instance.TryGetCategory(
 					OptionTab.CombinationTab,
-					ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(this.RoleType),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");

@@ -1,37 +1,30 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 #nullable enable
 
-namespace ExtremeRoles.GhostRoles.Impostor;
+namespace ExtremeRoles.GhostRoles.Impostor.Igniter;
 
-public sealed class Igniter : GhostRoleBase
+public sealed class IgniterRole : GhostRoleBase
 {
-    public enum IgniterOption
-    {
-        IsEffectImpostor,
-        IsEffectNeutral
-    }
-
     private static bool isEffectImp;
     private static bool isEffectNeut;
 
-    public Igniter() : base(
+    public IgniterRole(IGhostRoleCoreProvider provider) : base(
         false,
-        ExtremeRoleType.Impostor,
-        ExtremeGhostRoleId.Igniter,
-        ExtremeGhostRoleId.Igniter.ToString(),
-        Palette.ImpostorRed)
-    { }
+		provider.Get(ExtremeGhostRoleId.Igniter))
+    {
+		var loader = this.Loader;
+		isEffectImp = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectImpostor);
+		isEffectNeut = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectNeutral);
+	}
 
     public static bool TryComputeVison(NetworkedPlayerInfo player, out float vison)
     {
@@ -93,13 +86,6 @@ public sealed class Igniter : GhostRoleBase
         ExtremeRoleId.LastWolf
     };
 
-    public override void Initialize()
-    {
-		var loader = this.Loader;
-        isEffectImp = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectImpostor);
-        isEffectNeut = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectNeutral);
-    }
-
     protected override void OnMeetingEndHook()
     {
         return;
@@ -108,13 +94,6 @@ public sealed class Igniter : GhostRoleBase
     protected override void OnMeetingStartHook()
     {
 
-    }
-
-    protected override void CreateSpecificOption(OptionFactory factory)
-    {
-		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10, 15.0f);
-		factory.CreateBoolOption(IgniterOption.IsEffectImpostor, false);
-		factory.CreateBoolOption(IgniterOption.IsEffectNeutral, false);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

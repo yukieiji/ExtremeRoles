@@ -1,21 +1,18 @@
-using System;
-using System.Linq;
-
-using UnityEngine;
 using AmongUs.GameOptions;
-
+using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Compat;
 using ExtremeRoles.Module.Ability;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 
@@ -168,7 +165,7 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 
 		if (!OptionManager.Instance.TryGetCategory(
 				OptionTab.CombinationTab,
-				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.InvestigatorOffice),
+				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(CombinationRoleType.InvestigatorOffice),
 				out var cate))
 		{
 			return;

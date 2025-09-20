@@ -1,28 +1,23 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 #nullable enable
 
-namespace ExtremeRoles.GhostRoles.Impostor;
+namespace ExtremeRoles.GhostRoles.Impostor.SaboEvil;
 
-public sealed class SaboEvil : GhostRoleBase
+public sealed class SaboEvilRole : GhostRoleBase
 {
 
-    public SaboEvil() : base(
+    public SaboEvilRole(IGhostRoleCoreProvider provider) : base(
         false,
-        ExtremeRoleType.Impostor,
-        ExtremeGhostRoleId.SaboEvil,
-        ExtremeGhostRoleId.SaboEvil.ToString(),
-        Palette.ImpostorRed)
+		provider.Get(ExtremeGhostRoleId.SaboEvil))
     { }
 
     public static void ResetCool()
@@ -49,9 +44,6 @@ public sealed class SaboEvil : GhostRoleBase
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
 
-    public override void Initialize()
-    { }
-
     protected override void OnMeetingEndHook()
     {
         return;
@@ -60,11 +52,6 @@ public sealed class SaboEvil : GhostRoleBase
     protected override void OnMeetingStartHook()
     {
         return;
-    }
-
-    protected override void CreateSpecificOption(OptionFactory factory)
-    {
-		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 20);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

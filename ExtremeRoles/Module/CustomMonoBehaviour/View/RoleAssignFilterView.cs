@@ -1,21 +1,22 @@
-﻿using System;
-
-using TMPro;
-
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Events;
-using Il2CppInterop.Runtime.Attributes;
-
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Roles;
+using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.RoleAssign.Update;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
+using Il2CppInterop.Runtime.Attributes;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+
 
 #nullable enable
 
@@ -46,6 +47,8 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 	private AddRoleMenuView addRoleMenu;
 
 	private RoleAssignFilterModel model;
+
+	private IGhostRoleCoreProvider? provider;
 
 	public RoleAssignFilterView(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618
@@ -79,6 +82,8 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		// Create Actions
 		this.addFilterButton.ResetButtonAction();
 		this.addFilterButton.SetButtonClickAction((UnityAction)addNewFilterSet);
+
+		this.provider = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGhostRoleCoreProvider>();
 	}
 
 	public void Update()
@@ -230,9 +235,14 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 			}
 			foreach (var (id, roleId) in filter.FilterGhostRole)
 			{
-				string ghostRoleName =
-					ExtremeGhostRoleManager.AllGhostRole.TryGetValue(roleId, out var role) &&
-					role is not null ? role.GetColoredRoleName() : string.Empty;
+				if (this.provider is null)
+				{
+					continue;
+				}
+
+				var core = this.provider.Get((ExtremeGhostRoleId)id);
+				string ghostRoleName = DefaultGhostRoleVisual.GetDefaultColoredRoleName(core);
+
 				createFilterItem(parent, ghostRoleName, filterId, id);
 			}
 		}

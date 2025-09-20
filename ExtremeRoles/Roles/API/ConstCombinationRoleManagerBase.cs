@@ -1,14 +1,13 @@
+using AmongUs.GameOptions;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.RoleAssign;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEngine;
-using AmongUs.GameOptions;
-
-using ExtremeRoles.Helper;
-
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.RoleAssign;
 
 
 namespace ExtremeRoles.Roles.API;
@@ -83,7 +82,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 		// ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
 
 		var factory = OptionManager.CreateAutoParentSetOptionCategory(
-			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
+			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(this.RoleType),
 			this.RoleName,
 			OptionTab.CombinationTab,
 			this.OptionColor == DefaultColor ? null : this.OptionColor);
