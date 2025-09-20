@@ -1,5 +1,6 @@
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
@@ -29,7 +30,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
 	private ButtonWrapper buttonPrefab;
 	private GridLayoutGroup layout;
 
-	private IGhostRoleProvider? provider;
+	private IGhostRoleCoreProvider? provider;
 	private readonly Dictionary<int, ButtonWrapper> allButton = new ();
 
 	public AddRoleMenuView(IntPtr ptr) : base(ptr) { }
@@ -48,7 +49,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
 		var closeButton = trans.Find("CloseButton").gameObject.GetComponent<Button>();
 		closeButton.onClick.AddListener(() => base.gameObject.SetActive(false));
 
-		this.provider = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGhostRoleProvider>();
+		this.provider = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGhostRoleCoreProvider>();
 	}
 
 	public void Update()
@@ -126,7 +127,9 @@ public sealed class AddRoleMenuView : MonoBehaviour
 			model.GhostRole.TryGetValue(id, out var ghostRoleId) &&
 			this.provider is not null)
 		{
-			string ghostRoleName = this.provider.Get((ExtremeGhostRoleId)id).GetColoredRoleName();
+			var core = this.provider.Get((ExtremeGhostRoleId)id);
+			string ghostRoleName = DefaultGhostRoleVisual.GetDefaultColoredRoleName(core);
+
 			button.SetButtonText(ghostRoleName);
 			return () =>
 			{

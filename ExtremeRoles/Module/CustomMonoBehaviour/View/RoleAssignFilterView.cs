@@ -1,6 +1,7 @@
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
@@ -47,7 +48,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
 	private RoleAssignFilterModel model;
 
-	private IGhostRoleProvider? provider;
+	private IGhostRoleCoreProvider? provider;
 
 	public RoleAssignFilterView(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618
@@ -82,7 +83,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		this.addFilterButton.ResetButtonAction();
 		this.addFilterButton.SetButtonClickAction((UnityAction)addNewFilterSet);
 
-		this.provider = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGhostRoleProvider>();
+		this.provider = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGhostRoleCoreProvider>();
 	}
 
 	public void Update()
@@ -239,8 +240,9 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 					continue;
 				}
 
-				string ghostRoleName =
-					this.provider is not null ? this.provider.Get((ExtremeGhostRoleId)id).GetColoredRoleName() : string.Empty;
+				var core = this.provider.Get((ExtremeGhostRoleId)id);
+				string ghostRoleName = DefaultGhostRoleVisual.GetDefaultColoredRoleName(core);
+
 				createFilterItem(parent, ghostRoleName, filterId, id);
 			}
 		}
