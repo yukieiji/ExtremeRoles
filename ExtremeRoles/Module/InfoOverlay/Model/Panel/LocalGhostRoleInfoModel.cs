@@ -26,7 +26,6 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 		}
 
 		string roleOptionString = "";
-		string colorRoleName = role.GetColoredRoleName();
 
 		if (!role.Core.IsVanillaRole())
 		{
@@ -42,6 +41,7 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 		}
 
 		string roleFullDesc = role.GetFullDescription();
+		string colorRoleName = role.Visual.ColoredRoleName;
 
 		return (
 			$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}\n",

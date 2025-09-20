@@ -436,8 +436,7 @@ public static class HudManagerUpdatePatch
 
         if (ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out var ghostRole))
         {
-            string ghostRoleName = ghostRole.GetColoredRoleName();
-            roleNames = $"{ghostRoleName}({roleNames})";
+            roleNames = $"{ghostRole.Visual.ColoredRoleName}({roleNames})";
         }
 
         string completedStr = commonActive ? "?" : tasksCompleted.ToString();

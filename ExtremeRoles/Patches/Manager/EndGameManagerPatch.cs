@@ -220,7 +220,7 @@ public static class EndGameManagerSetUpPatch
                 textAddedRole.Count == 0 && textAddedGhostRole.Count == 0);
 
 			winDetailTextBuilder.Append(Tr.GetString(
-                ghostRole.GetColoredRoleName()));
+                ghostRole.Visual.ColoredRoleName));
             textAddedGhostRole.Add(ghostRole.Core.Id);
         }
 

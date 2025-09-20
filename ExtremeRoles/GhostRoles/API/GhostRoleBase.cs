@@ -28,6 +28,7 @@ public abstract class GhostRoleBase
 
 	public GhostRoleCore Core { get; }
 	public IGhostTeam Team { get; }
+	public IGhostRoleVisual Visual { get; protected set; }
     private int controlId;
 
 	public virtual IOptionLoader Loader
@@ -47,10 +48,15 @@ public abstract class GhostRoleBase
 
 	public GhostRoleBase(
 		bool hasTask,
-		in GhostRoleCore core)
+		GhostRoleCore core,
+		IGhostRoleVisual? visual=null)
 	{
-		this.Team = new GhostTeam(core.DefaultTeam);
 		this.Core = core;
+		this.Team = new GhostTeam(this.Core.DefaultTeam);
+
+		visual ??= new DefaultGhostRoleVisual(this.Core);
+		this.Visual = visual;
+
 		this.HasTask = hasTask;
 	}
 
@@ -60,7 +66,8 @@ public abstract class GhostRoleBase
         ExtremeGhostRoleId id,
         string roleName,
         Color color,
-        OptionTab tab = OptionTab.GeneralTab)
+        OptionTab tab = OptionTab.GeneralTab,
+		IGhostRoleVisual? visual = null)
     {
 		if (tab == OptionTab.GeneralTab)
 		{
@@ -78,7 +85,11 @@ public abstract class GhostRoleBase
 			id, color, team, tab);
 		this.Team = new GhostTeam(team);
 
-        this.HasTask = hasTask;
+		visual ??= new DefaultGhostRoleVisual(this.Core);
+		this.Visual = visual;
+
+
+		this.HasTask = hasTask;
     }
 
     public virtual GhostRoleBase Clone()
@@ -103,21 +114,10 @@ public abstract class GhostRoleBase
         return copy;
     }
 
-    public virtual string GetColoredRoleName() => Design.ColoredString(
-        this.Core.Color, Tr.GetString(this.Core.Name));
+    public string GetColoredRoleName() => this.Visual.ColoredRoleName;
 
     public virtual string GetFullDescription() => Tr.GetString(
        $"{this.Core.Id}FullDescription");
-
-    public virtual string GetImportantText() =>
-        Design.ColoredString(
-            this.Core.Color,
-            string.Format("{0}: {1}",
-                Design.ColoredString(
-                    this.Core.Color,
-                    Tr.GetString(this.Core.Name)),
-                Tr.GetString(
-                    $"{this.Core.Id}ShortDescription")));
 
     public virtual Color GetTargetRoleSeeColor(
         byte targetPlayerId, SingleRoleBase targetRole, GhostRoleBase? targetGhostRole)

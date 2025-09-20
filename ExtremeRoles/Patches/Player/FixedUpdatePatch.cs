@@ -68,7 +68,7 @@ public static class PlayerControlFixedUpdatePatch
 		string addText = playerRole.GetImportantText();
 		if (playerGhostRole != null)
 		{
-			addText = $"{addText}\n{playerGhostRole.GetImportantText()}";
+			addText = $"{addText}\n{playerGhostRole.Visual.ImportantText}";
 		}
 		importantTextTask.Text = addText;
 		player.myTasks.Insert(0, importantTextTask);
