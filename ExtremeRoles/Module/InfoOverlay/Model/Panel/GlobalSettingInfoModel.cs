@@ -1,15 +1,15 @@
 using System;
 using System.Text;
 
-using ExtremeRoles.Helper;
+using Microsoft.Extensions.DependencyInjection;
 
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Compat;
-using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
-
-
+using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
+
 
 
 
@@ -48,7 +48,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 
 		tryAddHudString(
 			container,
-			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
+			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Xion),
 			this.printOption);
 
 		this.printOption.AppendLine();

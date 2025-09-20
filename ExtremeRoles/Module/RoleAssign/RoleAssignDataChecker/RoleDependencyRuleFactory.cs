@@ -1,12 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+
 
 namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
 
@@ -26,7 +29,7 @@ public sealed class RoleDependencyRuleFactory : IRoleDependencyRuleFactory
 		ExtremeRoleId checkRoleId, ExtremeRoleId dependRoleId, OptionTab tab, params T[] options) where T : Enum
 		=> new(checkRoleId, dependRoleId,
 			() =>
-				OptionManager.Instance.TryGetCategory(tab, ExtremeRoleManager.GetRoleGroupId(checkRoleId), out var category) &&
+				OptionManager.Instance.TryGetCategory(tab, ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(checkRoleId), out var category) &&
 				!options.All(x => category.GetValue<T, bool>(x))
 			);
 }

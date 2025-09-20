@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 
-using ExtremeRoles.Module.Interface;
+using Microsoft.Extensions.DependencyInjection;
 
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
-using ExtremeRoles.Roles.Solo.Neutral.Queen;
+
 
 
 namespace ExtremeRoles.Module.SpecialWinChecker;
@@ -37,7 +38,7 @@ internal sealed class LoverWinChecker : IWinChecker
 		if (this.loverNum == 0 &&
 			OptionManager.Instance.TryGetCategory(
 				OptionTab.CombinationTab,
-				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.Lover),
+				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(CombinationRoleType.Lover),
 				out var cate))
 		{
 			this.loverNum = cate.GetValue<CombinationRoleCommonOption, int>(CombinationRoleCommonOption.AssignsNum);

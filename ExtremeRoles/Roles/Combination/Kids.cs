@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
+using Microsoft.Extensions.DependencyInjection;
 using Hazel;
 using UnityEngine;
-
 using TMPro;
 
 using ExtremeRoles.Helper;
@@ -14,6 +14,7 @@ using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.GhostRoles;
@@ -29,6 +30,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Factory;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+
 
 
 #nullable enable
@@ -395,7 +397,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 			if (OffsetInfo is null ||
 				!OptionManager.Instance.TryGetCategory(
 					this.Tab,
-					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(this.OffsetInfo.RoleId),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");

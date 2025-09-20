@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
-using ExtremeRoles.Helper;
+using Microsoft.Extensions.DependencyInjection;
+
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GhostRoles;
@@ -92,7 +93,7 @@ public sealed class GhostRoleSpawnDataManager :
 			};
 
 			if (!opt.TryGetCategory(
-					tab, ExtremeGhostRoleManager.GetRoleGroupId(role.Id),
+					tab, ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(role.Id),
 					out var roleCate))
 			{
 				continue;

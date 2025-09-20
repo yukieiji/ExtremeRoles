@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
+
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -45,10 +49,10 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
 
 	public HideNSeekGameModeRoleSelector()
     {
-        foreach (ExtremeRoleId id in getUseNormalId())
+		var gen = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>();
+		foreach (ExtremeRoleId id in getUseNormalId())
 		{
-			this.roleCategoryGroup.Add(
-				ExtremeRoleManager.GetRoleGroupId(id));
+			this.roleCategoryGroup.Add(gen.Get(id));
 		}
     }
 

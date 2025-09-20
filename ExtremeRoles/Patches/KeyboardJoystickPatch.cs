@@ -1,15 +1,14 @@
 using HarmonyLib;
-using AmongUs.GameOptions;
 
+using Microsoft.Extensions.DependencyInjection;
+
+using AmongUs.GameOptions;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.SystemType;
-
 namespace ExtremeRoles.Patches;
 
 [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
@@ -23,7 +22,7 @@ public static class KeyboardJoystickPatch
         if (ExtremeGameModeManager.Instance.RoleSelector.CanUseXion &&
             OptionManager.Instance.TryGetCategory(
 				OptionTab.GeneralTab,
-				ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
+				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Xion),
 				out var cate) &&
 			cate.TryGetValueOption<XionOption, bool>(XionOption.UseXion, out var opt) &&
 			opt.Value &&
