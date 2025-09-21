@@ -928,9 +928,6 @@
   <data name="Gambler" xml:space="preserve">
     <value>投機者</value>
   </data>
-  <data name="GamblerNormalVoteRate" xml:space="preserve">
-    <value>投機者投票數為1票的概率</value>
-  </data>
   <data name="GamblerIntroDescription" xml:space="preserve">
     <value>太空有風險，投票需謹慎</value>
   </data>

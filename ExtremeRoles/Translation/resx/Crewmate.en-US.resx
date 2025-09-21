@@ -927,9 +927,6 @@ The Ressurecter will not be assigned to a ghost role.</value>
   <data name="Gambler" xml:space="preserve">
     <value>Gambler</value>
   </data>
-  <data name="GamblerNormalVoteRate" xml:space="preserve">
-    <value>Chance of normal vote</value>
-  </data>
   <data name="GamblerIntroDescription" xml:space="preserve">
     <value>Role the dice to vote twice!</value>
   </data>

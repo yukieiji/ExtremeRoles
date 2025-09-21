@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using ExtremeRoles.Helper;
@@ -17,7 +18,7 @@ public sealed class Gambler :
 {
     public enum GamblerOption
     {
-        NormalVoteRate,
+        ChangeVoteChance,
         MaxVoteNum,
         MinVoteNum
     }
@@ -25,10 +26,10 @@ public sealed class Gambler :
     public int Order => (int)IRoleVoteModifier.ModOrder.GamblerAddVote;
     
 	private int normalVoteIndex;
-	private int minVoteIndex;
 
 	private int minVoteNum;
-    private int maxVoteNum;
+	private int maxVoteNum;
+	private float voteStep;
 
     private byte votedFor = PlayerVoteArea.HasNotVoted;
     private int voteCount = 1;
@@ -52,26 +53,26 @@ public sealed class Gambler :
         }
 
 		int index = RandomGenerator.Instance.Next(1, 101);
-
 		if (index <= this.normalVoteIndex)
 		{
 			this.voteCount = 1;
 		}
-		else if (index <= this.minVoteIndex)
-		{
-			this.voteCount = this.minVoteNum;
-		}
 		else
 		{
-			this.voteCount = this.maxVoteNum;
+			do
+			{
+				this.voteCount = RandomGenerator.Instance.Next(this.minVoteNum, this.maxVoteNum);
+			}
+			while (this.voteCount == 1);
 		}
 
-        if (this.voteCount == 1)
+		if (this.voteCount == 1)
         {
             return;
         }
 
-        int newVotedNum = curVoteNum + voteCount - 1;
+		// 自分の票数がもともと入っていて票数=curVoteNumなので、入っていた票数を消して足す
+		int newVotedNum = curVoteNum + voteCount - 1;
 		Logging.Debug($"New vote num : {newVotedNum}");
 		voteResult[this.votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
@@ -91,8 +92,8 @@ public sealed class Gambler :
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
-            GamblerOption.NormalVoteRate,
-            50, 0, 90, 5,
+            GamblerOption.ChangeVoteChance,
+            50, 10, 100, 5,
             format: OptionUnit.Percentage);
 		factory.CreateIntOption(
             GamblerOption.MinVoteNum,
@@ -106,10 +107,9 @@ public sealed class Gambler :
 
     protected override void RoleSpecificInit()
     {
-        this.normalVoteIndex = this.Loader.GetValue<GamblerOption, int>(GamblerOption.NormalVoteRate);
-		
-		int changeIndex = (100 - this.normalVoteIndex) / 2;
-		this.minVoteIndex = this.normalVoteIndex + changeIndex;
+        int changeIndex = this.Loader.GetValue<GamblerOption, int>(GamblerOption.ChangeVoteChance);
+
+		this.normalVoteIndex = 100 - changeIndex;
 
         this.minVoteNum = this.Loader.GetValue<GamblerOption, int>(GamblerOption.MinVoteNum);
         this.maxVoteNum = this.Loader.GetValue<GamblerOption, int>(GamblerOption.MaxVoteNum);

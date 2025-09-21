@@ -950,8 +950,8 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="Gambler" xml:space="preserve">
     <value>ギャンブラー</value>
   </data>
-  <data name="GamblerNormalVoteRate" xml:space="preserve">
-    <value>投票数が1票になる確率</value>
+  <data name="GamblerChangeVoteChance" xml:space="preserve">
+    <value>投票数が変化する確率</value>
   </data>
   <data name="GamblerIntroDescription" xml:space="preserve">
     <value>投票が"増えるか"どうか運次第</value>
@@ -960,13 +960,11 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>会議での票数がランダムに変化する</value>
   </data>
   <data name="GamblerFullDescription" xml:space="preserve">
-    <value>会議で自分の投票数がランダムに変化するクルー役職
+    <value>投票数が1票か、最大値と最小値の間からランダムに変化するクルー役職
 この投票数の変化は画面上ではわからず、票数がどの票数であって
 も画面上に表示される票数は1票と表示される(内部的には計算され
 てます)
-票が変化する確率は100％から「投票数が1票になる確率」を引いて、2で
-割った確率になる(例：「投票数が1票になる確率」：50％の場合、
-票が最小と最大になる確率はそれぞれ25％になる)</value>
+投票数が変化する確率を当てたときに、最大票数から最小票数の間からランダムに票が変化する</value>
   </data>
   <data name="Teleporter" xml:space="preserve">
     <value>テレポーター</value>
