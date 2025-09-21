@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 using ExtremeRoles.Helper;
@@ -24,8 +23,11 @@ public sealed class Gambler :
     }
 
     public int Order => (int)IRoleVoteModifier.ModOrder.GamblerAddVote;
-    private int normalVoteRate;
-    private int minVoteNum;
+    
+	private int normalVoteIndex;
+	private int minVoteIndex;
+
+	private int minVoteNum;
     private int maxVoteNum;
 
     private byte votedFor = PlayerVoteArea.HasNotVoted;
@@ -49,15 +51,20 @@ public sealed class Gambler :
             return;
         }
 
-        int[] voteArray = new int[100];
-        int dualVoteRate = (int)Math.Floor((100 - this.normalVoteRate) / 2.0d);
-        int zeroVoteRate = 100 - dualVoteRate - this.normalVoteRate;
+		int index = RandomGenerator.Instance.Next(1, 101);
 
-        Array.Fill(voteArray, 1, 0, this.normalVoteRate);
-        Array.Fill(voteArray, this.minVoteNum, this.normalVoteRate, zeroVoteRate);
-        Array.Fill(voteArray, this.maxVoteNum, this.normalVoteRate + zeroVoteRate, dualVoteRate);
-
-        this.voteCount = voteArray[RandomGenerator.Instance.Next(100)];
+		if (index <= this.normalVoteIndex)
+		{
+			this.voteCount = 1;
+		}
+		else if (index <= this.minVoteIndex)
+		{
+			this.voteCount = this.minVoteNum;
+		}
+		else
+		{
+			this.voteCount = this.maxVoteNum;
+		}
 
         if (this.voteCount == 1)
         {
@@ -99,7 +106,11 @@ public sealed class Gambler :
 
     protected override void RoleSpecificInit()
     {
-        this.normalVoteRate = this.Loader.GetValue<GamblerOption, int>(GamblerOption.NormalVoteRate);
+        this.normalVoteIndex = this.Loader.GetValue<GamblerOption, int>(GamblerOption.NormalVoteRate);
+		
+		int changeIndex = (100 - this.normalVoteIndex) / 2;
+		this.minVoteIndex = this.normalVoteIndex + changeIndex;
+
         this.minVoteNum = this.Loader.GetValue<GamblerOption, int>(GamblerOption.MinVoteNum);
         this.maxVoteNum = this.Loader.GetValue<GamblerOption, int>(GamblerOption.MaxVoteNum);
     }

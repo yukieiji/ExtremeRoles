@@ -937,15 +937,6 @@
   <data name="GamblerShortDescription" xml:space="preserve">
     <value>你的投票数会随机变化</value>
   </data>
-  <data name="GamblerFullDescription" xml:space="preserve">
-    <value>投机者属于船员阵营。
-其会议阶段的投票的等价票数会在0到2票之间变化。
-
-·被动技能“薛定谔的票数”
-投机者的投票在投票结算画面中不会变动，无论实际投出几票，都只会显示投机者投出了一票。
-投机者投票数为0票与2票的概率相等，由投票数为1票的概率决定。
-例如，若投票数为1票的概率为50%，则投票数为0票与2票的概率均为25%。</value>
-  </data>
   <data name="Teleporter" xml:space="preserve">
     <value>传送师</value>
   </data>

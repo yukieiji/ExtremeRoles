@@ -936,15 +936,6 @@ The Ressurecter will not be assigned to a ghost role.</value>
   <data name="GamblerShortDescription" xml:space="preserve">
     <value>Randomly multiplies votes</value>
   </data>
-  <data name="GamblerFullDescription" xml:space="preserve">
-    <value>A CREWMATE role which can randomly vote 0-2 counts.
-The vote display will be normal (shows 1 vote).
-  - It only affects the internal count of votes.
-The chances of vote count variation is calculated by 
- "{100 - (Configured chance of normal vote)}/2"
- - When the configured chance is 50%, you may vote 1 for 50%, 
-    vote 0 for 25%, vote 2 for 25%.</value>
-  </data>
   <data name="Teleporter" xml:space="preserve">
     <value>Teleporter</value>
   </data>
