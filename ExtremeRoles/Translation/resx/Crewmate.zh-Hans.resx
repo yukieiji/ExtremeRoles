@@ -1412,7 +1412,7 @@
     <value>最少票数</value>
   </data>
   <data name="TeleporterInitAbilityNum" xml:space="preserve">
-    <value>传说师初始可放置传送门数</value>
+    <value>传送师初始可放置传送门数</value>
   </data>
   <data name="BlockModeAbilityButton" xml:space="preserve">
     <value>无法使用技能</value>
