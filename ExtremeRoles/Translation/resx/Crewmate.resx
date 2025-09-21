@@ -1433,4 +1433,32 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="TeleporterInitAbilityNum" xml:space="preserve">
     <value>「セットポータル」の初期使用回数</value>
   </data>
+  <data name="BlockModeAbilityButton" xml:space="preserve">
+    <value>能力ボタン使用禁止</value>
+  </data>
+  <data name="BlockModeReportButton" xml:space="preserve">
+    <value>通報ボタン使用禁止</value>
+  </data>
+  <data name="BlockModeKillButton" xml:space="preserve">
+    <value>キルボタン使用禁止</value>
+  </data>
+  <data name="BlockModeAbilityAndReportButton" xml:space="preserve">
+    <value>能力と通報ボタン
+使用禁止</value>
+  </data>
+  <data name="BlockModeAbilityAndKillButton" xml:space="preserve">
+    <value>能力とキルボタン
+使用禁止</value>
+  </data>
+  <data name="BlockModeKillAndReportButton" xml:space="preserve">
+    <value>能力と通報ボタン
+使用禁止</value>
+  </data>
+  <data name="BlockModeAll" xml:space="preserve">
+    <value>能力、通報、キルボタン
+使用禁止</value>
+  </data>
+  <data name="BlockModeNone" xml:space="preserve">
+    <value>デメリットなし</value>
+  </data>
 </root>
