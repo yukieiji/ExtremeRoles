@@ -1142,7 +1142,7 @@
     <value>残り使用回数：{0}回
 この会議で{1}回可能</value>
   </data>
-  <data name="BarterRandomCastling" xml:space="preserve">
+  <data name="BarterRandomCastlingLabel" xml:space="preserve">
     <value>ランダムキャスリング</value>
   </data>
 </root>

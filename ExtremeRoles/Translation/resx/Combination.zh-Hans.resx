@@ -1187,7 +1187,7 @@
     <value>剩余可交换次数：{0}次
 这次会议可交换{1}次</value>
   </data>
-  <data name="BarterRandomCastling" xml:space="preserve">
+  <data name="BarterRandomCastlingLabel" xml:space="preserve">
     <value>随机交换
 使用次数</value>
   </data>

@@ -145,7 +145,7 @@ public sealed class BarterRole :
 						});
 					}
 					this.randomButton.SetInfiniteUses();
-					this.randomButton.buttonLabelText.text = Tr.GetString("BarterRandomCastling");
+					this.randomButton.buttonLabelText.text = Tr.GetString("BarterRandomCastlingLabel");
 					this.randomButton.gameObject.SetActive(false);
 				}
 			}
