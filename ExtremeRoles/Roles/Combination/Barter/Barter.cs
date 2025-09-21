@@ -145,7 +145,7 @@ public sealed class BarterRole :
 						});
 					}
 					this.randomButton.SetInfiniteUses();
-					this.randomButton.buttonLabelText.text = Tr.GetString("BarterRandomCstling");
+					this.randomButton.buttonLabelText.text = Tr.GetString("BarterRandomCastling");
 					this.randomButton.gameObject.SetActive(false);
 				}
 			}
@@ -220,7 +220,7 @@ public sealed class BarterRole :
 				{
 					sourceMark = UnityEngine.Object.Instantiate(
 						instance.Background, instance.LevelNumberText.transform);
-					sourceMark.name = $"captain_SpecialVoteCheckMark_{target}";
+					sourceMark.name = $"barter_CastlingMark_{target}";
 					sourceMark.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
 						ObjectPath.CommonTextureAsset,
 						string.Format(
