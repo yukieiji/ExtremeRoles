@@ -295,3 +295,8 @@ You can either edit [the files](https://github.com/yukieiji/ExtremeRoles/tree/ma
   4. Open `ResXResourceManager.exe`
   5. Set Directory to Cloned path(Like /a/ExtremeRoles)
   6. Add or edit translations!!
+
+#### Q＆A
+
+- Q : Can't checkout new branch
+- A : Fork ExR again and clone it, or run `git remote prune`, `git branch -d develop`(Please delete all local `develop` branches) and try again.
