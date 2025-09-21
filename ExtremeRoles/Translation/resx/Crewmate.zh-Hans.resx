@@ -1308,7 +1308,7 @@
     <value>驱魔师</value>
   </data>
   <data name="ExorcistAwakeTaskGage" xml:space="preserve">
-    <value>驱魔人完成多少任务可在内鬼视角变为红名</value>
+    <value>驱魔师完成多少任务可在内鬼视角变为红名</value>
   </data>
   <data name="ExorcistAbilityCoolTime" xml:space="preserve">
     <value>驱魔冷却时间</value>
