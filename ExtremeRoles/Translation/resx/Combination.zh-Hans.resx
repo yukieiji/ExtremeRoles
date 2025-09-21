@@ -1121,4 +1121,74 @@
   <data name="SkaterSkateOff" xml:space="preserve">
     <value>刹车</value>
   </data>
+  <data name="InvestigatorContinueSearch" xml:space="preserve">
+    <value>能否继续调查犯罪现场</value>
+  </data>
+  <data name="InvestigatorSearchCanFindName" xml:space="preserve">
+    <value>能否通过犯罪现场调查出凶手</value>
+  </data>
+  <data name="InvestigatorForceMeetingOnSearchEnd" xml:space="preserve">
+    <value>调查完犯罪现场后强行开启会议</value>
+  </data>
+  <data name="InvestigatorSearchCanContineMeetingNum" xml:space="preserve">
+    <value>剩余的关于犯罪现场的会议数</value>
+  </data>
+  <data name="Barter" xml:space="preserve">
+    <value>奇迹商人</value>
+  </data>
+  <data name="NiceBarter" xml:space="preserve">
+    <value>正义的奇迹商人</value>
+  </data>
+  <data name="EvilBarter" xml:space="preserve">
+    <value>邪恶的奇迹商人</value>
+  </data>
+  <data name="BarterAwakeTaskRate" xml:space="preserve">
+    <value>正义的奇迹商人知晓职业所需任务数量(条件1)</value>
+  </data>
+  <data name="BarterAwakeDeadPlayerNum" xml:space="preserve">
+    <value>正义的奇迹商人知晓职业所需死亡人数(条件2)</value>
+  </data>
+  <data name="BarterAwakeKillNum" xml:space="preserve">
+    <value>邪恶的奇迹商人知晓职业所需击杀数</value>
+  </data>
+  <data name="BarterCanCallMeeting" xml:space="preserve">
+    <value>奇迹商人能否开启会议</value>
+  </data>
+  <data name="BarterCastlingNum" xml:space="preserve">
+    <value>奇迹商人每次会议可进行的交换数</value>
+  </data>
+  <data name="BarterMaxCastlingNumWhenMeeting" xml:space="preserve">
+    <value>奇迹商人总共可进行的交换数</value>
+  </data>
+  <data name="BarterRandomCastling" xml:space="preserve">
+    <value>奇迹商人的阵营随机</value>
+  </data>
+  <data name="BarterOneCastlingNum" xml:space="preserve">
+    <value>随机交换
+使用次数</value>
+  </data>
+  <data name="BarterShowCastlingOther" xml:space="preserve">
+    <value>他人是否会知晓谁被交换了</value>
+  </data>
+  <data name="BarterFullDescription" xml:space="preserve">
+    <value>可以交换两人的票职业
+
+会议能力“交换”
+   -选择玩家发动
+   -可以交换两人的票数</value>
+  </data>
+  <data name="BarterShortDescription" xml:space="preserve">
+    <value>用交换把会议搞得翻天覆地吧！</value>
+  </data>
+  <data name="BarterIntroDescription" xml:space="preserve">
+    <value>票的去向？看我的心情吧</value>
+  </data>
+  <data name="BarterCastlingInfo" xml:space="preserve">
+    <value>剩余可交换次数：{0}次
+这次会议可交换{1}次</value>
+  </data>
+  <data name="BarterRandomCstling" xml:space="preserve">
+    <value>随机交换
+使用次数</value>
+  </data>
 </root>

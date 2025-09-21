@@ -1521,4 +1521,7 @@
   <data name="KnightCanKillServant" xml:space="preserve">
     <value>知晓女皇时&lt;br&gt;能否击杀侍从</value>
   </data>
+  <data name="HereticUseVent" xml:space="preserve">
+    <value>能否使用通风管</value>
+  </data>
 </root>
