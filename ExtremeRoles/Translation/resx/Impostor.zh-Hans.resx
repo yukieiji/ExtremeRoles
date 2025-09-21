@@ -1609,4 +1609,58 @@ Lv2武器“光剑”
   <data name="WeaponMixTimeRemain" xml:space="preserve">
     <value>正在合成 {0}....: 完成还需 {1} 秒</value>
   </data>
+  <data name="WeaponMixInfo" xml:space="preserve">
+    <value>按下"Alt"可合成武器</value>
+  </data>
+  <data name="GetFirstWeapon" xml:space="preserve">
+    <value>获得了“{0}”</value>
+  </data>
+  <data name="GetNextWeapon" xml:space="preserve">
+    <value>获得了“{0}”，可以通过鼠标滚轮切换</value>
+  </data>
+  <data name="Boxer" xml:space="preserve">
+    <value>拳击手</value>
+  </data>
+  <data name="BoxerAbilityCoolTime" xml:space="preserve">
+    <value>直拳冷却时间</value>
+  </data>
+  <data name="BoxerAbilityCount" xml:space="preserve">
+    <value>可打出直拳次数</value>
+  </data>
+  <data name="BoxerStraightChargeTime" xml:space="preserve">
+    <value>直拳蓄力时间</value>
+  </data>
+  <data name="BoxerStraightRange" xml:space="preserve">
+    <value>直拳范围</value>
+  </data>
+  <data name="BoxerStraightFirstSpeed" xml:space="preserve">
+    <value>被打飞船员的初始速度</value>
+  </data>
+  <data name="BoxerStraightAcceleration" xml:space="preserve">
+    <value>被打飞船员的加速度</value>
+  </data>
+  <data name="BoxerStraightKillSpeed" xml:space="preserve">
+    <value>撞击墙壁死亡所需速度</value>
+  </data>
+  <data name="BoxerStraightReflectionE" xml:space="preserve">
+    <value>撞击墙壁可反弹数</value>
+  </data>
+  <data name="BoxerFullDescription" xml:space="preserve">
+    <value>拳击手属于内鬼阵营
+可以使用直拳打飞并击杀目标
+
+·主动技能“直拳”
+按下技能后开始蓄力，当有人靠近可以再次使用技能打飞目标
+当目标以一定速度撞到墙壁将直接死亡
+蓄力越久打飞时的速度越快</value>
+  </data>
+  <data name="BoxerShortDescription" xml:space="preserve">
+    <value>用"直拳"打飞船员！</value>
+  </data>
+  <data name="BoxerIntroDescription" xml:space="preserve">
+    <value>认真一拳！</value>
+  </data>
+  <data name="BoxerAbility" xml:space="preserve">
+    <value>直拳</value>
+  </data>
 </root>
