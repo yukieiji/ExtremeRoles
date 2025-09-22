@@ -225,12 +225,17 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 				categoryHeaderMasked.transform.SetParent(
 					vanillaSettings.settingsContainer);
 				categoryHeaderMasked.transform.localScale = Vector3.one;
-				if (cate.View.Color.HasValue)
+
+				if (cate.View is OptionCategoryViewInfo categoryView)
 				{
-					categoryHeaderMasked.Background.color = cate.View.Color.Value;
+					if (categoryView.Color.HasValue)
+					{
+						categoryHeaderMasked.Background.color = categoryView.Color.Value;
+					}
+					categoryHeaderMasked.ReplaceExRText(categoryView.TransedName, 61);
+					vanillaSettings.settingsInfo.Add(categoryHeaderMasked.gameObject);
 				}
-				categoryHeaderMasked.ReplaceExRText(cate.View.TransedName, 61);
-				vanillaSettings.settingsInfo.Add(categoryHeaderMasked.gameObject);
+
 
 				var groupViewObj = new OptionCategoryViewObject<ViewSettingsInfoPanel>.Builder(
 					categoryHeaderMasked, cate.Loader.Size);
@@ -284,15 +289,19 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 					continue;
 				}
 
-				var category = optionGroupView.Category;
-				if (catego.View.Color.HasValue)
+				CategoryHeaderMasked? category = null;
+				if (catego.View is OptionCategoryViewInfo categoryView)
 				{
-					category.Background.color = catego.View.Color.Value;
-				}
-				category.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
-				category.ReplaceExRText(catego.View.TransedName, 61);
+					category = optionGroupView.Category;
+					if (categoryView.Color.HasValue)
+					{
+						category.Background.color = categoryView.Color.Value;
+					}
+					category.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
+					category.ReplaceExRText(catego.View.TransedName, 61);
 
-				yPos -= categoryOffset;
+					yPos -= categoryOffset;
+				}
 
 				int activeIndex = 0;
 				int activeObjNum = 0;
@@ -337,6 +346,11 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 					}
 					++activeIndex;
 					optionView.transform.localPosition = new Vector3(x, yPos, -2f);
+				}
+
+				if (category == null)
+				{
+					continue;
 				}
 
 				if (tab is not OptionTab.GeneralTab && activeObjNum == 1)
