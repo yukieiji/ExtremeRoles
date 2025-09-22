@@ -284,7 +284,7 @@ public class OptionCategoryFactory(
 
 	public void Dispose()
 	{
-		var newGroup = new OptionCategoryView(this.Tab, groupid, this.Name, this.optionPack, this.color);
+		var newGroup = new OptionCategory(this.Tab, groupid, this.Name, this.optionPack, this.color);
 		this.registerOption.Invoke(Tab, newGroup);
 	}
 }

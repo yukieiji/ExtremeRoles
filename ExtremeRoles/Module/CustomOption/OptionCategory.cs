@@ -210,7 +210,7 @@ public sealed class HiddenCategoryViewInfo(
 }
 
 
-public sealed class OptionCategoryView(
+public sealed class OptionCategory(
 	OptionTab tab,
 	int id,
 	string name,
@@ -218,9 +218,9 @@ public sealed class OptionCategoryView(
 	in Color? color = null) : IOptionCategory
 {
 	public int Id { get; } = id;
+	public bool IsDirty { get; set; } = false;
 
 	public IOptionLoader Loader { get; } = new OptionLoader(option);
-	public bool IsDirty { get; set; } = false;
 
 	public IOptionCategoryViewInfo View { get; } = new OptionCategoryViewInfo(name, tab, color);
 
