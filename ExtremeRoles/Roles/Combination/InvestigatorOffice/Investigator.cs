@@ -1,16 +1,19 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using AmongUs.GameOptions;
+using UnityEngine;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using UnityEngine;
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 
 #nullable enable
@@ -384,9 +387,16 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 			hideSearchText();
 			if (this.forceMeetingOnSearchEnd)
 			{
-				rolePlayer.CmdReportDeadBody(null);
+				rolePlayer.StartCoroutine(
+					cmdReport(rolePlayer).WrapToIl2Cpp());
 			}
 		}
+	}
+
+	private static IEnumerator cmdReport(PlayerControl rolePlayer)
+	{
+		yield return new WaitForSeconds(1.0f);
+		rolePlayer.CmdReportDeadBody(null);
 	}
 
 	public override void RolePlayerKilledAction(

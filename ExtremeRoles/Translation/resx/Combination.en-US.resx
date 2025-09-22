@@ -530,26 +530,7 @@ player's emergency meeting</value>
     <value>Investigate the scene and solve the case</value>
   </data>
   <data name="InvestigatorFullDescription" xml:space="preserve">
-    <value> A CREWMATE role with the ability to investigate clues.
- "INVESTIGATE" : Find clues left behind at the site!
-   - After a dead body is reported, the reported body's position is 
-assigned as a "Crime site".
-   - The Crime site can be investigated by standing nearby for a 
-while. Moving will stop the investigation.
-   - Crime sites of bodies reported by an "Assistant" can be 
-Investigated faster than normal.
-   - The Crime site can be investigated for only one turn (before the 
-next meeting).
-   - Investigators can know where the Crime site is by following an
-arrow.
- The investigation can lead to clues like: 
-    - 1: The date and time of the crime (UTC)
-    - 2: How many seconds did it take for the body to be reported
-    - 3: The team who did the crime
-    - 4: The Role who did the crime
-
- On the Assistant's death, your Role will switch to an 
-"Apprentice".</value>
+    <value> </value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
     <value>Investigator, let me help you too!</value>

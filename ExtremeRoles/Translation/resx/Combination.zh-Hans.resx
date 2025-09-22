@@ -526,29 +526,6 @@
   <data name="InvestigatorShortDescription" xml:space="preserve">
     <value>调查案发现场留下的蛛丝马迹</value>
   </data>
-  <data name="InvestigatorFullDescription" xml:space="preserve">
-    <value>调查员属于船员阵营。
-可以从案发现场搜寻线索。
-
-·主动技能“尸检报告”
-当有尸体被报告时，那尸体所在的地点直到下一轮会议阶段开始为止记录为案发现场。
-调查员可以通过箭头确认案发现场的位置。
-调查员在案发现场周围停留时，可以进行调查。
-若调查员在调查过程中离开，调查进程会被重置。
-通过调查得知的信息如下。
-每一次的调查都需要一定的时间。
-在第四次调查完成时，案发现场被移除。
-第一次调查:死者死亡时刻。
-第二次调查:从死者死亡到会议召开的间隔时间。
-第三次调查:凶手的所属阵营。
-第四次调查:凶手的职业。
-
-·被动技能“助手的援助”
-若尸体是助手报告的，则每次调查所需的时间将缩短。
-
-·被动技能“传承”
-调查员死亡等情况下，助手的职业变为见习调查员。</value>
-  </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
     <value>调查员的最佳搭档</value>
   </data>
