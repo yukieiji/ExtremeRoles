@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -85,7 +85,7 @@ public static class CustomOptionCsvProcessor
 				foreach (var cate in tabContainer.Category)
 				{
 					int cateId = cate.Id;
-					foreach (var option in cate.Options)
+					foreach (var option in cate.Loader.Options)
 					{
 						var info = option.Info;
 						if (PresetOption.IsPreset(cateId, info.Id))
@@ -277,7 +277,7 @@ public static class CustomOptionCsvProcessor
 				{
 					int cateId = cate.Id;
 
-					foreach (var option in cate.Options)
+					foreach (var option in cate.Loader.Options)
 					{
 
 						var optionInfo = option.Info;

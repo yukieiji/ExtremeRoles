@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 #nullable enable
@@ -7,8 +8,11 @@ namespace ExtremeRoles.Module.CustomOption.Interfaces;
 
 public interface IOptionLoader
 {
+	public int Size { get; }
+	public IEnumerable<IOption> Options { get; }
 	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option);
 	public IOption Get<T>(T id) where T : Enum;
+	public IOption Get(int id);
 
 	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IValueOption<T>? option)
 		where W : Enum

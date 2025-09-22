@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -225,16 +225,21 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 				categoryHeaderMasked.transform.SetParent(
 					vanillaSettings.settingsContainer);
 				categoryHeaderMasked.transform.localScale = Vector3.one;
-				if (cate.Color.HasValue)
+
+				if (cate.View is OptionCategoryViewInfo categoryView)
 				{
-					categoryHeaderMasked.Background.color = cate.Color.Value;
+					if (categoryView.Color.HasValue)
+					{
+						categoryHeaderMasked.Background.color = categoryView.Color.Value;
+					}
+					categoryHeaderMasked.ReplaceExRText(categoryView.TransedName, 61);
+					vanillaSettings.settingsInfo.Add(categoryHeaderMasked.gameObject);
 				}
-				categoryHeaderMasked.ReplaceExRText(cate.TransedName, 61);
-				vanillaSettings.settingsInfo.Add(categoryHeaderMasked.gameObject);
+
 
 				var groupViewObj = new OptionCategoryViewObject<ViewSettingsInfoPanel>.Builder(
-					categoryHeaderMasked, cate.Count);
-				foreach (var option in cate.Options)
+					categoryHeaderMasked, cate.Loader.Size);
+				foreach (var option in cate.Loader.Options)
 				{
 					ViewSettingsInfoPanel viewSettingsInfoPanel = Instantiate(
 						vanillaSettings.infoPanelOrigin);
@@ -284,19 +289,23 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 					continue;
 				}
 
-				var category = optionGroupView.Category;
-				if (catego.Color.HasValue)
+				CategoryHeaderMasked? category = null;
+				if (catego.View is OptionCategoryViewInfo categoryView)
 				{
-					category.Background.color = catego.Color.Value;
-				}
-				category.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
-				category.ReplaceExRText(catego.TransedName, 61);
+					category = optionGroupView.Category;
+					if (categoryView.Color.HasValue)
+					{
+						category.Background.color = categoryView.Color.Value;
+					}
+					category.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
+					category.ReplaceExRText(catego.View.TransedName, 61);
 
-				yPos -= categoryOffset;
+					yPos -= categoryOffset;
+				}
 
 				int activeIndex = 0;
 				int activeObjNum = 0;
-				foreach (var (option, optionView) in catego.Options.Zip(optionGroupView.View))
+				foreach (var (option, optionView) in catego.Loader.Options.Zip(optionGroupView.View))
 				{
 					if (!OptionSplitter.IsValidOption(validOptionId, option.Info.Id))
 					{
@@ -337,6 +346,11 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 					}
 					++activeIndex;
 					optionView.transform.localPosition = new Vector3(x, yPos, -2f);
+				}
+
+				if (category == null)
+				{
+					continue;
 				}
 
 				if (tab is not OptionTab.GeneralTab && activeObjNum == 1)

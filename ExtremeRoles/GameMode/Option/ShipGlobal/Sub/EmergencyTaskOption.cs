@@ -1,7 +1,7 @@
-﻿using Il2CppSystem;
-
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using Il2CppSystem;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
@@ -32,19 +32,19 @@ public sealed class SystemGetter(ShipStatus instance)
 	}
 }
 
-public sealed class EmergencyTaskOption(in OptionCategory category)
+public sealed class EmergencyTaskOption(in IOptionLoader loader)
 {
-	private readonly int skeldReactorTime = category.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.SkeldReactor);
-	private readonly int skeldOxygenTime = category.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.SkeldOxygen);
+	private readonly int skeldReactorTime = loader.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.SkeldReactor);
+	private readonly int skeldOxygenTime = loader.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.SkeldOxygen);
 
-	private readonly int miraReactorTime = category.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.MiraHqReactor);
-	private readonly int miraOxygenTime = category.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.MiraHqOxygen);
+	private readonly int miraReactorTime = loader.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.MiraHqReactor);
+	private readonly int miraOxygenTime = loader.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.MiraHqOxygen);
 
-	private readonly int polusReactorTime = category.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.PolusReactor);
+	private readonly int polusReactorTime = loader.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.PolusReactor);
 
-	public readonly int AirshipHeliTime = category.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.AirshipHeli);
+	public readonly int AirshipHeliTime = loader.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.AirshipHeli);
 
-	private readonly int fungleReactorTime = category.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.FungleReactor);
+	private readonly int fungleReactorTime = loader.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.FungleReactor);
 
 
 	public void ChangeTime(ShipStatus instance)

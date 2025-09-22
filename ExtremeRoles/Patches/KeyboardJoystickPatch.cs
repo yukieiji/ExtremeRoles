@@ -24,7 +24,7 @@ public static class KeyboardJoystickPatch
 				OptionTab.GeneralTab,
 				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Xion),
 				out var cate) &&
-			cate.TryGetValueOption<XionOption, bool>(XionOption.UseXion, out var opt) &&
+			cate.Loader.TryGetValueOption<XionOption, bool>(XionOption.UseXion, out var opt) &&
 			opt.Value &&
             !ExtremeRolesPlugin.DebugMode.Value)
         {

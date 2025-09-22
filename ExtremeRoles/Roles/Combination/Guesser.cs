@@ -188,7 +188,7 @@ public sealed class Guesser :
                         assignState.IsJackalForceReplaceLover = OptionManager.Instance.TryGetCategory(
 							OptionTab.NeutralTab,
 							ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Jackal),
-							out var cate) && cate.GetValue<JackalRole.JackalOption, bool>(JackalRole.JackalOption.ForceReplaceLover);
+							out var cate) && cate.Loader.GetValue<JackalRole.JackalOption, bool>(JackalRole.JackalOption.ForceReplaceLover);
                         break;
                     case ExtremeRoleId.Queen:
                         assignState.IsQueenOn = true;
@@ -204,7 +204,7 @@ public sealed class Guesser :
 								OptionTab.CrewmateTab,
 								ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Jailer),
 								out var jailer) && 
-							!jailer.GetValue<Jailer.Option, bool>(Jailer.Option.IsMissingToDead))
+							!jailer.Loader.GetValue<Jailer.Option, bool>(Jailer.Option.IsMissingToDead))
 						{
 							add(ExtremeRoleId.Lawbreaker, ExtremeRoleType.Neutral);
 						}

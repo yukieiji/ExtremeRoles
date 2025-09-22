@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
@@ -19,12 +19,12 @@ public interface ISpawnDataManager
 	public IReadOnlyDictionary<ExtremeRoleType, int> CurrentSingleRoleUseNum { get; }
 
 	protected static int ComputeSpawnNum(
-		OptionCategory category,
+		IOptionLoader loader,
 		RoleSpawnOption minSpawnKey,
 		RoleSpawnOption maxSpawnKey)
 	{
-		int minSpawnNum = category.GetValue<int>((int)minSpawnKey);
-		int maxSpawnNum = category.GetValue<int>((int)maxSpawnKey);
+		int minSpawnNum = loader.GetValue<int>((int)minSpawnKey);
+		int maxSpawnNum = loader.GetValue<int>((int)maxSpawnKey);
 
 		// 最大値が最小値より小さくならないように
 		maxSpawnNum = Math.Clamp(maxSpawnNum, minSpawnNum, int.MaxValue);

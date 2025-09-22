@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
@@ -12,7 +13,7 @@ public static class OptionSplitter
 {
 	public static HashSet<int> AllEnable => [];
 
-	public static bool TryGetValidOption(in OptionCategory cate, [NotNullWhen(true)] out IReadOnlySet<int>? optionId)
+	public static bool TryGetValidOption(in IOptionCategory cate, [NotNullWhen(true)] out IReadOnlySet<int>? optionId)
 	{
 		int id = cate.Id;
 
@@ -23,7 +24,7 @@ public static class OptionSplitter
 		return
 		(
 			(
-				cate.Tab is OptionTab.GeneralTab &&
+				cate.View.Tab is OptionTab.GeneralTab &&
 				(
 					OptionCreator.IsCommonOption(id) ||
 					IRoleSelector.IsCommonOption(id) ||

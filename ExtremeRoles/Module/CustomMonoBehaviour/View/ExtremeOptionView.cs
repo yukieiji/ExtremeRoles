@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using TMPro;
 using UnityEngine;
@@ -21,7 +21,7 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 	public IOption? OptionModel { private get; set; }
 
 	[HideFromIl2Cpp]
-	public OptionCategory? OptionCategoryModel { private get; set; }
+	public IOptionCategory? OptionCategoryModel { private get; set; }
 
 	private readonly record struct AwakeProp(
 		TextMeshPro Title,

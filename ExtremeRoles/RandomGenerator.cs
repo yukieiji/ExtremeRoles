@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Security.Cryptography;
 
 using ExtremeRoles.Helper;
@@ -22,7 +22,7 @@ public static class RandomGenerator
 						OptionTab.GeneralTab,
 						randCategoryKey,
 						out var category) &&
-					category.GetValue<bool>(useStrongKey));
+					category.Loader.GetValue<bool>(useStrongKey));
             }
             return instance;
         }
@@ -32,7 +32,7 @@ public static class RandomGenerator
 			OptionTab.GeneralTab,
 			randCategoryKey,
 			out var category) &&
-		category.GetValue<bool>(useStrongKey);
+		category.Loader.GetValue<bool>(useStrongKey);
 
 	private const int randCategoryKey = (int)OptionCreator.CommonOption.RandomOption;
 	private const int useStrongKey = (int)OptionCreator.RandomOptionKey.UseStrong;
@@ -53,7 +53,7 @@ public static class RandomGenerator
 			return;
 		}
 
-        bool useStrongGen = category.GetValue<bool>(useStrongKey);
+        bool useStrongGen = category.Loader.GetValue<bool>(useStrongKey);
         if (instance != null)
         {
             if (useStrongGen != prevValue)
@@ -62,7 +62,7 @@ public static class RandomGenerator
             }
             else
             {
-                int selection = category.GetValue<int>(algorithmKey);
+                int selection = category.Loader.GetValue<int>(algorithmKey);
                 if (prevSelection != selection)
                 {
                     instance = getAditionalPrng(selection);
@@ -91,7 +91,7 @@ public static class RandomGenerator
 				out var category) &&
 			isStrong)
 		{
-            int selection = category.GetValue<int>(algorithmKey);
+            int selection = category.Loader.GetValue<int>(algorithmKey);
             instance = getAditionalPrng(selection);
             UnityEngine.Random.InitState(CreateStrongRandomSeed());
             prevSelection = selection;

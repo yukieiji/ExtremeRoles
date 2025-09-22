@@ -51,26 +51,27 @@ public sealed class GhostRoleSpawnDataManager :
 
 		if (opt.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.GhostRoleSpawnCategory, out var cate))
 		{
+			var loader = cate.Loader;
 			this.globalSpawnLimit = new Dictionary<ExtremeRoleType, int>
 			{
 				{
 					ExtremeRoleType.Crewmate,
 					ISpawnLimiter.ComputeSpawnNum(
-						cate,
+						loader,
 						RoleSpawnOption.MinCrewmate,
 						RoleSpawnOption.MaxCrewmate)
 				},
 				{
 					ExtremeRoleType.Neutral,
 					ISpawnLimiter.ComputeSpawnNum(
-						cate,
+						loader,
 						RoleSpawnOption.MinNeutral,
 						RoleSpawnOption.MaxNeutral)
 				},
 				{
 					ExtremeRoleType.Impostor,
 					ISpawnLimiter.ComputeSpawnNum(
-						cate,
+						loader,
 						RoleSpawnOption.MinImpostor,
 						RoleSpawnOption.MaxImpostor)
 				},
@@ -94,9 +95,10 @@ public sealed class GhostRoleSpawnDataManager :
 				continue;
 			}
 
-			int spawnRate = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
-			int weight = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
-			int roleNum = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
+			var loader = roleCate.Loader;
+			int spawnRate = loader.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
+			int weight = loader.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
+			int roleNum = loader.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 
 			logger.LogInfo(
 				$"GhostRoleSpawnInfo,  Name:{role.Core.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -87,7 +87,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	public bool TryGetTab(OptionTab tab, [NotNullWhen(true)] out OptionTabContainer? container)
 		=> this.options.TryGetValue(tab, out container) && container is not null;
 
-	public bool TryGetCategory(OptionTab tab, int categoryId, [NotNullWhen(true)] out OptionCategory? category)
+	public bool TryGetCategory(OptionTab tab, int categoryId, [NotNullWhen(true)] out IOptionCategory? category)
 	{
 		category = null;
 		return this.TryGetTab(tab, out var container) && container.TryGetCategory(categoryId, out category) && category is not null;
@@ -138,13 +138,13 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			option.ToString(),
 			tab, color, parent);
 
-	public void UpdateToStep(in OptionCategory category, in int id, int step)
+	public void UpdateToStep(in IOptionCategory category, in int id, int step)
 	{
-		var option = category.Get(id);
+		var option = category.Loader.Get(id);
 		UpdateToStep(category, option, step);
 	}
 
-	public void UpdateToStep(in OptionCategory category, in IOption option, int step)
+	public void UpdateToStep(in IOptionCategory category, in IOption option, int step)
 	{
 		int newSelection = 0;
 		if (Key.IsControlDown())
@@ -158,13 +158,13 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		Update(category, option, newSelection);
 	}
 
-	public void Update(in OptionCategory category, in int id, int newIndex)
+	public void Update(in IOptionCategory category, in int id, int newIndex)
 	{
-		var option = category.Get(id);
+		var option = category.Loader.Get(id);
 		Update(category, option, newIndex);
 	}
 
-	public void Update(in OptionCategory category, in IOption option, int newIndex)
+	public void Update(in IOptionCategory category, in IOption option, int newIndex)
 	{
 		option.Selection = newIndex;
 
@@ -195,7 +195,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		}
 	}
 
-	private void registerOptionGroup(OptionTab tab, OptionCategory group)
+	private void registerOptionGroup(OptionTab tab, IOptionCategory group)
 	{
 		if (!this.options.TryGetValue(tab, out var container))
 		{
@@ -205,9 +205,9 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	}
 
 	private static void shareOptionCategory(
-		in OptionCategory category, bool isShow = true)
+		in IOptionCategory category, bool isShow = true)
 	{
-		int size = category.Count;
+		int size = category.Loader.Size;
 
 		if (size <= chunkSize)
 		{
@@ -226,16 +226,16 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	}
 
 	private static void shareOptionCategoryWithSize(
-		in OptionCategory category, int size, bool isShow=true)
+		in IOptionCategory category, int size, bool isShow=true)
 	{
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.ShareOption))
 		{
 			caller.WriteByte(isShow ? byte.MinValue : byte.MaxValue);
-			caller.WriteByte((byte)category.Tab);
+			caller.WriteByte((byte)category.View.Tab);
 			caller.WritePackedInt(category.Id);
 			caller.WriteByte((byte)size);
-			foreach (var option in category.Options)
+			foreach (var option in category.Loader.Options)
 			{
 				caller.WritePackedInt(option.Info.Id);
 				caller.WritePackedInt(option.Selection);
@@ -265,7 +265,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			{
 				int id = reader.ReadPackedInt32();
 				int selection = reader.ReadPackedInt32();
-				if (!category.TryGet(id, out var option))
+				if (!category.Loader.TryGet(id, out var option))
 				{
 					continue;
 				}
@@ -277,7 +277,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 				{
 					string showStr = Tr.GetString(
 						"OptionSettingChange",
-						tabName, category.TransedName,
+						tabName, category.View.TransedName,
 						option.Title, option.ValueString);
 
 					HudManager.Instance.Notifier.SettingsChangeMessageLogic(
@@ -296,7 +296,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		{
 			foreach (var category in tab.Category)
 			{
-				foreach (var option in category.Options)
+				foreach (var option in category.Loader.Options)
 				{
 					option.SwitchPreset();
 				}
