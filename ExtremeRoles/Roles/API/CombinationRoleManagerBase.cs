@@ -42,7 +42,7 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
 			{
 				throw new ArgumentException("Can't find category");
 			}
-			return cate;
+			return cate.Loader;
 		}
 	}
 

@@ -66,7 +66,7 @@ public class OptionRunner
 			{
 				if (cate.Id == 0) { continue; }
 
-				foreach (var opt in cate.Options)
+				foreach (var opt in cate.Loader.Options)
 				{
 					int newIndex = RandomGenerator.Instance.Next(0, opt.Range);
 					try

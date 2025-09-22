@@ -47,7 +47,7 @@ public static class GameUtility
 		{
 			return;
 		}
-		var option = presetCate.Get(0);
+		var option = presetCate.Loader.Get(0);
 		mng.Update(presetCate, option, newPreset);
 	}
 
@@ -96,7 +96,7 @@ public static class GameUtility
 			{
 				if (cate.Id == 0) { continue; }
 
-				foreach (var opt in cate.Options)
+				foreach (var opt in cate.Loader.Options)
 				{
 					int newIndex = RandomGenerator.Instance.Next(0, opt.Range);
 					string name = opt.Info.Name;
@@ -148,7 +148,7 @@ public static class GameUtility
 			{
 				if (cate.Id == 0) { continue; }
 
-				foreach (var opt in cate.Options)
+				foreach (var opt in cate.Loader.Options)
 				{
 					int newIndex = RandomGenerator.Instance.Next(0, opt.Range);
 					string name = opt.Info.Name;
@@ -205,7 +205,7 @@ public static class GameUtility
 					continue;
 				}
 
-				foreach (var opt in cate.Options)
+				foreach (var opt in cate.Loader.Options)
 				{
 					int length = opt.Range;
 					if (length == 0)

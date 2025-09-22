@@ -18,7 +18,7 @@ namespace ExtremeRoles.Module.CustomOption.Factory;
 public class OptionCategoryFactory(
 	string name,
 	int groupId,
-	in Action<OptionTab, OptionCategory> action,
+	in Action<OptionTab, IOptionCategory> action,
 	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) : IDisposable
 {
@@ -31,7 +31,7 @@ public class OptionCategoryFactory(
 
 	private readonly Color? color = color;
 	private readonly int groupid = groupId;
-	private readonly Action<OptionTab, OptionCategory> registerOption = action;
+	private readonly Action<OptionTab, IOptionCategory> registerOption = action;
 	private readonly OptionPack optionPack = new OptionPack();
 
 	public IOption Get(int id)
@@ -284,7 +284,7 @@ public class OptionCategoryFactory(
 
 	public void Dispose()
 	{
-		var newGroup = new OptionCategory(this.Tab, groupid, this.Name, this.optionPack, this.color);
-		this.registerOption(Tab, newGroup);
+		var newGroup = new OptionCategoryView(this.Tab, groupid, this.Name, this.optionPack, this.color);
+		this.registerOption.Invoke(Tab, newGroup);
 	}
 }

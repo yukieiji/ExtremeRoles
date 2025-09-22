@@ -184,7 +184,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 			return;
 		}
 
-		var randomSpawnOpt = cate.Get(RandomSpawnOption.Enable);
+		var randomSpawnOpt = cate.Loader.Get(RandomSpawnOption.Enable);
 		this.enableSubMergedRandomSpawn = factory.CreateSelectionOption<SpawnSetting>(
 			SubmergedOption.SubmergedSpawnSetting, randomSpawnOpt, invert: true);
 	}

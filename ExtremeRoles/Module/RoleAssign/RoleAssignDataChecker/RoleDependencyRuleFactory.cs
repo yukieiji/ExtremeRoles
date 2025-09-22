@@ -30,6 +30,6 @@ public sealed class RoleDependencyRuleFactory : IRoleDependencyRuleFactory
 		=> new(checkRoleId, dependRoleId,
 			() =>
 				OptionManager.Instance.TryGetCategory(tab, ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(checkRoleId), out var category) &&
-				!options.All(x => category.GetValue<T, bool>(x))
+				!options.All(x => category.Loader.GetValue<T, bool>(x))
 			);
 }

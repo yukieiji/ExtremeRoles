@@ -61,12 +61,13 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			if (!opt.TryGetCategory(
 					OptionTab.CombinationTab,
 					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(roleId),
-					out var conbCate))
+					out var combCate))
 			{
 				continue;
 			}
-			int spawnRate = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
-			int roleSet = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
+			var loader = combCate.Loader;
+			int spawnRate = loader.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
+			int roleSet = loader.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 
 			var role = ExtremeRoleManager.CombRole[combType];
 			if (roleSet <= 0 || spawnRate <= 0)
@@ -74,8 +75,8 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 				continue;
 			}
 
-			int weight = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
-			bool isMultiAssign = conbCate.GetValue<CombinationRoleCommonOption, bool>(CombinationRoleCommonOption.IsMultiAssign);
+			int weight = loader.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
+			bool isMultiAssign = loader.GetValue<CombinationRoleCommonOption, bool>(CombinationRoleCommonOption.IsMultiAssign);
 
 			log.LogInfo($"Add Combination Role:{role} - SpawnRate:{spawnRate} - RoleSetNum:{roleSet}");
 			combRole.Add(
@@ -109,15 +110,16 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 				continue;
 			}
 
-			int spawnRate = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
-			int roleNum = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
+			var loader = roleCate.Loader;
+			int spawnRate = loader.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
+			int roleNum = loader.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 
 			if (roleNum <= 0 || spawnRate <= 0)
 			{
 				continue;
 			}
 
-			int weight = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
+			int weight = loader.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
 			log.LogInfo($"Add Single Role:{role.RoleName} - SpawnRate:{spawnRate} - RoleSetNum:{roleNum}");
 
 			var team = role.Core.Team;

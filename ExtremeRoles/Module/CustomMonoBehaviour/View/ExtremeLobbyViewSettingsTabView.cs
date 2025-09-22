@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -225,16 +225,16 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 				categoryHeaderMasked.transform.SetParent(
 					vanillaSettings.settingsContainer);
 				categoryHeaderMasked.transform.localScale = Vector3.one;
-				if (cate.Color.HasValue)
+				if (cate.View.Color.HasValue)
 				{
-					categoryHeaderMasked.Background.color = cate.Color.Value;
+					categoryHeaderMasked.Background.color = cate.View.Color.Value;
 				}
-				categoryHeaderMasked.ReplaceExRText(cate.TransedName, 61);
+				categoryHeaderMasked.ReplaceExRText(cate.View.TransedName, 61);
 				vanillaSettings.settingsInfo.Add(categoryHeaderMasked.gameObject);
 
 				var groupViewObj = new OptionCategoryViewObject<ViewSettingsInfoPanel>.Builder(
-					categoryHeaderMasked, cate.Count);
-				foreach (var option in cate.Options)
+					categoryHeaderMasked, cate.Loader.Size);
+				foreach (var option in cate.Loader.Options)
 				{
 					ViewSettingsInfoPanel viewSettingsInfoPanel = Instantiate(
 						vanillaSettings.infoPanelOrigin);
@@ -285,18 +285,18 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 				}
 
 				var category = optionGroupView.Category;
-				if (catego.Color.HasValue)
+				if (catego.View.Color.HasValue)
 				{
-					category.Background.color = catego.Color.Value;
+					category.Background.color = catego.View.Color.Value;
 				}
 				category.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
-				category.ReplaceExRText(catego.TransedName, 61);
+				category.ReplaceExRText(catego.View.TransedName, 61);
 
 				yPos -= categoryOffset;
 
 				int activeIndex = 0;
 				int activeObjNum = 0;
-				foreach (var (option, optionView) in catego.Options.Zip(optionGroupView.View))
+				foreach (var (option, optionView) in catego.Loader.Options.Zip(optionGroupView.View))
 				{
 					if (!OptionSplitter.IsValidOption(validOptionId, option.Info.Id))
 					{

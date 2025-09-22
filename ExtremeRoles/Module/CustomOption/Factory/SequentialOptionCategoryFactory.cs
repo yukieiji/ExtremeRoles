@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 
 using System;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace ExtremeRoles.Module.CustomOption.Factory;
 public sealed class SequentialOptionCategoryFactory(
 	string name,
 	int groupId,
-	in Action<OptionTab, OptionCategory> action,
+	in Action<OptionTab, IOptionCategory> action,
 	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) :
 	OptionCategoryFactory(name, groupId, action, tab, color)

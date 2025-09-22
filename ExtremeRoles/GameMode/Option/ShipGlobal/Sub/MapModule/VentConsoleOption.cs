@@ -1,7 +1,8 @@
-﻿
+
 using AmongUs.GameOptions;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
@@ -31,11 +32,11 @@ public readonly struct VentConsoleOption(
 	public readonly bool CanKillVentInPlayer = canKillVentInPlayer;
 	public readonly VentAnimationMode AnimationMode = ventAnimation;
 
-	public VentConsoleOption(in OptionCategory category) : this(
-		category.GetValue<bool>((int)VentOption.Disable),
-		category.GetValue<bool>((int)VentOption.EngineerUseImpostor),
-		category.GetValue<bool>((int)VentOption.CanKillInPlayer),
-		(VentAnimationMode)category.GetValue<int>((int)VentOption.AnimationModeInVison))
+	public VentConsoleOption(in IOptionLoader loader) : this(
+		loader.GetValue<bool>((int)VentOption.Disable),
+		loader.GetValue<bool>((int)VentOption.EngineerUseImpostor),
+		loader.GetValue<bool>((int)VentOption.CanKillInPlayer),
+		(VentAnimationMode)loader.GetValue<int>((int)VentOption.AnimationModeInVison))
 	{ }
 
 	public static void Create(in OptionCategoryFactory factory)

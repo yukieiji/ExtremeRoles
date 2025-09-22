@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
@@ -18,84 +18,62 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module.CustomOption;
 
-public sealed class OptionLoadWrapper(in OptionCategory category, int idOffset) : IOptionLoader
+public sealed class OptionLoadWrapper(in IOptionCategory category, int idOffset) : IOptionLoader
 {
-	private readonly OptionCategory category = category;
+	private readonly IOptionCategory category = category;
 	private readonly int idOffset = idOffset;
+	public int Size { get; } = 0;
+	public IEnumerable<IOption> Options { get; } = null;
 
 	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option)
 		=> this.TryGet(id + idOffset, out option);
 	public IOption Get<T>(T id) where T : Enum
-			=> this.category.Get(id.FastInt() + idOffset);
+			=> this.category.Loader.Get(id.FastInt() + idOffset);
 
 	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IValueOption<T>? option)
 		where W : Enum
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
-		=> this.category.TryGetValueOption(id.FastInt() + idOffset, out option);
+		=> this.category.Loader.TryGetValueOption(id.FastInt() + idOffset, out option);
 	public bool TryGetValueOption<T>(int id, [NotNullWhen(true)] out IValueOption<T>? option)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
-		=> this.category.TryGetValueOption(id + idOffset, out option);
+		=> this.category.Loader.TryGetValueOption(id + idOffset, out option);
 
 	public IValueOption<T> GetValueOption<W, T>(W id)
 		where W : Enum
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
-		=> this.category.GetValueOption<T>(id.FastInt() + idOffset);
+		=> this.category.Loader.GetValueOption<T>(id.FastInt() + idOffset);
 	public IValueOption<T> GetValueOption<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
-		=> this.category.GetValueOption<T>(id + idOffset);
+		=> this.category.Loader.GetValueOption<T>(id + idOffset);
 
 	public T GetValue<W, T>(W id) where W : Enum
-		=> this.category.GetValue<T>(id.FastInt() + idOffset);
+		=> this.category.Loader.GetValue<T>(id.FastInt() + idOffset);
 	public T GetValue<T>(int id)
-		=> this.category.GetValue<T>(id + idOffset);
+		=> this.category.Loader.GetValue<T>(id + idOffset);
+	public IOption Get(int id)
+		=> throw new ArgumentException();
 }
 
-public sealed class OptionCategory(
-	OptionTab tab,
-	int id,
+public sealed class OptionLoader(
 	string name,
-	in OptionPack option,
-	in Color? color = null) : IOptionLoader
+	in OptionPack option) : IOptionLoader
 {
-	public Color? Color { get; } = color;
-
 	public IEnumerable<IOption> Options => allOpt.Values;
-	public int Count => allOpt.Count;
-
-	public OptionTab Tab { get; } = tab;
-	public int Id { get; } = id;
-	public string Name { get; } = name;
-	public string TransedName => Tr.GetString(Name);
-
-	public bool IsDirty { get; set; } = false;
+	public int Size => allOpt.Count;
 
 	private readonly IReadOnlyDictionary<int, IValueOption<int>> intOpt = option.IntOptions;
 	private readonly IReadOnlyDictionary<int, IValueOption<float>> floatOpt = option.FloatOptions;
 	private readonly IReadOnlyDictionary<int, IValueOption<bool>> boolOpt = option.BoolOptions;
 	private readonly IReadOnlyDictionary<int, IOption> allOpt = option.AllOptions;
 
-	public void AddHudString(in StringBuilder builder)
-	{
-		builder.AppendLine($"・{Tr.GetString("OptionCategory")}: {this.TransedName}");
-
-		foreach (var option in this.allOpt.Values)
-		{
-			if (!option.IsActiveAndEnable)
-			{
-				continue;
-			}
-
-			builder.AppendLine($"{option.Title}: {option.ValueString}");
-		}
-	}
 	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option)
 		=> this.allOpt.TryGetValue(id, out option) && option is not null;
 	public IOption Get<T>(T id) where T : Enum
@@ -207,6 +185,49 @@ public sealed class OptionCategory(
 		else
 		{
 			throw new ArgumentException($"OptionId: {typeof(T)} Not Found");
+		}
+	}
+}
+
+public sealed class OptionCategoryViewInfo(
+	string name,
+	OptionTab tab,
+	Color? color = null) : IOptionCategoryViweInfo
+{
+	public Color? Color { get; } = color;
+	public string Name { get; } = name;
+	public string TransedName => Tr.GetString(Name);
+
+	public OptionTab Tab { get; } = tab;
+}
+
+
+public sealed class OptionCategoryView(
+	OptionTab tab,
+	int id,
+	string name,
+	in OptionPack option,
+	in Color? color = null) : IOptionCategory
+{
+	public int Id { get; } = id;
+
+	public IOptionLoader Loader { get; } = new OptionLoader(name, option);
+	public bool IsDirty { get; set; } = false;
+
+	public IOptionCategoryViweInfo View { get; } = new OptionCategoryViewInfo(name, tab, color);
+
+	public void AddHudString(in StringBuilder builder)
+	{
+		builder.AppendLine($"・{Tr.GetString("OptionCategory")}: {this.View.TransedName}");
+
+		foreach (var option in this.Loader.Options)
+		{
+			if (!option.IsActiveAndEnable)
+			{
+				continue;
+			}
+
+			builder.AppendLine($"{option.Title}: {option.ValueString}");
 		}
 	}
 }

@@ -51,7 +51,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 			{
 				throw new ArgumentException("Can't find category");
 			}
-			return cate;
+			return cate.Loader;
 		}
 	}
 
