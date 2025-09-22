@@ -52,7 +52,7 @@ public interface IRoleSelector
 		OptionTab.GeneralTab,
 		ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Xion),
 		out var cate) &&
-		cate.GetValue<bool>((int)XionOption.UseXion);
+		cate.Loader.GetValue<bool>((int)XionOption.UseXion);
 
 	public static bool IsCommonOption(int id)
 	=> id == (int)SpawnOptionCategory.RoleSpawnCategory ||

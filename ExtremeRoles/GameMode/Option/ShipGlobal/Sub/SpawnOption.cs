@@ -1,5 +1,6 @@
-﻿
+
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
@@ -15,17 +16,17 @@ public enum RandomSpawnOption : int
 	IsAutoSelect,
 }
 
-public readonly struct SpawnOption(in OptionCategory cate)
+public readonly struct SpawnOption(in IOptionLoader loader)
 {
-	public readonly bool EnableSpecialSetting = cate.GetValue<bool>((int)RandomSpawnOption.Enable);
+	public readonly bool EnableSpecialSetting = loader.GetValue<bool>((int)RandomSpawnOption.Enable);
 
-	public readonly bool Skeld = cate.GetValue<bool>((int)RandomSpawnOption.Skeld);
-	public readonly bool MiraHq = cate.GetValue<bool>((int)RandomSpawnOption.MiraHq);
-	public readonly bool Polus = cate.GetValue<bool>((int)RandomSpawnOption.Polus);
-	public readonly bool AirShip = cate.GetValue<bool>((int)RandomSpawnOption.AirShip);
-	public readonly bool Fungle = cate.GetValue<bool>((int)RandomSpawnOption.Fungle);
+	public readonly bool Skeld = loader.GetValue<bool>((int)RandomSpawnOption.Skeld);
+	public readonly bool MiraHq = loader.GetValue<bool>((int)RandomSpawnOption.MiraHq);
+	public readonly bool Polus = loader.GetValue<bool>((int)RandomSpawnOption.Polus);
+	public readonly bool AirShip = loader.GetValue<bool>((int)RandomSpawnOption.AirShip);
+	public readonly bool Fungle = loader.GetValue<bool>((int)RandomSpawnOption.Fungle);
 
-	public readonly bool IsAutoSelectRandom = cate.GetValue<bool>((int)RandomSpawnOption.IsAutoSelect);
+	public readonly bool IsAutoSelectRandom = loader.GetValue<bool>((int)RandomSpawnOption.IsAutoSelect);
 
 
 	public static void Create(in OptionCategoryFactory factory)

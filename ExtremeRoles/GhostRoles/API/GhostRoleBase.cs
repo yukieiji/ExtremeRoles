@@ -44,7 +44,7 @@ public abstract class GhostRoleBase
 			{
 				throw new ArgumentException("Can't find category");
 			}
-			return cate;
+			return cate.Loader;
 		}
 	}
 

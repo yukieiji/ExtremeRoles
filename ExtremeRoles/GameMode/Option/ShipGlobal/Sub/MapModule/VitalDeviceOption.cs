@@ -1,5 +1,6 @@
-﻿
+
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
@@ -23,11 +24,11 @@ public readonly struct VitalDeviceOption : IDeviceOption
 	public bool EnableLimit { get; }
 	public float LimitTime { get; }
 
-	public VitalDeviceOption(in OptionCategory cate)
+	public VitalDeviceOption(in IOptionLoader loader)
 	{
-		PolusPos = (PolusVitalPos)cate.GetValue<int>((int)VitalSpecialOption.PolusVitalPos);
+		PolusPos = (PolusVitalPos)loader.GetValue<int>((int)VitalSpecialOption.PolusVitalPos);
 
-		var device = new DeviceOption(cate);
+		var device = new DeviceOption(loader);
 		Disable = device.Disable;
 		EnableLimit = device.EnableLimit;
 		LimitTime = device.LimitTime;

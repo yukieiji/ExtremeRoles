@@ -1,17 +1,18 @@
-﻿
+
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
-public readonly struct GhostRoleOption(in OptionCategory category)
+public readonly struct GhostRoleOption(in IOptionLoader loader)
 {
-	public readonly float HauntMinigameMaxSpeed = category.GetValue<GhostRoleGlobalOption, float>(GhostRoleGlobalOption.HauntMinigameMaxSpeed);
-	public readonly bool IsAssignNeutralToVanillaCrewGhostRole = category.GetValue<GhostRoleGlobalOption, bool>(GhostRoleGlobalOption.IsAssignNeutralToVanillaCrewGhostRole);
-	public readonly bool IsRemoveAngleIcon = category.GetValue<GhostRoleGlobalOption, bool>(GhostRoleGlobalOption.IsRemoveAngleIcon);
-	public readonly bool IsBlockGAAbilityReport = category.GetValue<GhostRoleGlobalOption, bool>(GhostRoleGlobalOption.IsBlockGAAbilityReport);
+	public readonly float HauntMinigameMaxSpeed = loader.GetValue<GhostRoleGlobalOption, float>(GhostRoleGlobalOption.HauntMinigameMaxSpeed);
+	public readonly bool IsAssignNeutralToVanillaCrewGhostRole = loader.GetValue<GhostRoleGlobalOption, bool>(GhostRoleGlobalOption.IsAssignNeutralToVanillaCrewGhostRole);
+	public readonly bool IsRemoveAngleIcon = loader.GetValue<GhostRoleGlobalOption, bool>(GhostRoleGlobalOption.IsRemoveAngleIcon);
+	public readonly bool IsBlockGAAbilityReport = loader.GetValue<GhostRoleGlobalOption, bool>(GhostRoleGlobalOption.IsBlockGAAbilityReport);
 
 	public static void Create(in OptionCategoryFactory factory)
 	{

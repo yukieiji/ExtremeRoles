@@ -1,4 +1,4 @@
-﻿
+
 using ExtremeRoles.Module.CustomOption.Factory;
 
 
@@ -35,9 +35,9 @@ public interface IDeviceOption
 	}
 }
 
-public readonly struct DeviceOption(in OptionCategory category) : IDeviceOption
+public readonly struct DeviceOption(in IOptionLoader loader) : IDeviceOption
 {
-	public bool Disable { get; } = category.GetValue<bool>((int)DeviceOptionType.IsRemove);
-	public bool EnableLimit { get; } = category.GetValue<bool>((int)DeviceOptionType.EnableLimit);
-	public float LimitTime { get; } = category.GetValue<float>((int)DeviceOptionType.LimitTime);
+	public bool Disable { get; } = loader.GetValue<bool>((int)DeviceOptionType.IsRemove);
+	public bool EnableLimit { get; } = loader.GetValue<bool>((int)DeviceOptionType.EnableLimit);
+	public float LimitTime { get; } = loader.GetValue<float>((int)DeviceOptionType.LimitTime);
 }

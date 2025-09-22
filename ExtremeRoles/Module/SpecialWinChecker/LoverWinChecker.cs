@@ -39,7 +39,7 @@ internal sealed class LoverWinChecker : IWinChecker
 				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(CombinationRoleType.Lover),
 				out var cate))
 		{
-			this.loverNum = cate.GetValue<CombinationRoleCommonOption, int>(CombinationRoleCommonOption.AssignsNum);
+			this.loverNum = cate.Loader.GetValue<CombinationRoleCommonOption, int>(CombinationRoleCommonOption.AssignsNum);
 		}
 		if (!role.HasTask())
 		{

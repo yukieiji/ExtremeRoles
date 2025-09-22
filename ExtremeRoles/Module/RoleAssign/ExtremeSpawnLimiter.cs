@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Collections.Generic;
 
 using ExtremeRoles.GameMode.RoleSelector;
@@ -21,27 +21,27 @@ public sealed class ExtremeSpawnLimiter : ISpawnLimiter
 			this.maxNum = [];
 			return;
 		}
-
+		var loader = cate.Loader;
 		this.maxNum = new Dictionary<ExtremeRoleType, int>(3)
 		{
 			{
 				ExtremeRoleType.Crewmate,
 				ISpawnLimiter.ComputeSpawnNum(
-					cate,
+					loader,
 					RoleSpawnOption.MinCrewmate,
 					RoleSpawnOption.MaxCrewmate)
 			},
 			{
 				ExtremeRoleType.Impostor,
 				ISpawnLimiter.ComputeSpawnNum(
-					cate,
+					loader,
 					RoleSpawnOption.MinImpostor,
 					RoleSpawnOption.MaxImpostor)
 			},
 			{
 				ExtremeRoleType.Neutral,
 				ISpawnLimiter.ComputeSpawnNum(
-					cate,
+					loader,
 					RoleSpawnOption.MinNeutral,
 					RoleSpawnOption.MaxNeutral)
 			},

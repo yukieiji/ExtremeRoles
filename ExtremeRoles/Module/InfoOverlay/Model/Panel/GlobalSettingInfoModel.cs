@@ -1,14 +1,15 @@
+using System;
+using System.Text;
+
+using Microsoft.Extensions.DependencyInjection;
+
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Text;
-
-
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
@@ -103,26 +104,26 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
-				category,
+				category.Loader,
 				$"crewmate{transKey}",
 				RoleSpawnOption.MinCrewmate,
 				RoleSpawnOption.MaxCrewmate));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
-				category,
+				category.Loader,
 				$"neutral{transKey}",
 				RoleSpawnOption.MinNeutral,
 				RoleSpawnOption.MaxNeutral));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
-				category,
+				category.Loader,
 				$"impostor{transKey}",
 				RoleSpawnOption.MinImpostor,
 				RoleSpawnOption.MaxImpostor));
 	}
 
 	private static string createRoleSpawnNumOptionHudStringLine(
-		OptionCategory category,
+		IOptionLoader loader,
 		string transKey,
 		RoleSpawnOption minOptKey,
 		RoleSpawnOption maxOptKey)
@@ -130,13 +131,13 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		string optionName = Design.ColoredString(
 			new UnityEngine.Color(204f / 255f, 204f / 255f, 0, 1f),
 			Tr.GetString(transKey));
-		int min = getSpawnOptionValue(category, minOptKey);
-		int max = getSpawnOptionValue(category, maxOptKey);
+		int min = getSpawnOptionValue(loader, minOptKey);
+		int max = getSpawnOptionValue(loader, maxOptKey);
 		string optionValueStr = (min >= max) ? $"{max}" : $"{min} - {max}";
 
 		return $"{optionName}: {optionValueStr}";
 	}
 
-	private static int getSpawnOptionValue(OptionCategory category, RoleSpawnOption optionKey)
-		=> category.GetValue<int>((int)optionKey);
+	private static int getSpawnOptionValue(IOptionLoader loader, RoleSpawnOption optionKey)
+		=> loader.GetValue<int>((int)optionKey);
 }

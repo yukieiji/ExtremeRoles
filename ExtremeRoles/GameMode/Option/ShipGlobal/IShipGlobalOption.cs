@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
@@ -102,7 +103,7 @@ public interface IShipGlobalOption
 		{
 			var fixTask = new HashSet<TaskTypes>();
 
-			var cate = GetOptionCategory(ShipGlobalOptionCategory.TaskOption);
+			var cate = GetOptionLoader(ShipGlobalOptionCategory.TaskOption);
 
 			for (int i = (int)TaskOption.GarbageTask; i <= (int)TaskOption.DivertPowerTask; ++i)
 			{
@@ -223,12 +224,12 @@ public interface IShipGlobalOption
 		}
 	}
 
-	protected static OptionCategory GetOptionCategory(ShipGlobalOptionCategory category)
+	protected static IOptionLoader GetOptionLoader(ShipGlobalOptionCategory category)
 	{
 		if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)category, out var cate))
 		{
 			throw new ArgumentException(category.ToString());
 		}
-		return cate;
+		return cate.Loader;
 	}
 }

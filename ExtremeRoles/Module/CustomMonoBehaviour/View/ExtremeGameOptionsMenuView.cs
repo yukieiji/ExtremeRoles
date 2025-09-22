@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -236,9 +236,9 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 				this.settingsContainer);
 			categoryHeaderMasked.transform.localScale = Vector3.one * 0.63f;
 
-			var optionGroupViewObject = tabBuilder.AddCategoryObject(categoryHeaderMasked, catego.Count);
+			var optionGroupViewObject = tabBuilder.AddCategoryObject(categoryHeaderMasked, catego.Loader.Size);
 
-			foreach (var option in catego.Options)
+			foreach (var option in catego.Loader.Options)
 			{
 				var opt = Instantiate(
 					this.optionPrefab, Vector3.zero, Quaternion.identity, this.settingsContainer);
@@ -347,17 +347,17 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 
 
 			var categoObj = groupViewObj.Category;
-			if (catego.Color.HasValue)
+			if (catego.View.Color.HasValue)
 			{
-				categoObj.Background.color = catego.Color.Value;
+				categoObj.Background.color = catego.View.Color.Value;
 			}
 			categoObj.transform.localPosition = new Vector3(-0.903f, yPos, -2f);
-			categoObj.ReplaceExRText(catego.TransedName, 20);
+			categoObj.ReplaceExRText(catego.View.TransedName, 20);
 			categoObj.gameObject.SetActive(true);
 
 			yPos -= 0.63f;
 
-			foreach (var (option, optionObj) in catego.Options.Zip(groupViewObj.View))
+			foreach (var (option, optionObj) in catego.Loader.Options.Zip(groupViewObj.View))
 			{
 				if (!OptionSplitter.IsValidOption(validOptionId, option.Info.Id))
 				{
