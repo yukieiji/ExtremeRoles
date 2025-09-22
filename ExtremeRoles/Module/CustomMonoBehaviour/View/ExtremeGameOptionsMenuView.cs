@@ -346,16 +346,19 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 			}
 
 
-			var categoObj = groupViewObj.Category;
-			if (catego.View.Color.HasValue)
+			if (catego.View is OptionCategoryViewInfo categoryView)
 			{
-				categoObj.Background.color = catego.View.Color.Value;
-			}
-			categoObj.transform.localPosition = new Vector3(-0.903f, yPos, -2f);
-			categoObj.ReplaceExRText(catego.View.TransedName, 20);
-			categoObj.gameObject.SetActive(true);
+				var categoObj = groupViewObj.Category;
+				if (categoryView.Color.HasValue)
+				{
+					categoObj.Background.color = categoryView.Color.Value;
+				}
+				categoObj.transform.localPosition = new Vector3(-0.903f, yPos, -2f);
+				categoObj.ReplaceExRText(catego.View.TransedName, 20);
+				categoObj.gameObject.SetActive(true);
 
-			yPos -= 0.63f;
+				yPos -= 0.63f;
+			}
 
 			foreach (var (option, optionObj) in catego.Loader.Options.Zip(groupViewObj.View))
 			{

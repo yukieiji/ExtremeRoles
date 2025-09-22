@@ -62,9 +62,7 @@ public sealed class OptionLoadWrapper(in IOptionCategory category, int idOffset)
 		=> throw new ArgumentException();
 }
 
-public sealed class OptionLoader(
-	string name,
-	in OptionPack option) : IOptionLoader
+public sealed class OptionLoader(in OptionPack option) : IOptionLoader
 {
 	public IEnumerable<IOption> Options => allOpt.Values;
 	public int Size => allOpt.Count;
@@ -201,6 +199,16 @@ public sealed class OptionCategoryViewInfo(
 	public OptionTab Tab { get; } = tab;
 }
 
+public sealed class HiddenCategoryViewInfo(
+	IOptionCategoryViweInfo parent)
+{
+	private readonly IOptionCategoryViweInfo parent = parent;
+	public string Name { get; } = "";
+	public string TransedName => parent.TransedName;
+
+	public OptionTab Tab => parent.Tab;
+}
+
 
 public sealed class OptionCategoryView(
 	OptionTab tab,
@@ -211,14 +219,17 @@ public sealed class OptionCategoryView(
 {
 	public int Id { get; } = id;
 
-	public IOptionLoader Loader { get; } = new OptionLoader(name, option);
+	public IOptionLoader Loader { get; } = new OptionLoader(option);
 	public bool IsDirty { get; set; } = false;
 
 	public IOptionCategoryViweInfo View { get; } = new OptionCategoryViewInfo(name, tab, color);
 
 	public void AddHudString(in StringBuilder builder)
 	{
-		builder.AppendLine($"・{Tr.GetString("OptionCategory")}: {this.View.TransedName}");
+		if (this.View.Name != "")
+		{
+			builder.AppendLine($"・{Tr.GetString("OptionCategory")}: {this.View.TransedName}");
+		}
 
 		foreach (var option in this.Loader.Options)
 		{
