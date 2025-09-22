@@ -190,7 +190,7 @@ public sealed class OptionLoader(in OptionPack option) : IOptionLoader
 public sealed class OptionCategoryViewInfo(
 	string name,
 	OptionTab tab,
-	Color? color = null) : IOptionCategoryViweInfo
+	Color? color = null) : IOptionCategoryViewInfo
 {
 	public Color? Color { get; } = color;
 	public string Name { get; } = name;
@@ -200,9 +200,9 @@ public sealed class OptionCategoryViewInfo(
 }
 
 public sealed class HiddenCategoryViewInfo(
-	IOptionCategoryViweInfo parent)
+	IOptionCategoryViewInfo parent)
 {
-	private readonly IOptionCategoryViweInfo parent = parent;
+	private readonly IOptionCategoryViewInfo parent = parent;
 	public string Name { get; } = "";
 	public string TransedName => parent.TransedName;
 
@@ -222,7 +222,7 @@ public sealed class OptionCategoryView(
 	public IOptionLoader Loader { get; } = new OptionLoader(option);
 	public bool IsDirty { get; set; } = false;
 
-	public IOptionCategoryViweInfo View { get; } = new OptionCategoryViewInfo(name, tab, color);
+	public IOptionCategoryViewInfo View { get; } = new OptionCategoryViewInfo(name, tab, color);
 
 	public void AddHudString(in StringBuilder builder)
 	{
