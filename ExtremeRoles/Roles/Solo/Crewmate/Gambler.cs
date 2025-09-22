@@ -29,7 +29,6 @@ public sealed class Gambler :
 
 	private int minVoteNum;
 	private int maxVoteNum;
-	private float voteStep;
 
     private byte votedFor = PlayerVoteArea.HasNotVoted;
     private int voteCount = 1;
