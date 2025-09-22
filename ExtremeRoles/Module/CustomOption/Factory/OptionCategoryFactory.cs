@@ -268,7 +268,10 @@ public class OptionCategoryFactory(
 		foreach (object enumValue in Enum.GetValues(typeof(T)))
 		{
 			string? valuse = enumValue.ToString();
-			if (string.IsNullOrEmpty(valuse)) { continue; }
+			if (string.IsNullOrEmpty(valuse))
+			{
+				continue;
+			}
 
 			yield return valuse;
 		}
