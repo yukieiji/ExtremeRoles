@@ -35,7 +35,7 @@ public static class RPCOperator
         UncheckedMurderPlayer,
 		UncheckedExiledPlayer,
 		UncheckedRevive,
-		UnckeckedReportDeadbody,
+		UncheckedReportDeadbody,
         CleanDeadBody,
         FixForceRepairSpecialSabotage,
         ReplaceDeadReason,

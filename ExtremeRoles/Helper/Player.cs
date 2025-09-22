@@ -377,7 +377,7 @@ public static class Player
 		}
 
 		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.UnckeckedReportDeadbody))
+			RPCOperator.Command.UncheckedReportDeadbody))
 		{
 			caller.WriteByte(playerInfo == null ? byte.MaxValue : playerInfo.PlayerId);
 		}
