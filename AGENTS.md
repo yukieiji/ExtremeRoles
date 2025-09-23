@@ -144,7 +144,7 @@
 
     using MyMod.Module;
 
-    using Heep = MyMod.Module.Heep;
+    using Heep = MyMod.Module.Heap;
 
     namespace MyMod.Collection;
     
