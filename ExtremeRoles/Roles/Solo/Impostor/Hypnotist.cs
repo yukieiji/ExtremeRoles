@@ -60,7 +60,6 @@ public sealed class Hypnotist :
 
     public enum RpcOps : byte
     {
-        TargetToDoll,
         PickUpAbilityModule,
         ResetDollKillButton,
     }
@@ -142,14 +141,6 @@ public sealed class Hypnotist :
         RpcOps ops = (RpcOps)reader.ReadByte();
         switch (ops)
         {
-            case RpcOps.TargetToDoll:
-                byte targetPlayerId = reader.ReadByte();
-				if (role is null)
-				{
-					return;
-				}
-                targetToDoll(role, rolePlayerId, targetPlayerId);
-                break;
             case RpcOps.PickUpAbilityModule:
 				if (role is null)
 				{
@@ -164,6 +155,8 @@ public sealed class Hypnotist :
 				}
 				resetDollKillButton(role);
                 break;
+			default:
+				break;
         }
     }
 
@@ -219,17 +212,20 @@ public sealed class Hypnotist :
         }
     }
 
-    private static void targetToDoll(
-        Hypnotist role,
+    public static void TargetToDoll(
         byte rolePlayerId,
         byte targetPlayerId)
     {
-
-        PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-        SingleRoleBase targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
+		var role = ExtremeRoleManager.GetSafeCastedRole<Hypnotist>(rolePlayerId);
+		if (role is null)
+		{
+			return;
+		}
+		var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
+        var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
         IRoleSpecialReset.ResetRole(targetPlayerId);
-        Doll newDoll = new Doll(targetPlayerId, rolePlayerId, role);
+        var newDoll = new Doll(targetPlayerId, rolePlayerId, role);
         if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
             newDoll.CreateAbility();
@@ -314,7 +310,10 @@ public sealed class Hypnotist :
 
     public bool IsAbilityUse()
     {
-        if (!this.IsAwake) { return false; }
+        if (!this.IsAwake)
+		{
+			return false;
+		}
 
         this.target = Player.GetClosestPlayerInRange(
             PlayerControl.LocalPlayer,
@@ -379,14 +378,10 @@ public sealed class Hypnotist :
 			redPartNum += computeRedPartNum(anotherInterface);
 		}
 
-        using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.HypnotistAbility))
-        {
-            caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
-            caller.WriteByte((byte)RpcOps.TargetToDoll);
-            caller.WriteByte(targetPlayerId);
-        }
-        targetToDoll(this, rolePlayer.PlayerId, targetPlayerId);
+		ExtremeRoleManager.RpcReplaceRole(
+			rolePlayer.PlayerId, targetPlayerId,
+			ExtremeRoleManager.ReplaceOperation.TargetToDoll);
+
         setAbilityPart(redPartNum);
         this.target = null;
 

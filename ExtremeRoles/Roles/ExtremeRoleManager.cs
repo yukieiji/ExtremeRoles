@@ -411,6 +411,7 @@ public static class ExtremeRoleManager
         ForceReplaceToSidekick,
         SidekickToJackal,
         CreateServant,
+		TargetToDoll,
 		ForceReplaceToYardbird,
 		BecomeLawbreaker,
 		ForceRelaceToChimera,
@@ -588,6 +589,9 @@ public static class ExtremeRoleManager
             case ReplaceOperation.CreateServant:
                 QueenRole.TargetToServant(caller, targetId);
                 break;
+			case ReplaceOperation.TargetToDoll:
+				Hypnotist.TargetToDoll(caller, targetId);
+				break;
 			case ReplaceOperation.ForceReplaceToYardbird:
 				Jailer.NotCrewmateToYardbird(caller, targetId);
 				break;
