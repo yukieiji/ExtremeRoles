@@ -24,7 +24,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral.Tucker;
 public sealed class TuckerRole :
 	SingleRoleBase, IRoleAbility,
 	IRoleSpecialReset, IRoleUpdate,
-	IRoleOnRevive
+	IRoleReviveHook
 {
 	private sealed record RemoveInfo(int Target, Vector2 StartPos);
 
@@ -517,12 +517,12 @@ public sealed class TuckerRole :
 		}
 	}
 
-	public void ReviveAction(PlayerControl player)
+	public void HookRevive(PlayerControl revivePlayer)
 	{
-		byte playerId = player.PlayerId;
+		byte playerId = revivePlayer.PlayerId;
 		if (!(ExtremeRoleManager.TryGetRole(playerId, out var role) &&
 			IsSameTeam(role) &&
-			chimera.Contains(player.PlayerId)))
+			chimera.Contains(revivePlayer.PlayerId)))
 		{
 			return;
 		}
