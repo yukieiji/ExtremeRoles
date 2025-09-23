@@ -158,7 +158,6 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		PlayerControl killerPlayer)
 	{
 		if (!IsAwake ||
-			rolePlayer.PlayerId == killerPlayer.PlayerId || // 自決時通報しないように
 			MeetingHud.Instance != null)
 		{
 			return;

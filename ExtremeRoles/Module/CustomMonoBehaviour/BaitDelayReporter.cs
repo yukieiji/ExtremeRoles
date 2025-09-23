@@ -31,17 +31,7 @@ public sealed class BaitDelayReporter : MonoBehaviour
 		{
 			return;
 		}
-
-		this.stopTargetCorutine(this.delayCorutine);
-
-		this.flasher.Reset();
-
-		if (this.text != null)
-		{
-			Destroy(this.text);
-		}
-
-		Destroy(this);
+		removeThis();
 	}
 
 	public void StartReportTimer(
@@ -89,9 +79,31 @@ public sealed class BaitDelayReporter : MonoBehaviour
 		reportTarget(target);
 	}
 
-	private static void reportTarget(NetworkedPlayerInfo target)
+	private void reportTarget(NetworkedPlayerInfo target)
 	{
-		PlayerControl.LocalPlayer.CmdReportDeadBody(target);
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer == null ||
+			localPlayer.Data == null ||
+			localPlayer.Data.IsDead ||
+			localPlayer.Data.Disconnected)
+		{
+			removeThis();
+			return;
+		}
+		localPlayer.CmdReportDeadBody(target);
+	}
+
+	private void removeThis()
+	{
+		this.stopTargetCorutine(this.delayCorutine);
+
+		this.flasher.Reset();
+
+		if (this.text != null)
+		{
+			Destroy(this.text);
+		}
+		Destroy(this);
 	}
 
 	private void stopTargetCorutine(Coroutine? coroutine)
