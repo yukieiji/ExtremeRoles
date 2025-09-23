@@ -119,7 +119,7 @@
 
     using MyMod.Module;
 
-    using Heep = MyMod.Module.Heep;
+    using Heap = MyMod.Module.Heap;
 
     namespace MyMod.Collection;
     
