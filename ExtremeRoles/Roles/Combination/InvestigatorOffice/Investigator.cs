@@ -396,7 +396,10 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 	private static IEnumerator cmdReport(PlayerControl rolePlayer)
 	{
 		yield return new WaitForSeconds(1.0f);
-		rolePlayer.CmdReportDeadBody(null);
+		if (MeetingHud.Instance == null)
+		{
+			rolePlayer.CmdReportDeadBody(null);
+		}
 	}
 
 	public override void RolePlayerKilledAction(
