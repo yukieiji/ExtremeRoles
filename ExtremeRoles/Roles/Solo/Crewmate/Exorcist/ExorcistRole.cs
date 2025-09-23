@@ -219,7 +219,8 @@ public sealed class ExorcistRole :
 			!ExtremeRolesPlugin.ShipState.DeadPlayerInfo.TryGetValue(
 				this.target.PlayerId, out var info) ||
 			info.Killer == null ||
-			info.Killer.Data == null)
+			info.Killer.Data == null ||
+			MeetingHud.Instance != null)
 		{
 			return;
 		}
@@ -233,7 +234,17 @@ public sealed class ExorcistRole :
 			Tr.GetString(
 				"ExorcistReport", this.target.DefaultOutfit.PlayerName, reason,
 				killer.IsDead ? Tr.GetString(PlayerStatus.Dead.ToString()) : Tr.GetString(PlayerStatus.Alive.ToString())));
-		PlayerControl.LocalPlayer.CmdReportDeadBody(this.target);
+
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (!(
+				localPlayer == null ||
+				localPlayer.Data == null ||
+				localPlayer.Data.IsDead ||
+				localPlayer.Data.Disconnected
+			))
+		{
+			localPlayer.CmdReportDeadBody(this.target);
+		}
 		this.target = null;
 	}
 
