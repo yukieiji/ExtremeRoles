@@ -11,7 +11,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 
 #nullable enable
 
-public class TimeMasterAbilityHandler : IAbility, IKilledFrom
+public sealed class TimeMasterAbilityHandler : IAbility, IKilledFrom
 {
     private readonly TimeMasterStatusModel status;
 	private readonly TimeMasterHistory history;
