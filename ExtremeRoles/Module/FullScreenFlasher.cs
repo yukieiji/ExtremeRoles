@@ -115,11 +115,11 @@ public sealed class FullScreenFlasher
 				alpha = (1f - (fadeOutElapsed / this.timeLine.FadeOutLength)) * this.maxAlpha;
 			}
 
-			renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha));
+			this.renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha));
 
 			if (p >= 1.0f)
 			{
-				renderer.enabled = false;
+				this.renderer.enabled = false;
 			}
 		};
 	}
