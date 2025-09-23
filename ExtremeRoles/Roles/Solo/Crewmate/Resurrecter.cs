@@ -84,7 +84,7 @@ public sealed class Resurrecter :
     private float resetTaskGage;
     private TMPro.TextMeshPro resurrectText;
 
-	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.ResurrecterBlue, 0.75f, 0.5f, 0.5f);
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.ResurrecterBlue);
 
     public Resurrecter() : base(
 		RoleCore.BuildCrewmate(

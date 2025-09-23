@@ -19,7 +19,7 @@ public sealed class BaitDelayReporter : MonoBehaviour
 	private TextMeshPro? text = null;
 	private Coroutine? delayCorutine = null;
 
-	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.BaitCyan, 0.75f, 0.5f, 0.5f);
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.BaitCyan);
 
 	public BaitDelayReporter(IntPtr ptr) : base(ptr)
 	{

@@ -29,7 +29,7 @@ public sealed class ServantRole :
 	public ExtremeAbilityButton? Button { get; set; }
 
 	private byte queenPlayerId;
-	private readonly FullScreenFlasher flasher = new FullScreenFlasher(new Color(0f, 0.8f, 0f), 0.75f, 0.5f, 0.5f);
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(new Color(0f, 0.8f, 0f));
 
 	public override IOptionLoader Loader { get; }
 	public override IStatusModel Status => status;

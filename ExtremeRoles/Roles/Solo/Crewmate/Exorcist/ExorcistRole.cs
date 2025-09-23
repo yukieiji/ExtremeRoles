@@ -66,7 +66,7 @@ public sealed class ExorcistRole :
 		AwakeTaskGage,
 	}
 
-	private readonly FullScreenFlasher flasher = new FullScreenFlasher(Palette.CrewmateBlue, 0.75f, 0.5f, 0.5f);
+	private readonly FullScreenFlasher flasher = new FullScreenFlasher(Palette.CrewmateBlue);
 
 	public ExorcistRole() : base(
 		RoleCore.BuildCrewmate(

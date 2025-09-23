@@ -312,7 +312,7 @@ public sealed class Photographer :
     private float upgradeAllSendChatTaskGage;
     private bool isUpgradeChat;
 
-    private readonly FullScreenFlasher flasher = new FullScreenFlasher(Color.white, 0.75f, 0.25f, 0.5f, 0.25f);
+    private readonly FullScreenFlasher flasher = new FullScreenFlasher(Color.white, 3.75f, 0.25f, holdTime: 0.25f);
     public const float FlashTime = 1.0f;
 
 #pragma warning disable CS8618

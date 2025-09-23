@@ -26,7 +26,7 @@ public sealed class FullScreenFlasher
 	private readonly Action<float> defaultLerpAction;
 
 
-	public FullScreenFlasher(Color defaultColor, float maxAlpha, float fadeInTime, float fadeOutTime, float holdTime = 0.0f)
+	public FullScreenFlasher(Color defaultColor, float maxAlpha=1.5f, float fadeInTime=0.5f, float fadeOutTime=0.5f, float holdTime = 0.0f)
 	{
 		if (fadeInTime <= 0)
 		{
@@ -117,7 +117,7 @@ public sealed class FullScreenFlasher
 
 			this.renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha));
 
-			if (p >= 1.0f)
+			if (p >= 1)
 			{
 				this.renderer.enabled = false;
 			}
