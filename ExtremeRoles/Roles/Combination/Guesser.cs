@@ -95,6 +95,7 @@ public sealed class Guesser :
 				{ExtremeRoleType.Crewmate, new List<ExtremeRoleId>() },
 				{ExtremeRoleType.Impostor, new List<ExtremeRoleId>() },
 				{ExtremeRoleType.Neutral , new List<ExtremeRoleId>() },
+				{ExtremeRoleType.Liberal , new List<ExtremeRoleId>() },
 			};
 
 			addVanillaRole(includeNoneRole);

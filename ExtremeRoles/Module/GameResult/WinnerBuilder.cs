@@ -341,6 +341,9 @@ public sealed class WinnerBuilder : IDisposable
 				collectAllTargetRole(
 					ExtremeRoleId.Queen, ExtremeRoleId.Servant, ExtremeRoleId.Pawn);
 				break;
+			case RoleGameOverReason.LiberalRevolution:
+				replaceWinnerToLiberalPlayers();
+				break;
 			default:
 				break;
 		}
@@ -356,6 +359,20 @@ public sealed class WinnerBuilder : IDisposable
 		logger.LogInfo("Clear Winner(Reason:Neautal Win)");
 		this.tempData.Clear();
 		collectAllTargetRole(isAlive, roles);
+	}
+
+	private void replaceWinnerToLiberalPlayers()
+	{
+		var logger = ExtremeRolesPlugin.Logger;
+		logger.LogInfo("Clear Winner(Reason:Liberal Win)");
+		this.tempData.Clear();
+		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+		{
+			if (ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) && role.IsLiberal())
+			{
+				this.tempData.Add(player);
+			}
+		}
 	}
 
 	private void addSpecificRoleToSameControlIdPlayer(in SingleRoleBase role, in Player player)
