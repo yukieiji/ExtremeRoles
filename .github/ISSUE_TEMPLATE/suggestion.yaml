@@ -26,3 +26,7 @@ body:
       placeholder: "提案される機能によって、どんな事ができるようになり、その追加された結果どういうメリットが生まれるのか / What will become possible with the proposed feature, and what benefits will result from it?"
     validations:
       required: true
+  - type: textarea
+    attributes:
+      label: "ユースケース / Use case"
+      placeholder: "提案された機能をいつ、どのようなタイミングで使用するか / When and under what situation to use the proposed feature"
