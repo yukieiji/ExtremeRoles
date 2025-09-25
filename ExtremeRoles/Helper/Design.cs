@@ -37,7 +37,7 @@ public static class Design
 	///  Converts 32-bit uint to Color32.
 	/// The format is 0x|RR|GG|BB|AA|, store 8 bits as a single value
 	/// </summary>
-	/// <param name="value">32-bit uinted color</param>
+	/// <param name="value">32-bit unsigned integer color</param>
 	public static Color32 ToRGBA(uint value)
 	{
 		return new Color32(
