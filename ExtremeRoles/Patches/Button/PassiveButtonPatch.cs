@@ -17,10 +17,12 @@ public static class PassiveButtonReceiveClickDownPatch
         var obj = __instance.gameObject;
 		var localPlayer = PlayerControl.LocalPlayer;
 
+		// ゲームが開始されていない、いわゆるプレイヤーがいないとかマップがない時にボタンが押せるようにするため
         if (obj == null ||
 			localPlayer == null ||
 			obj.transform.parent == null ||
             obj.transform.parent.name == GameSystem.BottomRightButtonGroupObjectName ||
+			ShipStatus.Instance == null ||
             ExtremeRoleManager.GameRole.Count == 0 ||
             !RoleAssignState.Instance.IsRoleSetUpEnd)
 		{
