@@ -1,10 +1,11 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using TMPro;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
+using System.Text;
 
 namespace ExtremeRoles.Patches.Meeting;
 
@@ -54,27 +55,30 @@ public static class MeetingIntroAnimationInitPatch
 
 		TMP_Text text = textSubMesh.textComponent;
 
-		string gaProtectText = string.Empty;
+		var builder = new StringBuilder();
 
 		if (someoneWasProtected && !ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsBlockGAAbilityReport)
 		{
-			gaProtectText = text.text;
+            builder.Append(text.text);
 		}
 
-		string exrAbiltyText =
-			MeetingReporter.IsExist ?
-			MeetingReporter.Instance.GetMeetingStartReport() : string.Empty;
+		if (MeetingReporter.IsExist)
+		{
+			if (builder.Length > 0)
+			{
+				builder.AppendLine();
+			}
 
-        bool isGaAbilityTextEmpty = string.IsNullOrEmpty(gaProtectText);
-		bool isExrAbilityTextEmpty = string.IsNullOrEmpty(exrAbiltyText);
+            builder.Append(
+				MeetingReporter.Instance.GetMeetingStartReport());
+		}
 
-		if (isGaAbilityTextEmpty && isExrAbilityTextEmpty)
+		if (builder.Length <= 0)
 		{
 			return;
 		}
 
-		text.text = isGaAbilityTextEmpty ?
-			exrAbiltyText : string.Concat(gaProtectText, "\n", exrAbiltyText);
+		text.text = builder.ToString();
 		SoundManager.Instance.PlaySound(__instance.ProtectedRecentlySound, false, 1f);
 		__instance.ProtectedRecently.SetActive(true);
     }
