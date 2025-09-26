@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -58,7 +58,7 @@
 			: using a System.ComponentModel.TypeConverter
 			: and then encoded with base64 encoding.
 	-->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -950,8 +950,8 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="Gambler" xml:space="preserve">
     <value>ギャンブラー</value>
   </data>
-  <data name="GamblerNormalVoteRate" xml:space="preserve">
-    <value>投票数が1票になる確率</value>
+  <data name="GamblerChangeVoteChance" xml:space="preserve">
+    <value>投票数が変化する確率</value>
   </data>
   <data name="GamblerIntroDescription" xml:space="preserve">
     <value>投票が"増えるか"どうか運次第</value>
@@ -960,13 +960,11 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>会議での票数がランダムに変化する</value>
   </data>
   <data name="GamblerFullDescription" xml:space="preserve">
-    <value>会議で自分の投票数が0～2票の間でランダムに変化するクルー役職
-この投票数の変化は画面上ではわからず、0～2票のどの票数であって
+    <value>投票数が1票か、最大値と最小値の間からランダムに変化するクルー役職
+この投票数の変化は画面上ではわからず、票数がどの票数であって
 も画面上に表示される票数は1票と表示される(内部的には計算され
 てます)
-0票と2票の確率は100％から「投票数が1票になる確率」を2で
-割った確率になる(例：「投票数が1票になる確率」：50％の場合、
-0票と2票になる確率はそれぞれ25％になる)</value>
+投票数が変化する確率を当てたときに、最大票数から最小票数の間からランダムに票が変化する</value>
   </data>
   <data name="Teleporter" xml:space="preserve">
     <value>テレポーター</value>
@@ -1324,5 +1322,141 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   </data>
   <data name="Summon" xml:space="preserve">
     <value>召喚</value>
+  </data>
+  <data name="Exorcist" xml:space="preserve">
+    <value>エクソシスト</value>
+  </data>
+  <data name="ExorcistAwakeTaskGage" xml:space="preserve">
+    <value>インポスターから誤視認になるタスク進捗率</value>
+  </data>
+  <data name="ExorcistAbilityCoolTime" xml:space="preserve">
+    <value>「悪魔祓い」のクールタイム</value>
+  </data>
+  <data name="ExorcistAbilityActiveTime" xml:space="preserve">
+    <value>「悪魔祓い」にかかる時間</value>
+  </data>
+  <data name="ExorcistAbilityCount" xml:space="preserve">
+    <value>「悪魔祓い」が使用できる回数</value>
+  </data>
+  <data name="ExorcistRange" xml:space="preserve">
+    <value>「悪魔祓い」が発動できる死体からの距離</value>
+  </data>
+  <data name="ExorcistWithName" xml:space="preserve">
+    <value>「悪魔祓い」の情報にキルしたプレイヤーの名前を含めるか</value>
+  </data>
+  <data name="ExorcistCrewBlockSystemType" xml:space="preserve">
+    <value>「悪魔祓い」の発動中のデメリット</value>
+  </data>
+  <data name="ExorcistFullDescription" xml:space="preserve">
+    <value>インポスターからはインポスターとして表示されるクルーメイト
+ただし、「インポスターから誤視認になるタスク進捗率」以上のタスクをこなす必要がある
+
+通報ボタンは使用できない
+
+ボタン能力「悪魔祓い」
+　・近くの「死体」を対象として発動
+　・一定時間経過後、自動通報が発生しチャット欄に死体の情報が出力される
+　・能力発動中はクルーメイト陣営全体に「「悪魔祓い」の発動中のデメリット」が適用される
+</value>
+  </data>
+  <data name="ExorcistShortDescription" xml:space="preserve">
+    <value>「悪魔祓い」で有利な情報を得よう</value>
+  </data>
+  <data name="ExorcistIntroDescription" xml:space="preserve">
+    <value>インポスターを聖なる力で成敗せよ</value>
+  </data>
+  <data name="ExorcistAbility" xml:space="preserve">
+    <value>悪魔祓い</value>
+  </data>
+  <data name="ExorcistReport" xml:space="preserve">
+    <value>「{0}」は「{1}」によって死んだようだ、犯人は「{2}」している</value>
+  </data>
+  <data name="ExorcistReportWithName" xml:space="preserve">
+    <value>「{0}」の手によって{1}が殺された、原因は「{2}」である</value>
+  </data>
+  <data name="Loner" xml:space="preserve">
+    <value>ロウワー</value>
+  </data>
+  <data name="LonerStressMaxGage" xml:space="preserve">
+    <value>自決する「ストレス値」</value>
+  </data>
+  <data name="LonerStressRange" xml:space="preserve">
+    <value>「ストレス値」が増加する範囲</value>
+  </data>
+  <data name="LonerStressIgnoreTime" xml:space="preserve">
+    <value>スポーン後、「ストレス値」が増加しない時間</value>
+  </data>
+  <data name="LonerStressProgressOnTask" xml:space="preserve">
+    <value>タスク中に「ストレス値」が上昇するか</value>
+  </data>
+  <data name="LonerStressProgressOnVentPlayer" xml:space="preserve">
+    <value>ベント内のプレイヤーに対して
+「ストレス値」が上昇するか</value>
+  </data>
+  <data name="LonerStressProgressOnMovingPlatPlayer" xml:space="preserve">
+    <value>はしご等を使用しているプレイヤーに対して
+「ストレス値」が上昇するか</value>
+  </data>
+  <data name="LonerIsShowArrow" xml:space="preserve">
+    <value>近くのプレイヤーに対して矢印を表示するか</value>
+  </data>
+  <data name="LonerArrowNum" xml:space="preserve">
+    <value>表示する数</value>
+  </data>
+  <data name="LonerArrowShowVentPlayer" xml:space="preserve">
+    <value>ベント内のプレイヤーに対しての矢印表示</value>
+  </data>
+  <data name="LonerFullDescription" xml:space="preserve">
+    <value>プレイヤーが近くにいると「ストレス値」が上がって、一定値を超えると自決するクルー
+
+ストレス値 : {0}/{1}
+
+パッシブ能力「ストレス」
+　・一定範囲内にプレイヤーが居ると「ストレス値」が上がっていく
+　・上昇率は1ストレス値/秒/人である
+　・範囲内にプレイヤーがいないと1秒あたり1ずつ「ストレス値」が下がっていく</value>
+  </data>
+  <data name="LonerShortDescription" xml:space="preserve">
+    <value>「ストレス値」を上げすぎないように</value>
+  </data>
+  <data name="LonerIntroDescription" xml:space="preserve">
+    <value>孤高だけど何処か淋しい一匹クルー</value>
+  </data>
+  <data name="GamblerMinVoteNum" xml:space="preserve">
+    <value>最大票数</value>
+  </data>
+  <data name="GamblerMaxVoteNum" xml:space="preserve">
+    <value>最小標数</value>
+  </data>
+  <data name="TeleporterInitAbilityNum" xml:space="preserve">
+    <value>「セットポータル」の初期使用回数</value>
+  </data>
+  <data name="BlockModeAbilityButton" xml:space="preserve">
+    <value>能力ボタン使用禁止</value>
+  </data>
+  <data name="BlockModeReportButton" xml:space="preserve">
+    <value>通報ボタン使用禁止</value>
+  </data>
+  <data name="BlockModeKillButton" xml:space="preserve">
+    <value>キルボタン使用禁止</value>
+  </data>
+  <data name="BlockModeAbilityAndReportButton" xml:space="preserve">
+    <value>能力と通報ボタン
+使用禁止</value>
+  </data>
+  <data name="BlockModeAbilityAndKillButton" xml:space="preserve">
+    <value>能力とキルボタン
+使用禁止</value>
+  </data>
+  <data name="BlockModeKillAndReportButton" xml:space="preserve">
+    <value>能力と通報ボタン
+使用禁止</value>
+  </data>
+  <data name="BlockModeAll" xml:space="preserve">
+    <value>能力、通報、キルボタン
+使用禁止</value>
+  </data>
+  <data name="BlockModeNone" xml:space="preserve">
+    <value>デメリットなし</value>
   </data>
 </root>

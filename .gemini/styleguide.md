@@ -1,39 +1,50 @@
 # Extreme Roles(ExR) C# Style Guide
 
-# �T�v
+## 概要
 
-�����ExtremeRoles(ExR)��C#�R�[�h�J���ɂ�����X�^�C���K�C�h���C���ł��B
-��{�I��Microsoft��.NET�̃X�^�C��/�R�[�f�B���O�K�C�h���C���ɉ����ĊJ������Ă��܂����AUnity��Mod�J���̂��߂������̓_�ŕύX���������Ă��܂�
+これはExtremeRoles(ExR)のC#コード開発におけるスタイルガイドラインです。
+基本的にMicrosoftの.NETのスタイル/コーディングガイドラインに沿って定義/開発されていますが、UnityとMod開発のためいくつかの点で変更が加えられています
 
-# ����
-* **�ǐ�:** �R�[�h�͊Ȍ����킩��₷�����ׂ�
-* **�_�:** �R�[�h�͕ύX���e�Ղ��A�_���������Ԃ�ۂׂ�
-* **�p�t�H�[�}���X:** �R�[�h�͉ǐ��Ə_��͈ێ����A�ł������̍��������������ׂ��ł���
+## 原則
+* **可読性:** コードは簡潔かつわかりやすくすべき
+    * 参考にすべき書籍より抜粋
+      * 『ルールズ オブ プログラミング』
+        * 「ルール1 : 単純であるべきであるが、単純化してはいけない」 : 単純なコードとは、コードレビューをするときにストレートに読めるコードである
+        * 「ルール3 : 優れた名前こそ最高のドキュメントである」 : 頭を使わさせるような名前(変数名、関数名など)は使用しない
+        * 「ルール7 : 失敗が起こる場合をなくす」 : 一度脳が記憶できる値や概念の数を考えて実装を行うべきである(変数で1つ、!は1つの記憶を使用する)
+        * 「ルール8 : 実行されていないコードは動作しない」 : 後で治す等のコードはAPIの変更によって動作しなくなるので残すべきではない
+      * 『ロバストPython』
+        * コードはコミニュケーションである、名前や型等なぜそのようなコードを書いたのか等をわかりやすく伝えるべきである
+        * 驚くようなコードを書くべきではない(驚き最小の原則)
+        * 開発によって追加される偶発的複雑性はなるべく排除し、アルゴリズムモデルが持つ必然的複雑性のみをコードにもたらすべきである
+* **柔軟性:** コードは変更が容易い、柔軟性が高い状態を保つべき
+    * 注意 : 過度な柔軟性は逆にコードを見づらくするので、適度な柔軟性を維持すべきである
+* **パフォーマンス:** コードは可読性と柔軟性は維持しつつ、最も効率の高い実装がされるべきである
 
-# �ύX�ӏ�
+## 変更箇所
 
-## �A�N�Z�T�r���e�B
-* **private�t�@�[�X�g:** �ϐ��̃X�R�[�v�͂Ȃ�ׂ������A�C���X�^���X�ϐ����͌��J����K�v���Ȃ��ꍇ��private�ɂ���
-* **readonly/�v���p�e�B�𑽗l:** �s�K�v�ȏ��������������������Ȃ��悤�ɂ���
-    * �N���X�ϐ��͂Ȃ�ׂ�readonly�ϐ���Get�v���p�e�B�ɂ��� `private readonly` `public Git git { get; }` 
-    * �R���N�V�����̎󂯓n����ϐ��͉\�Ȍ���readonly�̃C���^�[�t�F�[�X���g�p���� `IReadOnlyList<Net>` `IReadOnlyDictionary<string, string>`
+### アクセサビリティ
+* **privateファースト:** 変数のスコープはなるべく狭く、インスタンス変数等は公開する必要がない場合はprivateにする
+* **readonly/プロパティを多様:** 不必要な書き換えや代入が発生しないようにする
+    * クラス変数はなるべくreadonly変数やGetプロパティにする `private readonly` `public Git git { get; }` 
+    * コレクションの受け渡しや変数は可能な限りreadonlyのインターフェースを使用する `IReadOnlyList<Net>` `IReadOnlyDictionary<string, string>`
 
-## �N���X
-* **�p�������Ϗ�** ��{�I�ɃN���X��sealed�����ăV�[�����A�p�����l����O�ɈϏ��ł��Ȃ������l����
-* **�s�K�v��new** �s�K�v��new��h�����߁A�C���X�^���X�ϐ��������N���Xstaic�����Ȃ�ׂ�static�N���X������
+### クラス
+* **継承をより委譲** 基本的にクラスはsealedをつけてシールし、継承を考える前に委譲できないかを考える
+* **不必要なnew** 不必要なnewを防ぐため、インスタンス変数が無いクラスstaticをつけなるべくstaticクラス化する
 
-## �^
-* **var:** �g�ݍ��݌^�͌^���g�p���Avar�͌^���m���ɂ킩�鎞�Ɏg�p����
+### 型
+* **var:** 組み込み型は型を使用し、varは型が確実にわかる時に使用する
 
-## Null
-* **Null���e�^(Nullable):** Null�̉\���̂���R�[�h��Nullable���g�p���ANull�`�F�b�N��K���s��
+### Null
+* **Null許容型(Nullable):** Nullの可能性のあるコードはNullableを使用し、Nullチェックを必ず行う
     
     ```csharp
     #nullable enable
 
     public sealed class MyClassA
     {
-        public void MyMethod(MyClassB b) // b��Null�ł͂Ȃ����Ƃ�ۏ� 
+        public void MyMethod(MyClassB b) // bはNullではないことを保証 
         {
         }
     }
@@ -41,16 +52,16 @@
 
     public sealed class MyClassB
     {
-        public void MyMethod(MyClassA? a) // a��Null�̉\��������
+        public void MyMethod(MyClassA? a) // aはNullの可能性がある
         {
-            if (a is not null) // null�`�F�b�N�͕K�������Ȃ�
+            if (a is not null) // nullチェックは必ずおこなう
             {
-                // ����
+                // 処理
             }
         }
 
-        // �K�v�ɉ�����NotNullWhen�����g��
-        public bool NullCheck([NotNullWhen(true)] out MyClassA? a) // ���̃��\�b�h��True��Ԃ����Aa��Null�ł͂Ȃ�
+        // 必要に応じてNotNullWhen等も使う
+        public bool NullCheck([NotNullWhen(true)] out MyClassA? a) // このメソッドがTrueを返す時、aはNullではない
         {
         }
     }
@@ -58,15 +69,15 @@
     ```
 
 
-## Unity
-* **�p�t�H�[�}���X:** Unity�̃Q�[����MOD���邪�̂Ƀp�t�H�[�}���X�͏�ɒǂ����߂�ׂ��ł���
-* **�ǐ��ƃp�t�H�[�}���X�̃g���[�h�I�t:** �ǐ��ƃp�t�H�[�}���X���g���[�h�I�t�̏ꍇ�A�ǐ������߂邱�Ƃ��d�v������
-* **Unity�Ǝ���Null�`�F�b�N:** Unity�̃N���X��Null�`�F�b�N���I�[�o���C�h����Ǝ���������Ă���
-    * Unity�̃N���X�������͌p�����ꂽ�N���X��Null�`�F�b�N�͎Z�p���Z�q��p���ă`�F�b�N���s��
-        * Null�������Z�q��is�ɂ���r�͐�΂ɍs��Ȃ�
-    * Unity�̃N���X�������͌p�����ꂽ�N���X�̕ϐ��݂͎̂̂g�p���Ȃ�
+### Unity
+* **パフォーマンス:** UnityのゲームをMODするが故にパフォーマンスは常に追い求めるべきである
+* **可読性とパフォーマンスのトレードオフ:** 可読性とパフォーマンスがトレードオフの場合、可読性を高めることを重要視する
+* **Unity独自のNullチェック:** UnityのクラスはNullチェックがオーバライドされ独自実装されている
+    * Unityのクラスもしくは継承されたクラスのNullチェックは算術演算子を用いてチェックを行う
+        * Null条件演算子やisによる比較は絶対に行わない
+    * Unityのクラスもしくは継承されたクラスの変数のみのは使用しない
     ```csharp
-    public sealed class MyMono : MonoBehavior
+    public sealed class MyMono : MonoBehaviour
     {
     }
 
@@ -76,50 +87,50 @@
         {
             if (mono != null)
             {
-                // ����
+                // 処理
             }
         }
     }
     ```
 
-## �����K��
-* **�ϐ�/�萔**
-    * **public/protected:** �@�p�X�J���P�[�X: `RoleManager`, `BoolOption`
-    * **private:** �@�L�������P�[�X: `gameResult`, `userData`
-* **���\�b�h/�֐�**
-    * **public/protected:** �@�p�X�J���P�[�X: `CalculateTotal()`, `ProcessData()`
-    * **private:** �@�L�������P�[�X: `computeResult()`, `resolveData()`
-* **�N���X/���R�[�h/�\����:** �@�p�X�J���P�[�X: `UserManager`, `PaymentProcessor`
-* **�C���^�[�t�F�[�X:** I����n�܂�p�X�J���P�[�X: `IRole`, `IMeetingHud`
+### 命名規則
+* **変数/定数**
+    * **public/protected:** 　パスカルケース: `RoleManager`, `BoolOption`
+    * **private:** 　キャメルケース: `gameResult`, `userData`
+* **メソッド/関数**
+    * **public/protected:** 　パスカルケース: `CalculateTotal()`, `ProcessData()`
+    * **private:** 　キャメルケース: `computeResult()`, `resolveData()`
+* **クラス/レコード/構造体:** 　パスカルケース: `UserManager`, `PaymentProcessor`
+* **インターフェース:** Iから始まるパスカルケース: `IRole`, `IMeetingHud`
 
-## ���O���
-* **using�f�B���N�e�B�u:** �ȉ��̏��ԂŐ錾���A���̒��ŃA���t�@�x�b�g���Ƀ\�[�g���� 
-    * .NET�W��
-    * �O�����C�u����/DLL
-    * ���g�̃��C�u����/DLL
-* **�G�C���A�X:** �K�v�ɉ����ăG�C���A�X�����Ausing�f�B���N�e�B�u�Ɩ��O��Ԃ̐錾�̊Ԃɒǉ�����
-* **���O��Ԃ̐錾:** �t�@�C���X�R�[�v���O��Ԃ��g�p����
+### 名前空間
+* **usingディレクティブ:** 以下の順番で宣言し、その中でアルファベット順にソートする 
+    * .NET標準
+    * 外部ライブラリ/DLL
+    * 自身のライブラリ/DLL
+* **エイリアス:** 必要に応じてエイリアスをつけ、usingディレクティブと名前空間の宣言の間に追加する
+* **名前空間の宣言:** ファイルスコープ名前空間を使用する
 
     ```csharp
-    using System.Collection.Generic;
-    using System.Ling;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using InnerNet;
 
     using MyMod.Module;
 
-    using Heep = MyMod.Module.Heep;
+    using Heap = MyMod.Module.Heap;
 
     namespace MyMod.Collection;
     
-    // �R�[�h
+    // コード
 
     ```
 
-# ��
+## 例
 
 ```csharp
-using System.Collection.Generic;
+using System.Collections.Generic;
 
 using SemanticVersioning;
 
@@ -144,15 +155,15 @@ public sealed class BetaContentAdder(string version)
 		string content = curLang switch
 		{
 			SupportedLangs.Japanese =>
-				"�E��E�����̃e�L�X�g�̉��P/�ύX\n�E�t�B�[�h�o�b�N�V�X�e���̒ǉ�\n�E�u���肷��v�{�^�����g�O�����ɕύX",
+				"・役職説明のテキストの改善/変更\n・フィードバックシステムの追加\n・「挙手する」ボタンをトグル式に変更",
 			_ => "",
 		};
 		transData.Add(transKey, content);
 
-		// �t�B�[�h�o�b�N�𑗂�悤
+		// フィードバックを送るよう
 		transData.Add("SendFeedBackToExR", curLang switch
 		{
-			SupportedLangs.Japanese => "�t�B�[�h�o�b�N�𑗂�",
+			SupportedLangs.Japanese => "フィードバックを送る",
 			_ => "",
 		});
 	}

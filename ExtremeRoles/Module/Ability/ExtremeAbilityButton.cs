@@ -1,12 +1,12 @@
 using UnityEngine;
 
-using ExtremeRoles.Extension.UnityEvents;
+
 using ExtremeRoles.Extension.Manager;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
 
 using ArgException = System.ArgumentException;
 
@@ -129,6 +129,13 @@ public class ExtremeAbilityButton
 		{
 			return;
 		}
+
+		if (ButtonLockSystem.IsAbilityButtonLock())
+		{
+			blockedUpdate();
+			return;
+		}
+
 		this.UpdateImp();
 	}
 
@@ -136,7 +143,10 @@ public class ExtremeAbilityButton
 	{
 		bool isActive = this.activator.IsActive();
 		setActive(isActive);
-		if (!this.Button.isActiveAndEnabled) { return; }
+		if (!this.Button.isActiveAndEnabled)
+		{
+			return;
+		}
 
 		AbilityState newState = this.Behavior.Update(State);
 		if (newState != this.State)
@@ -144,19 +154,19 @@ public class ExtremeAbilityButton
 			setStatus(newState);
 		}
 
-		var grahic = this.Button.graphic;
-		grahic.sprite = this.Behavior.Graphic.Img;
+		var graphic = this.Button.graphic;
+		graphic.sprite = this.Behavior.Graphic.Img;
 		this.Button.OverrideText(this.Behavior.Graphic.Text);
 
 		if (this.Behavior.IsUse())
 		{
-			grahic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-			grahic.material.SetFloat(materialName, 0f);
+			graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
+			graphic.material.SetFloat(materialName, 0f);
 		}
 		else
 		{
-			grahic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-			grahic.material.SetFloat(materialName, 1f);
+			graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
+			graphic.material.SetFloat(materialName, 1f);
 		}
 
 		// チャージ中は改行をオフにしてるので
@@ -295,17 +305,20 @@ public class ExtremeAbilityButton
 
 	private void onClick()
 	{
-		if (Behavior.IsUse() &&
-			Behavior.TryUseAbility(Timer, State, out AbilityState newState))
+		if (ButtonLockSystem.IsAbilityButtonLock() ||
+			!Behavior.IsUse() ||
+			!Behavior.TryUseAbility(Timer, State, out AbilityState newState))
 		{
-			ExtremeRolesPlugin.Logger.LogInfo(
-				$"ExtremeAbilityButton : Clicking {this.Behavior.Graphic.Text}");
-			if (newState == AbilityState.CoolDown)
-			{
-				Behavior.AbilityOff();
-			}
-			setStatus(newState);
+			return;
 		}
+
+		ExtremeRolesPlugin.Logger.LogInfo(
+			$"ExtremeAbilityButton : Clicking {this.Behavior.Graphic.Text}");
+		if (newState == AbilityState.CoolDown)
+		{
+			Behavior.AbilityOff();
+		}
+		setStatus(newState);
 	}
 
 	private void setActive(bool active)
@@ -320,12 +333,12 @@ public class ExtremeAbilityButton
 		{
 			case AbilityState.None:
 			case AbilityState.Ready:
-				Timer = 0.0f;
+				this.Timer = 0.0f;
 				break;
 			case AbilityState.CoolDown:
-				if (State != AbilityState.Stop)
+				if (State is not AbilityState.Stop)
 				{
-					Timer = Behavior.CoolTime;
+					this.Timer = Behavior.CoolTime;
 				}
 				break;
 			case AbilityState.Charging:
@@ -353,5 +366,22 @@ public class ExtremeAbilityButton
 		ExtremeRolesPlugin.Logger.LogInfo(
 			$"ExtremeAbilityButton : Status changed, {this.State} => {newState}");
 		State = newState;
+	}
+
+	private void blockedUpdate()
+	{
+		var graphic = this.Button.graphic;
+		graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
+		graphic.material.SetFloat(materialName, 1f);
+		switch (this.State)
+		{
+			case AbilityState.Activating:
+			case AbilityState.Charging:
+				this.Behavior.ForceAbilityOff();
+				setStatus(AbilityState.Ready);
+				break;
+			default:
+				break;
+		}
 	}
 }

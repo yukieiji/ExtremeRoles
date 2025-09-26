@@ -454,7 +454,7 @@
   <data name="call" xml:space="preserve">
     <value>龙套体质</value>
   </data>
-  <data name="DetectiveOffice" xml:space="preserve">
+  <data name="InvestigatorOffice" xml:space="preserve">
     <value>&lt;color=#9E5C46&gt;大&lt;/color&gt;调查员&lt;color=#008A99&gt;探&lt;/color&gt;</value>
   </data>
   <data name="Investigator" xml:space="preserve">
@@ -496,28 +496,28 @@
   <data name="AssistantApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>受到照明破坏影响</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherVision" xml:space="preserve">
     <value>见习调查员拥有独立视野</value>
   </data>
-  <data name="DetectiveApprenticeVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeVision" xml:space="preserve">
     <value>视野范围</value>
   </data>
-  <data name="DetectiveApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
+  <data name="InvestigatorApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>受到照明破坏影响</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCount" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCount" xml:space="preserve">
     <value>见习调查员紧急召集技能使用次数</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCoolTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCoolTime" xml:space="preserve">
     <value>紧急召集的冷却时间</value>
   </data>
-  <data name="DetectiveApprenticeAbilityActiveTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityActiveTime" xml:space="preserve">
     <value>见习调查员“紧急召集”按下紧急会议按钮的时间</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButton" xml:space="preserve">
     <value>见习调查员紧急召集的会议不计入紧急会议次数限制</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>不计入次数限制的次数</value>
   </data>
   <data name="InvestigatorIntroDescription" xml:space="preserve">
@@ -525,29 +525,6 @@
   </data>
   <data name="InvestigatorShortDescription" xml:space="preserve">
     <value>调查案发现场留下的蛛丝马迹</value>
-  </data>
-  <data name="InvestigatorFullDescription" xml:space="preserve">
-    <value>调查员属于船员阵营。
-可以从案发现场搜寻线索。
-
-·主动技能“尸检报告”
-当有尸体被报告时，那尸体所在的地点直到下一轮会议阶段开始为止记录为案发现场。
-调查员可以通过箭头确认案发现场的位置。
-调查员在案发现场周围停留时，可以进行调查。
-若调查员在调查过程中离开，调查进程会被重置。
-通过调查得知的信息如下。
-每一次的调查都需要一定的时间。
-在第四次调查完成时，案发现场被移除。
-第一次调查:死者死亡时刻。
-第二次调查:从死者死亡到会议召开的间隔时间。
-第三次调查:凶手的所属阵营。
-第四次调查:凶手的职业。
-
-·被动技能“助手的援助”
-若尸体是助手报告的，则每次调查所需的时间将缩短。
-
-·被动技能“传承”
-调查员死亡等情况下，助手的职业变为见习调查员。</value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
     <value>调查员的最佳搭档</value>
@@ -565,10 +542,10 @@
 ·被动技能“传承”
 助手死亡时，调查员的职业变为见习调查员。</value>
   </data>
-  <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeShortDescription" xml:space="preserve">
     <value>接过逝去的搭档的衣钵</value>
   </data>
-  <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeFullDescription" xml:space="preserve">
     <value>见习调查员属于船员阵营。
 见习调查员是由调查员或助手转变而来的。
 
@@ -1120,5 +1097,75 @@
   </data>
   <data name="SkaterSkateOff" xml:space="preserve">
     <value>刹车</value>
+  </data>
+  <data name="InvestigatorContinueSearch" xml:space="preserve">
+    <value>能否继续调查犯罪现场</value>
+  </data>
+  <data name="InvestigatorSearchCanFindName" xml:space="preserve">
+    <value>能否通过犯罪现场调查出凶手</value>
+  </data>
+  <data name="InvestigatorForceMeetingOnSearchEnd" xml:space="preserve">
+    <value>调查完犯罪现场后强行开启会议</value>
+  </data>
+  <data name="InvestigatorSearchCanContineMeetingNum" xml:space="preserve">
+    <value>剩余的关于犯罪现场的会议数</value>
+  </data>
+  <data name="Barter" xml:space="preserve">
+    <value>奇迹商人</value>
+  </data>
+  <data name="NiceBarter" xml:space="preserve">
+    <value>正义的奇迹商人</value>
+  </data>
+  <data name="EvilBarter" xml:space="preserve">
+    <value>邪恶的奇迹商人</value>
+  </data>
+  <data name="BarterAwakeTaskRate" xml:space="preserve">
+    <value>正义的奇迹商人知晓职业所需任务数量(条件1)</value>
+  </data>
+  <data name="BarterAwakeDeadPlayerNum" xml:space="preserve">
+    <value>正义的奇迹商人知晓职业所需死亡人数(条件2)</value>
+  </data>
+  <data name="BarterAwakeKillNum" xml:space="preserve">
+    <value>邪恶的奇迹商人知晓职业所需击杀数</value>
+  </data>
+  <data name="BarterCanCallMeeting" xml:space="preserve">
+    <value>奇迹商人能否开启会议</value>
+  </data>
+  <data name="BarterCastlingNum" xml:space="preserve">
+    <value>奇迹商人每次会议可进行的交换数</value>
+  </data>
+  <data name="BarterMaxCastlingNumWhenMeeting" xml:space="preserve">
+    <value>奇迹商人总共可进行的交换数</value>
+  </data>
+  <data name="BarterRandomCastling" xml:space="preserve">
+    <value>奇迹商人的阵营随机</value>
+  </data>
+  <data name="BarterOneCastlingNum" xml:space="preserve">
+    <value>随机交换
+使用次数</value>
+  </data>
+  <data name="BarterShowCastlingOther" xml:space="preserve">
+    <value>他人是否会知晓谁被交换了</value>
+  </data>
+  <data name="BarterFullDescription" xml:space="preserve">
+    <value>可以交换两人的票的职业
+
+会议能力“交换”
+   -选择玩家发动
+   -可以交换两人的票数</value>
+  </data>
+  <data name="BarterShortDescription" xml:space="preserve">
+    <value>用交换把会议搞得翻天覆地吧！</value>
+  </data>
+  <data name="BarterIntroDescription" xml:space="preserve">
+    <value>票的去向？看我的心情吧</value>
+  </data>
+  <data name="BarterCastlingInfo" xml:space="preserve">
+    <value>剩余可交换次数：{0}次
+这次会议可交换{1}次</value>
+  </data>
+  <data name="BarterRandomCastlingLabel" xml:space="preserve">
+    <value>随机交换
+使用次数</value>
   </data>
 </root>

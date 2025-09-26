@@ -928,23 +928,11 @@
   <data name="Gambler" xml:space="preserve">
     <value>投機者</value>
   </data>
-  <data name="GamblerNormalVoteRate" xml:space="preserve">
-    <value>投機者投票數為1票的概率</value>
-  </data>
   <data name="GamblerIntroDescription" xml:space="preserve">
     <value>太空有風險，投票需謹慎</value>
   </data>
   <data name="GamblerShortDescription" xml:space="preserve">
     <value>你的投票數會隨機變化</value>
-  </data>
-  <data name="GamblerFullDescription" xml:space="preserve">
-    <value>投機者屬於船員陣營。
-其會議階段的投票的等價票數會在0到2票之間變化。
-
-·被動技能“薛定諤的票數”
-投機者的投票在投票結算畫面中不會變動，無論實際投出幾票，都只會顯示投機者投出了一票。
-投機者投票數為0票與2票的概率相等，由投票數為1票的概率決定。
-例如，若投票數為1票的概率為50%，則投票數為0票與2票的概率均為25%。</value>
   </data>
   <data name="Teleporter" xml:space="preserve">
     <value>傳送師</value>

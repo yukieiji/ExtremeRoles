@@ -1242,4 +1242,16 @@ ExR 和其他设备仅以最低限度的功能启动</value>
   <data name="ThreeToThree" xml:space="preserve">
     <value>3:3</value>
   </data>
+  <data name="Detective" xml:space="preserve">
+    <value>侦探</value>
+  </data>
+  <data name="Viper" xml:space="preserve">
+    <value>毒蛇</value>
+  </data>
+  <data name="Despair" xml:space="preserve">
+    <value>压力</value>
+  </data>
+  <data name="Clashed" xml:space="preserve">
+    <value>撞击</value>
+  </data>
 </root>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using ExtremeRoles.Performance;
@@ -7,27 +7,37 @@ namespace ExtremeRoles.Module.ExtremeShipStatus;
 
 public sealed partial class ExtremeShipStatus
 {
-	public enum PlayerStatus
+	public enum PlayerStatus : byte
 	{
+		// -- 特殊勝利 --
+		// モニカ
 		LoveYou = 0,
+
+		// アサマリ周り
+		Assassinate,
+		DeadAssassinate,
+		Surrender,
+
+		// アンブレイヤー勝利
+		Zombied,
+		// -- 特殊性終了 --
+
+		// 基本
 		Alive,
 		Exiled,
 		Dead,
 		Killed,
 
+		// MOD追加
 		Suicide,
 		MissShot,
 		Retaliate,
 		Departure,
 		Martyrdom,
 		Eatting,
-
 		Explosion,
-
-		Assassinate,
-		DeadAssassinate,
-		Surrender,
-		Zombied,
+		Clashed,
+		Despair,
 
 		Disconnected,
 	}
@@ -42,7 +52,10 @@ public sealed partial class ExtremeShipStatus
 		PlayerControl killer)
 	{
 
-		if (this.deadPlayerInfo.ContainsKey(deadPlayer.PlayerId)) { return; }
+		if (this.deadPlayerInfo.ContainsKey(deadPlayer.PlayerId))
+		{
+			return;
+		}
 
 		PlayerStatus newReson = PlayerStatus.Dead;
 
@@ -68,12 +81,7 @@ public sealed partial class ExtremeShipStatus
 
 		this.deadPlayerInfo.Add(
 			deadPlayer.PlayerId,
-			new DeadInfo
-			{
-				DeadTime = DateTime.UtcNow,
-				Reason = newReson,
-				Killer = killer
-			});
+			new DeadInfo(newReson, DateTime.UtcNow, killer));
 	}
 
 	public void RemoveDeadInfo(byte targetPlayerId)
@@ -96,8 +104,11 @@ public sealed partial class ExtremeShipStatus
 	public void ReplaceDeadReason(
 		byte playerId, PlayerStatus newReason)
 	{
-		if (!this.deadPlayerInfo.ContainsKey(playerId)) { return; }
-		this.deadPlayerInfo[playerId].Reason = newReason;
+		if (!this.deadPlayerInfo.TryGetValue(playerId, out var old))
+		{
+			return;
+		}
+		this.deadPlayerInfo[playerId] = new DeadInfo(newReason, old.DeadTime, old.Killer);
 	}
 
 	private void resetDeadPlayerInfo()
@@ -105,13 +116,5 @@ public sealed partial class ExtremeShipStatus
 		this.deadPlayerInfo.Clear();
 	}
 
-	public sealed class DeadInfo
-	{
-		public PlayerStatus Reason { get; set; }
-
-		public DateTime DeadTime { get; set; }
-
-		public PlayerControl Killer { get; set; }
-	}
-
+	public readonly record struct DeadInfo(PlayerStatus Reason, DateTime DeadTime, PlayerControl Killer);
 }

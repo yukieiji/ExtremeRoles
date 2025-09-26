@@ -1,30 +1,98 @@
+using System;
 using System.Linq;
 
 using HarmonyLib;
+
+using InnerNet;
+using Il2CppSystem.Linq;
+using Il2CppSystem.Collections.Generic;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+
+using UnityHelper = ExtremeRoles.Helper.Unity;
+
+#nullable enable
 
 namespace ExtremeRoles.Patches.Manager;
 
+
+// GetAdjustedNumImpostorsのパッチが動作しないのでバニラの実装を完コピしてインポスターの人数だけ強制的にパッチを当てる
 [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.SelectRoles))]
 public static class RoleManagerAssignSelectRolesPatch
 {
-	public static void Prefix()
+	public static bool Prefix()
 	{
 		RoleAssignState.TryDestroy();
 
-		if (!ExtremeGameModeManager.Instance.EnableXion) { return; }
+		if (ExtremeGameModeManager.Instance.EnableXion)
+		{
 
-		PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
+			PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
 
-		loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
-		loaclPlayer.Data.IsDead = true;
+			loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
+			loaclPlayer.Data.IsDead = true;
+		}
+
+		var client = AmongUsClient.Instance.allClients;
+		ClientData[] allPlayerArray;
+		lock (client)
+		{
+			allPlayerArray = [..client.GetFastEnumerator()];
+		}
+		var filltedList = allPlayerArray
+			.Where(
+				c => 
+					!(
+						c == null ||
+						c.Character == null ||
+						c.Character.Data == null ||
+						c.Character.Data.Disconnected ||
+						c.Character.Data.IsDead
+					))
+			.OrderBy(c => c.Id)
+			.Select(c => c.Character.Data)
+			.ToList();
+
+		foreach (var npd in GameData.Instance.AllPlayers.GetFastEnumerator())
+		{
+			if (npd.Object != null && 
+				npd.Object.isDummy)
+			{
+				filltedList.Add(npd);
+			}
+		}
+		
+		IGameOptions currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
+		int maxRoleNum = filltedList.Count;
+		int adjustedNumImpostors =
+			ExtremeGameModeManager.Instance.RoleSelector.IsAdjustImpostorNum ?
+			currentGameOptions.GetAdjustedNumImpostors(maxRoleNum) :
+			Math.Clamp(currentGameOptions.NumImpostors, 0, maxRoleNum);
+
+
+		var il2CppFiltedList = new List<NetworkedPlayerInfo>();
+		foreach (var data in filltedList)
+		{
+			il2CppFiltedList.Add(data);
+		}
+
+		var logicRoleSelection = GameManager.Instance.LogicRoleSelection;
+		
+		logicRoleSelection.AssignRolesForTeam(
+			il2CppFiltedList, currentGameOptions, RoleTeamTypes.Impostor,
+			adjustedNumImpostors, UnityHelper.CreateNullAble(RoleTypes.Impostor));
+		logicRoleSelection.AssignRolesForTeam(
+			il2CppFiltedList, currentGameOptions, RoleTeamTypes.Crewmate,
+			int.MaxValue, UnityHelper.CreateNullAble(RoleTypes.Crewmate));
+
+		return false;
 	}
 }
 

@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Meeting;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -17,15 +18,20 @@ public sealed class Gambler :
 {
     public enum GamblerOption
     {
-        NormalVoteRate,
+        ChangeVoteChance,
         MaxVoteNum,
         MinVoteNum
     }
 
     public int Order => (int)IRoleVoteModifier.ModOrder.GamblerAddVote;
-    private int normalVoteRate;
-    private int minVoteNum;
-    private int maxVoteNum;
+    
+	private int normalVoteIndex;
+
+	private int minVoteNum;
+	private int maxVoteNum;
+
+    private byte votedFor = PlayerVoteArea.HasNotVoted;
+    private int voteCount = 1;
 
     public Gambler() : base(
 		RoleCore.BuildCrewmate(
@@ -39,39 +45,54 @@ public sealed class Gambler :
         ref Dictionary<byte, byte> voteTarget,
         ref Dictionary<byte, int> voteResult)
     {
-        if (!voteTarget.TryGetValue(rolePlayerId, out byte voteTo) ||
-            !voteResult.TryGetValue(voteTo, out int curVoteNum)) { return; }
+        if (!voteTarget.TryGetValue(rolePlayerId, out votedFor) ||
+            !voteResult.TryGetValue(votedFor, out int curVoteNum))
+        {
+            return;
+        }
 
-        int[] voteArray = new int[100];
-        int dualVoteRate = (int)Math.Floor((100 - this.normalVoteRate) / 2.0d);
-        int zeroVoteRate = 100 - dualVoteRate - this.normalVoteRate;
+		int index = RandomGenerator.Instance.Next(1, 101);
+		if (index <= this.normalVoteIndex)
+		{
+			this.voteCount = 1;
+		}
+		else
+		{
+			do
+			{
+				this.voteCount = RandomGenerator.Instance.Next(this.minVoteNum, this.maxVoteNum);
+			}
+			while (this.voteCount == 1);
+		}
 
-        Array.Fill(voteArray, 1, 0, this.normalVoteRate);
-        Array.Fill(voteArray, this.minVoteNum, this.normalVoteRate, zeroVoteRate);
-        Array.Fill(voteArray, this.maxVoteNum, this.normalVoteRate + zeroVoteRate, dualVoteRate);
+		if (this.voteCount == 1)
+        {
+            return;
+        }
 
-        int playerVoteNum = voteArray[RandomGenerator.Instance.Next(100)];
-
-        if (playerVoteNum == 1) { return; }
-
-        int newVotedNum = curVoteNum + playerVoteNum - 1;
-        voteResult[voteTo] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
+		// 自分の票数がもともと入っていて票数=curVoteNumなので、入っていた票数を消して足す
+		int newVotedNum = curVoteNum + voteCount - 1;
+		Logging.Debug($"New vote num : {newVotedNum}");
+		voteResult[this.votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
 
-    public void ModifiedVoteAnime(
-        MeetingHud instance,
-        NetworkedPlayerInfo rolePlayer,
-        ref Dictionary<byte, int> voteIndex)
-    { }
+    public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
+    {
+		// Gamblerは見た目は変更しないのでそのままにする
+		yield break;
+    }
 
     public void ResetModifier()
-    { }
+    {
+        votedFor = PlayerVoteArea.HasNotVoted;
+        voteCount = 1;
+    }
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
-            GamblerOption.NormalVoteRate,
-            50, 0, 90, 5,
+            GamblerOption.ChangeVoteChance,
+            50, 10, 100, 5,
             format: OptionUnit.Percentage);
 		factory.CreateIntOption(
             GamblerOption.MinVoteNum,
@@ -85,7 +106,10 @@ public sealed class Gambler :
 
     protected override void RoleSpecificInit()
     {
-        this.normalVoteRate = this.Loader.GetValue<GamblerOption, int>(GamblerOption.NormalVoteRate);
+        int changeIndex = this.Loader.GetValue<GamblerOption, int>(GamblerOption.ChangeVoteChance);
+
+		this.normalVoteIndex = 100 - changeIndex;
+
         this.minVoteNum = this.Loader.GetValue<GamblerOption, int>(GamblerOption.MinVoteNum);
         this.maxVoteNum = this.Loader.GetValue<GamblerOption, int>(GamblerOption.MaxVoteNum);
     }

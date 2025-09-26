@@ -454,7 +454,7 @@
   <data name="call" xml:space="preserve">
     <value>龍套體質</value>
   </data>
-  <data name="DetectiveOffice" xml:space="preserve">
+  <data name="InvestigatorOffice" xml:space="preserve">
     <value>&lt;color=#9E5C46&gt;大&lt;/color&gt;調查員&lt;color=#008A99&gt;探&lt;/color&gt;</value>
   </data>
   <data name="Investigator" xml:space="preserve">
@@ -496,28 +496,28 @@
   <data name="AssistantApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>受到照明破壞影響</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherVision" xml:space="preserve">
     <value>見習調查員擁有獨立視野</value>
   </data>
-  <data name="DetectiveApprenticeVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeVision" xml:space="preserve">
     <value>視野範圍</value>
   </data>
-  <data name="DetectiveApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
+  <data name="InvestigatorApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>受到照明破壞影響</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCount" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCount" xml:space="preserve">
     <value>見習調查員緊急召集技能使用次數</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCoolTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCoolTime" xml:space="preserve">
     <value>緊急召集的冷卻時間</value>
   </data>
-  <data name="DetectiveApprenticeAbilityActiveTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityActiveTime" xml:space="preserve">
     <value>見習調查員“緊急召集”按下緊急會議按鈕的時間</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButton" xml:space="preserve">
     <value>見習調查員緊急召集的會議不計入緊急會議次數限制</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>不計入次數限制的次數</value>
   </data>
   <data name="InvestigatorIntroDescription" xml:space="preserve">
@@ -525,29 +525,6 @@
   </data>
   <data name="InvestigatorShortDescription" xml:space="preserve">
     <value>調查案發現場留下的蛛絲馬跡</value>
-  </data>
-  <data name="InvestigatorFullDescription" xml:space="preserve">
-    <value>調查員屬於船員陣營。
-可以從案發現場搜尋線索。
-
-·主動技能“屍檢報告”
-當有屍體被報告時，那屍體所在的地點直到下一輪會議階段開始為止記錄為案發現場。
-調查員可以通過箭頭確認案發現場的位置。
-調查員在案發現場周圍停留時，可以進行調查。
-若調查員在調查過程中離開，調查進程會被重置。
-通過調查得知的信息如下。
-每一次的調查都需要一定的時間。
-在第四次調查完成時，案發現場被移除。
-第一次調查:死者死亡時刻。
-第二次調查:從死者死亡到會議召開的間隔時間。
-第三次調查:兇手的所屬陣營。
-第四次調查:兇手的職業。
-
-·被動技能“助手的援助”
-若屍體是助手報告的，則每次調查所需的時間將縮短。
-
-·被動技能“傳承”
-調查員死亡等情況下，助手的職業變為見習調查員。</value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
     <value>調查員的最佳搭檔</value>
@@ -565,10 +542,10 @@
 ·被動技能“傳承”
 助手死亡時，調查員的職業變為見習調查員。</value>
   </data>
-  <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeShortDescription" xml:space="preserve">
     <value>接過逝去的搭檔的衣缽</value>
   </data>
-  <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeFullDescription" xml:space="preserve">
     <value>見習調查員屬於船員陣營。
 見習調查員是由調查員或助手轉變而來的。
 

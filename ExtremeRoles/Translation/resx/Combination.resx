@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -58,7 +58,7 @@
 			: using a System.ComponentModel.TypeConverter
 			: and then encoded with base64 encoding.
 	-->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -412,7 +412,7 @@
   <data name="call" xml:space="preserve">
     <value>エマージェンシーコール</value>
   </data>
-  <data name="DetectiveOffice" xml:space="preserve">
+  <data name="InvestigatorOffice" xml:space="preserve">
     <value>&lt;color=#9E5C46&gt;捜査官&lt;/color&gt;と&lt;color=#008A99&gt;助手&lt;/color&gt;</value>
   </data>
   <data name="Investigator" xml:space="preserve">
@@ -454,28 +454,28 @@
   <data name="AssistantApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>助手が視界効果を受けるか</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherVision" xml:space="preserve">
     <value>見習い捜査官が別の視界設定を持つか</value>
   </data>
-  <data name="DetectiveApprenticeVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeVision" xml:space="preserve">
     <value>見習い捜査官のビジョン</value>
   </data>
-  <data name="DetectiveApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
+  <data name="InvestigatorApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>見習い捜査官が視界効果を受けるか</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCount" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCount" xml:space="preserve">
     <value>見習い捜査官「緊急招集」の使用回数</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCoolTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCoolTime" xml:space="preserve">
     <value>見習い捜査官「緊急招集」のクールタイム</value>
   </data>
-  <data name="DetectiveApprenticeAbilityActiveTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityActiveTime" xml:space="preserve">
     <value>見習い捜査官「緊急招集」によって緊急会議ボタンを押せる時間</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButton" xml:space="preserve">
     <value>見習い捜査官「緊急招集」によって緊急会議ボタンを消費しないか</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>消費されない回数</value>
   </data>
   <data name="InvestigatorIntroDescription" xml:space="preserve">
@@ -486,23 +486,33 @@
   </data>
   <data name="InvestigatorFullDescription" xml:space="preserve">
     <value>通報された死体の場所から様々な情報を得ることができるクルー役職
-通報された死体のある場所は「犯行現場」として登録される
-登録された「犯行現場」は通報があった会議終了後から次の会議
-開始時まで有効である
-有効化された「犯行現場」には矢印が表示される
-有効化された「犯行現場」の近くに一定時間同じ場所に留まる
-ことで「調査」を行うことができる。調査中に離れた場合、
-「調査」の進捗はリセットされる
-「調査」でわかる情報は以下である、各一回の「調査」には設定
-された時間がかかる、「調査」4回目が完了すると「犯行現場」は
-無効化される
-　・調査1回目：キルされた時刻
-　・調査2回目：キルされてから会議が発生するまでの時間
-　・調査3回目：キルした陣営
-　・調査4回目：キルした役職
-「助手」が通報した死体の「犯行現場」であれば「調査」に
-かかる時間が短縮される
-「捜査官」が死亡等した場合、「助手」が「見習い捜査官」になる</value>
+
+マップ位置「犯行現場」
+  ・ 通報された死体のキルされた位置が「犯行現場」
+として保存される
+  ・ 通報があった会議終了後から一定回数、
+会議が開始時まで有効である
+  ・ その位置には矢印が表示される
+  ・「犯行現場」の近くに一定時間同じ場所に留まることで
+「調査」を行うことができる
+
+・ パッシブ能力「調査」
+   ・  「犯行現場」の近くに一定時間同じ場所に
+留まることで発動
+   ・ 一回の「調査」には設定された時間がかかり、
+調査が完了すると、情報が右下に表示される
+    ・ 「調査」でわかる情報は以下である
+　   ・ 1回目：キルされた時刻
+　   ・ 2回目：キルされてから会議が発生するまでの時間
+　   ・ 3回目：キルした陣営
+　   ・ 4回目：キルした役職
+       ・ 5回目(設定によって追加) : 犯人
+   ・ 「助手」が通報した死体の「犯行現場」であれば
+「調査」にかかる時間が短縮される
+   ・ オプション「「犯行現場」の調査を継続出来るか」がオフの時、
+調査中に犯行現場を離れると調査進捗がリセットされる
+
+- 「捜査官」が死亡等した場合、「助手」が「見習い捜査官」になる</value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
     <value>優秀な捜査官になるため切磋琢磨しよう</value>
@@ -516,10 +526,10 @@
 知ることができる
 「助手」が死亡した場合、「捜査官」が「見習い捜査官」になる</value>
   </data>
-  <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeShortDescription" xml:space="preserve">
     <value>”見習い”でも1人前の捜査官として頑張ろう</value>
   </data>
-  <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeFullDescription" xml:space="preserve">
     <value>捜査官や助手が何らかの理由で変化したクルー役職
 自分の通報した死体の完全な死亡時間を会議開始時チャットにて
 知ることができる
@@ -1072,5 +1082,77 @@
   </data>
   <data name="SkaterSkateOff" xml:space="preserve">
     <value>スケート解除</value>
+  </data>
+  <data name="InvestigatorContinueSearch" xml:space="preserve">
+    <value>「犯行現場」の調査を継続出来るか</value>
+  </data>
+  <data name="InvestigatorSearchCanFindName" xml:space="preserve">
+    <value>「犯行現場」の調査で犯人がわかるか</value>
+  </data>
+  <data name="InvestigatorForceMeetingOnSearchEnd" xml:space="preserve">
+    <value>「犯行現場」の調査完了後
+強制的に会議を起こすか</value>
+  </data>
+  <data name="InvestigatorSearchCanContineMeetingNum" xml:space="preserve">
+    <value>「犯行現場」が残る会議数</value>
+  </data>
+  <data name="Barter" xml:space="preserve">
+    <value>バーター</value>
+  </data>
+  <data name="NiceBarter" xml:space="preserve">
+    <value>ナイスバーター</value>
+  </data>
+  <data name="EvilBarter" xml:space="preserve">
+    <value>イビルバーター</value>
+  </data>
+  <data name="BarterAwakeTaskRate" xml:space="preserve">
+    <value>「ナイスバーター」に覚醒する
+タスク進捗率(覚醒条件:1)</value>
+  </data>
+  <data name="BarterAwakeDeadPlayerNum" xml:space="preserve">
+    <value>「ナイスバーター」に覚醒する
+プレイヤー死亡数(覚醒条件:2)</value>
+  </data>
+  <data name="BarterAwakeKillNum" xml:space="preserve">
+    <value>「イビルバーター」に覚醒するキル数</value>
+  </data>
+  <data name="BarterCanCallMeeting" xml:space="preserve">
+    <value>会議を起こせるか</value>
+  </data>
+  <data name="BarterCastlingNum" xml:space="preserve">
+    <value>1会議あたりの「キャスリング」回数</value>
+  </data>
+  <data name="BarterMaxCastlingNumWhenMeeting" xml:space="preserve">
+    <value>全体の「キャスリング」回数</value>
+  </data>
+  <data name="BarterRandomCastling" xml:space="preserve">
+    <value>「キャスリング」をランダムにするか</value>
+  </data>
+  <data name="BarterOneCastlingNum" xml:space="preserve">
+    <value>「キャスリング」をランダムに
+発動したときの交換数</value>
+  </data>
+  <data name="BarterShowCastlingOther" xml:space="preserve">
+    <value>「キャスリング」先を他のプレイヤーに表示させるか</value>
+  </data>
+  <data name="BarterFullDescription" xml:space="preserve">
+    <value>「キャスリング」で投票先を入れ替えることが出来る役職
+
+会議能力「キャスリング」
+　・プレイヤーを選択して発動
+　・2つ目に選択したプレイヤーと1つ目に選択したプレイヤーの票を入れ替える</value>
+  </data>
+  <data name="BarterShortDescription" xml:space="preserve">
+    <value>「キャスリング」で投票をグチャグチャにしよう</value>
+  </data>
+  <data name="BarterIntroDescription" xml:space="preserve">
+    <value>票の行き先は私の気分次第</value>
+  </data>
+  <data name="BarterCastlingInfo" xml:space="preserve">
+    <value>残り使用回数：{0}回
+この会議で{1}回可能</value>
+  </data>
+  <data name="BarterRandomCastlingLabel" xml:space="preserve">
+    <value>ランダムキャスリング</value>
   </data>
 </root>

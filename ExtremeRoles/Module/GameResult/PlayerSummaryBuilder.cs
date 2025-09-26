@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using ExtremeRoles.Roles.API;
@@ -39,7 +39,7 @@ public sealed class PlayerSummaryBuilder(
 	public PlayerSummary? Create(
 		NetworkedPlayerInfo playerInfo,
 		SingleRoleBase role,
-		GhostRoleBase ghostRole)
+		GhostRoleBase? ghostRole)
 	{
 		byte playerId = playerInfo.PlayerId;
 		if (!this.taskInfo.TryGetValue(playerId, out var taskInfo))
@@ -49,8 +49,7 @@ public sealed class PlayerSummaryBuilder(
 		var finalStatus = PlayerStatus.Alive;
 
 		if (playerInfo.IsDead &&
-			this.deadInfo.TryGetValue(playerId, out var deadInfo) &&
-			deadInfo is not null)
+			this.deadInfo.TryGetValue(playerId, out var deadInfo))
 		{
 			finalStatus = deadInfo.Reason;
 		}

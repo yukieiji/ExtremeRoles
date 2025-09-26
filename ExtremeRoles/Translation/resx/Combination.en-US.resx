@@ -455,7 +455,7 @@ Your ROLE status: You're the New Neutral!
   <data name="call" xml:space="preserve">
     <value>SOS</value>
   </data>
-  <data name="DetectiveOffice" xml:space="preserve">
+  <data name="InvestigatorOffice" xml:space="preserve">
     <value>&lt;color=#9E5C46&gt;Investigator&lt;/color&gt;&amp;amp;&lt;color=#008A99&gt;Assistant&lt;/color&gt;</value>
   </data>
   <data name="Investigator" xml:space="preserve">
@@ -498,29 +498,29 @@ supported by Assistant</value>
   <data name="AssistantApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Assistant: Does sabotage effect their vision</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherVision" xml:space="preserve">
     <value>Apprentice: Has special vision settings</value>
   </data>
-  <data name="DetectiveApprenticeVision" xml:space="preserve">
+  <data name="InvestigatorApprenticeVision" xml:space="preserve">
     <value>Apprentice: Vision</value>
   </data>
-  <data name="DetectiveApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
+  <data name="InvestigatorApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Apprentice: Does sabotage effect their vision</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCount" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCount" xml:space="preserve">
     <value>Apprentice: "MEETING" : Ability Charges</value>
   </data>
-  <data name="DetectiveApprenticeAbilityCoolTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityCoolTime" xml:space="preserve">
     <value>Apprentice: "MEETING" : Ability Cooldown</value>
   </data>
-  <data name="DetectiveApprenticeAbilityActiveTime" xml:space="preserve">
+  <data name="InvestigatorApprenticeAbilityActiveTime" xml:space="preserve">
     <value>Apprentice: "MEETING" : Ability Duration</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButton" xml:space="preserve">
     <value>Apprentice: "MEETING" : Does not count as
 player's emergency meeting</value>
   </data>
-  <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
+  <data name="InvestigatorApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>Does not count up to</value>
   </data>
   <data name="InvestigatorIntroDescription" xml:space="preserve">
@@ -530,26 +530,7 @@ player's emergency meeting</value>
     <value>Investigate the scene and solve the case</value>
   </data>
   <data name="InvestigatorFullDescription" xml:space="preserve">
-    <value> A CREWMATE role with the ability to investigate clues.
- "INVESTIGATE" : Find clues left behind at the site!
-   - After a dead body is reported, the reported body's position is 
-assigned as a "Crime site".
-   - The Crime site can be investigated by standing nearby for a 
-while. Moving will stop the investigation.
-   - Crime sites of bodies reported by an "Assistant" can be 
-Investigated faster than normal.
-   - The Crime site can be investigated for only one turn (before the 
-next meeting).
-   - Investigators can know where the Crime site is by following an
-arrow.
- The investigation can lead to clues like: 
-    - 1: The date and time of the crime (UTC)
-    - 2: How many seconds did it take for the body to be reported
-    - 3: The team who did the crime
-    - 4: The Role who did the crime
-
- On the Assistant's death, your Role will switch to an 
-"Apprentice".</value>
+    <value> </value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
     <value>Investigator, let me help you too!</value>
@@ -565,10 +546,10 @@ bodies.
  On the Investigator's death, your Role will switch to an
 "Apprentice".</value>
   </data>
-  <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeShortDescription" xml:space="preserve">
     <value>You're the only "Investigator" left on the ship</value>
   </data>
-  <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
+  <data name="InvestigatorApprenticeFullDescription" xml:space="preserve">
     <value> A CREWMATE role who failed to guard their sidekick.
  You can know when the crime happened by reporting dead 
 bodies.

@@ -13,7 +13,7 @@
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v16.1.0(v2025.5.20)-green)
+![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v17.0.0(v2025.9.9)-green)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
 [![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
@@ -50,7 +50,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 
 ## 追加役職一覧
 
-- Extreme Roles v2025.9.10.0時点、今後も追加予定
+- Extreme Roles v2025.9.24.0時点、今後も追加予定
 
 ### ホスト役職
 - シオン
@@ -87,18 +87,21 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 |  ジェイラー |  テロリスト  | ファーリー |
 |  ヤードバード |  レイダー  | インティメイト |
 |  サモナー |  グリッチ  | サロゲーター |
-|  マーリン  | ハイジャッカー | ナイト  |
-|  ヒーロー  | タイムブレーカー  | ポーン |
-|  捜査官  | スカベンジャー | ヴィジランテ |
-|  助手  | アサシン | ワルガキ |
-|  見習い捜査官  | シェアーズ  | トレイター |
-|  バディーズ  | ヴィラン |  |
+|  エクソシスト  | ハイジャッカー | ナイト  |
+|  ロウワー  | タイムブレーカー | ポーン  |
+|  マーリン  | スカベンジャー  | ヴィジランテ  |
+|  ヒーロー  | ボクサー | ワルガキ |
+|  捜査官  | アサシン | トレイター |
+|  助手  | シェアーズ |  |
+|  見習い捜査官  | ヴィラン  |  |
+|  バディーズ  |  |  |
 |  ラバーズ  |  |  |
 |  サポーター |  |  |
 |  ゲッサー |  |  |
 |  ムーバー |  |  |
 |  アクセラレーター |  |  |
 |  スケーター |  |  |
+|  バーター |  |  |
 
 ### 幽霊役職
 
@@ -110,7 +113,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 |    |  ドッペルゲンガー  |  |
 
 * 「ニート」と「ラバーズ」はオプション設定によりニュートラルにもなります。(デフォルトはクルー)
-* 「ラバーズ」、「サポーター」、「ゲッサー」、「ムーバー」、「アクセラレーター」と「スケーター」はオプション設定によりインポスターにもなります。(デフォルトはクルー)
+* 「ラバーズ」、「サポーター」、「ゲッサー」、「ムーバー」、「アクセラレーター」、「スケーター」と「バーター」はオプション設定によりインポスターにもなります。(デフォルトはクルー)
 * 「サイドキック」と「見習い捜査官」、「サーヴァント」、「ドール」、「ヤードバード」、「ロォーブレーカー」、「キメラ」はゲーム開始時にはアサインされず、条件を満たした時にアサインされます
 * 「マーリン」と「アサシン」、「ヒーロー」と「ヴィラン」と「ヴィジランテ」、「捜査官」と「助手」、「ワルガキ」と「ウィスプ」は一対の関係です
 * 「シェパード」と「ファーリー」、「インティメイト」、「サロゲーター」、「ナイト」、「ポーン」は**フォールバック役職のため特定の条件(特定の役職が存在する等)と設定を行った時にしかアサインされない**
@@ -183,8 +186,8 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v17.0.0(v2025.9.9)  | v2025.9.10 |
-|  v16.0.5(v2025.5.20)/v16.1.0(v2025.5.20)  | v14.0.0.0 ～ v2025.9.7 |
+|  v17.0.0(v2025.9.9)  | v2025.9.10.0 ～ v2025.9.24 |
+|  v16.0.5(v2025.5.20)/v16.1.0(v2025.5.20)  | v14.0.0.0 ～ v2025.9.7.0 |
 |  v16.0.0(v2025.3.25)/v16.0.2(v2025.3.31)  | v13.0.0.0 ～ v13.1.2.0 |
 |  v2024.8.13s/v2024.8.13e/v2024.9.4s/v2024.9.4e<br>v2024.10.29s/v2024.10.29e/v2024.11.26s/v2024.11.26e  | v12.0.0.0 ～ v12.1.5.3 |
 |  v2024.6.18s/v2024.6.18e  | v11.0.0.0 ～ v11.1.1.0 |
@@ -292,3 +295,8 @@ You can either edit [the files](https://github.com/yukieiji/ExtremeRoles/tree/ma
   4. Open `ResXResourceManager.exe`
   5. Set Directory to Cloned path(Like /a/ExtremeRoles)
   6. Add or edit translations!!
+
+#### Q＆A
+
+- Q : Can't checkout new branch
+- A : Fork ExR again and clone it, or run `git remote prune`, `git branch -d develop`(Please delete all local `develop` branches) and try again.

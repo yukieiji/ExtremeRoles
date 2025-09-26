@@ -928,23 +928,11 @@
   <data name="Gambler" xml:space="preserve">
     <value>投机者</value>
   </data>
-  <data name="GamblerNormalVoteRate" xml:space="preserve">
-    <value>投机者投票数为1票的概率</value>
-  </data>
   <data name="GamblerIntroDescription" xml:space="preserve">
     <value>太空有风险，投票需谨慎</value>
   </data>
   <data name="GamblerShortDescription" xml:space="preserve">
     <value>你的投票数会随机变化</value>
-  </data>
-  <data name="GamblerFullDescription" xml:space="preserve">
-    <value>投机者属于船员阵营。
-其会议阶段的投票的等价票数会在0到2票之间变化。
-
-·被动技能“薛定谔的票数”
-投机者的投票在投票结算画面中不会变动，无论实际投出几票，都只会显示投机者投出了一票。
-投机者投票数为0票与2票的概率相等，由投票数为1票的概率决定。
-例如，若投票数为1票的概率为50%，则投票数为0票与2票的概率均为25%。</value>
   </data>
   <data name="Teleporter" xml:space="preserve">
     <value>传送师</value>
@@ -1303,5 +1291,143 @@
   </data>
   <data name="NoisemakerFullDescription" xml:space="preserve">
     <value>被杀时，可以在一定时间内通知所有人自己的位置</value>
+  </data>
+  <data name="Exorcist" xml:space="preserve">
+    <value>驱魔师</value>
+  </data>
+  <data name="ExorcistAwakeTaskGage" xml:space="preserve">
+    <value>驱魔师完成多少任务可在内鬼视角变为红名</value>
+  </data>
+  <data name="ExorcistAbilityCoolTime" xml:space="preserve">
+    <value>驱魔冷却时间</value>
+  </data>
+  <data name="ExorcistAbilityActiveTime" xml:space="preserve">
+    <value>驱魔所需时间</value>
+  </data>
+  <data name="ExorcistAbilityCount" xml:space="preserve">
+    <value>可驱魔次数</value>
+  </data>
+  <data name="ExorcistRange" xml:space="preserve">
+    <value>驱魔范围</value>
+  </data>
+  <data name="ExorcistWithName" xml:space="preserve">
+    <value>驱魔信息中包含死者名字</value>
+  </data>
+  <data name="ExorcistCrewBlockSystemType" xml:space="preserve">
+    <value>驱魔发动时会对他人有影响</value>
+  </data>
+  <data name="ExorcistFullDescription" xml:space="preserve">
+    <value>驱魔师属于船员阵营
+可以对尸体驱魔获得信息
+
+完成设定数量的任务可在内鬼视野里变为红名，如设定是0%则开局就是红名
+
+·主动技能“驱魔”
+对尸体进行驱魔，一段时间后尸体将被报告，并在聊天栏出现尸体信息
+如开启了驱魔发动时对他人有影响，则所有船员阵营都会无法使用技能
+</value>
+  </data>
+  <data name="ExorcistShortDescription" xml:space="preserve">
+    <value>通过驱魔获得有用的信息</value>
+  </data>
+  <data name="ExorcistIntroDescription" xml:space="preserve">
+    <value>神圣之剑，劈碎谎言！</value>
+  </data>
+  <data name="ExorcistAbility" xml:space="preserve">
+    <value>驱魔</value>
+  </data>
+  <data name="ExorcistReport" xml:space="preserve">
+    <value>“{0}”似乎是“{1}”杀的，凶手正在“{2}”</value>
+  </data>
+  <data name="ExorcistReportWithName" xml:space="preserve">
+    <value>“{1}”被“{0}”的手杀害了，原因是“{2}”</value>
+  </data>
+  <data name="Loner" xml:space="preserve">
+    <value>地雷系</value>
+  </data>
+  <data name="LonerStressMaxGage" xml:space="preserve">
+    <value>自杀所需压力值</value>
+  </data>
+  <data name="LonerStressRange" xml:space="preserve">
+    <value>压力值增长范围</value>
+  </data>
+  <data name="LonerStressIgnoreTime" xml:space="preserve">
+    <value>会议后不会增长压力值时间</value>
+  </data>
+  <data name="LonerStressProgressOnTask" xml:space="preserve">
+    <value>做任务时压力值是否增长</value>
+  </data>
+  <data name="LonerStressProgressOnVentPlayer" xml:space="preserve">
+    <value>附近的管道内有人时
+压力值是否会上升</value>
+  </data>
+  <data name="LonerStressProgressOnMovingPlatPlayer" xml:space="preserve">
+    <value>附近的梯子上有人时
+压力值是否会上升</value>
+  </data>
+  <data name="LonerIsShowArrow" xml:space="preserve">
+    <value>是否知晓附近玩家的位置</value>
+  </data>
+  <data name="LonerArrowNum" xml:space="preserve">
+    <value>显示数量</value>
+  </data>
+  <data name="LonerArrowShowVentPlayer" xml:space="preserve">
+    <value>知晓通风管中是否有人</value>
+  </data>
+  <data name="LonerFullDescription" xml:space="preserve">
+    <value>地雷系属于船员职业
+当附近有人时地雷系的压力值会上升，当压力值超过一定值地雷系会自杀
+根据设置地雷系会可见指向附近玩家的箭头
+
+压力值：{0}/{1}
+
+·被动技能“压力”
+一定范围内有人时，压力值会逐渐增加
+增加效率为1秒1点
+当范围内没人时，压力会逐渐降低
+降低效率为1秒1点</value>
+  </data>
+  <data name="LonerShortDescription" xml:space="preserve">
+    <value>注意压力值！</value>
+  </data>
+  <data name="LonerIntroDescription" xml:space="preserve">
+    <value>小心一触即爆！</value>
+  </data>
+  <data name="GamblerMinVoteNum" xml:space="preserve">
+    <value>最多票数</value>
+  </data>
+  <data name="GamblerMaxVoteNum" xml:space="preserve">
+    <value>最少票数</value>
+  </data>
+  <data name="TeleporterInitAbilityNum" xml:space="preserve">
+    <value>传送师初始可放置传送门数</value>
+  </data>
+  <data name="BlockModeAbilityButton" xml:space="preserve">
+    <value>无法使用技能</value>
+  </data>
+  <data name="BlockModeReportButton" xml:space="preserve">
+    <value>无法报告</value>
+  </data>
+  <data name="BlockModeKillButton" xml:space="preserve">
+    <value>无法击杀</value>
+  </data>
+  <data name="BlockModeAbilityAndReportButton" xml:space="preserve">
+    <value>无法使用
+技能和报告</value>
+  </data>
+  <data name="BlockModeAbilityAndKillButton" xml:space="preserve">
+    <value>无法使用
+技能和击杀</value>
+  </data>
+  <data name="BlockModeKillAndReportButton" xml:space="preserve">
+    <value>无法使用
+技能和报告</value>
+  </data>
+  <data name="BlockModeAll" xml:space="preserve">
+    <value>无法使用
+技能、击杀和报告</value>
+  </data>
+  <data name="BlockModeNone" xml:space="preserve">
+    <value>无</value>
   </data>
 </root>

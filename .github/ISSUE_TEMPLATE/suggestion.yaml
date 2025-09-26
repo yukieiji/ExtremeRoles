@@ -1,0 +1,32 @@
+name: "機能等提案/Feature suggestion"
+description: "機能等追加の提案用のテンプレート/Template for proposals for additional functions or feature, etc"
+title: "機能内容を一言で/The Feature in a nutshell"
+labels:
+  - "機能拡張/Enhancement"
+  - "提案/Suggestion"
+  - "未確認/Unconfirmed"
+body:
+  - type: markdown
+    attributes:
+      value: 新しく実装して欲しい役職の詳細を記載して下さい/Please tell me detail that you want new role
+  - type: textarea
+    attributes:
+      label: "追加する機能の詳細 / Feature details"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "現状の問題点 / Feature details"
+      placeholder: "提案されている機能がないことによって現状どういった問題/デメリット/コスト等が発生しているのか、既存機能でなぜ代替できないのかを記載してください / Please describe what problems/disadvantages/costs, etc., are currently caused by the proposed feature not being available, and why existing features cannot replace it."
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "機能を追加するメリット / Benefits of adding features"
+      placeholder: "提案される機能によって、どんな事ができるようになり、その追加された結果どういうメリットが生まれるのか / What will become possible with the proposed feature, and what benefits will result from it?"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "ユースケース / Use case"
+      placeholder: "提案された機能をいつ、どのようなタイミングで使用するか / When and under what situation to use the proposed feature"

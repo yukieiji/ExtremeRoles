@@ -466,7 +466,7 @@ public sealed class BodyGuard :
         if (shilded.IsShielding(
 			PlayerControl.LocalPlayer.PlayerId, targetPlayerId))
         {
-            return Design.ColoedString(this.Core.Color, $" ■");
+            return Design.ColoredString(this.Core.Color, $" ■");
         }
 
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);

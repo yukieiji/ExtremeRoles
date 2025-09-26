@@ -94,7 +94,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		}
 		else
 		{
-			return Design.ColoedString(
+			return Design.ColoredString(
 				Palette.White, Tr.GetString(RoleTypes.Crewmate.ToString()));
 		}
 	}
@@ -121,7 +121,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		}
 		else
 		{
-			return Design.ColoedString(
+			return Design.ColoredString(
 				Palette.White,
 				$"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
 		}
@@ -135,7 +135,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		}
 		else
 		{
-			return Design.ColoedString(
+			return Design.ColoredString(
 				Palette.CrewmateBlue,
 				PlayerControl.LocalPlayer.Data.Role.Blurb);
 		}
@@ -157,7 +157,8 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		PlayerControl rolePlayer,
 		PlayerControl killerPlayer)
 	{
-		if (!IsAwake || MeetingHud.Instance != null)
+		if (!IsAwake ||
+			MeetingHud.Instance != null)
 		{
 			return;
 		}
@@ -165,9 +166,9 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		if (localPlayer.PlayerId == killerPlayer.PlayerId)
 		{
-			var baitReporter = HudManager.Instance.gameObject.AddComponent<BaitDalayReporter>();
+			var baitReporter = HudManager.Instance.gameObject.AddComponent<BaitDelayReporter>();
 			baitReporter.StartReportTimer(
-				this.Core.Color, rolePlayer.Data,
+				rolePlayer.Data,
 				this.delayUntilForceReport);
 		}
 

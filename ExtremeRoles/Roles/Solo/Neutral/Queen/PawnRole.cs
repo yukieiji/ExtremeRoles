@@ -54,7 +54,7 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 		=> canSeeQueen(targetRole) ?
-				Design.ColoedString(
+				Design.ColoredString(
 					ColorPalette.QueenWhite,
 					$" {QueenRole.RoleShowTag}") :
 				base.GetRolePlayerNameTag(targetRole, targetPlayerId);

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
@@ -97,6 +97,8 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Bait,
 			ExtremeRoleId.Jailer,
 			ExtremeRoleId.Summoner,
+			ExtremeRoleId.Exorcist,
+			ExtremeRoleId.Loner,
 
 			ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,
@@ -129,6 +131,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Hijacker,
 			ExtremeRoleId.TimeBreaker,
 			ExtremeRoleId.Scavenger,
+			ExtremeRoleId.Boxer,
 
 			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,
@@ -161,7 +164,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 		[
             CombinationRoleType.Avalon,
             CombinationRoleType.HeroAca,
-            CombinationRoleType.DetectiveOffice,
+            CombinationRoleType.InvestigatorOffice,
             CombinationRoleType.Kids,
 
             CombinationRoleType.Lover,
@@ -174,6 +177,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             CombinationRoleType.Mover,
 			CombinationRoleType.Accelerator,
 			CombinationRoleType.Skater,
+			CombinationRoleType.Barter,
 
 			CombinationRoleType.Traitor,
         ];
