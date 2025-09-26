@@ -15,18 +15,21 @@ public static class PassiveButtonReceiveClickDownPatch
     public static bool Prefix(PassiveButton __instance)
     {
         var obj = __instance.gameObject;
+		var localPlayer = PlayerControl.LocalPlayer;
 
+		// ゲームが開始されていない、いわゆるプレイヤーがいないとかマップがない時にボタンが押せるようにするため
         if (obj == null ||
-            obj.transform.parent == null ||
+			localPlayer == null ||
+			obj.transform.parent == null ||
             obj.transform.parent.name == GameSystem.BottomRightButtonGroupObjectName ||
+			ShipStatus.Instance == null ||
             ExtremeRoleManager.GameRole.Count == 0 ||
             !RoleAssignState.Instance.IsRoleSetUpEnd)
 		{
 			return true;
 		}
 
-		if (PlayerControl.LocalPlayer == null ||
-			PlayerControl.LocalPlayer.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _))
+		if (localPlayer.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _))
 		{
 			return false;
 		}

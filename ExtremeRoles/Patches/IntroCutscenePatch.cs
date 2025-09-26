@@ -1,7 +1,10 @@
-﻿using HarmonyLib;
+using HarmonyLib;
+
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Patches;
 
@@ -50,6 +53,7 @@ public static class BeginCrewmatePatch
 		}
 	}
 }
+
 [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
 public static class IntroCutsceneCoBeginPatch
 {
@@ -60,6 +64,28 @@ public static class IntroCutsceneCoBeginPatch
 		return mod.CoBeginPrefix(__instance, ref __result);
 	}
 }
+
+[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CreatePlayer))]
+public static class IntroCutsceneCreatePlayerPatch
+{
+	public static void Postfix(
+		ref PoolablePlayer __result,
+		[HarmonyArgument(2)] NetworkedPlayerInfo pData,
+		[HarmonyArgument(3)] bool impostorPositioning)
+	{
+		if (!impostorPositioning ||
+			VanillaRoleProvider.IsImpostorRole(pData.Role.Role))
+		{
+			return;
+		}
+
+		// おそらくImpostorRedであると思われるがわからないのでImpostorのデフォルトカラーを取り出す
+		// 内部的にはfor分使って呼び出してるけどどうせデフォルト役職なので早めに取り出されると思われる
+		__result.SetNameColor(
+			RoleManager.Instance.GetRole(RoleTypes.Impostor).NameColor);
+	}
+}
+
 
 [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
 public static class IntroCutsceneSetUpRoleTextPatch
