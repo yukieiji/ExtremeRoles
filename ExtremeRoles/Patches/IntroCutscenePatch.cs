@@ -1,9 +1,10 @@
 using HarmonyLib;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.RoleAssign;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches;
 
