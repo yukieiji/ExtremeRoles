@@ -147,11 +147,10 @@ public static class MeetingHudPopulateResultsPatch
 		// 表の情報を初期化
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{
-			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+			var playerVoteArea = __instance.playerStates[i];
 			playerVoteArea.ClearForResults();
 			playerAreaMap[playerVoteArea.TargetPlayerId] = playerVoteArea;
 		}
-		playerAreaMap[PlayerVoteArea.SkippedVote] = __instance.playerStates[0];
 
 		// 各種表の情報
 		foreach (var voter in states)
