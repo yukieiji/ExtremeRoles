@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -11,7 +10,6 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
-
 
 #nullable enable
 
@@ -65,12 +63,16 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			return;
 		}
 
-		var swapInfo = system.getSwapInfo();
-		var allAnime = new List<Il2CppIEnumerator>(swapInfo.Count * 2);
+		if (system.swapList.Count == 0)
+		{
+			return;
+		}
+
+		var allAnime = new List<Il2CppIEnumerator>(pvaCache.Count * 2);
 		var voteSwapedPos = new Dictionary<byte, Vector3>(pvaCache.Count);
 
 		// 交換をシミュレートし、最終的なtとsの位置を計算
-		foreach (var (s, t) in swapInfo)
+		foreach (var (s, t) in system.swapList)
 		{
 			if (s == t ||
 				!pvaCache.TryGetValue(s, out var sPva) ||
@@ -81,9 +83,10 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 				continue;
 			}
 
+			// t => sになってしまって同じ場所にある判定になる
+			var tTruePos = voteSwapedPos.TryGetValue(t, out var tSwaped) ? tSwaped : tPva.transform.localPosition;
 			var sTruePos = voteSwapedPos.TryGetValue(s, out var sSwaped) ? sSwaped : sPva.transform.localPosition;
-			var tTruePos = voteSwapedPos.TryGetValue(t, out var tSwaped) ? tSwaped : tPva.transform.localPosition; 
-			
+
 			voteSwapedPos[s] = tTruePos;
 			voteSwapedPos[t] = sTruePos;
 		}
@@ -191,30 +194,24 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			{
 				sNewVote = 0;
 			}
-
-			if (!voteInfo.TryGetValue(s, out int tNewVote))
-			{
-				tNewVote = 0;
-			}
-
-			tempData[t] = tNewVote;
 			tempData[s] = sNewVote;
 		}
 
 		Logging.Debug($"--- swaped vote info ---");
-		var finalData = new Dictionary<byte, int>(tempData.Count);
 		foreach (var (t, v) in tempData)
 		{
 			if (v > 0)
 			{
 				Logging.Debug($"Vote to {t}, Num:{v}");
-				finalData[t] = v;
+				voteInfo[t] = v;
 			}
 		}
 
-		return finalData;
+		return voteInfo;
 	}
 
+
+	// Swapした結果の全プレイヤーの全投票位置が来る
 	private IReadOnlyDictionary<byte, byte> getSwapInfo()
 	{
 		if (this.pva is null || this.swapList.Count == 0)
@@ -224,17 +221,13 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 		if (this.cache is null)
 		{
-			this.cache = this.pva.Keys.ToDictionary(key => key, key => key);
+			this.cache = new Dictionary<byte, byte>();
 
 			// 2. 各スワップ操作をシミュレートし、マップの値を更新していく
 			foreach (var (s, t) in this.swapList)
 			{
-				if (this.cache.ContainsKey(s) &&
-					this.cache.ContainsKey(t))
-				{
-					// key1の位置とkey2の位置にある「値の出所（元のキー）」を交換する
-					(this.cache[s], this.cache[t]) = (this.cache[t], this.cache[s]);
-				}
+				this.cache[s] = t;
+				this.cache[t] = s;
 			}
 		}
 		return this.cache;
