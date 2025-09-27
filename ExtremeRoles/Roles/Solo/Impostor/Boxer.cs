@@ -145,6 +145,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 				{
 					player.MyPhysics.RpcExitVent(vent.Id);
 					vent.SetButtons(false);
+					break;
 				}
 			}
 		}
