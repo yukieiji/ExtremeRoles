@@ -179,15 +179,26 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	private IReadOnlyDictionary<byte, int> swap(Dictionary<byte, int> voteInfo)
 	{
 		var swapInfo = getSwapInfo();
+		if (swapInfo.Count == 0)
+		{
+			return voteInfo;
+		}
 
 		var tempData = new Dictionary<byte, int>(voteInfo.Count);
 		foreach (var (s, t) in swapInfo)
 		{
-			if (!voteInfo.TryGetValue(t, out int val))
+			if (!voteInfo.TryGetValue(t, out int sNewVote))
 			{
-				val = 0;
+				sNewVote = 0;
 			}
-			tempData[s] = val;
+
+			if (!voteInfo.TryGetValue(s, out int tNewVote))
+			{
+				tNewVote = 0;
+			}
+
+			tempData[t] = tNewVote;
+			tempData[s] = sNewVote;
 		}
 
 		Logging.Debug($"--- swaped vote info ---");
@@ -206,7 +217,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 	private IReadOnlyDictionary<byte, byte> getSwapInfo()
 	{
-		if (this.pva is null)
+		if (this.pva is null || this.swapList.Count == 0)
 		{
 			return new Dictionary<byte, byte>();
 		}
