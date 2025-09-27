@@ -187,13 +187,13 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		}
 
 		var finalVoteInfo = new Dictionary<byte, int>();
-		foreach (var (originalPlayer, orignalVote) in voteInfo)
+		foreach (var (originalPlayer, originalVote) in voteInfo)
 		{
 			if (!swapInfo.TryGetValue(originalPlayer, out byte target))
 			{
 				continue;
 			}
-			finalVoteInfo[target] = finalVoteInfo.GetValueOrDefault(target, 0) + orignalVote;
+			finalVoteInfo[target] = finalVoteInfo.GetValueOrDefault(target, 0) + originalVote;
 		}
 
 		return finalVoteInfo;

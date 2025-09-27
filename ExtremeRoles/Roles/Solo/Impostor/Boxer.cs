@@ -2,6 +2,7 @@ using System.Collections;
 
 using Hazel;
 using UnityEngine;
+
 using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Extension.Il2Cpp;
