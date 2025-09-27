@@ -105,15 +105,31 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		instance.StartCoroutine(Effects.All(allAnime.ToArray()));
 	}
 
-	public static bool TryGetSwapTarget(byte source, out byte target)
+	public static bool TryGetSwapTarget(byte source, out byte target, Dictionary<byte, PlayerVoteArea> pvaCache)
 	{
 		if (!TryGet(out var system))
 		{
 			target = byte.MaxValue;
 			return false;
 		}
-		var swapInfo = system.getSwapInfo();
-		return swapInfo.TryGetValue(source, out target);
+		
+		if (system.cache is null)
+		{
+			system.cache = pvaCache.Keys.ToDictionary(key => key, key => key);
+
+			// 2. 各スワップ操作をシミュレートし、マップの値を更新していく
+			foreach (var (s, t) in system.swapList)
+			{
+				if (system.cache.ContainsKey(s) &&
+					system.cache.ContainsKey(t))
+				{
+					// key1の位置とkey2の位置にある「値の出所（元のキー）」を交換する
+					(system.cache[s], system.cache[t]) = (system.cache[t], system.cache[s]);
+				}
+			}
+		}
+
+		return system.cache.TryGetValue(source, out target);
 	}
 
 	public void RpcSwapVote(byte source, byte target, ShowOps show)
@@ -181,20 +197,24 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 	private IReadOnlyDictionary<byte, int> swap(Dictionary<byte, int> voteInfo)
 	{
-		var swapInfo = getSwapInfo();
-		if (swapInfo.Count == 0)
+		if (this.swapList.Count == 0)
 		{
 			return voteInfo;
 		}
 
 		var tempData = new Dictionary<byte, int>(voteInfo.Count);
-		foreach (var (s, t) in swapInfo)
+		foreach (var (s, t) in this.swapList)
 		{
 			if (!voteInfo.TryGetValue(t, out int sNewVote))
 			{
 				sNewVote = 0;
 			}
+			if (!voteInfo.TryGetValue(s, out int tNewVote))
+			{
+				tNewVote = 0;
+			}
 			tempData[s] = sNewVote;
+			tempData[t] = tNewVote;
 		}
 
 		Logging.Debug($"--- swaped vote info ---");
@@ -208,29 +228,6 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		}
 
 		return voteInfo;
-	}
-
-
-	// Swapした結果の全プレイヤーの全投票位置が来る
-	private IReadOnlyDictionary<byte, byte> getSwapInfo()
-	{
-		if (this.pva is null || this.swapList.Count == 0)
-		{
-			return new Dictionary<byte, byte>();
-		}
-
-		if (this.cache is null)
-		{
-			this.cache = new Dictionary<byte, byte>();
-
-			// 2. 各スワップ操作をシミュレートし、マップの値を更新していく
-			foreach (var (s, t) in this.swapList)
-			{
-				this.cache[s] = t;
-				this.cache[t] = s;
-			}
-		}
-		return this.cache;
 	}
 
 	private void addImg(byte id, ImgType type, Color32 color)
