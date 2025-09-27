@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by ExtremeBepInExInstaller.rc
 
-// 新しいオブジェクトの次の既定値
+// 譁ｰ縺励＞繧ｪ繝悶ず繧ｧ繧ｯ繝医�ｮ谺｡縺ｮ譌｢螳壼､
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
