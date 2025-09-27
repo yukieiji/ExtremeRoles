@@ -63,13 +63,14 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			return;
 		}
 
-		if (system.swapList.Count == 0)
+		int size = system.swapList.Count;
+		if (size == 0)
 		{
 			return;
 		}
 
-		var allAnime = new List<Il2CppIEnumerator>(pvaCache.Count * 2);
-		var voteSwapedPos = new Dictionary<byte, Vector3>(pvaCache.Count);
+		var allAnime = new List<Il2CppIEnumerator>(size * 2);
+		var voteSwapedPos = new Dictionary<byte, Vector3>(size);
 
 		// 交換をシミュレートし、最終的なtとsの位置を計算
 		foreach (var (s, t) in system.swapList)
