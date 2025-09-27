@@ -145,11 +145,10 @@ public static class MeetingHudPopulateResultsPatch
 		}
 
 		// 表の情報を初期化
-		for (int i = 0; i < __instance.playerStates.Length; i++)
+		foreach (var pva in __instance.playerStates)
 		{
-			var playerVoteArea = __instance.playerStates[i];
-			playerVoteArea.ClearForResults();
-			playerAreaMap[playerVoteArea.TargetPlayerId] = playerVoteArea;
+			pva.ClearForResults();
+			playerAreaMap[pva.TargetPlayerId] = pva;
 		}
 
 		// 各種表の情報
