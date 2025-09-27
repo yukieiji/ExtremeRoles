@@ -4,8 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
-		<Version>2025.9.27.1</Version>
-		<!--<VersionPrefix>2025.9.27</VersionPrefix>-->
+		<!--<Version>2025.9.27.1</Version>-->
+		<VersionPrefix>2025.9.28</VersionPrefix>
     <VersionSuffix>ReBirth</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
