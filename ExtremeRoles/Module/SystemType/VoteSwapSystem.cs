@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -11,7 +10,6 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
-
 
 #nullable enable
 
@@ -65,12 +63,16 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			return;
 		}
 
-		var swapInfo = system.getSwapInfo();
-		var allAnime = new List<Il2CppIEnumerator>(swapInfo.Count * 2);
+		if (system.swapList.Count == 0)
+		{
+			return;
+		}
+
+		var allAnime = new List<Il2CppIEnumerator>(pvaCache.Count * 2);
 		var voteSwapedPos = new Dictionary<byte, Vector3>(pvaCache.Count);
 
 		// 交換をシミュレートし、最終的なtとsの位置を計算
-		foreach (var (s, t) in swapInfo)
+		foreach (var (s, t) in system.swapList)
 		{
 			if (s == t ||
 				!pvaCache.TryGetValue(s, out var sPva) ||
@@ -81,9 +83,9 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 				continue;
 			}
 
+			var tTruePos = voteSwapedPos.TryGetValue(t, out var tSwaped) ? tSwaped : tPva.transform.localPosition;
 			var sTruePos = voteSwapedPos.TryGetValue(s, out var sSwaped) ? sSwaped : sPva.transform.localPosition;
-			var tTruePos = voteSwapedPos.TryGetValue(t, out var tSwaped) ? tSwaped : tPva.transform.localPosition; 
-			
+
 			voteSwapedPos[s] = tTruePos;
 			voteSwapedPos[t] = sTruePos;
 		}
@@ -179,34 +181,29 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	private IReadOnlyDictionary<byte, int> swap(Dictionary<byte, int> voteInfo)
 	{
 		var swapInfo = getSwapInfo();
-
-		var tempData = new Dictionary<byte, int>(voteInfo.Count);
-		foreach (var (s, t) in swapInfo)
+		if (swapInfo.Count == 0)
 		{
-			if (!voteInfo.TryGetValue(t, out int val))
-			{
-				val = 0;
-			}
-			tempData[s] = val;
+			return voteInfo;
 		}
 
-		Logging.Debug($"--- swaped vote info ---");
-		var finalData = new Dictionary<byte, int>(tempData.Count);
-		foreach (var (t, v) in tempData)
+		var finalVoteInfo = new Dictionary<byte, int>();
+		foreach (var (originalPlayer, originalVote) in voteInfo)
 		{
-			if (v > 0)
+			if (!swapInfo.TryGetValue(originalPlayer, out byte target))
 			{
-				Logging.Debug($"Vote to {t}, Num:{v}");
-				finalData[t] = v;
+				continue;
 			}
+			finalVoteInfo[target] = finalVoteInfo.GetValueOrDefault(target, 0) + originalVote;
 		}
 
-		return finalData;
+		return finalVoteInfo;
 	}
 
+
+	// Swapした結果の全プレイヤーの全投票位置が来る
 	private IReadOnlyDictionary<byte, byte> getSwapInfo()
 	{
-		if (this.pva is null)
+		if (this.pva is null || this.swapList.Count == 0)
 		{
 			return new Dictionary<byte, byte>();
 		}

@@ -152,7 +152,8 @@ public sealed class TimeMasterAbilityHandler : IAbility, IKilledFrom
                         {
                             localPlayer.MyPhysics.RpcExitVent(vent.Id);
                             vent.SetButtons(false);
-                        }
+							break;
+						}
                     }
                 }
 

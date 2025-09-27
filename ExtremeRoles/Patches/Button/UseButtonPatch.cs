@@ -18,8 +18,8 @@ public static class UseButtonReceiveClickDownPatch
 			return true;
 		}
 
-		if (PlayerControl.LocalPlayer == null ||
-			PlayerControl.LocalPlayer.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _))
+		var pc = PlayerControl.LocalPlayer;
+		if (pc == null || pc.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _))
 		{
 			return false;
 		}

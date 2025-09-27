@@ -1,5 +1,9 @@
+using System.Collections;
+
 using Hazel;
 using UnityEngine;
+
+using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
@@ -11,6 +15,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+
 
 #nullable enable
 
@@ -111,14 +116,48 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 			return;
 		}
 		var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-		if (targetPlayer == null)
+		if (targetPlayer == null ||
+			targetPlayer.Data == null)
 		{
 			return;
 		}
 
-		var directionOrSpeed = new Vector2(x, y);
-		var beha = targetPlayer.gameObject.TryAddComponent<BoxerButtobiBehaviour>();
-		beha.Initialize(directionOrSpeed, role.speed, role.killSpeed, role.param);
+		targetPlayer.StartCoroutine(safeButtobi(new Vector2(x, y), targetPlayer, role));
+	}
+
+	private static IEnumerator safeButtobi(Vector2 speed, PlayerControl player, Boxer role)
+	{
+		while (player.walkingToVent)
+		{
+			yield return null;
+		}
+
+		if (player.inVent)
+		{
+			foreach (var vent in ShipStatus.Instance.AllVents)
+			{
+				bool canUse;
+				bool couldUse;
+				vent.CanUse(
+					player.Data,
+					out canUse, out couldUse);
+				if (canUse)
+				{
+					player.MyPhysics.RpcExitVent(vent.Id);
+					vent.SetButtons(false);
+					break;
+				}
+			}
+		}
+		while (!player.moveable || player.onLadder || player.inMovingPlat)
+		{
+			yield return null;
+		}
+		
+		yield return null;
+
+		var beha = player.gameObject.TryAddComponent<BoxerButtobiBehaviour>();
+		beha.Initialize(speed, role.speed, role.killSpeed, role.param);
 	}
 
 	protected override void CreateSpecificOption(
