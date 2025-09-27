@@ -25,12 +25,10 @@ public static class VentButtonDoClickPatch
 		var (useRole, anotherUseRole) =
 			ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleUsableOverride>();
 
-		if (!(
-				(useRole is null && anotherUseRole is null) ||
-				(useRole.EnableVentButton && anotherUseRole is null) ||
-				(useRole is null && anotherUseRole.EnableVentButton) ||
-				(useRole.EnableVentButton && anotherUseRole.EnableVentButton)
-			))
+		bool useRoleAllows = useRole?.EnableVentButton ?? true;
+		bool anotherRoleAllows = anotherUseRole?.EnableVentButton ?? true;
+
+		if (!(useRoleAllows && anotherRoleAllows))
 		{
 			return false;
 		}
