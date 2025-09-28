@@ -13,8 +13,14 @@ namespace ExtremeRoles.Roles.API
 
         public bool IsNeutral() => this.Core.Team == ExtremeRoleType.Neutral;
 
+        public bool IsLiberal() => this.Team == ExtremeRoleType.Liberal;
+
         public virtual bool IsSameTeam(SingleRoleBase targetRole)
         {
+            if (this.IsLiberal())
+            {
+                return targetRole.Team == ExtremeRoleType.Liberal;
+            }
 
             if (this.IsImpostor())
             {
