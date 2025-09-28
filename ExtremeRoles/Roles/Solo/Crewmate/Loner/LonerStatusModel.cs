@@ -35,7 +35,7 @@ public sealed class StressProgress(float range, float waitTime, StressProgress.O
 			return;
 		}
 		
-		if (this.waitTimer > 0.0f)
+		if (this.waitTimer >= 0.0f)
 		{
 			this.waitTimer -= deltaTime;
 			return;
