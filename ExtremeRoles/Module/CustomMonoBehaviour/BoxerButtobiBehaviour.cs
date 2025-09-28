@@ -58,9 +58,6 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 			pc.Data == null ||
 			pc.Data.Disconnected ||
 			pc.Data.IsDead ||
-			!pc.CanMove ||
-			pc.inMovingPlat ||
-			pc.onLadder ||
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null ||
 			this.PrevForce.sqrMagnitude <= 0.01f)
