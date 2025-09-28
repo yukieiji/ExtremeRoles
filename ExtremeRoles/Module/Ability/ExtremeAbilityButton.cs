@@ -47,6 +47,8 @@ public class ExtremeAbilityButton
 	private bool isShow = true;
 
 	private const string materialName = "_Desat";
+	private const float chargeFailureTime = 2.5f;
+
 	private static readonly Color TimerOnColor = new Color(0f, 0.8f, 0f);
 	private static readonly Color TimerChargeColor = Color.yellow;
 
@@ -222,7 +224,7 @@ public class ExtremeAbilityButton
 				}
 
 				// 最大までチャージして2.5f秒後経過すると失敗として再チャージを要求
-				if (this.Timer > maxTimer + 2.5f)
+				if (this.Timer > maxTimer + chargeFailureTime)
 				{
 					// 能力解除 => Ready => Chargingにする
 					// こうすることで能力を解除して再度チャージって形になる
