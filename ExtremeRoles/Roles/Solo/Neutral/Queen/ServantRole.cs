@@ -155,19 +155,21 @@ public sealed class ServantRole :
 	public bool TryRolePlayerKillTo(
 		PlayerControl rolePlayer, PlayerControl targetPlayer)
 	{
-		if (targetPlayer.PlayerId != queenPlayerId ||
-			AnotherRole?.Core.Id is not ExtremeRoleId.Sheriff)
+		if (targetPlayer.PlayerId != queenPlayerId)
 		{
 			return true;
 		}
 
-		Player.RpcUncheckMurderPlayer(
-			rolePlayer.PlayerId,
-			rolePlayer.PlayerId,
-			byte.MaxValue);
+		if (AnotherRole?.Core.Id is ExtremeRoleId.Sheriff)
+		{
+			Player.RpcUncheckMurderPlayer(
+				rolePlayer.PlayerId,
+				rolePlayer.PlayerId,
+				byte.MaxValue);
 
-		ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
-			rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
+			ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+				rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
+		}
 		return false;
 	}
 
