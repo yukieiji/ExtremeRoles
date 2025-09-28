@@ -181,7 +181,7 @@ public sealed class YandereRole :
         }
     }
 
-    public override bool TryRolePlayerKillTo(
+    public bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
         if (target.IsContain(targetPlayer.PlayerId))

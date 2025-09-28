@@ -1,4 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using TMPro;
+using UnityEngine;
+
 using AmongUs.GameOptions;
+
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -9,12 +17,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using Il2CppSystem.Xml;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
-using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 
@@ -35,7 +37,8 @@ public sealed class BarterRole :
 	MultiAssignRoleBase,
 	IRoleResetMeeting,
 	IRoleMeetingButtonAbility,
-	IRoleAwake<RoleTypes>
+	IRoleAwake<RoleTypes>,
+	ITryKillTo
 {
 
 	public enum Option
@@ -336,7 +339,7 @@ public sealed class BarterRole :
 	public string GetFakeOptionString()
 		=> "";
 
-	public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
+	public bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
 	{
 		this.updateAwakeStatus(rolePlayer);
 		return true;

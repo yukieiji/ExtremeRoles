@@ -152,26 +152,23 @@ public sealed class ServantRole :
 		}
 	}
 
-	public override bool TryRolePlayerKillTo(
+	public bool TryRolePlayerKillTo(
 		PlayerControl rolePlayer, PlayerControl targetPlayer)
 	{
-		if (targetPlayer.PlayerId == queenPlayerId)
+		if (targetPlayer.PlayerId != queenPlayerId ||
+			AnotherRole?.Core.Id is not ExtremeRoleId.Sheriff)
 		{
-			if (AnotherRole?.Core.Id == ExtremeRoleId.Sheriff)
-			{
-
-				Player.RpcUncheckMurderPlayer(
-					rolePlayer.PlayerId,
-					rolePlayer.PlayerId,
-					byte.MaxValue);
-
-				ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
-					rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
-			}
-			return false;
+			return true;
 		}
 
-		return base.TryRolePlayerKillTo(rolePlayer, targetPlayer);
+		Player.RpcUncheckMurderPlayer(
+			rolePlayer.PlayerId,
+			rolePlayer.PlayerId,
+			byte.MaxValue);
+
+		ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+			rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
+		return false;
 	}
 
 	public override string GetFullDescription()

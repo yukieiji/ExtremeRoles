@@ -298,7 +298,7 @@ public sealed class Zombie :
         }
     }
 
-    public override bool TryRolePlayerKillTo(
+    public bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
         if ((!this.awakeRole ||

@@ -351,7 +351,7 @@ public sealed class Shooter :
         }
     }
 
-    public override bool TryRolePlayerKillTo(
+    public bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
         this.curKillCount = this.curKillCount + 1;
