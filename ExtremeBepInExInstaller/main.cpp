@@ -16,8 +16,7 @@ namespace
     
     const string defaultLang = "0";
 
-    const map<string, map<string, wstring>> printString(
-        {   
+    const map<string, map<string, wstring>> printString({
             {"11",
                 {
                     {"dontClose"        , L"!!!--作業が完了するまでこのウィンドウを閉じないで下さい--!!!"},
