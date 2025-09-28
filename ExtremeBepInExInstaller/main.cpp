@@ -1,4 +1,4 @@
-#include <cstdio>
+﻿#include <cstdio>
 #include <iostream>
 #include <filesystem>
 #include <map>
@@ -16,17 +16,18 @@ namespace
     
     const string defaultLang = "0";
 
-    const map<string, map<string, wstring>> printString({
-            {"11",
-                {
-                    {"dontClose"        , L"!!!--作業が完了するまでこのウィンドウを閉じないで下さい--!!!"},
-                    {"waitAmongUs"      , L"Among Usの終了を待っています"},
-                    {"removeBeplnEx"    , L"古いバージョンのBeplnExを削除しています"},
-                    {"installBeplnEx"   , L"BeplnExをインストール中です"},
-                    {"messageBoxSuccess", L"BeplnExのインストールが完了しました。\nAmong Usを再起動して下さい"},
-                    {"messageBoxFail"   , L"BeplnExのインストールが失敗しました。\nExtreme Rolesを手動で導入して下さい"}
+    const map<string, map<string, wstring>> printString(
+        {
+                {"11",
+                    {
+                        {"dontClose"        , L"!!!--作業が完了するまでこのウィンドウを閉じないで下さい--!!!"},
+                        {"waitAmongUs"      , L"Among Usの終了を待っています"},
+                        {"removeBeplnEx"    , L"古いバージョンのBeplnExを削除しています"},
+                        {"installBeplnEx"   , L"BeplnExをインストール中です"},
+                        {"messageBoxSuccess", L"BeplnExのインストールが完了しました。\nAmong Usを再起動して下さい"},
+                        {"messageBoxFail"   , L"BeplnExのインストールが失敗しました。\nExtreme Rolesを手動で導入して下さい"}
+                    }
                 }
-            }
         });
 
     const wstring GetTimeStmp()
