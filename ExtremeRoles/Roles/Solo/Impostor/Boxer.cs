@@ -52,11 +52,11 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		var beha = new ChargingAndReclickCountBehavior(
 			Tr.GetString("BoxerAbility"),
 			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Boxer),
-			(isCharge, _) =>
+			(isCharge, gage) =>
 			{
 				if (isCharge)
 				{
-					return IsAbilityUse();
+					return IsAbilityUse() && gage > 0.0f;
 				}
 				return IRoleAbility.IsCommonUse();
 			},
@@ -89,7 +89,17 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		}
 
 		var direction = this.target.GetTruePosition() - local.GetTruePosition();
-		direction = direction.normalized * x;
+		direction = direction.normalized;
+		if (direction == Vector2.zero &&
+			local.cosmetics != null)
+		{
+			direction = local.cosmetics.FlipX ? Vector2.left : Vector2.right;
+		}
+		direction *= x;
+		if (direction == Vector2.zero)
+		{
+			return false;
+		}
 
 		using (var op = RPCOperator.CreateCaller(RPCOperator.Command.BoxerRpcOps))
 		{
