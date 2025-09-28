@@ -221,7 +221,7 @@ public class ExtremeAbilityButton
 					return;
 				}
 
-				// 最大までチャージして1.0f秒後経過すると失敗として再チャージを要求
+				// 最大までチャージして2.5f秒後経過すると失敗として再チャージを要求
 				if (this.Timer > maxTimer + 2.5f)
 				{
 					// 能力解除 => Ready => Chargingにする
