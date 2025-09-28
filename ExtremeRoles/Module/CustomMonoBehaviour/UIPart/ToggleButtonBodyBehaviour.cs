@@ -5,6 +5,8 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 [Il2CppRegister]
@@ -24,9 +26,9 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 		}
 	}
 
-	private Transform bodyTransform;
-	private Image body;
-	private Image backGround;
+	private Transform? bodyTransform;
+	private Image? body;
+	private Image? backGround;
 
 	private ColorProperty property = new ColorProperty(Color.green, Color.red, Color.white);
 	private bool active = false;
@@ -35,17 +37,19 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 	public void Awake()
 	{
 		var bk = base.transform.Find("Background");
-		if (bk != null)
+		if (bk == null)
 		{
-			if (bk.TryGetComponent<Image>(out var bkImage))
-			{
-				this.backGround = bkImage;
-			}
-			var trigger = bk.gameObject.AddComponent<EventTrigger>();
-			trigger.triggers.Add(onMouseClickEvent());
-			trigger.triggers.Add(onMouseEnterEvent());
-			trigger.triggers.Add(onMouseExitEvent());
+			return;
 		}
+
+		if (bk.TryGetComponent<Image>(out var bkImage))
+		{
+			this.backGround = bkImage;
+		}
+		var trigger = bk.gameObject.AddComponent<EventTrigger>();
+		trigger.triggers.Add(createEventEntry(EventTriggerType.PointerClick, (_) => this.Set(!this.active)));
+		trigger.triggers.Add(createEventEntry(EventTriggerType.PointerEnter, (_) => this.transform.localScale *= 1.05f));
+		trigger.triggers.Add(createEventEntry(EventTriggerType.PointerExit, (_) => this.transform.localScale /= 1.05f));
 
 		this.bodyTransform = bk.Find("ButtonBodyShadow");
 
@@ -61,38 +65,14 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 		this.Set(false);
 	}
 
-	private EventTrigger.Entry onMouseClickEvent()
+	private static EventTrigger.Entry createEventEntry(EventTriggerType trigger, Action<BaseEventData> action)
 	{
 		var callBack = new EventTrigger.TriggerEvent();
-		callBack.AddListener((UnityAction<BaseEventData>)((_) => this.Set(!this.active)));
+		callBack.AddListener((UnityAction<BaseEventData>)action);
 
 		return new EventTrigger.Entry()
 		{
-			eventID = EventTriggerType.PointerClick,
-			callback = callBack,
-		};
-	}
-
-	private EventTrigger.Entry onMouseEnterEvent()
-	{
-		var callBack = new EventTrigger.TriggerEvent();
-		callBack.AddListener((UnityAction<BaseEventData>)((_) => this.transform.localScale *= 1.05f));
-
-		return new EventTrigger.Entry()
-		{
-			eventID = EventTriggerType.PointerEnter,
-			callback = callBack,
-		};
-	}
-
-	private EventTrigger.Entry onMouseExitEvent()
-	{
-		var callBack = new EventTrigger.TriggerEvent();
-		callBack.AddListener((UnityAction<BaseEventData>)((_) => this.transform.localScale /= 1.05f));
-
-		return new EventTrigger.Entry()
-		{
-			eventID = EventTriggerType.PointerExit,
+			eventID = trigger,
 			callback = callBack,
 		};
 	}

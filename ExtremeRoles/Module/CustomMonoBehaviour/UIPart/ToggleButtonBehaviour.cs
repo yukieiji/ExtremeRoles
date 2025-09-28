@@ -2,28 +2,30 @@ using System;
 using TMPro;
 using UnityEngine;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 [Il2CppRegister]
 public sealed class ToggleButtonBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 {
-	private TextMeshProUGUI text;
-	private ToggleButtonBodyBehaviour button;
+	private TextMeshProUGUI? text;
+	private ToggleButtonBodyBehaviour? button;
 
 	public void Awake()
 	{
-		var text = base.transform.Find("Text");
-		if (text != null &&
-			text.TryGetComponent<TextMeshProUGUI>(out var textBody))
+		var textBody = base.transform.Find("Text");
+		if (textBody != null &&
+			textBody.TryGetComponent<TextMeshProUGUI>(out var textBehav))
 		{
-			this.text = textBody;
+			this.text = textBehav;
 			this.text.text = "設定済みのみを表示";
 		}
-		var body = base.transform.Find("ButtonBody");
-		if (body != null &&
-			body.TryGetComponent<ToggleButtonBodyBehaviour>(out var buttonBody))
+		var buttonBody = base.transform.Find("ButtonBody");
+		if (buttonBody != null &&
+			buttonBody.TryGetComponent<ToggleButtonBodyBehaviour>(out var buttonBehav))
 		{
-			this.button = buttonBody;
+			this.button = buttonBehav;
 		}
 	}
 }
