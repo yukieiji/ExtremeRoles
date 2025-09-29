@@ -139,30 +139,6 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 		}
 	}
 
-	public void UpdateFromEvent(InfoOverlayModel model)
-	{
-		if (!model.PanelModel.TryGetValue(model.CurShow, out var panelModel) ||
-			panelModel is null)
-		{
-			return;
-		}
-
-		var (main, sub) = panelModel.GetInfoText();
-
-		this.title.text = Tr.GetString(model.CurShow.ToString());
-		this.mainText.text = main;
-		this.subText.text = sub;
-
-		switch (panelModel)
-		{
-			case RolePagePanelModelBase pageModel:
-				this.info.text = $"({pageModel.CurPage + 1}/{pageModel.PageNum})   {Tr.GetString("changePageMore")}";
-				break;
-			default:
-				break;
-		}
-	}
-
 	private void pageModelUpdate(InfoOverlayModel model, RolePagePanelModelBase panelModel)
 	{
 		if (this.prevShow != model.CurShow)
