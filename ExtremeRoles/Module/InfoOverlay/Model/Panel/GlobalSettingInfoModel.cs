@@ -142,4 +142,9 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 
 	private static int getSpawnOptionValue(OptionCategory category, RoleSpawnOption optionKey)
 		=> category.GetValue<int>((int)optionKey);
+
+	public void UpdateVisual()
+	{
+
+	}
 }

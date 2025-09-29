@@ -1,5 +1,3 @@
-﻿using System.Collections.Generic;
-
 using ExtremeRoles.Helper;
 
 using ExtremeRoles.Roles.API;
@@ -10,7 +8,7 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 #nullable enable
 
-public sealed class AllGhostRoleInfoModel : PanelPageModelBase
+public sealed class AllGhostRoleInfoModel : RolePagePanelModelBase
 {
 	protected override void CreateAllRoleText()
 	{

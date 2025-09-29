@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -47,5 +47,10 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 			$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}\n",
 			$"・{Tr.GetString(colorRoleName)}{Tr.GetString("roleOption")}\n{roleOptionString}"
 		);
+	}
+
+	public void UpdateVisual()
+	{
+
 	}
 }

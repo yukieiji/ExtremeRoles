@@ -8,7 +8,7 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 #nullable enable
 
-public sealed class AllRoleInfoModel : PanelPageModelBase
+public sealed class AllRoleInfoModel : RolePagePanelModelBase
 {
 	protected override void CreateAllRoleText()
 	{
