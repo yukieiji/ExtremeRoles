@@ -615,7 +615,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
             rolePlayer.PlayerId);
     }
 
-    public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
+    public bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
         Assassin? assassin = ExtremeRoleManager.GameRole[targetPlayer.PlayerId] as Assassin;
 

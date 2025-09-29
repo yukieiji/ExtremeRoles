@@ -135,7 +135,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility, ITryKillTo
         true, false, true, true)
     { }
 
-    public override bool TryRolePlayerKillTo(
+    public bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
         if (isLightOff())

@@ -145,7 +145,7 @@ public sealed class PsychoKiller :
     }
 
 
-    public override bool TryRolePlayerKillTo(
+    public bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
 		if (this.combCount < this.combMax)

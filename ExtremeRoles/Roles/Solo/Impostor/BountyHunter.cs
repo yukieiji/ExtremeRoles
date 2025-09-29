@@ -85,7 +85,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
             Player.GetPlayerControlById(this.targetId).Data.PlayerName);
     }
 
-    public override bool TryRolePlayerKillTo(
+    public bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
         if (targetPlayer.PlayerId == this.targetId)

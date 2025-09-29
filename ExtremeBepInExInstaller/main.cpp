@@ -1,4 +1,4 @@
-#include <cstdio>
+ï»¿#include <cstdio>
 #include <iostream>
 #include <filesystem>
 #include <map>
@@ -17,17 +17,17 @@ namespace
     const string defaultLang = "0";
 
     const map<string, map<string, wstring>> printString(
-        {   
-            {"11",
-                {
-                    {"dontClose"        , L"!!!--ì‹Æ‚ªŠ®—¹‚·‚é‚Ü‚Å‚±‚ÌƒEƒBƒ“ƒhƒE‚ğ•Â‚¶‚È‚¢‚Å‰º‚³‚¢--!!!"},
-                    {"waitAmongUs"      , L"Among Us‚ÌI—¹‚ğ‘Ò‚Á‚Ä‚¢‚Ü‚·"},
-                    {"removeBeplnEx"    , L"ŒÃ‚¢ƒo[ƒWƒ‡ƒ“‚ÌBeplnEx‚ğíœ‚µ‚Ä‚¢‚Ü‚·"},
-                    {"installBeplnEx"   , L"BeplnEx‚ğƒCƒ“ƒXƒg[ƒ‹’†‚Å‚·"},
-                    {"messageBoxSuccess", L"BeplnEx‚ÌƒCƒ“ƒXƒg[ƒ‹‚ªŠ®—¹‚µ‚Ü‚µ‚½B\nAmong Us‚ğÄ‹N“®‚µ‚Ä‰º‚³‚¢"},
-                    {"messageBoxFail"   , L"BeplnEx‚ÌƒCƒ“ƒXƒg[ƒ‹‚ª¸”s‚µ‚Ü‚µ‚½B\nExtreme Roles‚ğè“®‚Å“±“ü‚µ‚Ä‰º‚³‚¢"}
+        {
+                {"11",
+                    {
+                        {"dontClose"        , L"!!!--ä½œæ¥­ãŒå®Œäº†ã™ã‚‹ã¾ã§ã“ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‰ã˜ãªã„ã§ä¸‹ã•ã„--!!!"},
+                        {"waitAmongUs"      , L"Among Usã®çµ‚äº†ã‚’å¾…ã£ã¦ã„ã¾ã™"},
+                        {"removeBeplnEx"    , L"å¤ã„ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã®BeplnExã‚’å‰Šé™¤ã—ã¦ã„ã¾ã™"},
+                        {"installBeplnEx"   , L"BeplnExã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ä¸­ã§ã™"},
+                        {"messageBoxSuccess", L"BeplnExã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ãŒå®Œäº†ã—ã¾ã—ãŸã€‚\nAmong Usã‚’å†èµ·å‹•ã—ã¦ä¸‹ã•ã„"},
+                        {"messageBoxFail"   , L"BeplnExã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ãŒå¤±æ•—ã—ã¾ã—ãŸã€‚\nExtreme Rolesã‚’æ‰‹å‹•ã§å°å…¥ã—ã¦ä¸‹ã•ã„"}
+                    }
                 }
-            }
         });
 
     const wstring GetTimeStmp()

@@ -50,7 +50,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
         true, true, false, false)
     { }
 
-    public override bool TryRolePlayerKillTo(
+    public bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
         var targetPlayerRole = ExtremeRoleManager.GameRole[

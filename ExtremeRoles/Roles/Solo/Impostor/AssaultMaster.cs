@@ -176,7 +176,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
 
     }
 
-    public override bool TryRolePlayerKillTo(
+    public bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
 

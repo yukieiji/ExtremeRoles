@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
 
@@ -23,8 +23,4 @@ public abstract partial class SingleRoleBase
     {
         return;
     }
-
-    public virtual bool TryRolePlayerKillTo(
-        PlayerControl rolePlayer,
-        PlayerControl targetPlayer) => true;
 }

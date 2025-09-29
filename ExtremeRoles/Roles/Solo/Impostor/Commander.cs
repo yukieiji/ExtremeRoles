@@ -112,7 +112,7 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility, ITryKillT
         return true;
     }
 
-    public override bool TryRolePlayerKillTo(
+    public bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
         ++this.killCount;

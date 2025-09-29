@@ -296,7 +296,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     public override bool IsSameTeam(SingleRoleBase targetRole) =>
         this.IsNeutralSameTeam(targetRole);
 
-    public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
+    public bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
         this.canUseButton = true;
         if (this.Button != null)
