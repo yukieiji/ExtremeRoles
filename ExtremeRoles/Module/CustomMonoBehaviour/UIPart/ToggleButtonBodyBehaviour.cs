@@ -12,19 +12,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 [Il2CppRegister]
 public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 {
-	public readonly struct ColorProperty
-	{
-		public readonly Color Active;
-		public readonly Color Deactive;
-		public readonly Color BodyColor;
-
-		public ColorProperty(Color active, Color deactive, Color body)
-		{
-			this.Active = active;
-			this.Deactive = deactive;
-			this.BodyColor = body;
-		}
-	}
+	public readonly record struct ColorProperty(Color Active, Color Deactive, Color BodyColor);
 
 	private Transform? bodyTransform;
 	private Image? body;
@@ -34,6 +22,8 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 	private ColorProperty property = new ColorProperty(Color.green, Color.red, Color.white);
 	private bool active = false;
 	private float offset = 0.5f;
+
+	private Vector3 size;
 
 	public void Awake()
 	{
@@ -47,10 +37,15 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			this.backGround = bkImage;
 		}
-		var trigger = bk.gameObject.AddComponent<EventTrigger>();
-		trigger.triggers.Add(createEventEntry(EventTriggerType.PointerClick, (_) => this.Set(!this.active)));
-		trigger.triggers.Add(createEventEntry(EventTriggerType.PointerEnter, (_) => this.transform.localScale *= 1.05f));
-		trigger.triggers.Add(createEventEntry(EventTriggerType.PointerExit, (_) => this.transform.localScale /= 1.05f));
+		this.size = this.transform.localScale;
+
+		if (!bk.TryGetComponent<EventTrigger>(out _))
+		{
+			var trigger = bk.gameObject.AddComponent<EventTrigger>();
+			trigger.triggers.Add(createEventEntry(EventTriggerType.PointerClick, (_) => this.Set(!this.active)));
+			trigger.triggers.Add(createEventEntry(EventTriggerType.PointerEnter, (_) => this.transform.localScale = this.size * 1.05f));
+			trigger.triggers.Add(createEventEntry(EventTriggerType.PointerExit, (_) => this.transform.localScale = this.size / 1.05f));
+		}
 
 		this.bodyTransform = bk.Find("ButtonBodyShadow");
 

@@ -16,6 +16,7 @@ public static class Update
 		{
 			panel.UpdateVisual();
 		}
+		model.IsDuty = true;
 	}
 
 	public static void InitializeLobby(InfoOverlayModel model)

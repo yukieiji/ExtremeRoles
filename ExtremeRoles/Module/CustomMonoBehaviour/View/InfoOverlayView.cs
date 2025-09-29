@@ -42,6 +42,8 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 	private readonly SortedDictionary<InfoOverlayModel.Type, ButtonWrapper> menu =
 		new SortedDictionary<InfoOverlayModel.Type, ButtonWrapper>();
 
+	private InfoOverlayModel.Type prevShow = (InfoOverlayModel.Type)(byte.MaxValue);
+
 	public void Awake()
 	{
 		Transform trans = base.transform;
@@ -123,10 +125,6 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 			return;
 		}
 
-		this.pageButtonParent.SetActive(false);
-		this.leftButton.onClick.RemoveAllListeners();
-		this.rightButton.onClick.RemoveAllListeners();
-
 		this.title.text = Tr.GetString(model.CurShow.ToString());
 
 		switch (panelModel)
@@ -166,23 +164,39 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 
 	private void pageModelUpdate(InfoOverlayModel model, RolePagePanelModelBase panelModel)
 	{
-		this.toggleButton.gameObject.SetActive(true);
-		this.toggleButton.Awake();
-		this.rightButton.onClick.AddListener(
-			() =>
-			{
-				Update.DecreasePage(model);
-			});
-		this.leftButton.onClick.AddListener(
-			() =>
-			{
-				Update.IncreasePage(model);
-			});
-		this.toggleButton.Initialize(
-			"設定済みのみを表示",
-			new ToggleButtonBodyBehaviour.ColorProperty(new Color(0f, 0.8f, 0f), Palette.ImpostorRed, Color.white),
-			true, (active) => panelModel.ShowActiveOnly = active);
-		this.pageButtonParent.SetActive(true);
+		if (this.prevShow != model.CurShow)
+		{
+			this.toggleButton.gameObject.SetActive(true);
+			this.toggleButton.Awake();
+
+			this.pageButtonParent.SetActive(true);
+
+			this.leftButton.onClick.RemoveAllListeners();
+			this.rightButton.onClick.RemoveAllListeners();
+
+			this.rightButton.onClick.AddListener(
+				() =>
+				{
+					Update.DecreasePage(model);
+				});
+			this.leftButton.onClick.AddListener(
+				() =>
+				{
+					Update.IncreasePage(model);
+				});
+
+			this.toggleButton.Initialize(
+				"設定済みのみを表示",
+				new ToggleButtonBodyBehaviour.ColorProperty(new Color(0f, 0.8f, 0f), Palette.ImpostorRed, Color.white),
+				model.IsShowActiveOnly, (active) =>
+				{
+					model.IsShowActiveOnly = active;
+					panelModel.ShowActiveOnly = active;
+					Update.UpdatePanel(model);
+				});
+		}
+
+		this.prevShow = model.CurShow;
 
 		var (main, sub) = panelModel.GetInfoText();
 		this.mainText.text = main;
@@ -192,10 +206,12 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 
 	private void modelUpdate(IInfoOverlayPanelModel model)
 	{
+		this.pageButtonParent.SetActive(false);
+		this.toggleButton.gameObject.SetActive(false);
+
 		var (main, sub) = model.GetInfoText();
 		this.mainText.text = main;
 		this.subText.text = sub;
 		this.info.text = "";
-		this.toggleButton.gameObject.SetActive(false);
 	}
 }

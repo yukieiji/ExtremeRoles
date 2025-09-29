@@ -12,7 +12,14 @@ namespace ExtremeRoles.Module.Interface;
 
 public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 {
-	public bool ShowActiveOnly { private get; set; }
+	public bool ShowActiveOnly
+	{
+		set
+		{
+			this.prevShow = this.curTarget.Count == 0 ? null : this.curTarget[this.CurPage];
+			this.showActiveOnly = value;
+		}
+	}
 	protected readonly record struct RoleInfo(string RoleName, string FullDec, IOption Option);
 
 	public int PageNum => this.curTarget.Count;
@@ -36,12 +43,14 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 		}
 	}
 
-	private IReadOnlyList<RoleInfo> curTarget => this.ShowActiveOnly ? curSettedRole : allPage;
+	private IReadOnlyList<RoleInfo> curTarget => this.showActiveOnly ? curSettedRole : allPage;
 
 	private readonly List<RoleInfo> curSettedRole = [];
 	private readonly List<RoleInfo> allPage = [];
 
 	private int curPage = 0;
+	private bool showActiveOnly = false;
+	private RoleInfo? prevShow;
 
 	public void UpdateVisual()
 	{
@@ -56,21 +65,23 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 			{
 				CreateAllRoleText();
 			}
-			if (this.ShowActiveOnly)
+			if (this.showActiveOnly)
 			{
-				RoleInfo? curShow = this.curTarget.Count == 0 ? null : this.curTarget[this.CurPage];
 				createSettedRolePage();
-				if (curShow.HasValue)
-				{
-					int newPage = this.curSettedRole.IndexOf(curShow.Value);
-					this.CurPage = Math.Max(0, newPage);
-				}
 			}
 		}
 		if (this.curTarget.Count == 0)
 		{
 			return ("", "");
 		}
+
+		if (this.prevShow.HasValue)
+		{
+			int newPage = this.curSettedRole.IndexOf(this.prevShow.Value);
+			this.CurPage = Math.Max(0, newPage);
+			this.prevShow = null;
+		}
+
 		var info = this.curTarget[this.CurPage];
 
 		string colorRoleName = info.RoleName;

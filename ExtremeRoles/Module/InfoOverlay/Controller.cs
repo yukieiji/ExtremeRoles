@@ -71,11 +71,7 @@ public sealed class Controller : NullableSingleton<Controller>
 	public void UpdateOnEvent()
 	{
 		UpdateFunc.UpdatePanel(this.model);
-		if (this.model.IsDuty && this.view != null)
-		{
-			this.model.IsDuty = false;
-			this.view.UpdateFromEvent(this.model);
-		}
+		this.model.IsDuty = true;
 	}
 
 	public void Update()
