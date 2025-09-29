@@ -137,6 +137,7 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 				modelUpdate(panelModel);
 				break;
 		}
+		this.prevShow = model.CurShow;
 	}
 
 	[HideFromIl2Cpp]
@@ -170,8 +171,6 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 					Update.UpdateActiveToggle(model, panelModel, active);
 				});
 		}
-
-		this.prevShow = model.CurShow;
 
 		var (main, sub) = panelModel.GetInfoText();
 		this.mainText.text = main;
