@@ -58,7 +58,6 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 				this.body = bodImg;
 			}
 		}
-		this.Set(false);
 	}
 
 	public void Initialize(ColorProperty color, bool isActive, Action<bool> act)
