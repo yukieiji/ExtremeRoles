@@ -1246,4 +1246,8 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="Clashed" xml:space="preserve">
     <value>激突</value>
   </data>
+  <data name="ShowOnlyActiveRoleInInfoOverlay" xml:space="preserve">
+    <value>設定済みの役職のみを
+表示する</value>
+  </data>
 </root>

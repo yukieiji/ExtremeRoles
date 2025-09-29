@@ -188,7 +188,7 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 				});
 
 			this.toggleButton.Initialize(
-				"設定済みのみを表示",
+				Tr.GetString("ShowOnlyActiveRoleInInfoOverlay"),
 				this.property,
 				model.IsShowActiveOnly, (active) =>
 				{
