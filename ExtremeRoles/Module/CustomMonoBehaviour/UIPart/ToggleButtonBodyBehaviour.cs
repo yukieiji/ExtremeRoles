@@ -25,7 +25,7 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 
 	private Vector3 scale;
 
-	public void Awake()
+	public void Initialize(ColorProperty color, bool isActive, Action<bool> act)
 	{
 		var bk = base.transform.Find("Background");
 		if (bk == null)
@@ -58,10 +58,7 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 				this.body = bodImg;
 			}
 		}
-	}
 
-	public void Initialize(ColorProperty color, bool isActive, Action<bool> act)
-	{
 		this.property = color;
 		this.act = act;
 

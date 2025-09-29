@@ -137,15 +137,15 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 				modelUpdate(panelModel);
 				break;
 		}
+		this.prevShow = model.CurShow;
 	}
 
+	[HideFromIl2Cpp]
 	private void pageModelUpdate(InfoOverlayModel model, RolePagePanelModelBase panelModel)
 	{
 		if (this.prevShow != model.CurShow)
 		{
 			this.toggleButton.gameObject.SetActive(true);
-			// オブジェクト等を初期化する必要があるためAwakeを自分自身で呼び出す
-			this.toggleButton.Awake();
 
 			this.pageButtonParent.SetActive(true);
 
@@ -172,14 +172,13 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 				});
 		}
 
-		this.prevShow = model.CurShow;
-
 		var (main, sub) = panelModel.GetInfoText();
 		this.mainText.text = main;
 		this.subText.text = sub;
 		this.info.text = $"({panelModel.CurPage + 1}/{panelModel.PageNum})   {Tr.GetString("changePageMore")}";
 	}
 
+	[HideFromIl2Cpp]
 	private void modelUpdate(IInfoOverlayPanelModel model)
 	{
 		this.pageButtonParent.SetActive(false);
