@@ -43,6 +43,7 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 		new SortedDictionary<InfoOverlayModel.Type, ButtonWrapper>();
 
 	private InfoOverlayModel.Type prevShow = (InfoOverlayModel.Type)(byte.MaxValue);
+	private readonly ToggleButtonBodyBehaviour.ColorProperty property = new(new Color(0f, 0.8f, 0f), Palette.ImpostorRed, Color.white);
 
 	public void Awake()
 	{
@@ -187,12 +188,10 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 
 			this.toggleButton.Initialize(
 				"設定済みのみを表示",
-				new ToggleButtonBodyBehaviour.ColorProperty(new Color(0f, 0.8f, 0f), Palette.ImpostorRed, Color.white),
+				this.property,
 				model.IsShowActiveOnly, (active) =>
 				{
-					model.IsShowActiveOnly = active;
-					panelModel.ShowActiveOnly = active;
-					Update.UpdatePanel(model);
+					Update.UpdateActiveToggle(model, panelModel, active);
 				});
 		}
 

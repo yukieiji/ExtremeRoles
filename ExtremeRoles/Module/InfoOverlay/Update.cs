@@ -10,6 +10,13 @@ namespace ExtremeRoles.Module.InfoOverlay;
 
 public static class Update
 {
+	public static void UpdateActiveToggle(InfoOverlayModel model, RolePagePanelModelBase panelModel, bool toggleOn)
+	{
+		model.IsShowActiveOnly = toggleOn;
+		panelModel.ShowActiveOnly = toggleOn;
+		UpdatePanel(model);
+	}
+
 	public static void UpdatePanel(InfoOverlayModel model)
 	{
 		foreach (var panel in model.PanelModel.Values)
