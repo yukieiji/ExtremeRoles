@@ -28,7 +28,7 @@ public static class Update
 		}
 		else if (model.PanelModel.Count >= 4)
 		{
-			foreach (InfoOverlayModel.Type value in System.Enum.GetValues(typeof(InfoOverlayModel.Type)))
+			foreach (var value in System.Enum.GetValues<InfoOverlayModel.Type>())
 			{
 				switch (value)
 				{
