@@ -1,10 +1,8 @@
-using ExtremeRoles.Helper;
-
+using System;
 using System.Collections.Generic;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using System.Linq;
-using System;
+
 
 namespace ExtremeRoles.Module.Interface;
 
@@ -43,7 +41,7 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 		}
 	}
 
-	private IReadOnlyList<RoleInfo> curTarget => this.showActiveOnly ? curSettedRole : allPage;
+	private List<RoleInfo> curTarget => this.showActiveOnly ? curSettedRole : allPage;
 
 	private readonly List<RoleInfo> curSettedRole = [];
 	private readonly List<RoleInfo> allPage = [];
@@ -77,7 +75,7 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 
 		if (this.prevShow.HasValue)
 		{
-			int newPage = this.curSettedRole.IndexOf(this.prevShow.Value);
+			int newPage = this.curTarget.IndexOf(this.prevShow.Value);
 			this.CurPage = Math.Max(0, newPage);
 			this.prevShow = null;
 		}
