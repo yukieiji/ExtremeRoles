@@ -168,6 +168,7 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 		if (this.prevShow != model.CurShow)
 		{
 			this.toggleButton.gameObject.SetActive(true);
+			// オブジェクト等を初期化する必要があるためAwakeを自分自身で呼び出す
 			this.toggleButton.Awake();
 
 			this.pageButtonParent.SetActive(true);

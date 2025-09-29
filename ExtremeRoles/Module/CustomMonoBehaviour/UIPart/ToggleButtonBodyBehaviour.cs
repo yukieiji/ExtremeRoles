@@ -98,7 +98,7 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			this.backGround.color = color;
 		}
-		this.act?.Invoke(active);
 		this.active = active;
+		this.act?.Invoke(active);
 	}
 }
