@@ -21,7 +21,7 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 
 	private ColorProperty property = new ColorProperty(Color.green, Color.red, Color.white);
 	private bool active = false;
-	private float offset = 0.5f;
+	private const float offset = 0.5f;
 
 	private Vector3 size;
 
