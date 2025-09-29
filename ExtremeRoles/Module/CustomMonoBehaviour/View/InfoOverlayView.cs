@@ -120,7 +120,7 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 		}
 
 
-		if (!model.PanelModel.TryGetValue(model.CurShow, out var panelModel) &&
+		if (!model.PanelModel.TryGetValue(model.CurShow, out var panelModel) ||
 			panelModel is null)
 		{
 			return;
@@ -141,7 +141,7 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 
 	public void UpdateFromEvent(InfoOverlayModel model)
 	{
-		if (!model.PanelModel.TryGetValue(model.CurShow, out var panelModel) &&
+		if (!model.PanelModel.TryGetValue(model.CurShow, out var panelModel) ||
 			panelModel is null)
 		{
 			return;
