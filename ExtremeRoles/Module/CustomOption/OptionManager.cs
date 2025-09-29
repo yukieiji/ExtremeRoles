@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -13,6 +13,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Extension;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Event;
 
 
 #nullable enable
@@ -74,6 +75,8 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			int categoryId = reader.ReadPackedInt32();
 			Instance.syncOption(
 				isShow, tab, categoryId, reader);
+
+			EventManager.Instance.Invoke(ModEvent.OptionUpdate);
 		}
 		catch (Exception e)
 		{
@@ -182,6 +185,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			shareOptionCategory(category);
 			category.IsDirty = true;
 		}
+		EventManager.Instance.Invoke(ModEvent.OptionUpdate);
 	}
 
 	public void ShereAllOption()
