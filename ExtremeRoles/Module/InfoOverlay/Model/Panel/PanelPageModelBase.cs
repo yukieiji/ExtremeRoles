@@ -50,6 +50,7 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 	private bool showActiveOnly = false;
 	private RoleInfo? prevShow;
 
+	// 何回も呼ばれるのでここではクリアだけしておく
 	public void UpdateVisual()
 	{
 		this.curSettedRole.Clear();
