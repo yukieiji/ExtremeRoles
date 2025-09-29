@@ -23,7 +23,7 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 	private bool active = false;
 	private const float offset = 0.5f;
 
-	private Vector3 size;
+	private Vector3 scale;
 
 	public void Awake()
 	{
@@ -37,14 +37,14 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			this.backGround = bkImage;
 		}
-		this.size = this.transform.localScale;
+		this.scale = this.transform.localScale;
 
 		if (!bk.TryGetComponent<EventTrigger>(out _))
 		{
 			var trigger = bk.gameObject.AddComponent<EventTrigger>();
 			trigger.triggers.Add(createEventEntry(EventTriggerType.PointerClick, (_) => this.Set(!this.active)));
-			trigger.triggers.Add(createEventEntry(EventTriggerType.PointerEnter, (_) => this.transform.localScale = this.size * 1.05f));
-			trigger.triggers.Add(createEventEntry(EventTriggerType.PointerExit, (_) => this.transform.localScale = this.size / 1.05f));
+			trigger.triggers.Add(createEventEntry(EventTriggerType.PointerEnter, (_) => this.transform.localScale = this.scale * 1.05f));
+			trigger.triggers.Add(createEventEntry(EventTriggerType.PointerExit, (_) => this.transform.localScale = this.scale));
 		}
 
 		this.bodyTransform = bk.Find("ButtonBodyShadow");
