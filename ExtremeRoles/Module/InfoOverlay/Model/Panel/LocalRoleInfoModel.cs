@@ -124,4 +124,9 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 			roleOptionString = awakeFromExRole.GetFakeOptionString();
 		}
 	}
+
+	public void UpdateVisual()
+	{
+
+	}
 }

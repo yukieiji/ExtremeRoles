@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.InfoOverlay.Model;
@@ -10,6 +10,14 @@ namespace ExtremeRoles.Module.InfoOverlay;
 
 public static class Update
 {
+	public static void UpdatePanel(InfoOverlayModel model)
+	{
+		foreach (var panel in model.PanelModel.Values)
+		{
+			panel.UpdateVisual();
+		}
+	}
+
 	public static void InitializeLobby(InfoOverlayModel model)
 	{
 		if (model.PanelModel == null ||
@@ -64,7 +72,7 @@ public static class Update
 	public static void IncreasePage(InfoOverlayModel model)
 	{
 		if (!model.PanelModel.TryGetValue(model.CurShow, out var panel) ||
-			panel is not PanelPageModelBase pagePanel) { return; }
+			panel is not RolePagePanelModelBase pagePanel) { return; }
 		pagePanel.CurPage = pagePanel.CurPage + 1;
 		model.IsDuty = true;
 	}
@@ -72,7 +80,7 @@ public static class Update
 	public static void DecreasePage(InfoOverlayModel model)
 	{
 		if (!model.PanelModel.TryGetValue(model.CurShow, out var panel) ||
-			panel is not PanelPageModelBase pagePanel) { return; }
+			panel is not RolePagePanelModelBase pagePanel) { return; }
 		pagePanel.CurPage = pagePanel.CurPage - 1;
 		model.IsDuty = true;
 	}

@@ -26,6 +26,19 @@ public sealed class ToggleButtonBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 			buttonBody.TryGetComponent<ToggleButtonBodyBehaviour>(out var buttonBehav))
 		{
 			this.button = buttonBehav;
+			this.button.Awake();
+		}
+	}
+
+	public void Initialize(string text, ToggleButtonBodyBehaviour.ColorProperty property, bool active, Action<bool> act)
+	{
+		if (this.text != null)
+		{
+			this.text.text = text;
+		}
+		if (this.button != null)
+		{
+			this.button.Initialize(property, active, act);
 		}
 	}
 }

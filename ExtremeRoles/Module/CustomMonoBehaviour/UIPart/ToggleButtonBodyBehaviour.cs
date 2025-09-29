@@ -29,6 +29,7 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 	private Transform? bodyTransform;
 	private Image? body;
 	private Image? backGround;
+	private Action<bool>? act;
 
 	private ColorProperty property = new ColorProperty(Color.green, Color.red, Color.white);
 	private bool active = false;
@@ -65,6 +66,19 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 		this.Set(false);
 	}
 
+	public void Initialize(ColorProperty color, bool isActive, Action<bool> act)
+	{
+		this.property = color;
+		this.act = act;
+
+		if (this.body != null)
+		{
+			this.body.color = this.property.BodyColor;
+		}
+
+		this.Set(isActive);
+	}
+
 	private static EventTrigger.Entry createEventEntry(EventTriggerType trigger, Action<BaseEventData> action)
 	{
 		var callBack = new EventTrigger.TriggerEvent();
@@ -90,6 +104,7 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			this.backGround.color = color;
 		}
+		this.act?.Invoke(active);
 		this.active = active;
 	}
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
@@ -65,6 +65,16 @@ public sealed class Controller : NullableSingleton<Controller>
 		else
 		{
 			UpdateFunc.InitializeLobby(this.model);
+		}
+	}
+
+	public void UpdateOnEvent()
+	{
+		UpdateFunc.UpdatePanel(this.model);
+		if (this.model.IsDuty && this.view != null)
+		{
+			this.model.IsDuty = false;
+			this.view.UpdateFromEvent(this.model);
 		}
 	}
 

@@ -14,6 +14,8 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.InfoOverlay;
 using ExtremeRoles.Module.InfoOverlay.Model;
 
+using ToggleButton = ExtremeRoles.Module.CustomMonoBehaviour.UIPart.ToggleButtonBehaviour;
+
 
 #nullable enable
 
@@ -34,6 +36,7 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 	private Button rightButton;
 
 	private ButtonWrapper button;
+	private ToggleButton toggleButton;
 #pragma warning restore CS8618
 
 	private readonly SortedDictionary<InfoOverlayModel.Type, ButtonWrapper> menu =
@@ -54,6 +57,8 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 
 		this.mainText = trans.Find("InfoMain/Viewport/Content").GetComponent<TextMeshProUGUI>();
 		this.subText = trans.Find("InfoSub/Viewport/Content").GetComponent<TextMeshProUGUI>();
+
+		this.toggleButton = trans.Find("ToggleButton").GetComponent<ToggleButton>();
 	}
 
 	[HideFromIl2Cpp]
@@ -111,38 +116,86 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 			}
 		}
 
-		if (model.PanelModel.TryGetValue(model.CurShow, out var panelModel) &&
-			panelModel is not null)
+
+		if (!model.PanelModel.TryGetValue(model.CurShow, out var panelModel) &&
+			panelModel is null)
 		{
-			var (main, sub) = panelModel.GetInfoText();
-
-			this.title.text = Tr.GetString(model.CurShow.ToString());
-			this.mainText.text = main;
-			this.subText.text = sub;
-
-			this.pageButtonParent.SetActive(false);
-			this.leftButton.onClick.RemoveAllListeners();
-			this.rightButton.onClick.RemoveAllListeners();
-
-			switch (panelModel)
-			{
-				case PanelPageModelBase pageModel:
-					this.pageButtonParent.SetActive(true);
-					this.info.text = $"({pageModel.CurPage + 1}/{pageModel.PageNum})   {Tr.GetString("changePageMore")}";
-					this.rightButton.onClick.AddListener(
-						() =>
-						{
-							Update.DecreasePage(model);
-						});
-					this.leftButton.onClick.AddListener(
-						() =>
-						{
-							Update.IncreasePage(model);
-						});
-					break;
-				default:
-					break;
-			}
+			return;
 		}
+
+		this.pageButtonParent.SetActive(false);
+		this.leftButton.onClick.RemoveAllListeners();
+		this.rightButton.onClick.RemoveAllListeners();
+
+		this.title.text = Tr.GetString(model.CurShow.ToString());
+
+		switch (panelModel)
+		{
+			case RolePagePanelModelBase pageModel:
+				pageModelUpdate(model, pageModel);
+				break;
+			default:
+				modelUpdate(panelModel);
+				break;
+		}
+	}
+
+	public void UpdateFromEvent(InfoOverlayModel model)
+	{
+		if (!model.PanelModel.TryGetValue(model.CurShow, out var panelModel) &&
+			panelModel is null)
+		{
+			return;
+		}
+
+		var (main, sub) = panelModel.GetInfoText();
+
+		this.title.text = Tr.GetString(model.CurShow.ToString());
+		this.mainText.text = main;
+		this.subText.text = sub;
+
+		switch (panelModel)
+		{
+			case RolePagePanelModelBase pageModel:
+				this.info.text = $"({pageModel.CurPage + 1}/{pageModel.PageNum})   {Tr.GetString("changePageMore")}";
+				break;
+			default:
+				break;
+		}
+	}
+
+	private void pageModelUpdate(InfoOverlayModel model, RolePagePanelModelBase panelModel)
+	{
+		this.toggleButton.gameObject.SetActive(true);
+		this.toggleButton.Awake();
+		this.rightButton.onClick.AddListener(
+			() =>
+			{
+				Update.DecreasePage(model);
+			});
+		this.leftButton.onClick.AddListener(
+			() =>
+			{
+				Update.IncreasePage(model);
+			});
+		this.toggleButton.Initialize(
+			"設定済みのみを表示",
+			new ToggleButtonBodyBehaviour.ColorProperty(new Color(0f, 0.8f, 0f), Palette.ImpostorRed, Color.white),
+			true, (active) => panelModel.ShowActiveOnly = active);
+		this.pageButtonParent.SetActive(true);
+
+		var (main, sub) = panelModel.GetInfoText();
+		this.mainText.text = main;
+		this.subText.text = sub;
+		this.info.text = $"({panelModel.CurPage + 1}/{panelModel.PageNum})   {Tr.GetString("changePageMore")}";
+	}
+
+	private void modelUpdate(IInfoOverlayPanelModel model)
+	{
+		var (main, sub) = model.GetInfoText();
+		this.mainText.text = main;
+		this.subText.text = sub;
+		this.info.text = "";
+		this.toggleButton.gameObject.SetActive(false);
 	}
 }
