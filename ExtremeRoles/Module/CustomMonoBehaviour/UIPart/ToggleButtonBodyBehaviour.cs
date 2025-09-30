@@ -5,6 +5,8 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+using Il2CppInterop.Runtime.Attributes;
+
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
@@ -26,7 +28,54 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 
 	private Vector3 scale = Vector3.zero;
 
+
+	[HideFromIl2Cpp]
 	public void Initialize(ColorProperty color, bool isActive, Action<bool> act)
+	{
+		setUpObject();
+
+		this.property = color;
+		this.act = act;
+
+		if (this.body != null)
+		{
+			this.body.color = this.property.BodyColor;
+		}
+
+		this.Set(isActive);
+	}
+
+	[HideFromIl2Cpp]
+	private static EventTrigger.Entry createEventEntry(EventTriggerType trigger, Action<BaseEventData> action)
+	{
+		var callBack = new EventTrigger.TriggerEvent();
+		callBack.AddListener((UnityAction<BaseEventData>)action);
+
+		return new EventTrigger.Entry()
+		{
+			eventID = trigger,
+			callback = callBack,
+		};
+	}
+
+	public void Set(bool active)
+	{
+		float x = active ? offset : -offset;
+		if (this.bodyTransform != null)
+		{
+			var curPos = this.bodyTransform.localPosition;
+			this.bodyTransform.localPosition = new Vector3(x, curPos.y, curPos.z);
+		}
+		var color = active ? this.property.Active : this.property.Deactive;
+		if (this.backGround != null)
+		{
+			this.backGround.color = color;
+		}
+		this.active = active;
+		this.act?.Invoke(active);
+	}
+
+	private void setUpObject()
 	{
 		if (this.bkTransform == null)
 		{
@@ -62,55 +111,19 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 			this.bodyTransform = this.bkTransform.Find("ButtonBodyShadow");
 		}
 
-		if (this.bodyTransform != null &&
-			this.body == null)
+
+		if (this.bodyTransform == null ||
+			this.body != null)
 		{
-			// ボタンは影の子に本体があるので、影自体のオブジェクトから本体を探すで良い
-			var bodyImgTrans = this.bodyTransform.Find("ButtonBody");
-			if (bodyImgTrans != null &&
-				this.bodyTransform.TryGetComponent<Image>(out var bodImg))
-			{
-				this.body = bodImg;
-			}
+			return;
 		}
 
-		this.property = color;
-		this.act = act;
-
-		if (this.body != null)
+		// ボタンは影の子に本体があるので、影自体のオブジェクトから本体を探すで良い
+		var bodyImgTrans = this.bodyTransform.Find("ButtonBody");
+		if (bodyImgTrans != null &&
+			this.bodyTransform.TryGetComponent<Image>(out var bodImg))
 		{
-			this.body.color = this.property.BodyColor;
+			this.body = bodImg;
 		}
-
-		this.Set(isActive);
-	}
-
-	private static EventTrigger.Entry createEventEntry(EventTriggerType trigger, Action<BaseEventData> action)
-	{
-		var callBack = new EventTrigger.TriggerEvent();
-		callBack.AddListener((UnityAction<BaseEventData>)action);
-
-		return new EventTrigger.Entry()
-		{
-			eventID = trigger,
-			callback = callBack,
-		};
-	}
-
-	public void Set(bool active)
-	{
-		float x = active ? offset : -offset;
-		if (this.bodyTransform != null)
-		{
-			var curPos = this.bodyTransform.localPosition;
-			this.bodyTransform.localPosition = new Vector3(x, curPos.y, curPos.z);
-		}
-		var color = active ? this.property.Active : this.property.Deactive;
-		if (this.backGround != null)
-		{
-			this.backGround.color = color;
-		}
-		this.active = active;
-		this.act?.Invoke(active);
 	}
 }
