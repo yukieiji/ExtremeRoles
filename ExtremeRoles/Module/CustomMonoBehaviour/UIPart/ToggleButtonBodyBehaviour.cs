@@ -118,10 +118,10 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 			return;
 		}
 
-		// ボタンは影の子に本体があるので、影自体のオブジェクトから本体を探すで良い
+		// 本体画像 => ボタン影 => ボタン本体という関係性なので
 		var bodyImgTrans = this.bodyTransform.Find("ButtonBody");
 		if (bodyImgTrans != null &&
-			this.bodyTransform.TryGetComponent<Image>(out var bodImg))
+			bodyImgTrans.TryGetComponent<Image>(out var bodImg))
 		{
 			this.body = bodImg;
 		}

@@ -42,17 +42,15 @@ public sealed class ToggleButtonBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 				this.text = textBehav;
 			}
 		}
-		
-		if (this.button != null)
-		{
-			return;
-		}
 
-		var buttonBody = base.transform.Find("ButtonBody");
-		if (buttonBody != null &&
-			buttonBody.TryGetComponent<ToggleButtonBodyBehaviour>(out var buttonBehav))
+		if (this.button == null)
 		{
-			this.button = buttonBehav;
+			var buttonBody = base.transform.Find("ButtonBody");
+			if (buttonBody != null &&
+				buttonBody.TryGetComponent<ToggleButtonBodyBehaviour>(out var buttonBehav))
+			{
+				this.button = buttonBehav;
+			}
 		}
 	}
 }
