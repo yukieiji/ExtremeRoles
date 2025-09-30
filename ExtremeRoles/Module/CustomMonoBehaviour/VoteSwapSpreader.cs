@@ -49,22 +49,23 @@ public sealed class VoteSwapSpreader : MonoBehaviour
 		for (int i = 0; i < num; i++)
 		{
 			var spriteRenderer = this.vote[i];
+			var transform = spriteRenderer.transform;
 
 			// 追加: 親オブジェクトの変更と座標の維持
-			if (spriteRenderer.transform.parent != this.target)
+			if (transform.parent != this.target)
 			{
 				// 親オブジェクトから切り離した際のワールド座標を保持
-				spriteRenderer.transform.GetPositionAndRotation(out var currentWorldPosition, out var currentWorldRotation);
+				transform.GetPositionAndRotation(out var currentWorldPosition, out var currentWorldRotation);
 				
 				// 新しい親を設定
-				spriteRenderer.transform.parent = this.target;
+				transform.parent = this.target;
 				if (this.target.TryGetComponent<PlayerVoteArea>(out var component))
 				{
 					spriteRenderer.material.SetInt(PlayerMaterial.MaskLayer, component.MaskLayer);
 				}
 
 				// ワールド座標を再適用して、位置がジャンプしないようにする
-				spriteRenderer.transform.SetPositionAndRotation(currentWorldPosition, currentWorldRotation);
+				transform.SetPositionAndRotation(currentWorldPosition, currentWorldRotation);
 			}
 
 			Vector2 vector = new Vector3(0f, this.counterY);
@@ -75,7 +76,7 @@ public sealed class VoteSwapSpreader : MonoBehaviour
 			var targetWorldPosition = this.target.TransformPoint(localPos);
 
 			// ワールド座標でLerpを使ってスムーズに移動
-			spriteRenderer.transform.position = Vector3.Lerp(spriteRenderer.transform.position, targetWorldPosition, Time.deltaTime * this.adjustRate);
+			transform.position = Vector3.Lerp(transform.position, targetWorldPosition, Time.deltaTime * this.adjustRate);
 		}
 	}
 
