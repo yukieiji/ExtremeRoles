@@ -194,7 +194,6 @@ public sealed class Heretic :
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 		=> this.IsNeutralSameTeam(targetRole) ||
-			targetRole.IsImpostor() || 
 			(targetRole.IsImpostor() && !this.canKillImpostor);
 
 	public void ResetOnMeetingStart()
