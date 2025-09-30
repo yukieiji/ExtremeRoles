@@ -1,7 +1,7 @@
 ### Quick Link
  - [Latest Release](https://github.com/yukieiji/ExtremeRoles/releases/latest)
  - [Wiki](https://yukieiji.github.io/ExtremeRoles.Docs/)
- - [How to translate](https://github.com/yukieiji/ExtremeRoles/tree/master?tab=readme-ov-file#how-to-translate)
+ - [How to translate](https://github.com/yukieiji/ExtremeRoles/tree/master/doc/en/README.md?tab=readme-ov-file#how-to-translate)
 <div><img src="../img/burner.png" /></div>
 
 <div align="center"><h1>Extreme Roles, Extreme Skins and Engine Voice Engine</h1></div>
@@ -20,7 +20,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 
 ---
 
-# Extreme Roles
+## Extreme Roles
 Main features include:
 - Addition of a third faction, "Neutral," and ghost roles.
 - **Over 100 unique roles** added.
@@ -43,14 +43,14 @@ Main features include:
 - Multilingual support (currently only English, Japanese, and Simplified Chinese!!).
 - Equipped with a REST API that can acquire a wide variety of information (if you want an API, please contact us).
 
-## Additional Role List
+### Additional Role List
 
 - As of Extreme Roles v2025.9.24.0, more will be added in the future.
 
-### Host Role
+#### Host Role
 - Xion
 
-### Normal Roles
+#### Normal Roles
 
 |  Crewmate  |  Impostor  | Neutral |
 | ---- | ---- | ---- |
@@ -98,7 +98,7 @@ Main features include:
 |  Skater |  |  |
 |  Barter |  |  |
 
-### Ghost Roles
+#### Ghost Roles
 
 |  Crewmate  |  Impostor  | Neutral |
 | ---- | ---- | ---- |
@@ -115,7 +115,8 @@ Main features include:
 * "Shepherd", "Intimate", and "Knight" **become sub-team roles with specific settings.**
 * For details, see [Roles on the Wiki](https://yukieiji.github.io/ExtremeRoles.Docs/docs/%E8%BF%BD%E5%8A%A0%E5%BD%B9%E8%81%B7/%E8%BF%BD%E5%8A%A0%E5%BD%B9%E8%81%B7.html).
 
-# Extreme Skins
+## Extreme Skins
+
 An add-on for adding cosmetics to Extreme Roles. Main features include:
 - MOD update/version check function.
 - In addition to normal skins, "animated skins" that can be animated have been added (only for hats and visors).
@@ -126,7 +127,7 @@ An add-on for adding cosmetics to Extreme Roles. Main features include:
 
 ### If you want to make your own hat or visor, or want to publish the hat or visor you made, please contact me on Twitter etc.!!
 
-# Extreme Voice Engine
+## Extreme Voice Engine
 A client add-on that adds a text-to-speech function to Extreme Roles. Main features include:
 - A client add-on that works if only those who want to use it install it.
 - Reading out meeting chats, etc. using synthetic voice software.
@@ -136,14 +137,12 @@ A client add-on that adds a text-to-speech function to Extreme Roles. Main featu
    - Please check the Wiki for details.
 
 
-# Currently confirmed bugs
+## Known bugs
 - When ExtremeVoiceEngine is installed and Xion's command is used while using Xion, it displays "Invalid command" even though it is working.
   - This bug is a display problem that occurs because ExtremeVoiceEngine and ExtremeRoles have implemented separate command processing, so it has no effect on operation.
 
-# Release Schedule
 
-
-# Compatible versions with AmongUs and download of the latest version
+## Release
 - You can download the latest version from [here](https://github.com/yukieiji/ExtremeRoles/releases/latest).
 - Extreme Roles v (version number) is without skins, Extreme Roles v (version number) with Extreme Skins is with skins.
 
@@ -173,7 +172,7 @@ A client add-on that adds a text-to-speech function to Extreme Roles. Main featu
 |  v2021.12.15s/v2022.02.08s/v2021.12.15e  |  v1.17.0.0 ～ v1.18.1.0  |
 |  v2021.12.15s/v2021.12.15e  |  v1.11.1.1 ～ v1.16.1.0  |
 
-# How to build
+### How to build
 - If you can't build due to errors, etc., please contact us and we will respond.
 - Required environment
   - VisualStudio 2022
@@ -188,7 +187,8 @@ A client add-on that adds a text-to-speech function to Extreme Roles. Main featu
      - The first build will take some time because it will restore the Nuget package.
      - If the assets are not loaded properly, try building again.
 
-# Credits & Thanks
+## Credits & Thanks
+
 - TheOtherRoles - We have been developing by referencing, quoting, and modifying the code of [TOR](https://github.com/Eisbison/TheOtherRoles) and [TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM) (except for the parts related to roles (options, patches, etc.)) since the time of development. It would have been impossible to develop this MOD without TOR. Also the source of ideas for Bounty Hunter, Carpenter, Shooter, and Captain.
 - [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - MOD created by **Dhalucard**, source of ideas for Jackal and Sidekick.
 - [Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - MOD created by **Woodi-dev**, source of ideas for Sheriff.
@@ -218,7 +218,7 @@ A client add-on that adds a text-to-speech function to Extreme Roles. Main featu
         - VOICEVOX:Zundamon
 
 
-## About the button icon
+### About the button icon
 The button icon image is created based on public domain material whose copyright has been waived. If you don't like it and want to replace it, please contact us.
 
 ## About multilingual support (Translation)
