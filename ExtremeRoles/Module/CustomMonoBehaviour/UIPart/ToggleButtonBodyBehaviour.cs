@@ -14,6 +14,7 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 {
 	public readonly record struct ColorProperty(Color Active, Color Deactive, Color BodyColor);
 
+	private Transform? bkTransform;
 	private Transform? bodyTransform;
 	private Image? body;
 	private Image? backGround;
@@ -23,37 +24,51 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 	private bool active = false;
 	private const float offset = 0.5f;
 
-	private Vector3 scale;
+	private Vector3 scale = Vector3.zero;
 
 	public void Initialize(ColorProperty color, bool isActive, Action<bool> act)
 	{
-		var bk = base.transform.Find("Background");
-		if (bk == null)
+		if (this.bkTransform == null)
+		{
+			this.bkTransform = base.transform.Find("Background");
+		}
+
+		if (this.bkTransform == null)
 		{
 			return;
 		}
 
-		if (bk.TryGetComponent<Image>(out var bkImage))
+		if (this.backGround == null &&
+			this.bkTransform.TryGetComponent<Image>(out var bkImage))
 		{
 			this.backGround = bkImage;
 		}
-		this.scale = this.transform.localScale;
 
-		if (!bk.TryGetComponent<EventTrigger>(out _))
+		if (this.scale == Vector3.zero)
 		{
-			var trigger = bk.gameObject.AddComponent<EventTrigger>();
+			this.scale = this.transform.localScale;
+		}
+
+		if (!this.bkTransform.TryGetComponent<EventTrigger>(out _))
+		{
+			var trigger = this.bkTransform.gameObject.AddComponent<EventTrigger>();
 			trigger.triggers.Add(createEventEntry(EventTriggerType.PointerClick, (_) => this.Set(!this.active)));
 			trigger.triggers.Add(createEventEntry(EventTriggerType.PointerEnter, (_) => this.transform.localScale = this.scale * 1.05f));
 			trigger.triggers.Add(createEventEntry(EventTriggerType.PointerExit, (_) => this.transform.localScale = this.scale));
 		}
 
-		this.bodyTransform = bk.Find("ButtonBodyShadow");
-
-		if (this.bodyTransform != null)
+		if (this.bodyTransform == null)
 		{
+			this.bodyTransform = this.bkTransform.Find("ButtonBodyShadow");
+		}
+
+		if (this.bodyTransform != null &&
+			this.body == null)
+		{
+			// ボタンは影の子に本体があるので、影自体のオブジェクトから本体を探すで良い
 			var bodyImgTrans = this.bodyTransform.Find("ButtonBody");
 			if (bodyImgTrans != null &&
-				bodyTransform.TryGetComponent<Image>(out var bodImg))
+				this.bodyTransform.TryGetComponent<Image>(out var bodImg))
 			{
 				this.body = bodImg;
 			}

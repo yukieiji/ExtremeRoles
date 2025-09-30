@@ -14,17 +14,23 @@ public sealed class ToggleButtonBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 
 	public void Initialize(string text, ToggleButtonBodyBehaviour.ColorProperty property, bool active, Action<bool> act)
 	{
-		var textBody = base.transform.Find("Text");
-		if (textBody != null &&
-			textBody.TryGetComponent<TextMeshProUGUI>(out var textBehav))
+		if (this.text == null)
 		{
-			this.text = textBehav;
+			var textBody = base.transform.Find("Text");
+			if (textBody != null &&
+				textBody.TryGetComponent<TextMeshProUGUI>(out var textBehav))
+			{
+				this.text = textBehav;
+			}
 		}
-		var buttonBody = base.transform.Find("ButtonBody");
-		if (buttonBody != null &&
-			buttonBody.TryGetComponent<ToggleButtonBodyBehaviour>(out var buttonBehav))
+		if (this.button == null)
 		{
-			this.button = buttonBehav;
+			var buttonBody = base.transform.Find("ButtonBody");
+			if (buttonBody != null &&
+				buttonBody.TryGetComponent<ToggleButtonBodyBehaviour>(out var buttonBehav))
+			{
+				this.button = buttonBehav;
+			}
 		}
 
 		if (this.text != null)
