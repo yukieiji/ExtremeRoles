@@ -112,6 +112,20 @@ dotnet_diagnostic.UNT0026.severity = warning
 dotnet_diagnostic.UNT0028.severity = warning
 dotnet_diagnostic.UNT0024.severity = warning
 csharp_prefer_system_threading_lock = true:suggestion
+csharp_style_prefer_simple_property_accessors = true:suggestion
+csharp_prefer_static_anonymous_function = true:suggestion
+csharp_style_prefer_readonly_struct_member = true:suggestion
+csharp_style_prefer_implicitly_typed_lambda_expression = true:suggestion
+csharp_style_prefer_unbound_generic_type_in_nameof = true:suggestion
+csharp_style_allow_blank_line_after_token_in_conditional_expression_experimental = true:silent
+csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental = true:silent
+dotnet_diagnostic.UNT0038.severity = suggestion
+dotnet_diagnostic.UNT0032.severity = warning
+dotnet_diagnostic.UNT0037.severity = warning
+dotnet_diagnostic.UNT0036.severity = warning
+dotnet_diagnostic.UNT0034.severity = warning
+dotnet_diagnostic.UNT0035.severity = warning
+dotnet_diagnostic.UNT0022.severity = warning
 
 [*.vb]
 
@@ -171,5 +185,10 @@ dotnet_diagnostic.CA1806.severity = suggestion
 dotnet_diagnostic.CA1868.severity = warning
 dotnet_diagnostic.CA1860.severity = warning
 dotnet_diagnostic.CA1826.severity = warning
+dotnet_style_prefer_collection_expression = when_types_loosely_match:suggestion
+dotnet_diagnostic.CA1822.severity = suggestion
+dotnet_diagnostic.CA1853.severity = suggestion
+dotnet_diagnostic.CA1854.severity = suggestion
+dotnet_diagnostic.CA1858.severity = warning
 
 

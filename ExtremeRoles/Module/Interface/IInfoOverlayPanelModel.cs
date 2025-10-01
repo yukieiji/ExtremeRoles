@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
@@ -6,6 +6,7 @@ namespace ExtremeRoles.Module.Interface;
 
 public interface IInfoOverlayPanelModel
 {
+	public void UpdateVisual();
 	public (string, string) GetInfoText();
 
 	protected static string ToHudStringWithChildren(IOption option, int indent = 0)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 #nullable enable
@@ -67,11 +67,12 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 		// 始点から終点への方向ベクトルを求める
 		Vector3 direction = target - this.start;
 
-		// 対象オブジェクトを中間点に配置する
-		this.transform.position = Vector3.Lerp(this.start, target, 0.5f);
-
-		// 指定した方向に回転
-		this.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
+        // 対象オブジェクトを中間点に配置する
+        // 指定した方向に回転
+        this.transform.SetPositionAndRotation(
+			Vector3.Lerp(this.start, target, 0.5f),
+            Quaternion.FromToRotation(Vector3.right, direction)
+        );
 
 		// 画像が横になってるから特定の角度でyとxを逆にする
 		var angle = this.transform.rotation.eulerAngles;

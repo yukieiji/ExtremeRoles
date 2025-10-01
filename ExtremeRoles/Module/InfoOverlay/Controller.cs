@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
+using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.InfoOverlay.Model;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
 using UpdateFunc = ExtremeRoles.Module.InfoOverlay.Update;
@@ -37,6 +37,7 @@ public sealed class Controller : NullableSingleton<Controller>
 	{
 		this.model = new InfoOverlayModel();
 		this.button = new HelpButton();
+		EventManager.Instance.Register(new EventUpdator(), ModEvent.OptionUpdate);
 	}
 
 	public void Hide()
@@ -66,6 +67,12 @@ public sealed class Controller : NullableSingleton<Controller>
 		{
 			UpdateFunc.InitializeLobby(this.model);
 		}
+	}
+
+	public void UpdateOnEvent()
+	{
+		UpdateFunc.UpdatePanel(this.model);
+		this.model.IsDuty = true;
 	}
 
 	public void Update()

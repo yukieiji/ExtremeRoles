@@ -14,6 +14,8 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.InfoOverlay;
 using ExtremeRoles.Module.InfoOverlay.Model;
 
+using ToggleButton = ExtremeRoles.Module.CustomMonoBehaviour.UIPart.ToggleButtonBehaviour;
+
 
 #nullable enable
 
@@ -34,10 +36,14 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 	private Button rightButton;
 
 	private ButtonWrapper button;
+	private ToggleButton toggleButton;
 #pragma warning restore CS8618
 
 	private readonly SortedDictionary<InfoOverlayModel.Type, ButtonWrapper> menu =
 		new SortedDictionary<InfoOverlayModel.Type, ButtonWrapper>();
+
+	private InfoOverlayModel.Type prevShow = (InfoOverlayModel.Type)(byte.MaxValue);
+	private readonly ToggleButtonBodyBehaviour.ColorProperty property = new(new Color(0f, 0.8f, 0f), Palette.ImpostorRed, Color.white);
 
 	public void Awake()
 	{
@@ -54,6 +60,8 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 
 		this.mainText = trans.Find("InfoMain/Viewport/Content").GetComponent<TextMeshProUGUI>();
 		this.subText = trans.Find("InfoSub/Viewport/Content").GetComponent<TextMeshProUGUI>();
+
+		this.toggleButton = trans.Find("ToggleButton").GetComponent<ToggleButton>();
 	}
 
 	[HideFromIl2Cpp]
@@ -111,38 +119,74 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 			}
 		}
 
-		if (model.PanelModel.TryGetValue(model.CurShow, out var panelModel) &&
-			panelModel is not null)
+
+		if (!model.PanelModel.TryGetValue(model.CurShow, out var panelModel) ||
+			panelModel is null)
 		{
-			var (main, sub) = panelModel.GetInfoText();
+			return;
+		}
 
-			this.title.text = Tr.GetString(model.CurShow.ToString());
-			this.mainText.text = main;
-			this.subText.text = sub;
+		this.title.text = Tr.GetString(model.CurShow.ToString());
 
-			this.pageButtonParent.SetActive(false);
+		switch (panelModel)
+		{
+			case RolePagePanelModelBase pageModel:
+				pageModelUpdate(model, pageModel);
+				break;
+			default:
+				modelUpdate(panelModel);
+				break;
+		}
+		this.prevShow = model.CurShow;
+	}
+
+	[HideFromIl2Cpp]
+	private void pageModelUpdate(InfoOverlayModel model, RolePagePanelModelBase panelModel)
+	{
+		if (this.prevShow != model.CurShow)
+		{
+			this.toggleButton.gameObject.SetActive(true);
+
+			this.pageButtonParent.SetActive(true);
+
 			this.leftButton.onClick.RemoveAllListeners();
 			this.rightButton.onClick.RemoveAllListeners();
 
-			switch (panelModel)
-			{
-				case PanelPageModelBase pageModel:
-					this.pageButtonParent.SetActive(true);
-					this.info.text = $"({pageModel.CurPage + 1}/{pageModel.PageNum})   {Tr.GetString("changePageMore")}";
-					this.rightButton.onClick.AddListener(
-						() =>
-						{
-							Update.DecreasePage(model);
-						});
-					this.leftButton.onClick.AddListener(
-						() =>
-						{
-							Update.IncreasePage(model);
-						});
-					break;
-				default:
-					break;
-			}
+			this.rightButton.onClick.AddListener(
+				() =>
+				{
+					Update.DecreasePage(model);
+				});
+			this.leftButton.onClick.AddListener(
+				() =>
+				{
+					Update.IncreasePage(model);
+				});
+
+			this.toggleButton.Initialize(
+				Tr.GetString("ShowOnlyActiveRoleInInfoOverlay"),
+				this.property,
+				model.IsShowActiveOnly, (active) =>
+				{
+					Update.UpdateActiveToggle(model, panelModel, active);
+				});
 		}
+
+		var (main, sub) = panelModel.GetInfoText();
+		this.mainText.text = main;
+		this.subText.text = sub;
+		this.info.text = $"({panelModel.CurPage + 1}/{panelModel.PageNum})   {Tr.GetString("changePageMore")}";
+	}
+
+	[HideFromIl2Cpp]
+	private void modelUpdate(IInfoOverlayPanelModel model)
+	{
+		this.pageButtonParent.SetActive(false);
+		this.toggleButton.gameObject.SetActive(false);
+
+		var (main, sub) = model.GetInfoText();
+		this.mainText.text = main;
+		this.subText.text = sub;
+		this.info.text = "";
 	}
 }

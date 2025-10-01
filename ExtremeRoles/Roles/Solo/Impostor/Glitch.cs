@@ -38,7 +38,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 
 	private GlitchDummySystem? system;
 
-	private List<(SystemConsoleType, Vector3)> allPos = [];
+	private List<(SystemConsoleType, Vector2)> allPos = [];
 
 	private float timer;
 	private float range;
@@ -80,7 +80,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 
 		foreach (var (console, pos) in this.allPos)
 		{
-			Vector2 vector = new Vector2(pos.x, pos.y) - playerPos;
+			Vector2 vector =  pos - playerPos;
 			float magnitude = vector.magnitude;
 			if (magnitude <= this.range)
 			{
