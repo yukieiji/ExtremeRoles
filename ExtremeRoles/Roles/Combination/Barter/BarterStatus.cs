@@ -56,24 +56,24 @@ public sealed class CrewmateAwakeCheck(int taskGage, int deadNum) : IAwakeCheck
 	}
 }
 
-public sealed class CastlingNumInfo(int all, int maxNumWithOne)
+public sealed class CastlingNumInfo(int oneMeetingNum, int allCastlingNum)
 {
-	public int MaxNum { get; } = maxNumWithOne;
-	public int All { get; private set; } = all;
-
-	private int curNum = 0;
+	public int OneMeetingNum { get; private set; } = oneMeetingNum;
+	public int WholeNum { get; private set; } = allCastlingNum;
+	
+	private readonly int maxNum = oneMeetingNum;
 
 	public bool CanUse()
-		=> this.All > 0 && this.curNum < this.MaxNum;
+		=> this.WholeNum > 0 && this.OneMeetingNum > 0;
 
 	public void Use()
 	{
-		++this.curNum;
-		--this.All;
+		--this.WholeNum;
+		--this.OneMeetingNum;
 	}
 	public void Reset()
 	{
-		this.curNum = 0;
+		this.OneMeetingNum = this.maxNum;
 	}
 }
 
@@ -82,6 +82,9 @@ public readonly record struct RandomCastling(bool On, int Num);
 public sealed class BarterStatus(IOptionLoader loader, bool isImpostor) : IStatusModel
 {
 	private readonly CastlingNumInfo castlingNum = new CastlingNumInfo(
+			// オプション名が間違っているが後方互換性を持たせるためそのままにする
+			// CastlingNum => 1会議あたりの「キャスリング」回数
+			// BarterMaxCastlingNumWhenMeeting => 全体の「キャスリング」回数
 			loader.GetValue<BarterRole.Option, int>(
 				BarterRole.Option.CastlingNum),
 			loader.GetValue<BarterRole.Option, int>(
@@ -99,7 +102,6 @@ public sealed class BarterStatus(IOptionLoader loader, bool isImpostor) : IStatu
 				loader.GetValue<BarterRole.Option, int>(BarterRole.Option.AwakeTaskRate),
 				loader.GetValue<BarterRole.Option, int>(BarterRole.Option.AwakeDeadPlayerNum));
 
-	public int MaxNum => this.castlingNum.MaxNum;
 	public bool IsRandomCastling => this.random.On;
 	public int OneCastlingNum => this.random.Num;
 
@@ -116,7 +118,7 @@ public sealed class BarterStatus(IOptionLoader loader, bool isImpostor) : IStatu
 	public string CastlingStatus()
 		=> Tr.GetString(
 			"BarterCastlingInfo",
-			castlingNum.MaxNum, castlingNum.All);
+			castlingNum.WholeNum, castlingNum.OneMeetingNum);
 
 	public void UseCastling()
 	{

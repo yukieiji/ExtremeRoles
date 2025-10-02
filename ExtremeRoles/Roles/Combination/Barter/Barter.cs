@@ -313,19 +313,21 @@ public sealed class BarterRole :
 		this.roleNamePrefix = CreateImpCrewPrefix();
 		this.system = VoteSwapSystem.CreateOrGet();
 
-		if (!this.status.IsAwake)
+		if (this.status.IsAwake)
 		{
-			this.awakeHasOtherVision = this.HasOtherVision;
-			this.HasOtherVision = false;
-			this.CanCallMeeting = true;
+			return;
+		}
 
-			if (this.IsImpostor())
-			{
-				this.awakeHasOtherKillCool = this.HasOtherKillCool;
-				this.awakeHasOtherKillRange = this.HasOtherKillRange;
-				this.HasOtherKillCool = false;
-				this.HasOtherKillRange = false;
-			}
+		this.awakeHasOtherVision = this.HasOtherVision;
+		this.HasOtherVision = false;
+		this.CanCallMeeting = true;
+
+		if (this.IsImpostor())
+		{
+			this.awakeHasOtherKillCool = this.HasOtherKillCool;
+			this.awakeHasOtherKillRange = this.HasOtherKillRange;
+			this.HasOtherKillCool = false;
+			this.HasOtherKillRange = false;
 		}
 	}
 
