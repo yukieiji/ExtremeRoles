@@ -56,24 +56,24 @@ public sealed class CrewmateAwakeCheck(int taskGage, int deadNum) : IAwakeCheck
 	}
 }
 
-public sealed class CastlingNumInfo(int oneMeetingNum, int allCastlingNum)
+public sealed class CastlingNumInfo(int maxNumPerMeeting, int totalNum)
 {
-	public int OneMeetingNum { get; private set; } = oneMeetingNum;
-	public int WholeNum { get; private set; } = allCastlingNum;
+	public int PerMeeting { get; private set; } = maxNumPerMeeting;
+	public int Total { get; private set; } = totalNum;
 	
-	private readonly int maxNum = oneMeetingNum;
+	private readonly int maxNumPerMeeting = maxNumPerMeeting;
 
 	public bool CanUse()
-		=> this.WholeNum > 0 && this.OneMeetingNum > 0;
+		=> this.Total > 0 && this.PerMeeting > 0;
 
 	public void Use()
 	{
-		--this.WholeNum;
-		--this.OneMeetingNum;
+		--this.Total;
+		--this.PerMeeting;
 	}
 	public void Reset()
 	{
-		this.OneMeetingNum = this.maxNum;
+		this.PerMeeting = this.maxNumPerMeeting;
 	}
 }
 
@@ -118,7 +118,7 @@ public sealed class BarterStatus(IOptionLoader loader, bool isImpostor) : IStatu
 	public string CastlingStatus()
 		=> Tr.GetString(
 			"BarterCastlingInfo",
-			castlingNum.WholeNum, castlingNum.OneMeetingNum);
+			castlingNum.Total, castlingNum.PerMeeting);
 
 	public void UseCastling()
 	{
