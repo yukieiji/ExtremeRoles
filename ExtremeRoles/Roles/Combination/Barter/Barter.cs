@@ -124,7 +124,8 @@ public sealed class BarterRole :
 				meetingCastlingText.alignment = TextAlignmentOptions.BottomLeft;
 				meetingCastlingText.transform.position = Vector3.zero;
 
-				float xPos = AnotherRole != null ? subRoleXPos : defaultXPos;
+				float xPos = this.AnotherRole != null && this.AnotherRole is IRoleMeetingButtonAbility ? 
+					subRoleXPos : defaultXPos;
 
 				meetingCastlingText.transform.localPosition = new Vector3(xPos, 3.15f, -20f);
 				meetingCastlingText.transform.localScale *= 0.9f;
