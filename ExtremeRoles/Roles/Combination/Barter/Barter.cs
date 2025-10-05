@@ -194,8 +194,7 @@ public sealed class BarterRole :
 
 		byte target = instance.TargetPlayerId;
 		if (this.status is null ||
-			!this.status.CanUseNoneRandomCastling() ||
-			target == PlayerVoteArea.DeadVote)
+			!this.status.CanUseNoneRandomCastling())
 		{
 			return true;
 		}
