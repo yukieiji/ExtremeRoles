@@ -120,6 +120,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		PlayerVoteArea pva,
 		IRoleMeetingButtonAbility buttonRole)
 		=> !(
+			pva.TargetPlayerId == PlayerVoteArea.SkippedVote ||
 			pva.AmDead ||
 			buttonRole.IsBlockMeetingButtonAbility(pva) ||
 			pva.voteComplete ||

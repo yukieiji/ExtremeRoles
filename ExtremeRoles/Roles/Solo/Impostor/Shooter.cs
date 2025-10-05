@@ -94,7 +94,6 @@ public sealed class Shooter :
                 this.shootCounter < this.maxMeetingShootNum &&
                 this.canShootThisMeeting
             ) ||
-            target == 253 ||
             ExtremeRoleManager.GameRole[target].Core.Id == ExtremeRoleId.Assassin;
     }
 

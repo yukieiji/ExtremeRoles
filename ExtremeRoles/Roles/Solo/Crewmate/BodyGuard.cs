@@ -614,8 +614,7 @@ public sealed class BodyGuard :
         {
             return
                 !this.awakeMeetingAbility ||
-                behavior.AbilityCount <= 0 ||
-                instance.TargetPlayerId == 253;
+                behavior.AbilityCount <= 0;
         }
         else
         {

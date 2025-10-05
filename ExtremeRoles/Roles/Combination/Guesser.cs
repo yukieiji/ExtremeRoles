@@ -483,8 +483,7 @@ public sealed class Guesser :
 
         return
             this.bulletNum <= 0 ||
-            this.curGuessNum >= this.maxGuessNum ||
-            target == 253;
+            this.curGuessNum >= this.maxGuessNum;
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
