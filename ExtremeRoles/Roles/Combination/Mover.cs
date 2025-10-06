@@ -195,6 +195,7 @@ public sealed class Mover :
 		UnityHelper.SetColliderActive(mover.hasConsole.Object, true);
 
         mover.hasConsole.Put(player.GetTruePosition());
+		mover.hasConsole = null;
     }
 
     public void CreateAbility()
