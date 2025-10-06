@@ -363,20 +363,19 @@ public sealed class Hypnotist :
         PlayerControl rolePlayer = PlayerControl.LocalPlayer;
         byte targetPlayerId = this.target!.PlayerId;
 
-        SingleRoleBase role = ExtremeRoleManager.GameRole[targetPlayerId];
+		if (!ExtremeRoleManager.TryGetRole(targetPlayerId, out var role))
+		{
+			return false;
+		}
 
         int redPartNum = this.defaultRedAbilityPartNum;
-        Type roleType = role.GetType();
-        Type[] interfaces = roleType.GetInterfaces();
 
-        redPartNum += computeRedPartNum(interfaces);
+        redPartNum += computeRedPartFromRole(role);
 
         if (role is MultiAssignRoleBase multiAssignRole &&
 			multiAssignRole.AnotherRole != null)
         {
-			Type anotherRoleType = multiAssignRole.AnotherRole.GetType();
-			Type[] anotherInterface = anotherRoleType.GetInterfaces();
-			redPartNum += computeRedPartNum(anotherInterface);
+			redPartNum += computeRedPartFromRole(multiAssignRole.AnotherRole);
 		}
 
 		ExtremeRoleManager.RpcReplaceRole(
@@ -829,6 +828,27 @@ public sealed class Hypnotist :
 			)
 		);
     }
+
+	private static int computeRedPartFromRole(SingleRoleBase role)
+	{
+		int result = computeRedPartFromClass(role);
+		if (role.Status is not null)
+		{
+			result += computeRedPartFromClass(role.Status);
+		}
+		if (role.AbilityClass is not null)
+		{
+			result += computeRedPartFromClass(role.AbilityClass);
+		}
+		return result;
+	}
+
+	private static int computeRedPartFromClass(object targetClass)
+	{
+		var type = targetClass.GetType();
+		var interfaces = type.GetInterfaces();
+		return computeRedPartNum(interfaces);
+	}
 
     private static int computeRedPartNum(Type[] interfaces)
     {
