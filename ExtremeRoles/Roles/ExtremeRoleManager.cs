@@ -712,6 +712,24 @@ public static class ExtremeRoleManager
         return safeCast<T>(checkRole);
     }
 
+	public static bool GetRoleCastedStatusFlag<T>(SingleRoleBase role, Func<T, bool> statusFlag)
+		where T : class
+		=> role.Status is T tStatus && statusFlag.Invoke(tStatus);
+
+
+	public static bool GetLocalRoleCastedStatusFlag<T>(Func<T, bool> statusFlag)
+		where T : class
+	{
+		var checkRole = GetLocalPlayerRole();
+		return
+			GetRoleCastedStatusFlag(checkRole, statusFlag) &&
+				(
+					checkRole is not MultiAssignRoleBase multiAssignRoleBase ||
+					GetRoleCastedStatusFlag(multiAssignRoleBase, statusFlag)
+				);
+	}
+
+
 	public static void InvokeInterfaceRoleMethod<T>(Action<T> action) where T : class
 	{
 		var checkRole = GetLocalPlayerRole();
