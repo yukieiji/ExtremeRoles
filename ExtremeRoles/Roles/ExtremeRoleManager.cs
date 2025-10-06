@@ -714,7 +714,7 @@ public static class ExtremeRoleManager
 
 	public static bool GetRoleCastedStatusFlag<T>(SingleRoleBase role, Func<T, bool> statusFlag)
 		where T : class
-		=> role.Status is T tStatus && statusFlag.Invoke(tStatus);
+		=> role.Status is not T tStatus || statusFlag.Invoke(tStatus);
 
 
 	public static bool GetLocalRoleCastedStatusFlag<T>(Func<T, bool> statusFlag)

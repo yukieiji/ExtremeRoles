@@ -2,22 +2,21 @@ using UnityEngine;
 
 using Hazel;
 
+
+using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Compat;
-
-
+using ExtremeRoles.Roles.API.Interface.Status;
 
 using UnityHelper = ExtremeRoles.Helper.Unity;
-using ExtremeRoles.Module.Ability;
 
-
-using ExtremeRoles.Module.CustomOption.Factory;
+#nullable enable
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -30,11 +29,17 @@ public sealed class MoverManager : FlexibleCombinationRoleManagerBase
 
 }
 
+public sealed class MoverStatus : IStatusModel, IUsableOverrideStatus
+{
+	public bool EnableUseButton { get; set; } = true;
+
+	public bool EnableVentButton => true;
+}
+
 public sealed class Mover :
     MultiAssignRoleBase,
     IRoleAutoBuildAbility,
-    IRoleSpecialReset,
-    IRoleUsableOverride
+    IRoleSpecialReset
 {
     public enum MoverRpc : byte
     {
@@ -45,23 +50,14 @@ public sealed class Mover :
     public override string RoleName =>
         string.Concat(this.roleNamePrefix, this.Core.Name);
 
-    public ExtremeAbilityButton Button { get; set; }
+    public ExtremeAbilityButton? Button { get; set; }
 
-    public bool EnableUseButton { get; private set; } = true;
 
-    public bool EnableVentButton { get; private set; } = true;
-
-    private struct ConsoleData
+    private sealed class ConsoleData
     {
-        public Console Console = null;
+        public Console Console { get; init; }
         public GameObject Object => this.Console.gameObject;
-        private Transform parent;
-
-        public ConsoleData()
-        {
-            this.Console = null;
-            this.parent = null;
-        }
+        private readonly Transform parent;
 
         public ConsoleData(Console console)
         {
@@ -71,29 +67,40 @@ public sealed class Mover :
         }
         public void PickUp(Transform trans)
         {
+			if (this.Console == null)
+			{
+				return;
+			}
+
             this.Console.Image.enabled = false;
             this.Console.transform.position = trans.position;
             this.Console.transform.SetParent(trans);
         }
         public void Put(Vector2 pos)
         {
-            this.Console.transform.SetParent(this.parent);
+			if (this.Console == null)
+			{
+				return;
+			}
+
+			this.Console.transform.SetParent(this.parent);
             this.Console.Image.enabled = true;
             this.Console.transform.position =
                 new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 
-            this.Console = null;
-            this.parent = null;
         }
 
         public bool IsValid() => this.Console != null;
     }
 
-    private Console targetConsole;
+	public override IStatusModel? Status => status;
+	private MoverStatus? status;
 
-    private ConsoleData hasConsole;
+	private Console? targetConsole;
 
-    private string roleNamePrefix;
+    private ConsoleData? hasConsole;
+
+    private string roleNamePrefix = string.Empty;
 
     public Mover() : base(
 		RoleCore.BuildCrewmate(
@@ -138,9 +145,15 @@ public sealed class Mover :
     {
         Console console = ShipStatus.Instance.AllConsoles[index];
 
-        if (console == null) { return; }
+        if (console == null)
+		{
+			return;
+		}
 
-        mover.EnableUseButton = false;
+		if (mover.status != null)
+		{
+			mover.status.EnableUseButton = false;
+		}
 
 		UnityHelper.SetColliderActive(console.gameObject, false);
         setColliderTriggerOn(console.gameObject);
@@ -158,9 +171,16 @@ public sealed class Mover :
 
     private static void removeConsole(Mover mover, PlayerControl player)
     {
-        mover.EnableUseButton = true;
+		if (mover.status != null)
+		{
+			mover.status.EnableUseButton = true;
+		}
 
-        if (!mover.hasConsole.IsValid()) { return; }
+        if (mover.hasConsole == null ||
+			!mover.hasConsole.IsValid())
+		{
+			return;
+		}
 
         if (mover.hasConsole.Console.TryGetComponent<VentInPlayerPosSyncer>(out var syncer))
         {
@@ -187,7 +207,7 @@ public sealed class Mover :
             abilityOff: this.CleanUp);
         if (this.IsCrewmate())
         {
-            this.Button.SetLabelToCrewmate();
+            this.Button?.SetLabelToCrewmate();
         }
     }
 
@@ -209,7 +229,7 @@ public sealed class Mover :
             GameSystem.IsValidConsole(localPlayer, this.targetConsole);
     }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -278,10 +298,7 @@ public sealed class Mover :
     {
         this.roleNamePrefix = this.CreateImpCrewPrefix();
 
-        this.hasConsole = new ConsoleData();
-
-        this.EnableVentButton = true;
-        this.EnableUseButton = true;
+		this.status = new MoverStatus();
     }
 
     public void AllReset(PlayerControl rolePlayer)

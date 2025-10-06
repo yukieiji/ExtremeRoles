@@ -1,15 +1,13 @@
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Module.Ability;
 
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+#nullable enable
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -21,14 +19,26 @@ public sealed class SkaterManager : FlexibleCombinationRoleManagerBase
 
 }
 
+public sealed class SkaterStatus(float canUseSpeed) : IStatusModel, IUsableOverrideStatus
+{
+	public bool EnableUseButton
+		=> this.Behaviour == null || !this.Behaviour.enabled || this.Behaviour.PrevForce.magnitude <= this.canUseSpeed;
+
+	public bool EnableVentButton
+		=> this.Behaviour == null || !this.Behaviour.enabled || this.Behaviour.PrevForce.magnitude <= this.canUseSpeed;
+
+	private readonly float canUseSpeed = canUseSpeed;
+
+	public SkaterSkateBehaviour? Behaviour { get; set; }
+}
+
 #nullable enable
 
 public sealed class Skater :
 	MultiAssignRoleBase,
 	IRoleAutoBuildAbility,
 	IRoleSpecialSetUp,
-	IRoleSpecialReset,
-	IRoleUsableOverride
+	IRoleSpecialReset
 {
 	public enum Option
 	{
@@ -43,17 +53,11 @@ public sealed class Skater :
     public override string RoleName =>
         string.Concat(this.roleNamePrefix, this.Core.Name);
 
-	public bool EnableUseButton
-		=> this.behaviour == null || !this.behaviour.enabled || this.behaviour.PrevForce.magnitude <= this.canUseSpeed;
-
-	public bool EnableVentButton
-		=> this.behaviour == null || !this.behaviour.enabled || this.behaviour.PrevForce.magnitude <= this.canUseSpeed;
 
 	public ExtremeAbilityButton? Button { get; set; }
 
-	private SkaterSkateBehaviour.Parameter param;
-	private SkaterSkateBehaviour? behaviour;
-	private float canUseSpeed = 0.0f;
+	public override IStatusModel? Status => status;
+	private SkaterStatus? status;
 
     private string roleNamePrefix = string.Empty;
 
@@ -96,16 +100,9 @@ public sealed class Skater :
     protected override void RoleSpecificInit()
     {
         this.roleNamePrefix = this.CreateImpCrewPrefix();
-
-		var loader = this.Loader;
-		this.param = new SkaterSkateBehaviour.Parameter(
-			loader.GetValue<Option, float>(Option.Friction),
-			loader.GetValue<Option, float>(Option.Acceleration),
-			loader.GetValue<Option, int>(Option.MaxSpeed),
-			loader.GetValue<Option, bool>(Option.UseE) ? loader.GetValue<Option, float>(Option.EValue) : null);
-		this.canUseSpeed =
-			loader.GetValue<Option, float>(Option.CanUseSpeed) *
-			SkaterSkateBehaviour.SpeedOffset;
+		this.status = new SkaterStatus(
+			this.Loader.GetValue<Option, float>(Option.CanUseSpeed) *
+			SkaterSkateBehaviour.SpeedOffset);
     }
 
 	public void IntroBeginSetUp()
@@ -113,8 +110,21 @@ public sealed class Skater :
 
 	public void IntroEndSetUp()
 	{
-		this.behaviour = PlayerControl.LocalPlayer.gameObject.AddComponent<SkaterSkateBehaviour>();
-		this.behaviour.Initialize(this.param);
+		if (this.status is null)
+		{
+			return;
+		}
+
+		this.status.Behaviour = PlayerControl.LocalPlayer.gameObject.AddComponent<SkaterSkateBehaviour>();
+		
+		var loader = this.Loader;
+		var param = new SkaterSkateBehaviour.Parameter(
+			loader.GetValue<Option, float>(Option.Friction),
+			loader.GetValue<Option, float>(Option.Acceleration),
+			loader.GetValue<Option, int>(Option.MaxSpeed),
+			loader.GetValue<Option, bool>(Option.UseE) ? loader.GetValue<Option, float>(Option.EValue) : null);
+
+		this.status.Behaviour.Initialize(param);
 		this.setBehaviourEnable(false);
 	}
 	public void AllReset(PlayerControl rolePlayer)
@@ -129,7 +139,7 @@ public sealed class Skater :
 	}
 
 	public bool IsAbilityUse()
-		=> IRoleAbility.IsCommonUse() && this.EnableUseButton;
+		=> IRoleAbility.IsCommonUse() && this.status is not null && this.status.EnableUseButton;
 
 	public void CreateAbility()
 	{
@@ -162,9 +172,12 @@ public sealed class Skater :
 
 	private void setBehaviourEnable(bool enable)
 	{
-		if (this.behaviour == null) { return; }
+		if (this.status?.Behaviour == null)
+		{
+			return;
+		}
 
-		this.behaviour.enabled = enable;
-		this.behaviour.Reset();
+		this.status.Behaviour.enabled = enable;
+		this.status.Behaviour.Reset();
 	}
 }

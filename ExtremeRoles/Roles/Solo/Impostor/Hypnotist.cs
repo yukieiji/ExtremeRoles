@@ -30,6 +30,7 @@ using ExtremeRoles.Patches;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -853,7 +854,7 @@ public sealed class Hypnotist :
                     addNum = 6;
                     break;
 				case nameof(IRoleAbility):
-				case nameof(IRoleUsableOverride):
+				case nameof(IUsableOverrideStatus):
 					addNum = 5;
                     break;
                 case nameof(IRoleMurderPlayerHook):
