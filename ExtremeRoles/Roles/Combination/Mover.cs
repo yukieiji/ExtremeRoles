@@ -79,8 +79,6 @@ public sealed class Mover :
                 new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 
         }
-
-        public bool IsValid() => this.Console != null;
     }
 
 	public override IStatusModel? Status => status;
@@ -166,8 +164,7 @@ public sealed class Mover :
 			mover.status.EnableUseButton = true;
 		}
 
-        if (mover.hasConsole == null ||
-			!mover.hasConsole.IsValid())
+        if (mover.hasConsole == null)
 		{
 			return;
 		}
