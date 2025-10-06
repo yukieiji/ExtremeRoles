@@ -572,8 +572,7 @@ public sealed class Guesser :
                 this.meetingGuessText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                 this.meetingGuessText.transform.position = Vector3.zero;
 
-				float xPos = this.AnotherRole != null && this.AnotherRole is IRoleMeetingButtonAbility ? 
-					subRoleXPos : defaultXPos;
+				float xPos = this.AnotherRole is IRoleMeetingButtonAbility ? subRoleXPos : defaultXPos;
 
                 this.meetingGuessText.transform.localPosition = new Vector3(xPos, 3.15f, -20f);
                 this.meetingGuessText.transform.localScale *= 0.9f;
