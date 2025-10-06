@@ -1538,4 +1538,7 @@
   <data name="HereticUseVent" xml:space="preserve">
     <value>ベントを使用できるか</value>
   </data>
+  <data name="HereticMeetingButtonTaskGage" xml:space="preserve">
+    <value>「緊急会議」ボタンが使用可能になる&lt;br&gt;タスク進捗率</value>
+  </data>
 </root>
