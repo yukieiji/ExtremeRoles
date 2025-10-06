@@ -725,7 +725,8 @@ public static class ExtremeRoleManager
 			GetRoleCastedStatusFlag(checkRole, statusFlag) &&
 				(
 					checkRole is not MultiAssignRoleBase multiAssignRoleBase ||
-					GetRoleCastedStatusFlag(multiAssignRoleBase, statusFlag)
+					multiAssignRoleBase.AnotherRole is null ||
+					GetRoleCastedStatusFlag(multiAssignRoleBase.AnotherRole, statusFlag)
 				);
 	}
 
