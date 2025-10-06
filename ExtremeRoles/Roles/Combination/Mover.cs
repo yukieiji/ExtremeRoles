@@ -67,22 +67,12 @@ public sealed class Mover :
         }
         public void PickUp(Transform trans)
         {
-			if (this.Console == null)
-			{
-				return;
-			}
-
             this.Console.Image.enabled = false;
             this.Console.transform.position = trans.position;
             this.Console.transform.SetParent(trans);
         }
         public void Put(Vector2 pos)
         {
-			if (this.Console == null)
-			{
-				return;
-			}
-
 			this.Console.transform.SetParent(this.parent);
             this.Console.Image.enabled = true;
             this.Console.transform.position =
