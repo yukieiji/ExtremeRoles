@@ -1,27 +1,31 @@
-using AmongUs.GameOptions;
-using ExtremeRoles.Extension.Il2Cpp;
+using System.Linq;
+
+using UnityEngine;
+
 using ExtremeRoles.Extension.Player;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomMonoBehaviour.Overrider;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using System.Linq;
-using UnityEngine;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
+public sealed class HijackerStatus : IStatusModel, IStatusMovable
+{
+	public bool CanMove { get; set; } = true;
+}
+
+public sealed class Hijacker : SingleRoleBase, IRoleAbility
 {
 	public enum Option
 	{
@@ -29,12 +33,14 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 	}
 
 	public ExtremeAbilityButton? Button { get; set; }
-	public bool CanMove { get; private set; } = true;
+
+	public override IStatusModel? Status => this.status;
 
 	private FollowerCamera? camera;
 
 	private ShapeShiftMinigameWrapper? minigame;
 	private PlayerControl? target;
+	private HijackerStatus? status;
 
 	private bool isAbilityUse = false;
 
@@ -112,7 +118,10 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 			this.camera = hud.transform.parent.GetComponent<FollowerCamera>();
 		}
 
-		this.CanMove = false;
+		if (this.status is not null)
+		{
+			this.status.CanMove = false;
+		}
 
 		this.camera.Target = this.target;
 		this.isAbilityUse = true;
@@ -132,6 +141,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 
 	protected override void RoleSpecificInit()
 	{
+		this.status = new HijackerStatus();
 	}
 
 	private bool openUI()
@@ -157,7 +167,10 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 		HudManager.Instance.ShadowQuad.gameObject.SetActive(
 			!localPlayer.Data.IsDead);
 
-		this.CanMove = true;
+		if (this.status is not null)
+		{
+			this.status.CanMove = true;
+		}
 		this.target = null;
 
 		if (!this.isAbilityUse)
