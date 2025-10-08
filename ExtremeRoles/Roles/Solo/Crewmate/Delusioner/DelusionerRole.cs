@@ -91,7 +91,26 @@ public sealed class DelusionerRole :
 
     public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
+		var loader = Loader;
+		this.status = new DelusionerStatusModel(
+			loader.GetValue<DelusionerOption, float>(DelusionerOption.Range),
+			loader.GetValue<DelusionerOption, bool>(DelusionerOption.IsIncludeSpawnPoint),
+			100f - loader.GetValue<DelusionerOption, int>(DelusionerOption.DeflectDamagePenaltyRate) / 100f
+		);
+
+		this.defaultCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(
+			RoleAbilityCommonOption.AbilityCoolTime);
+
+		var system = loader.GetValue<DelusionerOption, bool>(DelusionerOption.EnableCounter) ?
+			ExtremeSystemTypeManager.Instance.CreateOrGet<DelusionerCounterSystem>(
+			DelusionerCounterSystem.Type) : null;
+
+		this.ability = new DelusionerAbilityHandler(system, this.status, this);
+		this.AbilityClass = this.ability;
+
+		this.status.CurCoolTime = defaultCoolTime;
+
+		this.CreateAbilityCountButton(
             "deflectDamage",
 			UnityObjectLoader.LoadSpriteFromResources(
                 ObjectPath.DelusionerDeflectDamage));
@@ -314,11 +333,6 @@ public sealed class DelusionerRole :
     protected override void RoleSpecificInit()
     {
         var loader = Loader;
-        status = new DelusionerStatusModel(
-            loader.GetValue<DelusionerOption, float>(DelusionerOption.Range),
-            loader.GetValue<DelusionerOption, bool>(DelusionerOption.IsIncludeSpawnPoint),
-            100f - loader.GetValue<DelusionerOption, int>(DelusionerOption.DeflectDamagePenaltyRate) / 100f
-        );
 
         awakeVoteCount = loader.GetValue<DelusionerOption, int>(
             DelusionerOption.AwakeVoteNum);
@@ -331,19 +345,6 @@ public sealed class DelusionerRole :
             DelusionerOption.IsIncludeLocalPlayer);
 
         isOneTimeAwake = isOneTimeAwake && awakeVoteCount > 0;
-        defaultCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(
-            RoleAbilityCommonOption.AbilityCoolTime);
-		defaultCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(
-			RoleAbilityCommonOption.AbilityCoolTime);
-
-		var system = loader.GetValue<DelusionerOption, bool>(DelusionerOption.EnableCounter) ? 
-			ExtremeSystemTypeManager.Instance.CreateOrGet<DelusionerCounterSystem>(
-			DelusionerCounterSystem.Type) : null;
-
-		this.ability = new DelusionerAbilityHandler(system, status, this);
-		AbilityClass = this.ability;
-
-        status.CurCoolTime = defaultCoolTime;
         isAwakeRole = awakeVoteCount == 0;
 
         curVoteCount = 0;

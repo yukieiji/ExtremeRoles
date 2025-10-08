@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Implemented;
@@ -285,10 +285,11 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		IOption? parent = null,
 		bool isHidden = false,
 		bool invert = false,
-		bool ignorePrefix = false) where T : struct, IConvertible
+		bool ignorePrefix = false,
+		int defaultGage = 0) where T : struct, IConvertible
 		=> CreateIntOption(
 			option,
-			0, 0, SingleRoleSpawnData.MaxSpawnRate, 10,
+			defaultGage, 0, SingleRoleSpawnData.MaxSpawnRate, 10,
 			parent,
 			isHidden,
 			OptionUnit.Percentage,

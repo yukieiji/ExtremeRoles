@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using AmongUs.GameOptions;
 using UnityEngine;
@@ -6,9 +6,9 @@ using UnityEngine;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 #nullable enable
 
@@ -17,6 +17,15 @@ namespace ExtremeRoles.Patches;
 [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
 public static class PlayerPhysicsFixedUpdatePatch
 {
+	private static bool isTimeBreakNow =>
+		ExtremeSystemTypeManager.Instance.TryGet<TimeBreakerTimeBreakSystem>(
+			ExtremeSystemType.TimeBreakerTimeBreakSystem, out var system) &&
+		system.Active;
+	private static bool isCanMove(PlayerPhysics __instance)
+		=> !__instance.AmOwner ||
+			ExtremeRoleManager.GetLocalRoleCastedStatusFlag<IStatusMovable>(x => x.CanMove);
+		
+
 	public static bool Prefix(PlayerPhysics __instance)
 	{
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
@@ -24,18 +33,7 @@ public static class PlayerPhysicsFixedUpdatePatch
 			return true;
 		}
 
-		if (ExtremeSystemTypeManager.Instance.TryGet<TimeBreakerTimeBreakSystem>(
-				ExtremeSystemType.TimeBreakerTimeBreakSystem, out var system) &&
-			system.Active)
-		{
-			setVelocityToZero(__instance);
-			return false;
-		}
-
-	 	var (main, sub) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleMovable>();
-
-		if (!((main is null || main.CanMove) && (sub is null || sub.CanMove)) &&
-			__instance.AmOwner)
+		if (isTimeBreakNow || !isCanMove(__instance))
 		{
 			setVelocityToZero(__instance);
 			return false;

@@ -33,6 +33,7 @@ public sealed class Heretic :
 		UseVent,
 		HasTask,
 		SeeImpostorTaskGage,
+		MeetingButtonTaskGage,
 
 		KillMode,
 		CanKillImpostor,
@@ -59,6 +60,7 @@ public sealed class Heretic :
 
 	private bool isSeeImpostorNow = false;
 	private float seeImpostorTaskGage;
+	private float meetingButtonTaskGage;
 	private Sprite sprite => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
 
 	public Heretic() : base(
@@ -104,7 +106,7 @@ public sealed class Heretic :
 		}
 
 		// 全てのベントリンクを解除
-		foreach (Vent vent in ShipStatus.Instance.AllVents)
+		foreach (var vent in ShipStatus.Instance.AllVents)
 		{
 			vent.Right = null;
 			vent.Center = null;
@@ -214,7 +216,8 @@ public sealed class Heretic :
 			!rolePlayer.Data.Disconnected &&
 			(this.killMode is KillMode.AbilityOnTaskPhase or KillMode.AbilityOnTaskPhaseTarget));
 
-		if (!this.HasTask || this.isSeeImpostorNow)
+		if (!this.HasTask ||
+			(this.isSeeImpostorNow && this.CanCallMeeting))
 		{
 			return;
 		}
@@ -224,6 +227,12 @@ public sealed class Heretic :
 			!this.isSeeImpostorNow)
 		{
 			this.isSeeImpostorNow = true;
+		}
+
+		if (taskGage >= this.meetingButtonTaskGage &&
+			!this.CanCallMeeting)
+		{
+			this.CanCallMeeting = true;
 		}
 	}
 
@@ -283,8 +292,12 @@ public sealed class Heretic :
 		var taskOpt = factory.CreateBoolOption(
 			Option.HasTask,
 			false);
+
 		factory.Create0To100Percentage10StepOption(
 			Option.SeeImpostorTaskGage, taskOpt);
+		factory.Create0To100Percentage10StepOption(
+			Option.MeetingButtonTaskGage, taskOpt, defaultGage: 100);
+
 		var killModeOpt = factory.CreateSelectionOption(
 			Option.KillMode,
 			[
@@ -322,14 +335,19 @@ public sealed class Heretic :
 			Option.UseVent);
 		this.HasTask = loader.GetValue<Option, bool>(
 			Option.HasTask);
+
 		this.seeImpostorTaskGage = loader.GetValue<Option, int>(
 			Option.SeeImpostorTaskGage) / 100.0f;
+		this.meetingButtonTaskGage = loader.GetValue<Option, int>(
+			Option.MeetingButtonTaskGage) / 100.0f;
+
 		this.canKillImpostor = loader.GetValue<Option, bool>(
 			Option.CanKillImpostor);
 		this.killMode = (KillMode)loader.GetValue<Option, int>(Option.KillMode);
 		this.range = loader.GetValue<Option, float>(Option.Range);
-		this.isSeeImpostorNow = this.HasTask && this.seeImpostorTaskGage <= 0;
 
+		this.isSeeImpostorNow = this.HasTask && this.seeImpostorTaskGage <= 0.0f;
+		this.CanCallMeeting = this.meetingButtonTaskGage <= 0.0f;
 	}
 
 	public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)

@@ -539,7 +539,7 @@ public static class RPCOperator
 
 	public static void AcceleratorAbility(ref MessageReader reader)
 	{
-		Roles.Combination.Accelerator.Ability(ref reader);
+		Roles.Combination.AcceleratorRole.Ability(ref reader);
 	}
 
 	public static void BodyGuardAbility(ref MessageReader reader)

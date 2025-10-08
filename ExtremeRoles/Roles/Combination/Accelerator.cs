@@ -7,7 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Ability;
@@ -23,16 +23,22 @@ public sealed class AcceleratorManager : FlexibleCombinationRoleManagerBase
 {
     public AcceleratorManager() : base(
 		CombinationRoleType.Accelerator,
-		new Accelerator(), 1)
+		new AcceleratorRole(), 1)
     { }
 
 }
 
-public sealed class Accelerator :
+public sealed class AcceleratorStatus : IStatusModel, IUsableOverrideStatus
+{
+	public bool EnableUseButton { get; set; } = true;
+
+	public bool EnableVentButton { get; set; } = true;
+}
+
+public sealed class AcceleratorRole :
     MultiAssignRoleBase,
     IRoleAutoBuildAbility,
-    IRoleSpecialReset,
-    IRoleUsableOverride
+    IRoleSpecialReset
 {
     public enum AcceleratorRpc : byte
     {
@@ -49,20 +55,18 @@ public sealed class Accelerator :
     public override string RoleName =>
         string.Concat(this.roleNamePrefix, this.Core.Name);
 
-    public bool EnableUseButton { get; private set; } = true;
-
-    public bool EnableVentButton { get; private set; } = true;
-
 	private float speed;
 	private bool canUseOtherPlayer = false;
     private string roleNamePrefix;
 
 	private AutoTransformerWithFixedFirstPoint? transformer;
+	public override IStatusModel? Status  => status;
+	private AcceleratorStatus? status;
 
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
 
-	public Accelerator() : base(
+	public AcceleratorRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Accelerator,
 			ColorPalette.AcceleratorBiancoPeria),
@@ -78,7 +82,7 @@ public sealed class Accelerator :
 
         var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
         if (rolePlayer == null ||
-			!ExtremeRoleManager.TryGetSafeCastedRole<Accelerator>(rolePlayerId, out var role))
+			!ExtremeRoleManager.TryGetSafeCastedRole<AcceleratorRole>(rolePlayerId, out var role))
 		{
 			return;
 		}
@@ -103,10 +107,15 @@ public sealed class Accelerator :
 
     }
 
-    private static void setupPanel(Accelerator accelerator, PlayerControl player)
+    private static void setupPanel(AcceleratorRole accelerator, PlayerControl player)
     {
-		accelerator.EnableUseButton = false;
-		accelerator.EnableVentButton = false;
+		if (accelerator.status == null)
+		{
+			return;
+		}
+
+		accelerator.status.EnableUseButton = false;
+		accelerator.status.EnableVentButton = false;
 
 		Vector2 pos = player.GetTruePosition();
 
@@ -123,12 +132,16 @@ public sealed class Accelerator :
 		accelerator.transformer.Initialize(firstPoint, player.transform, rend);
     }
 
-    private static void endPanel(Accelerator accelerator, Vector2 endPos)
+    private static void endPanel(AcceleratorRole accelerator, Vector2 endPos)
     {
-		if (accelerator.transformer == null) { return; }
+		if (accelerator.transformer == null ||
+			accelerator.status == null)
+		{
+			return;
+		}
 
-		accelerator.EnableUseButton = true;
-		accelerator.EnableVentButton = true;
+		accelerator.status.EnableUseButton = true;
+		accelerator.status.EnableVentButton = true;
 
 		accelerator.transformer.Fixed(
 			new Vector3(endPos.x, endPos.y, endPos.y / 100.0f));
@@ -215,8 +228,7 @@ public sealed class Accelerator :
 		this.speed = loader.GetValue<Option, float>(
 			Option.Speed);
 
-		this.EnableVentButton = true;
-        this.EnableUseButton = true;
+		this.status = new AcceleratorStatus();
     }
 
     public void AllReset(PlayerControl rolePlayer)

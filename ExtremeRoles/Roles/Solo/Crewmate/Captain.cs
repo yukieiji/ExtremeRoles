@@ -223,8 +223,7 @@ public sealed class Captain :
 
     public string GetFakeOptionString() => "";
 
-    public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance) =>
-        instance.TargetPlayerId == 253 || isNotUseSpecialVote();
+    public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance) => isNotUseSpecialVote();
 
     public void Update(PlayerControl rolePlayer)
     {

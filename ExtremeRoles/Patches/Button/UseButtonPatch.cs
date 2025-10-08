@@ -1,9 +1,9 @@
 using HarmonyLib;
 
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Patches.Button;
 
@@ -24,13 +24,6 @@ public static class UseButtonReceiveClickDownPatch
 			return false;
 		}
 
-        var (useRole, anotherUseRole) = 
-            ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleUsableOverride>();
-
-        return 
-            (useRole is null && anotherUseRole is null) ||
-            (useRole.EnableUseButton && anotherUseRole is null) ||
-            (useRole is null && anotherUseRole.EnableUseButton) ||
-            (useRole.EnableUseButton && anotherUseRole.EnableUseButton);
+		return ExtremeRoleManager.GetLocalRoleCastedStatusFlag<IUsableOverrideStatus>(x => x.EnableUseButton);
     }
 }

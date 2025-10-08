@@ -483,8 +483,7 @@ public sealed class Guesser :
 
         return
             this.bulletNum <= 0 ||
-            this.curGuessNum >= this.maxGuessNum ||
-            target == 253;
+            this.curGuessNum >= this.maxGuessNum;
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
@@ -573,7 +572,7 @@ public sealed class Guesser :
                 this.meetingGuessText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                 this.meetingGuessText.transform.position = Vector3.zero;
 
-				float xPos = this.AnotherRole != null ? subRoleXPos : defaultXPos;
+				float xPos = this.AnotherRole is IRoleMeetingButtonAbility ? subRoleXPos : defaultXPos;
 
                 this.meetingGuessText.transform.localPosition = new Vector3(xPos, 3.15f, -20f);
                 this.meetingGuessText.transform.localScale *= 0.9f;

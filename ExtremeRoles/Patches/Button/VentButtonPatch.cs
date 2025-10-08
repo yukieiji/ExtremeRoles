@@ -2,7 +2,7 @@ using HarmonyLib;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Patches.Button;
 
@@ -17,21 +17,11 @@ public static class VentButtonDoClickPatch
 		var pc = PlayerControl.LocalPlayer;
 		if (__instance.currentTarget == null ||
 			pc == null ||
-			pc.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _))
+			pc.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _) ||
+			!ExtremeRoleManager.GetLocalRoleCastedStatusFlag<IUsableOverrideStatus>(x => x.EnableVentButton))
         {
 			return false;
         }
-
-		var (useRole, anotherUseRole) =
-			ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleUsableOverride>();
-
-		bool useRoleAllows = useRole?.EnableVentButton ?? true;
-		bool anotherRoleAllows = anotherUseRole?.EnableVentButton ?? true;
-
-		if (!(useRoleAllows && anotherRoleAllows))
-		{
-			return false;
-		}
 
 		Helper.Logging.Debug($"VentButtonClicked");
 		__instance.currentTarget.Use();
