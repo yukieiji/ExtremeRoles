@@ -347,7 +347,7 @@ public sealed class Heretic :
 		this.range = loader.GetValue<Option, float>(Option.Range);
 
 		this.isSeeImpostorNow = this.HasTask && this.seeImpostorTaskGage <= 0.0f;
-		this.CanCallMeeting = this.meetingButtonTaskGage <= 0.0f;
+		this.CanCallMeeting = this.HasTask && this.meetingButtonTaskGage <= 0.0f;
 	}
 
 	public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
