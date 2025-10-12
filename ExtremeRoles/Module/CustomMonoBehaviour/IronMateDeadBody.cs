@@ -125,7 +125,7 @@ public sealed class IronMateDeadBody : MonoBehaviour
 		if (this.gameObject.TryGetComponent<ViperDeadBody>(out var viperDeadBody))
 		{
 			// dissolveCurrentTimeをTime.fixedDeltaTime引いた時に必ず0秒以下にするためにこうする
-			viperDeadBody.dissolveCurrentTime = Time.fixedDeltaTime + 0.00001f;
+			viperDeadBody.dissolveCurrentTime = Time.fixedDeltaTime - 0.00001f;
 			// そしてFixedUpdateを呼び出す
 			viperDeadBody.FixedUpdate();
 		}
