@@ -122,12 +122,14 @@ public sealed class IronMateDeadBody : MonoBehaviour
 			rend.color = targetColor;
 		}
 
-		if (this.gameObject.TryGetComponent<ViperDeadBody>(out var viperDeadBody))
+		if (!this.gameObject.TryGetComponent<ViperDeadBody>(out var viperDeadBody))
 		{
-			// dissolveCurrentTimeをTime.fixedDeltaTime引いた時に必ず0秒以下にするためにこうする
-			viperDeadBody.dissolveCurrentTime = Time.fixedDeltaTime - 0.00001f;
-			// そしてFixedUpdateを呼び出す
-			viperDeadBody.FixedUpdate();
+			return;
 		}
+
+		// dissolveCurrentTimeをTime.fixedDeltaTime引いた時に必ず0秒以下にするためにこうする
+		viperDeadBody.dissolveCurrentTime = Time.fixedDeltaTime - 0.00001f;
+		// そして1フレームでも表示させないためにFixedUpdateを呼び出す
+		viperDeadBody.FixedUpdate();
 	}
 }
