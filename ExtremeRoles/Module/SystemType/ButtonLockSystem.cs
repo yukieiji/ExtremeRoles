@@ -13,12 +13,13 @@ public sealed class ButtonLockSystem(ExtremeSystemType type) : IExtremeSystemTyp
 {
 	public enum ConditionId
 	{
-		Exorcist
+		Exorcist,
+		Boxer,
 	}
 
 	public enum Ops
 	{
-		Lock,
+		RpcLock,
 		Unlock,
 	}
 
@@ -66,6 +67,24 @@ public sealed class ButtonLockSystem(ExtremeSystemType type) : IExtremeSystemTyp
 		});
 	}
 
+	public void Lock(int conditionId)
+	{
+		if (!this.blockCondition.TryGetValue(conditionId, out var func))
+		{
+			func = () => true;
+			this.blockCondition[conditionId] = func;
+		}
+		if (func.Invoke())
+		{
+			this.blockedConditionId.Add(conditionId);
+		}
+	}
+
+	public void UnLock(int conditionId)
+	{
+		this.blockedConditionId.Remove(conditionId);
+	}
+
 	public void AddCondition(int id, Func<bool> condition)
 	{
 		this.blockCondition[id] = condition;
@@ -80,23 +99,16 @@ public sealed class ButtonLockSystem(ExtremeSystemType type) : IExtremeSystemTyp
 	{
 		var ops = (Ops)msgReader.ReadByte();
 		int conditionId = msgReader.ReadPackedInt32();
-		if (!blockCondition.TryGetValue(conditionId, out var func))
-		{
-			return;
-		}
 
 		lock (this.blockedConditionId)
 		{
 			switch (ops)
 			{
-				case Ops.Lock:
-					if (func.Invoke())
-					{
-						this.blockedConditionId.Add(conditionId);
-					}
+				case Ops.RpcLock:
+					Lock(conditionId);
 					break;
 				case Ops.Unlock:
-					this.blockedConditionId.Remove(conditionId);
+					UnLock(conditionId);
 					break;
 				default:
 					break;
