@@ -109,6 +109,8 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 			op.WriteFloat(direction.y);
 		}
 
+		Sound.PlaySound(Sound.Type.BoxcerStraight, 0.7f);
+
 		return true;
 	}
 
@@ -137,6 +139,8 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 
 	private static IEnumerator safeButtobi(Vector2 speed, PlayerControl player, Boxer role)
 	{
+		Sound.PlaySound(Sound.Type.BoxcerStraight, 0.7f);
+
 		while (player.walkingToVent)
 		{
 			yield return null;
@@ -165,7 +169,6 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		}
 		
 		yield return null;
-
 		var beha = player.gameObject.TryAddComponent<BoxerButtobiBehaviour>();
 		beha.Initialize(speed, role.speed, role.killSpeed, role.param);
 	}
