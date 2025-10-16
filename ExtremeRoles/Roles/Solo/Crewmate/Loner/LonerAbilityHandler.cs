@@ -108,11 +108,7 @@ public sealed class LonerAbilityHandler(
 
 	public void Update(PlayerControl rolePlayer)
     {
-		if (MeetingHud.Instance != null ||
-			ExileController.Instance != null)
-		{
-			return;
-		}
+		this.status.Update(rolePlayer, Time.deltaTime);
 
 		if (rolePlayer == null ||
 			rolePlayer.Data == null ||
@@ -122,8 +118,6 @@ public sealed class LonerAbilityHandler(
 			this.arrow.Hide();
 			return;
 		}
-
-		this.status.Update(rolePlayer, Time.deltaTime);
 		this.arrow.Update(rolePlayer);
 
 		if (this.status.StressGage < this.MaxStressGage)
@@ -136,6 +130,7 @@ public sealed class LonerAbilityHandler(
 			byte.MinValue);
 		ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(playerId, Module.ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.Despair);
 	}
+
 	public void Reset()
 	{
 		this.arrow.Hide();

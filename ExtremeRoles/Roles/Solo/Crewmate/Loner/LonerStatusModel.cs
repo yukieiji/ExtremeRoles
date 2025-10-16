@@ -22,7 +22,7 @@ public sealed class StressProgress(float range, float waitTime, StressProgress.O
 	{
 		if (!GameProgressSystem.IsTaskPhase)
 		{
-			this.waitTimer = waitTime;
+			this.waitTimer = this.waitTime;
 			return;
 		}
 
