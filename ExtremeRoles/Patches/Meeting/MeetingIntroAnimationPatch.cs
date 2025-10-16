@@ -4,6 +4,7 @@ using HarmonyLib;
 
 using TMPro;
 
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
@@ -19,14 +20,15 @@ public static class MeetingIntroAnimationInitPatch
 	{
 		// バニラのベント掃除が残り続けるバグの修正
 		// これより前だとベントに入ってる状態が残ってる可能性があるのでここでやる
-		if (ShipStatus.Instance == null ||
-			!ShipStatus.Instance.enabled ||
-			!ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Ventilation, out ISystemType? system))
+		if (!(
+				ShipStatus.Instance != null &&
+				ShipStatus.Instance.enabled &&
+				ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Ventilation, out ISystemType? system) &&
+				system.IsTryCast<VentilationSystem>(out var ventSystem)
+			))
 		{
 			return;
 		}
-		var ventSystem = system.TryCast<VentilationSystem>();
-		if (ventSystem == null) { return; }
 
 		ventSystem.PlayersCleaningVents.Clear();
 		ventSystem.PlayersInsideVents.Clear();
@@ -39,9 +41,12 @@ public static class MeetingIntroAnimationInitPatch
 		SoundManager.Instance.StopSound(__instance.ProtectedRecentlySound);
 
 		bool someoneWasProtected = false;
-		foreach(PlayerControl pc in PlayerCache.AllPlayerControl)
+		foreach(var pc in PlayerCache.AllPlayerControl)
 		{
-			if (pc == null || !pc.protectedByGuardianThisRound) { continue; }
+			if (pc == null || !pc.protectedByGuardianThisRound)
+			{
+				continue;
+			}
 
 			pc.protectedByGuardianThisRound = false;
 			if (pc.Data != null && !pc.Data.IsDead)
@@ -52,7 +57,10 @@ public static class MeetingIntroAnimationInitPatch
 
 		TMP_SubMesh textSubMesh = __instance.ProtectedRecently.GetComponentInChildren<TMP_SubMesh>();
 
-		if (textSubMesh == null) { return; }
+		if (textSubMesh == null)
+		{
+			return;
+		}
 
 		TMP_Text text = textSubMesh.textComponent;
 
