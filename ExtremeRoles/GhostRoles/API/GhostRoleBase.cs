@@ -10,9 +10,9 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -165,7 +165,11 @@ public abstract class GhostRoleBase
             isGhostRoleImpostor = targetGhostRole.IsImpostor();
         }
 
-        if ((targetRole.IsImpostor() || targetRole.FakeImpostor || isGhostRoleImpostor) &&
+        if ((
+				targetRole.IsImpostor() || 
+				(targetRole.Status is IFakeImpostorStatus fake && fake.IsFakeImpostor) || 
+				isGhostRoleImpostor
+			) &&
             this.IsImpostor())
         {
             return Palette.ImpostorRed;

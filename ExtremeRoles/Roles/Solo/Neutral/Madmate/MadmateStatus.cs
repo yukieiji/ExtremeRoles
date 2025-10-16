@@ -6,9 +6,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral.Madmate;
 
 #nullable enable
 
-public sealed class MadmateStatus : IStatusModel, IRoleFakeIntro
+public sealed class MadmateStatus : IStatusModel, IRoleFakeIntro, IFakeImpostorStatus
 {
     public bool IsUpdateMadmate { get; set; } = false;
 
-    public ExtremeRoleType FakeTeam => IsUpdateMadmate ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
+	public bool IsFakeImpostor { get; set; } = false;
+
+	public ExtremeRoleType FakeTeam => IsUpdateMadmate ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
 }

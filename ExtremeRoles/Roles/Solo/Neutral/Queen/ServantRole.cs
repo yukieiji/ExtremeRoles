@@ -51,13 +51,11 @@ public sealed class ServantRole :
 			baseRole.UseSabotage)
 	{
 		Loader = queen.Loader;
-		this.status = new ServantStatus(queenPlayerId, queen);
+		this.status = new ServantStatus(queenPlayerId, queen, baseRole);
 		SetControlId(queen.GameControlId);
 		this.queenPlayerId = queenPlayerId;
 
 		var core = baseRole.Core;
-		FakeImpostor = core.Team == ExtremeRoleType.Impostor;
-
 		var id = core.Id;
 
 		IsSpecialKill = id is
