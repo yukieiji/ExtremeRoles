@@ -883,7 +883,6 @@ public sealed class Hypnotist :
                 case nameof(IRoleUpdate):
                     addNum = 3;
                     break;
-                case nameof(IRoleExilHook):
                 case nameof(IRoleReportHook):
                     addNum = 2;
                     break;

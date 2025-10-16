@@ -32,17 +32,6 @@ public static class PlayerControlExiledPatch
 		ExtremeRolesPlugin.ShipState.AddDeadInfo(
 			__instance, DeathReason.Exile, null);
 
-		var role = ExtremeRoleManager.GetLocalPlayerRole();
-		if (role is IRoleExilHook hookRole)
-		{
-			hookRole.HookExil(__instance);
-		}
-		if (role is MultiAssignRoleBase multiAssignRole &&
-			multiAssignRole.AnotherRole is IRoleExilHook multiHookRole)
-		{
-			multiHookRole.HookExil(__instance);
-		}
-
 		exiledPlayerRole.ExiledAction(__instance);
 		if (exiledPlayerRole is MultiAssignRoleBase multiAssignExiledPlayerRole)
 		{
