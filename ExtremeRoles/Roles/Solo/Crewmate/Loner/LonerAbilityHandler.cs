@@ -108,7 +108,12 @@ public sealed class LonerAbilityHandler(
 
 	public void Update(PlayerControl rolePlayer)
     {
+		if (IntroCutscene.Instance != null)
+		{
+			return;
+		}
 		this.status.Update(rolePlayer, Time.deltaTime);
+		}
 
 		if (rolePlayer == null ||
 			rolePlayer.Data == null ||
