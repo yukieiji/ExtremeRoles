@@ -61,13 +61,15 @@ public sealed class GameProgressSystem : IExtremeSystemType
 
 	private static void set(Progress newProgress)
 	{
-		if (ExtremeSystemTypeManager.Instance.TryGet<GameProgressSystem>(ExtremeSystemType.GameProgress, out var system))
+		if (!ExtremeSystemTypeManager.Instance.TryGet<GameProgressSystem>(ExtremeSystemType.GameProgress, out var system))
 		{
-			system.cur = newProgress;
-			if (newProgress is Progress.RoleSetUpEnd)
-			{
-				system.isSetUpEnd = true;
-			}
+			return;
+		}
+
+		system.cur = newProgress;
+		if (newProgress is Progress.RoleSetUpEnd)
+		{
+			system.isSetUpEnd = true;
 		}
 	}
 

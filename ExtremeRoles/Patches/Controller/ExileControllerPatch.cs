@@ -350,15 +350,20 @@ public static class ExileControllerReEnableGameplayPatch
 
     public static void ReEnablePostfix()
     {
-        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+		GameProgressSystem.Current = GameProgressSystem.Progress.Task;
+		if (!GameProgressSystem.IsGameNow)
+		{
+			return;
+		}
 
         MeetingReporter.Reset();
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-        if (!role.TryGetKillCool(out float killCool)) { return; }
-
-        PlayerControl.LocalPlayer.SetKillTimer(killCool);
+        if (!role.TryGetKillCool(out float killCool))
+		{
+			PlayerControl.LocalPlayer.SetKillTimer(killCool);
+		}
     }
 
 }

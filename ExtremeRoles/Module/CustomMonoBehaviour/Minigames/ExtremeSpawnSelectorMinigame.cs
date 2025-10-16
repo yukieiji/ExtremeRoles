@@ -301,8 +301,6 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		}
 		Destroy(instance.gameObject);
 		
-		GameProgressSystem.Current = GameProgressSystem.Progress.Task;
-		
 		yield break;
 	}
 

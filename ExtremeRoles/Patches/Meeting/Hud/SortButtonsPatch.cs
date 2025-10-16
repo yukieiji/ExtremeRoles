@@ -21,7 +21,7 @@ public static class MeetingHudSortButtonsPatch
 {
 	public static bool Prefix(MeetingHud __instance)
 	{
-		if (!GameProgressSystem.Is(GameProgressSystem.Progress.Meeting))
+		if (!GameProgressSystem.IsGameNow)
 		{
 			return true;
 		}

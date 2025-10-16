@@ -44,12 +44,3 @@ public static class SpawnInMinigameBeginPatch
     }
 }
 
-[HarmonyPatch(typeof(SpawnInMinigame), nameof(SpawnInMinigame.Close))]
-public static class SpawnInMinigameClosePatch
-{
-	public static void Postfix()
-	{
-		GameProgressSystem.Current = GameProgressSystem.Progress.Task;
-	}
-}
-
