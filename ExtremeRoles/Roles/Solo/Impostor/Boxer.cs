@@ -110,7 +110,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 			op.WriteFloat(direction.y);
 		}
 
-		Sound.PlaySound(Sound.Type.BoxerStraight, 0.7f);
+		Sound.PlaySound(Sound.Type.BoxerStraight, 0.8f);
 
 		return true;
 	}
@@ -167,7 +167,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 			yield return null;
 		}
 
-		Sound.PlaySound(Sound.Type.BoxerStraight, 0.7f);
+		Sound.PlaySound(Sound.Type.BoxerStraight, 0.8f);
 
 		var system = ButtonLockSystem.CreateOrGetAbilityButtonLockSystem();
 		system.Lock((int)ButtonLockSystem.ConditionId.Boxer);
