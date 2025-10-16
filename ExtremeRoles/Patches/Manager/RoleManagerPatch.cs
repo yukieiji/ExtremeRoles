@@ -100,7 +100,7 @@ public static class RoleManagerAssignRoleOnDeathPatch
     public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
     {
         if (!(
-				!GameProgressSystem.IsGameNow &&
+				GameProgressSystem.IsGameNow &&
 				ExtremeRoleManager.TryGetRole(player.PlayerId, out var role)
 			))
         {
