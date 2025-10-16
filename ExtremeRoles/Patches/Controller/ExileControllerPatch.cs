@@ -360,7 +360,7 @@ public static class ExileControllerReEnableGameplayPatch
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-        if (!role.TryGetKillCool(out float killCool))
+        if (role.TryGetKillCool(out float killCool))
 		{
 			PlayerControl.LocalPlayer.SetKillTimer(killCool);
 		}
