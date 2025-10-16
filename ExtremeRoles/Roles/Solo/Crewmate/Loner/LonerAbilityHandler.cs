@@ -112,8 +112,7 @@ public sealed class LonerAbilityHandler(
 
 	public void Update(PlayerControl rolePlayer)
     {
-		if (MeetingHud.Instance != null ||
-			ExileController.Instance != null)
+		if (IntroCutscene.Instance != null)
 		{
 			return;
 		}
