@@ -1,3 +1,5 @@
+using System.Text;
+
 using HarmonyLib;
 
 using TMPro;
@@ -5,7 +7,6 @@ using TMPro;
 using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
-using System.Text;
 
 namespace ExtremeRoles.Patches.Meeting;
 
