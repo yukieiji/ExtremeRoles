@@ -16,15 +16,35 @@ public sealed class GameProgressSystem : IExtremeSystemType
 		PreTask,
 		Task,
 		Meeting,
+		Exiled,
 	}
 
-	public static Progress Cur
+	public static Progress Current
 	{
-		get => get();
+		private get => get();
 		set => set(value);
 	}
 
 	private Progress cur = Progress.None;
+
+	public static bool Is(Progress check)
+	{
+		var cur = get();
+		return check switch
+		{ 
+			Progress.None => cur is Progress.None || PlayerControl.LocalPlayer == null || ShipStatus.Instance == null || !ShipStatus.Instance.enabled,
+			Progress.IntroStart => isIntroCheck(cur, Progress.IntroStart),
+			Progress.RoleSetUpStart => isIntroCheck(cur, Progress.RoleSetUpStart),
+			Progress.RoleSetUpEnd => isIntroCheck(cur, Progress.RoleSetUpEnd),
+			Progress.IntroEnd => isIntroCheck(cur, Progress.IntroEnd),
+			Progress.Meeting => cur is Progress.Meeting || MeetingHud.Instance != null || ExileController.Instance != null,
+			Progress.Exiled => cur is Progress.Exiled || ExileController.Instance != null,
+			Progress.PreTask => cur is Progress.PreTask || ExileController.Instance != null,
+			_ => cur == check,
+		};
+	}
+	private static bool isIntroCheck(Progress cur, Progress target)
+		=> cur == target || IntroCutscene.Instance != null;
 
 	private static Progress get()
 		=> ExtremeSystemTypeManager.Instance.TryGet<GameProgressSystem>(ExtremeSystemType.GameProgress, out var system) ? system.cur : Progress.None;
