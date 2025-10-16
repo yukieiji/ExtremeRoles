@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,15 +6,14 @@ using UnityEngine;
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-
-
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
@@ -188,9 +186,7 @@ public sealed class Foras : GhostRoleBase
 
     private bool isAbilityUse()
     {
-        if (ShipStatus.Instance == null ||
-            !ShipStatus.Instance.enabled) { return false; }
-
+        if (!GameProgressSystem.IsTaskPhase) { return false; }
 
         this.targetPlayer = Helper.Player.GetClosestPlayerInRange(
             PlayerControl.LocalPlayer,

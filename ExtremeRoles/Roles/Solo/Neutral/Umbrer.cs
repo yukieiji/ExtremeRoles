@@ -1,23 +1,20 @@
+
 using System.Collections.Generic;
 
 using UnityEngine;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.ModeSwitcher;
-
 
 using ButtonGraphic = ExtremeRoles.Module.Ability.Behavior.ButtonGraphic;
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -271,15 +268,12 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (MeetingHud.Instance != null ||
-            ExileController.Instance != null ||
-            ShipStatus.Instance == null ||
-            this.IsWin ||
-            GameData.Instance == null ||
-            this.container == null) { return; }
-        if (!ShipStatus.Instance.enabled) { return; }
+        if (!GameProgressSystem.IsTaskPhase)
+		{
+			return;
+		}
 
-        if (RoleAssignState.Instance.IsRoleSetUpEnd && !isFetch)
+        if (!isFetch)
         {
             this.isFetch = true;
             this.container.Fetch(this);

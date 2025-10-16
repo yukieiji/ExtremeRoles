@@ -121,7 +121,7 @@ public static class MeetingHudPopulateResultsPatch
 		MeetingHud __instance,
 		[HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		if (!GameProgressSystem.IsGameNow)
 		{
 			return true;
 		}
@@ -228,11 +228,6 @@ public static class MeetingHudPopulateResultsPatch
 		for (int i = 0; i < vote.Count; i++)
 		{
 			int index = startIndex + i;
-			if (!RoleAssignState.Instance.IsRoleSetUpEnd)
-			{
-				instance.BloopAVoteIcon(voterInfo, index, targetTransform);
-				return;
-			}
 
 			// swapTargetがある場合
 			if (swapTarget != null)

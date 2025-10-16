@@ -1,15 +1,14 @@
+
 using System.Collections.Generic;
 using System.Linq;
 
-using ExtremeRoles.Module;
-
 using ExtremeRoles.Helper;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API.Extension.Neutral;
-using ExtremeRoles.Performance;
-
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.Neutral;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -37,17 +36,20 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (ShipStatus.Instance == null ||
-            this.IsWin ||
-            GameData.Instance == null) { return; }
-
-        if (!ShipStatus.Instance.enabled) { return; }
+        if (!GameProgressSystem.IsTaskPhase ||
+            this.IsWin)
+		{
+			return;
+		}
 
         var playerInfo = GameData.Instance.GetPlayerById(
             rolePlayer.PlayerId);
         if (playerInfo.IsDead ||
             playerInfo.Disconnected ||
-            playerInfo.Tasks.Count == 0) { return; }
+            playerInfo.Tasks.Count == 0)
+		{
+			return;
+		}
 
         int compCount = 0;
 

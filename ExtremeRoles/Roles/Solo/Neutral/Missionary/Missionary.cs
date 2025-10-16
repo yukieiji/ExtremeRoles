@@ -10,6 +10,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -189,10 +190,10 @@ public sealed class MissionaryRole :
     public void Update(PlayerControl rolePlayer)
     {
         if (this.lamb.Count == 0 ||
-			ShipStatus.Instance == null ||
-            GameData.Instance == null ||
-			!ShipStatus.Instance.enabled ||
-			OnemanMeetingSystemManager.IsActive) { return; }
+			OnemanMeetingSystemManager.IsActive)
+		{
+			return;
+		}
 
 		this.lamb.RemoveAll(
 			x =>

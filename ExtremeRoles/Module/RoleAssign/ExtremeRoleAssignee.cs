@@ -1,7 +1,8 @@
-﻿using System.Collections;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
+using System.Collections;
 using System.Collections.Generic;
 
-using ExtremeRoles.Module.Interface;
 
 #nullable enable
 
@@ -45,8 +46,7 @@ public sealed class ExtremeRoleAssignee(
 			}
 		}
 		RPCOperator.SetRoleToAllPlayer(assignData);
-		RoleAssignState.Instance.SwitchRoleAssignToEnd();
+
+		GameProgressSystem.Current = GameProgressSystem.Progress.RoleSetUpEnd;
 	}
-
-
 }

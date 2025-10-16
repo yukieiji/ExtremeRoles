@@ -1,15 +1,13 @@
 using UnityEngine;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -107,12 +105,14 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     public void Update(
         PlayerControl rolePlayer)
     {
-        if (ShipStatus.Instance == null ||
-            GameData.Instance == null) { return; }
-        if (!ShipStatus.Instance.enabled ||
-            this.Button == null) { return; }
-
-        if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected || this.isUpgraded) { return; }
+        if (!GameProgressSystem.IsTaskPhase ||
+            this.Button == null ||
+			rolePlayer.Data.IsDead || 
+			rolePlayer.Data.Disconnected || 
+			this.isUpgraded)
+		{
+			return;
+		}
 
         foreach (var task in rolePlayer.Data.Tasks)
         {

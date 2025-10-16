@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using HarmonyLib;
 
 using UnityEngine;
@@ -42,7 +42,7 @@ public static class VitalsMinigameUpdatePatch
 
     public static bool Prefix(VitalsMinigame __instance)
     {
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
+        if (!GameProgressSystem.IsTaskPhase ||
 			ExtremeRoleManager.GetLocalPlayerRole().CanUseVital() ||
 			IRoleAbility.IsLocalPlayerAbilityUse(vitalUseRole))
 		{

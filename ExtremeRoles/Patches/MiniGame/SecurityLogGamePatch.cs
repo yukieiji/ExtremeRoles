@@ -1,10 +1,10 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType.SecurityDummySystem;
-using ExtremeRoles.Module.CustomMonoBehaviour.WithAction;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Module.CustomMonoBehaviour.WithAction;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.SecurityDummySystem;
+using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Patches.MiniGame;
 
@@ -28,7 +28,7 @@ public static class SecurityLogGameUpdatePatch
 {
     public static bool Prefix(SecurityLogGame __instance)
     {
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
+        if (!GameProgressSystem.IsTaskPhase ||
 			Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
             SecurityHelper.IsAbilityUse())
 		{

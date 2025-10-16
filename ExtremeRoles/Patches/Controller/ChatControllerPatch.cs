@@ -1,17 +1,17 @@
-﻿using System;
-
-using UnityEngine;
-
-using HarmonyLib;
+using System;
 
 using AmongUs.Data;
 
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
-using ExtremeRoles.Module.RoleAssign;
+using HarmonyLib;
+using UnityEngine;
+
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Roles;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Roles;
+
 
 #nullable enable
 
@@ -37,7 +37,7 @@ public static class ChatControllerAddChatPatch
         [HarmonyArgument(1)] string chatText,
 		[HarmonyArgument(2)] bool censor)
     {
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		if (!GameProgressSystem.IsGameNow)
 		{
 			return true;
 		}

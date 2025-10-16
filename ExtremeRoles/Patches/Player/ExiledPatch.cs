@@ -1,10 +1,10 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -17,7 +17,7 @@ public static class PlayerControlExiledPatch
 		PlayerControl __instance)
 	{
 		if (!(
-				RoleAssignState.Instance.IsRoleSetUpEnd &&
+				GameProgressSystem.IsGameNow &&
 				 ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var exiledPlayerRole)
 			))
 		{
@@ -37,12 +37,10 @@ public static class PlayerControlExiledPatch
 		{
 			hookRole.HookExil(__instance);
 		}
-		if (role is MultiAssignRoleBase multiAssignRole)
+		if (role is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is IRoleExilHook multiHookRole)
 		{
-			if (multiAssignRole.AnotherRole is IRoleExilHook multiHookRole)
-			{
-				multiHookRole.HookExil(__instance);
-			}
+			multiHookRole.HookExil(__instance);
 		}
 
 		exiledPlayerRole.ExiledAction(__instance);

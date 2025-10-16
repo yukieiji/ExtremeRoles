@@ -1,78 +1,80 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Helper;
 
-namespace ExtremeRoles.Patches.Role
+namespace ExtremeRoles.Patches.Role;
+
+[HarmonyPatch(typeof(RoleBehaviour), nameof(RoleBehaviour.GetAbilityDistance))]
+public static class RoleBehaviourGetAbilityDistancePatch
 {
-    [HarmonyPatch(typeof(RoleBehaviour), nameof(RoleBehaviour.GetAbilityDistance))]
-    public static class RoleBehaviourGetAbilityDistancePatch
+    public static bool Prefix(
+        RoleBehaviour __instance,
+        ref float __result)
     {
-        public static bool Prefix(
-            RoleBehaviour __instance,
-            ref float __result)
-        {
-            if (!(
-					RoleAssignState.Instance.IsRoleSetUpEnd &&
-					ExtremeRoleManager.TryGetRole(__instance.Player.PlayerId, out var role) &&
-					role.CanKill() &&
-					role.TryGetKillRange(out int range) &&
-					GameSystem.TryGetKillDistance(out var killRange)
-				))
-			{
-				return true;
-			}
+        if (!(
+				GameProgressSystem.IsGameNow &&
+				ExtremeRoleManager.TryGetRole(__instance.Player.PlayerId, out var role) &&
+				role.CanKill() &&
+				role.TryGetKillRange(out int range) &&
+				GameSystem.TryGetKillDistance(out var killRange)
+			))
+		{
+			return true;
+		}
 
-            __result = killRange[range];
+        __result = killRange[range];
 
-            return false;
-        }
+        return false;
     }
+}
 
-    [HarmonyPatch(typeof(RoleBehaviour), nameof(RoleBehaviour.IsValidTarget))]
-    public static class RoleBehaviourIsValidTargetPatch
+[HarmonyPatch(typeof(RoleBehaviour), nameof(RoleBehaviour.IsValidTarget))]
+public static class RoleBehaviourIsValidTargetPatch
+{
+    public static bool Prefix(
+        RoleBehaviour __instance,
+        ref bool __result,
+        [HarmonyArgument(0)] NetworkedPlayerInfo target)
     {
-        public static bool Prefix(
-            RoleBehaviour __instance,
-            ref bool __result,
-            [HarmonyArgument(0)] NetworkedPlayerInfo target)
-        {
-            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+        if (!GameProgressSystem.IsGameNow)
+		{
+			return true;
+		}
 
-			byte instancePlayerId = __instance.Player.PlayerId;
+		byte instancePlayerId = __instance.Player.PlayerId;
 
-            if (!(
-					ExtremeRoleManager.TryGetRole(instancePlayerId, out var role) &&
-					role.CanKill()
-				))
-			{
-				return true;
-			}
+        if (!(
+				ExtremeRoleManager.TryGetRole(instancePlayerId, out var role) &&
+				role.CanKill()
+			))
+		{
+			return true;
+		}
 
-			byte targetPlayerId = target.PlayerId;
+		byte targetPlayerId = target.PlayerId;
 
 
-            __result =
-                target != null &&
-                !target.Disconnected &&
-                !target.IsDead &&
-				targetPlayerId != instancePlayerId &&
-                target.Role != null &&
-                target.Object != null &&
-                (
-					!target.Object.inVent ||
-					ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer
-				) &&
-				!target.Object.inMovingPlat &&
-				ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
-				!role.IsSameTeam(targetRole) &&
-				!MonikaTrashSystem.InvalidTarget(targetRole, instancePlayerId);
+        __result =
+            target != null &&
+            !target.Disconnected &&
+            !target.IsDead &&
+			targetPlayerId != instancePlayerId &&
+            target.Role != null &&
+            target.Object != null &&
+            (
+				!target.Object.inVent ||
+				ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer
+			) &&
+			!target.Object.inMovingPlat &&
+			ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
+			!role.IsSameTeam(targetRole) &&
+			!MonikaTrashSystem.InvalidTarget(targetRole, instancePlayerId);
 
-            return false;
-        }
+        return false;
     }
 }

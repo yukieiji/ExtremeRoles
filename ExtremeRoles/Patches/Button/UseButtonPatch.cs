@@ -1,7 +1,7 @@
 using HarmonyLib;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface.Status;
 
@@ -12,8 +12,7 @@ public static class UseButtonReceiveClickDownPatch
 {
     public static bool Prefix()
     {
-        if (ExtremeRoleManager.GameRole.Count == 0 ||
-            !RoleAssignState.Instance.IsRoleSetUpEnd)
+        if (!GameProgressSystem.IsTaskPhase)
 		{
 			return true;
 		}

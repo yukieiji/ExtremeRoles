@@ -96,7 +96,8 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
     {
         ShipStatus.Instance.enabled = false;
         GameManager.Instance.RpcEndGame(reason, trigger);
-    }
+		GameProgressSystem.Current = GameProgressSystem.Progress.None;
+	}
 
     private static bool isCrewmateWin(PlayerStatistics statistics)
     {

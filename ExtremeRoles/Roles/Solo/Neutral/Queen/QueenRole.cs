@@ -1,20 +1,21 @@
-using System.Collections.Generic;
 
-using UnityEngine;
+using System.Collections.Generic;
 
 using AmongUs.GameOptions;
 
+using UnityEngine;
+
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability;
 
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Queen;
 
@@ -259,11 +260,11 @@ public sealed class QueenRole :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (!rolePlayer ||
-            rolePlayer.Data.Tasks.Count == 0 ||
-            !GameData.Instance ||
-            !ShipStatus.Instance ||
-            !ShipStatus.Instance.enabled) { return; }
+        if (!GameProgressSystem.IsTaskPhase ||
+			rolePlayer.Data.Tasks.Count == 0)
+		{
+			return;
+		}
 
         foreach (byte playerId in servantPlayerId)
         {

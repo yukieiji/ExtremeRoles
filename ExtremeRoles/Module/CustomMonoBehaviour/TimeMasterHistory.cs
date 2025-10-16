@@ -1,13 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using UnityEngine;
+using ExtremeRoles.Module.SystemType;
 using Il2CppInterop.Runtime.Attributes;
 
-using ExtremeRoles.Module.RoleAssign;
-
-using ExtremeRoles.Performance;
+using UnityEngine;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -32,11 +30,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
 		public void FixedUpdate()
 		{
-			if (!this.init || this.BlockAddHistory ||
-				!RoleAssignState.Instance.IsRoleSetUpEnd ||
-				AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
-				MeetingHud.Instance ||
-				ExileController.Instance)
+			if (!this.init || 
+				this.BlockAddHistory ||
+				!GameProgressSystem.IsTaskPhase)
 			{
 				return;
 			}

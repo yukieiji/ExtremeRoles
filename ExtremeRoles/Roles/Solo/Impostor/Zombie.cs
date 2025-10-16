@@ -9,10 +9,9 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -239,11 +238,7 @@ public sealed class Zombie :
     {
 
         bool isDead = rolePlayer.Data.IsDead;
-        bool isNotTaskPhase =
-            MeetingHud.Instance ||
-            ExileController.Instance ||
-            ShipStatus.Instance == null ||
-            !ShipStatus.Instance.enabled;
+		bool isNotTaskPhase = !GameProgressSystem.IsTaskPhase;
         bool isNotAwake = !this.IsAwake;
         bool isDeActivateArrow = isDead || isNotTaskPhase || isNotAwake;
 

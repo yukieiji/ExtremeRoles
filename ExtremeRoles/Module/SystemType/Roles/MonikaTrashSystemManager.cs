@@ -71,11 +71,7 @@ public sealed class MonikaTrashSystem(bool canSeeCrew) : IDirtableSystemType
 
 	public void Deteriorate(float deltaTime)
 	{
-		if (RoleAssignState.Instance.IsRoleSetUpEnd &&
-			this.isMonikaAlive &&
-			AmongUsClient.Instance.AmHost &&
-			MeetingHud.Instance == null &&
-			ExileController.Instance == null &&
+		if (GameProgressSystem.IsTaskPhase &&
 			!this.isEnd)
 		{
 			checkMonikaSpecialMeeting();

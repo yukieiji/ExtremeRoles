@@ -1,6 +1,3 @@
-﻿using ExtremeRoles.Module.RoleAssign;
-using UnityEngine;
-
 namespace ExtremeRoles.Module.ExtremeShipStatus;
 
 public sealed partial class ExtremeShipStatus
@@ -15,10 +12,8 @@ public sealed partial class ExtremeShipStatus
 	{
 		// 以下リファクタ済み
 
-			this.resetDeadPlayerInfo();
-			this.resetGlobalAction();
-			// this.resetPlayerSummary();
-			RoleAssignState.TryDestroy();
+		this.resetDeadPlayerInfo();
+		this.resetGlobalAction();
 
 		this.resetWins();
 	}

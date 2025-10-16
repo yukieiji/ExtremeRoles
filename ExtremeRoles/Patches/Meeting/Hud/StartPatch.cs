@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 
 using HarmonyLib;
 
@@ -10,8 +10,6 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
-using ExtremeRoles.Performance;
 
 using PlayerHeler = ExtremeRoles.Helper.Player;
 using SoundHelper = ExtremeRoles.Helper.Sound;
@@ -25,6 +23,7 @@ public static class MeetingHudStartPatch
 {
 	public static void Postfix(MeetingHud __instance)
 	{
+		GameProgressSystem.Current = GameProgressSystem.Progress.Meeting;
 
 		var state = ExtremeRolesPlugin.ShipState;
 		bool trigger = OnemanMeetingSystemManager.TryGetOnemanMeetingName(out string name);

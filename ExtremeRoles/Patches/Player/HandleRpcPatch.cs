@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 
 using HarmonyLib;
+
 using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -60,7 +62,7 @@ public static class PlayerControlHandleRpcPatch
 					}
 				}
 				RPCOperator.SetRoleToAllPlayer(assignData);
-				RoleAssignState.Instance.SwitchRoleAssignToEnd();
+				GameProgressSystem.Current = GameProgressSystem.Progress.RoleSetUpEnd;
 				break;
 			case RPCOperator.Command.ShareOption:
 				RPCOperator.ShareOption(reader);

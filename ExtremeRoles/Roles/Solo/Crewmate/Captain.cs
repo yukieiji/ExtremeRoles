@@ -227,14 +227,13 @@ public sealed class Captain :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (!this.awakeRole)
+        if (!this.awakeRole &&
+			Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
         {
-            if (Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
-            {
-                this.awakeRole = true;
-                this.HasOtherVision = this.awakeHasOtherVision;
-            }
-        }
+			this.awakeRole = true;
+			this.HasOtherVision = this.awakeHasOtherVision;
+		}
+
         if (this.IsAwake && MeetingHud.Instance)
         {
             if (meetingVoteText == null)

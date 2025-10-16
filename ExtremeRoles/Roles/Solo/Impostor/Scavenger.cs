@@ -1,3 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
+using Hazel;
+using TMPro;
+using UnityEngine;
+
 using ExtremeRoles.Extension.Controller;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -13,13 +22,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using Hazel;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using TMPro;
-using UnityEngine;
+
 using UnityObject = UnityEngine.Object;
 
 
@@ -65,9 +68,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public void Update()
 		{
-			if (IntroCutscene.Instance != null ||
-			    MeetingHud.Instance != null ||
-			    ExileController.Instance != null)
+			if (!GameProgressSystem.IsTaskPhase)
 			{
 				this.isShow = false;
 			}
@@ -190,9 +191,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			bool isSingle = this.button.MultiModalAbilityNum <= 1;
 
-			if (IntroCutscene.Instance != null ||
-				MeetingHud.Instance != null ||
-				ExileController.Instance != null ||
+			if (!GameProgressSystem.IsTaskPhase ||
 				isSingle || 
 				this.button.IsAbilityActiveOrCharge())
 			{

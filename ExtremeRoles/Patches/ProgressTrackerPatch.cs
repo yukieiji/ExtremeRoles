@@ -1,14 +1,14 @@
-﻿using System.Linq;
+using System.Linq;
+
+using AmongUs.GameOptions;
+using HarmonyLib;
 
 using UnityEngine;
-using HarmonyLib;
-using AmongUs.GameOptions;
 
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
-
 
 namespace ExtremeRoles.Patches;
 
@@ -25,7 +25,7 @@ public static class ProgressTrackerFixedUpdatePatch
     public static void Postfix(ProgressTracker __instance)
     {
 		if (!(
-				RoleAssignState.Instance.IsRoleSetUpEnd && (
+				GameProgressSystem.IsGameNow && (
 				(
 					ExtremeRoleManager.TryGetSafeCastedLocalRole<Agency>(out var agency) &&
 					agency.CanSeeTaskBar

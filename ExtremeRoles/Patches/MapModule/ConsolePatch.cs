@@ -1,9 +1,9 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Compat;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Patches.MapModule;
 
@@ -25,8 +25,7 @@ public static class ConsoleCanUsePatch
 		}
 
         PlayerTask task = __instance.FindTask(player);
-        if (task == null ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd)
+        if (task == null || !GameProgressSystem.IsTaskPhase)
 		{
 			return true;
 		}

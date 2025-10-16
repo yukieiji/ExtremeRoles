@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using HarmonyLib;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -19,7 +19,7 @@ public sealed class KillAnimationHook
 
 		var localPc = PlayerControl.LocalPlayer;
 		if (!(
-				RoleAssignState.Instance.IsRoleSetUpEnd &&
+				GameProgressSystem.IsGameNow &&
 				localPc != null &&
 				(source.PlayerId == localPc.PlayerId || target.PlayerId == localPc.PlayerId)
 			))

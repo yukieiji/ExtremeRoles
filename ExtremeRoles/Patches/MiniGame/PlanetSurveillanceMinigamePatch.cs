@@ -1,10 +1,10 @@
-﻿using System;
-using HarmonyLib;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.SystemType.SecurityDummySystem;
-using ExtremeRoles.Module.RoleAssign;
+using System;
 
+using HarmonyLib;
+
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.SecurityDummySystem;
+using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Patches.MiniGame;
 
@@ -43,9 +43,12 @@ public static class PlanetSurveillanceMinigameNextCameraPatch
         PlanetSurveillanceMinigame __instance,
         [HarmonyArgument(0)] int direction)
     {
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
+        if (!GameProgressSystem.IsTaskPhase ||
 			Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
-            SecurityHelper.IsAbilityUse()) { return true; }
+            SecurityHelper.IsAbilityUse())
+		{
+			return true;
+		}
 
         if (direction != 0 && Constants.ShouldPlaySfx())
         {
@@ -78,7 +81,7 @@ public static class PlanetSurveillanceMinigameUpdatePatch
 {
     public static bool Prefix(PlanetSurveillanceMinigame __instance)
     {
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
+        if (!GameProgressSystem.IsTaskPhase ||
 			Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity())
 		{
 			// Update内でやっている処理に特殊な処理がなくサボの処理だけなのでオーバーライドしなくてよし

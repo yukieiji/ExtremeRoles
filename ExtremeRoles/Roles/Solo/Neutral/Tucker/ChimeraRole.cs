@@ -112,13 +112,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (ShipStatus.Instance == null ||
-			GameData.Instance == null ||
-			!ShipStatus.Instance.enabled ||
-			rolePlayer == null ||
-			rolePlayer.Data == null ||
-			MeetingHud.Instance != null ||
-			ExileController.Instance != null)
+		if (!GameProgressSystem.IsTaskPhase)
 		{
 			if (resurrectText != null)
 			{

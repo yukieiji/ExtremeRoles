@@ -12,6 +12,7 @@ using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -176,18 +177,10 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
 
     public void Update(PlayerControl rolePlayer)
     {
-
-        if (ShipStatus.Instance == null ||
-            GameData.Instance == null ||
-            MeetingHud.Instance != null)
-        {
-            return;
-        }
-        if (!ShipStatus.Instance.enabled ||
-			OnemanMeetingSystemManager.IsActive)
-        {
-            return;
-        }
+        if (!GameProgressSystem.IsTaskPhase)
+		{
+			return;
+		}
 
 
         this.targetTimer -= Time.deltaTime;

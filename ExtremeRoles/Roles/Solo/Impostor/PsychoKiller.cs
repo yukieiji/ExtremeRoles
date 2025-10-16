@@ -4,12 +4,12 @@ using TMPro;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
+
+
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -57,13 +57,8 @@ public sealed class PsychoKiller :
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (rolePlayer == null ||
+		if (!GameProgressSystem.IsTaskPhase ||
 			rolePlayer.Data.IsDead ||
-			GameData.Instance == null ||
-			ShipStatus.Instance == null ||
-			!ShipStatus.Instance.enabled ||
-			ExileController.Instance != null ||
-			MeetingHud.Instance != null ||
 			!this.isStartTimer)
 		{
 			if (this.hasSelfTimer)

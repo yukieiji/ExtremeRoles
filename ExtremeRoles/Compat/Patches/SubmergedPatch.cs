@@ -6,13 +6,13 @@ using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
 
 using Submerged = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator;
 using SpawnPoint = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator.SpawnSetting;
+
 
 #nullable enable
 
@@ -144,7 +144,7 @@ public static class SubmarineOxygenSystemDetorioratePatch
 	{
 		if (__instance == null ||
 			!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod) ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd ||
+			!GameProgressSystem.IsTaskPhase ||
 			Roles.ExtremeRoleManager.GetLocalPlayerRole().Core.Id != Roles.ExtremeRoleId.Assassin)
 		{
 			return;
