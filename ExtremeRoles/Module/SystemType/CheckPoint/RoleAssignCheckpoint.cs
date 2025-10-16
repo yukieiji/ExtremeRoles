@@ -14,6 +14,6 @@ public sealed class RoleAssignCheckPoint : GlobalCheckpointSystem.CheckpointHand
 	}
 	public override void HandleChecked()
 	{
-		GameProgressSystem.Current = GameProgressSystem.Progress.RoleSetUpEnd;
+		GameProgressSystem.Current = GameProgressSystem.Progress.RoleSetUpReady;
 	}
 }
