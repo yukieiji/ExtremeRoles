@@ -13,6 +13,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using TMPro;
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -184,9 +185,6 @@ public sealed class Shooter :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (ShipStatus.Instance == null ||
-            GameData.Instance == null) { return; }
-
         if (!this.isAwake)
         {
             meetingInfoSetActive(false);

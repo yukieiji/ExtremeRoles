@@ -1,16 +1,12 @@
-using System.Collections.Generic;
-
-using UnityEngine;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -109,10 +105,8 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
     public void Update(
         PlayerControl rolePlayer)
     {
-        if (Minigame.Instance != null ||
-            ShipStatus.Instance == null ||
-            GameData.Instance == null ||
-            MeetingHud.Instance != null)
+        if (!GameProgressSystem.IsTaskPhase ||
+			Minigame.Instance != null)
         {
             return;
         }

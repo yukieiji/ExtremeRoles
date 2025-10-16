@@ -1,14 +1,14 @@
-﻿using System.Linq;
+using System.Linq;
 
 using HarmonyLib;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
-using ExtremeRoles.Performance;
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+
 
 namespace ExtremeRoles.Patches.Meeting;
 
@@ -22,7 +22,10 @@ public static class NamePlateHelper
 		var playerInfo = GameData.Instance.GetPlayerById(
 			playerId != byte.MaxValue ?
 			playerId : pva.TargetPlayerId);
-		if (playerInfo == null) { return; }
+		if (playerInfo == null)
+		{
+			return;
+		}
 
 		var cache = ShipStatus.Instance.CosmeticsCache;
 		string id = playerInfo.DefaultOutfit.NamePlateId;
@@ -32,7 +35,10 @@ public static class NamePlateHelper
 		{
 			np = cache.nameplates["nameplate_NoPlate"];
 		}
-		if (np == null) { return; }
+		if (np == null)
+		{
+			return;
+		}
 		pva.Background.sprite = np.GetAsset().Image;
 	}
 }
@@ -55,7 +61,7 @@ public static class PlayerVoteAreaSelectPatch
 	public static bool Prefix(PlayerVoteArea __instance)
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		if (!GameProgressSystem.IsGameNow)
 		{
 			return true;
 		}

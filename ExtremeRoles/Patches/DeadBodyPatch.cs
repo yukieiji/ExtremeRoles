@@ -1,7 +1,6 @@
 using HarmonyLib;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles;
@@ -14,7 +13,7 @@ public static class DeadBodyOnClickPatch
 {
 	public static bool Prefix()
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		if (!GameProgressSystem.IsTaskPhase)
 		{
 			return true;
 		}

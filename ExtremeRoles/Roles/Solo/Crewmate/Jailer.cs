@@ -9,16 +9,15 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
-
 
 #nullable enable
 
@@ -485,9 +484,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (GameData.Instance == null ||
-			ShipStatus.Instance == null ||
-			!ShipStatus.Instance.enabled ||
+		if (!GameProgressSystem.IsTaskPhase ||
 			this.Button is null ||
 			this.awakeRole)
 		{
@@ -596,10 +593,11 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (ShipStatus.Instance == null ||
-			GameData.Instance == null ||
-			!ShipStatus.Instance.enabled ||
-			this.allTask.Count == 0) { return; }
+		if (!GameProgressSystem.IsTaskPhase ||
+			this.allTask.Count == 0)
+		{
+			return;
+		}
 
 		var playerInfo = GameData.Instance.GetPlayerById(
 			rolePlayer.PlayerId);

@@ -104,7 +104,10 @@ public static class ExileControllerBeginePatch
 		ExileController __instance,
 		ExileController.InitProperties init)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+		if (!GameProgressSystem.IsGameNow)
+		{
+			return true; 
+		}
 
 		__instance.initData = init;
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))

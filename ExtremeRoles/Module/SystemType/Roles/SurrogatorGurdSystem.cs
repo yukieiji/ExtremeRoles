@@ -2,7 +2,6 @@ using Hazel;
 
 using ExtremeRoles.Module.Interface;
 using System.Collections.Generic;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
@@ -29,9 +28,7 @@ public sealed class SurrogatorGurdSystem(float preventKillTime) : IDirtableSyste
 
 	public void Deteriorate(float deltaTime)
 	{
-		if (this.init ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			IntroCutscene.Instance != null)
+		if (this.init || !GameProgressSystem.IsGameNow)
 		{
 			return;
 		}

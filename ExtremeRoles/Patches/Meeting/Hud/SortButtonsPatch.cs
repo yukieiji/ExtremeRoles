@@ -6,9 +6,6 @@ using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.RoleAssign;
-
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
@@ -24,7 +21,7 @@ public static class MeetingHudSortButtonsPatch
 {
 	public static bool Prefix(MeetingHud __instance)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		if (!GameProgressSystem.Is(GameProgressSystem.Progress.Meeting))
 		{
 			return true;
 		}
@@ -38,7 +35,7 @@ public static class MeetingHudSortButtonsPatch
 		IMeetingButtonInitialize? initializer = null;
 		bool isSpecialMeeting =
 			OnemanMeetingSystemManager.TryGetActiveSystem(out var onemanMeeting) &&
-			onemanMeeting.TryGetOnemanMeeting<IMeetingButtonInitialize>(out initializer);
+			onemanMeeting.TryGetOnemanMeeting(out initializer);
 
 		if (isChangeVoteAreaButtonSort && monikaOn)
 		{
@@ -93,7 +90,10 @@ public static class MeetingHudSortButtonsPatch
 
 	public static void Postfix(MeetingHud __instance)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
+		if (!GameProgressSystem.IsGameNow)
+		{
+			return;
+		}
 
 		var player = PlayerControl.LocalPlayer;
 		bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
@@ -131,7 +131,10 @@ public static class MeetingHudSortButtonsPatch
 	private static int playerName2Int(PlayerVoteArea pva)
 	{
 		var player = GameData.Instance.GetPlayerById(pva.TargetPlayerId);
-		if (player == null) { return 0; }
+		if (player == null)
+		{
+			return 0;
+		}
 
 		byte[] bytedPlayerName = Encoding.UTF8.GetBytes(player.DefaultOutfit.PlayerName.Trim());
 

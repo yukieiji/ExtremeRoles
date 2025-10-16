@@ -1,5 +1,6 @@
 using UnityEngine;
 
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Status;
 
@@ -19,11 +20,7 @@ public sealed class StressProgress(float range, float waitTime, StressProgress.O
 
 	public void Update(PlayerControl rolePlayer, in float deltaTime)
 	{
-		if (rolePlayer == null ||
-			MeetingHud.Instance != null ||
-			ExileController.Instance != null ||
-			ShipStatus.Instance == null ||
-			!ShipStatus.Instance.enabled)
+		if (!GameProgressSystem.IsTaskPhase)
 		{
 			this.waitTimer = waitTime;
 			return;

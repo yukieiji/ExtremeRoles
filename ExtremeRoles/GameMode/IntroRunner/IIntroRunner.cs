@@ -99,7 +99,7 @@ public interface IIntroRunner
 				{
 					yield return null;
 
-				} while (!RoleAssignState.Instance.IsReady);
+				} while (!GameProgressSystem.Is(GameProgressSystem.Progress.RoleSetUpReady));
 
 				yield return null;
 			}
@@ -123,7 +123,7 @@ public interface IIntroRunner
 		}
 
         // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
-        while (!RoleAssignState.Instance.IsRoleSetUpEnd)
+        while (!GameProgressSystem.Is(GameProgressSystem.Progress.RoleSetUpEnd))
         {
             yield return null;
         }

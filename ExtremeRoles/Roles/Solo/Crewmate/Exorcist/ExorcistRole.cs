@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -267,8 +266,7 @@ public sealed class ExorcistRole :
 
 	private static bool exorcistBlockCondition()
 	{
-		if (PlayerControl.LocalPlayer == null ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd)
+		if (PlayerControl.LocalPlayer == null || !GameProgressSystem.IsTaskPhase)
 		{
 			return true;
 		}

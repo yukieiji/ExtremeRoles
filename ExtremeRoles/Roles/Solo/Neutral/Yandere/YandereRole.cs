@@ -1,19 +1,17 @@
+
 using System.Collections.Generic;
 
 using UnityEngine;
 
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
-
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
@@ -230,18 +228,9 @@ public sealed class YandereRole :
 
     public void Update(PlayerControl rolePlayer)
     {
-
-        if (ShipStatus.Instance == null ||
-            GameData.Instance == null ||
-            MeetingHud.Instance != null ||
+        if (!GameProgressSystem.IsTaskPhase ||
             progress == null ||
             !isOneSidedLoverShare && OneSidedLover == null)
-        {
-            return;
-        }
-
-        if (!ShipStatus.Instance.enabled ||
-			OnemanMeetingSystemManager.IsActive)
         {
             return;
         }

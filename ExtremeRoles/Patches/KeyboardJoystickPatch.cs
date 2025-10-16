@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
@@ -8,6 +8,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches;
 
@@ -34,13 +35,17 @@ public static class KeyboardJoystickPatch
 		InfoOverlay.Instance.Update();
 
         // キルとベントボタン
-        if (PlayerControl.LocalPlayer.Data == null ||
-            PlayerControl.LocalPlayer.Data.Role == null ||
-            !RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
+        if (!GameProgressSystem.IsTaskPhase)
+		{
+			return;
+		}
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-        if (role.IsImpostor()) { return; }
+        if (role.IsImpostor())
+		{
+			return;
+		}
 
         var player = KeyboardJoystick.player;
         var hudManager = HudManager.Instance;

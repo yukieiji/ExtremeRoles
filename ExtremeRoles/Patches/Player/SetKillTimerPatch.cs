@@ -1,12 +1,9 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using UnityEngine;
 
-using AmongUs.GameOptions;
-
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.RoleAssign;
 
 using PlayerHelper = ExtremeRoles.Helper.Player;
 
@@ -21,7 +18,7 @@ public static class PlayerControlSetKillTimernPatch
 		PlayerControl __instance, [HarmonyArgument(0)] float time)
 	{
 		if (!(
-				RoleAssignState.Instance.IsRoleSetUpEnd &&
+				GameProgressSystem.IsGameNow &&
 				ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var role)
 			))
 		{

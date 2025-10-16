@@ -10,11 +10,10 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.Combination.Avalon;
@@ -218,18 +217,11 @@ public sealed class Miner :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (rolePlayer.Data.IsDead ||
-			rolePlayer.Data.Disconnected ||
-			ShipStatus.Instance == null ||
-			GameData.Instance == null ||
-			!ShipStatus.Instance.enabled ||
-			OnemanMeetingSystemManager.IsActive) { return; }
-
-        if (MeetingHud.Instance || ExileController.Instance)
-        {
-            this.timer = this.nonActiveTime;
-            return;
-        }
+		if (!GameProgressSystem.IsTaskPhase)
+		{
+			this.timer = this.nonActiveTime;
+			return;
+		}
 
         if (this.timer > 0.0f)
         {

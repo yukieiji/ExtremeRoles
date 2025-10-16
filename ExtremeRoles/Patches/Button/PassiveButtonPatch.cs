@@ -1,11 +1,10 @@
 using HarmonyLib;
-using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Button;
 
@@ -19,12 +18,9 @@ public static class PassiveButtonReceiveClickDownPatch
 
 		// ゲームが開始されていない、いわゆるプレイヤーがいないとかマップがない時にボタンが押せるようにするため
         if (obj == null ||
-			localPlayer == null ||
 			obj.transform.parent == null ||
             obj.transform.parent.name == GameSystem.BottomRightButtonGroupObjectName ||
-			ShipStatus.Instance == null ||
-            ExtremeRoleManager.GameRole.Count == 0 ||
-            !RoleAssignState.Instance.IsRoleSetUpEnd)
+			!GameProgressSystem.IsTaskPhase)
 		{
 			return true;
 		}

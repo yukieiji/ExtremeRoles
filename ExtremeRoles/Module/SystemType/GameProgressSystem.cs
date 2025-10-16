@@ -11,6 +11,7 @@ public sealed class GameProgressSystem : IExtremeSystemType
 		None = 0,
 		IntroStart,
 		RoleSetUpStart,
+		RoleSetUpReady,
 		RoleSetUpEnd,
 		IntroEnd,
 		PreTask,
@@ -21,39 +22,52 @@ public sealed class GameProgressSystem : IExtremeSystemType
 
 	public static Progress Current
 	{
-		private get => get();
 		set => set(value);
 	}
 
 	private Progress cur = Progress.None;
+	private bool isSetUpEnd = false;
+
+	public static bool IsRoleSetUpEnd
+		=> !(Is(Progress.None) || Is(Progress.IntroStart) || Is(Progress.RoleSetUpStart) || Is(Progress.RoleSetUpReady));
+
+	public static bool IsGameNow
+		=> IsTaskPhase && (Is(Progress.Meeting) || Is(Progress.Exiled) || Is(Progress.PreTask));
+
+	public static bool IsTaskPhase
+		=> Is(Progress.Task) && PlayerControl.LocalPlayer != null;
 
 	public static bool Is(Progress check)
 	{
-		var cur = get();
+		var cur = ExtremeSystemTypeManager.Instance.TryGet<GameProgressSystem>(ExtremeSystemType.GameProgress, out var system) ? system.cur : Progress.None;
+		
 		return check switch
 		{ 
 			Progress.None => cur is Progress.None || PlayerControl.LocalPlayer == null || ShipStatus.Instance == null || !ShipStatus.Instance.enabled,
 			Progress.IntroStart => isIntroCheck(cur, Progress.IntroStart),
 			Progress.RoleSetUpStart => isIntroCheck(cur, Progress.RoleSetUpStart),
+			Progress.RoleSetUpReady => isIntroCheck(cur, Progress.RoleSetUpReady),
 			Progress.RoleSetUpEnd => isIntroCheck(cur, Progress.RoleSetUpEnd),
 			Progress.IntroEnd => isIntroCheck(cur, Progress.IntroEnd),
-			Progress.Meeting => cur is Progress.Meeting || MeetingHud.Instance != null || ExileController.Instance != null,
-			Progress.Exiled => cur is Progress.Exiled || ExileController.Instance != null,
-			Progress.PreTask => cur is Progress.PreTask || ExileController.Instance != null,
+			Progress.PreTask => (cur is Progress.PreTask || ExileController.Instance != null) && system.isSetUpEnd,
+			Progress.Task => cur is Progress.Task && system.isSetUpEnd,
+			Progress.Meeting => (cur is Progress.Meeting || MeetingHud.Instance != null || ExileController.Instance != null) && system.isSetUpEnd,
+			Progress.Exiled => (cur is Progress.Exiled || ExileController.Instance != null) && system.isSetUpEnd,
 			_ => cur == check,
 		};
 	}
 	private static bool isIntroCheck(Progress cur, Progress target)
 		=> cur == target || IntroCutscene.Instance != null;
 
-	private static Progress get()
-		=> ExtremeSystemTypeManager.Instance.TryGet<GameProgressSystem>(ExtremeSystemType.GameProgress, out var system) ? system.cur : Progress.None;
-
 	private static void set(Progress newProgress)
 	{
 		if (ExtremeSystemTypeManager.Instance.TryGet<GameProgressSystem>(ExtremeSystemType.GameProgress, out var system))
 		{
 			system.cur = newProgress;
+			if (newProgress is Progress.RoleSetUpEnd)
+			{
+				system.isSetUpEnd = true;
+			}
 		}
 	}
 

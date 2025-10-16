@@ -1,20 +1,16 @@
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.Ability;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -212,11 +208,10 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (ShipStatus.Instance == null ||
-            GameData.Instance == null) { return; }
-
-        if (!ShipStatus.Instance.enabled ||
-            this.TakeTask.Count == 0) { return; }
+        if (!GameProgressSystem.IsTaskPhase || this.TakeTask.Count == 0)
+		{
+			return;
+		}
 
         var playerInfo = GameData.Instance.GetPlayerById(
             rolePlayer.PlayerId);

@@ -4,6 +4,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Ability;
 
@@ -27,12 +28,7 @@ public sealed class ArrowController(int arrowNum, bool isShowOnVentPlayer)
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (this.arrowNum == 0 ||
-			rolePlayer == null ||
-			MeetingHud.Instance != null ||
-			ExileController.Instance != null ||
-			ShipStatus.Instance == null ||
-			!ShipStatus.Instance.enabled)
+		if (this.arrowNum == 0 || !GameProgressSystem.IsTaskPhase)
 		{
 			return;
 		}

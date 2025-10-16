@@ -1,22 +1,20 @@
-﻿using HarmonyLib;
-using System.Collections;
-
-using UnityEngine;
 using AmongUs.GameOptions;
-
 using BepInEx.Unity.IL2CPP.Utils.Collections;
-
 using ExtremeRoles.Compat;
-using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.Solo.Impostor;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.VentModule;
-
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.Solo.Impostor;
+using HarmonyLib;
+using System.Collections;
+using UnityEngine;
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
+
 
 #nullable enable
 
@@ -307,16 +305,14 @@ public static class VentUsePatch
             return false;
         }
 
-        if (RoleAssignState.Instance.IsRoleSetUpEnd)
+        if (GameProgressSystem.IsTaskPhase &&
+			UnderWarper.IsNoAnimateVent)
         {
-            if (UnderWarper.IsNoAnimateVent)
-            {
-                UnderWarper.RpcUseVentWithNoAnimation(
-                    localPlayer, __instance.Id, isEnter);
-                __instance.SetButtons(isEnter);
-                return false;
-            }
-        }
+			UnderWarper.RpcUseVentWithNoAnimation(
+					localPlayer, __instance.Id, isEnter);
+			__instance.SetButtons(isEnter);
+			return false;
+		}
 
         if (isEnter)
         {

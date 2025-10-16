@@ -1,20 +1,20 @@
 using System;
 using System.Linq;
 
-using HarmonyLib;
-
-using InnerNet;
-using Il2CppSystem.Linq;
-using Il2CppSystem.Collections.Generic;
 using AmongUs.GameOptions;
+using HarmonyLib;
+using Il2CppSystem.Collections.Generic;
+using Il2CppSystem.Linq;
+using InnerNet;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityHelper = ExtremeRoles.Helper.Unity;
 
@@ -29,8 +29,6 @@ public static class RoleManagerAssignSelectRolesPatch
 {
 	public static bool Prefix()
 	{
-		RoleAssignState.TryDestroy();
-
 		if (ExtremeGameModeManager.Instance.EnableXion)
 		{
 
@@ -102,7 +100,7 @@ public static class RoleManagerAssignRoleOnDeathPatch
     public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
     {
         if (!(
-				RoleAssignState.Instance.IsRoleSetUpEnd &&
+				!GameProgressSystem.IsGameNow &&
 				ExtremeRoleManager.TryGetRole(player.PlayerId, out var role)
 			))
         {
@@ -126,7 +124,7 @@ public static class RoleManagerAssignRoleOnDeathPatch
     public static void Postfix([HarmonyArgument(0)] PlayerControl player)
     {
         if (!(
-				RoleAssignState.Instance.IsRoleSetUpEnd &&
+				GameProgressSystem.IsGameNow &&
 				ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
 				role.IsAssignGhostRole()
 			))
@@ -144,7 +142,7 @@ public static class RoleManagerTryAssignRoleOnDeathPatch
     public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
     {
         // バニラ幽霊クルー役職にニュートラルがアサインされる時はTrueを返す
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
+        if (!GameProgressSystem.IsGameNow ||
 			ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsAssignNeutralToVanillaCrewGhostRole ||
 			!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role))
 		{

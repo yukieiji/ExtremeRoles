@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.Solo.Neutral;
-using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -82,12 +81,7 @@ public sealed class MinerMineEffect : MonoBehaviour
 		if (!this.isUseEffect ||
 			player == null ||
 			player.Data == null ||
-			ShipStatus.Instance == null ||
-			!ShipStatus.Instance.enabled ||
-			GameData.Instance == null ||
-			MeetingHud.Instance != null ||
-			ExileController.Instance != null ||
-			OnemanMeetingSystemManager.IsActive)
+			!GameProgressSystem.IsTaskPhase)
 		{
 			this.audioSource.volume = 0.0f;
 			return;

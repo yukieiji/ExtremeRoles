@@ -45,10 +45,10 @@ public sealed class BakerySystem : IDirtableSystemType
 
 	public void Deteriorate(float deltaTime)
 	{
-		if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			MeetingHud.Instance != null ||
-			ExileController.Instance != null) { return; }
+		if (!GameProgressSystem.IsTaskPhase)
+		{
+			return;
+		}
 
 		if (!this.isUnion)
 		{

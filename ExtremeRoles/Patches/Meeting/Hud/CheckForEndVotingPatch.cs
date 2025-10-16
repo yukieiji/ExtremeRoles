@@ -6,7 +6,6 @@ using HarmonyLib;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
@@ -22,7 +21,7 @@ public static class MeetingHudCheckForEndVotingPatch
 
 	public static bool Prefix(MeetingHud __instance)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		if (!GameProgressSystem.IsGameNow)
 		{ 
 			return true;
 		}

@@ -28,7 +28,7 @@ public static class PlayerControlMurderPlayerPatch
 		[HarmonyArgument(0)] PlayerControl target,
 		[HarmonyArgument(1)] MurderResultFlags resultFlags)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
+		if (!GameProgressSystem.IsGameNow ||
 			resultFlags.HasFlag(MurderResultFlags.FailedError) ||
 			!ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var role))
 		{

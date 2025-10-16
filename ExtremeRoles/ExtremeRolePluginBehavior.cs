@@ -1,9 +1,9 @@
-using ExtremeRoles.Helper;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module;
 using UnityEngine;
-using ExtremeRoles.Module.RoleAssign;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles;
 
@@ -20,7 +20,7 @@ public sealed class ExtremeRolePluginBehavior : MonoBehaviour
 #if DEBUG
         if (Input.GetKeyDown(KeyCode.F9) &&
             ExtremeRolesPlugin.DebugMode.Value &&
-            RoleAssignState.Instance.IsRoleSetUpEnd)
+			GameProgressSystem.IsTaskPhase)
         {
             Logging.Debug($"{PlayerStatistics.Create()}");
         }

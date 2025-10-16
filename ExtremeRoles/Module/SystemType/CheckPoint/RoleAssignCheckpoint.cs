@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Module.SystemType.CheckPoint;
 
@@ -14,6 +14,6 @@ public sealed class RoleAssignCheckPoint : GlobalCheckpointSystem.CheckpointHand
 	}
 	public override void HandleChecked()
 	{
-		RoleAssignState.Instance.SwitchToReady();
+		GameProgressSystem.Current = GameProgressSystem.Progress.RoleSetUpEnd;
 	}
 }
