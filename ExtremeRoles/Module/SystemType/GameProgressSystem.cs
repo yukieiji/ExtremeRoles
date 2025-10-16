@@ -32,7 +32,7 @@ public sealed class GameProgressSystem : IExtremeSystemType
 		=> !(Is(Progress.None) || Is(Progress.IntroStart) || Is(Progress.RoleSetUpStart) || Is(Progress.RoleSetUpReady));
 
 	public static bool IsGameNow
-		=> IsTaskPhase && (Is(Progress.Meeting) || Is(Progress.Exiled) || Is(Progress.PreTask));
+		=> IsTaskPhase || Is(Progress.Meeting) || Is(Progress.Exiled) || Is(Progress.PreTask);
 
 	public static bool IsTaskPhase
 		=> Is(Progress.Task) && PlayerControl.LocalPlayer != null;
