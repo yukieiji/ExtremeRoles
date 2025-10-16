@@ -21,10 +21,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 public sealed class ExorcistRole :
 	SingleRoleBase,
 	IRoleFakeIntro,
+	IDeadBodyReportOverride,
 	IRoleUpdate,
 	IRoleAutoBuildAbility
 {
-	public ExtremeRoleType FakeTeam => this.FakeImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
 	public override IStatusModel? Status => status;
 
 	public ExtremeAbilityButton? Button { get; set; }

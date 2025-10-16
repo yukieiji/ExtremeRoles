@@ -1,10 +1,14 @@
 using ExtremeRoles.Helper;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
 public sealed class ExorcistStatus : IStatusModel, IDeadBodyReportOverrideStatus
+public sealed class ExorcistStatus : IStatusModel, IRoleFakeIntro
 {
+	public ExtremeRoleType FakeTeam => exorcist.FakeImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
+
 	public bool CanReport => false;
 
 	private readonly ExorcistRole exorcist;

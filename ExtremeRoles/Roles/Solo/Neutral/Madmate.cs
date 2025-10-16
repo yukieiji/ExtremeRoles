@@ -15,8 +15,7 @@ public sealed class Madmate :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleUpdate,
-    IRoleWinPlayerModifier,
-	IRoleFakeIntro
+    IRoleWinPlayerModifier
 {
     public enum MadmateOption
     {
@@ -33,7 +32,6 @@ public sealed class Madmate :
     private bool isDontCountAliveCrew = false;
 
     private bool isSeeImpostorNow = false;
-    private bool isUpdateMadmate = false;
     private float seeImpostorTaskGage;
     private float seeFromImpostorTaskGage;
 
@@ -47,9 +45,6 @@ public sealed class Madmate :
     }
 
     public bool IsDontCountAliveCrew => this.isDontCountAliveCrew;
-
-	public ExtremeRoleType FakeTeam =>
-		this.isUpdateMadmate ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
 
 	private ExtremeAbilityButton madmateAbilityButton;
 
@@ -130,9 +125,10 @@ public sealed class Madmate :
         }
         if (this.canSeeFromImpostor &&
             taskGage >= this.seeFromImpostorTaskGage &&
-            !this.isUpdateMadmate)
+            this.Status is MadmateStatus madmateStatus &&
+            !madmateStatus.IsUpdateMadmate)
         {
-            this.isUpdateMadmate = true;
+            madmateStatus.IsUpdateMadmate = true;
 
             using (var caller = RPCOperator.CreateCaller(
                 RPCOperator.Command.MadmateToFakeImpostor))
@@ -191,8 +187,8 @@ public sealed class Madmate :
     {
         var cate = this.Loader;
         this.isSeeImpostorNow = false;
-        this.isUpdateMadmate = false;
         this.FakeImpostor = false;
+        this.Status = new MadmateStatus();
 
         this.isDontCountAliveCrew = cate.GetValue<MadmateOption, bool>(
             MadmateOption.IsDontCountAliveCrew);
@@ -213,11 +209,14 @@ public sealed class Madmate :
         this.isSeeImpostorNow =
             this.HasTask &&
             this.seeImpostorTaskGage <= 0.0f;
-        this.isUpdateMadmate =
-            this.HasTask &&
-            this.canSeeFromImpostor &&
-            this.seeFromImpostorTaskGage <= 0.0f;
 
-        this.FakeImpostor = this.isUpdateMadmate;
+        if (this.Status is MadmateStatus madmateStatus)
+        {
+            madmateStatus.IsUpdateMadmate =
+                this.HasTask &&
+                this.canSeeFromImpostor &&
+                this.seeFromImpostorTaskGage <= 0.0f;
+            this.FakeImpostor = madmateStatus.IsUpdateMadmate;
+        }
     }
 }
