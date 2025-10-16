@@ -24,8 +24,7 @@ public sealed class IronMateRole :
 	SingleRoleBase,
 	IRoleAwake<RoleTypes>,
 	IRoleMurderPlayerHook,
-	IRoleWinPlayerModifier,
-	IDeadBodyReportOverride
+	IRoleWinPlayerModifier
 {
     public enum Option
     {
@@ -38,7 +37,6 @@ public sealed class IronMateRole :
 
 	public bool IsAwake => false;
 	public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
-	public bool CanReport => false;
 
 	private IronMateStatusModel? status;
 

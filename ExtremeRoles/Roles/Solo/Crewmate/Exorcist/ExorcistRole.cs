@@ -21,7 +21,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 public sealed class ExorcistRole :
 	SingleRoleBase,
 	IRoleFakeIntro,
-	IDeadBodyReportOverride,
 	IRoleUpdate,
 	IRoleAutoBuildAbility
 {
@@ -29,8 +28,6 @@ public sealed class ExorcistRole :
 	public override IStatusModel? Status => status;
 
 	public ExtremeAbilityButton? Button { get; set; }
-
-	public bool CanReport => false;
 
 	private ExorcistStatus? status;
 	private NetworkedPlayerInfo? target;

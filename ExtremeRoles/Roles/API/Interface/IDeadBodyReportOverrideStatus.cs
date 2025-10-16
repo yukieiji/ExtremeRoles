@@ -1,6 +1,6 @@
 ﻿namespace ExtremeRoles.Roles.API.Interface;
 
-public interface IDeadBodyReportOverride
+public interface IDeadBodyReportOverrideStatus
 {
 	public bool CanReport { get; }
 }

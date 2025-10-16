@@ -29,11 +29,15 @@ public static class DeadBodyOnClickPatch
 			return false;
 		}
 
-		var (role, another) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IDeadBodyReportOverride>();
+		var (role, another) = ExtremeRoleManager.GetLocalRole();
+		if (role is null) return true;
+
+		var status = role.Status as IDeadBodyReportOverrideStatus;
+		var anotherStatus = another?.Status as IDeadBodyReportOverrideStatus;
 
 		return
 			!OnemanMeetingSystemManager.IsActive &&
-			(role != null ? role.CanReport : true) &&
-			(another != null ? another.CanReport : true);
+			(status != null ? status.CanReport : true) &&
+			(anotherStatus != null ? anotherStatus.CanReport : true);
 	}
 }
