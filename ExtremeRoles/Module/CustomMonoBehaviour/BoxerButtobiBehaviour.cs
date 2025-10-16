@@ -4,8 +4,10 @@ using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.SystemType;
 
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
+
 
 
 #nullable enable
@@ -121,5 +123,13 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 		Player.RpcUncheckSnap(killerId, killer.transform.position);
 		Player.RpcUncheckMurderPlayer(killerId, killerId, byte.MaxValue);
 		ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(killerId, PlayerStatus.Clashed);
+	}
+
+#pragma warning disable CA1822 // メンバーを static に設定します
+	public void OnDDestroy()
+#pragma warning restore CA1822 // メンバーを static に設定します
+	{
+		var system = ButtonLockSystem.CreateOrGetAbilityButtonLockSystem();
+		system.UnLock((int)ButtonLockSystem.ConditionId.Boxer);
 	}
 }

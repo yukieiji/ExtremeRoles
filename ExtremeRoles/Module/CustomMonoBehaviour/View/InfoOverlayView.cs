@@ -47,7 +47,7 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 
 	public void Awake()
 	{
-		Transform trans = base.transform;
+		var trans = base.transform;
 
 		this.title = trans.Find("Title").GetComponent<TextMeshProUGUI>();
 		this.info = trans.Find("PageChangeButton/InfoText").GetComponent<TextMeshProUGUI>();
@@ -62,6 +62,9 @@ public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 		this.subText = trans.Find("InfoSub/Viewport/Content").GetComponent<TextMeshProUGUI>();
 
 		this.toggleButton = trans.Find("ToggleButton").GetComponent<ToggleButton>();
+
+		var closeButton = trans.Find("CloseButton").GetComponent<Button>();
+		closeButton.onClick.AddListener(() => base.gameObject.SetActive(false));
 	}
 
 	[HideFromIl2Cpp]

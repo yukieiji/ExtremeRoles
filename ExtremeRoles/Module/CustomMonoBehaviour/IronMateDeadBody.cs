@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -111,13 +111,25 @@ public sealed class IronMateDeadBody : MonoBehaviour
 			this.fake.Clear();
 		}
 
-		if (this.deadBodyShowTime <= 0.0f)
+		if (this.deadBodyShowTime > 0.0f)
 		{
-			var targetColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
-			foreach (SpriteRenderer rend in this.rends)
-			{
-				rend.color = targetColor;
-			}
+			return;
 		}
+
+		var targetColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+		foreach (SpriteRenderer rend in this.rends)
+		{
+			rend.color = targetColor;
+		}
+
+		if (!this.gameObject.TryGetComponent<ViperDeadBody>(out var viperDeadBody))
+		{
+			return;
+		}
+
+		// dissolveCurrentTimeをTime.fixedDeltaTime引いた時に必ず0秒以下にするためにこうする
+		viperDeadBody.dissolveCurrentTime = Time.fixedDeltaTime - 0.00001f;
+		// そして1フレームでも表示させないためにFixedUpdateを呼び出す
+		viperDeadBody.FixedUpdate();
 	}
 }

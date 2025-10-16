@@ -3,6 +3,7 @@ using UnityEngine;
 
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Extension.UnityEvents;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.Interface;
@@ -45,6 +46,8 @@ public class ExtremeAbilityButton
 	private readonly IButtonAutoActivator activator;
 
 	private bool isShow = true;
+
+	private bool isSeReady = true;
 
 	private const string materialName = "_Desat";
 	private const float chargeFailureTime = 2.5f;
@@ -237,6 +240,13 @@ public class ExtremeAbilityButton
 				// チャージ時間なのでタイマーを増やす
 				this.Timer += Time.deltaTime;
 
+				if (chargingBehavior.ChargeGage >= 1.0f &&
+					this.isSeReady)
+				{
+					Sound.PlaySound(Sound.Type.ChargeComplete, 0.5f);
+					this.isSeReady = false;
+				}
+
 				// そのままだと表示が分かりにくいので変える
 				this.Button.isCoolingDown = true;
 				this.Button.SetCooldownFill(1 - chargingBehavior.ChargeGage);
@@ -349,6 +359,7 @@ public class ExtremeAbilityButton
 					throw new ArgException("Can't inject IChargingBehavior");
 				}
 				chargingBehavior.ChargeGage = 0.0f;
+				this.isSeReady = true;
 				this.Timer = 0;
 				break;
 			case AbilityState.Activating:

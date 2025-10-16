@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+
 using UnityEngine;
 
 using ExtremeRoles.Roles;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Helper;
@@ -28,10 +28,12 @@ public static class Sound
 		ScavengerPickUpWeapon,
 		ScavengerFireNormalGun,
 		ScavengerFireBeam,
+		BoxerStraight,
 
 		MinerMineSE,
 
 		ReplaceNewTask,
+		ChargeComplete,
     }
 
     private static readonly Dictionary<Type, AudioClip> cachedAudio =

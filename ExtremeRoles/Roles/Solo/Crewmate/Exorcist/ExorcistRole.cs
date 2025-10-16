@@ -177,7 +177,7 @@ public sealed class ExorcistRole :
 		this.target = this.tmpTarget;
 		foreach (var s in this.lockSystem)
 		{
-			s.RpcLock(ButtonLockSystem.Ops.Lock, (int)ButtonLockSystem.ConditionId.Exorcist);
+			s.RpcLock(ButtonLockSystem.Ops.RpcLock, (int)ButtonLockSystem.ConditionId.Exorcist);
 		}
 		using (var op = RPCOperator.CreateCaller(
 			RPCOperator.Command.ExorcistOps))
