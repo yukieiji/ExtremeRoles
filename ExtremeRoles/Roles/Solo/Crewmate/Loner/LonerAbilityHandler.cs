@@ -112,8 +112,8 @@ public sealed class LonerAbilityHandler(
 		{
 			return;
 		}
+
 		this.status.Update(rolePlayer, Time.deltaTime);
-		}
 
 		if (rolePlayer == null ||
 			rolePlayer.Data == null ||
