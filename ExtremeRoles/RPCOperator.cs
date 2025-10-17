@@ -9,6 +9,7 @@ using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
+using ExtremeRoles.Roles.Solo.Neutral.Madmate;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using Hazel;
 using InnerNet;
@@ -717,7 +718,7 @@ public static class RPCOperator
     }
     public static void MadmateToFakeImpostor(byte playerId)
     {
-        Roles.Solo.Neutral.Madmate.ToFakeImpostor(playerId);
+        MadmateRole.ToFakeImpostor(playerId);
     }
 	public static void ArtistDrawOps(in MessageReader reader)
 	{

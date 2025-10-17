@@ -3,15 +3,17 @@ using UnityEngine;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Roles.API.Interface.Status;
 
-namespace ExtremeRoles.Roles.Solo.Neutral;
+#nullable enable
 
-public sealed class Madmate :
+namespace ExtremeRoles.Roles.Solo.Neutral.Madmate;
+
+public sealed class MadmateRole :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleUpdate,
@@ -35,20 +37,15 @@ public sealed class Madmate :
     private float seeImpostorTaskGage;
     private float seeFromImpostorTaskGage;
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.madmateAbilityButton;
-        set
-        {
-            this.madmateAbilityButton = value;
-        }
-    }
+    public ExtremeAbilityButton? Button { get; set; }
 
-    public bool IsDontCountAliveCrew => this.isDontCountAliveCrew;
+    public bool IsDontCountAliveCrew => isDontCountAliveCrew;
 
-	private ExtremeAbilityButton madmateAbilityButton;
 
-    public Madmate() : base(
+	public override IStatusModel? Status => status;
+	private MadmateStatus? status;
+
+    public MadmateRole() : base(
 		RoleCore.BuildNeutral(
 			ExtremeRoleId.Madmate,
 			Palette.ImpostorRed),
@@ -58,8 +55,11 @@ public sealed class Madmate :
     public static void ToFakeImpostor(byte playerId)
     {
 
-        Madmate madmate = ExtremeRoleManager.GetSafeCastedRole<Madmate>(playerId);
-        if (madmate == null) { return; }
+        MadmateRole? madmate = ExtremeRoleManager.GetSafeCastedRole<MadmateRole>(playerId);
+        if (madmate == null)
+		{
+			return;
+		}
 
         madmate.FakeImpostor = true;
     }
@@ -67,7 +67,7 @@ public sealed class Madmate :
     public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
-            "selfKill", Resources.UnityObjectLoader.LoadSpriteFromResources(
+            "selfKill", UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.SucideSprite));
     }
 
@@ -88,7 +88,7 @@ public sealed class Madmate :
         return;
     }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -116,16 +116,16 @@ public sealed class Madmate :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (!this.HasTask) { return; }
+        if (!HasTask) { return; }
 
         float taskGage = Helper.Player.GetPlayerTaskGage(rolePlayer);
-        if (taskGage >= this.seeImpostorTaskGage && !isSeeImpostorNow)
+        if (taskGage >= seeImpostorTaskGage && !isSeeImpostorNow)
         {
-            this.isSeeImpostorNow = true;
+			isSeeImpostorNow = true;
         }
-        if (this.canSeeFromImpostor &&
-            taskGage >= this.seeFromImpostorTaskGage &&
-            this.Status is MadmateStatus madmateStatus &&
+        if (canSeeFromImpostor &&
+            taskGage >= seeFromImpostorTaskGage &&
+			Status is MadmateStatus madmateStatus &&
             !madmateStatus.IsUpdateMadmate)
         {
             madmateStatus.IsUpdateMadmate = true;
@@ -142,7 +142,7 @@ public sealed class Madmate :
     public override Color GetTargetRoleSeeColor(
         SingleRoleBase targetRole, byte targetPlayerId)
     {
-        if (this.isSeeImpostorNow &&
+        if (isSeeImpostorNow &&
             (targetRole.IsImpostor() || targetRole.FakeImpostor))
         {
             return Palette.ImpostorRed;
@@ -185,38 +185,38 @@ public sealed class Madmate :
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Loader;
-        this.isSeeImpostorNow = false;
-        this.FakeImpostor = false;
-        this.Status = new MadmateStatus();
+        var cate = Loader;
+		isSeeImpostorNow = false;
+		FakeImpostor = false;
+		status = new MadmateStatus();
 
-        this.isDontCountAliveCrew = cate.GetValue<MadmateOption, bool>(
+		isDontCountAliveCrew = cate.GetValue<MadmateOption, bool>(
             MadmateOption.IsDontCountAliveCrew);
 
-        this.CanRepairSabotage = cate.GetValue<MadmateOption, bool>(
+		CanRepairSabotage = cate.GetValue<MadmateOption, bool>(
             MadmateOption.CanFixSabotage);
-        this.UseVent = cate.GetValue<MadmateOption, bool>(
+		UseVent = cate.GetValue<MadmateOption, bool>(
             MadmateOption.CanUseVent);
-        this.HasTask = cate.GetValue<MadmateOption, bool>(
+		HasTask = cate.GetValue<MadmateOption, bool>(
             MadmateOption.HasTask);
-        this.seeImpostorTaskGage = cate.GetValue<MadmateOption, int>(
+		seeImpostorTaskGage = cate.GetValue<MadmateOption, int>(
             MadmateOption.SeeImpostorTaskGage) / 100.0f;
-        this.canSeeFromImpostor = cate.GetValue<MadmateOption, bool>(
+		canSeeFromImpostor = cate.GetValue<MadmateOption, bool>(
             MadmateOption.CanSeeFromImpostor);
-        this.seeFromImpostorTaskGage = cate.GetValue<MadmateOption, int>(
+		seeFromImpostorTaskGage = cate.GetValue<MadmateOption, int>(
             MadmateOption.CanSeeFromImpostorTaskGage) / 100.0f;
 
-        this.isSeeImpostorNow =
-            this.HasTask &&
-            this.seeImpostorTaskGage <= 0.0f;
+		isSeeImpostorNow =
+			HasTask &&
+			seeImpostorTaskGage <= 0.0f;
 
-        if (this.Status is MadmateStatus madmateStatus)
+        if (Status is MadmateStatus madmateStatus)
         {
             madmateStatus.IsUpdateMadmate =
-                this.HasTask &&
-                this.canSeeFromImpostor &&
-                this.seeFromImpostorTaskGage <= 0.0f;
-            this.FakeImpostor = madmateStatus.IsUpdateMadmate;
+				HasTask &&
+				canSeeFromImpostor &&
+				seeFromImpostorTaskGage <= 0.0f;
+			FakeImpostor = madmateStatus.IsUpdateMadmate;
         }
     }
 }
