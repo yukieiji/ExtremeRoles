@@ -3,8 +3,10 @@ using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
-public sealed class ExorcistStatus : IStatusModel
+public sealed class ExorcistStatus : IStatusModel, IDeadBodyReportOverrideStatus
 {
+	public bool CanReport => false;
+
 	private readonly ExorcistRole exorcist;
 	private readonly float range;
 	private float awakeFakeImpTaskGage;
