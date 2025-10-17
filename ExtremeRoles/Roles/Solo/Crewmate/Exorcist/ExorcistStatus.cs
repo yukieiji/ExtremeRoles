@@ -5,8 +5,7 @@ using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
-public sealed class ExorcistStatus : IStatusModel, IDeadBodyReportOverrideStatus
-public sealed class ExorcistStatus : IStatusModel, IRoleFakeIntro
+public sealed class ExorcistStatus : IStatusModel, IDeadBodyReportOverrideStatus, IRoleFakeIntro
 {
 	public ExtremeRoleType FakeTeam => exorcist.FakeImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
 

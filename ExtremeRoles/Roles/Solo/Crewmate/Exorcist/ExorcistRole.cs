@@ -20,8 +20,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
 public sealed class ExorcistRole :
 	SingleRoleBase,
-	IRoleFakeIntro,
-	IDeadBodyReportOverride,
 	IRoleUpdate,
 	IRoleAutoBuildAbility
 {
