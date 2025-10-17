@@ -1,4 +1,4 @@
-﻿namespace ExtremeRoles.Roles.API.Interface;
+namespace ExtremeRoles.Roles.API.Interface.Status;
 
 public interface IDeadBodyReportOverrideStatus
 {

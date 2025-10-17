@@ -4,7 +4,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Patches;
 
@@ -18,26 +18,17 @@ public static class DeadBodyOnClickPatch
 			return true;
 		}
 
-		if (ButtonLockSystem.IsReportButtonLock())
+		var localPlayer = PlayerControl.LocalPlayer;
+
+		if (ButtonLockSystem.IsReportButtonLock() ||
+			localPlayer == null ||
+			localPlayer.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _))
 		{
 			return false;
 		}
 
-		if (PlayerControl.LocalPlayer == null ||
-			PlayerControl.LocalPlayer.gameObject.TryGetComponent<BoxerButtobiBehaviour>(out _))
-		{
-			return false;
-		}
-
-		var (role, another) = ExtremeRoleManager.GetLocalRole();
-		if (role is null) return true;
-
-		var status = role.Status as IDeadBodyReportOverrideStatus;
-		var anotherStatus = another?.Status as IDeadBodyReportOverrideStatus;
-
-		return
-			!OnemanMeetingSystemManager.IsActive &&
-			(status != null ? status.CanReport : true) &&
-			(anotherStatus != null ? anotherStatus.CanReport : true);
+		return 
+			!OnemanMeetingSystemManager.IsActive && 
+			ExtremeRoleManager.GetLocalRoleCastedStatusFlag<IDeadBodyReportOverrideStatus>(x => x.CanReport);
 	}
 }

@@ -1,5 +1,4 @@
 using ExtremeRoles.Helper;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
