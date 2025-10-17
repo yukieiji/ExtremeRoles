@@ -901,8 +901,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     {
         target = byte.MaxValue;
 
-        PlayerControl player = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this, range);
+        PlayerControl player = Player.GetClosestPlayerInRange(this.range);
 
         if (player == null) { return false; }
         target = player.PlayerId;

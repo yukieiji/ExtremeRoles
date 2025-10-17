@@ -364,9 +364,7 @@ public sealed class TuckerRole :
 	{
 		target = byte.MaxValue;
 
-		var targetPlayer = Player.GetClosestPlayerInRange(
-			PlayerControl.LocalPlayer,
-			this, range);
+		var targetPlayer = Player.GetClosestPlayerInRange(range);
 		if (targetPlayer == null)
 		{
 			return false;

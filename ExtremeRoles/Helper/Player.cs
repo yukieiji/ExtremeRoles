@@ -129,6 +129,17 @@ public static class Player
         return playersInAbilityRangeSorted[0];
     }
 
+	public static PlayerControl GetClosestPlayerInRange(float range)
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer == null)
+		{
+			return null; 
+		}
+
+		var role = ExtremeRoleManager.GetLocalPlayerRole();
+		return GetClosestPlayerInRange(PlayerControl.LocalPlayer, role, range);
+	}
 
 	public static PlayerControl GetClosestPlayerInRange(
         PlayerControl sourcePlayer,

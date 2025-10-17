@@ -188,9 +188,7 @@ public sealed class Summoner :
 	{
 		this.targetData = null;
 
-		PlayerControl target = Player.GetClosestPlayerInRange(
-			PlayerControl.LocalPlayer, this,
-			this.range);
+		PlayerControl target = Player.GetClosestPlayerInRange(this.range);
 		if (target == null ||
 			(
 				this.summonTarget != null &&

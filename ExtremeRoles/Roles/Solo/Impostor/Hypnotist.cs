@@ -316,9 +316,7 @@ public sealed class Hypnotist :
 			return false;
 		}
 
-        this.target = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer,
-            this, this.range);
+        this.target = Player.GetClosestPlayerInRange(this.range);
 
         return this.target != null && IRoleAbility.IsCommonUse();
     }

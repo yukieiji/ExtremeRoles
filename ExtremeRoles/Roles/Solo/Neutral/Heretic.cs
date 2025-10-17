@@ -136,8 +136,7 @@ public sealed class Heretic :
 			return false;
 		}
 
-		var player = Player.GetClosestPlayerInRange(
-		   PlayerControl.LocalPlayer, this, this.range);
+		var player = Player.GetClosestPlayerInRange(this.range);
 
 		if (player == null ||
 			this.meetingTarget == player.PlayerId)

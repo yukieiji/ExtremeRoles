@@ -332,9 +332,7 @@ public sealed class QueenRole :
 
     public bool IsAbilityUse()
     {
-        Target = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer,
-            this, range);
+        Target = Player.GetClosestPlayerInRange(range);
 
         return Target != null && IRoleAbility.IsCommonUse();
     }

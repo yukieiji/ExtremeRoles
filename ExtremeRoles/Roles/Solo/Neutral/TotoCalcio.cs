@@ -79,9 +79,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
 
     public bool IsAbilityUse()
     {
-        this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this,
-            this.range);
+        this.tmpTarget = Helper.Player.GetClosestPlayerInRange(this.range);
 
         if (this.tmpTarget == null ||
             this.tmpTarget.Data == null) { return false; }

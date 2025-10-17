@@ -239,8 +239,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 
     public bool IsAbilityUse()
     {
-        this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this, this.range);
+        this.tmpTarget = Helper.Player.GetClosestPlayerInRange(this.range);
 
         bool isUpgrade = this.container.IsFirstStage(
             this.tmpTarget == null ? byte.MaxValue : this.tmpTarget.PlayerId);

@@ -75,7 +75,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 
     public bool IsAbilityUse()
     {
-		this.target = Player.GetClosestPlayerInRange(PlayerControl.LocalPlayer, this, this.range);
+		this.target = Player.GetClosestPlayerInRange(this.range);
         return IRoleAbility.IsCommonUse() && this.target != null;
     }
 
