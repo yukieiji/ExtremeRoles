@@ -138,7 +138,7 @@ public static class Player
 		}
 
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
-		return GetClosestPlayerInRange(PlayerControl.LocalPlayer, role, range);
+		return GetClosestPlayerInRange(localPlayer, role, range);
 	}
 
 	public static PlayerControl GetClosestPlayerInRange(
