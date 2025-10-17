@@ -56,12 +56,13 @@ public sealed class MadmateRole :
     {
 
         MadmateRole? madmate = ExtremeRoleManager.GetSafeCastedRole<MadmateRole>(playerId);
-        if (madmate == null)
+        if (madmate is null ||
+			madmate.status is null)
 		{
 			return;
 		}
 
-        madmate.FakeImpostor = true;
+		madmate.status.IsFakeImpostor = true;
     }
 
     public void CreateAbility()
@@ -129,9 +130,9 @@ public sealed class MadmateRole :
         if (canSeeFromImpostor &&
             taskGage >= seeFromImpostorTaskGage &&
 			this.status is not null &&
-			!this.status.IsUpdateMadmate)
+			!this.status.IsFakeImpostor)
         {
-			this.status.IsUpdateMadmate = true;
+			this.status.IsFakeImpostor = true;
 
             using (var caller = RPCOperator.CreateCaller(
                 RPCOperator.Command.MadmateToFakeImpostor))
@@ -145,8 +146,8 @@ public sealed class MadmateRole :
     public override Color GetTargetRoleSeeColor(
         SingleRoleBase targetRole, byte targetPlayerId)
     {
-        if (isSeeImpostorNow &&
-            (targetRole.IsImpostor() || targetRole.FakeImpostor))
+        if (this.isSeeImpostorNow &&
+            (targetRole.IsImpostor() || (targetRole.Status is IFakeImpostorStatus status && status.IsFakeImpostor)))
         {
             return Palette.ImpostorRed;
         }
@@ -190,7 +191,6 @@ public sealed class MadmateRole :
     {
         var cate = Loader;
 		this.isSeeImpostorNow = false;
-		this.FakeImpostor = false;
 		this.status = new MadmateStatus();
 
 		this.isDontCountAliveCrew = cate.GetValue<MadmateOption, bool>(
@@ -210,13 +210,12 @@ public sealed class MadmateRole :
             MadmateOption.CanSeeFromImpostorTaskGage) / 100.0f;
 
 		this.isSeeImpostorNow =
-			HasTask &&
-			seeImpostorTaskGage <= 0.0f;
+			this.HasTask &&
+			this.seeImpostorTaskGage <= 0.0f;
 
-		this.status.IsUpdateMadmate =
-			HasTask &&
-			canSeeFromImpostor &&
-			seeFromImpostorTaskGage <= 0.0f;
-		this.FakeImpostor = this.status.IsUpdateMadmate;
+		this.status.IsFakeImpostor = 
+			this.HasTask &&
+			this.canSeeFromImpostor &&
+			this.seeFromImpostorTaskGage <= 0.0f;
 	}
 }

@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using ExtremeRoles.Roles.API.Interface.Status;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.API;
@@ -23,7 +25,10 @@ public abstract partial class SingleRoleBase
 			return Palette.ImpostorRed;
 		}
 
-        if ((targetRole.IsImpostor() || targetRole.FakeImpostor) &&
+        if ((
+				targetRole.IsImpostor() || 
+				(targetRole.Status is IFakeImpostorStatus fake && fake.IsFakeImpostor)
+			) &&
             this.IsImpostor())
         {
             return Palette.ImpostorRed;

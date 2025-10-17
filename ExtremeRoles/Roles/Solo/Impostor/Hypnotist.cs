@@ -919,6 +919,11 @@ public sealed class Hypnotist :
 	}
 }
 
+public sealed class DollStatus : IStatusModel, IFakeImpostorStatus
+{
+	public bool IsFakeImpostor { get; } = true;
+}
+
 public sealed class Doll :
     SingleRoleBase,
     IRoleAutoBuildAbility,
@@ -957,6 +962,9 @@ public sealed class Doll :
     private Sprite securitySprite;
 	private Sprite vitalSprite;
 
+	public override IStatusModel Status => this.status;
+	private readonly DollStatus status;
+
 	private bool prevKillState;
 
     public Doll(
@@ -973,7 +981,7 @@ public sealed class Doll :
         this.dollPlayerId = dollPlayerId;
         this.hypnotistPlayerId = hypnotistPlayerId;
         this.hypnotist = parent;
-        this.FakeImpostor = true;
+        this.status = new DollStatus();
         this.canUseCrakingModule = new HashSet<AbilityType>();
         this.prevKillState = false;
 

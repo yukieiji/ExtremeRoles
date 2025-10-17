@@ -16,6 +16,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Patches.Button;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -276,7 +277,7 @@ public sealed class Heretic :
 		SingleRoleBase targetRole, byte targetPlayerId)
 	{
 		if (this.isSeeImpostorNow &&
-			(targetRole.IsImpostor() || targetRole.FakeImpostor))
+			(targetRole.IsImpostor() || (targetRole.Status is IFakeImpostorStatus fake && fake.IsFakeImpostor)))
 		{
 			return Palette.ImpostorRed;
 		}

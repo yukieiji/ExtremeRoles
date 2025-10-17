@@ -7,12 +7,12 @@ using TMPro;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
-
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.SystemType;
+
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -232,8 +232,11 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
             SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];
 
             if (role.IsImpostor() ||
-                role.FakeImpostor ||
-                this.targetId == player.PlayerId) { continue; }
+                (role.Status is IFakeImpostorStatus fake && fake.IsFakeImpostor) ||
+                this.targetId == player.PlayerId)
+			{
+				continue;
+			}
 
             this.targetId = player.PlayerId;
             var pool = this.PlayerIcon[this.targetId];
