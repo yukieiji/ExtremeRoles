@@ -1,26 +1,28 @@
 using ExtremeRoles.Helper;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
-public sealed class ExorcistStatus : IStatusModel, IDeadBodyReportOverrideStatus
+public sealed class ExorcistStatus : IStatusModel, IDeadBodyReportOverrideStatus, IFakeImpostorStatus, IRoleFakeIntro
 {
+	public ExtremeRoleType FakeTeam => this.IsFakeImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
+
 	public bool CanReport => false;
 
-	private readonly ExorcistRole exorcist;
 	private readonly float range;
 	private float awakeFakeImpTaskGage;
 
+	public bool IsFakeImpostor { get; private set; }
 	public NetworkedPlayerInfo CurTarget => Player.GetDeadBodyInfo(this.range);
 
 	public ExorcistStatus(
-		ExorcistRole exorcist,
 		float awakeFakeImpTaskGage,
 		float range)
 	{
 		this.awakeFakeImpTaskGage = awakeFakeImpTaskGage;
-		this.exorcist = exorcist;
-		this.exorcist.FakeImpostor = awakeFakeImpTaskGage <= 0.0f;
+		this.IsFakeImpostor = awakeFakeImpTaskGage <= 0.0f;
 		this.range = range;
 	}
 
@@ -39,7 +41,7 @@ public sealed class ExorcistStatus : IStatusModel, IDeadBodyReportOverrideStatus
 	
 	public void UpdateToFakeImpostor()
 	{
-		this.exorcist.FakeImpostor = true;
+		this.IsFakeImpostor = true;
 		this.awakeFakeImpTaskGage = -1.0f;
 	}
 

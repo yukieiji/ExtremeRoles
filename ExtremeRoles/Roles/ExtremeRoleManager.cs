@@ -27,6 +27,7 @@ using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Neutral.IronMate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
 using ExtremeRoles.Roles.Solo.Neutral.Missionary;
+using ExtremeRoles.Roles.Solo.Neutral.Madmate;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
@@ -357,7 +358,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Miner     , new Miner()},
             {(int)ExtremeRoleId.Eater     , new Eater()},
             {(int)ExtremeRoleId.Queen     , new QueenRole()},
-            {(int)ExtremeRoleId.Madmate   , new Madmate()},
+            {(int)ExtremeRoleId.Madmate   , new MadmateRole()},
             {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
 			{(int)ExtremeRoleId.Artist    , new Artist()},

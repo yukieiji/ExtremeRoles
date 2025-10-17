@@ -32,7 +32,6 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     public bool IsApplyEnvironmentVision = true;
     public bool IsWin = false;
 
-    public bool FakeImpostor = false;
     public bool IsBoost = false;
     public float MoveSpeed = 1.0f;
 

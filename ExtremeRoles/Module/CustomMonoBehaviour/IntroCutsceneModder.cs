@@ -97,11 +97,14 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 			{
 				continue;
 			}
-			if (tryAddFakeTeam(playerId, role, team, temaId) ||
-				(
-					role is MultiAssignRoleBase multiAssignRole &&
-					tryAddFakeTeam(playerId, multiAssignRole, team, temaId)
-				))
+			if (tryAddFakeTeam(playerId, role, team, temaId))
+			{
+				continue;
+			}
+
+			if (role is MultiAssignRoleBase multiAssignRole &&
+			    multiAssignRole.AnotherRole is not null &&
+			    tryAddFakeTeam(playerId, multiAssignRole.AnotherRole, team, temaId))
 			{
 				continue;
 			}
@@ -114,7 +117,7 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 		PlayerIl2CppList impTeam,
 		ExtremeRoleType teamId)
 	{
-		if (role is IRoleFakeIntro mainFake &&
+		if (role.Status is IRoleFakeIntro mainFake &&
 			mainFake.FakeTeam == teamId)
 		{
 			var player = Player.GetPlayerControlById(playerId);
