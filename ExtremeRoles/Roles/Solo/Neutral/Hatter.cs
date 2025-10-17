@@ -18,7 +18,7 @@ using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public class HatterStatusModel : IStatusModel, IDeadBodyReportOverrideStatus
+public sealed class HatterStatusModel : IStatusModel, IDeadBodyReportOverrideStatus
 {
 	public bool CanReport => false;
 }
