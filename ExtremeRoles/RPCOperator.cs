@@ -37,6 +37,7 @@ public static class RPCOperator
         UncheckedMurderPlayer,
 		UncheckedExiledPlayer,
 		UncheckedRevive,
+		UncheckedReportDeadbody,
         CleanDeadBody,
         FixForceRepairSpecialSabotage,
         ReplaceDeadReason,
@@ -428,6 +429,18 @@ public static class RPCOperator
         }
 
 		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
+	}
+
+	public static void UncheckedReportDeadBody(byte playerId)
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (!AmongUsClient.Instance.AmHost ||
+			localPlayer == null)
+		{
+			return;
+		}
+		var playerInfo = playerId == byte.MaxValue ? null : GameData.Instance.GetPlayerById(playerId);
+		localPlayer.ReportDeadBody(playerInfo);
 	}
 
 
