@@ -18,7 +18,7 @@ public sealed class ServantStatus : IStatusModel, IParentChainStatus, IFakeImpos
         this.queen = queen;
 
         var core = baseRole.Core;
-        this.IsFakeImpostor = core.Team == ExtremeRoleType.Impostor;
+        this.IsFakeImpostor = core.Team is ExtremeRoleType.Impostor;
     }
 
 	public void RemoveParent(byte rolePlayerId)

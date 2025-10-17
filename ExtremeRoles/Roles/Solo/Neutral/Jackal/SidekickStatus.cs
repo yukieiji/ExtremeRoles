@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
+#nullable enable
+
 namespace ExtremeRoles.Roles.Solo.Neutral.Jackal;
 
 public class SidekickStatus : IStatusModel, IParentChainStatus, IFakeImpostorStatus
