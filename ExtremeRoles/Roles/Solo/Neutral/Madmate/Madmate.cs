@@ -130,9 +130,9 @@ public sealed class MadmateRole :
         if (canSeeFromImpostor &&
             taskGage >= seeFromImpostorTaskGage &&
 			this.status is not null &&
-			!this.status.IsUpdateMadmate)
+			!this.status.IsFakeImpostor)
         {
-			this.status.IsUpdateMadmate = true;
+			this.status.IsFakeImpostor = true;
 
             using (var caller = RPCOperator.CreateCaller(
                 RPCOperator.Command.MadmateToFakeImpostor))
@@ -210,13 +210,12 @@ public sealed class MadmateRole :
             MadmateOption.CanSeeFromImpostorTaskGage) / 100.0f;
 
 		this.isSeeImpostorNow =
-			HasTask &&
-			seeImpostorTaskGage <= 0.0f;
+			this.HasTask &&
+			this.seeImpostorTaskGage <= 0.0f;
 
-		this.status.IsUpdateMadmate =
-			HasTask &&
-			canSeeFromImpostor &&
-			seeFromImpostorTaskGage <= 0.0f;
-		this.status.IsFakeImpostor = this.status.IsUpdateMadmate;
+		this.status.IsFakeImpostor = 
+			this.HasTask &&
+			this.canSeeFromImpostor &&
+			this.seeFromImpostorTaskGage <= 0.0f;
 	}
 }

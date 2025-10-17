@@ -1,5 +1,6 @@
-using ExtremeRoles.Roles.API.Interface.Status;
 using UnityEngine;
+
+using ExtremeRoles.Roles.API.Interface.Status;
 
 #nullable enable
 

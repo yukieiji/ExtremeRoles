@@ -8,9 +8,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral.Madmate;
 
 public sealed class MadmateStatus : IStatusModel, IRoleFakeIntro, IFakeImpostorStatus
 {
-    public bool IsUpdateMadmate { get; set; } = false;
-
 	public bool IsFakeImpostor { get; set; } = false;
 
-	public ExtremeRoleType FakeTeam => IsUpdateMadmate ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
+	public ExtremeRoleType FakeTeam => this.IsFakeImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
 }
