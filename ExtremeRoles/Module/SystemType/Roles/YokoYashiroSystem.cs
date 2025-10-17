@@ -158,7 +158,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 
 	public void Deteriorate(float deltaTime)
 	{
-		if (!(AmongUsClient.Instance.AmHost &&GameProgressSystem.IsTaskPhase))
+		if (!(AmongUsClient.Instance.AmHost && GameProgressSystem.IsTaskPhase))
 		{
 			return;
 		}
