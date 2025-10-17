@@ -116,7 +116,10 @@ public sealed class MadmateRole :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (!HasTask) { return; }
+        if (!this.HasTask)
+		{
+			return;
+		}
 
         float taskGage = Helper.Player.GetPlayerTaskGage(rolePlayer);
         if (taskGage >= seeImpostorTaskGage && !isSeeImpostorNow)
@@ -125,10 +128,10 @@ public sealed class MadmateRole :
         }
         if (canSeeFromImpostor &&
             taskGage >= seeFromImpostorTaskGage &&
-			Status is MadmateStatus madmateStatus &&
-            !madmateStatus.IsUpdateMadmate)
+			this.status is not null &&
+			!this.status.IsUpdateMadmate)
         {
-            madmateStatus.IsUpdateMadmate = true;
+			this.status.IsUpdateMadmate = true;
 
             using (var caller = RPCOperator.CreateCaller(
                 RPCOperator.Command.MadmateToFakeImpostor))
@@ -186,37 +189,34 @@ public sealed class MadmateRole :
     protected override void RoleSpecificInit()
     {
         var cate = Loader;
-		isSeeImpostorNow = false;
-		FakeImpostor = false;
-		status = new MadmateStatus();
+		this.isSeeImpostorNow = false;
+		this.FakeImpostor = false;
+		this.status = new MadmateStatus();
 
-		isDontCountAliveCrew = cate.GetValue<MadmateOption, bool>(
+		this.isDontCountAliveCrew = cate.GetValue<MadmateOption, bool>(
             MadmateOption.IsDontCountAliveCrew);
 
-		CanRepairSabotage = cate.GetValue<MadmateOption, bool>(
+		this.CanRepairSabotage = cate.GetValue<MadmateOption, bool>(
             MadmateOption.CanFixSabotage);
-		UseVent = cate.GetValue<MadmateOption, bool>(
+		this.UseVent = cate.GetValue<MadmateOption, bool>(
             MadmateOption.CanUseVent);
-		HasTask = cate.GetValue<MadmateOption, bool>(
+		this.HasTask = cate.GetValue<MadmateOption, bool>(
             MadmateOption.HasTask);
-		seeImpostorTaskGage = cate.GetValue<MadmateOption, int>(
+		this.seeImpostorTaskGage = cate.GetValue<MadmateOption, int>(
             MadmateOption.SeeImpostorTaskGage) / 100.0f;
-		canSeeFromImpostor = cate.GetValue<MadmateOption, bool>(
+		this.canSeeFromImpostor = cate.GetValue<MadmateOption, bool>(
             MadmateOption.CanSeeFromImpostor);
-		seeFromImpostorTaskGage = cate.GetValue<MadmateOption, int>(
+		this.seeFromImpostorTaskGage = cate.GetValue<MadmateOption, int>(
             MadmateOption.CanSeeFromImpostorTaskGage) / 100.0f;
 
-		isSeeImpostorNow =
+		this.isSeeImpostorNow =
 			HasTask &&
 			seeImpostorTaskGage <= 0.0f;
 
-        if (Status is MadmateStatus madmateStatus)
-        {
-            madmateStatus.IsUpdateMadmate =
-				HasTask &&
-				canSeeFromImpostor &&
-				seeFromImpostorTaskGage <= 0.0f;
-			FakeImpostor = madmateStatus.IsUpdateMadmate;
-        }
-    }
+		this.status.IsUpdateMadmate =
+			HasTask &&
+			canSeeFromImpostor &&
+			seeFromImpostorTaskGage <= 0.0f;
+		this.FakeImpostor = this.status.IsUpdateMadmate;
+	}
 }
