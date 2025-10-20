@@ -12,7 +12,8 @@ public interface IRoleVoteModifier
         GamblerAddVote,
 
         DelusionerCheckVote = 88659,
-    }
+		CEOOverrideVote,
+	}
 
     public int Order { get; }
 

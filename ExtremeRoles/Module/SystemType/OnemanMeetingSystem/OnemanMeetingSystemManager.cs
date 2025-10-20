@@ -48,7 +48,8 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 	public enum Type
 	{
 		Assassin,
-		Monika
+		Monika,
+		CEO
 	}
 
 	public static OnemanMeetingSystemManager CreateOrGet()
@@ -341,6 +342,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		{
 			Type.Assassin => new AssassinAssassinateTargetMeeting(),
 			Type.Monika => new MonikaLoveTargetMeeting(),
+			Type.CEO => new CEOForceMeeting(),
 			_ => null,
 		};
 
