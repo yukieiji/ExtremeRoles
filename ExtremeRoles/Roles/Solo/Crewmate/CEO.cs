@@ -81,7 +81,7 @@ public sealed class CEO : SingleRoleBase,
 		foreach (var (playerId, voteNum) in voteResult)
 		{
 
-			if (maxNum < voteNum)
+			if (maxNum > voteNum)
 			{
 				continue;
 			}
