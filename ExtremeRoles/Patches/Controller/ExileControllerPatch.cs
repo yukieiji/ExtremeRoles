@@ -130,7 +130,24 @@ public static class ExileControllerBeginePatch
 				__instance, shipOption.Exile);
 			return false;
 		}
-		return true;
+
+		var info = getOverideInfo(__instance.initData);
+		if (info == null)
+		{
+			return true;
+		}
+
+		if (info.ExiledPlayer != null)
+		{
+			setUpExiledPlayer(__instance, info.ExiledPlayer.DefaultOutfit);
+		}
+		else
+		{
+			__instance.Player.gameObject.SetActive(false);
+		}
+		__instance.completeString = info.AnimationText;
+		__instance.StartCoroutine(__instance.Animate());
+		return false;
 	}
 
     private static void confirmExile(
@@ -216,17 +233,7 @@ public static class ExileControllerBeginePatch
 			return string.Empty;
 		}
 
-		OverideInfo? info = null;
-		// 今後複数役職でIExiledAnimationOverrideが出てきた時に考えろ
-		if (exiledPlayerRole.AbilityClass is IExiledAnimationOverrideWhenExiled @override)
-		{
-			info = @override.OverideInfo;
-		}
-		else if (exiledPlayerRole is MultiAssignRoleBase multiAssignRole &&
-			exiledPlayerRole.AbilityClass is IExiledAnimationOverrideWhenExiled @multiOverride)
-		{
-			info = @multiOverride.OverideInfo;
-		}
+		OverideInfo? info = getOverideInfo(init);
 
 		if (info != null)
 		{
@@ -294,6 +301,39 @@ public static class ExileControllerBeginePatch
 			player.SetCustomHatPosition(controller.exileHatPosition);
 			player.SetCustomVisorPosition(controller.exileVisorPosition);
 		}
+	}
+
+	private static OverideInfo? getOverideInfo(ExileController.InitProperties? init)
+	{
+		bool validExiled = init != null && init.outfit != null;
+		if (!validExiled)
+		{
+			return null;
+		}
+
+		NetworkedPlayerInfo? targetExiled = init!.networkedPlayer;
+		byte exiledPlayerId = targetExiled.PlayerId;
+		if (!ExtremeRoleManager.TryGetRole(exiledPlayerId, out var exiledPlayerRole))
+		{
+			// Critical error: exiled player's role not found. Log and/or return.
+			ExtremeRolesPlugin.Logger.LogError($"Exiled player role not found for ID: {exiledPlayerId}");
+			// Depending on desired behavior, might throw or simply not populate text, leading to default display.
+			// For now, let's return to prevent further processing with a null role.
+			return null;
+		}
+
+		OverideInfo? info = null;
+		// 今後複数役職でIExiledAnimationOverrideが出てきた時に考えろ
+		if (exiledPlayerRole.AbilityClass is IExiledAnimationOverrideWhenExiled @override)
+		{
+			info = @override.OverideInfo;
+		}
+		else if (exiledPlayerRole is MultiAssignRoleBase multiAssignRole &&
+			exiledPlayerRole.AbilityClass is IExiledAnimationOverrideWhenExiled @multiOverride)
+		{
+			info = @multiOverride.OverideInfo;
+		}
+		return info;
 	}
 
 	private static string getNoExiledString(ExileController controller)
