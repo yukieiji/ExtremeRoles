@@ -50,12 +50,12 @@ public sealed class CEO : SingleRoleBase,
 
 	public bool IsAwake
 	{
-		get => this.staus is not null && this.staus.IsAwake;
+		get => this.status is not null && this.status.IsAwake;
 		set
 		{
-			if (this.staus is not null)
+			if (this.status is not null)
 			{
-				this.staus.IsAwake = value;
+				this.status.IsAwake = value;
 			}
 		}
 	}
@@ -67,9 +67,9 @@ public sealed class CEO : SingleRoleBase,
 	private bool isShowRolePlayerVote;
 	private bool useCEOMeeting;
 
-	public override IStatusModel? Status => staus;
+	public override IStatusModel? Status => status;
 
-	private CEOStatus? staus;
+	private CEOStatus? status;
 
 	private float awakeTaskGage;
 	private bool awakeHasOtherVision;
@@ -222,8 +222,8 @@ public sealed class CEO : SingleRoleBase,
 
 	protected override void RoleSpecificInit()
 	{
-		this.staus = new CEOStatus();
-		this.AbilityClass = new CEOAbilityHandler(this.staus);
+		this.status = new CEOStatus();
+		this.AbilityClass = new CEOAbilityHandler(this.status);
 
 
 		this.isShowRolePlayerVote = this.Loader.GetValue<Option, bool>(Option.IsShowRolePlayerVote);
