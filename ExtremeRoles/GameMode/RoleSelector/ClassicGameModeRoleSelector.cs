@@ -99,6 +99,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Summoner,
 			ExtremeRoleId.Exorcist,
 			ExtremeRoleId.Loner,
+			ExtremeRoleId.CEO,
 
 			ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using AmongUs.GameOptions;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.Meeting;
@@ -10,31 +11,59 @@ using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
+using ExtremeRoles.Roles.API.Interface.Status;
 
+#nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class CEOAbilityHandler : IAbility, IExiledAnimationOverrideWhenExiled
+public sealed class CEOAbilityHandler(CEOStatus status) : IAbility, IExiledAnimationOverrideWhenExiled
 {
-	public string AnimationText => "CEO権限により本投票は無効になりました";
+	private readonly CEOStatus status = status;
+	public OverideInfo? OverideInfo => this.status.IsAwake ? new OverideInfo(null, "CEO権限により本投票は無効になりました") : null;
+}
 
-	public NetworkedPlayerInfo OverideExiledTarget => null;
+public sealed class CEOStatus : IStatusModel
+{
+	public bool IsAwake { get; set; }
 }
 
 public sealed class CEO : SingleRoleBase,
 	IRoleAwake<RoleTypes>,
 	IRoleVoteModifier
 {
-	public bool IsAwake { get; private set; }
+	public enum Option
+	{
+		AwakeTaskGage,
+		IsShowRolePlayerVote,
+		IsUseCEOMeeting
+	}
+
+	public bool IsAwake
+	{
+		get => this.staus is not null && this.staus.IsAwake;
+		set
+		{
+			if (this.staus is not null)
+			{
+				this.staus.IsAwake = value;
+			}
+		}
+	}
 
 	public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
 	public int Order => (int)IRoleVoteModifier.ModOrder.CEOOverrideVote;
 
-
 	private bool isShowRolePlayerVote;
-	private bool useCEOmeeting;
+	private bool useCEOMeeting;
 
+	public override IStatusModel? Status => staus;
+
+	private CEOStatus? staus;
+
+	private float awakeTaskGage;
+	private bool awakeHasOtherVision;
 
 	public CEO() : base(
 		RoleCore.BuildCrewmate(
@@ -55,7 +84,7 @@ public sealed class CEO : SingleRoleBase,
 		// 死んでも蘇らせる
 		rolePlayer.Revive();
 
-		if (!this.useCEOmeeting)
+		if (!this.useCEOMeeting)
 		{
 			return;
 		}
@@ -112,19 +141,50 @@ public sealed class CEO : SingleRoleBase,
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (!GameProgressSystem.IsTaskPhase)
+		if (!(
+				GameProgressSystem.IsTaskPhase &&
+				this.IsAwake
+			))
 		{
 			return;
 		}
+
+		if (Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
+		{
+			this.IsAwake = true;
+			this.HasOtherVision = this.awakeHasOtherVision;
+		}
+
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		throw new NotImplementedException();
+		factory.Create0To100Percentage10StepOption(Option.AwakeTaskGage, defaultGage: 50);
+		factory.CreateBoolOption(Option.IsShowRolePlayerVote, true);
+		factory.CreateBoolOption(Option.IsUseCEOMeeting, true);
 	}
 
 	protected override void RoleSpecificInit()
 	{
-		throw new NotImplementedException();
+		this.staus = new CEOStatus();
+		this.AbilityClass = new CEOAbilityHandler(this.staus);
+
+
+		this.isShowRolePlayerVote = this.Loader.GetValue<Option, bool>(Option.IsShowRolePlayerVote);
+		this.useCEOMeeting = this.Loader.GetValue<Option, bool>(Option.IsUseCEOMeeting);
+
+		this.awakeTaskGage = this.Loader.GetValue<Option, int>(Option.AwakeTaskGage) / 100.0f;
+		this.awakeHasOtherVision = this.HasOtherVision;
+
+		if (this.awakeTaskGage <= 0.0f)
+		{
+			this.IsAwake = true;
+			this.HasOtherVision = this.awakeHasOtherVision;
+		}
+		else
+		{
+			this.IsAwake = false;
+			this.HasOtherVision = false;
+		}
 	}
 }

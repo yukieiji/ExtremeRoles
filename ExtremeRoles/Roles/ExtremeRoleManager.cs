@@ -91,6 +91,7 @@ public enum ExtremeRoleId : int
 	Summoner,
 	Exorcist,
 	Loner,
+	CEO,
 
 	SpecialImpostor,
     Evolver,
@@ -313,6 +314,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Summoner    , new Summoner()},
 			{(int)ExtremeRoleId.Exorcist    , new ExorcistRole()},
 			{(int)ExtremeRoleId.Loner       , new LonerRole()},
+			{(int)ExtremeRoleId.CEO         , new CEO()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},

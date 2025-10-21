@@ -216,31 +216,29 @@ public static class ExileControllerBeginePatch
 			return string.Empty;
 		}
 
-		string result = string.Empty;
+		OverideInfo? info = null;
 		// 今後複数役職でIExiledAnimationOverrideが出てきた時に考えろ
 		if (exiledPlayerRole.AbilityClass is IExiledAnimationOverrideWhenExiled @override)
 		{
-			result = @override.AnimationText;
-			targetExiled = @override.OverideExiledTarget;
+			info = @override.OverideInfo;
 		}
 		else if (exiledPlayerRole is MultiAssignRoleBase multiAssignRole &&
 			exiledPlayerRole.AbilityClass is IExiledAnimationOverrideWhenExiled @multiOverride)
 		{
-			result = @multiOverride.AnimationText;
-			targetExiled = @multiOverride.OverideExiledTarget;
+			info = @multiOverride.OverideInfo;
 		}
 
-		if (!string.IsNullOrEmpty(result))
+		if (info != null)
 		{
-			if (targetExiled != null)
+			if (info.ExiledPlayer != null)
 			{
-				setUpExiledPlayer(controller, targetExiled.DefaultOutfit);
+				setUpExiledPlayer(controller, info.ExiledPlayer.DefaultOutfit);
 			}
 			else
 			{
 				controller.Player.gameObject.SetActive(false);
 			}
-			return result;
+			return info.AnimationText;
 		}
 
 

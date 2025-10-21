@@ -2,8 +2,9 @@
 
 namespace ExtremeRoles.Roles.API.Interface.Ability;
 
+public sealed record OverideInfo(NetworkedPlayerInfo? ExiledPlayer, string AnimationText);
+
 public interface IExiledAnimationOverrideWhenExiled
 {
-	public NetworkedPlayerInfo? OverideExiledTarget { get; }
-	public string AnimationText { get; }
+	public OverideInfo? OverideInfo { get; }
 }
