@@ -39,7 +39,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		system.meeting is not null;
 
 	public bool IsIgnoreDeadPlayer => this.meeting is not null && this.meeting.IgnoreDeadPlayer;
-	public bool IsSkipButtonActive => this.meeting is not null && this.meeting.IgnoreDeadPlayer;
+	public bool IsSkipButtonActive => this.meeting is not null && this.meeting.SkipButtonActive;
 
 	private const ExtremeSystemType systemType = ExtremeSystemType.OnemanMeetingSystem;
 

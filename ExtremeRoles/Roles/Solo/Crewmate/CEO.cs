@@ -1,4 +1,9 @@
+using System.Collections.Generic;
+
+using Hazel;
+
 using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -9,9 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
-using Hazel;
-using System;
-using System.Collections.Generic;
+
 
 #nullable enable
 
@@ -20,7 +23,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 public sealed class CEOAbilityHandler(CEOStatus status) : IAbility, IExiledAnimationOverrideWhenExiled
 {
 	private readonly CEOStatus status = status;
-	public OverideInfo? OverideInfo => this.status.IsAwake ? new OverideInfo(null, "CEO権限により本投票は無効になりました") : null;
+	public OverrideInfo? OverrideInfo => this.status.IsAwake ? new OverrideInfo(null, "CEO権限により本投票は無効になりました") : null;
 }
 
 public sealed class CEOStatus : IStatusModel
@@ -148,7 +151,7 @@ public sealed class CEO : SingleRoleBase,
 		}
 		
 		bool isTie = false;
-		int maxNum = -50;
+		int maxNum = int.MinValue;
 		this.isMeExiled = false;
 
 		foreach (var (playerId, voteNum) in voteResult)
@@ -188,10 +191,7 @@ public sealed class CEO : SingleRoleBase,
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (!(
-				GameProgressSystem.IsTaskPhase &&
-				this.IsAwake
-			))
+		if (!GameProgressSystem.IsTaskPhase || this.IsAwake)
 		{
 			return;
 		}

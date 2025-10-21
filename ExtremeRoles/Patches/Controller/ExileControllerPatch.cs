@@ -131,7 +131,7 @@ public static class ExileControllerBeginePatch
 			return false;
 		}
 
-		var info = getOverideInfo(__instance.initData);
+		var info = getOverrideInfo(__instance.initData);
 		if (info == null)
 		{
 			return true;
@@ -233,7 +233,7 @@ public static class ExileControllerBeginePatch
 			return string.Empty;
 		}
 
-		OverideInfo? info = getOverideInfo(init);
+		OverrideInfo? info = getOverrideInfo(init);
 
 		if (info != null)
 		{
@@ -303,7 +303,7 @@ public static class ExileControllerBeginePatch
 		}
 	}
 
-	private static OverideInfo? getOverideInfo(ExileController.InitProperties? init)
+	private static OverrideInfo? getOverrideInfo(ExileController.InitProperties? init)
 	{
 		bool validExiled = init != null && init.outfit != null;
 		if (!validExiled)
@@ -322,16 +322,16 @@ public static class ExileControllerBeginePatch
 			return null;
 		}
 
-		OverideInfo? info = null;
+		OverrideInfo? info = null;
 		// 今後複数役職でIExiledAnimationOverrideが出てきた時に考えろ
 		if (exiledPlayerRole.AbilityClass is IExiledAnimationOverrideWhenExiled @override)
 		{
-			info = @override.OverideInfo;
+			info = @override.OverrideInfo;
 		}
 		else if (exiledPlayerRole is MultiAssignRoleBase multiAssignRole &&
 			exiledPlayerRole.AbilityClass is IExiledAnimationOverrideWhenExiled @multiOverride)
 		{
-			info = @multiOverride.OverideInfo;
+			info = @multiOverride.OverrideInfo;
 		}
 		return info;
 	}
