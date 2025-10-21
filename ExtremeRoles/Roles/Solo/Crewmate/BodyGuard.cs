@@ -576,9 +576,7 @@ public sealed class BodyGuard :
     {
         this.targetPlayer = byte.MaxValue;
 
-        PlayerControl target = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this,
-            this.shieldRange);
+        PlayerControl target = Player.GetClosestPlayerInRange(this.shieldRange);
 
 		if (target != null)
 		{

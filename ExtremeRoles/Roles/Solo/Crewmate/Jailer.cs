@@ -156,10 +156,11 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	{
 		this.targetPlayerId = byte.MaxValue;
 
-		PlayerControl target = Player.GetClosestPlayerInRange(
-			PlayerControl.LocalPlayer, this,
-			this.range);
-		if (target == null) { return false; }
+		PlayerControl target = Player.GetClosestPlayerInRange(this.range);
+		if (target == null)
+		{
+			return false;
+		}
 
 		this.targetPlayerId = target.PlayerId;
 

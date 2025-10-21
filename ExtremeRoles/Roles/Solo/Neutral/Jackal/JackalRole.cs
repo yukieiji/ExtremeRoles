@@ -320,9 +320,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 		}
 
 
-        Target = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer,
-            this, range[Mathf.Clamp(createSidekickRange, 0, 2)]);
+        Target = Player.GetClosestPlayerInRange(range[Mathf.Clamp(createSidekickRange, 0, 2)]);
 
         return Target != null && IRoleAbility.IsCommonUse();
     }

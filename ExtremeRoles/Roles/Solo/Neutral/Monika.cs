@@ -61,9 +61,7 @@ public sealed class Monika :
 		}
 
 		this.targetPlayer = byte.MaxValue;
-		var player = Player.GetClosestPlayerInRange(
-			PlayerControl.LocalPlayer, this,
-			this.range);
+		var player = Player.GetClosestPlayerInRange(this.range);
 
 		if (player == null ||
 			this.trashSystem.InvalidPlayer(player))

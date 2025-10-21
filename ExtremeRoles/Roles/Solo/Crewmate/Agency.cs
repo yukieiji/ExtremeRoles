@@ -184,9 +184,7 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         this.TargetPlayer = byte.MaxValue;
 
-        PlayerControl target = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this,
-            this.takeTaskRange);
+        PlayerControl target = Player.GetClosestPlayerInRange(this.takeTaskRange);
 
         if (target != null)
         {
