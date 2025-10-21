@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -12,6 +9,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
+using Hazel;
+using System;
+using System.Collections.Generic;
 
 #nullable enable
 
@@ -37,6 +37,12 @@ public sealed class CEO : SingleRoleBase,
 		AwakeTaskGage,
 		IsShowRolePlayerVote,
 		IsUseCEOMeeting
+	}
+
+	public enum Ops
+	{
+		Awake,
+		ExiledMe
 	}
 
 	public bool IsAwake
@@ -65,25 +71,63 @@ public sealed class CEO : SingleRoleBase,
 	private float awakeTaskGage;
 	private bool awakeHasOtherVision;
 
+	private bool isMeExiled = false;
+
 	public CEO() : base(
 		RoleCore.BuildCrewmate(
-			ExtremeRoleId.Captain,
+			ExtremeRoleId.CEO,
 			ColorPalette.CaptainLightKonjou),
 		false, true, false, false)
 	{ }
 
 	public string GetFakeOptionString() => "";
 
-	public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
+	public IEnumerable<VoteInfo> GetModdedVoteInfo(
+		VoteInfoCollector collector,
+		NetworkedPlayerInfo rolePlayer)
 	{
-		yield break;
+		if (this.isShowRolePlayerVote || !this.IsAwake || this.isMeExiled)
+		{
+			yield break;
+		}
+
+		foreach (var info in collector.Vote)
+		{
+			// 自分に入っている票だけ打ち消す票情報を追加
+			if (info.TargetId == rolePlayer.PlayerId &&
+				info.Count > 0)
+			{
+				yield return new VoteInfo(info.VoterId, info.TargetId, -info.Count);
+			}
+		}
+	}
+
+	public static void RpcOps(MessageReader reader)
+	{
+		var ops = (Ops)reader.ReadByte();
+		byte rolePlayerId = reader.ReadByte();
+
+		if (!ExtremeRoleManager.TryGetSafeCastedRole<CEO>(rolePlayerId, out var role))
+		{
+			return;
+		}
+
+		switch (ops)
+		{
+			case Ops.Awake:
+				if (role.Status is CEOStatus ceoStatus)
+				{
+					ceoStatus.IsAwake = true;
+				}
+				break;
+			case Ops.ExiledMe:
+				role.isMeExiled = true;
+				break;
+		}
 	}
 
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
-		// 死んでも蘇らせる
-		rolePlayer.Revive();
-
 		if (!this.useCEOMeeting)
 		{
 			return;
@@ -104,9 +148,9 @@ public sealed class CEO : SingleRoleBase,
 		}
 		
 		bool isTie = false;
-		bool isMeExiled = false;
 		int maxNum = -50;
-		
+		this.isMeExiled = false;
+
 		foreach (var (playerId, voteNum) in voteResult)
 		{
 
@@ -119,24 +163,27 @@ public sealed class CEO : SingleRoleBase,
 			isTie = maxNum == voteNum;
 
 			maxNum = voteNum;
-			isMeExiled = playerId == rolePlayerId;
+			this.isMeExiled = playerId == rolePlayerId;
 		}
 
-		// 自分自身が吊られるときは何もいじらない
-		if (isMeExiled && !isTie)
+		if (this.isMeExiled && !isTie)
 		{
+			using (var op = RPCOperator.CreateCaller(
+				RPCOperator.Command.CEOOps))
+			{
+				op.WriteByte((byte)Ops.ExiledMe);
+				op.WriteByte(rolePlayerId);
+			}
+
 			return;
 		}
 
-		// 票を消し飛ばす
 		voteResult.Remove(rolePlayerId);
-		voteTarget.Remove(rolePlayerId);
-
 	}
 
 	public void ResetModifier()
 	{
-
+		this.isMeExiled = false;
 	}
 
 	public void Update(PlayerControl rolePlayer)
@@ -149,10 +196,19 @@ public sealed class CEO : SingleRoleBase,
 			return;
 		}
 
-		if (Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
+		if (Player.GetPlayerTaskGage(rolePlayer) < this.awakeTaskGage)
 		{
-			this.IsAwake = true;
-			this.HasOtherVision = this.awakeHasOtherVision;
+			return;
+		}
+
+		this.IsAwake = true;
+		this.HasOtherVision = this.awakeHasOtherVision;
+
+		using (var op = RPCOperator.CreateCaller(
+			RPCOperator.Command.CEOOps))
+		{
+			op.WriteByte((byte)Ops.Awake);
+			op.WriteByte(rolePlayer.PlayerId);
 		}
 
 	}

@@ -126,7 +126,10 @@ public static class PlayerVoteAreaSetDeadPatch
 		[HarmonyArgument(1)] bool isDead,
 		[HarmonyArgument(2)] bool isGuardian = false)
 	{
-		if (!OnemanMeetingSystemManager.IsActive)
+		if (!(
+				OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
+				system.IsIgnoreDeadPlayer
+			))
 		{
 			return true;
 		}

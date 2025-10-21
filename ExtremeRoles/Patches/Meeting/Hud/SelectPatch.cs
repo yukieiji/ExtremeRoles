@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
@@ -51,6 +51,11 @@ public static class MeetingHudSelectPatch
 				return false;
 			}
 
+			return true;
+		}
+
+		if (!system.IsIgnoreDeadPlayer)
+		{
 			return true;
 		}
 

@@ -8,6 +8,9 @@ namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 public sealed class AssassinAssassinateTargetMeeting : IOnemanMeeting
 {
+	public bool IgnoreDeadPlayer => true;
+	public bool SkipButtonActive => false;
+
 	public byte VoteTarget
 	{
 		get => this.voteTarget;

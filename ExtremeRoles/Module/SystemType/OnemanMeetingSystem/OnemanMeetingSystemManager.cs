@@ -38,6 +38,9 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		=> ExtremeSystemTypeManager.Instance.TryGet<OnemanMeetingSystemManager>(systemType, out var system) &&
 		system.meeting is not null;
 
+	public bool IsIgnoreDeadPlayer => this.meeting is not null && this.meeting.IgnoreDeadPlayer;
+	public bool IsSkipButtonActive => this.meeting is not null && this.meeting.IgnoreDeadPlayer;
+
 	private const ExtremeSystemType systemType = ExtremeSystemType.OnemanMeetingSystem;
 
 	private readonly Queue<(byte, Type)> meetingQueue = [];

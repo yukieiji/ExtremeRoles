@@ -14,6 +14,9 @@ namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInitialize
 {
+	public bool IgnoreDeadPlayer => false;
+	public bool SkipButtonActive => false;
+
 	public byte VoteTarget
 	{
 		get => this.winPlayer == null ? byte.MaxValue : this.winPlayer.PlayerId;

@@ -150,7 +150,9 @@ public sealed class Captain :
             }
         }
     }
-    public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
+
+    public IEnumerable<VoteInfo> GetModdedVoteInfo(
+		VoteInfoCollector collector, NetworkedPlayerInfo rolePlayer)
     {
         if (this.voteTarget == PlayerVoteArea.HasNotVoted)
         {

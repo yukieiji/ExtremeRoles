@@ -5,13 +5,14 @@ namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 public sealed class CEOForceMeeting : IOnemanMeeting
 {
-	public byte VoteTarget { get; set; }
+	public bool IgnoreDeadPlayer => false;
+	public bool SkipButtonActive => true;
 
-	private byte voteTarget = byte.MaxValue;
+	public byte VoteTarget { get; set; }
 
 	public IOnemanMeeting.ExiledInfo CreateExiledInfo(byte _)
 	{
-		var player = GameData.Instance.GetPlayerById(this.voteTarget);
+		var player = GameData.Instance.GetPlayerById(this.VoteTarget);
 		if (player == null)
 		{
 			return new IOnemanMeeting.ExiledInfo(false, "CEOはスキップを選択した");

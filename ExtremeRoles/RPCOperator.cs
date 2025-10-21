@@ -76,6 +76,7 @@ public static class RPCOperator
 		BaitAwakeRole,
 		SummonerOps,
 		ExorcistOps,
+		CEOOps,
 
 		// インポスター
 		CarrierAbility,
@@ -613,6 +614,11 @@ public static class RPCOperator
 	public static void ExorcistRpcOps(in MessageReader reader)
 	{
 		Roles.Solo.Crewmate.Exorcist.ExorcistRole.RpcOps(reader);
+	}
+
+	public static void CEORpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Crewmate.CEO.RpcOps(reader);
 	}
 
 	public static void CarrierAbility(
