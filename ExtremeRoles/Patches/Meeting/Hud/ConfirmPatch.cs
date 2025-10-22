@@ -25,11 +25,6 @@ public static class MeetingHudConfirmPatch
 			return false;
 		}
 
-		if (!system.IsSkipButtonActive)
-		{
-			return true;
-		}
-
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{
 			PlayerVoteArea playerVoteArea = __instance.playerStates[i];

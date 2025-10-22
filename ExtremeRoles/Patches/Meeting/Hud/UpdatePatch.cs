@@ -131,7 +131,7 @@ public static class MeetingHudUpdatePatch
 			system.TryGetMeetingTitle(out string title))
 		{
 			hud.TitleText.text = title;
-			hud.SkipVoteButton.gameObject.SetActive(false);
+			hud.SkipVoteButton.gameObject.SetActive(system.IsSkipButtonActive);
 			var localPlayer = PlayerControl.LocalPlayer;
 
 			HudManager.Instance.Chat.gameObject.SetActive(
