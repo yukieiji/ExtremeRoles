@@ -328,8 +328,9 @@ public static class ExileControllerBeginePatch
 		{
 			info = @override.OverrideInfo;
 		}
-		else if (exiledPlayerRole is MultiAssignRoleBase multiAssignRole &&
-			exiledPlayerRole.AbilityClass is IExiledAnimationOverrideWhenExiled @multiOverride)
+		else if (
+			exiledPlayerRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AbilityClass is IExiledAnimationOverrideWhenExiled @multiOverride)
 		{
 			info = @multiOverride.OverrideInfo;
 		}
