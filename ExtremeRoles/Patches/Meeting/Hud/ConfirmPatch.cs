@@ -25,7 +25,7 @@ public static class MeetingHudConfirmPatch
 			return false;
 		}
 
-		if (!system.IsIgnoreDeadPlayer)
+		if (!system.IsSkipButtonActive)
 		{
 			return true;
 		}
