@@ -149,6 +149,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IVoterShiftor, IVo
 	private readonly MonikaTrashSystem system;
 	private readonly MeetingTarget target;
 	// 会議の投票先は常に2つ
+	private const float xOffset = 0.75f;
 
 	public MonikaLoveTargetMeeting()
 	{
@@ -283,7 +284,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IVoterShiftor, IVo
 		foreach (var pva in pvas)
 		{
 			pva.transform.position = new Vector3(
-				offset.x * (index == 0 ? 0.75f : -0.75f), 0.0f,
+				offset.x * (index == 0 ? xOffset : -xOffset), 0.0f,
 				origin.z - 0.9f);
 			index++;
 		}
