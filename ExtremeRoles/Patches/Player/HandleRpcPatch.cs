@@ -254,6 +254,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.ExorcistOps:
 				RPCOperator.ExorcistRpcOps(reader);
 				break;
+			case RPCOperator.Command.CEOOps:
+				RPCOperator.CEORpcOps(reader);
+				break;
 			case RPCOperator.Command.CarrierAbility:
 				byte carrierCarryOpCallPlayerId = reader.ReadByte();
 				float carrierPlayerPosX = reader.ReadSingle();

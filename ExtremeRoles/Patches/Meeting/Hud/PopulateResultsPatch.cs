@@ -26,39 +26,6 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 
 #nullable enable
 
-public sealed class VoteInfoCollector()
-{
-	public IEnumerable<VoteInfo> Vote =>
-		vote
-			// VoterIdとTargetIdの組み合わせでグループ化
-			.GroupBy(vote => new { vote.VoterId, vote.TargetId })
-			// 各グループから新しいVoteInfoを作成
-			.Select(
-				group => new VoteInfo(
-					group.Key.VoterId,
-					group.Key.TargetId,
-					group.Sum(vote => vote.Count) // グループ内のContを合計
-				)
-			);
-
-	private readonly List<VoteInfo> vote = new List<VoteInfo>();
-
-	public void AddSkip(byte voter)
-	{
-		this.vote.Add(new VoteInfo(voter, PlayerVoteArea.SkippedVote, 1));
-	}
-
-	public void AddTo(byte voter, byte to)
-	{
-		this.vote.Add(new VoteInfo(voter, to, 1));
-	}
-
-	public void AddRange(IEnumerable<VoteInfo> votes)
-	{
-		this.vote.AddRange(votes);
-	}
-}
-
 public sealed class PlayerRoleInfo(int size)
 {
 	public IEnumerable<(IRoleVoteModifier, NetworkedPlayerInfo)> Modifier => this.voteModifier.Values;
@@ -176,7 +143,7 @@ public static class MeetingHudPopulateResultsPatch
 		// --- Phase 2: Vote Modification ---
 		foreach (var (role, player) in playerRoleInfo.Modifier)
 		{
-			var info = role.GetModdedVoteInfo(player);
+			var info = role.GetModdedVoteInfo(voteInfo, player);
 			voteInfo.AddRange(info);
 			role.ResetModifier();
 		}

@@ -1,16 +1,19 @@
 using System;
-using System.Text;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
-using HarmonyLib;
 using UnityEngine;
 
+
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.Event;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType.Roles;
+using HarmonyLib;
+
 
 #nullable enable
 
@@ -19,71 +22,77 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.SortButtons))]
 public static class MeetingHudSortButtonsPatch
 {
+	public static Vector3 HideOffset => new Vector3(1000.0f, 1000.0f, 1000.0f);
+
 	public static bool Prefix(MeetingHud __instance)
 	{
 		if (!GameProgressSystem.IsGameNow)
 		{
 			return true;
 		}
-
-		IOrderedEnumerable<PlayerVoteArea>? orderLinq = null;
+		var offset = HideOffset;
 		var curPlayerState = __instance.playerStates;
+
+		IOnemanMeeting? onemanMeeting = null;
+		bool activeMeeting =
+			OnemanMeetingSystemManager.TryGetActiveSystem(out var onemanMeetingMng) &&
+			onemanMeetingMng.TryGetOnemanMeeting(out onemanMeeting);
+
+		if (activeMeeting && onemanMeeting is IVoterValidtor validtor)
+		{
+			var validPlayer = new HashSet<byte>(validtor.ValidPlayer);
+			var validPva = new List<PlayerVoteArea>(curPlayerState.Count);
+			foreach (var pva in curPlayerState)
+			{
+				if (!validPlayer.Contains(pva.TargetPlayerId))
+				{
+					pva.transform.localPosition = offset;
+				}
+			}
+		}
 
 		bool isChangeVoteAreaButtonSort = ExtremeGameModeManager.Instance.ShipOption.Meeting.IsChangeVoteAreaButtonSortArg;
 		bool monikaOn = MonikaTrashSystem.TryGet(out var monikaSystem);
 
-		IMeetingButtonInitialize? initializer = null;
-		bool isSpecialMeeting =
-			OnemanMeetingSystemManager.TryGetActiveSystem(out var onemanMeeting) &&
-			onemanMeeting.TryGetOnemanMeeting(out initializer);
-
-		if (isChangeVoteAreaButtonSort && monikaOn)
+		var orderLinq = curPlayerState.OrderBy(DefaultSort);
+		if (monikaOn)
 		{
-			orderLinq = curPlayerState
-				.OrderBy(DefaultSort)
-				.ThenBy(monikaSystem!.GetVoteAreaOrder)
-				.ThenBy(playerName2Int);
+			orderLinq = orderLinq.ThenBy(monikaSystem!.GetVoteAreaOrder);
 		}
-		else if (monikaOn)
+		if (isChangeVoteAreaButtonSort)
 		{
-			orderLinq = curPlayerState
-				.OrderBy(DefaultSort)
-				.ThenBy(monikaSystem!.GetVoteAreaOrder);
-		}
-		else if (isChangeVoteAreaButtonSort)
-		{
-			orderLinq = curPlayerState
-				.OrderBy(DefaultSort)
-				.ThenBy(playerName2Int);
-		}
-		else if (initializer != null)
-		{
-			orderLinq = curPlayerState.OrderBy(DefaultSort);
-		}
-		else
-		{
-			return true;
+			orderLinq = orderLinq.ThenBy(playerName2Int);
 		}
 
 		var array = orderLinq.ToArray();
 
-		for (int i = 0; i < array.Length; i++)
+		if (activeMeeting && onemanMeeting is IVoterShiftor shiftor)
 		{
-			int num = i % 3;
-			int num2 = i / 3;
-			array[i].transform.localPosition = __instance.VoteOrigin + new Vector3(
-				__instance.VoteButtonOffsets.x * (float)num,
-				__instance.VoteButtonOffsets.y * (float)num2, -0.9f - (float)num2 * 0.01f);
+			shiftor.Shift(
+				__instance.VoteOrigin,
+				__instance.VoteButtonOffsets,
+				array);
 		}
-		if (monikaOn)
+		else
 		{
-			monikaSystem!.InitializeButton(array);
+			int index = 0;
+			foreach (var pva in array)
+			{
+				var transform = pva.transform;
+				if (transform.localPosition == offset)
+				{
+					continue;
+				}
+				int num = index % 3;
+				int num2 = index / 3;
+				transform.localPosition = __instance.VoteOrigin + new Vector3(
+					__instance.VoteButtonOffsets.x * (float)num,
+					__instance.VoteButtonOffsets.y * (float)num2, -0.9f - (float)num2 * 0.01f);
+				index++;
+			}
 		}
 
-		initializer?.InitializeButon(
-			__instance.VoteOrigin,
-			__instance.VoteButtonOffsets,
-			array);
+		__instance.playerStates = array;
 
 		return false;
 	}

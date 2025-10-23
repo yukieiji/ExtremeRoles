@@ -76,7 +76,7 @@ public sealed class Gambler :
 		voteResult[this.votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
 
-    public IEnumerable<VoteInfo> GetModdedVoteInfo(NetworkedPlayerInfo rolePlayer)
+    public IEnumerable<VoteInfo> GetModdedVoteInfo(VoteInfoCollector collector, NetworkedPlayerInfo rolePlayer)
     {
 		// Gamblerは見た目は変更しないのでそのままにする
 		yield break;

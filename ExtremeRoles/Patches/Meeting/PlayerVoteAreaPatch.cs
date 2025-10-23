@@ -145,17 +145,19 @@ public static class PlayerVoteAreaSetDeadPatch
 		[HarmonyArgument(0)] bool didReport,
 		[HarmonyArgument(1)] bool isDead,
 		[HarmonyArgument(2)] bool isGuardian = false)
-        {
+    {
+		var ga = __instance.GAIcon.gameObject;
+
 		if (ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsRemoveAngleIcon)
 		{
-			__instance.GAIcon.gameObject.SetActive(false);
+			ga.SetActive(false);
 		}
 		else
 		{
 			bool isGhostRole = isGuardian ||
 				ExtremeGhostRoleManager.GameRole.ContainsKey(__instance.TargetPlayerId);
 
-			__instance.GAIcon.gameObject.SetActive(isGhostRole);
+			ga.SetActive(isGhostRole);
 		}
 	}
 }
