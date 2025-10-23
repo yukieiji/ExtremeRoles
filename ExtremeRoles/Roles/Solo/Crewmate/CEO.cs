@@ -146,6 +146,75 @@ public sealed class CEO : SingleRoleBase,
 		system.Start(rolePlayer, OnemanMeetingSystemManager.Type.CEO, null);
 	}
 
+	public override string GetColoredRoleName(bool isTruthColor = false)
+	{
+		if (isTruthColor || IsAwake)
+		{
+			return base.GetColoredRoleName();
+		}
+		else
+		{
+			return Design.ColoredString(
+				Palette.White,
+				Tr.GetString(RoleTypes.Crewmate.ToString()));
+		}
+	}
+	public override string GetFullDescription()
+	{
+		if (IsAwake)
+		{
+			return Tr.GetString(
+				$"{this.Core.Id}FullDescription");
+		}
+		else
+		{
+			return Tr.GetString(
+				$"{RoleTypes.Crewmate}FullDescription");
+		}
+	}
+
+	public override string GetImportantText(bool isContainFakeTask = true)
+	{
+		if (IsAwake)
+		{
+			return base.GetImportantText(isContainFakeTask);
+
+		}
+		else
+		{
+			return Design.ColoredString(
+				Palette.White,
+				$"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
+		}
+	}
+
+	public override string GetIntroDescription()
+	{
+		if (IsAwake)
+		{
+			return base.GetIntroDescription();
+		}
+		else
+		{
+			return Design.ColoredString(
+				Palette.CrewmateBlue,
+				PlayerControl.LocalPlayer.Data.Role.Blurb);
+		}
+	}
+
+	public override Color GetNameColor(bool isTruthColor = false)
+	{
+		if (isTruthColor || IsAwake)
+		{
+			return base.GetNameColor(isTruthColor);
+		}
+		else
+		{
+			return Palette.White;
+		}
+	}
+
+
 	public void ModifiedVote(byte rolePlayerId, ref Dictionary<byte, byte> voteTarget, ref Dictionary<byte, int> voteResult)
 	{
 		if (this.isShowRolePlayerVote || !this.IsAwake || voteResult.Count <= 0)
@@ -187,6 +256,19 @@ public sealed class CEO : SingleRoleBase,
 		voteResult.Remove(rolePlayerId);
 	}
 
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
+	{
+
+	}
+
+	public void ResetOnMeetingStart()
+	{
+		if (this.resurrectText != null)
+		{
+			this.resurrectText.gameObject.SetActive(false);
+		}
+	}
+
 	public void ResetModifier()
 	{
 		this.isMeExiled = false;
@@ -194,38 +276,41 @@ public sealed class CEO : SingleRoleBase,
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (!GameProgressSystem.IsTaskPhase || this.IsAwake)
+		if (!GameProgressSystem.IsTaskPhase)
 		{
 			if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting) && 
 				this.exiledTimer > 0.0f)
 			{
 				this.exiledTimer = 5.0f;
 			}
-
 			return;
 		}
 
-		if (this.exiledTimer > 0.0f)
+		if (this.IsAwake)
 		{
-			if (this.resurrectText == null)
+			if (this.exiledTimer > 0.0f)
 			{
-				this.resurrectText = Object.Instantiate(
-					HudManager.Instance.KillButton.cooldownTimerText,
-					Camera.main.transform, false);
-				this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-				this.resurrectText.enableWordWrapping = false;
-			}
+				if (this.resurrectText == null)
+				{
+					this.resurrectText = Object.Instantiate(
+						HudManager.Instance.KillButton.cooldownTimerText,
+						Camera.main.transform, false);
+					this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
+					this.resurrectText.enableWordWrapping = false;
+				}
 
-			this.resurrectText.gameObject.SetActive(true);
-			this.exiledTimer -= Time.deltaTime;
-			this.resurrectText.text = Tr.GetString(
-				"resurrectText",
-				Mathf.CeilToInt(this.exiledTimer));
+				this.resurrectText.gameObject.SetActive(true);
+				this.exiledTimer -= Time.deltaTime;
+				this.resurrectText.text = Tr.GetString(
+					"resurrectText",
+					Mathf.CeilToInt(this.exiledTimer));
 
-			if (this.exiledTimer <= 0.0f)
-			{
-				revive(rolePlayer);
+				if (this.exiledTimer <= 0.0f)
+				{
+					revive(rolePlayer);
+				}
 			}
+			return;
 		}
 
 		if (Player.GetPlayerTaskGage(rolePlayer) < this.awakeTaskGage)
@@ -242,7 +327,6 @@ public sealed class CEO : SingleRoleBase,
 			op.WriteByte((byte)Ops.Awake);
 			op.WriteByte(rolePlayer.PlayerId);
 		}
-
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -301,19 +385,6 @@ public sealed class CEO : SingleRoleBase,
 			RandomGenerator.Instance.Next(randomPos.Count)]);
 
 		HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
-		if (this.resurrectText != null)
-		{
-			this.resurrectText.gameObject.SetActive(false);
-		}
-	}
-
-	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
-	{
-
-	}
-
-	public void ResetOnMeetingStart()
-	{
 		if (this.resurrectText != null)
 		{
 			this.resurrectText.gameObject.SetActive(false);
