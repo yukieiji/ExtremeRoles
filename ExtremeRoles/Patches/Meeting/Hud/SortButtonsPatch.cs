@@ -22,13 +22,15 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.SortButtons))]
 public static class MeetingHudSortButtonsPatch
 {
+	public static Vector3 HideOffset => new Vector3(1000.0f, 1000.0f, 1000.0f);
+
 	public static bool Prefix(MeetingHud __instance)
 	{
 		if (!GameProgressSystem.IsGameNow)
 		{
 			return true;
 		}
-		var offset = new Vector3(1000.0f, 1000.0f, 1000.0f); ;
+		var offset = HideOffset;
 		var curPlayerState = __instance.playerStates;
 
 		IOnemanMeeting? onemanMeeting = null;

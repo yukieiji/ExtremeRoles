@@ -32,11 +32,11 @@ public sealed class CrowedModInitializer(PluginInfo plugin) : InitializerBase<Cr
 			 SymbolExtensions.GetMethodInfo(() => Patches.CrowedModPatch.IsNotMonikaMeeting());
 
 		IEnumerable<PlayerVoteArea> ienum = null;
-		var monikaSortPostfixMethod =
+		var sortPostfixMethod =
 			 SymbolExtensions.GetMethodInfo(() => Patches.CrowedModPatch.Sort(ref ienum));
 
 		patch.Patch(update, new HarmonyMethod(monikaCheckPrefixMethod));
 		patch.Patch(onPageChanged, new HarmonyMethod(monikaCheckPrefixMethod));
-		patch.Patch(targets, postfix: new HarmonyMethod(monikaSortPostfixMethod));
+		patch.Patch(targets, postfix: new HarmonyMethod(sortPostfixMethod));
 	}
 }

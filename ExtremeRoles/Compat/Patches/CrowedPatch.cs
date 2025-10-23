@@ -28,7 +28,7 @@ public static class CrowedModPatch
 		}
 		else
 		{
-			var offset = new Vector3(1000.0f, 1000.0f, 1000.0f);
+			var offset = MeetingHudSortButtonsPatch.HideOffset;
 			__result = __result
 				.Where(t => t.transform.localPosition != offset);
 		}
