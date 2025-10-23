@@ -59,6 +59,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IVoterShiftor, IVo
 					) // モニカは投票権を持つが会議の投票先には表示さない)
 				))
 				{
+					// このメソッドは開始時一回しか呼ばれないことが保証されているため
 					this.target.Add(player);
 					yield return player.PlayerId;
 				}
@@ -112,7 +113,6 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IVoterShiftor, IVo
 			{
 				return;
 			}
-			throw new InvalidOperationException("Meeting target always TWO!!!!");
 		}
 
 		public bool Contain(byte playerId)
