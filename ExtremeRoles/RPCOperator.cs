@@ -431,16 +431,16 @@ public static class RPCOperator
 		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 	}
 
-	public static void UncheckedReportDeadBody(byte playerId)
+	public static void UncheckedReportDeadBody(byte reporter, byte target)
 	{
-		var localPlayer = PlayerControl.LocalPlayer;
+		var player = Helper.Player.GetPlayerControlById(reporter);
 		if (!AmongUsClient.Instance.AmHost ||
-			localPlayer == null)
+			player == null)
 		{
 			return;
 		}
-		var playerInfo = playerId == byte.MaxValue ? null : GameData.Instance.GetPlayerById(playerId);
-		localPlayer.ReportDeadBody(playerInfo);
+		var playerInfo = target == byte.MaxValue ? null : GameData.Instance.GetPlayerById(target);
+		player.ReportDeadBody(playerInfo);
 	}
 
 

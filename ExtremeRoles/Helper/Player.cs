@@ -374,11 +374,13 @@ public static class Player
 			localPlayer != null)
 		{
 			localPlayer.ReportDeadBody(playerInfo);
+			return;
 		}
 
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.UncheckedReportDeadbody))
 		{
+			caller.WriteByte(localPlayer.PlayerId);
 			caller.WriteByte(playerInfo == null ? byte.MaxValue : playerInfo.PlayerId);
 		}
 	}
