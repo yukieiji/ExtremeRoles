@@ -42,7 +42,7 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 	{
 
 		this.Loader = jackal.Loader;
-		this.status = new SidekickStatus(jackalPlayerId, jackal);
+		this.status = new SidekickStatus(jackalPlayerId, jackal, isImpostor);
 
 		this.Parent = jackalPlayerId;
 		SetControlId(jackal.GameControlId);
@@ -55,8 +55,6 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 		HasOtherVision = option.HasOtherVision;
 		Vision = option.Vision;
 		IsApplyEnvironmentVision = option.ApplyEnvironmentVisionEffect;
-
-		FakeImpostor = jackal.CanSeeImpostorToSidekickImpostor && isImpostor;
 
 		recursion = jackal.CurRecursion;
 		sidekickJackalCanMakeSidekick = jackal.SidekickJackalCanMakeSidekick;

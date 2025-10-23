@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 using UnityEngine;
 
 using ExtremeRoles.Module.RoleAssign;
@@ -86,7 +86,7 @@ public class VisionComputer
 			CompatModManager.Instance.TryGetModMap(out var modMap) &&
 			modMap.IsCustomCalculateLightRadius;
 
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		if (!GameProgressSystem.IsGameNow)
 		{
 			return checkNormalOrCustomCalculateLightRadius(
 				modMap, isRequireCustomVision, playerInfo, ref vision);

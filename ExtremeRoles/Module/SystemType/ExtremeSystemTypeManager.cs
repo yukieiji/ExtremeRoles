@@ -23,6 +23,7 @@ public enum ExtremeSystemType : byte
 {
 	MeetingCount,
 	GlobalCheckpoint,
+	GameProgress,
 
 	RaiseHandSystem,
 	ModdedMeetingTimeSystem,
@@ -303,6 +304,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	{
 		add<GlobalCheckpointSystem>(GlobalCheckpointSystem.Type);
 		add<MeetingCountSystem>(MeetingCountSystem.Type);
+		add<GameProgressSystem>(ExtremeSystemType.GameProgress);
 	}
 
 	private void add<T>(ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()

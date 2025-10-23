@@ -1,20 +1,20 @@
 using System.Collections.Generic;
 
-using HarmonyLib;
-
-using UnityEngine;
 using AmongUs.GameOptions;
+using HarmonyLib;
+using UnityEngine;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
+
 
 using PlayerHeler = ExtremeRoles.Helper.Player;
 
@@ -27,10 +27,11 @@ public static class PlayerControlFixedUpdatePatch
 {
 	public static void Postfix(PlayerControl __instance)
 	{
-		if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			ExtremeRoleManager.GameRole.Count == 0 ||
-			PlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
+		if (!GameProgressSystem.IsTaskPhase ||
+			PlayerControl.LocalPlayer.PlayerId != __instance.PlayerId)
+		{
+			return;
+		}
 
 		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
 		GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();

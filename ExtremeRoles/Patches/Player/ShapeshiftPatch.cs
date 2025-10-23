@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using HarmonyLib;
 using AmongUs.GameOptions;
@@ -6,8 +6,7 @@ using UnityEngine;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -23,7 +22,7 @@ public static class PlayerControlShapeshiftPatch
 		[HarmonyArgument(1)] bool animate)
 	{
         if ((
-				!RoleAssignState.Instance.IsRoleSetUpEnd ||
+				!GameProgressSystem.IsGameNow ||
 				!ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var role) ||
 				(role.TryGetVanillaRoleId(out RoleTypes roleId) && roleId is RoleTypes.Shapeshifter)
 			))

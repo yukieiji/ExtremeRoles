@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -21,17 +20,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
 public sealed class ExorcistRole :
 	SingleRoleBase,
-	IRoleFakeIntro,
-	IDeadBodyReportOverride,
 	IRoleUpdate,
 	IRoleAutoBuildAbility
 {
-	public ExtremeRoleType FakeTeam => this.FakeImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
 	public override IStatusModel? Status => status;
 
 	public ExtremeAbilityButton? Button { get; set; }
-
-	public bool CanReport => false;
 
 	private ExorcistStatus? status;
 	private NetworkedPlayerInfo? target;
@@ -133,7 +127,6 @@ public sealed class ExorcistRole :
 		var loader = this.Loader;
 		this.withName = loader.GetValue<Option, bool>(Option.WithName);
 		this.status = new ExorcistStatus(
-			this,
 			loader.GetValue<Option, int>(Option.AwakeTaskGage) / 100.0f,
 			loader.GetValue<Option, float>(Option.Range));
 
@@ -267,8 +260,7 @@ public sealed class ExorcistRole :
 
 	private static bool exorcistBlockCondition()
 	{
-		if (PlayerControl.LocalPlayer == null ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd)
+		if (PlayerControl.LocalPlayer == null || !GameProgressSystem.IsTaskPhase)
 		{
 			return true;
 		}

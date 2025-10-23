@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
-
-using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
@@ -150,8 +149,10 @@ public sealed class Poltergeist : GhostRoleBase
     {
         this.targetBody = null;
 
-        if (ShipStatus.Instance == null ||
-            !ShipStatus.Instance.enabled) { return false; }
+        if (!GameProgressSystem.IsTaskPhase)
+		{
+			return false;
+		}
 
         Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
 

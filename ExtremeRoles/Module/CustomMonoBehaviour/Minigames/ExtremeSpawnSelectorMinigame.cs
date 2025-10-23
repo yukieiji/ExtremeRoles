@@ -1,29 +1,30 @@
-﻿using System;
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Reflection;
 
-using TMPro;
-using UnityEngine;
-using Il2CppInterop.Runtime.Attributes;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
+using TMPro;
+using UnityEngine;
 
-using ExtremeRoles.Helper;
-using ExtremeRoles.GameMode;
 using ExtremeRoles.Extension.Task;
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
-
 using ExtremeRoles.Patches.Controller;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
+using Il2CppInterop.Runtime.Attributes;
 
 using Il2CppObject = Il2CppSystem.Object;
+
 
 
 #nullable enable
@@ -299,11 +300,14 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			instance.ReEnableGameplay();
 		}
 		Destroy(instance.gameObject);
+		
 		yield break;
 	}
 
 	public static IEnumerator WaiteSpawn()
 	{
+		GameProgressSystem.Current = GameProgressSystem.Progress.PreTask;
+
 		GameObject obj = new GameObject("SpawnSelector");
 		var spawnSelector = obj.AddComponent<ExtremeSpawnSelectorMinigame>();
 		spawnSelector.transform.SetParent(Camera.main.transform, false);

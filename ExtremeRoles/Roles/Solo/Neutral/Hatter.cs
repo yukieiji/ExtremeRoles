@@ -12,14 +12,22 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IDeadBodyReportOverride
+public sealed class HatterStatusModel : IStatusModel, IDeadBodyReportOverrideStatus
 {
-    public enum HatterOption
+	public bool CanReport => false;
+}
+
+public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
+{
+	public override IStatusModel? Status { get; } = new HatterStatusModel();
+
+	public enum HatterOption
 	{
         CanRepairSabotage,
 		WinCount,
@@ -29,8 +37,6 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 		IncreaseTaskGage,
 		IncreseNum
     }
-
-	public bool CanReport => false;
 
 	public ExtremeAbilityButton? Button { get; set; }
 

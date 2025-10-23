@@ -1,15 +1,13 @@
-﻿using HarmonyLib;
-
 using AmongUs.GameOptions;
-
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
-
-using ExtremeRoles.Performance;
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -42,8 +40,10 @@ public static class PlayerControlRevivePatch
 			__instance.cosmetics.currentPet.SetIdle();
 		}
 
-		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
+		if (!GameProgressSystem.IsGameNow)
+		{
+			return;
+		}
 
 		bool isLocalPlayerRevive = revivePlayerId == PlayerControl.LocalPlayer.PlayerId;
 

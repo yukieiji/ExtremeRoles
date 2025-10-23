@@ -7,6 +7,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -15,6 +16,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Patches.Button;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -203,9 +205,7 @@ public sealed class Heretic :
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (MeetingHud.Instance != null ||
-			ExileController.Instance != null ||
-			GameManager.Instance == null)
+		if (!GameProgressSystem.IsTaskPhase)
 		{
 			return;
 		}
@@ -277,7 +277,7 @@ public sealed class Heretic :
 		SingleRoleBase targetRole, byte targetPlayerId)
 	{
 		if (this.isSeeImpostorNow &&
-			(targetRole.IsImpostor() || targetRole.FakeImpostor))
+			(targetRole.IsImpostor() || (targetRole.Status is IFakeImpostorStatus fake && fake.IsFakeImpostor)))
 		{
 			return Palette.ImpostorRed;
 		}

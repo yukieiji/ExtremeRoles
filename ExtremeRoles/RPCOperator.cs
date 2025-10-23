@@ -9,6 +9,7 @@ using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
+using ExtremeRoles.Roles.Solo.Neutral.Madmate;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using Hazel;
 using InnerNet;
@@ -36,6 +37,7 @@ public static class RPCOperator
         UncheckedMurderPlayer,
 		UncheckedExiledPlayer,
 		UncheckedRevive,
+		UncheckedReportDeadbody,
         CleanDeadBody,
         FixForceRepairSpecialSabotage,
         ReplaceDeadReason,
@@ -429,6 +431,18 @@ public static class RPCOperator
 		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 	}
 
+	public static void UncheckedReportDeadBody(byte reporter, byte target)
+	{
+		var player = Helper.Player.GetPlayerControlById(reporter);
+		if (!AmongUsClient.Instance.AmHost ||
+			player == null)
+		{
+			return;
+		}
+		var playerInfo = target == byte.MaxValue ? null : GameData.Instance.GetPlayerById(target);
+		player.ReportDeadBody(playerInfo);
+	}
+
 
     public static void SetWinGameControlId(int id)
     {
@@ -717,7 +731,7 @@ public static class RPCOperator
     }
     public static void MadmateToFakeImpostor(byte playerId)
     {
-        Roles.Solo.Neutral.Madmate.ToFakeImpostor(playerId);
+        MadmateRole.ToFakeImpostor(playerId);
     }
 	public static void ArtistDrawOps(in MessageReader reader)
 	{

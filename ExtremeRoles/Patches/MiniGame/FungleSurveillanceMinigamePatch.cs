@@ -1,7 +1,8 @@
-﻿using HarmonyLib;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Module.SystemType.SecurityDummySystem;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.SecurityDummySystem;
+using ExtremeRoles.Roles.API.Extension.State;
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches.MiniGame;
 
@@ -36,7 +37,7 @@ public static class FungleSurveillanceMinigameePatch
 {
     public static bool Prefix(FungleSurveillanceMinigame __instance)
     {
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+        if (!GameProgressSystem.IsTaskPhase)
 		{
 			return true;
 		}

@@ -1,4 +1,5 @@
-﻿using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using HarmonyLib;
 
@@ -10,7 +11,12 @@ namespace ExtremeRoles.Patches.MiniGame;
 [HarmonyPatch(typeof(SpawnInMinigame), nameof(SpawnInMinigame.Begin))]
 public static class SpawnInMinigameBeginPatch
 {
-    public static void Postfix(SpawnInMinigame __instance)
+	public static void Prefix()
+	{
+		GameProgressSystem.Current = GameProgressSystem.Progress.PreTask;
+	}
+
+	public static void Postfix(SpawnInMinigame __instance)
     {
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 
@@ -33,7 +39,8 @@ public static class SpawnInMinigameBeginPatch
 		}
         else if (spawnOpt.IsAutoSelectRandom)
         {
-            __instance.Close();
-        }
+			__instance.Close();
+		}
     }
 }
+

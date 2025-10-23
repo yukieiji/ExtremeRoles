@@ -7,6 +7,7 @@ using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType;
 
 
 #nullable enable
@@ -140,17 +141,9 @@ public sealed class Whisper :
 
         this.abilityText.gameObject.SetActive(false);
 
-        if (Minigame.Instance != null ||
-            ShipStatus.Instance == null ||
-            GameData.Instance == null ||
-            MeetingHud.Instance != null ||
+        if (!GameProgressSystem.IsTaskPhase ||
+			Minigame.Instance != null ||
             !rolePlayer.CanMove)
-        {
-            resetAbility(rolePlayer);
-            return;
-        }
-        if (!ShipStatus.Instance.enabled ||
-			OnemanMeetingSystemManager.IsActive)
         {
             resetAbility(rolePlayer);
             return;

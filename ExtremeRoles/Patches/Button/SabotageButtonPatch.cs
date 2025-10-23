@@ -1,9 +1,8 @@
 using HarmonyLib;
 
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Button;
 
@@ -13,13 +12,19 @@ public static class SabotageButtonDoClickPatch
 {
     public static bool Prefix(SabotageButton __instance)
     {
-        if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+        if (!GameProgressSystem.IsTaskPhase)
+		{
+			return true;
+		}
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
         // The sabotage button behaves just fine if it's a regular impostor
         if ((PlayerControl.LocalPlayer.Data.Role.TeamType == RoleTeamTypes.Impostor) ||
-            role.IsImpostor()) { return true; }
-        if (!role.CanUseSabotage()) { return true; }
+            role.IsImpostor() ||
+			!role.CanUseSabotage()) 
+		{
+			return true;
+		}
 
         HudManager.Instance.ToggleMapVisible(
             new MapOptions
@@ -36,8 +41,10 @@ public static class SabotageButtonRefreshPatch
 {
     public static bool Prefix(SabotageButton __instance)
     {
-        if (ExtremeRoleManager.GameRole.Count == 0 || 
-            !RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+        if (!GameProgressSystem.IsTaskPhase)
+		{
+			return true;
+		}
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
 
@@ -45,9 +52,7 @@ public static class SabotageButtonRefreshPatch
 
         bool roleCanUseSabotage = role.CanUseSabotage();
 
-        if (MeetingHud.Instance ||
-            ExileController.Instance ||
-            !GameManager.Instance || 
+        if (!GameManager.Instance || 
             !GameManager.Instance.SabotagesEnabled() || 
             !roleCanUseSabotage ||
             (

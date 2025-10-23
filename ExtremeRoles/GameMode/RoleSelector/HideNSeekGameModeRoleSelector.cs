@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
@@ -64,6 +64,7 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Survivor,
             ExtremeRoleId.Resurrecter,
             ExtremeRoleId.Teleporter,
+			ExtremeRoleId.Loner,
 
             ExtremeRoleId.BountyHunter,
             ExtremeRoleId.Bomber,

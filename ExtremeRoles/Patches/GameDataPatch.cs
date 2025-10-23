@@ -1,11 +1,11 @@
-using HarmonyLib;
-
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Extension.State;
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches;
 
@@ -20,7 +20,7 @@ public static class GameDataRecomputeTaskCountsPatch
 
 	public static bool Prefix(GameData __instance)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		if (!GameProgressSystem.IsGameNow)
 		{
 			return true;
 		}

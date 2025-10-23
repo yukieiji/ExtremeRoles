@@ -11,11 +11,10 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
@@ -160,17 +159,18 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected) { return; }
-        if (this.bombPlayerId.Count == 0) { return; }
-
-        if (MeetingHud.Instance != null ||
-            ShipStatus.Instance == null ||
-            GameData.Instance == null) { return; }
-        if (!ShipStatus.Instance.enabled ||
-			OnemanMeetingSystemManager.IsActive) { return; }
-
+        if (rolePlayer.Data.IsDead || 
+			rolePlayer.Data.Disconnected ||
+			this.bombPlayerId.Count == 0 ||
+			!GameProgressSystem.IsTaskPhase)
+		{
+			return;
+		}
         this.timer -= Time.deltaTime;
-        if (this.timer > 0) { return; }
+        if (this.timer > 0)
+		{
+			return;
+		}
 
         resetTimer();
 

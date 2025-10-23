@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Generic;
 using HarmonyLib;
 
 using UnityEngine;
@@ -9,7 +8,8 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.CheckPoint;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -21,11 +21,9 @@ using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Patches.MapOverlay;
 
-
-
 using PlayerHelper = ExtremeRoles.Helper.Player;
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
-using ExtremeRoles.Module.SystemType.CheckPoint;
+
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -34,6 +32,8 @@ public static class HudManagerOnGameStartPatch
 {
 	public static void Postfix()
 	{
+		GameProgressSystem.Current = GameProgressSystem.Progress.Task;
+
 		if (PlayerControl.LocalPlayer == null)
 		{
 			return;
@@ -43,8 +43,7 @@ public static class HudManagerOnGameStartPatch
 
 		if (!gameStart.IsKillCoolDownIsTen)
 		{
-			if (RoleAssignState.IsExist &&
-				RoleAssignState.Instance.IsRoleSetUpEnd)
+			if (GameProgressSystem.IsTaskPhase)
 			{
 				var role = ExtremeRoleManager.GetLocalPlayerRole();
 				PlayerControl.LocalPlayer.SetKillTimer(
@@ -68,7 +67,7 @@ public static class HudManagerSetAlertOverlayPatch
 	{
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		if (localPlayer == null ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd)
+			!GameProgressSystem.IsGameNow)
 		{
 			return true;
 		}
@@ -164,9 +163,10 @@ public static class HudManagerUpdatePatch
 
     public static void Postfix()
     {
-        if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
-			ExtremeRoleManager.GameRole.Count == 0 ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
+        if (!GameProgressSystem.IsGameNow)
+		{
+			return;
+		}
 
         SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
         GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();

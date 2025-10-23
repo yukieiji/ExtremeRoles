@@ -1,10 +1,10 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -17,7 +17,7 @@ public static class PlayerControlExiledPatch
 		PlayerControl __instance)
 	{
 		if (!(
-				RoleAssignState.Instance.IsRoleSetUpEnd &&
+				GameProgressSystem.IsGameNow &&
 				 ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var exiledPlayerRole)
 			))
 		{
@@ -31,19 +31,6 @@ public static class PlayerControlExiledPatch
 
 		ExtremeRolesPlugin.ShipState.AddDeadInfo(
 			__instance, DeathReason.Exile, null);
-
-		var role = ExtremeRoleManager.GetLocalPlayerRole();
-		if (role is IRoleExilHook hookRole)
-		{
-			hookRole.HookExil(__instance);
-		}
-		if (role is MultiAssignRoleBase multiAssignRole)
-		{
-			if (multiAssignRole.AnotherRole is IRoleExilHook multiHookRole)
-			{
-				multiHookRole.HookExil(__instance);
-			}
-		}
 
 		exiledPlayerRole.ExiledAction(__instance);
 		if (exiledPlayerRole is MultiAssignRoleBase multiAssignExiledPlayerRole)

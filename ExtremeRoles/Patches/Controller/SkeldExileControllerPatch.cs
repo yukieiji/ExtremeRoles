@@ -1,13 +1,12 @@
-﻿using System.Collections;
+using System.Collections;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
-
+using HarmonyLib;
 using UnityEngine;
 
-using HarmonyLib;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType;
 
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
 
@@ -18,6 +17,8 @@ public static class SkeldExileControllerAnimePatch
 {
 	public static bool Prefix(SkeldExileController __instance, ref Il2CppEnumerator __result)
 	{
+		GameProgressSystem.Current = GameProgressSystem.Progress.Exiled;
+
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 
 		if (spawnOpt.EnableSpecialSetting &&

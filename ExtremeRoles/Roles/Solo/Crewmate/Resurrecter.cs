@@ -5,18 +5,14 @@ using UnityEngine;
 using Hazel;
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
 
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -185,10 +181,7 @@ public sealed class Resurrecter :
         }
 
         if (!rolePlayer.moveable ||
-            MeetingHud.Instance ||
-            ExileController.Instance ||
-            ShipStatus.Instance == null ||
-            !ShipStatus.Instance.enabled)
+            !GameProgressSystem.IsTaskPhase)
         {
             return;
         }

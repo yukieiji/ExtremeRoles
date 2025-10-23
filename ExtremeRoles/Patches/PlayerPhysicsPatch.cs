@@ -28,7 +28,7 @@ public static class PlayerPhysicsFixedUpdatePatch
 
 	public static bool Prefix(PlayerPhysics __instance)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		if (!GameProgressSystem.IsTaskPhase)
 		{
 			return true;
 		}
@@ -44,8 +44,7 @@ public static class PlayerPhysicsFixedUpdatePatch
 
     public static void Postfix(PlayerPhysics __instance)
     {
-        if (RoleAssignState.Instance.IsRoleSetUpEnd &&
-			ExtremeRoleManager.GameRole.Count != 0 &&
+        if (GameProgressSystem.IsTaskPhase &&
 			__instance.AmOwner &&
             __instance.myPlayer.CanMove &&
             GameData.Instance &&
