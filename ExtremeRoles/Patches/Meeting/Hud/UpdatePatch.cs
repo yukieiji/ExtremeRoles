@@ -130,9 +130,13 @@ public static class MeetingHudUpdatePatch
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
 			system.TryGetMeetingTitle(out string title))
 		{
-			hud.TitleText.text = title;
-			hud.SkipVoteButton.gameObject.SetActive(system.IsSkipButtonActive);
+
 			var localPlayer = PlayerControl.LocalPlayer;
+			hud.TitleText.text = title;
+			hud.SkipVoteButton.gameObject.SetActive(
+				system.IsSkipButtonActive && 
+				system.Caller == localPlayer.PlayerId &&
+				hud.state == MeetingHud.VoteStates.NotVoted);
 
 			HudManager.Instance.Chat.gameObject.SetActive(
 				(

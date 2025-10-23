@@ -1,14 +1,33 @@
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Crewmate;
+using System.Collections.Generic;
 
 namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
-public sealed class CEOForceMeeting : IOnemanMeeting
+public sealed class CEOForceMeeting : IOnemanMeeting, IVoterValidtor
 {
-	public bool IgnoreDeadPlayer => false;
 	public bool SkipButtonActive => true;
 
 	public byte VoteTarget { get; set; }
+
+	public IEnumerable<byte> ValidPlayer
+	{
+		get
+		{
+			foreach (var player in GameData.Instance.AllPlayers)
+			{
+				// CEOと死んだ人は非表示にする
+				if (!(
+					player == null ||
+					player.IsDead ||
+					player.Disconnected
+				))
+				{
+					yield return player.PlayerId;
+				}
+			}
+		}
+	}
 
 	public IOnemanMeeting.ExiledInfo CreateExiledInfo(byte _)
 	{

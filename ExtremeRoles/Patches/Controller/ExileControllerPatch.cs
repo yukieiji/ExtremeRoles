@@ -514,7 +514,10 @@ public static class ExileControllerWrapUpPatch
 		InfoOverlay.Instance.IsBlock = false;
         Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 
-        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+        if (ExtremeRoleManager.GameRole.Count == 0)
+		{
+			return;
+		}
 
         var state = ExtremeRolesPlugin.ShipState;
 

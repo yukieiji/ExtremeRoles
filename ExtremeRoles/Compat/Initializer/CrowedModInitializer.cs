@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 
 using System.Collections.Generic;
 using System.Reflection;
@@ -33,7 +33,7 @@ public sealed class CrowedModInitializer(PluginInfo plugin) : InitializerBase<Cr
 
 		IEnumerable<PlayerVoteArea> ienum = null;
 		var monikaSortPostfixMethod =
-			 SymbolExtensions.GetMethodInfo(() => Patches.CrowedModPatch.SortMonikaTrash(ref ienum));
+			 SymbolExtensions.GetMethodInfo(() => Patches.CrowedModPatch.Sort(ref ienum));
 
 		patch.Patch(update, new HarmonyMethod(monikaCheckPrefixMethod));
 		patch.Patch(onPageChanged, new HarmonyMethod(monikaCheckPrefixMethod));

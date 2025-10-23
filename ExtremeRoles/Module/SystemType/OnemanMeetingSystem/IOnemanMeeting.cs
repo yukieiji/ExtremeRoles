@@ -8,8 +8,6 @@ public interface IOnemanMeeting
 {
 	public readonly record struct VoteResult(byte VoteFor, NetworkedPlayerInfo? ExiledTarget);
 	public readonly record struct ExiledInfo(bool IsShowPlayer, string Text);
-
-	public bool IgnoreDeadPlayer { get; }
 	public bool SkipButtonActive { get; }
 	public byte VoteTarget { set; }
 

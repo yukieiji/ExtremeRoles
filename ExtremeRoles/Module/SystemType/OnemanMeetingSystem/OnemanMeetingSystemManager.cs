@@ -37,8 +37,6 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 	public static bool IsActive
 		=> ExtremeSystemTypeManager.Instance.TryGet<OnemanMeetingSystemManager>(systemType, out var system) &&
 		system.meeting is not null;
-
-	public bool IsIgnoreDeadPlayer => this.meeting is not null && this.meeting.IgnoreDeadPlayer;
 	public bool IsSkipButtonActive => this.meeting is not null && this.meeting.SkipButtonActive;
 
 	private const ExtremeSystemType systemType = ExtremeSystemType.OnemanMeetingSystem;

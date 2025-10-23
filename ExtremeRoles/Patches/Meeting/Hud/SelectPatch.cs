@@ -54,11 +54,6 @@ public static class MeetingHudSelectPatch
 			return true;
 		}
 
-		if (!system.IsIgnoreDeadPlayer)
-		{
-			return true;
-		}
-
 		var gm = GameManager.Instance;
 		if (localPlayer.PlayerId != system.Caller ||
 			gm == null ||

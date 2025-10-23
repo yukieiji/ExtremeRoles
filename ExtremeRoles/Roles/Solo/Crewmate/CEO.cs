@@ -1,8 +1,9 @@
+using AmongUs.GameOptions;
 using System.Collections.Generic;
 
 using Hazel;
 
-using AmongUs.GameOptions;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -33,7 +34,8 @@ public sealed class CEOStatus : IStatusModel
 
 public sealed class CEO : SingleRoleBase,
 	IRoleAwake<RoleTypes>,
-	IRoleVoteModifier
+	IRoleVoteModifier,
+	IRoleResetMeeting
 {
 	public enum Option
 	{
@@ -75,6 +77,8 @@ public sealed class CEO : SingleRoleBase,
 	private bool awakeHasOtherVision;
 
 	private bool isMeExiled = false;
+	private float exiledTimer = 0.0f;
+	private TMPro.TextMeshPro? resurrectText;
 
 	public CEO() : base(
 		RoleCore.BuildCrewmate(
@@ -131,12 +135,11 @@ public sealed class CEO : SingleRoleBase,
 
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
-		if (!this.useCEOMeeting)
-		{
-			return;
-		}
-
-		if (!OnemanMeetingSystemManager.TryGetSystem(out var system))
+		this.exiledTimer = 5.0f;
+		
+		if (OnemanMeetingSystemManager.IsActive ||
+			!this.useCEOMeeting ||
+			!OnemanMeetingSystemManager.TryGetSystem(out var system))
 		{
 			return;
 		}
@@ -193,7 +196,36 @@ public sealed class CEO : SingleRoleBase,
 	{
 		if (!GameProgressSystem.IsTaskPhase || this.IsAwake)
 		{
+			if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting) && 
+				this.exiledTimer > 0.0f)
+			{
+				this.exiledTimer = 5.0f;
+			}
+
 			return;
+		}
+
+		if (this.exiledTimer > 0.0f)
+		{
+			if (this.resurrectText == null)
+			{
+				this.resurrectText = Object.Instantiate(
+					HudManager.Instance.KillButton.cooldownTimerText,
+					Camera.main.transform, false);
+				this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
+				this.resurrectText.enableWordWrapping = false;
+			}
+
+			this.resurrectText.gameObject.SetActive(true);
+			this.exiledTimer -= Time.deltaTime;
+			this.resurrectText.text = Tr.GetString(
+				"resurrectText",
+				Mathf.CeilToInt(this.exiledTimer));
+
+			if (this.exiledTimer <= 0.0f)
+			{
+				revive(rolePlayer);
+			}
 		}
 
 		if (Player.GetPlayerTaskGage(rolePlayer) < this.awakeTaskGage)
@@ -241,6 +273,50 @@ public sealed class CEO : SingleRoleBase,
 		{
 			this.IsAwake = false;
 			this.HasOtherVision = false;
+		}
+	}
+
+	private void revive(PlayerControl rolePlayer)
+	{
+		if (rolePlayer == null)
+		{
+			return;
+		}
+
+		byte playerId = rolePlayer.PlayerId;
+
+		Player.RpcUncheckRevive(playerId);
+
+		if (rolePlayer.Data == null ||
+			rolePlayer.Data.IsDead ||
+			rolePlayer.Data.Disconnected)
+		{
+			return;
+		}
+
+		List<Vector2> randomPos = new List<Vector2>();
+		Map.AddSpawnPoint(randomPos, playerId);
+
+		Player.RpcUncheckSnap(playerId, randomPos[
+			RandomGenerator.Instance.Next(randomPos.Count)]);
+
+		HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
+		if (this.resurrectText != null)
+		{
+			this.resurrectText.gameObject.SetActive(false);
+		}
+	}
+
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
+	{
+
+	}
+
+	public void ResetOnMeetingStart()
+	{
+		if (this.resurrectText != null)
+		{
+			this.resurrectText.gameObject.SetActive(false);
 		}
 	}
 }
