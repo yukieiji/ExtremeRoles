@@ -32,6 +32,8 @@ public static class HudManagerOnGameStartPatch
 {
 	public static void Postfix()
 	{
+		GameProgressSystem.Current = GameProgressSystem.Progress.Task;
+
 		if (PlayerControl.LocalPlayer == null)
 		{
 			return;
