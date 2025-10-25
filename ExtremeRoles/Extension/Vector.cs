@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace ExtremeRoles.Extension.Vector;
 
-public static class VectorExtention
+public static class VectorExtension
 {
 	public static bool IsCloseTo(this Vector2 @this, Vector2 other, float eps = 0.001f)
 	{

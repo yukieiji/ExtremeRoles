@@ -94,7 +94,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 		var rigidBody = pc.rigidbody2D;
 		Vector2 curPos = pc.transform.position;
 
-		if (this.PrevForce.IsNotCloseTo(curPos, 0.1f) &&
+		if (this.PrevForce.IsNotCloseTo(Vector2.zero, 0.1f) &&
 			(
 				PhysicsHelpers.AnythingBetween(
 					curPos, curPos + (this.PrevForce.normalized * offset),

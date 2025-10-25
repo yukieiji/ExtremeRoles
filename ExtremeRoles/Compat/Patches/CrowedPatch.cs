@@ -29,7 +29,7 @@ public static class CrowedModPatch
 		{
 			var offset = MeetingHudSortButtonsPatch.HideOffset;
 			__result = __result
-				.Where(t => t.transform.localPosition.IsCloseTo(offset));
+				.Where(t => t.transform.localPosition.IsNotCloseTo(offset));
 		}
 	}
 }
