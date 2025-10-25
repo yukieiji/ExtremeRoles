@@ -18,7 +18,7 @@ public class VectorComparisonAnalyzer : DiagnosticAnalyzer
         Category,
         DiagnosticSeverity.Error,
         isEnabledByDefault: true,
-        "UnityのVector型は浮動小数点数のため、== や != での比較は想定しない結果を生む可能性があります。");
+        "UnityのVector型は浮動小数点数のため、== や != での比較は想定しない結果を生む可能性があります.");
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [RuleERA003];
 
