@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module;
@@ -36,7 +37,7 @@ public sealed class Arrow
 
 	public void Update()
 	{
-		if (this.Target == defaultPos)
+		if (this.Target.IsCloseTo(defaultPos))
 		{
 			this.Target = Vector3.zero;
 		}

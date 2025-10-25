@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using UnityEngine;
-
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Patches.Meeting.Hud;
@@ -30,7 +29,7 @@ public static class CrowedModPatch
 		{
 			var offset = MeetingHudSortButtonsPatch.HideOffset;
 			__result = __result
-				.Where(t => t.transform.localPosition != offset);
+				.Where(t => t.transform.localPosition.IsCloseTo(offset));
 		}
 	}
 }

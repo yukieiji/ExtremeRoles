@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using HarmonyLib;
 using UnityEngine;
 
-
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
-using HarmonyLib;
 
 
 #nullable enable
@@ -79,7 +79,7 @@ public static class MeetingHudSortButtonsPatch
 			foreach (var pva in array)
 			{
 				var transform = pva.transform;
-				if (transform.localPosition == offset)
+				if (transform.localPosition.IsCloseTo(offset))
 				{
 					continue;
 				}

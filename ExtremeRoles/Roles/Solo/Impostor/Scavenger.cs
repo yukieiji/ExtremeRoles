@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 
 using ExtremeRoles.Extension.Controller;
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
@@ -212,7 +213,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				this.prevPlayerPos = rolePlayer.GetTruePosition();
 			}
 
-			if (this.prevPlayerPos.Value != curPos ||
+			if (this.prevPlayerPos.Value.IsNotCloseTo(curPos, 0.1f) ||
 				!Key.IsAltDown())
 			{
 				hideAbilityInfo(curPos);
@@ -676,7 +677,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return false;
 			}
 			var curPos = PlayerControl.LocalPlayer.GetTruePosition();
-			return curPos == this.chargePos;
+			return curPos.IsCloseTo(this.chargePos);
 		}
 
 		private bool isIaiOk(bool isCharge, float chargeGauge)
@@ -696,7 +697,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			}
 
 			var curPos = PlayerControl.LocalPlayer.GetTruePosition();
-			if (curPos != this.chargePos)
+			if (curPos.IsNotCloseTo(this.chargePos))
 			{
 				return false;
 			}
@@ -905,7 +906,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private bool ability()
 		{
-			if (this.playerDirection == Vector2.zero)
+			if (this.playerDirection.IsCloseTo(Vector2.zero))
 			{
 				this.playerDirection.x = this.playerDirection.x +
 					(PlayerControl.LocalPlayer.cosmetics.FlipX ? -1 : 1);

@@ -5,6 +5,7 @@ using System.Linq;
 using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
@@ -95,7 +96,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		foreach (var (id, pos) in voteSwapedPos)
 		{
 			if (!pvaCache.TryGetValue(id, out var pva) ||
-				pva.transform.localPosition == pos)
+				pva.transform.localPosition.IsCloseTo(pos))
 			{
 				continue;
 			}

@@ -14,7 +14,7 @@ public class VectorComparisonAnalyzer : DiagnosticAnalyzer
     private static readonly DiagnosticDescriptor RuleERA003 = new DiagnosticDescriptor(
         "ERA003",
         "UnityのVector型を == や != で比較することはできません",
-        "UnityのVector型を == や != で比較することはできません。代わりに'Vector3.Distance'や'sqrMagnitude'を使用してください",
+		"UnityのVector型を == や != で比較することはできません。代わりに'Vector.IsCloseToかVector.IsNotCloseToを使用してください",
         Category,
         DiagnosticSeverity.Error,
         isEnabledByDefault: true,

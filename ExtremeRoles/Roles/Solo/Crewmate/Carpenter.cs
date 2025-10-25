@@ -6,23 +6,20 @@ using Hazel;
 using TMPro;
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.Ability.AutoActivator;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Resources;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Extension.VentModule;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.ModeSwitcher;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
-
+using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -581,7 +578,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 	}
 
     public bool IsAbilityCheck() =>
-        this.prevPos == PlayerControl.LocalPlayer.GetTruePosition();
+        this.prevPos.IsCloseTo(PlayerControl.LocalPlayer.GetTruePosition(), 0.1f);
 
     public bool IsVentMode()
     {

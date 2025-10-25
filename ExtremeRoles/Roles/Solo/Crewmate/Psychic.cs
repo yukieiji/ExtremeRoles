@@ -7,20 +7,17 @@ using AmongUs.GameOptions;
 
 using Hazel;
 
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -261,7 +258,8 @@ public sealed class Psychic :
 	}
 
 	public bool CheckAbility()
-		=> this.startPos == PlayerControl.LocalPlayer.GetTruePosition() &&
+		=> this.startPos.HasValue &&
+		this.startPos.Value.IsCloseTo(PlayerControl.LocalPlayer.GetTruePosition(), 0.1f) &&
 		IRoleAbility.IsCommonUse();
 
 	public bool UseAbility()

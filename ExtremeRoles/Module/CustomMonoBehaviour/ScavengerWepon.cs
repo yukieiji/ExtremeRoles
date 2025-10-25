@@ -6,6 +6,7 @@ using Il2CppInterop.Runtime.Attributes;
 using ExtremeRoles.Resources;
 
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
@@ -761,7 +762,7 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 			return;
 		}
 		var cur = this.TargetPlayer.GetTruePosition();
-		this.Increse(cur == this.prevPos ? Time.deltaTime : -Time.deltaTime);
+		this.Increse(cur.IsCloseTo(this.prevPos) ? Time.deltaTime : -Time.deltaTime);
 		this.prevPos = cur;
 	}
 
