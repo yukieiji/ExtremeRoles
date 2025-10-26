@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -135,7 +135,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 		this.getFloorHandlerInfo = init.GetMethod(
 			floorHandlerType, "GetFloorHandler", [ typeof(PlayerControl) ]);
 		this.rpcRequestChangeFloorMethod = init.GetMethod(
-			floorHandlerType, "RpcRequestChangeFloor");
+			floorHandlerType, "RpcRequestChangeFloor", [typeof(bool)]);
 		this.registerFloorOverrideMethod = init.GetMethod(
 			floorHandlerType, "RegisterFloorOverride");
 		this.onUpperField = AccessTools.Field(floorHandlerType, "onUpper");
