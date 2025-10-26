@@ -128,7 +128,7 @@ public sealed class Zombie :
 
 		var thum = UnityObjectLoader.LoadFromResources(
 			ExtremeRoleId.Zombie,
-			ObjectPath.GetRoleImgPath(ExtremeRoleId.Zombie, ObjectPath.MapIcon));
+			ObjectPath.MapIcon);
 		player.SetThum(thum);
 
 		var video = UnityObjectLoader.LoadFromResources<VideoClip, ExtremeRoleId>(
