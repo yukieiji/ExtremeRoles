@@ -76,6 +76,7 @@ public sealed class CEO : SingleRoleBase,
 	private float awakeTaskGage;
 	private bool awakeHasOtherVision;
 
+	private bool isMonikaMeeting = false;
 	private bool isMeExiled = false;
 	private float exiledTimer = 0.0f;
 	private TMPro.TextMeshPro? resurrectText;
@@ -135,6 +136,12 @@ public sealed class CEO : SingleRoleBase,
 
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
+		if (!this.isMonikaMeeting)
+		{
+			this.isMonikaMeeting = false;
+			return;
+		}
+
 		this.exiledTimer = 5.0f;
 		
 		if (OnemanMeetingSystemManager.IsActive ||
@@ -263,6 +270,11 @@ public sealed class CEO : SingleRoleBase,
 
 	public void ResetOnMeetingStart()
 	{
+		// モニカの会議かどうか確認する
+		this.isMonikaMeeting =
+			OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
+			system.TryGetOnemanMeeting<MonikaLoveTargetMeeting>(out _);
+
 		if (this.resurrectText != null)
 		{
 			this.resurrectText.gameObject.SetActive(false);
