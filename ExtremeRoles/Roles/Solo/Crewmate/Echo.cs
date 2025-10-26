@@ -1,4 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
 using BepInEx.Unity.IL2CPP.Utils;
+using UnityEngine;
+
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module;
@@ -8,11 +14,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-
 
 #nullable enable
 
@@ -28,7 +29,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		CanSeparatePlayer
 	}
 
-	private readonly record struct LocationInfo(Vector3 Pos, bool IsDeadbody, float Disstance);
+	private readonly record struct LocationInfo(Vector3 Pos, bool IsDeadbody, float Distance);
 	private sealed class PingInfo(PingBehaviour ping, float time)
 	{
 		public PingBehaviour Ping { get; } = ping;
@@ -91,7 +92,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 		foreach (var pool in this.pool.activeChildren)
 		{
-			if (!pool.IsTryCast<ArrowBehaviour>(out var arrow))
+			if (!pool.IsTryCast<PingBehaviour>(out var arrow))
 			{
 				return;
 			}
@@ -103,8 +104,8 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 	public bool UseAbility()
 	{
-		var coroutine = HudManager.Instance.StartCoroutine(emitEchoLocation());
-		this.coroutine.Add(coroutine);
+		var newCoroutine = HudManager.Instance.StartCoroutine(emitEchoLocation());
+		this.coroutine.Add(newCoroutine);
 		return true;
 	}
 
@@ -149,7 +150,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 				float sqrDistance = diff.sqrMagnitude;
 				if (sqrDistance <= this.echoLocationRangeSquare)
 				{
-					target.Add(new LocationInfo(vec2, false, sqrDistance / this.echoLocationRangeSquare));
+					target.Add(new LocationInfo(vec2, true, sqrDistance / this.echoLocationRangeSquare));
 				}
 			}
 		}
@@ -160,13 +161,12 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 			yield break;
 		}
 
-		var sorted = target.OrderBy(x => x.Disstance);
-		var allEnum = new List<IEnumerator>(size);
+		var sorted = target.OrderBy(x => x.Distance);
 
 		var showPing = new Queue<PingInfo>(size);
 		foreach (var item in sorted)
 		{
-			float hitTime = item.Disstance;
+			float hitTime = item.Distance;
 
 			if (showPing.TryPeek(out var first) &&
 				first.Time - hitTime <= 0.0f)
@@ -214,9 +214,9 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 			hidePing(ping.Ping);
 		}
 		
-		foreach (var pool in this.pool.activeChildren)
+		foreach (var p in this.pool.activeChildren)
 		{
-			if (!pool.IsTryCast<PingBehaviour>(out var ping))
+			if (!p.IsTryCast<PingBehaviour>(out var ping))
 			{
 				continue;
 			}
@@ -238,7 +238,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		factory.CreateFloatOption(Option.Range, 10.0f, 5.0f, 30.0f, 0.5f);
 		factory.CreateFloatOption(Option.ShowTime, 2.0f, 0.5f, 15.0f, 0.25f, format: OptionUnit.Second);
 		var deadDodyOpt = factory.CreateBoolOption(Option.IsDetectDeadBody, false);
-		factory.CreateBoolOption(Option.CanSeparatePlayer, false);
+		factory.CreateBoolOption(Option.CanSeparatePlayer, false, deadDodyOpt);
 	}
 
 	protected override void RoleSpecificInit()
