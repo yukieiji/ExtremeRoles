@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using BepInEx.Unity.IL2CPP.Utils;
+
 using UnityEngine;
 
 using ExtremeRoles.Extension.Il2Cpp;
@@ -14,6 +15,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+
 
 #nullable enable
 
@@ -122,37 +124,12 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 		var allPlayer = PlayerCache.AllPlayerControl;
 		var target = new List<LocationInfo>(allPlayer.Count);
-
-		foreach (var player in allPlayer)
-		{
-			if (!player.IsValid() || 
-				player.PlayerId == source.PlayerId)
-			{
-				continue;
-			}
-
-			var pos = player.GetTruePosition();
-			var diff = sourcePos - pos;
-			float sqrDistance = diff.sqrMagnitude;
-			
-			if (sqrDistance <= this.echoLocationRangeSquare)
-			{
-				target.Add(new LocationInfo(pos, false, sqrDistance / this.echoLocationRangeSquare));
-			}
-		}
-
+		
+		addPlayerLocationInfo(source, target);
+		
 		if (this.isDetectDeadBody)
 		{
-			foreach (var deadBody in Object.FindObjectsOfType<DeadBody>())
-			{
-				Vector2 vec2 = deadBody.transform.position;
-				var diff = sourcePos - vec2;
-				float sqrDistance = diff.sqrMagnitude;
-				if (sqrDistance <= this.echoLocationRangeSquare)
-				{
-					target.Add(new LocationInfo(vec2, true, sqrDistance / this.echoLocationRangeSquare));
-				}
-			}
+			addDeadBodyLocationInfo(sourcePos, target);
 		}
 
 		int size = target.Count;
@@ -166,45 +143,14 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		var showPing = new Queue<PingInfo>(size);
 		foreach (var item in sorted)
 		{
-			float hitTime = item.Distance;
-
-			if (showPing.TryPeek(out var first) &&
-				first.Time - hitTime <= 0.0f)
-			{
-				float totalRedule = 0.0f;
-				while 
-					(showPing.TryPeek(out var nextPing) && 
-					(hitTime - nextPing.Time > 0.0f))
-				{
-					var removePing = showPing.Dequeue();
-					float removePingWaitTime = removePing.Time;
-					yield return new WaitForSeconds(removePingWaitTime);
-					totalRedule += removePingWaitTime;
-				}
-				yield return new WaitForSeconds(hitTime - totalRedule);
-			}
-			else
-			{
-				yield return new WaitForSeconds(hitTime);
-			}
+			yield return waitNextTarget(item, showPing);
 
 			foreach (var p in showPing)
 			{
-				p.Reduce(hitTime);
+				p.Reduce(item.Distance);
 			}
 
-			var ping = this.pool.Get<PingBehaviour>();
-			ping.transform.position = new Vector3(0.0f, 0.0f, -900.0f);
-			ping.target = item.Pos;
-			ping.AmSeeker = false;
-			ping.UpdatePosition();
-			ping.gameObject.SetActive(true);
-			ping.gameObject.layer = 5;
-			if (ping.image != null)
-			{
-				ping.image.sortingOrder = 88659;
-			}
-			ping.SetImageEnabled(true);
+			var ping = setUpPing(this.pool, item.Pos);
 			showPing.Enqueue(new PingInfo(ping, this.pingTime));
 		}
 
@@ -222,6 +168,83 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 			}
 			hidePing(ping);
 		}
+	}
+
+	private void addDeadBodyLocationInfo(Vector3 sourcePos, in List<LocationInfo> result)
+	{
+		foreach (var deadBody in Object.FindObjectsOfType<DeadBody>())
+		{
+			var pos = deadBody.transform.position;
+			var diff = sourcePos - pos;
+			float sqrDistance = diff.sqrMagnitude;
+			if (sqrDistance <= this.echoLocationRangeSquare)
+			{
+				result.Add(new LocationInfo(pos, true, sqrDistance / this.echoLocationRangeSquare));
+			}
+		}
+	}
+
+	private void addPlayerLocationInfo(PlayerControl source, in List<LocationInfo> result)
+	{
+		var sourcePos = source.GetTruePosition();
+		foreach (var player in PlayerCache.AllPlayerControl)
+		{
+			if (!player.IsValid() ||
+				player.PlayerId == source.PlayerId)
+			{
+				continue;
+			}
+
+			var pos = player.GetTruePosition();
+			var diff = sourcePos - pos;
+			float sqrDistance = diff.sqrMagnitude;
+
+			if (sqrDistance <= this.echoLocationRangeSquare)
+			{
+				result.Add(new LocationInfo(pos, false, sqrDistance / this.echoLocationRangeSquare));
+			}
+		}
+	}
+
+	private PingBehaviour setUpPing(ObjectPoolBehavior pool, Vector3 pos)
+	{
+		var ping = pool.Get<PingBehaviour>();
+		ping.transform.position = new Vector3(0.0f, 0.0f, -900.0f);
+		ping.target = pos;
+		ping.AmSeeker = false;
+		ping.UpdatePosition();
+		ping.gameObject.SetActive(true);
+		ping.gameObject.layer = 5;
+		if (ping.image != null)
+		{
+			ping.image.sortingOrder = 88659;
+		}
+		ping.SetImageEnabled(true);
+		return ping;
+	}
+
+	private static IEnumerator waitNextTarget(LocationInfo next, Queue<PingInfo> curShowPing)
+	{
+		float hitTime = next.Distance;
+		
+		float lastWaitTime = hitTime;
+		
+		if (curShowPing.TryPeek(out var first) &&
+			first.Time - hitTime <= 0.0f)
+		{
+			float totalRedule = 0.0f;
+			while
+				(curShowPing.TryPeek(out var nextPing) &&
+				(hitTime - nextPing.Time > 0.0f))
+			{
+				var removePing = curShowPing.Dequeue();
+				float removePingWaitTime = removePing.Time;
+				yield return new WaitForSeconds(removePingWaitTime);
+				totalRedule += removePingWaitTime;
+			}
+			lastWaitTime = hitTime - totalRedule;
+		}
+		yield return new WaitForSeconds(lastWaitTime);
 	}
 
 	private static void hidePing(PingBehaviour ping)
