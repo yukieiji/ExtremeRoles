@@ -39,7 +39,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 		public void Reduce(float delta)
 		{
-			this.Time -= delta; 
+			this.Time -= delta;
 		}
 	}
 
@@ -92,15 +92,15 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 			return;	
 		}
 
-		foreach (var pool in this.pool.activeChildren)
+		foreach (var p in this.pool.activeChildren)
 		{
-			if (!pool.IsTryCast<PingBehaviour>(out var arrow))
+			if (!p.IsTryCast<PingBehaviour>(out var ping))
 			{
 				return;
 			}
-			arrow.target = Vector3.zero;
-			arrow.SetImageEnabled(false);
-			arrow.gameObject.SetActive(false);
+			ping.target = Vector3.zero;
+			ping.SetImageEnabled(false);
+			ping.gameObject.SetActive(false);
 		}
 	}
 
@@ -232,7 +232,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		if (curShowPing.TryPeek(out var first) &&
 			first.Time - hitTime <= 0.0f)
 		{
-			float totalRedule = 0.0f;
+			float totalReduce = 0.0f;
 			while
 				(curShowPing.TryPeek(out var nextPing) &&
 				(hitTime - nextPing.Time > 0.0f))
@@ -240,9 +240,9 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 				var removePing = curShowPing.Dequeue();
 				float removePingWaitTime = removePing.Time;
 				yield return new WaitForSeconds(removePingWaitTime);
-				totalRedule += removePingWaitTime;
+				totalReduce += removePingWaitTime;
 			}
-			lastWaitTime = hitTime - totalRedule;
+			lastWaitTime = hitTime - totalReduce;
 		}
 		yield return new WaitForSeconds(lastWaitTime);
 	}
@@ -260,8 +260,8 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 50);
 		factory.CreateFloatOption(Option.Range, 10.0f, 5.0f, 30.0f, 0.5f);
 		factory.CreateFloatOption(Option.ShowTime, 2.0f, 0.5f, 15.0f, 0.25f, format: OptionUnit.Second);
-		var deadDodyOpt = factory.CreateBoolOption(Option.IsDetectDeadBody, false);
-		factory.CreateBoolOption(Option.CanSeparatePlayer, false, deadDodyOpt);
+		var deadBodyOpt = factory.CreateBoolOption(Option.IsDetectDeadBody, false);
+		factory.CreateBoolOption(Option.CanSeparatePlayer, false, deadBodyOpt);
 	}
 
 	protected override void RoleSpecificInit()
