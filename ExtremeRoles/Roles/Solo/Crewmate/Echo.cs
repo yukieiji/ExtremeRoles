@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-using BepInEx.Unity.IL2CPP.Utils;
-
+using Hazel;
 using UnityEngine;
+using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.Player;
@@ -15,6 +15,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+
+using UnityObject = UnityEngine.Object;
 
 
 #nullable enable
@@ -27,8 +29,22 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		Range,
 		ShowTime,
+		AttentionMode,
 		IsDetectDeadBody,
 		CanSeparatePlayer
+	}
+
+	public enum EmitAttentionMode
+	{
+		EmitAll,
+		EmitNotCrewmate,
+		EmitDisable,
+	}
+
+	public enum RpcOps
+	{
+		Emit,
+		Reset,
 	}
 
 	private readonly record struct LocationInfo(Vector3 Pos, bool IsDeadbody, float Distance);
@@ -46,10 +62,26 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	private float echoLocationRangeSquare;
 	private bool isDetectDeadBody;
 	private float pingTime;
+	private EmitAttentionMode mode;
 
 	private List<Coroutine?> coroutine = [];
 	public ExtremeAbilityButton? Button { get; set; }
-	private ObjectPoolBehavior? pool;
+	private ObjectPoolBehavior pool
+	{
+		get
+		{
+			if (this.innerPool == null)
+			{
+				var localPlayer = PlayerControl.LocalPlayer;
+				var prefab = GameManagerCreator.Instance.HideAndSeekManagerPrefab.PingPool;
+				this.innerPool = UnityObject.Instantiate(prefab, localPlayer.transform);
+			}
+			return this.innerPool;
+		}
+	}
+	private ObjectPoolBehavior? innerPool;
+
+	private static Color emitColor = Palette.CrewmateRoleBlue;
 
 	public Echo() : base(
 		RoleCore.BuildCrewmate(
@@ -60,9 +92,37 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 	}
 
+	public static void Rpc(in MessageReader reader)
+	{
+		byte playerId = reader.ReadByte();
+		var ops = (RpcOps)reader.ReadByte();
+		
+		if (!ExtremeRoleManager.TryGetSafeCastedRole<Echo>(playerId, out var echo))
+		{
+			return;
+		}
+		switch (ops)
+		{
+			case RpcOps.Emit:
+				float x = reader.ReadSingle();
+				float y = reader.ReadSingle();
+				if (!echo.isShowEchoEmitPos())
+				{
+					return;
+				}
+				// 大きく見せるため近くで打ったとして表示させる
+				var ping = echo.setUpPing(echo.pool, new LocationInfo(new Vector2(x, y), false, 0.1f));
+				var newCoroutine = HudManager.Instance.StartCoroutine(echo.showMePing(ping));
+				echo.coroutine.Add(newCoroutine);
+				break;
+			case RpcOps.Reset:
+				echo.reset();
+				break;
+		}
+	}
+
 	public void CreateAbility()
 	{
-
 		this.CreateAbilityCountButton(
 			"echoLocation",
 			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton));
@@ -78,6 +138,20 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 	public void ResetOnMeetingStart()
 	{
+		if (this.mode is not EmitAttentionMode.EmitDisable)
+		{
+			var localPlayer = PlayerControl.LocalPlayer;
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EchoOps))
+			{
+				caller.WriteByte(localPlayer.PlayerId);
+				caller.WriteByte((byte)RpcOps.Reset);
+			}
+		}
+		reset();
+	}
+
+	private void reset()
+	{
 		foreach (var c in this.coroutine)
 		{
 			if (c != null)
@@ -89,7 +163,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 		if (this.pool == null)
 		{
-			return;	
+			return;
 		}
 
 		foreach (var p in this.pool.activeChildren)
@@ -106,9 +180,39 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 	public bool UseAbility()
 	{
+		if (this.mode is not EmitAttentionMode.EmitDisable)
+		{
+			var localPlayer = PlayerControl.LocalPlayer;
+			var pos = localPlayer.GetTruePosition();
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EchoOps))
+			{
+				caller.WriteByte(localPlayer.PlayerId);
+				caller.WriteByte((byte)RpcOps.Emit);
+				caller.WriteFloat(pos.x);
+				caller.WriteFloat(pos.y);
+			}
+		}
+
 		var newCoroutine = HudManager.Instance.StartCoroutine(emitEchoLocation());
 		this.coroutine.Add(newCoroutine);
 		return true;
+	}
+
+	private bool isShowEchoEmitPos()
+	{
+		var role = ExtremeRoleManager.GetLocalPlayerRole();
+		return this.mode switch
+		{
+			EmitAttentionMode.EmitNotCrewmate => !role.IsCrewmate(),
+			EmitAttentionMode.EmitAll => true,
+			_ => false
+		};
+	}
+
+	private IEnumerator showMePing(PingBehaviour ping)
+	{
+		yield return new WaitForSeconds(this.pingTime);
+		hidePing(ping);
 	}
 
 	private IEnumerator emitEchoLocation()
@@ -116,17 +220,11 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		var source = PlayerControl.LocalPlayer;
 		var sourcePos = source.GetTruePosition();
 
-		if (this.pool == null)
-		{
-			var prefab = GameManagerCreator.Instance.HideAndSeekManagerPrefab.PingPool;
-			this.pool = Object.Instantiate(prefab, source.transform);
-		}
-
 		var allPlayer = PlayerCache.AllPlayerControl;
 		var target = new List<LocationInfo>(allPlayer.Count);
-		
+
 		addPlayerLocationInfo(source, target);
-		
+
 		if (this.isDetectDeadBody)
 		{
 			addDeadBodyLocationInfo(sourcePos, target);
@@ -150,7 +248,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 				p.Reduce(item.Distance);
 			}
 
-			var ping = setUpPing(this.pool, item.Pos);
+			var ping = setUpPing(this.pool, item);
 			showPing.Enqueue(new PingInfo(ping, this.pingTime));
 		}
 
@@ -159,7 +257,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 			yield return new WaitForSeconds(ping.Time);
 			hidePing(ping.Ping);
 		}
-		
+
 		foreach (var p in this.pool.activeChildren)
 		{
 			if (!p.IsTryCast<PingBehaviour>(out var ping))
@@ -172,7 +270,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 	private void addDeadBodyLocationInfo(Vector3 sourcePos, in List<LocationInfo> result)
 	{
-		foreach (var deadBody in Object.FindObjectsOfType<DeadBody>())
+		foreach (var deadBody in UnityObject.FindObjectsOfType<DeadBody>())
 		{
 			var pos = deadBody.transform.position;
 			var diff = sourcePos - pos;
@@ -206,18 +304,27 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		}
 	}
 
-	private PingBehaviour setUpPing(ObjectPoolBehavior pool, Vector3 pos)
+	private PingBehaviour setUpPing(ObjectPoolBehavior pool, in LocationInfo info)
 	{
+		// 最大距離最小スケール0.2f、最小距離最大スケール1.0fに変換
+		float floatedScale = (1.0f - info.Distance) * 0.8f + 0.2f;
+
 		var ping = pool.Get<PingBehaviour>();
 		ping.transform.position = new Vector3(0.0f, 0.0f, -900.0f);
-		ping.target = pos;
+		ping.target = info.Pos;
 		ping.AmSeeker = false;
 		ping.UpdatePosition();
 		ping.gameObject.SetActive(true);
 		ping.gameObject.layer = 5;
+		ping.MaxScale = 0.9f * floatedScale;
+
 		if (ping.image != null)
 		{
 			ping.image.sortingOrder = 88659;
+			if (!info.IsDeadbody)
+			{
+				ping.image.color = emitColor;
+			}
 		}
 		ping.SetImageEnabled(true);
 		return ping;
@@ -259,6 +366,8 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 50);
 		factory.CreateFloatOption(Option.Range, 10.0f, 5.0f, 30.0f, 0.5f);
+		factory.CreateSelectionOption<Option, EmitAttentionMode>(Option.AttentionMode);
+
 		factory.CreateFloatOption(Option.ShowTime, 2.0f, 0.5f, 15.0f, 0.25f, format: OptionUnit.Second);
 		var deadBodyOpt = factory.CreateBoolOption(Option.IsDetectDeadBody, false);
 		factory.CreateBoolOption(Option.CanSeparatePlayer, false, deadBodyOpt);
@@ -266,9 +375,13 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 	protected override void RoleSpecificInit()
 	{
-		float range = this.Loader.GetValue<Option, float>(Option.Range);
+		var loader = this.Loader;
+
+		float range = loader.GetValue<Option, float>(Option.Range);
 		this.echoLocationRangeSquare = range * range;
-		this.pingTime = this.Loader.GetValue<Option, float>(Option.ShowTime);
-		this.isDetectDeadBody = this.Loader.GetValue<Option, bool>(Option.IsDetectDeadBody);
+
+		this.pingTime = loader.GetValue<Option, float>(Option.ShowTime);
+		this.isDetectDeadBody = loader.GetValue<Option, bool>(Option.IsDetectDeadBody);
+		this.mode = (EmitAttentionMode)loader.GetValue<Option, int>(Option.AttentionMode);
 	}
 }
