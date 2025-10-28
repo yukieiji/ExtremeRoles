@@ -4,19 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils;
 
+
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.GameResult;
 
 #nullable enable
 
@@ -348,7 +350,7 @@ public sealed class YokoRole :
 	}
 
 	public bool IsAbilityActive() =>
-		prevPos == PlayerControl.LocalPlayer.GetTruePosition();
+		prevPos.IsCloseTo(PlayerControl.LocalPlayer.GetTruePosition(), 0.1f);
 
 	public void CreateAbility()
 	{

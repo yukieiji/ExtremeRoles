@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 using Il2CppInterop.Runtime.Attributes;
+using ExtremeRoles.Extension.Vector;
 
 #nullable enable
 
@@ -93,7 +94,7 @@ public sealed class ToggleButtonBodyBehaviour(IntPtr ptr) : MonoBehaviour(ptr)
 			this.backGround = bkImage;
 		}
 
-		if (this.scale == Vector3.zero)
+		if (this.scale.IsCloseTo(Vector3.zero))
 		{
 			this.scale = this.transform.localScale;
 		}

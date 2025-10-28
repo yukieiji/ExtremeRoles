@@ -5,22 +5,20 @@ using UnityEngine;
 
 using Hazel;
 
+using ExtremeRoles.Compat;
+using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Extension.Ship;
-
-using ExtremeRoles.Compat;
-using ExtremeRoles.Module.Ability;
 
 #nullable enable
-
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -146,7 +144,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 			vent.myRend = ventRenderer;
 
 			var transform = vent.myRend.transform;
-			if (transform.localPosition != vent.transform.localPosition)
+			if (transform.localPosition.IsNotCloseTo(vent.transform.localPosition))
 			{
 				transform.localPosition = Vector3.zero;
 			}

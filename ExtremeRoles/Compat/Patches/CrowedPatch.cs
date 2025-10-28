@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Patches.Meeting.Hud;
@@ -16,13 +17,19 @@ public static class CrowedModPatch
 			system.IsActiveMeeting<MonikaLoveTargetMeeting>()
 		);
 
-	public static void SortMonikaTrash(ref IEnumerable<PlayerVoteArea> __result)
+	public static void Sort(ref IEnumerable<PlayerVoteArea> __result)
 	{
 		if (MonikaTrashSystem.TryGet(out var system))
 		{
 			__result = __result
 				.OrderBy(MeetingHudSortButtonsPatch.DefaultSort)
 				.ThenBy(system.GetVoteAreaOrder);
+		}
+		else
+		{
+			var offset = MeetingHudSortButtonsPatch.HideOffset;
+			__result = __result
+				.Where(t => t.transform.localPosition.IsNotCloseTo(offset));
 		}
 	}
 }

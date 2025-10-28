@@ -6,6 +6,7 @@ using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
@@ -91,13 +92,13 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 
 		var direction = this.target.GetTruePosition() - local.GetTruePosition();
 		direction = direction.normalized;
-		if (direction == Vector2.zero &&
+		if (direction.IsCloseTo(Vector2.zero, 0.1f) &&
 			local.cosmetics != null)
 		{
 			direction = local.cosmetics.FlipX ? Vector2.left : Vector2.right;
 		}
 		direction *= x;
-		if (direction == Vector2.zero)
+		if (direction.IsCloseTo(Vector2.zero))
 		{
 			return false;
 		}

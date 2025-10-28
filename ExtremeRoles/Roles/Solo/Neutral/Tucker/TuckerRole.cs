@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.Vector;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
@@ -14,8 +16,6 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode;
 
 #nullable enable
 
@@ -437,7 +437,7 @@ public sealed class TuckerRole :
 		{
 			return false;
 		}
-		return local.GetTruePosition() == removeInfo.StartPos;
+		return local.GetTruePosition().IsCloseTo(removeInfo.StartPos);
 	}
 
 	private void remove()

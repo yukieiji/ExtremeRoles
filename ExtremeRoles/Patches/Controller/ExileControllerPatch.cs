@@ -8,17 +8,19 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface.Ability;
+using ExtremeRoles.Roles.API.Interface;
+
 
 using Il2CppObject = Il2CppSystem.Object;
-using ExtremeRoles.Module.SystemType;
+
 
 
 #nullable enable
@@ -79,11 +81,17 @@ public static class ExileControllerBeginePatch
     public static void Postfix(ExileController __instance)
     {
         if (!MeetingReporter.IsExist ||
-			OnemanMeetingSystemManager.IsActive) { return; }
+			OnemanMeetingSystemManager.IsActive)
+		{
+			return;
+		}
 
 		string reports = MeetingReporter.Instance.GetMeetingEndReport();
 
-		if (string.IsNullOrEmpty(reports)) { return; }
+		if (string.IsNullOrEmpty(reports))
+		{
+			return;
+		}
 
         TMPro.TextMeshPro infoText = UnityEngine.Object.Instantiate(
             __instance.ImpostorText,
@@ -122,7 +130,24 @@ public static class ExileControllerBeginePatch
 				__instance, shipOption.Exile);
 			return false;
 		}
-		return true;
+
+		var info = getOverrideInfo(__instance.initData);
+		if (info == null)
+		{
+			return true;
+		}
+
+		if (info.ExiledPlayer != null)
+		{
+			setUpExiledPlayer(__instance, info.ExiledPlayer.DefaultOutfit);
+		}
+		else
+		{
+			__instance.Player.gameObject.SetActive(false);
+		}
+		__instance.completeString = info.AnimationText;
+		__instance.StartCoroutine(__instance.Animate());
+		return false;
 	}
 
     private static void confirmExile(
@@ -130,119 +155,197 @@ public static class ExileControllerBeginePatch
         in ExileOption option)
     {
         SetExiledTarget(instance);
-        var transController = TranslationController.Instance;
-
-        var allPlayer = GameData.Instance.AllPlayers.ToArray();
-
 		var init = instance.initData;
 		bool validExiled = init != null && init.outfit != null;
 
-		var alivePlayers = allPlayer.Where(
-            x =>
-            {
-                return
-                    (
-                        (validExiled && x.PlayerId != init!.networkedPlayer.PlayerId) ||
-						!validExiled
-                    ) && !x.IsDead && !x.Disconnected;
-            });
-
-        int aliveImpNum = Enumerable.Count(
-            alivePlayers,
-            (NetworkedPlayerInfo p) =>
-				ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) && role.IsImpostor());
-        int aliveCrewNum = Enumerable.Count(
-            alivePlayers,
-            (NetworkedPlayerInfo p) =>
-				ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) && role.IsCrewmate());
-        int aliveNeutNum = Enumerable.Count(
-            alivePlayers,
-            (NetworkedPlayerInfo p) =>
-				ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) && role.IsNeutral());
-
         string completeString = string.Empty;
-
-		var mode = option.Mode;
         if (validExiled)
         {
-            string playerName = init!.outfit!.PlayerName;
-            if (!ExtremeRoleManager.TryGetRole(init!.networkedPlayer.PlayerId, out var exiledPlayerRole))
-            {
-                // Critical error: exiled player's role not found. Log and/or return.
-                ExtremeRolesPlugin.Logger.LogError($"Exiled player role not found for ID: {init!.networkedPlayer.PlayerId}");
-                // Depending on desired behavior, might throw or simply not populate text, leading to default display.
-                // For now, let's return to prevent further processing with a null role.
-                return;
-            }
-            switch (mode)
-            {
-                case ConfirmExileMode.AllTeam:
-                    string team = Tr.GetString(exiledPlayerRole.Core.Team.ToString());
-                    completeString = option.IsConfirmRole ?
-						Tr.GetString("ExileTextAllTeamWithRole", playerName, team, exiledPlayerRole.GetColoredRoleName()) :
-						Tr.GetString("ExileTextAllTeam", playerName, team);
-                    break;
-                default:
-                    completeString = getCompleteString(
-                        playerName, exiledPlayerRole, in option);
-                    break;
-            }
-
-			instance.Player.UpdateFromPlayerOutfit(init!.outfit, PlayerMaterial.MaskType.Exile, false, false, (Il2CppSystem.Action)(() =>
-			{
-				var cache = ShipStatus.Instance.CosmeticsCache;
-				var skinViewData = GameManager.Instance != null ?
-					cache.GetSkin(instance.initData.outfit.SkinId) :
-					instance.Player.GetSkinView();
-
-				if (GameManager.Instance != null &&
-					!HatManager.Instance.CheckLongModeValidCosmetic(
-					init!.outfit!.SkinId, instance.Player.GetIgnoreLongMode()))
-				{
-					skinViewData = cache.GetSkin("skin_None");
-				}
-				if (instance.useIdleAnim)
-				{
-					instance.Player.FixSkinSprite(skinViewData.IdleFrame);
-					return;
-				}
-				instance.Player.FixSkinSprite(skinViewData.EjectFrame);
-			}), false);
-			instance.Player.ToggleName(false);
-			if (!instance.useIdleAnim)
-			{
-				instance.Player.SetCustomHatPosition(instance.exileHatPosition);
-				instance.Player.SetCustomVisorPosition(instance.exileVisorPosition);
-			}
+			completeString = getExiledString(instance, option);
 		}
         else if (init != null)
         {
-            completeString = transController.GetString(
-                init.voteTie ? StringNames.NoExileTie : StringNames.NoExileSkip,
-                Array.Empty<Il2CppObject>());
-            instance.Player.gameObject.SetActive(false);
+			completeString = getNoExiledString(instance);
         }
 
         instance.completeString = completeString;
-        instance.ImpostorText.text = mode switch
-        {
-            ConfirmExileMode.Impostor => transController.GetString(
-                aliveImpNum == 1 ? StringNames.ImpostorsRemainS : StringNames.ImpostorsRemainP,
-                [ aliveImpNum ]),
-
-            ConfirmExileMode.Crewmate => Tr.GetString(
-                aliveCrewNum == 1 ? "CrewmateRemainS" : "CrewmateRemainP", aliveCrewNum),
-
-            ConfirmExileMode.Neutral => Tr.GetString(
-                aliveNeutNum == 1 ?  "NeutralRemainS" : "NeutralRemainP", aliveNeutNum),
-
-            ConfirmExileMode.AllTeam => Tr.GetString(
-				"AllTeamAlive", aliveCrewNum, aliveImpNum, aliveNeutNum),
-
-            _ => string.Empty
-        };
+		instance.ImpostorText.text = createImpostorText(init, validExiled, option.Mode);
         instance.StartCoroutine(instance.Animate());
     }
+
+	private static string createImpostorText(ExileController.InitProperties? init, bool isValidExiled, ConfirmExileMode mode)
+	{
+		var alivePlayers = GameData.Instance.AllPlayers.ToArray().Where(
+			x =>
+			{
+				return
+					(
+						(isValidExiled && x.PlayerId != init!.networkedPlayer.PlayerId) ||
+						!isValidExiled
+					) && !x.IsDead && !x.Disconnected;
+			});
+
+		int aliveImpNum = Enumerable.Count(
+			alivePlayers,
+			(NetworkedPlayerInfo p) =>
+				ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) && role.IsImpostor());
+		int aliveCrewNum = Enumerable.Count(
+			alivePlayers,
+			(NetworkedPlayerInfo p) =>
+				ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) && role.IsCrewmate());
+		int aliveNeutNum = Enumerable.Count(
+			alivePlayers,
+			(NetworkedPlayerInfo p) =>
+				ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) && role.IsNeutral());
+
+		return mode switch
+		{
+			ConfirmExileMode.Impostor => TranslationController.Instance.GetString(
+				aliveImpNum == 1 ? StringNames.ImpostorsRemainS : StringNames.ImpostorsRemainP,
+				[aliveImpNum]),
+
+			ConfirmExileMode.Crewmate => Tr.GetString(
+				aliveCrewNum == 1 ? "CrewmateRemainS" : "CrewmateRemainP", aliveCrewNum),
+
+			ConfirmExileMode.Neutral => Tr.GetString(
+				aliveNeutNum == 1 ? "NeutralRemainS" : "NeutralRemainP", aliveNeutNum),
+
+			ConfirmExileMode.AllTeam => Tr.GetString(
+				"AllTeamAlive", aliveCrewNum, aliveImpNum, aliveNeutNum),
+
+			_ => string.Empty
+		};
+	}
+
+	private static string getExiledString(ExileController controller, in ExileOption option)
+	{
+		var init = controller.initData;
+		bool validExiled = init != null && init.outfit != null;
+
+		NetworkedPlayerInfo? targetExiled = init!.networkedPlayer;
+		byte exiledPlayerId = targetExiled.PlayerId;
+		if (!ExtremeRoleManager.TryGetRole(exiledPlayerId, out var exiledPlayerRole))
+		{
+			// Critical error: exiled player's role not found. Log and/or return.
+			ExtremeRolesPlugin.Logger.LogError($"Exiled player role not found for ID: {exiledPlayerId}");
+			// Depending on desired behavior, might throw or simply not populate text, leading to default display.
+			// For now, let's return to prevent further processing with a null role.
+			return string.Empty;
+		}
+
+		OverrideInfo? info = getOverrideInfo(init);
+
+		if (info != null)
+		{
+			if (info.ExiledPlayer != null)
+			{
+				setUpExiledPlayer(controller, info.ExiledPlayer.DefaultOutfit);
+			}
+			else
+			{
+				controller.Player.gameObject.SetActive(false);
+			}
+			return info.AnimationText;
+		}
+
+
+		string playerName = init!.outfit!.PlayerName;
+		string completeString = string.Empty;
+
+		switch (option.Mode)
+		{
+			case ConfirmExileMode.AllTeam:
+				string team = Tr.GetString(exiledPlayerRole.Core.Team.ToString());
+				completeString = option.IsConfirmRole ?
+					Tr.GetString("ExileTextAllTeamWithRole", playerName, team, exiledPlayerRole.GetColoredRoleName()) :
+					Tr.GetString("ExileTextAllTeam", playerName, team);
+				break;
+			default:
+				completeString = getCompleteString(
+					playerName, exiledPlayerRole, in option);
+				break;
+		}
+
+		setUpExiledPlayer(controller, init.outfit);
+		return completeString;
+	}
+
+	private static void setUpExiledPlayer(ExileController controller, NetworkedPlayerInfo.PlayerOutfit outfit)
+	{
+		var player = controller.Player;
+		player.UpdateFromPlayerOutfit(outfit, PlayerMaterial.MaskType.Exile, false, false, (Il2CppSystem.Action)(() =>
+		{
+			var cache = ShipStatus.Instance.CosmeticsCache;
+			var skinViewData = GameManager.Instance != null ?
+				cache.GetSkin(controller.initData.outfit.SkinId) :
+				player.GetSkinView();
+
+			if (GameManager.Instance != null &&
+				!HatManager.Instance.CheckLongModeValidCosmetic(
+				outfit.SkinId, player.GetIgnoreLongMode()))
+			{
+				skinViewData = cache.GetSkin("skin_None");
+			}
+			if (controller.useIdleAnim)
+			{
+				player.FixSkinSprite(skinViewData.IdleFrame);
+				return;
+			}
+			player.FixSkinSprite(skinViewData.EjectFrame);
+		}), false);
+
+		player.ToggleName(false);
+
+		if (!controller.useIdleAnim)
+		{
+			player.SetCustomHatPosition(controller.exileHatPosition);
+			player.SetCustomVisorPosition(controller.exileVisorPosition);
+		}
+	}
+
+	private static OverrideInfo? getOverrideInfo(ExileController.InitProperties? init)
+	{
+		bool validExiled = init != null && init.outfit != null;
+		if (!validExiled)
+		{
+			return null;
+		}
+
+		NetworkedPlayerInfo? targetExiled = init!.networkedPlayer;
+		byte exiledPlayerId = targetExiled.PlayerId;
+		if (!ExtremeRoleManager.TryGetRole(exiledPlayerId, out var exiledPlayerRole))
+		{
+			// Critical error: exiled player's role not found. Log and/or return.
+			ExtremeRolesPlugin.Logger.LogError($"Exiled player role not found for ID: {exiledPlayerId}");
+			// Depending on desired behavior, might throw or simply not populate text, leading to default display.
+			// For now, let's return to prevent further processing with a null role.
+			return null;
+		}
+
+		OverrideInfo? info = null;
+		// 今後複数役職でIExiledAnimationOverrideが出てきた時に考えろ
+		if (exiledPlayerRole.AbilityClass is IExiledAnimationOverrideWhenExiled @override)
+		{
+			info = @override.OverrideInfo;
+		}
+		else if (
+			exiledPlayerRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AbilityClass is IExiledAnimationOverrideWhenExiled @multiOverride)
+		{
+			info = @multiOverride.OverrideInfo;
+		}
+		return info;
+	}
+
+	private static string getNoExiledString(ExileController controller)
+	{
+		string result = TranslationController.Instance.GetString(
+			controller.initData.voteTie ? StringNames.NoExileTie : StringNames.NoExileSkip,
+			Array.Empty<Il2CppObject>());
+		controller.Player.gameObject.SetActive(false);
+		
+		return result;
+	}
 
     private static string getSuffix(
         bool isExiledSameMode,
@@ -411,7 +514,10 @@ public static class ExileControllerWrapUpPatch
 		InfoOverlay.Instance.IsBlock = false;
         Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 
-        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+        if (ExtremeRoleManager.GameRole.Count == 0)
+		{
+			return;
+		}
 
         var state = ExtremeRolesPlugin.ShipState;
 

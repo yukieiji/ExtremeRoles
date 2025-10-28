@@ -19,6 +19,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 
 using Il2CppObject = Il2CppSystem.Object;
 using SystemArray = System.Array;
+using ExtremeRoles.Extension.Vector;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -172,7 +173,7 @@ public sealed class Zombie :
     }
 
     public bool IsActivate()
-        => this.curPos == PlayerControl.LocalPlayer.transform.position;
+        => this.curPos.IsCloseTo(PlayerControl.LocalPlayer.transform.position, 0.1f);
 
     public bool UseAbility()
     {
