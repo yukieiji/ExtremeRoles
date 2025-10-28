@@ -161,11 +161,6 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		}
 		this.coroutine.Clear();
 
-		if (this.pool == null)
-		{
-			return;
-		}
-
 		foreach (var p in this.pool.activeChildren)
 		{
 			if (!p.IsTryCast<PingBehaviour>(out var ping))
