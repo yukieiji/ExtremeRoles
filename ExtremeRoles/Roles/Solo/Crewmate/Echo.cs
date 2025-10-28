@@ -47,7 +47,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		Reset,
 	}
 
-	private readonly record struct LocationInfo(Vector3 Pos, bool IsDeadbody, float Distance);
+	private readonly record struct LocationInfo(Vector3 Pos, bool IsDeadbody, float NormedDistance);
 	private sealed class PingInfo(PingBehaviour ping, float time)
 	{
 		public PingBehaviour Ping { get; } = ping;
@@ -215,6 +215,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		hidePing(ping);
 	}
 
+	// エコーを放ってから距離に従って順次表示、表示された順番から経過時間ごとに消していく
 	private IEnumerator emitEchoLocation()
 	{
 		var source = PlayerControl.LocalPlayer;
@@ -223,8 +224,11 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		var allPlayer = PlayerCache.AllPlayerControl;
 		var target = new List<LocationInfo>(allPlayer.Count);
 
+		// 1. まずはPingを立てる場所を探す
+		/// 通常プレイヤー
 		addPlayerLocationInfo(source, target);
 
+		/// 死体
 		if (this.isDetectDeadBody)
 		{
 			addDeadBodyLocationInfo(sourcePos, target);
@@ -236,28 +240,31 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 			yield break;
 		}
 
-		var sorted = target.OrderBy(x => x.Distance);
-
+		// 2. 1秒を使い近い順からPingを建てる
+		var sorted = target.OrderBy(x => x.NormedDistance);
 		var showPing = new Queue<PingInfo>(size);
 		foreach (var item in sorted)
 		{
 			yield return waitNextTarget(item, showPing);
 
+			// エコーは1秒で全範囲を探査するのでNormedDistance分経過したとする
 			foreach (var p in showPing)
 			{
-				p.Reduce(item.Distance);
+				p.Reduce(item.NormedDistance);
 			}
 
 			var ping = setUpPing(this.pool, item);
 			showPing.Enqueue(new PingInfo(ping, this.pingTime));
 		}
 
+		// 3. 経過時間が残っているPingをすべて探査して消す
 		while (showPing.TryDequeue(out var ping))
 		{
 			yield return new WaitForSeconds(ping.Time);
 			hidePing(ping.Ping);
 		}
 
+		// 4. あと掃除
 		foreach (var p in this.pool.activeChildren)
 		{
 			if (!p.IsTryCast<PingBehaviour>(out var ping))
@@ -307,7 +314,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	private PingBehaviour setUpPing(ObjectPoolBehavior pool, in LocationInfo info)
 	{
 		// 最大距離最小スケール0.2f、最小距離最大スケール1.0fに変換
-		float floatedScale = (1.0f - info.Distance) * 0.8f + 0.2f;
+		float floatedScale = (1.0f - info.NormedDistance) * 0.8f + 0.2f;
 
 		var ping = pool.Get<PingBehaviour>();
 		ping.transform.position = new Vector3(0.0f, 0.0f, -900.0f);
@@ -332,10 +339,12 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 	private static IEnumerator waitNextTarget(LocationInfo next, Queue<PingInfo> curShowPing)
 	{
-		float hitTime = next.Distance;
+		float hitTime = next.NormedDistance;
 		
 		float lastWaitTime = hitTime;
 		
+		// 次のPingを建てる前に前のPingの表示時間が過ぎているかどうかを確認して
+		// 過ぎているのであれば非表示にする
 		if (curShowPing.TryPeek(out var first) &&
 			first.Time - hitTime <= 0.0f)
 		{
