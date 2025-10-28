@@ -110,7 +110,7 @@ public static class PbExileControllerPlayerSpinPatch
 			initData.networkedPlayer != null &&
 			ExtremeRoleManager.TryGetRole(initData.networkedPlayer.PlayerId, out var role))
 		{
-			bool isBadHand = mode switch
+			bool isConfirmedTeam = mode switch
 			{
 				ConfirmExileMode.Neutral => role.IsNeutral(),
 				ConfirmExileMode.Crewmate => role.IsCrewmate(),
@@ -118,7 +118,7 @@ public static class PbExileControllerPlayerSpinPatch
 				_ => false
 			};
 
-			instance.HandSlot.sprite = isBadHand ? instance.GoodHand : instance.BadHand;
+			instance.HandSlot.sprite = isConfirmedTeam ? instance.GoodHand : instance.BadHand;
 			PlayerMaterial.SetColors(initData.outfit.ColorId, instance.HandSlot);
 		}
 
