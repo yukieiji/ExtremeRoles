@@ -170,7 +170,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		{
 			if (!p.IsTryCast<PingBehaviour>(out var ping))
 			{
-				return;
+				continue;
 			}
 			ping.target = Vector3.zero;
 			ping.SetImageEnabled(false);
