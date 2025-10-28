@@ -77,6 +77,7 @@ public static class RPCOperator
 		SummonerOps,
 		ExorcistOps,
 		CEOOps,
+		EchoOps,
 
 		// インポスター
 		CarrierAbility,
@@ -619,6 +620,11 @@ public static class RPCOperator
 	public static void CEORpcOps(in MessageReader reader)
 	{
 		Roles.Solo.Crewmate.CEO.RpcOps(reader);
+	}
+
+	public static void EchoRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Crewmate.Echo.Rpc(reader);
 	}
 
 	public static void CarrierAbility(
