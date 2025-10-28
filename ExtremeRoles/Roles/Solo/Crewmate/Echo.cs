@@ -61,6 +61,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 	private float echoLocationRangeSquare;
 	private bool isDetectDeadBody;
+	private bool canSeparatePlayer;
 	private float pingTime;
 	private EmitAttentionMode mode;
 
@@ -279,7 +280,8 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 			float sqrDistance = diff.sqrMagnitude;
 			if (sqrDistance <= this.echoLocationRangeSquare)
 			{
-				result.Add(new LocationInfo(pos, true, sqrDistance / this.echoLocationRangeSquare));
+				// 死体だと見分けられるときだけtrueを入れて判別可能にする
+				result.Add(new LocationInfo(pos, this.canSeparatePlayer, sqrDistance / this.echoLocationRangeSquare));
 			}
 		}
 	}
@@ -384,6 +386,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		float range = loader.GetValue<Option, float>(Option.Range);
 		this.echoLocationRangeSquare = range * range;
 
+		this.canSeparatePlayer = loader.GetValue<Option, bool>(Option.CanSeparatePlayer);
 		this.pingTime = loader.GetValue<Option, float>(Option.ShowTime);
 		this.isDetectDeadBody = loader.GetValue<Option, bool>(Option.IsDetectDeadBody);
 		this.mode = (EmitAttentionMode)loader.GetValue<Option, int>(Option.AttentionMode);
