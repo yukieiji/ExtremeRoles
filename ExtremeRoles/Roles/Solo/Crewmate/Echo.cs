@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
+using BepInEx.Unity.IL2CPP.Utils;
 using Hazel;
 using UnityEngine;
-using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.Player;
@@ -236,10 +235,10 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 			yield break;
 		}
 
-		// 2. 1秒を使い近い順からPingを建てる
-		var sorted = target.OrderBy(x => x.NormedDistance);
+		// 2. 1秒を使い近い順からPingを建てる、ただしすでに建てたPingが経過時間以上経ってると落とすようにする
+		target.Sort((a, b) => a.NormedDistance.CompareTo(b.NormedDistance));
 		var showPing = new Queue<PingInfo>(size);
-		foreach (var item in sorted)
+		foreach (var item in target)
 		{
 			yield return waitNextTarget(item, showPing);
 
