@@ -1,42 +1,40 @@
-
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 
 namespace ExtremeRoles.Roles.API;
 
 public abstract partial class SingleRoleBase
 {
-    protected sealed override AutoParentSetOptionCategoryFactory CreateSpawnOption()
+    protected sealed override OptionCategoryScope<AutoParentSetBuilder> CreateSpawnOption(AutoRoleOptionCategoryFactory factory)
     {
-		var factory = OptionManager.CreateAutoParentSetOptionCategory(
-			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(this.Core.Id),
-			this.Core.Name, this.Tab, this.Core.Color);
+		var cate = factory.CreateRoleCategory(
+			this.Core.Id,
+			this.Core.Name,
+			this.Tab, this.Core.Color);
 
-		var roleSetOption = factory.Create0To100Percentage10StepOption(
+		var builder = cate.Builder;
+		var roleSetOption = builder.Create0To100Percentage10StepOption(
             RoleCommonOption.SpawnRate,
 			ignorePrefix: true);
 
         int spawnNum = this.IsImpostor() ?
             GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
-		factory.CreateIntOption(
+		builder.CreateIntOption(
             RoleCommonOption.RoleNum,
             1, 1, spawnNum, 1,
 			ignorePrefix: true);
 
-		factory.CreateIntOption(
+		builder.CreateIntOption(
 			RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1,
 			ignorePrefix: true);
 
-        return factory;
+        return cate;
     }
 
-    protected sealed override void CreateVisionOption(
-        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
+    protected sealed override void CreateVisionOption(AutoParentSetBuilder factory, bool ignorePrefix = true)
     {
         var visionOption = factory.CreateBoolOption(
             RoleCommonOption.HasOtherVision,

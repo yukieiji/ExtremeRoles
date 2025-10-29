@@ -1,14 +1,17 @@
-using AmongUs.GameOptions;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.RoleAssign;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using Microsoft.Extensions.DependencyInjection;
+
 using UnityEngine;
 
+using AmongUs.GameOptions;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -77,17 +80,18 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 
     }
 
-    protected override AutoParentSetOptionCategoryFactory CreateSpawnOption()
+    protected override OptionCategoryScope<AutoParentSetBuilder> CreateSpawnOption(AutoRoleOptionCategoryFactory factory)
     {
 		// ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
 
-		var factory = OptionManager.CreateAutoParentSetOptionCategory(
-			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(this.RoleType),
+		var cate = factory.CreateRoleCategory(
+			this.RoleType,
 			this.RoleName,
 			OptionTab.CombinationTab,
 			this.OptionColor == DefaultColor ? null : this.OptionColor);
 
-        var roleSetOption = factory.Create0To100Percentage10StepOption(
+		var builder = cate.Builder;
+        var roleSetOption = builder.Create0To100Percentage10StepOption(
 			RoleCommonOption.SpawnRate,
 			ignorePrefix: true);
 
@@ -95,23 +99,22 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
             this.maxSetNum == int.MaxValue ?
             (int)Math.Floor((decimal)GameSystem.VanillaMaxPlayerNum / this.setPlayerNum) : this.maxSetNum;
 
-		factory.CreateIntOption(
+		builder.CreateIntOption(
 			RoleCommonOption.RoleNum,
             1, 1, thisMaxRoleNum, 1,
 			ignorePrefix: true);
 
-		factory.CreateBoolOption(
+		builder.CreateBoolOption(
 			CombinationRoleCommonOption.IsMultiAssign, false,
 			ignorePrefix: true);
 
-		factory.CreateIntOption(RoleCommonOption.AssignWeight,
+		builder.CreateIntOption(RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1, ignorePrefix: true);
 
-        return factory;
+        return cate;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
         IEnumerable<MultiAssignRoleBase> collection = Roles;
 
@@ -119,15 +122,10 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
             (Value, Index) => new { Value, Index }))
         {
 			var role = item.Value;
-			// 同じオプションを参照したい時があるのでオフセット値を入れておく
-			int offset = (item.Index + 1) * ExtremeRoleManager.OptionOffsetPerRole;
+			var innerCategoryBuilder = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<AutoRoleOptionCategoryFactory>();
+			var inner = innerCategoryBuilder.CreateInnnerRoleCategory(role.Core.Id, categoryScope);
 
-			factory.IdOffset = (item.Index + 1) * ExtremeRoleManager.OptionOffsetPerRole;
-			factory.OptionPrefix = role.Core.Name;
-
-			role.CreateRoleSpecificOption(factory, false);
-			role.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(
-				this.RoleType, offset);
+			role.CreateRoleSpecificOption(categoryScope, false);
         }
     }
 

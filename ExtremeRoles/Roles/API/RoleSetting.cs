@@ -1,9 +1,8 @@
-using System;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API.Interface;
+using System;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -50,36 +49,33 @@ public abstract class RoleOptionBase
 		}
     }
 
-    public void CreateRoleAllOption()
+    public void CreateRoleAllOption(AutoRoleOptionCategoryFactory factory)
     {
-		using var factory = CreateSpawnOption();
-		this.CreateRoleSpecificOption(factory);
+		using var cate = CreateSpawnOption(factory);
+		this.CreateRoleSpecificOption(cate);
     }
-    public void CreateRoleSpecificOption(
-        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
+    public void CreateRoleSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope, bool ignorePrefix = true)
     {
-        CreateVisionOption(factory, ignorePrefix);
+        CreateVisionOption(categoryScope.Builder, ignorePrefix);
 
         if (this.CanKill)
         {
-            CreateKillerOption(factory, ignorePrefix: ignorePrefix);
+            CreateKillerOption(categoryScope.Builder, ignorePrefix: ignorePrefix);
         }
 
-        CreateSpecificOption(factory);
+        CreateSpecificOption(categoryScope);
     }
-    protected abstract AutoParentSetOptionCategoryFactory CreateSpawnOption();
+    protected abstract OptionCategoryScope<AutoParentSetBuilder> CreateSpawnOption(AutoRoleOptionCategoryFactory factory);
 
-    protected abstract void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory);
-    protected abstract void CreateVisionOption(
-        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true);
+    protected abstract void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope);
+    protected abstract void CreateVisionOption(AutoParentSetBuilder factory, bool ignorePrefix = true);
 
     protected abstract void CommonInit();
 
     protected abstract void RoleSpecificInit();
 
 	protected static void CreateKillerOption(
-		AutoParentSetOptionCategoryFactory factory,
+		AutoParentSetBuilder factory,
 		IOption parent = null,
 		bool ignorePrefix = true,
 		bool invert = false)

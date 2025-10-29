@@ -1,12 +1,11 @@
-using AmongUs.GameOptions;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Performance;
-using Microsoft.Extensions.DependencyInjection;
 using System;
+
 using UnityEngine;
 
+using AmongUs.GameOptions;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
@@ -14,28 +13,8 @@ namespace ExtremeRoles.Roles.API;
 
 public abstract class MultiAssignRoleBase : SingleRoleBase
 {
-	public sealed record class OptionOffsetInfo(CombinationRoleType RoleId, int IdOffset);
-
     public SingleRoleBase? AnotherRole = null;
     public bool CanHasAnotherRole = false;
-
-	public OptionOffsetInfo? OffsetInfo { get; set; } = null;
-
-	public override IOptionLoader Loader
-	{
-		get
-		{
-			if (OffsetInfo is null ||
-				!OptionManager.Instance.TryGetCategory(
-					this.Tab,
-					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(this.OffsetInfo.RoleId),
-					out var cate))
-			{
-				throw new ArgumentException("Can't find category");
-			}
-			return new OptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
-		}
-	}
 
 	public MultiAssignRoleBase(
         RoleCore core,
@@ -75,13 +54,6 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 			this.HasTask = false;
 		}
     }
-
-	public override SingleRoleBase Clone()
-	{
-		var newRole = (MultiAssignRoleBase)base.Clone();
-		newRole.OffsetInfo = this.OffsetInfo;
-		return newRole;
-	}
 
 	public void SetAnotherRole(SingleRoleBase role)
     {

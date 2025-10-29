@@ -1,19 +1,16 @@
-using System;
-using System.Collections.Generic;
-
-using Microsoft.Extensions.DependencyInjection;
-using UnityEngine;
-
 using ExtremeRoles.Helper;
-using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -40,8 +37,7 @@ public abstract class GhostRoleBase
 
     protected readonly OptionTab Tab = OptionTab.GeneralTab;
     private int controlId;
-
-	public virtual IOptionLoader Loader
+	public IOptionLoader Loader
 	{
 		get
 		{
@@ -96,12 +92,6 @@ public abstract class GhostRoleBase
         GhostRoleBase copy = (GhostRoleBase)this.MemberwiseClone();
         Color baseColor = this.Color;
 
-		if (this is ICombination combRole &&
-			copy is ICombination copyComb)
-		{
-			copyComb.OffsetInfo = combRole.OffsetInfo;
-		}
-
         copy.Color = new Color(
             baseColor.r,
             baseColor.g,
@@ -111,14 +101,13 @@ public abstract class GhostRoleBase
         return copy;
     }
 
-    public void CreateRoleAllOption()
+    public void CreateRoleAllOption(AutoRoleOptionCategoryFactory factory)
     {
-        using var parentOps = createOptionFactory();
-        CreateSpecificOption(parentOps);
+        using var parentOps = createOptionFactory(factory);
+        CreateSpecificOption(parentOps.Builder);
     }
 
-    public void CreateRoleSpecificOption(
-		OptionFactory factory)
+    public void CreateRoleSpecificOption(AutoParentSetBuilder factory)
     {
         CreateSpecificOption(factory);
     }
@@ -230,26 +219,27 @@ public abstract class GhostRoleBase
 
     protected bool IsReportAbility() => this.Loader.GetValue<GhostRoleOption, bool>(GhostRoleOption.IsReportAbility);
 
-    private OptionFactory createOptionFactory()
-    {
-		var factory = OptionManager.CreateAutoParentSetOptionCategory(
-			ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
+	private OptionCategoryScope<AutoParentSetBuilder> createOptionFactory(AutoRoleOptionCategoryFactory factory)
+	{
+		var cate = factory.CreateRoleCategory(this.Id,
 			this.Name, this.Tab, this.Color);
-		factory.Create0To100Percentage10StepOption(
+
+		var builder = cate.Builder;
+		builder.Create0To100Percentage10StepOption(
 			RoleCommonOption.SpawnRate,
 			ignorePrefix: true);
 
-        int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
+		int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
-		factory.CreateIntOption(
-            RoleCommonOption.RoleNum,
-            1, 1, spawnNum, 1,
+		builder.CreateIntOption(
+			RoleCommonOption.RoleNum,
+			1, 1, spawnNum, 1,
 			ignorePrefix: true);
 
-		factory.CreateIntOption(RoleCommonOption.AssignWeight, 500, 1, 1000, 1, ignorePrefix: true);
+		builder.CreateIntOption(RoleCommonOption.AssignWeight, 500, 1, 1000, 1, ignorePrefix: true);
 
-		return factory;
-    }
+		return cate;
+	}
 
     public abstract void CreateAbility();
 
@@ -261,7 +251,7 @@ public abstract class GhostRoleBase
 
     protected abstract void OnMeetingStartHook();
 
-    protected abstract void CreateSpecificOption(OptionFactory parentOps);
+    protected abstract void CreateSpecificOption(AutoParentSetBuilder parentOps);
 
     protected abstract void UseAbility(RPCOperator.RpcCaller caller);
 

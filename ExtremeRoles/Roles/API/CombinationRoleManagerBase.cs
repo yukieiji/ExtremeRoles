@@ -1,6 +1,7 @@
 using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -66,8 +67,7 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
     public abstract MultiAssignRoleBase GetRole(
         int roleId, RoleTypes playerRoleType);
 
-    protected sealed override void CreateVisionOption(
-        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix)
+    protected sealed override void CreateVisionOption(AutoParentSetBuilder factory, bool ignorePrefix)
     {
         // 複数のロールがまとまっているため、管理ロールで視界の設定はしない
         return;

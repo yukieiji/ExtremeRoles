@@ -1,15 +1,14 @@
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Performance;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-
 using UnityEngine;
-
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Factory;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 
 namespace ExtremeRoles.Roles.API.Interface;
@@ -124,7 +123,7 @@ public interface IRoleAbility : IRoleResetMeeting
 
 
 	public static void CreateCommonAbilityOption(
-		AutoParentSetOptionCategoryFactory factory,
+		AutoParentSetBuilder factory,
 		float defaultActiveTime = float.MaxValue,
 		IOption parentOpt = null)
 	{
@@ -148,7 +147,7 @@ public interface IRoleAbility : IRoleResetMeeting
 	}
 
 	public static void CreateAbilityCountOption(
-		AutoParentSetOptionCategoryFactory factory,
+		AutoParentSetBuilder factory,
 		int defaultAbilityCount,
 		int maxAbilityCount,
 		float defaultActiveTime = float.MaxValue,

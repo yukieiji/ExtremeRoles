@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
-using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.GhostRoles;
-using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -36,29 +37,20 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
     public GhostRoleBase GetGhostRole(ExtremeRoleId id) =>
         this.CombGhostRole[id];
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
 
-        base.CreateSpecificOption(factory);
+        base.CreateSpecificOption(categoryScope);
 
         IEnumerable<GhostRoleBase> collection = this.CombGhostRole.Values;
 
+		var innerCategoryBuilder = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<AutoRoleOptionCategoryFactory>();
 		foreach (var item in collection.Select(
             (Value, Index) => new { Value, Index }))
         {
-			var role = item.Value; ;
-
-			int offset = (item.Index + 1) * ExtremeGhostRoleManager.IdOffset;
-			factory.IdOffset = offset;
-			factory.OptionPrefix = role.Name;
-
-			role.CreateRoleSpecificOption(factory);
-			if (role is ICombination combGhost)
-			{
-				combGhost.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(
-					this.RoleType, offset);
-			}
+			var role = item.Value;
+			var inner = innerCategoryBuilder.CreateInnnerRoleCategory(role.Id, categoryScope);
+			role.CreateRoleSpecificOption(inner.Builder);
         }
     }
     protected override void CommonInit()

@@ -4,6 +4,7 @@ using ExtremeRoles.Helper;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.RoleAssign;
 using Microsoft.Extensions.DependencyInjection;
@@ -83,17 +84,21 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     public MultiAssignRoleBase BaseRole { get; }
     private readonly int minimumRoleNum = 0;
     private readonly bool canAssignImposter = true;
+	private readonly bool includeImpostorKillerSetting = true;
 
-    public FlexibleCombinationRoleManagerBase(
+
+	public FlexibleCombinationRoleManagerBase(
 		CombinationRoleType roleType,
         MultiAssignRoleBase role,
         int minimumRoleNum = 2,
-        bool canAssignImposter = true) :
+        bool canAssignImposter = true,
+		bool includeImpostorKillerSetting = true) :
             base(roleType, role.Core.Id.ToString(), role.GetNameColor(true))
     {
         this.BaseRole = role;
         this.minimumRoleNum = minimumRoleNum;
         this.canAssignImposter = canAssignImposter;
+		this.includeImpostorKillerSetting = includeImpostorKillerSetting;
     }
 
     public string GetBaseRoleFullDescription() =>
@@ -156,15 +161,15 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			roleToImpostor(role) : role;
     }
 
-    protected override AutoParentSetOptionCategoryFactory CreateSpawnOption()
+    protected override OptionCategoryScope<AutoParentSetBuilder> CreateSpawnOption(AutoRoleOptionCategoryFactory factory)
     {
-		var factory = OptionManager.CreateAutoParentSetOptionCategory(
-			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(this.RoleType),
+		var cate = factory.CreateRoleCategory(this.RoleType,
 			this.RoleName,
 			OptionTab.CombinationTab,
 			this.OptionColor);
 
-		var roleSetOption = factory.Create0To100Percentage10StepOption(
+		var builder = cate.Builder;
+		var roleSetOption = builder.Create0To100Percentage10StepOption(
 			RoleCommonOption.SpawnRate,
 			ignorePrefix: true);
 
@@ -172,7 +177,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			GameSystem.MaxImposterNum :
 			(GameSystem.VanillaMaxPlayerNum - 1);
 
-		var roleSetNumOption = factory.CreateIntOption(
+		var roleSetNumOption = builder.CreateIntOption(
 			RoleCommonOption.RoleNum,
 			1, 1, maxSetNum, 1,
 			ignorePrefix: true);
@@ -181,55 +186,56 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		int roleAssignNum = this.BaseRole.IsImpostor() ?
 			GameSystem.MaxImposterNum :
 			GameSystem.VanillaMaxPlayerNum - 1;
-		var roleAssignNumOption = factory.CreateIntOption(
+		var roleAssignNumOption = builder.CreateIntOption(
 			CombinationRoleCommonOption.AssignsNum,
 			this.minimumRoleNum, this.minimumRoleNum,
 			roleAssignNum, 1,
 			isHidden: isHideMultiAssign,
 			ignorePrefix: true);
 
-		factory.CreateBoolOption(
+		builder.CreateBoolOption(
 			CombinationRoleCommonOption.IsMultiAssign, false,
 			ignorePrefix: true,
 			isHidden: this.RoleType is CombinationRoleType.Traitor);
 
 		roleAssignNumOption.AddWithUpdate(roleSetNumOption);
 
-		factory.CreateIntOption(RoleCommonOption.AssignWeight,
+		builder.CreateIntOption(RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1, ignorePrefix: true);
 
         if (this.canAssignImposter)
         {
-			var assignRatioOption = factory.CreateBoolOption(
+			var assignRatioOption = builder.CreateBoolOption(
 				CombinationRoleCommonOption.IsRatioTeamAssign,
 				false, ignorePrefix: true);
-			var isImposterAssignOps = factory.CreateBoolOption(
+			var isImposterAssignOps = builder.CreateBoolOption(
 				CombinationRoleCommonOption.IsAssignImposter,
 				false, assignRatioOption,
 				ignorePrefix: true,
 				invert: true);
-			factory.CreateIntOption(
+			builder.CreateIntOption(
 				CombinationRoleCommonOption.ImposterSelectedRate,
 				10, 10, SingleRoleSpawnData.MaxSpawnRate, 10,
 				isImposterAssignOps,
 				format: OptionUnit.Percentage,
 				ignorePrefix: true);
 
-			factory.CreateSelectionOption<CombinationRoleCommonOption, ImpostorRatio.Ratio>(
+			builder.CreateSelectionOption<CombinationRoleCommonOption, ImpostorRatio.Ratio>(
 				CombinationRoleCommonOption.AssignRatio,
 				assignRatioOption,
 				ignorePrefix: true);
-        }
-        return factory;
+
+			if (this.includeImpostorKillerSetting)
+			{
+				CreateKillerOption(builder, isImposterAssignOps);
+			}
+		}
+        return cate;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
-        this.BaseRole.CreateRoleSpecificOption(
-            factory);
-		this.BaseRole.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(
-			this.RoleType, 0);
+		this.BaseRole.CreateRoleSpecificOption(categoryScope);
     }
 
     protected override void CommonInit()
