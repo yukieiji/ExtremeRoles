@@ -54,7 +54,9 @@ public partial class ExtremeRolesPlugin
 		collection.AddSingleton<IEventManager, Module.Event.EventManager>();
 
 
-		collection.AddTransient<IRoleOptionCategoryIdGenerator, RoleOptionCategoryIdGenerator>();
+		// かなり呼び出すと思うのでSingleton化
+		collection.AddSingleton<IRoleOptionCategoryIdGenerator, RoleOptionCategoryIdGenerator>();
+		
 		collection.AddTransient<OptionCategoryAssembler>();
 		collection.AddTransient<AutoRoleOptionCategoryFactory>();
 

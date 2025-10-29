@@ -41,4 +41,20 @@ public sealed class AutoRoleOptionCategoryFactory(IRoleOptionCategoryIdGenerator
 		int categoryId = generator.Get(id);
 		return assembler.CreateAutoParentSetOptionCategory(categoryId, name, tab, color);
 	}
+
+	public OptionCategoryScope<AutoParentSetBuilder> CreateInnnerRoleCategory(
+		ExtremeRoleId id,
+		OptionCategoryScope<AutoParentSetBuilder> parentCategory)
+	{
+		int categoryId = generator.Get(id);
+		return assembler.CreateSubOptionCategory(categoryId, parentCategory);
+	}
+
+	public OptionCategoryScope<AutoParentSetBuilder> CreateInnnerRoleCategory(
+		ExtremeGhostRoleId id,
+		OptionCategoryScope<AutoParentSetBuilder> parentCategory)
+	{
+		int categoryId = generator.Get(id);
+		return assembler.CreateSubOptionCategory(categoryId, parentCategory);
+	}
 }
