@@ -1,17 +1,12 @@
-using System;
-
-using UnityEngine;
-
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.AutoActivator;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Performance;
-
-
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Roles.API.Interface;
+using System;
+using UnityEngine;
 
 namespace ExtremeRoles.Module.Ability.Factory;
 
@@ -25,7 +20,7 @@ public static class GhostRoleAbilityFactory
 	private const float step = 0.5f;
 
 	public static void CreateButtonOption(
-		OptionFactory factory,
+		AutoParentSetBuilder factory,
 		float defaultActiveTime = float.MaxValue)
 	{
 
@@ -52,7 +47,7 @@ public static class GhostRoleAbilityFactory
 	}
 
 	public static void CreateCountButtonOption(
-		OptionFactory factory,
+		AutoParentSetBuilder factory,
 		int defaultAbilityCount,
 		int maxAbilityCount,
 		float defaultActiveTime = float.MaxValue)

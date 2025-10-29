@@ -1,25 +1,21 @@
+using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using Hazel;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 using UnityEngine;
-using Hazel;
-
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-
-
-
+using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
-using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
-using ExtremeRoles.Module.Ability.Factory;
 
 
 #nullable enable
@@ -229,7 +225,7 @@ public sealed class Shutter : GhostRoleBase
 		}
 	}
 
-    protected override void CreateSpecificOption(OptionFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetBuilder factory)
     {
 		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10);
 		factory.CreateFloatOption(

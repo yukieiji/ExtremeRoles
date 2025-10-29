@@ -1,22 +1,19 @@
-using System.Collections.Generic;
-
-using UnityEngine;
-
-using ExtremeRoles.Helper;
-
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Resources;
-
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.SystemType.Roles;
-
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using System.Collections.Generic;
+using UnityEngine;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+
 
 
 #nullable enable
@@ -142,7 +139,7 @@ public sealed class Doppelganger : GhostRoleBase
 		this.minigame?.Reset();
 	}
 
-	protected override void CreateSpecificOption(OptionFactory factory)
+	protected override void CreateSpecificOption(AutoParentSetBuilder factory)
 	{
 		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 2, 10, 5.0f);
 	}

@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
-
+using System.Collections.Generic;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+
 
 #nullable enable
 
@@ -110,7 +110,7 @@ public sealed class Igniter : GhostRoleBase
 
     }
 
-    protected override void CreateSpecificOption(OptionFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetBuilder factory)
     {
 		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10, 15.0f);
 		factory.CreateBoolOption(IgniterOption.IsEffectImpostor, false);

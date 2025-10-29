@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-
-
-using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
-
+using System.Collections.Generic;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Extension.Il2Cpp;
+
 
 #nullable enable
 
@@ -62,7 +61,7 @@ public sealed class SaboEvil : GhostRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(OptionFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetBuilder factory)
     {
 		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 20);
     }

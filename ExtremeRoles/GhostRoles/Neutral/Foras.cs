@@ -1,21 +1,18 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using Hazel;
-using UnityEngine;
-
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using Hazel;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace ExtremeRoles.GhostRoles.Neutal;
 
@@ -144,7 +141,7 @@ public sealed class Foras : GhostRoleBase
 
     }
 
-    protected override void CreateSpecificOption(OptionFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetBuilder factory)
     {
 		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10, 25.0f);
 		factory.CreateFloatOption(

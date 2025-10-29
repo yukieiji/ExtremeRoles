@@ -1,22 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Assets.CoreScripts;
-
-using UnityEngine;
 using AmongUs.GameOptions;
-
+using Assets.CoreScripts;
+using ExtremeRoles.Compat;
+using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Factory;
-using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Compat;
-
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+
 
 #nullable enable
 
@@ -83,8 +81,7 @@ public sealed class Faunus : GhostRoleBase
         this.saboGame = null;
     }
 
-    protected override void CreateSpecificOption(
-		OptionFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetBuilder factory)
     {
         GhostRoleAbilityFactory.CreateCountButtonOption(factory, 1, 5, 3.0f);
     }

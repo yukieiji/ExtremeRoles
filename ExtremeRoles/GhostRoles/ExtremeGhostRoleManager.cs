@@ -1,19 +1,18 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using Hazel;
 using AmongUs.GameOptions;
-
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.Crewmate;
 using ExtremeRoles.GhostRoles.Impostor;
 using ExtremeRoles.GhostRoles.Neutal;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.Combination;
+using Hazel;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ExtremeRoles.GhostRoles;
 
@@ -149,11 +148,11 @@ public static class ExtremeGhostRoleManager
         }
     }
 
-    public static void CreateGhostRoleOption()
+    public static void CreateGhostRoleOption(AutoRoleOptionCategoryFactory factory)
     {
         foreach (var ghost in AllGhostRole.Values)
 		{
-			ghost.CreateRoleAllOption();
+			ghost.CreateRoleAllOption(factory);
 		}
     }
 

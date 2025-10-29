@@ -1,15 +1,13 @@
-using System.Collections.Generic;
-
-using UnityEngine;
-
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-
+using System.Collections.Generic;
+using UnityEngine;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 namespace ExtremeRoles.GhostRoles.Crewmate;
@@ -123,7 +121,7 @@ public sealed class Poltergeist : GhostRoleBase
         this.targetBody = null;
     }
 
-    protected override void CreateSpecificOption(OptionFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetBuilder factory)
     {
 		factory.CreateFloatOption(
             Option.Range, 1.0f,

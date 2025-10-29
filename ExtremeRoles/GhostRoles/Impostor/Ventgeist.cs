@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -15,6 +15,7 @@ using ExtremeRoles.Performance;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Extension.VentModule;
 using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 
 namespace ExtremeRoles.GhostRoles.Impostor;
 
@@ -71,7 +72,7 @@ public sealed class Ventgeist : GhostRoleBase
         this.targetVent = null;
     }
 
-    protected override void CreateSpecificOption(OptionFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetBuilder factory)
     {
 		factory.CreateFloatOption(
             Option.Range, 1.0f,
