@@ -9,9 +9,9 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Roles;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -68,32 +68,32 @@ public interface IRoleSelector
 
 	public bool IsValidCategory(int categoryId);
 
-    public static void CreateRoleGlobalOption()
+    public static void CreateRoleGlobalOption(OptionCategoryAssembler assembler)
     {
-		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
+		using (var roleOptionFactory = assembler.CreateOptionCategory(
 			SpawnOptionCategory.RoleSpawnCategory,
 			color: defaultOptionColor))
 		{
-			createExtremeRoleRoleSpawnOption(roleOptionFactory);
+			createExtremeRoleRoleSpawnOption(roleOptionFactory.Builder);
 		}
 
-		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
+		using (var roleOptionFactory = assembler.CreateOptionCategory(
 			SpawnOptionCategory.GhostRoleSpawnCategory,
 			color: defaultOptionColor))
 		{
-			createExtremeRoleRoleSpawnOption(roleOptionFactory);
+			createExtremeRoleRoleSpawnOption(roleOptionFactory.Builder);
 		}
-		using (var xionCategory = OptionManager.CreateOptionCategory(
-			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(ExtremeRoleId.Xion),
-			ExtremeRoleId.Xion.ToString(),
-			color: ColorPalette.XionBlue))
+		var factory = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<AutoRoleOptionCategoryFactory>();
+		using (var xionCategory =
+			factory.CreateRoleCategory(
+				ExtremeRoleId.Xion, ExtremeRoleId.Xion.ToString(),
+				OptionTab.GeneralTab, ColorPalette.XionBlue))
 		{
-			xionCategory.CreateBoolOption(
-				XionOption.UseXion, false);
+			xionCategory.Builder.CreateBoolOption(XionOption.UseXion, false);
 		}
 	}
 
-    private static void createExtremeRoleRoleSpawnOption(OptionCategoryFactory factory)
+    private static void createExtremeRoleRoleSpawnOption(DefaultBuilder factory)
     {
 		factory.CreateIntOption(
 			RoleSpawnOption.MinCrewmate,

@@ -2,7 +2,7 @@
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
@@ -14,7 +14,7 @@ public readonly struct GhostRoleOption(in IOptionLoader loader)
 	public readonly bool IsRemoveAngleIcon = loader.GetValue<GhostRoleGlobalOption, bool>(GhostRoleGlobalOption.IsRemoveAngleIcon);
 	public readonly bool IsBlockGAAbilityReport = loader.GetValue<GhostRoleGlobalOption, bool>(GhostRoleGlobalOption.IsBlockGAAbilityReport);
 
-	public static void Create(in OptionCategoryFactory factory)
+	public static void Create(in DefaultBuilder factory)
 	{
 		factory.CreateFloatOption(
 			GhostRoleGlobalOption.HauntMinigameMaxSpeed,

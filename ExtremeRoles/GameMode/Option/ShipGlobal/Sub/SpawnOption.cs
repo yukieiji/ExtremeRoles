@@ -1,5 +1,6 @@
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
@@ -29,7 +30,7 @@ public readonly struct SpawnOption(in IOptionLoader loader)
 	public readonly bool IsAutoSelectRandom = loader.GetValue<bool>((int)RandomSpawnOption.IsAutoSelect);
 
 
-	public static void Create(in OptionCategoryFactory factory)
+	public static void Create(in DefaultBuilder factory)
 	{
 		var randomSpawnOpt = factory.CreateBoolOption(RandomSpawnOption.Enable, true);
 		factory.CreateBoolOption(RandomSpawnOption.Skeld, false, randomSpawnOpt, invert: true);

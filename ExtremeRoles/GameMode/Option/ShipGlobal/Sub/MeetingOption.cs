@@ -1,5 +1,4 @@
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
@@ -38,7 +37,7 @@ public readonly struct MeetingHudOption
 		this.DisableSelfVote = loader.GetValue<bool>((int)MeetingOption.DisableSelfVote);
 	}
 
-	public static void Create(in OptionCategoryFactory factory)
+	public static void Create(in DefaultBuilder factory)
 	{
 		factory.CreateBoolOption(MeetingOption.UseRaiseHand, false);
 		factory.CreateIntOption(MeetingOption.NumMeating, 10, 0, 100, 1);

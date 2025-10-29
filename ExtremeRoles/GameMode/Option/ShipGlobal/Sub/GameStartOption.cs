@@ -1,4 +1,4 @@
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
@@ -36,7 +36,7 @@ public readonly struct GameStartOption
 		this.FirstButtonCoolDown = loader.GetValue<OnGameStartOption, int>(
 			OnGameStartOption.FirstButtonCoolDown);
 	}
-	public static void Create(in OptionCategoryFactory factory)
+	public static void Create(in DefaultBuilder factory)
 	{
 		var killCoolOpt = factory.CreateBoolOption(OnGameStartOption.IsKillCoolDownIsTen, true);
 		var buttonOpt = factory.CreateBoolOption(

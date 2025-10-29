@@ -2,6 +2,7 @@
 using AmongUs.GameOptions;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
@@ -39,7 +40,7 @@ public readonly struct VentConsoleOption(
 		(VentAnimationMode)loader.GetValue<int>((int)VentOption.AnimationModeInVison))
 	{ }
 
-	public static void Create(in OptionCategoryFactory factory)
+	public static void Create(in DefaultBuilder factory)
 	{
 		var ventOption = factory.CreateBoolOption(VentOption.Disable, false);
 
