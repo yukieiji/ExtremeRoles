@@ -104,7 +104,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
 		CompatModManager.Initialize();
 
-		OptionCreator.Create();
+		OptionCreator.Create(this.Provider);
 
 		AddComponent<ExtremeRolePluginBehavior>();
 		AddComponent<UnityMainThreadDispatcher>();

@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+using System;
+using Microsoft.Extensions.DependencyInjection;
+
+using UnityEngine;
 
 using ExtremeRoles.Compat;
+
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
-
 
 
 namespace ExtremeRoles;
@@ -37,7 +41,7 @@ public static class OptionCreator
 	public static bool IsCommonOption(int id)
 		=> (CommonOption)id is CommonOption.PresetOption or CommonOption.RandomOption;
 
-    public static void Create()
+    public static void Create(IServiceProvider provider)
     {
 		// CustomRegion.Default = ServerManager.DefaultRegions;
 
@@ -45,14 +49,16 @@ public static class OptionCreator
 
         Roles.ExtremeRoleManager.GameRole.Clear();
 
-		PresetOption.Create(CommonOption.PresetOption.ToString());
+		var assembler = provider.GetRequiredService<OptionCategoryAssembler>();
+		PresetOption.Create(assembler, CommonOption.PresetOption.ToString());
 
-		using (var commonOptionFactory = OptionManager.CreateOptionCategory(
+		using (var cate = assembler.CreateOptionCategory(
 			CommonOption.RandomOption, color: DefaultOptionColor))
 		{
-			var strongGen = commonOptionFactory.CreateBoolOption(
+			var builder = cate.Builder;
+			var strongGen = builder.CreateBoolOption(
 				RandomOptionKey.UseStrong,　true);
-			commonOptionFactory.CreateSelectionOption(
+			builder.CreateSelectionOption(
 				RandomOptionKey.Algorithm,
 				[
 					"Pcg32XshRr", "Pcg64RxsMXs",
@@ -65,12 +71,13 @@ public static class OptionCreator
 				strongGen, invert: true);
 		}
 
-        IRoleSelector.CreateRoleGlobalOption();
-        IShipGlobalOption.Create();
+        IRoleSelector.CreateRoleGlobalOption(assembler);
+        IShipGlobalOption.Create(assembler);
 
-        Roles.ExtremeRoleManager.CreateNormalRoleOptions();
-        Roles.ExtremeRoleManager.CreateCombinationRoleOptions();
-        GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption();
+		var factory = provider.GetRequiredService<AutoRoleOptionCategoryFactory>();
+		Roles.ExtremeRoleManager.CreateNormalRoleOptions(factory);
+        Roles.ExtremeRoleManager.CreateCombinationRoleOptions(factory);
+        GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(factory);
 
 
 		CompatModManager.Instance.CreateIntegrateOption(IntegrateOptionStartOffset);
