@@ -196,9 +196,9 @@ public sealed class Slime :
 		this.seeMorphMerlin = this.Loader.GetValue<Option, bool>(Option.SeeMorphMerlin);
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         IRoleAbility.CreateCommonAbilityOption(
             factory, 30.0f);
 		factory.CreateBoolOption(

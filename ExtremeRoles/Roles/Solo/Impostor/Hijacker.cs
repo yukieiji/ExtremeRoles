@@ -131,9 +131,9 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 		return true;
 	}
 
-	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
+		var factory = categoryScope.Builder;
 		IRoleAbility.CreateAbilityCountOption(
 			factory, 3, 10, 10f);
 		factory.CreateBoolOption(Option.IsRandomPlayer, true);

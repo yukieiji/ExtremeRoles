@@ -422,9 +422,9 @@ public sealed class Zombie :
     public override bool IsBlockShowPlayingRoleInfo() => this.infoBlock();
 
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         factory.CreateIntOption(
             ZombieOption.AwakeKillCount,
             1, 0, 3, 1,

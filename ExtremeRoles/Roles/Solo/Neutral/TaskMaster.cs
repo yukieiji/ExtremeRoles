@@ -117,9 +117,9 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
         resetTask(rolePlayer.PlayerId);
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         factory.CreateBoolOption(
             TaskMasterOption.CanUseSabotage,
             true);

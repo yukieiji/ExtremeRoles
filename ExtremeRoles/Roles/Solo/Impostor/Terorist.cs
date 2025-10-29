@@ -67,9 +67,9 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
 		return true;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         IRoleAbility.CreateAbilityCountOption(
             factory, 5, 100);
 		factory.CreateBoolOption(
