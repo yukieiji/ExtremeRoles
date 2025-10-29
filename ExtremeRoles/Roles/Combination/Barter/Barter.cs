@@ -2,21 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using AmongUs.GameOptions;
 using TMPro;
 using UnityEngine;
-
-using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+
 using UnityObject = UnityEngine.Object;
 
 
@@ -257,11 +258,9 @@ public sealed class BarterRole :
 		this.source = null;
 	}
 
-	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
-		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
+		var factory = categoryScope.Builder;
 
 		factory.CreateIntOption(
 			Option.AwakeTaskRate,

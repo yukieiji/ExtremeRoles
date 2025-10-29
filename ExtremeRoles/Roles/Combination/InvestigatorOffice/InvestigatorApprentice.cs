@@ -10,6 +10,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -38,8 +39,7 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 			HasOtherButtonNum,
 		}
 
-		public static void CreateOption(
-			AutoParentSetOptionCategoryFactory factory)
+		public static void CreateOption(AutoParentSetBuilder factory)
 		{
 			var visionOpt = factory.CreateBoolOption(
 				InvestigatorApprenticeOption.HasOtherVision,
@@ -300,8 +300,7 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 		return;
 	}
 
-	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
 		throw new Exception("Don't call this class method!!");
 	}

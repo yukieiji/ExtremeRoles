@@ -1,17 +1,15 @@
 using System.Collections.Generic;
 
-using UnityEngine;
 using AmongUs.GameOptions;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -257,9 +255,9 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
     }
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
-        factory.CreateIntOption(
+		categoryScope.Builder.CreateIntOption(
             BuddyOption.AwakeTaskGage,
             50, 0, 100, 10,
             format: OptionUnit.Percentage);

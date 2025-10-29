@@ -1,14 +1,13 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
-using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -170,11 +169,8 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
             supportRoleName);
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
 	}
 
     protected override void RoleSpecificInit()

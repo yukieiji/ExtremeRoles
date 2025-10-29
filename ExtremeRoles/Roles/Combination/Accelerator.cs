@@ -1,19 +1,15 @@
-using UnityEngine;
-
-using Hazel;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.Ability;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using Hazel;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -202,12 +198,9 @@ public sealed class AcceleratorRole :
 		endPanel(this, playerPos);
 	}
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
-        var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-        CreateKillerOption(factory, imposterSetting);
-
+		var factory = categoryScope.Builder;
         IRoleAbility.CreateAbilityCountOption(
             factory, 3, 10, 30.0f);
 		factory.CreateFloatOption(

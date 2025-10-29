@@ -1,6 +1,8 @@
 using ExtremeRoles.Helper;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Roles.API;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 
@@ -18,13 +20,14 @@ public sealed class InvestigatorOfficeManager : ConstCombinationRoleManagerBase
         Roles.Add(new Assistant());
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        base.CreateSpecificOption(factory);
-		factory.IdOffset = Roles.Count * ExtremeRoleManager.OptionOffsetPerRole;
-		factory.OptionPrefix = ExtremeRoleId.InvestigatorApprentice.ToString();
-		InvestigatorApprentice.InvestigatorApprenticeOptionHolder.CreateOption(factory);
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+        base.CreateSpecificOption(categoryScope);
+
+		var innerCategoryBuilder = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<AutoRoleOptionCategoryFactory>();
+		var inner = innerCategoryBuilder.CreateInnnerRoleCategory(ExtremeRoleId.InvestigatorApprentice, categoryScope);
+
+		InvestigatorApprentice.InvestigatorApprenticeOptionHolder.CreateOption(inner.Builder);
     }
 
 }

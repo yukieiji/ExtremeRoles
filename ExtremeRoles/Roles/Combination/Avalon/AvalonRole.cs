@@ -4,13 +4,13 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 #nullable enable
 
@@ -58,9 +58,9 @@ public sealed class Assassin : MultiAssignRoleBase
     {
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+		var factory = categoryScope.Builder;
         factory.CreateBoolOption(
             AssassinOption.HasTask,
             false);
@@ -271,10 +271,10 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
     }
 
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        factory.CreateBoolOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		factory.CreateBoolOption(
             MarlinOption.HasTask,
             false);
 

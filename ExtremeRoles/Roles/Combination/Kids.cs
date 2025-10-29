@@ -1,35 +1,29 @@
 using System;
 using System.Collections.Generic;
-
-using Microsoft.Extensions.DependencyInjection;
-using Hazel;
-using UnityEngine;
 using TMPro;
 
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.ModeSwitcher;
-using ExtremeRoles.Module.Ability.Factory;
-using ExtremeRoles.Module.Ability.AutoActivator;
-using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.SystemType.Roles;
+using Hazel;
+using UnityEngine;
+
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.AutoActivator;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-
 
 
 #nullable enable
@@ -351,9 +345,10 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         return true;
     }
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
-    {
-        IRoleAbility.CreateAbilityCountOption(factory, 7, 20);
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		IRoleAbility.CreateAbilityCountOption(factory, 7, 20);
         factory.CreateFloatOption(
             DelinqentOption.Range,
             3.6f, 1.0f, 5.0f, 0.1f);
@@ -386,26 +381,8 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 
 }
 
-public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
+public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 {
-	public MultiAssignRoleBase.OptionOffsetInfo? OffsetInfo { get; set; }
-	public override IOptionLoader Loader
-	{
-		get
-		{
-			if (OffsetInfo is null ||
-				!OptionManager.Instance.TryGetCategory(
-					this.Tab,
-					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(this.OffsetInfo.RoleId),
-					out var cate))
-			{
-				throw new ArgumentException("Can't find category");
-			}
-			return new OptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
-		}
-	}
-
-
 	public enum WispOption
     {
         WinNum,
@@ -525,7 +502,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 		return;
     }
 
-    protected override void CreateSpecificOption(OptionFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetBuilder factory)
     {
 		factory.CreateIntOption(
             WispOption.WinNum,

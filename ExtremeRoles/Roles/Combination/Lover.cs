@@ -1,17 +1,15 @@
+using AmongUs.GameOptions;
+using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Roles.API;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 using UnityEngine;
-
-using AmongUs.GameOptions;
-
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Extension.Player;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -19,7 +17,8 @@ public sealed class LoverManager : FlexibleCombinationRoleManagerBase
 {
     public LoverManager() : base(
 		CombinationRoleType.Lover,
-		new Lover())
+		new Lover(),
+		includeImpostorKillerSetting: false)
     { }
 
 }
@@ -237,10 +236,10 @@ public sealed class Lover : MultiAssignRoleBase
         }
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        var neutralSetting = factory.CreateBoolOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		var neutralSetting = factory.CreateBoolOption(
             LoverOption.IsNeutral,
             false);
 
@@ -333,7 +332,7 @@ public sealed class Lover : MultiAssignRoleBase
     }
 
     private void killerVisionSetting(
-		AutoParentSetOptionCategoryFactory factory,
+		AutoParentSetBuilder factory,
 		IOption killerOpt)
     {
         var visionOption = factory.CreateBoolOption(

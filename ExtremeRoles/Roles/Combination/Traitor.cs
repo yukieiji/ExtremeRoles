@@ -1,20 +1,15 @@
-using UnityEngine;
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API.Extension.Neutral;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
-
-
-
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.Neutral;
+using ExtremeRoles.Roles.API.Interface;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -373,11 +368,9 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
             Tr.GetString(this.crewRoleStr));
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        IRoleAbility.CreateCommonAbilityOption(
-            factory, 5.0f);
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		IRoleAbility.CreateCommonAbilityOption(categoryScope.Builder, 5.0f);
     }
 
     protected override void RoleSpecificInit()
