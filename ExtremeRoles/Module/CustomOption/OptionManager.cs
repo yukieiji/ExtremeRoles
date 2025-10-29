@@ -199,7 +199,16 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		}
 	}
 
-	private void registerOptionGroup(OptionTab tab, IOptionCategory group)
+	public void registerOptionGroup(IOptionCategory group)
+	{
+		if (!this.options.TryGetValue(group.View.Tab, out var container))
+		{
+			throw new ArgumentException($"Tab {group.View.Tab} is not registered.");
+		}
+		container.AddGroup(group);
+	}
+
+	public void registerOptionGroup(OptionTab tab, IOptionCategory group)
 	{
 		if (!this.options.TryGetValue(tab, out var container))
 		{

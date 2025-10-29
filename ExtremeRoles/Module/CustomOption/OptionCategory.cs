@@ -200,7 +200,7 @@ public sealed class OptionCategoryViewInfo(
 }
 
 public sealed class HiddenCategoryViewInfo(
-	IOptionCategoryViewInfo parent)
+	IOptionCategoryViewInfo parent) : IOptionCategoryViewInfo
 {
 	private readonly IOptionCategoryViewInfo parent = parent;
 	public string Name { get; } = "";
@@ -211,18 +211,27 @@ public sealed class HiddenCategoryViewInfo(
 
 
 public sealed class OptionCategory(
-	OptionTab tab,
 	int id,
-	string name,
 	in OptionPack option,
-	in Color? color = null) : IOptionCategory
+	in IOptionCategoryViewInfo view) : IOptionCategory
 {
+	public OptionCategory(
+		OptionTab tab,
+		int id,
+		string name,
+		in OptionPack option,
+		Color? color = null) : this(
+			id, option, new OptionCategoryViewInfo(name, tab, color))
+	{
+
+	}
+
 	public int Id { get; } = id;
 	public bool IsDirty { get; set; } = false;
 
 	public IOptionLoader Loader { get; } = new OptionLoader(option);
 
-	public IOptionCategoryViewInfo View { get; } = new OptionCategoryViewInfo(name, tab, color);
+	public IOptionCategoryViewInfo View { get; } = view;
 
 	public void AddHudString(in StringBuilder builder)
 	{
