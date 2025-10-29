@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
 
@@ -38,7 +39,7 @@ internal sealed class LoverWinChecker : IWinChecker
 		if (this.loverNum == 0 &&
 			OptionManager.Instance.TryGetCategory(
 				OptionTab.CombinationTab,
-				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(CombinationRoleType.Lover),
+				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(CombinationRoleType.Lover),
 				out var cate))
 		{
 			this.loverNum = cate.Loader.GetValue<CombinationRoleCommonOption, int>(CombinationRoleCommonOption.AssignsNum);

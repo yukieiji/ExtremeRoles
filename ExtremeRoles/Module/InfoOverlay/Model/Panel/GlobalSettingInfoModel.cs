@@ -47,7 +47,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 
 		tryAddHudString(
 			container,
-			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Xion),
+			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(ExtremeRoleId.Xion),
 			this.printOption);
 
 		this.printOption.AppendLine();

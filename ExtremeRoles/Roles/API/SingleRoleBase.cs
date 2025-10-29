@@ -1,7 +1,6 @@
 using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using UnityEngine;
@@ -46,7 +45,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 		{
 			if (!OptionManager.Instance.TryGetCategory(
 					this.Tab,
-					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(this.Core.Id),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(this.Core.Id),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");

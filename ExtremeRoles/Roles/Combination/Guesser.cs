@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.RoleAssign;
@@ -19,6 +18,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -189,7 +189,7 @@ public sealed class Guesser :
                         assignState.IsJackalOn = true;
                         assignState.IsJackalForceReplaceLover = OptionManager.Instance.TryGetCategory(
 							OptionTab.NeutralTab,
-							ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Jackal),
+							ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(ExtremeRoleId.Jackal),
 							out var cate) && cate.Loader.GetValue<JackalRole.JackalOption, bool>(JackalRole.JackalOption.ForceReplaceLover);
                         break;
                     case ExtremeRoleId.Queen:
@@ -204,7 +204,7 @@ public sealed class Guesser :
 						add(ExtremeRoleId.Yardbird, ExtremeRoleType.Crewmate);
 						if (OptionManager.Instance.TryGetCategory(
 								OptionTab.CrewmateTab,
-								ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Jailer),
+								ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(ExtremeRoleId.Jailer),
 								out var jailer) && 
 							!jailer.Loader.GetValue<Jailer.Option, bool>(Jailer.Option.IsMissingToDead))
 						{

@@ -4,7 +4,7 @@ using ExtremeRoles.Helper;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.RoleAssign;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -159,7 +159,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     protected override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
 		var factory = OptionManager.CreateAutoParentSetOptionCategory(
-			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(this.RoleType),
+			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(this.RoleType),
 			this.RoleName,
 			OptionTab.CombinationTab,
 			this.OptionColor);

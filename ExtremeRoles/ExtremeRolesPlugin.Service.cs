@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 namespace ExtremeRoles;
@@ -53,7 +54,9 @@ public partial class ExtremeRolesPlugin
 		collection.AddSingleton<IEventManager, Module.Event.EventManager>();
 
 
-		collection.AddSingleton<IRoleParentOptionIdGenerator, OldRoleParentOptionIdGenerator>();
+		collection.AddTransient<IRoleOptionCategoryIdGenerator, RoleOptionCategoryIdGenerator>();
+		collection.AddTransient<OptionCategoryAssembler>();
+		collection.AddTransient<AutoRoleOptionCategoryFactory>();
 
 		// collection.AddSingleton(x => new RoleParentOptionIdGenerator(256));
 

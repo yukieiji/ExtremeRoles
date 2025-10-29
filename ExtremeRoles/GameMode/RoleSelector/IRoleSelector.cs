@@ -9,8 +9,8 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
 namespace ExtremeRoles.GameMode.RoleSelector;
@@ -54,7 +54,7 @@ public interface IRoleSelector
 
 	public static bool RawXionUse => OptionManager.Instance.TryGetCategory(
 		OptionTab.GeneralTab,
-		ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Xion),
+		ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(ExtremeRoleId.Xion),
 		out var cate) &&
 		cate.Loader.GetValue<bool>((int)XionOption.UseXion);
 
@@ -63,7 +63,7 @@ public interface IRoleSelector
 		id == (int)SpawnOptionCategory.GhostRoleSpawnCategory ||
 		(
 			id > ExtremeRoleManager.RoleCategoryIdOffset &&
-			id == ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Xion)
+			id == ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(ExtremeRoleId.Xion)
 		);
 
 	public bool IsValidCategory(int categoryId);
@@ -84,7 +84,7 @@ public interface IRoleSelector
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
 		using (var xionCategory = OptionManager.CreateOptionCategory(
-			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(ExtremeRoleId.Xion),
+			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(ExtremeRoleId.Xion),
 			ExtremeRoleId.Xion.ToString(),
 			color: ColorPalette.XionBlue))
 		{

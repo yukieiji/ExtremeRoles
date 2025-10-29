@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
@@ -167,7 +166,7 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 
 		if (!OptionManager.Instance.TryGetCategory(
 				OptionTab.CombinationTab,
-				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(CombinationRoleType.InvestigatorOffice),
+				ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(CombinationRoleType.InvestigatorOffice),
 				out var cate))
 		{
 			return;

@@ -7,6 +7,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
 namespace ExtremeRoles.Module.RoleAssign;
@@ -60,7 +61,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			byte combType = (byte)roleId;
 			if (!opt.TryGetCategory(
 					OptionTab.CombinationTab,
-					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(roleId),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(roleId),
 					out var combCate))
 			{
 				continue;
@@ -104,7 +105,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			SingleRoleBase role = ExtremeRoleManager.NormalRole[intedRoleId];
 			if (!opt.TryGetCategory(
 					role.Tab,
-					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(roleId),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(roleId),
 					out var roleCate))
 			{
 				continue;

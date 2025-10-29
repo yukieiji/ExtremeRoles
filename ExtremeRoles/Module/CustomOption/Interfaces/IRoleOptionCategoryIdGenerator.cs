@@ -1,9 +1,9 @@
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 
-namespace ExtremeRoles.Module.Interface;
+namespace ExtremeRoles.Module.CustomOption.Interfaces;
 
-public interface IRoleParentOptionIdGenerator
+public interface IRoleOptionCategoryIdGenerator
 {
 	public int Get(ExtremeRoleId id);
 	public int Get(ExtremeGhostRoleId id);

@@ -1,10 +1,10 @@
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles;
 
-namespace ExtremeRoles.Module;
+namespace ExtremeRoles.Module.CustomOption.Implemented;
 
-public sealed class OldRoleParentOptionIdGenerator : IRoleParentOptionIdGenerator
+public sealed class RoleOptionCategoryIdGenerator : IRoleOptionCategoryIdGenerator
 {
 	public int Get(ExtremeRoleId id)
 		=> ExtremeRoleManager.GetRoleGroupId(id);

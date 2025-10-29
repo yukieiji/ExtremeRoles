@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -50,7 +50,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 
     public ClassicGameModeRoleSelector()
     {
-		var gen = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>();
+		var gen = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>();
         foreach (ExtremeRoleId roleId in getUseNormalRoleId())
         {
             this.roleCategoryGroup.Add(gen.Get(roleId));

@@ -9,6 +9,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
 namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
@@ -29,7 +30,7 @@ public sealed class RoleDependencyRuleFactory : IRoleDependencyRuleFactory
 		ExtremeRoleId checkRoleId, ExtremeRoleId dependRoleId, OptionTab tab, params T[] options) where T : Enum
 		=> new(checkRoleId, dependRoleId,
 			() =>
-				OptionManager.Instance.TryGetCategory(tab, ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(checkRoleId), out var category) &&
+				OptionManager.Instance.TryGetCategory(tab, ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(checkRoleId), out var category) &&
 				!options.All(x => category.Loader.GetValue<T, bool>(x))
 			);
 }

@@ -10,6 +10,7 @@ using ExtremeRoles.Module.Interface;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -94,7 +95,7 @@ public sealed class GhostRoleSpawnDataManager :
 			};
 
 			if (!opt.TryGetCategory(
-					tab, ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(role.Id),
+					tab, ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(role.Id),
 					out var roleCate))
 			{
 				continue;

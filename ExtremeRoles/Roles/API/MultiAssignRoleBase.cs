@@ -1,7 +1,6 @@
 using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +28,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 			if (OffsetInfo is null ||
 				!OptionManager.Instance.TryGetCategory(
 					this.Tab,
-					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(this.OffsetInfo.RoleId),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(this.OffsetInfo.RoleId),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");

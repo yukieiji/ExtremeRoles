@@ -14,7 +14,6 @@ using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.GhostRoles;
@@ -397,7 +396,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 			if (OffsetInfo is null ||
 				!OptionManager.Instance.TryGetCategory(
 					this.Tab,
-					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleParentOptionIdGenerator>().Get(this.OffsetInfo.RoleId),
+					ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleOptionCategoryIdGenerator>().Get(this.OffsetInfo.RoleId),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");
