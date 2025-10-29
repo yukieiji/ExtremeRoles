@@ -68,9 +68,9 @@ public sealed class SlaveDriver :
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
 
-	protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+		var factory = categoryScope.Builder;
 		factory.CreateBoolOption(
 			SlaveDriverOption.CanSeeTaskBar,
 			true);

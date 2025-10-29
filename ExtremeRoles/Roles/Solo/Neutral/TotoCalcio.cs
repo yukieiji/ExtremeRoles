@@ -181,10 +181,9 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
-
+        var factory = categoryScope.Builder;
         factory.CreateFloatOption(
             TotocalcioOption.Range,
             1.0f, 0.0f, 2.0f, 0.1f);

@@ -141,9 +141,9 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
         return true;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         factory.CreateBoolOption(
             EvolverOption.IsEvolvedAnimation,
             true);

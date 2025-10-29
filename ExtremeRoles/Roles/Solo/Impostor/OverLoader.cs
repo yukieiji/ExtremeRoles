@@ -189,9 +189,9 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 			base.GetNameColor(isTruthColor) : Palette.ImpostorRed;
 
 
-	protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         factory.CreateIntOption(
             OverLoaderOption.AwakeImpostorNum,
             GameSystem.MaxImposterNum, 1,

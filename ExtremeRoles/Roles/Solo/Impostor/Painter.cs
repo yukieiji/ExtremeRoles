@@ -136,9 +136,9 @@ public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
         return true;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         IRoleAbility.CreateCommonAbilityOption(
             factory);
 

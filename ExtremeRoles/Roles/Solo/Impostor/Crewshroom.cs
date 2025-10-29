@@ -71,9 +71,9 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 		return true;
 	}
 
-	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
+		var factory = categoryScope.Builder;
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 50);
 		factory.CreateFloatOption(
 			Option.DelaySecond, 5.0f, 0.5f, 30.0f, 0.5f, format:OptionUnit.Second);

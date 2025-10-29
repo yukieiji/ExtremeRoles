@@ -125,8 +125,9 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 		return true;
 	}
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         IRoleAbility.CreateAbilityCountOption(factory, 1, 10);
 
         factory.CreateIntOption(
