@@ -1,5 +1,5 @@
 using System;
-
+using System.Linq;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.CustomOption.Factory;
@@ -19,6 +19,10 @@ public sealed class OptionCategoryScope<T>(
 
 	public void Dispose()
 	{
+		if (this.Builder.Option.AllOptions.Count <= 0)
+		{
+			return;
+		}
 		var category = new OptionCategory(this.id, this.Builder.Option, this.View);
 		registerFunc.Invoke(category);
 	}

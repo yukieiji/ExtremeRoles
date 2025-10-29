@@ -12,33 +12,22 @@ namespace ExtremeRoles.Module.CustomOption.Factory;
 
 public sealed class OptionCategoryAssembler
 {
-	public OptionCategoryScope<T> CreateOptionCategory<T>(
-		int id,
-		string name,
-		T builder,
-		in OptionTab tab = OptionTab.GeneralTab,
-		Color? color = null)
-		where T : IOptionBuilder
-	{
-		var view = new OptionCategoryViewInfo(name, tab, color);
-		return new OptionCategoryScope<T>(id, builder, OptionManager.Instance.registerOptionGroup, view);
-	}
 
-	public OptionCategoryScope<DefaultBuilder> CreateDefaultOptionCategory(
+	public OptionCategoryScope<DefaultBuilder> CreateOptionCategory(
 		int id,
 		string name,
 		in OptionTab tab = OptionTab.GeneralTab,
 		Color? color = null)
 	{
 		var builder = new DefaultBuilder(name, tab);
-		return CreateOptionCategory(id, name, builder, tab, color);
+		return createOptionCategory(id, name, builder, tab, color);
 	}
 
 	public OptionCategoryScope<DefaultBuilder> CreateOptionCategory<T>(
 		T option,
 		in OptionTab tab = OptionTab.GeneralTab,
 		Color? color = null) where T : Enum
-		=> CreateDefaultOptionCategory(
+		=> CreateOptionCategory(
 			option.FastInt(),
 			option.ToString(), tab, color);
 
@@ -49,7 +38,7 @@ public sealed class OptionCategoryAssembler
 		Color? color = null)
 	{
 		var builder = new SequentialBuilder(name, tab);
-		return CreateOptionCategory(id, name, builder, tab, color);
+		return createOptionCategory(id, name, builder, tab, color);
 	}
 
 	public OptionCategoryScope<AutoParentSetBuilder> CreateAutoParentSetOptionCategory(
@@ -61,7 +50,7 @@ public sealed class OptionCategoryAssembler
 	{
 		var innerBuilder = new DefaultBuilder(name, tab);
 		var builder = new AutoParentSetBuilder(innerBuilder, parent);
-		return CreateOptionCategory(id, name, builder, tab, color);
+		return createOptionCategory(id, name, builder, tab, color);
 	}
 
 	public OptionCategoryScope<AutoParentSetBuilder> CreateAutoParentSetOptionCategory<T>(
@@ -80,5 +69,17 @@ public sealed class OptionCategoryAssembler
 	{
 		var view = new HiddenCategoryViewInfo(parentCategory.View);
 		return new OptionCategoryScope<T>(id, parentCategory.Builder, OptionManager.Instance.registerOptionGroup, view);
+	}
+
+	private OptionCategoryScope<T> createOptionCategory<T>(
+		int id,
+		string name,
+		T builder,
+		in OptionTab tab = OptionTab.GeneralTab,
+		Color? color = null)
+		where T : IOptionBuilder
+	{
+		var view = new OptionCategoryViewInfo(name, tab, color);
+		return new OptionCategoryScope<T>(id, builder, OptionManager.Instance.registerOptionGroup, view);
 	}
 }

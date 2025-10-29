@@ -33,6 +33,14 @@ public sealed class AutoParentSetBuilder(
 
 	public OptionPack Option => this.builder.Option;
 
+	public IOption Get(int id)
+		=> this.internalFactory.Get(id);
+	public IValueOption<T> Get<T>(int id)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+		=> this.internalFactory.Get<T>(id);
+
 	public BoolCustomOption CreateBoolOption<T>(
 		T option,
 		bool defaultValue,

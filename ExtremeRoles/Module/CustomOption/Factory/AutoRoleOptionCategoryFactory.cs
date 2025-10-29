@@ -36,7 +36,7 @@ public sealed class AutoRoleOptionCategoryFactory(IRoleOptionCategoryIdGenerator
 		CombinationRoleType id,
 		string name,
 		in OptionTab tab,
-		Color color)
+		Color? color)
 	{
 		int categoryId = generator.Get(id);
 		return assembler.CreateAutoParentSetOptionCategory(categoryId, name, tab, color);

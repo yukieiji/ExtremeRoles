@@ -26,6 +26,14 @@ public class DefaultBuilder(
 
 	public OptionPack Option { get; } = new OptionPack();
 
+	public IOption Get(int id)
+		=> this.Option.Get(id);
+	public IValueOption<T> Get<T>(int id)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+		=> this.Option.Get<T>(id);
+
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public BoolCustomOption CreateBoolOption<T>(
 		T option,

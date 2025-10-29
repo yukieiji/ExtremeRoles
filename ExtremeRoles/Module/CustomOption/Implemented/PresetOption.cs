@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Text;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -72,15 +73,15 @@ public sealed class PresetOption : IValueOption<int>
 	public static bool IsPreset(int categoryId, int optionId)
 		=> categoryId == PresetOption.categoryId && optionId == PresetOption.optionId;
 
-	public static void Create(string name)
+	public static void Create(OptionCategoryAssembler assembler, string name)
 	{
-		using (var commonOptionFactory = OptionManager.CreateOptionCategory(
+		using (var cate = assembler.CreateOptionCategory(
 			categoryId, name, color: OptionCreator.DefaultOptionColor))
 		{
 			var presetOption = new PresetOption(
 				new PresetOptionInfo(categoryId, $"{name}{OptionKey.Selection}"),
 				OptionRange<int>.Create(1, maxPresetNum, 1));
-			commonOptionFactory.AddOption(optionId, presetOption);
+			cate.Builder.AddOption(optionId, presetOption);
 		}
 	}
 
