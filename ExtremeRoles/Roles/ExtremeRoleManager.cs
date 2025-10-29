@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
-
 using AmongUs.GameOptions;
-
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.RoleAssign;
@@ -16,8 +12,8 @@ using ExtremeRoles.Roles.Combination.Barter;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Combination.InvestigatorOffice;
 using ExtremeRoles.Roles.Solo.Crewmate;
-using ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
+using ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 using ExtremeRoles.Roles.Solo.Crewmate.Fencer;
 using ExtremeRoles.Roles.Solo.Crewmate.Loner;
 using ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
@@ -26,12 +22,16 @@ using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Neutral.IronMate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
-using ExtremeRoles.Roles.Solo.Neutral.Missionary;
 using ExtremeRoles.Roles.Solo.Neutral.Madmate;
+using ExtremeRoles.Roles.Solo.Neutral.Missionary;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using ExtremeRoles.Roles.Solo.Neutral.Yoko;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExtremeRoles.Roles;
 
@@ -430,19 +430,19 @@ public static class ExtremeRoleManager
 	public static int GetCombRoleGroupId(CombinationRoleType roleId)
 		=> conbRoleIdOffset + (int)roleId;
 
-	public static void CreateCombinationRoleOptions()
+	public static void CreateCombinationRoleOptions(AutoRoleOptionCategoryFactory factory)
     {
         foreach (var role in CombRole.Values)
         {
-			role.CreateRoleAllOption();
+			role.CreateRoleAllOption(factory);
         }
     }
 
-    public static void CreateNormalRoleOptions()
+    public static void CreateNormalRoleOptions(AutoRoleOptionCategoryFactory factory)
     {
         foreach (var role in NormalRole.Values)
         {
-			role.CreateRoleAllOption();
+			role.CreateRoleAllOption(factory);
         }
     }
 
