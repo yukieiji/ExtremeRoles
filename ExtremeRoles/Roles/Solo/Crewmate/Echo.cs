@@ -1,21 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-
 using BepInEx.Unity.IL2CPP.Utils;
-using Hazel;
-using UnityEngine;
-
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
+using Hazel;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
+
 
 
 #nullable enable
@@ -367,8 +366,9 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
+		var factory = categoryScope.Builder;
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 50);
 		factory.CreateFloatOption(Option.Range, 10.0f, 5.0f, 30.0f, 0.5f);
 		factory.CreateSelectionOption<Option, EmitAttentionMode>(Option.AttentionMode);

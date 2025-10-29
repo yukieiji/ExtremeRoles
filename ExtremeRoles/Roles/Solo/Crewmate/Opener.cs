@@ -1,13 +1,13 @@
-using UnityEngine;
-
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -132,10 +132,10 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         }
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        IRoleAbility.CreateAbilityCountOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		IRoleAbility.CreateAbilityCountOption(
             factory, 2, 5);
         factory.CreateFloatOption(
             OpenerOption.Range,

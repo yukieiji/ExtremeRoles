@@ -1,23 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using UnityEngine;
 using AmongUs.GameOptions;
-
-using Hazel;
-
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
+using Hazel;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -400,10 +398,10 @@ public sealed class Psychic :
         }
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        factory.CreateIntOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		factory.CreateIntOption(
             PsychicOption.AwakeTaskGage,
             30, 0, 100, 10,
             format: OptionUnit.Percentage);

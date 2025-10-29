@@ -1,28 +1,22 @@
-using System;
-using System.Linq;
-
-using UnityEngine;
-
-using Newtonsoft.Json.Linq;
-
+using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Compat;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
-
-
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Linq;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -298,10 +292,10 @@ public sealed class Teleporter :
         return;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        factory.CreateBoolOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		factory.CreateBoolOption(
             TeleporterOption.CanUseOtherPlayer,
             false);
         IRoleAbility.CreateAbilityCountOption(

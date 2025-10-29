@@ -1,22 +1,18 @@
-using System;
-using System.Collections.Generic;
-
-using UnityEngine;
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
-using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -275,10 +271,10 @@ public sealed class CurseMaker :
         return true;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        factory.CreateFloatOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		factory.CreateFloatOption(
             CurseMakerOption.CursingRange,
             2.5f, 0.5f, 5.0f, 0.5f);
 

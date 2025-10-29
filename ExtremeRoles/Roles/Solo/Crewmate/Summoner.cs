@@ -1,16 +1,16 @@
-using System;
-
-using UnityEngine;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using System;
+using UnityEngine;
+
 
 #nullable enable
 
@@ -154,9 +154,9 @@ public sealed class Summoner :
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
 
-	protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
 
 		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,

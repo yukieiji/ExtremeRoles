@@ -1,16 +1,14 @@
-using UnityEngine;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -174,10 +172,10 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
     }
 
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        factory.CreateBoolOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		factory.CreateBoolOption(
             SheriffOption.CanShootAssassin,
             false);
 

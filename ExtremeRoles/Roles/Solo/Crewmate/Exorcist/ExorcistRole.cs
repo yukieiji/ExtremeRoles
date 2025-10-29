@@ -1,17 +1,15 @@
-using Hazel;
-using System.Collections.Generic;
-
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-
-
+using Hazel;
+using System.Collections.Generic;
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
@@ -109,9 +107,9 @@ public sealed class ExorcistRole :
 		this.status?.FrameUpdate(rolePlayer);
 	}
 
-	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
+		var factory = categoryScope.Builder;
 		factory.Create0To100Percentage10StepOption(Option.AwakeTaskGage);
 
 		IRoleAbility.CreateAbilityCountOption(factory, 1, 5, 3.0f);

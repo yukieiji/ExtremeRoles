@@ -1,17 +1,16 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-using Hazel;
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface;
+using Hazel;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
@@ -356,10 +355,10 @@ public sealed class Resurrecter :
     public override bool IsBlockShowPlayingRoleInfo() => this.infoBlock();
 
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        factory.CreateIntOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		factory.CreateIntOption(
             ResurrecterOption.AwakeTaskGage,
             100, 0, 100, 10,
             format: OptionUnit.Percentage);

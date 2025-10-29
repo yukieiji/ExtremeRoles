@@ -1,10 +1,8 @@
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
-using ExtremeRoles.Roles.API;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -38,9 +36,10 @@ public sealed class Neet : SingleRoleBase
         return base.GetFullDescription();
     }
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
-    {
-        factory.CreateBoolOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		factory.CreateBoolOption(
             NeetOption.CanCallMeeting,
             false);
         factory.CreateBoolOption(

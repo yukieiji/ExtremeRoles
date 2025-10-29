@@ -1,11 +1,9 @@
 using ExtremeRoles.Module;
-
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.API;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -25,10 +23,10 @@ public sealed class Bakary : SingleRoleBase
         false, true, false, false)
     { }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        var changeCooking = factory.CreateBoolOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		var changeCooking = factory.CreateBoolOption(
             BakaryOption.ChangeCooking,
             true);
 

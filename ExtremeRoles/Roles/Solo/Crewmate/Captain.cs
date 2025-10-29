@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
-
-using UnityEngine;
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -327,9 +326,10 @@ public sealed class Captain :
         }
     }
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
-    {
-        factory.CreateIntOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		factory.CreateIntOption(
             CaptainOption.AwakeTaskGage,
             70, 0, 100, 10,
             format: OptionUnit.Percentage);

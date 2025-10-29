@@ -1,10 +1,10 @@
-using UnityEngine;
-
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Loner;
 
@@ -49,9 +49,9 @@ public sealed class LonerRole : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
 		this.ability?.Update(rolePlayer);
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
 		factory.CreateIntOption(Option.StressMaxGage, 10, 1, 100, 1);
 		factory.CreateFloatOption(Option.StressRange, 2.5f, 0.5f, 3.0f, 0.1f);
 		factory.CreateIntOption(Option.StressIgnoreTime, 10, 1, 30, 1, format: OptionUnit.Second);

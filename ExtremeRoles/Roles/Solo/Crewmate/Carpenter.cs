@@ -1,25 +1,24 @@
-using System;
-using System.Linq;
-
-using UnityEngine;
-using Hazel;
-using TMPro;
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Extension.VentModule;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.Ability.AutoActivator;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using Hazel;
+using System;
+using System.Linq;
+using TMPro;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -722,10 +721,10 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         }
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        factory.CreateIntOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		factory.CreateIntOption(
             CarpenterOption.AwakeTaskGage,
             70, 0, 100, 10,
             format: OptionUnit.Percentage);
@@ -752,7 +751,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         }
     }
 
-    private void createAbilityOption(AutoParentSetOptionCategoryFactory factory)
+    private void createAbilityOption(AutoParentSetBuilder factory)
     {
         factory.CreateFloatOption(
             RoleAbilityCommonOption.AbilityCoolTime,

@@ -1,16 +1,16 @@
-using System.Collections.Generic;
-using System.Linq;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -247,9 +247,9 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         }
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
 		factory.CreateBoolOption(
 			AgencyOption.CanSeeTaskBar,
 			true);

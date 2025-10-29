@@ -1,14 +1,12 @@
-using System;
-using System.Collections.Generic;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.Meeting;
-
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using System;
+using System.Collections.Generic;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -88,9 +86,10 @@ public sealed class Gambler :
         voteCount = 1;
     }
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
-    {
-        factory.CreateIntOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		factory.CreateIntOption(
             GamblerOption.ChangeVoteChance,
             50, 10, 100, 5,
             format: OptionUnit.Percentage);

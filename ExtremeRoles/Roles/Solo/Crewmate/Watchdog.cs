@@ -1,16 +1,13 @@
-using UnityEngine;
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -137,11 +134,9 @@ public sealed class Watchdog : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
         this.chargeTime.gameObject.SetActive(true);
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        IRoleAbility.CreateCommonAbilityOption(
-            factory, 3.0f);
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		IRoleAbility.CreateCommonAbilityOption(categoryScope.Builder, 3.0f);
     }
 
     protected override void RoleSpecificInit()

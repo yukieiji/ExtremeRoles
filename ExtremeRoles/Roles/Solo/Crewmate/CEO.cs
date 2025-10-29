@@ -1,13 +1,8 @@
 using AmongUs.GameOptions;
-using System.Collections.Generic;
-
-using Hazel;
-
-using UnityEngine;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
@@ -15,6 +10,10 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
+using Hazel;
+using System.Collections.Generic;
+using UnityEngine;
+
 
 
 #nullable enable
@@ -341,8 +340,9 @@ public sealed class CEO : SingleRoleBase,
 		}
 	}
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
+		var factory = categoryScope.Builder;
 		factory.Create0To100Percentage10StepOption(Option.AwakeTaskGage, defaultGage: 50);
 		factory.CreateBoolOption(Option.IsShowRolePlayerVote, true);
 		factory.CreateBoolOption(Option.IsUseCEOMeeting, true);

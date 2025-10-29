@@ -1,11 +1,9 @@
-using UnityEngine;
-
 using ExtremeRoles.Module;
-
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Host;
 
@@ -26,11 +24,12 @@ public sealed partial class Xion : SingleRoleBase
         PlayerId = xionPlayerId;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    { }
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+	}
 
-    public static void XionPlayerToGhostLayer()
+
+	public static void XionPlayerToGhostLayer()
     {
         PlayerControl player = Helper.Player.GetPlayerControlById(PlayerId);
         if (player != null)

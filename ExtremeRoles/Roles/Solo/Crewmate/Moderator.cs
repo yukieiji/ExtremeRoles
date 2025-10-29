@@ -1,21 +1,16 @@
 using AmongUs.GameOptions;
-
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 using UnityEngine;
 
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.SystemType;
-
-using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -188,9 +183,9 @@ public sealed class Moderator :
 		return;
 	}
 
-	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
+		var factory = categoryScope.Builder;
 		factory.CreateIntOption(
 			ModeratorOption.AwakeTaskGage,
 			60, 0, 100, 10,

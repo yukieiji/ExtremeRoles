@@ -1,15 +1,12 @@
-using UnityEngine;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.Ability;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -136,10 +133,10 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
         this.chargeTime.gameObject.SetActive(true);
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        IRoleAbility.CreateCommonAbilityOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		IRoleAbility.CreateCommonAbilityOption(
             factory, 3.0f);
 
         var boostOption = factory.CreateBoolOption(

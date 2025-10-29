@@ -1,12 +1,13 @@
-using UnityEngine;
-
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using UnityEngine;
+
 
 
 #nullable enable
@@ -191,11 +192,11 @@ public sealed class Whisper :
         this.abilityText.gameObject.SetActive(true);
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
 
-        factory.CreateFloatOption(
+		factory.CreateFloatOption(
             WhisperOption.AbilityOffTime,
             2.0f, 1.0f, 5.0f, 0.5f,
             format: OptionUnit.Second);

@@ -1,17 +1,14 @@
 using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.Ability;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -99,11 +96,9 @@ public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        IRoleAbility.CreateAbilityCountOption(
-            factory, 2, 10);
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		IRoleAbility.CreateAbilityCountOption(categoryScope.Builder, 2, 10);
     }
 
     protected override void RoleSpecificInit()

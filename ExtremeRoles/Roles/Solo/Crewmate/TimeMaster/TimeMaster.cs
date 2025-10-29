@@ -1,15 +1,12 @@
-using Hazel;
-
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
-using ExtremeRoles.Module.Ability;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API.Interface.Status;
+using Hazel;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 
@@ -156,10 +153,10 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        IRoleAbility.CreateCommonAbilityOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		IRoleAbility.CreateCommonAbilityOption(
             factory, 3.0f);
 
         factory.CreateFloatOption(

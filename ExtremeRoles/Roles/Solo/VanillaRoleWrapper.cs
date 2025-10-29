@@ -1,12 +1,12 @@
-using System;
 using AmongUs.GameOptions;
-
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using System;
 
 
 namespace ExtremeRoles.Roles.Solo;
@@ -146,9 +146,9 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
-    {
-        throw new System.Exception("Don't call this class method!!");
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		throw new System.Exception("Don't call this class method!!");
     }
 
     private string getVanilaImportantText(bool isContainFakeTask = true)

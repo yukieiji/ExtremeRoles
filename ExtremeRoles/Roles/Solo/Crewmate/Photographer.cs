@@ -1,24 +1,21 @@
+using AmongUs.GameOptions;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using Hazel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using UnityEngine;
-using Hazel;
-using AmongUs.GameOptions;
-
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.Ability;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -469,10 +466,10 @@ public sealed class Photographer :
         }
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        factory.CreateIntOption(
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
+		factory.CreateIntOption(
             PhotographerOption.AwakeTaskGage,
             30, 0, 100, 10,
             format: OptionUnit.Percentage);

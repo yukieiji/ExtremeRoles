@@ -1,25 +1,25 @@
-using System;
-using System.Collections.Generic;
-
-using UnityEngine;
-using Hazel;
-using TMPro;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.ModeSwitcher;
-using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
+using Hazel;
+using System;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 
 
-using ExtremeRoles.Module.CustomOption.Factory;
+
 
 #nullable enable
 
@@ -708,11 +708,11 @@ public sealed class BodyGuard :
         }
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
 
-        factory.CreateFloatOption(
+		factory.CreateFloatOption(
             BodyGuardOption.ShieldRange,
             1.0f, 0.0f, 2.0f, 0.1f);
 

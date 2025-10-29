@@ -1,21 +1,15 @@
 using AmongUs.GameOptions;
-
-using UnityEngine;
-
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Performance;
-
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Extension.Il2Cpp;
-
-
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -180,9 +174,9 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		reducer.ReduceMulti = this.killCoolReduceMulti;
 	}
 
-	protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
+	{
+		var factory = categoryScope.Builder;
 		factory.CreateIntOption(
 			Option.AwakeTaskGage,
 			70, 0, 100, 10,
