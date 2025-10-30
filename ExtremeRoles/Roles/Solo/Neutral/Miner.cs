@@ -9,6 +9,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
