@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using ExtremeRoles.Extension;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-namespace ExtremeRoles.Module.CustomOption.Implemented;
+namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 public sealed class SelectionCustomOption : CustomOptionBase<int, string>
 {

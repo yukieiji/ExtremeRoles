@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 
 using System;
 using System.Linq;
@@ -10,7 +10,7 @@ using UnityEngine;
 
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 
 #nullable enable

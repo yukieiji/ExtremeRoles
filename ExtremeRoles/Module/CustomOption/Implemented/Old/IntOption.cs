@@ -1,8 +1,7 @@
 using BepInEx.Configuration;
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-namespace ExtremeRoles.Module.CustomOption.Implemented;
+namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 public sealed class IntCustomOption : CustomOptionBase<int, int>, IDynamismOption<int>
 {

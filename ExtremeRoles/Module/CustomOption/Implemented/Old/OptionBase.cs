@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Implemented;
+namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 public abstract class CustomOptionBase<OutType, SelectionType> :
 	IValueOption<OutType>
