@@ -1,7 +1,6 @@
-﻿using System;
-
-using ExtremeRoles.Module.CustomOption.Interfaces;
+using System;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 
 #nullable enable

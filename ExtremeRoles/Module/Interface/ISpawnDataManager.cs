@@ -1,5 +1,5 @@
-﻿using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;

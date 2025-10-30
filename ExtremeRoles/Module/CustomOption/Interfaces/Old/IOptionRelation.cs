@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace ExtremeRoles.Module.CustomOption.Interfaces;
+namespace ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 public interface IOptionRelation
 {

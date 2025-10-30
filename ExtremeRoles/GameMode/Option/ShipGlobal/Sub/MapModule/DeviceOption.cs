@@ -1,8 +1,6 @@
-﻿
+
 using ExtremeRoles.Module.CustomOption.Factory;
-
-
-using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
