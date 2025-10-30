@@ -101,8 +101,9 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 				ColorPalette.YandereVioletRed :
 				base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
+		var factory = categoryScope.Builder;
 		var killOpt = factory.CreateBoolOption(
 			Option.CanKill, true);
 		CreateKillerOption(factory, killOpt, true, true);

@@ -122,9 +122,9 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
         OutburstKill(this.outburstTarget.PlayerId, killTarget.PlayerId);
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         factory.CreateFloatOption(
             JesterOption.OutburstDistance,
             1.0f, 0.0f, 2.0f, 0.1f);

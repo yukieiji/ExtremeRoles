@@ -64,8 +64,9 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 				ColorPalette.QueenWhite :
 				base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
+		var factory = categoryScope.Builder;
 		factory.CreateBoolOption(
 			Option.UseVent, false);
 		var taskOpt = factory.CreateBoolOption(

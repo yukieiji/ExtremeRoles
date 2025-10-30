@@ -178,9 +178,9 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		beha.Initialize(speed, role.speed, role.killSpeed, role.param);
 	}
 
-	protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         IRoleAbility.CreateAbilityCountOption(factory, 2, 5);
 		factory.CreateFloatOption(Option.StraightChargeTime, 3.0f, 0.1f, 30.0f, 0.1f, format: OptionUnit.Second);
 		factory.CreateFloatOption(Option.StraightRange, 1.2f, 0.1f, 3.0f, 0.1f);

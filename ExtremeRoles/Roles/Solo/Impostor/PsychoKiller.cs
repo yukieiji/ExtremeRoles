@@ -162,9 +162,9 @@ public sealed class PsychoKiller :
         return true;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         factory.CreateIntOption(
             PsychoKillerOption.KillCoolReduceRate,
             5, 1, 15, 1,

@@ -110,8 +110,9 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 				ColorPalette.QueenWhite :
 				base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
+		var factory = categoryScope.Builder;
 		factory.CreateBoolOption(
 			Option.IsSubTeam, true);
 		factory.CreateBoolOption(

@@ -202,8 +202,9 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
         base.GetFullDescription(), this.stock,
         this.stockMax, this.curReloadCoolTime);
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         IRoleAbility.CreateCommonAbilityOption(factory);
 
         factory.CreateIntOption(

@@ -334,9 +334,9 @@ public sealed class UnderWarper :
         return true;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         factory.CreateIntOption(
             UnderWarperOption.AwakeKillCount,
             1, 0, 5, 1,

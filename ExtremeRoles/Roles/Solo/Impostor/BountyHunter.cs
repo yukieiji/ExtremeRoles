@@ -102,10 +102,9 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
         return true;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
-
+        var factory = categoryScope.Builder;
         factory.CreateFloatOption(
             BountyHunterOption.TargetUpdateTime,
             60f, 30.0f, 120f, 0.5f,

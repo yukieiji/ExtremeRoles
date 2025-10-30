@@ -130,9 +130,9 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
 		return true;
     }
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
 		IRoleAbility.CreateAbilityCountOption(
             factory, 2, 5, 2.0f);
 		factory.CreateFloatOption(ThiefOption.Range, 0.1f, 1.8f, 3.6f, 0.1f);
