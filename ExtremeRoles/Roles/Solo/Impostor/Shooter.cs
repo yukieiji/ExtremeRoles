@@ -13,6 +13,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using TMPro;
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

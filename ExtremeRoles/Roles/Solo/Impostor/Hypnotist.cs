@@ -29,6 +29,7 @@ using ExtremeRoles.Patches;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API.Interface.Status;
 

@@ -10,6 +10,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

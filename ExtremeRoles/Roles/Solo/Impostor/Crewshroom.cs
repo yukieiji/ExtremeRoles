@@ -14,6 +14,7 @@ using UnityEngine;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

@@ -9,6 +9,7 @@ using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -104,9 +105,9 @@ public sealed class YokoRole :
 	public override bool IsSameTeam(SingleRoleBase targetRole) =>
         this.IsNeutralSameTeam(targetRole);
 
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
     {
+        var factory = categoryScope.Builder;
         factory.CreateBoolOption(
             YokoOption.CanRepairSabo,
             false);

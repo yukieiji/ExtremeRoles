@@ -9,6 +9,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Patches.Button;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;

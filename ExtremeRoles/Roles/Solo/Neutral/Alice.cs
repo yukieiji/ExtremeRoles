@@ -13,6 +13,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.OptionBuilder;
 using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
