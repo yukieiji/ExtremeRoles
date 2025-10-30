@@ -254,8 +254,9 @@ public sealed class TuckerRole :
 		}
 	}
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OptionCategoryScope<AutoParentSetBuilder> categoryScope)
 	{
+		var factory = categoryScope.Builder;
 		IRoleAbility.CreateAbilityCountOption(factory, 1, 10);
 
 		factory.CreateFloatOption(
