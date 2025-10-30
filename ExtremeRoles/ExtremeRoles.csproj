@@ -5,7 +5,7 @@
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
 		<!--<Version>2025.9.27.1</Version>-->
-		<VersionPrefix>2025.10.26</VersionPrefix>
+		<VersionPrefix>2025.10.29</VersionPrefix>
     <VersionSuffix>ReBirth</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
