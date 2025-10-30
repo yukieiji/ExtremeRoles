@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
+namespace ExtremeRoles.Module.CustomOption.Implemented;
 
 public class OptionRange<T>(T[] option) : IOptionRange<T>
 	where T :

@@ -1,4 +1,4 @@
-namespace ExtremeRoles.Module.CustomOption.Interfaces.Old;
+namespace ExtremeRoles.Module.CustomOption.Interfaces;
 
 public interface IOptionInfo
 {

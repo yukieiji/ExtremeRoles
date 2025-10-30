@@ -1,10 +1,11 @@
 using System.Text.RegularExpressions;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+
 
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
+namespace ExtremeRoles.Module.CustomOption.Implemented;
 
 public sealed class OptionInfo(
 	int id, string name,
