@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 using UnityEngine;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Implemented.Old;
 using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
