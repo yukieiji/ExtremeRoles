@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-
-using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Implemented;
+namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 public sealed class NoRelation() : IOptionRelation
 {

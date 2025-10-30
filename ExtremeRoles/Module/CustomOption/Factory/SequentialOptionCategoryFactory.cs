@@ -1,16 +1,12 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
 using UnityEngine;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Implemented.Old;
+using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 
 #nullable enable

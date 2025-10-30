@@ -1,12 +1,11 @@
-﻿using System;
+using System;
 using System.Text;
-
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Implemented;
+namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 public sealed class PresetOption : IValueOption<int>
 {

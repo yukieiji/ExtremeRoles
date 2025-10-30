@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace ExtremeRoles.Module.CustomOption.Interfaces;
+namespace ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 public interface IOptionRange<SelectionType>
 	where SelectionType :
