@@ -108,6 +108,7 @@ public sealed class CustomOption : IOption
 		IComparable<T>, IEquatable<T>
 	{
 		var holder = this.holder;
+		// コンストラクタでIValueを継承していることは確定しているのでUnsafe.Asで高速にキャストする
 		var value = Unsafe.As<IValueHolder, IValue<T>>(ref holder);
 		return value.Value;
 	}
