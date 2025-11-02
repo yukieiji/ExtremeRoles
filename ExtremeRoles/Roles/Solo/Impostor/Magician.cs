@@ -10,11 +10,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Module.Ability;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -125,7 +121,7 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 		return true;
 	}
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(factory, 1, 10);
 

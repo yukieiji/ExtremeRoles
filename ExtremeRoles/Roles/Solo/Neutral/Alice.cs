@@ -11,9 +11,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Ability;
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -190,7 +189,7 @@ public sealed class Alice :
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateBoolOption(
             AliceOption.CanUseSabotage,

@@ -4,8 +4,7 @@ using ExtremeRoles.Module;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Host;
 
@@ -27,7 +26,7 @@ public sealed partial class Xion : SingleRoleBase
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     { }
 
     public static void XionPlayerToGhostLayer()

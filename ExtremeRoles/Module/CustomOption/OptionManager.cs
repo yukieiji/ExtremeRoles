@@ -7,13 +7,13 @@ using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Extension;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.CustomOption.Implemented.Old;
 using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 #nullable enable
@@ -96,14 +96,14 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		return this.TryGetTab(tab, out var container) && container.TryGetCategory(categoryId, out category) && category is not null;
 	}
 
-	public static OptionCategoryFactory CreateOptionCategory(
+	public static OldOptionCategoryFactory CreateOptionCategory(
 		int id,
 		string name,
 		in OptionTab tab = OptionTab.GeneralTab,
 		Color? color = null)
-		=> new OptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
+		=> new OldOptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
 
-	public static OptionCategoryFactory CreateOptionCategory<T>(
+	public static OldOptionCategoryFactory CreateOptionCategory<T>(
 		T option,
 		in OptionTab tab = OptionTab.GeneralTab,
 		Color? color = null) where T : Enum
@@ -111,14 +111,14 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			option.FastInt(),
 			option.ToString(), tab, color);
 
-	public static SequentialOptionCategoryFactory CreateSequentialOptionCategory(
+	public static OldSequentialOptionCategoryFactory CreateSequentialOptionCategory(
 		int id,
 		string name,
 		in OptionTab tab = OptionTab.GeneralTab,
 		Color? color = null)
-		=> new SequentialOptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
+		=> new OldSequentialOptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
 
-	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
+	public static OldAutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
 		int id,
 		string name,
 		in OptionTab tab,
@@ -126,12 +126,12 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		in IOldOption? parent = null)
 	{
 		var internalFactory = CreateOptionCategory(id, name, tab, color);
-		var factory = new AutoParentSetOptionCategoryFactory(internalFactory, parent);
+		var factory = new OldAutoParentSetOptionCategoryFactory(internalFactory, parent);
 
 		return factory;
 	}
 
-	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
+	public static OldAutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
 		T option,
 		in OptionTab tab = OptionTab.GeneralTab,
 		Color? color = null,

@@ -8,11 +8,7 @@ using UnityEngine;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using UnityEngine.Video;
 using ExtremeRoles.Module.Ability;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 
@@ -131,7 +127,7 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
 		IRoleAbility.CreateAbilityCountOption(
             factory, 2, 5, 2.0f);

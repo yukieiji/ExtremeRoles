@@ -5,7 +5,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factory;
+namespace ExtremeRoles.Module.CustomOption.Factory.Old;
 
 public static class OptionRelationFactory
 {

@@ -19,7 +19,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 
 using UnityObject = UnityEngine.Object;
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.SequentialOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.OldSequentialOptionCategoryFactory;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.Compat.Initializer;

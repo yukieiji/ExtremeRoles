@@ -9,11 +9,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using UnityEngine;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -72,7 +68,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+		OldAutoParentSetOptionCategoryFactory factory)
 	{
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 50);
 		factory.CreateFloatOption(

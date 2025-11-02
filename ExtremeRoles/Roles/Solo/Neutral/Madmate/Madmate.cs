@@ -4,10 +4,9 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 
@@ -156,7 +155,7 @@ public sealed class MadmateRole :
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateBoolOption(
             MadmateOption.IsDontCountAliveCrew,

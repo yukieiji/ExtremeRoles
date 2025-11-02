@@ -10,7 +10,7 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.OldAutoParentSetOptionCategoryFactory;
 
 namespace ExtremeRoles.GhostRoles.Crewmate;
 

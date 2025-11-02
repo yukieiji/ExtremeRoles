@@ -6,9 +6,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -202,7 +200,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
         base.GetFullDescription(), this.stock,
         this.stockMax, this.curReloadCoolTime);
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateCommonAbilityOption(factory);
 

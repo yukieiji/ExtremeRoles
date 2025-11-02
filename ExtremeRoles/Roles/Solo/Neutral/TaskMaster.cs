@@ -4,7 +4,7 @@ using System.Linq;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -118,7 +118,7 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateBoolOption(
             TaskMasterOption.CanUseSabotage,

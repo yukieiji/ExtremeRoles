@@ -2,11 +2,11 @@ using UnityEngine;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 
@@ -101,7 +101,7 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 				ColorPalette.YandereVioletRed :
 				base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
 	{
 		var killOpt = factory.CreateBoolOption(
 			Option.CanKill, true);

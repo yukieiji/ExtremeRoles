@@ -8,13 +8,13 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
 using UnityHelper = ExtremeRoles.Helper.Unity;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 
@@ -273,7 +273,7 @@ public sealed class Mover :
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
 		CreateKillerOption(factory, imposterSetting);

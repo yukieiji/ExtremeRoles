@@ -6,14 +6,14 @@ using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factory;
+namespace ExtremeRoles.Module.CustomOption.Factory.Old;
 
-public sealed class AutoParentSetOptionCategoryFactory(
-	in OptionCategoryFactory factory,
+public sealed class OldAutoParentSetOptionCategoryFactory(
+	in OldOptionCategoryFactory factory,
 	in IOldOption? parent = null) : IDisposable
 {
 	private IOldOption? parent = parent;
-	private readonly OptionCategoryFactory internalFactory = factory;
+	private readonly OldOptionCategoryFactory internalFactory = factory;
 
 	public int IdOffset
 	{

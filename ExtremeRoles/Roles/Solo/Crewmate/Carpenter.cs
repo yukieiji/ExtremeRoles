@@ -16,10 +16,10 @@ using ExtremeRoles.Module.Ability.ModeSwitcher;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.Ability.AutoActivator;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -723,7 +723,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
             CarpenterOption.AwakeTaskGage,
@@ -752,7 +752,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         }
     }
 
-    private void createAbilityOption(AutoParentSetOptionCategoryFactory factory)
+    private void createAbilityOption(OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateFloatOption(
             RoleAbilityCommonOption.AbilityCoolTime,

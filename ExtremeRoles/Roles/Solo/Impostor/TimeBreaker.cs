@@ -2,10 +2,10 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -52,7 +52,7 @@ public sealed class TimeBreaker : SingleRoleBase, IRoleAutoBuildAbility
 		return true;
 	}
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
 	{
 		IRoleAbility.CreateAbilityCountOption(
 			factory, 2, 100);

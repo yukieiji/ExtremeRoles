@@ -10,13 +10,13 @@ using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 
@@ -314,7 +314,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 3, 5);

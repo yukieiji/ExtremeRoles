@@ -9,7 +9,6 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
@@ -18,6 +17,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 
@@ -317,7 +317,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		return true;
 	}
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateIntOption(
 			Option.AwakeTaskGage,
@@ -581,7 +581,7 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		}
 	}
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}
@@ -653,7 +653,7 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 		}
 	}
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}

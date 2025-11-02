@@ -1,5 +1,4 @@
-﻿
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
@@ -32,7 +31,7 @@ public readonly struct VitalDeviceOption : IDeviceOption
 		EnableLimit = device.EnableLimit;
 		LimitTime = device.LimitTime;
 	}
-	public static void Create(in OptionCategoryFactory factory)
+	public static void Create(in OldOptionCategoryFactory factory)
 	{
 		var removeOpt = IDeviceOption.Create(factory);
 

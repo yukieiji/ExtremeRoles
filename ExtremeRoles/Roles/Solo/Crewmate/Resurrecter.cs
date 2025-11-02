@@ -7,11 +7,11 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
@@ -357,7 +357,7 @@ public sealed class Resurrecter :
 
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
             ResurrecterOption.AwakeTaskGage,

@@ -13,8 +13,7 @@ using ExtremeRoles.Module.SystemType.Roles;
 
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.Ability;
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 
@@ -291,7 +290,7 @@ public sealed class DelusionerRole :
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
             DelusionerOption.AwakeVoteNum,

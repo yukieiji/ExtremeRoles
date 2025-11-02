@@ -9,7 +9,6 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -17,6 +16,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -592,7 +592,7 @@ public sealed class Guesser :
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
 		CreateKillerOption(factory, imposterSetting);

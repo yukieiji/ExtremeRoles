@@ -3,7 +3,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -146,7 +146,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
     {
         throw new System.Exception("Don't call this class method!!");
     }

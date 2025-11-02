@@ -5,7 +5,6 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module;
@@ -15,6 +14,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 
@@ -215,7 +215,7 @@ public sealed class ServantRole :
 	}
 
 	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+		OldAutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}

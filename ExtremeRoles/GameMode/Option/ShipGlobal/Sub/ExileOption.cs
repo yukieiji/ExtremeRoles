@@ -1,7 +1,7 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
@@ -24,7 +24,7 @@ public readonly struct ExileOption(in OptionCategory category)
 	public readonly ConfirmExileMode Mode = (ConfirmExileMode)category.GetValue<int>((int)ExiledOption.ConfirmExilMode);
 	public readonly bool IsConfirmRole = category.GetValue<bool>((int)ExiledOption.IsConfirmRole);
 
-	public static void Create(in OptionCategoryFactory factory)
+	public static void Create(in OldOptionCategoryFactory factory)
 	{
 		var hook = () =>
 		{

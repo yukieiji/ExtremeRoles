@@ -25,10 +25,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-
-using ExtremeRoles.Module.CustomOption.Factory;
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.OldAutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 #nullable enable
@@ -350,7 +348,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         return true;
     }
 
-    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(factory, 7, 20);
         factory.CreateFloatOption(

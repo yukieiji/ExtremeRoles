@@ -7,7 +7,6 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.ModeSwitcher;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
@@ -15,6 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using ButtonGraphic = ExtremeRoles.Module.Ability.Behavior.ButtonGraphic;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -328,7 +328,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateFloatOption(
             UmbrerOption.Range,

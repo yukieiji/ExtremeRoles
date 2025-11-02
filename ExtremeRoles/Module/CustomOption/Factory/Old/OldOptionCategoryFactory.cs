@@ -13,9 +13,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factory;
+namespace ExtremeRoles.Module.CustomOption.Factory.Old;
 
-public class OptionCategoryFactory(
+public class OldOptionCategoryFactory(
 	string name,
 	int groupId,
 	in Action<OptionTab, OptionCategory> action,

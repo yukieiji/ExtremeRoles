@@ -12,15 +12,15 @@ using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factory;
+namespace ExtremeRoles.Module.CustomOption.Factory.Old;
 
-public sealed class SequentialOptionCategoryFactory(
+public sealed class OldSequentialOptionCategoryFactory(
 	string name,
 	int groupId,
 	in Action<OptionTab, OptionCategory> action,
 	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) :
-	OptionCategoryFactory(name, groupId, action, tab, color)
+	OldOptionCategoryFactory(name, groupId, action, tab, color)
 {
 	public int StartId => 0;
 	public int EndId => this.Offset - 1;

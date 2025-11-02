@@ -2,13 +2,13 @@ using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 
@@ -131,7 +131,7 @@ public sealed class FurryRole : SingleRoleBase,
 		ExtremeRoleManager.SetNewRole(targetFurry, newJackal);
 	}
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateBoolOption(Option.UseVent, false);
 		var taskOpt = factory.CreateBoolOption(

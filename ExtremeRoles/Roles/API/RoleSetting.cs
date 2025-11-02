@@ -1,7 +1,5 @@
 using System;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 using ExtremeRoles.Roles.API.Interface;
@@ -57,7 +55,7 @@ public abstract class RoleOptionBase
 		this.CreateRoleSpecificOption(factory);
     }
     public void CreateRoleSpecificOption(
-        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
+        OldAutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
     {
         CreateVisionOption(factory, ignorePrefix);
 
@@ -68,19 +66,19 @@ public abstract class RoleOptionBase
 
         CreateSpecificOption(factory);
     }
-    protected abstract AutoParentSetOptionCategoryFactory CreateSpawnOption();
+    protected abstract OldAutoParentSetOptionCategoryFactory CreateSpawnOption();
 
     protected abstract void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory);
+        OldAutoParentSetOptionCategoryFactory factory);
     protected abstract void CreateVisionOption(
-        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true);
+        OldAutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true);
 
     protected abstract void CommonInit();
 
     protected abstract void RoleSpecificInit();
 
 	protected static void CreateKillerOption(
-		AutoParentSetOptionCategoryFactory factory,
+		OldAutoParentSetOptionCategoryFactory factory,
 		IOldOption parent = null,
 		bool ignorePrefix = true,
 		bool invert = false)

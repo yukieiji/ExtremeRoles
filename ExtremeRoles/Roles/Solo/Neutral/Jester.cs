@@ -7,9 +7,8 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Patches.Button;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -123,7 +122,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateFloatOption(
             JesterOption.OutburstDistance,

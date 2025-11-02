@@ -8,9 +8,8 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 
@@ -59,7 +58,7 @@ public sealed class Assassin : MultiAssignRoleBase
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateBoolOption(
             AssassinOption.HasTask,
@@ -272,7 +271,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
 
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateBoolOption(
             MarlinOption.HasTask,

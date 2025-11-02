@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -7,9 +7,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -91,7 +89,7 @@ public interface IRoleSelector
 		}
 	}
 
-    private static void createExtremeRoleRoleSpawnOption(OptionCategoryFactory factory)
+    private static void createExtremeRoleRoleSpawnOption(OldOptionCategoryFactory factory)
     {
 		factory.CreateIntOption(
 			RoleSpawnOption.MinCrewmate,

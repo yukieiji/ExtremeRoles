@@ -10,7 +10,6 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -18,6 +17,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 #nullable enable
@@ -258,7 +258,7 @@ public sealed class BarterRole :
 	}
 
 	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+		OldAutoParentSetOptionCategoryFactory factory)
 	{
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
 		CreateKillerOption(factory, imposterSetting);

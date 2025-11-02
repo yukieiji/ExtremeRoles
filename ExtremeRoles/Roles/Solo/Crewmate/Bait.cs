@@ -11,11 +11,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Extension.Il2Cpp;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -181,7 +177,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 	}
 
 	protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
 		factory.CreateIntOption(
 			Option.AwakeTaskGage,

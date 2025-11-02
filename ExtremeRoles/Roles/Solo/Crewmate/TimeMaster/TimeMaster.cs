@@ -6,10 +6,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using ExtremeRoles.Module.Ability;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 
@@ -157,7 +155,7 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateCommonAbilityOption(
             factory, 3.0f);

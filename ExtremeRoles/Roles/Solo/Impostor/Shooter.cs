@@ -11,9 +11,8 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using TMPro;
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -356,7 +355,7 @@ public sealed class Shooter :
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateBoolOption(
             ShooterOption.IsInitAwake,

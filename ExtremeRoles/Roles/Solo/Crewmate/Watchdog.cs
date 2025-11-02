@@ -8,9 +8,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -138,7 +136,7 @@ public sealed class Watchdog : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateCommonAbilityOption(
             factory, 3.0f);

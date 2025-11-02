@@ -9,10 +9,8 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -197,7 +195,7 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
             SurvivorOption.AwakeTaskGage,

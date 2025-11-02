@@ -6,8 +6,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 
@@ -163,7 +163,7 @@ public sealed class PsychoKiller :
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
             PsychoKillerOption.KillCoolReduceRate,

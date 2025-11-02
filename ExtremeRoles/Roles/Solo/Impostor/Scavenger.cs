@@ -16,7 +16,6 @@ using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -25,6 +24,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 #nullable enable
@@ -1348,7 +1348,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	}
 
 
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,

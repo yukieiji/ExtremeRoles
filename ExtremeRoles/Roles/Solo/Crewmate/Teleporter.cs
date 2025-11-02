@@ -18,11 +18,7 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -299,7 +295,7 @@ public sealed class Teleporter :
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateBoolOption(
             TeleporterOption.CanUseOtherPlayer,

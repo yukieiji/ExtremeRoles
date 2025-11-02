@@ -7,9 +7,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -126,7 +124,7 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility, ITryKillT
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateFloatOption(
             CommanderOption.KillCoolReduceTime,

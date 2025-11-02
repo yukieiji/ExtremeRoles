@@ -9,13 +9,13 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -101,7 +101,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 5, 2.5f);

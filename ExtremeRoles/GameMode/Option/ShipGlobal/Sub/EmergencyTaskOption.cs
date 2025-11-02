@@ -1,7 +1,7 @@
-﻿using Il2CppSystem;
+using Il2CppSystem;
 
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
@@ -109,7 +109,7 @@ public sealed class EmergencyTaskOption(in OptionCategory category)
 		}
 	}
 
-	public static void Create(in OptionCategoryFactory factory)
+	public static void Create(in OldOptionCategoryFactory factory)
 	{
 		factory.CreateIntOption(
 			EmergencyTaskTimeOption.SkeldReactor,

@@ -1,5 +1,4 @@
-﻿
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
@@ -28,7 +27,7 @@ public readonly struct SpawnOption(in OptionCategory cate)
 	public readonly bool IsAutoSelectRandom = cate.GetValue<bool>((int)RandomSpawnOption.IsAutoSelect);
 
 
-	public static void Create(in OptionCategoryFactory factory)
+	public static void Create(in OldOptionCategoryFactory factory)
 	{
 		var randomSpawnOpt = factory.CreateBoolOption(RandomSpawnOption.Enable, true);
 		factory.CreateBoolOption(RandomSpawnOption.Skeld, false, randomSpawnOpt, invert: true);

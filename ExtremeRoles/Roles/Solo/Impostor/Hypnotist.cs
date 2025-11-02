@@ -26,11 +26,9 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -565,7 +563,7 @@ public sealed class Hypnotist :
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
             HypnotistOption.AwakeCheckImpostorNum,
@@ -1324,7 +1322,7 @@ public sealed class Doll :
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         throw new Exception("Don't call this class method!!");
     }

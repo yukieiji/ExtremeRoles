@@ -10,11 +10,11 @@ using UnityEngine;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 #nullable enable
@@ -420,7 +420,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 	}
 
 	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+		OldAutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateFloatOption(
 			DetectiveOption.SearchRange,

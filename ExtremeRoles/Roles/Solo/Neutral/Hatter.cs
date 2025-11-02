@@ -5,7 +5,6 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Resources;
@@ -13,6 +12,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 #nullable enable
 
@@ -131,7 +131,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
 		factory.CreateBoolOption(
 		   HatterOption.CanRepairSabotage,

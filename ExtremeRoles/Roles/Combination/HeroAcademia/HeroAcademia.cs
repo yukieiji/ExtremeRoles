@@ -7,7 +7,6 @@ using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
@@ -19,6 +18,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.Combination.Avalon;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 
@@ -652,7 +652,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateCommonAbilityOption(
             factory, 5.0f);
@@ -821,7 +821,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateCommonAbilityOption(
             factory, 5.0f);
@@ -1019,7 +1019,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 10, 5.0f);

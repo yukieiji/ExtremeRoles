@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -13,6 +12,7 @@ using ExtremeRoles.Roles.API.Interface.Status;
 
 
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
@@ -110,7 +110,7 @@ public sealed class ExorcistRole :
 	}
 
 	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+		OldAutoParentSetOptionCategoryFactory factory)
 	{
 		factory.Create0To100Percentage10StepOption(Option.AwakeTaskGage);
 

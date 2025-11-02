@@ -6,12 +6,12 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Jackal;
@@ -162,7 +162,7 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 	}
 
 	protected override void CreateSpecificOption(
-		AutoParentSetOptionCategoryFactory factory)
+		OldAutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}

@@ -9,12 +9,12 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -285,7 +285,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        OldAutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 10);
