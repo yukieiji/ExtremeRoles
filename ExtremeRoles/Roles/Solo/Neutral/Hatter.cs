@@ -147,6 +147,8 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		factory.CreateBoolOption(
 			HatterOption.HideMeetingTimer, true);
 
+		// 後で直す
+		/*
 		var lowerOpt = factory.CreateIntDynamicOption(
 			HatterOption.MeetingTimerDecreaseLower,
 			0, 0, 5,
@@ -156,7 +158,9 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			HatterOption.MeetingTimerDecreaseUpper,
 			20, 0, 50, 5,
 			format: OptionUnit.Percentage);
+
 		upperOpt.AddWithUpdate(lowerOpt);
+		*/
 
 		factory.CreateIntOption(
 			HatterOption.IncreaseTaskGage,

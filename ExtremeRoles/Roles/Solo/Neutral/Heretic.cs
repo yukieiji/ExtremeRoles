@@ -298,12 +298,15 @@ public sealed class Heretic :
 		factory.Create0To100Percentage10StepOption(
 			Option.MeetingButtonTaskGage, taskOpt, defaultGage: 100);
 
-		var killModeOpt = factory.CreateSelectionOption(
-			Option.KillMode,
-			[
+		var killModeOpt = factory.CreateSelectionOption<Option, KillMode>(Option.KillMode);
+
+		/* 後で直す
+		 * [
 				KillMode.AbilityOnTaskPhase,
 				KillMode.AbilityOnTaskPhaseTarget
-			]);
+			]
+		 */
+
 		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
 			IRoleAbility.DefaultCoolTime,

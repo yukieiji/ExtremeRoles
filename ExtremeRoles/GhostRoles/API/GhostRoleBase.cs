@@ -211,19 +211,15 @@ public abstract class GhostRoleBase
             loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
         if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
-			loader.TryGetValueOption<RoleAbilityCommonOption, float>(
-                RoleAbilityCommonOption.AbilityActiveTime,
-				out var activeTimeOtion))
+			loader.TryGetValue(RoleAbilityCommonOption.AbilityActiveTime, out float activeTime))
         {
-			activatingBehavior.ActiveTime = activeTimeOtion.Value;
+			activatingBehavior.ActiveTime = activeTime;
         }
 
         if (this.Button.Behavior is ICountBehavior behavior &&
-			loader.TryGetValueOption<RoleAbilityCommonOption, int>(
-                RoleAbilityCommonOption.AbilityCount,
-                out var countOption))
+			loader.TryGetValue(RoleAbilityCommonOption.AbilityCount, out int count))
         {
-            behavior.SetAbilityCount(countOption.Value);
+            behavior.SetAbilityCount(count);
         }
         this.Button.OnMeetingEnd();
     }

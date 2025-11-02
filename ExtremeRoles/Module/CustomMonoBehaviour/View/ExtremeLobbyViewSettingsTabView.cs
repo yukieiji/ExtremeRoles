@@ -304,7 +304,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 						continue;
 					}
 
-					bool isActive = option.IsActiveAndEnable;
+					bool isActive = option.IsActive;
 
 					optionView.gameObject.SetActive(isActive);
 					if (!isActive)
@@ -312,7 +312,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 						continue;
 					}
 					++activeObjNum;
-					setInfo(optionView, option.Title, option.ValueString);
+					setInfo(optionView, option.TransedTitle, option.TransedValue);
 
 					// ジェネレラルタブ以外 = 役職周りで、最初のオプション = 役職のスポーンレート
 					if (tab is not OptionTab.GeneralTab &&

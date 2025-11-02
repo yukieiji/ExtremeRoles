@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
@@ -165,9 +166,10 @@ public interface IShipGlobalOption
 			factory.CreateBoolOption(TaskOption.ParallelMedBayScans, false);
 
 			var fixTaskOpt = factory.CreateBoolOption(TaskOption.IsFixWallHaskTask, false);
+			var fixTaskActive = new ParentActive(fixTaskOpt);
 			for (int i = (int)TaskOption.GarbageTask; i <= (int)TaskOption.DivertPowerTask; ++i)
 			{
-				factory.CreateBoolOption((TaskOption)i, false, parent: fixTaskOpt);
+				factory.CreateBoolOption((TaskOption)i, false, fixTaskActive);
 			}
 		}
 
@@ -198,7 +200,7 @@ public interface IShipGlobalOption
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.TaskWinOption))
 		{
 			var taskDisableOpt = factory.CreateBoolOption(TaskWinOption.DisableWhenNoneTaskCrew, false);
-			factory.CreateBoolOption(TaskWinOption.DisableAll, false, taskDisableOpt);
+			factory.CreateBoolOption(TaskWinOption.DisableAll, false,　new DefaultParentActive(taskDisableOpt));
 		}
 
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.NeutralWinOption))

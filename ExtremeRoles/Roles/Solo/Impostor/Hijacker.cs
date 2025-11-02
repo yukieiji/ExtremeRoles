@@ -55,9 +55,9 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 			ExtremeRoleId.Hijacker);
 		string name = Tr.GetString("hijackerHijack");
 
-		BehaviorBase beha = this.Loader.TryGetValueOption<Option, bool>(
-			Option.IsRandomPlayer, out var opt) &&
-			opt.Value ?
+		BehaviorBase beha = this.Loader.TryGetValue(
+			Option.IsRandomPlayer, out bool isRandom) &&
+			isRandom ?
 				new ReclickCountBehavior(
 					name, img,
 					IsAbilityUse,

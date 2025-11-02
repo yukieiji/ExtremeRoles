@@ -8,10 +8,10 @@ public interface IInfoOverlayPanelModel
 	public void UpdateVisual();
 	public (string, string) GetInfoText();
 
-	protected static string ToHudStringWithChildren(IOldOption option, int indent = 0)
+	protected static string ToHudStringWithChildren(IOption option, int indent = 0)
 	{
 		var builder = new StringBuilder();
-		if (!option.Info.IsHidden && option.IsActiveAndEnable)
+		if (!option.Info.IsHidden && option.IsActive)
 		{
 			builder.AppendLine(toHudString(option));
 		}
@@ -22,9 +22,11 @@ public interface IInfoOverlayPanelModel
 
 	private static void addChildrenOptionHudString(
 		in StringBuilder builder,
-		IOldOption parentOption,
+		IOption parentOption,
 		int prefixIndentCount)
 	{
+		// 後で治します
+		/*
 		foreach (var child in parentOption.Relation.Children)
 		{
 			if (!child.Info.IsHidden && child.IsActiveAndEnable)
@@ -35,8 +37,9 @@ public interface IInfoOverlayPanelModel
 
 			addChildrenOptionHudString(in builder, child, prefixIndentCount + 1);
 		}
+		*/
 	}
 
-	private static string toHudString(in IOldOption option)
-		=> $"{option.Title}: {option.ValueString}";
+	private static string toHudString(in IOption option)
+		=> $"{option.TransedTitle}: {option.TransedValue}";
 }

@@ -314,10 +314,9 @@ public sealed class Guesser :
 
                     if (multiAssign)
                     {
-                        if (loader.TryGetValueOption<CombinationRoleCommonOption, bool>(
+                        if (loader.TryGetValue(
 								CombinationRoleCommonOption.IsAssignImposter,
-                                out var option) &&
-                            option.Value)
+                                out bool isImp) && isImp)
                         {
                             listAddTargetTeam(
                                 baseRoleId,

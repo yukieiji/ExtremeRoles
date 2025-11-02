@@ -97,8 +97,8 @@ public static class CustomOptionCsvProcessor
 						csv.WriteLine(
 							string.Format("{1}{0}{2}{0}{3}{0}{4}",
 								comma,
-								cleaner.Clean(option.Title),
-								cleaner.Clean(option.ValueString),
+								cleaner.Clean(option.TransedTitle),
+								cleaner.Clean(option.TransedValue),
 								cleaner.Clean(info.Name),
 								option.Selection));
 					}

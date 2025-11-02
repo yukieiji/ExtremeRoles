@@ -238,8 +238,8 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
 		var img = UnityObjectLoader.LoadFromResources(ExtremeRoleId.Raider);
 		string name = Tr.GetString("OpenBombUI");
-		if (this.Loader.TryGetValueOption<Option, bool>(Option.IsOpenLimit, out var opt) &&
-			opt.Value)
+		if (this.Loader.TryGetValue(Option.IsOpenLimit, out bool isOpenLimit) &&
+			isOpenLimit)
 		{
 			this.CreateAbilityCountButton(name, img, null, forceAbilityOff);
 		}
@@ -317,16 +317,16 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
 		var cate = this.Loader;
 
-		if (!cate.TryGetValueOption<RoleAbilityCommonOption, int>(
+		if (!cate.TryGetValue(
 				RoleAbilityCommonOption.AbilityActiveTime,
-				out var activeTimeOption))
+				out int activeTime))
 		{
 			return;
 		}
 
 		this.param = new UiParameter(
 			cate.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount),
-			activeTimeOption.Value,
+			activeTime,
 			cate.GetValue<Option, bool>(Option.IsHidePlayerOnOpen) ? PlayerShowSystem.Get() : null);
 		var _ = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.RaiderBomb,
@@ -350,21 +350,16 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			cate.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
 		if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
-			cate.TryGetValueOption<RoleAbilityCommonOption, float>(
-				RoleAbilityCommonOption.AbilityActiveTime,
-				out var activeTimeOption))
+			cate.TryGetValue(RoleAbilityCommonOption.AbilityActiveTime, out float activeTime))
 		{
-			activatingBehavior.ActiveTime = activeTimeOption.Value;
+			activatingBehavior.ActiveTime = activeTime;
 		}
 
-		if (cate.TryGetValueOption<Option, bool>(Option.IsOpenLimit, out var limitOpt) &&
-			limitOpt.Value &&
+		if (cate.TryGetValue(Option.IsOpenLimit, out bool islimit) && islimit &&
 			this.Button.Behavior is ICountBehavior countBehavior &&
-			cate.TryGetValueOption<Option, int>(
-				Option.LimitNum,
-				out var countOption))
+			cate.TryGetValue(Option.LimitNum, out int count))
 		{
-			countBehavior.SetAbilityCount(countOption.Value);
+			countBehavior.SetAbilityCount(count);
 		}
 
 		this.Button.OnMeetingEnd();

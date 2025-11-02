@@ -1,4 +1,5 @@
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
@@ -17,16 +18,16 @@ public interface IDeviceOption
 	public bool EnableLimit { get; }
 	public float LimitTime { get; }
 
-	public static IOldOption Create(in OptionCategoryFactory factory)
+	public static IOption Create(in OptionCategoryFactory factory)
 	{
 		var removeOpt = factory.CreateBoolOption(DeviceOptionType.IsRemove, false);
 		var enableLimit = factory.CreateBoolOption(
 			DeviceOptionType.EnableLimit, false,
-			removeOpt, invert: true);
+			new InvertActive(removeOpt));
 		factory.CreateFloatOption(
 			DeviceOptionType.LimitTime,
 			30.0f, 5.0f, 120.0f, 0.5f,
-			enableLimit,
+			new ParentActive(enableLimit),
 			format: OptionUnit.Second);
 
 		return removeOpt;

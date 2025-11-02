@@ -101,11 +101,11 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		var cate = this.Loader;
 		bool isMultiAssign = cate.GetValue<CombinationRoleCommonOption, bool>(
 			CombinationRoleCommonOption.IsMultiAssign);
-		bool isImposterAssign = cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
+		bool isImposterAssign = cate.TryGetValue(
 			CombinationRoleCommonOption.IsAssignImposter,
-			out var impOpt);
-		bool isRatioAssign = cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
-			CombinationRoleCommonOption.IsRatioTeamAssign, out var ratioOpt) && ratioOpt.Value;
+			out bool isEvil);
+		bool isRatioAssign = cate.TryGetValue(
+			CombinationRoleCommonOption.IsRatioTeamAssign, out bool isRatioOn) && isRatioOn;
 
 		foreach (var role in this.Roles)
         {
@@ -115,8 +115,6 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 				role.Initialize();
 				continue;
 			}
-
-            bool isEvil = impOpt.Value;
 
             int spawnOption = cate.GetValue<CombinationRoleCommonOption, int>(
                 CombinationRoleCommonOption.ImposterSelectedRate);
@@ -190,7 +188,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			ignorePrefix: true,
 			isHidden: this.RoleType is CombinationRoleType.Traitor);
 
-		roleAssignNumOption.AddWithUpdate(roleSetNumOption);
+		// 後で直す roleAssignNumOption.AddWithUpdate(roleSetNumOption);
 
 		factory.CreateIntOption(RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1, ignorePrefix: true);
@@ -232,23 +230,19 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     protected override void CommonInit()
     {
         this.Roles.Clear();
-        int roleAssignNum = 1;
 
 		var cate = this.Loader;
 
         this.BaseRole.CanHasAnotherRole = cate.GetValue<CombinationRoleCommonOption, bool>(
 			CombinationRoleCommonOption.IsMultiAssign);
 
-		if (cate.TryGetValueOption<CombinationRoleCommonOption, int>(
-				CombinationRoleCommonOption.AssignsNum,
-                out var opt))
+		if (!cate.TryGetValue(CombinationRoleCommonOption.AssignsNum, out int roleAssignNum))
         {
-            roleAssignNum = opt.Value;
-        }
+			roleAssignNum = 1;
+		}
 
-		if (cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
-				CombinationRoleCommonOption.IsRatioTeamAssign, out var enableRatioOpt) &&
-			enableRatioOpt.Value)
+		if (cate.TryGetValue(CombinationRoleCommonOption.IsRatioTeamAssign, out bool enableRatio) &&
+			enableRatio)
 		{
 			int selection = cate.GetValue<CombinationRoleCommonOption, int>(
 				CombinationRoleCommonOption.AssignRatio);

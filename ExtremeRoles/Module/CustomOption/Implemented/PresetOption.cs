@@ -81,7 +81,7 @@ public sealed class PresetOption : IOption
 			categoryId, name, color: OptionCreator.DefaultOptionColor))
 		{
 			var presetOption = new PresetOption(name);
-			// commonOptionFactory.AddOption(optionId, presetOption);
+			commonOptionFactory.AddOption(optionId, presetOption);
 		}
 	}
 
@@ -101,7 +101,7 @@ public sealed class PresetOption : IOption
 	{
 	}
 
-	public T GetValue<T>() where T : struct, IComparable, IConvertible, IComparable<T>, IEquatable<T>
+	public T Value<T>() where T : struct, IComparable, IConvertible, IComparable<T>, IEquatable<T>
 	{
 		throw new NotImplementedException();
 	}

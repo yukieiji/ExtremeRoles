@@ -101,7 +101,7 @@ public sealed class CustomOption : IOption
 		Selection = this.config.Value;
 	}
 
-	public T GetValue<T>() where T :
+	public T Value<T>() where T :
 		struct, IComparable, IConvertible,
 		IComparable<T>, IEquatable<T>
 	{

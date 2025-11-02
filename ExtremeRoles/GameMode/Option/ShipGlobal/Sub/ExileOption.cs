@@ -1,10 +1,17 @@
-using AmongUs.GameOptions;
-
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
+
+public sealed class ExiledCheckOptionActive : IOptionActivator
+{
+	public IOption Parent { get; } = null;
+
+	public bool IsActive => 
+		GameOptionsManager.Instance.CurrentGameOptions.IsTryCast<NormalGameOption>(out var normal) &&
+		normal.ConfirmImpostor;
+}
 
 public enum ExiledOption : int
 {
@@ -27,14 +34,8 @@ public readonly struct ExileOption(in OptionCategory category)
 
 	public static void Create(in OptionCategoryFactory factory)
 	{
-		var hook = () =>
-		{
-			var currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
-			return
-				currentGameOptions.IsTryCast<NormalGameOption>(out var normal) &&
-				normal.ConfirmImpostor;
-		};
-		factory.CreateSelectionOption<ExiledOption, ConfirmExileMode>(ExiledOption.ConfirmExilMode, hook: hook);
-		factory.CreateBoolOption(ExiledOption.IsConfirmRole, false, hook: hook);
+		var exileOptionActive = new ExiledCheckOptionActive();
+		factory.CreateSelectionOption<ExiledOption, ConfirmExileMode>(ExiledOption.ConfirmExilMode, exileOptionActive);
+		factory.CreateBoolOption(ExiledOption.IsConfirmRole, false, exileOptionActive);
 	}
 }

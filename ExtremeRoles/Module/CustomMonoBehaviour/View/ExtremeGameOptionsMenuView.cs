@@ -365,7 +365,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 					continue;
 				}
 
-				bool isActive = option.IsActiveAndEnable;
+				bool isActive = option.IsActive;
 
 				optionObj.gameObject.SetActive(isActive);
 				if (!isActive)

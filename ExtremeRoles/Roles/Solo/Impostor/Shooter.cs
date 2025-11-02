@@ -393,13 +393,15 @@ public sealed class Shooter :
         var initShootOps = factory.CreateIntDynamicOption(
             ShooterOption.InitShootNum,
             0, 0, 1,
-            format: OptionUnit.Shot,
+			maxShootOps,
+			format: OptionUnit.Shot,
             tempMaxValue: 14);
 
         var maxMeetingShootOps = factory.CreateIntDynamicOption(
             ShooterOption.MaxMeetingShootNum,
             1, 1, 1,
-            format: OptionUnit.Shot,
+			maxShootOps,
+			format: OptionUnit.Shot,
             tempMaxValue: 14);
 
         factory.CreateFloatOption(
@@ -410,10 +412,6 @@ public sealed class Shooter :
             ShooterOption.ShootKillNum,
             1, 0, 5, 1,
             format: OptionUnit.Shot);
-
-        maxShootOps.AddWithUpdate(initShootOps);
-        maxShootOps.AddWithUpdate(maxMeetingShootOps);
-
     }
 
     protected override void RoleSpecificInit()

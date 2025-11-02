@@ -17,7 +17,7 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 			this.showActiveOnly = value;
 		}
 	}
-	protected readonly record struct RoleInfo(string RoleName, string FullDec, IOldOption Option);
+	protected readonly record struct RoleInfo(string RoleName, string FullDec, IOption Option);
 
 	public int PageNum => this.curTarget.Count;
 
@@ -105,7 +105,7 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 		foreach (var info in this.allPage)
 		{
 			var opt = info.Option;
-			if (opt.IsEnable && !opt.Info.IsHidden)
+			if (opt.IsActive && !opt.Info.IsHidden)
 			{
 				this.curSettedRole.Add(info);
 			}

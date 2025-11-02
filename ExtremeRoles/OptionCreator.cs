@@ -62,8 +62,7 @@ public static class OptionCreator
 					"Xorshiro512StarStar",
 					"RomuMono", "RomuTrio", "RomuQuad",
 					"Seiran128", "Shioi128", "JFT32",
-				],
-				strongGen, invert: true);
+				], new InvertActive(strongGen));
 		}
 
         IRoleSelector.CreateRoleGlobalOption();

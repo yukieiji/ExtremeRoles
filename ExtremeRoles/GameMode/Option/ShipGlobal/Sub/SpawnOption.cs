@@ -1,4 +1,5 @@
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
@@ -31,12 +32,13 @@ public readonly struct SpawnOption(in OptionCategory cate)
 	public static void Create(in OptionCategoryFactory factory)
 	{
 		var randomSpawnOpt = factory.CreateBoolOption(RandomSpawnOption.Enable, true);
-		factory.CreateBoolOption(RandomSpawnOption.Skeld, false, randomSpawnOpt, invert: true);
-		factory.CreateBoolOption(RandomSpawnOption.MiraHq, false, randomSpawnOpt, invert: true);
-		factory.CreateBoolOption(RandomSpawnOption.Polus, false, randomSpawnOpt, invert: true);
-		factory.CreateBoolOption(RandomSpawnOption.AirShip, true, randomSpawnOpt, invert: true);
-		factory.CreateBoolOption(RandomSpawnOption.Fungle, false, randomSpawnOpt, invert: true);
+		var invertActive = new InvertActive(randomSpawnOpt);
+		factory.CreateBoolOption(RandomSpawnOption.Skeld, false, invertActive);
+		factory.CreateBoolOption(RandomSpawnOption.MiraHq, false, invertActive);
+		factory.CreateBoolOption(RandomSpawnOption.Polus, false, invertActive);
+		factory.CreateBoolOption(RandomSpawnOption.AirShip, true, invertActive);
+		factory.CreateBoolOption(RandomSpawnOption.Fungle, false, invertActive);
 
-		factory.CreateBoolOption(RandomSpawnOption.IsAutoSelect, false, randomSpawnOpt, invert: true);
+		factory.CreateBoolOption(RandomSpawnOption.IsAutoSelect, false, invertActive);
 	}
 }

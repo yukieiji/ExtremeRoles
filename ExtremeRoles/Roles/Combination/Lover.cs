@@ -248,10 +248,12 @@ public sealed class Lover : MultiAssignRoleBase
             LoverOption.BecomNeutral,
             false, neutralSetting);
 
-        var deathSetting = factory.CreateIntDynamicOption(
+		var target = factory.Get((int)CombinationRoleCommonOption.AssignsNum);
+
+		var deathSetting = factory.CreateIntDynamicOption(
             LoverOption.DethWhenUnderAlive,
-            1, 1, 1,
-            tempMaxValue: GameSystem.VanillaMaxPlayerNum - 1);
+			1, 1, 1, target,
+			tempMaxValue: GameSystem.VanillaMaxPlayerNum - 1);
 
         CreateKillerOption(factory, killerSetting);
         killerVisionSetting(factory, killerSetting);
@@ -259,9 +261,6 @@ public sealed class Lover : MultiAssignRoleBase
         factory.CreateBoolOption(
             LoverOption.BecomeNeutralLoverCanUseVent,
             false, killerSetting);
-
-		factory.Get<int>((int)CombinationRoleCommonOption.AssignsNum)
-			.AddWithUpdate(deathSetting);
     }
 
     protected override void RoleSpecificInit()
@@ -334,7 +333,7 @@ public sealed class Lover : MultiAssignRoleBase
 
     private void killerVisionSetting(
 		AutoParentSetOptionCategoryFactory factory,
-		IOldOption killerOpt)
+		IOption killerOpt)
     {
         var visionOption = factory.CreateBoolOption(
             LoverOption.BecomeNeutralLoverHasOtherVision,

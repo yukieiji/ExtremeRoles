@@ -98,7 +98,7 @@ public class OptionCategoryFactory(
 		checkValueOption.OnValueChanged += (x) => {
 
 			int prevSelection = floatRange.Selection;
-			float newMax = checkValueOption.GetValue<float>();
+			float newMax = checkValueOption.Value<float>();
 			floatRange.InnerRange = OptionRange<float>.Create(min, newMax, step);
 			floatRange.Selection = prevSelection;
 		};
@@ -148,7 +148,7 @@ public class OptionCategoryFactory(
 		checkValueOption.OnValueChanged += (x) => {
 
 			int prevSelection = intRange.Selection;
-			int newMax = checkValueOption.GetValue<int>();
+			int newMax = checkValueOption.Value<int>();
 			intRange.InnerRange = OptionRange<int>.Create(min, newMax, step);
 			intRange.Selection = prevSelection;
 

@@ -40,19 +40,19 @@ public interface IRoleAbility : IRoleResetMeeting
 			cate.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
 		if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
-			cate.TryGetValueOption<RoleAbilityCommonOption, float>(
+			cate.TryGetValue(
 				RoleAbilityCommonOption.AbilityActiveTime,
-				out var activeTimeOption))
+				out float activeTime))
 		{
-			activatingBehavior.ActiveTime = activeTimeOption.Value;
+			activatingBehavior.ActiveTime = activeTime;
 		}
 
 		if (this.Button.Behavior is ICountBehavior countBehavior &&
-			cate.TryGetValueOption<RoleAbilityCommonOption, int>(
+			cate.TryGetValue(
 				RoleAbilityCommonOption.AbilityCount,
-				out var countOption))
+				out int count))
 		{
-			countBehavior.SetAbilityCount(countOption.Value);
+			countBehavior.SetAbilityCount(count);
 		}
 
 		this.Button.OnMeetingEnd();
@@ -126,7 +126,7 @@ public interface IRoleAbility : IRoleResetMeeting
 	public static void CreateCommonAbilityOption(
 		AutoParentSetOptionCategoryFactory factory,
 		float defaultActiveTime = float.MaxValue,
-		IOldOption parentOpt = null)
+		IOption parentOpt = null)
 	{
 		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
@@ -153,7 +153,7 @@ public interface IRoleAbility : IRoleResetMeeting
 		int maxAbilityCount,
 		float defaultActiveTime = float.MaxValue,
 		int minAbilityCount = 1,
-		IOldOption parentOpt = null)
+		IOption parentOpt = null)
 	{
 		CreateCommonAbilityOption(
 			factory,

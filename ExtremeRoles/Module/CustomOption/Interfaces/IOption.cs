@@ -21,7 +21,7 @@ public interface IOption
 
 	public void SwitchPreset();
 
-	public T GetValue<T>() where T :
+	public T Value<T>() where T :
 		struct, IComparable, IConvertible,
 		IComparable<T>, IEquatable<T>;
 }

@@ -26,8 +26,7 @@ public static class KeyboardJoystickPatch
 				OptionTab.GeneralTab,
 				ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 				out var cate) &&
-			cate.TryGetValueOption<XionOption, bool>(XionOption.UseXion, out var opt) &&
-			opt.Value &&
+			cate.TryGetValue(XionOption.UseXion, out bool xionEnable) && xionEnable &&
             !ExtremeRolesPlugin.DebugMode.Value)
         {
             Roles.Solo.Host.Xion.SpecialKeyShortCut();

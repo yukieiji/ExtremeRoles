@@ -19,7 +19,7 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 	private TextMeshPro? valueText;
 
 	[HideFromIl2Cpp]
-	public IOldOption? OptionModel { private get; set; }
+	public IOption? OptionModel { private get; set; }
 
 	[HideFromIl2Cpp]
 	public OptionCategory? OptionCategoryModel { private get; set; }
@@ -106,11 +106,11 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 
 		if (this.titleText != null)
 		{
-			this.titleText.text = this.OptionModel.Title;
+			this.titleText.text = this.OptionModel.TransedTitle;
 		}
 		if (this.valueText != null)
 		{
-			this.valueText.text = this.OptionModel.ValueString;
+			this.valueText.text = this.OptionModel.TransedValue;
 		}
 	}
 

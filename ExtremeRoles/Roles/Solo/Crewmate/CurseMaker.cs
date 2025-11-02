@@ -329,6 +329,7 @@ public sealed class CurseMaker :
             format: OptionUnit.Percentage,
             invert: true);
 
+		/* 後で直す
         var reduceTimeOpt = factory.CreateFloatDynamicOption(
             CurseMakerOption.ReduceSearchDeadBodyTime,
             30f, 0.5f, 0.5f, taskBoostOpt,
@@ -337,6 +338,7 @@ public sealed class CurseMaker :
             tempMaxValue: 120.0f);
 
         searchTimeOpt.AddWithUpdate(reduceTimeOpt);
+		*/
     }
 
     protected override void RoleSpecificInit()
