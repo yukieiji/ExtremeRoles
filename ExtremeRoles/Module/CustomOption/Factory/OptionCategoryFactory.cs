@@ -1,15 +1,14 @@
-using ExtremeRoles.GhostRoles.Neutal;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Module.CustomOption.Implemented.Old;
-using ExtremeRoles.Module.CustomOption.Implemented.Value;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using Rewired.Utils.Platforms.Windows;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+
 using UnityEngine;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Implemented.Value;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 using ExROption = ExtremeRoles.Module.CustomOption.Implemented.CustomOption;
 
@@ -54,7 +53,7 @@ public class OptionCategoryFactory(
 		string name = GetOptionName(option, ignorePrefix);
 		var boolRange = new BoolOptionValue(defaultValue);
 
-		return createOption(optionId, name, format, isHidden, boolRange, activator);
+		return CreateOption(optionId, name, format, isHidden, boolRange, activator);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -73,7 +72,7 @@ public class OptionCategoryFactory(
 
 		var floatRange = new FloatOptionValue(defaultValue, min, max, step);
 
-		return createOption(optionId, name, format, isHidden, floatRange, activator);
+		return CreateOption(optionId, name, format, isHidden, floatRange, activator);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -88,13 +87,13 @@ public class OptionCategoryFactory(
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		float max = CreateMaxValue(min, step, defaultValue, tempMaxValue);
-		var floatRange = new FloatOptionValue(defaultValue, min, max, step);
-
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		var opt = createOption(optionId, name, format, isHidden, floatRange, activator);
+		float max = CreateMaxValue(min, step, defaultValue, tempMaxValue);
+		var floatRange = new FloatOptionValue(defaultValue, min, max, step);
+
+		var opt = CreateOption(optionId, name, format, isHidden, floatRange, activator);
 
 		checkValueOption.OnValueChanged += (x) => {
 
@@ -102,7 +101,6 @@ public class OptionCategoryFactory(
 			float newMax = checkValueOption.GetValue<float>();
 			floatRange.InnerRange = OptionRange<float>.Create(min, newMax, step);
 			floatRange.Selection = prevSelection;
-
 		};
 
 		return opt;
@@ -122,9 +120,9 @@ public class OptionCategoryFactory(
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		var floatRange = new FloatOptionValue(defaultValue, min, max, step);
+		var intRange = new IntOptionValue(defaultValue, min, max, step);
 
-		return createOption(optionId, name, format, isHidden, floatRange, activator);
+		return CreateOption(optionId, name, format, isHidden, intRange, activator);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -139,13 +137,13 @@ public class OptionCategoryFactory(
 		int tempMaxValue = 0,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		int max = CreateMaxValue(min, step, defaultValue, tempMaxValue);
-		var intRange = new IntOptionValue(defaultValue, min, max, step);
-
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		var opt = createOption(optionId, name, format, isHidden, intRange, activator);
+		int max = CreateMaxValue(min, step, defaultValue, tempMaxValue);
+		var intRange = new IntOptionValue(defaultValue, min, max, step);
+
+		var opt = CreateOption(optionId, name, format, isHidden, intRange, activator);
 
 		checkValueOption.OnValueChanged += (x) => {
 
@@ -172,7 +170,7 @@ public class OptionCategoryFactory(
 
 		var selection = new SelectionOptionValue(selections);
 
-		return createOption(optionId, name, format, isHidden, selection, activator);
+		return CreateOption(optionId, name, format, isHidden, selection, activator);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -190,7 +188,7 @@ public class OptionCategoryFactory(
 
 		var selection = SelectionOptionValue.CreateFromEnum<W>();
 
-		return createOption(optionId, name, format, isHidden, selection, activator);
+		return CreateOption(optionId, name, format, isHidden, selection, activator);
 	}
 
 	public void AddOption(int id, IOption option)
@@ -246,16 +244,16 @@ public class OptionCategoryFactory(
 		this.registerOption(Tab, newGroup);
 	}
 
-	private static int CreateMaxValue(int min, int step, int defaultValue, int tempMaxValue)
+	protected static int CreateMaxValue(int min, int step, int defaultValue, int tempMaxValue)
 		=> tempMaxValue == 0 ?
 			min + step < defaultValue ? defaultValue : min + step :
 			tempMaxValue;
-	private static float CreateMaxValue(float min, float step, float defaultValue, float tempMaxValue)
+	protected static float CreateMaxValue(float min, float step, float defaultValue, float tempMaxValue)
 		=> tempMaxValue == 0.0f ?
 			min + step < defaultValue ? defaultValue : min + step :
 			tempMaxValue;
 
-	private IOption createOption(
+	protected IOption CreateOption(
 		int id,
 		string name,
 		OptionUnit format,
