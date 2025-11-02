@@ -1,8 +1,7 @@
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Text;
-
-using ExtremeRoles.Module.CustomOption.OLDS;
 
 using ExtremeRoles.Module.CustomOption.Implemented.Value;
 using ExtremeRoles.Module.CustomOption.Interfaces;
@@ -104,6 +103,11 @@ public sealed class PresetOption : IOption
 
 	public T Value<T>() where T : struct, IComparable, IConvertible, IComparable<T>, IEquatable<T>
 	{
-		throw new NotImplementedException();
+		if (typeof(T) == typeof(int))
+		{
+			int val = this.Selection;
+			return Unsafe.As<int, T>(ref val);
+		}
+		throw new InvalidCastException($"Cannot cast PresetOption value to {typeof(T)}");
 	}
 }
