@@ -18,6 +18,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -373,10 +374,12 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 			KillerCommonOption.HasOtherKillRange,
 			false, lowBreakerKillOpt,
 			invert: true);
+
+		var rangeOptActive = new ParentActive(killRangeOption);
 		factory.CreateSelectionOption(
 			KillerCommonOption.KillRange,
 			OptionCreator.Range,
-			killRangeOption);
+			rangeOptActive);
 
 		factory.CreateBoolOption(
 		   Option.LawbreakerUseVent,

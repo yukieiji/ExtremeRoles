@@ -1,18 +1,18 @@
-using System;
-using System.Collections.Generic;
-
-using UnityEngine;
 using AmongUs.GameOptions;
-
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
 
 #nullable enable
 
@@ -106,10 +106,10 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 			var killRangeOption = factory.CreateBoolOption(
 				JackalOption.SidekickHasOtherKillRange,
 				false, sidekickKillerOps);
+			var rangeOptActive = new ParentActive(killRangeOption);
 			factory.CreateSelectionOption(
 				JackalOption.SidekickKillRange,
-				OptionCreator.Range,
-				killRangeOption);
+				OptionCreator.Range, rangeOptActive);
 
 			var visionOption = factory.CreateBoolOption(
 				JackalOption.SidekickHasOtherVision, false);

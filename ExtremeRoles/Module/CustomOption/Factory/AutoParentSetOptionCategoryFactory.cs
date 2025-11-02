@@ -69,18 +69,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool ignorePrefix = false) where T : struct, IConvertible
 		=> CreateNewIntOption(option, defaultValue, min, max, step, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
 
-
-	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
-	public IOption CreateSelectionOption<T>(
-		T option,
-		string[] selections,
-		IOption? parent = null,
-		bool isHidden = false,
-		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		bool ignorePrefix = false) where T : struct, IConvertible
-		=> CreateNewSelectionOption(option, selections, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
-
 	public IOption CreateNewBoolOption<T>(
 		T option,
 		bool defaultValue,
@@ -212,7 +200,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		return newOption;
 	}
 
-	public IOption CreateNewSelectionOption<T>(
+	public IOption CreateSelectionOption<T>(
 		T option,
 		string[] selections,
 		IOptionActivator? activator = null,

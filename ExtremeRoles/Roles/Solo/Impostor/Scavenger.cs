@@ -25,6 +25,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 using UnityObject = UnityEngine.Object;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 #nullable enable
@@ -1369,13 +1370,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Option.AllowAdvancedWeapon,
 			false, randomWepon);
 
-		factory.CreateSelectionOption(
+		factory.CreateSelectionOption<Option, Ability>(
 			Option.InitAbility,
-			Enum.GetValues<Ability>()
-				.Select(x => x.ToString())
-				.ToArray(),
-			randomWepon,
-			invert: true);
+			new InvertActive(randomWepon));
 
 		var mapSetOps = factory.CreateBoolOption(
 			Option.IsSetWeapon, true);

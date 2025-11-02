@@ -349,7 +349,7 @@ public sealed class Miner :
 			false);
 
 		var showOptActive = new ParentActive(showOpt);
-		factory.CreateNewSelectionOption(
+		factory.CreateSelectionOption(
 			MinerOption.RolePlayerShowMode,
 			[
 				ShowMode.MineSeeOnlySe.ToString(),

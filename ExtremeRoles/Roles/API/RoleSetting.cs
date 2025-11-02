@@ -1,5 +1,6 @@
 using System;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -98,10 +99,11 @@ public abstract class RoleOptionBase
 			false, parent,
 			ignorePrefix: ignorePrefix,
 			invert: invert);
+		var killerOptActive = new ParentActive(killRangeOption);
 		factory.CreateSelectionOption(
 			KillerCommonOption.KillRange,
 			OptionCreator.Range,
-			killRangeOption,
+			killerOptActive,
 			ignorePrefix: ignorePrefix);
 	}
 
