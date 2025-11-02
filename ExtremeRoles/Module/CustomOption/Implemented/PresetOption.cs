@@ -7,7 +7,6 @@ using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.CustomOption.Implemented.Value;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomOption.Implemented;
@@ -66,6 +65,11 @@ public sealed class PresetOption : IOption
 
 		this.activator = new AlwaysActive();
 		this.Selection = 0;
+
+		this.OnValueChanged += (x) =>
+		{
+			OptionManager.Instance.SwitchPreset();
+		};
 
 		ExtremeRolesPlugin.Logger.LogInfo($"---- Create new Option ----\n{this}\n--------");
 	}
