@@ -4,6 +4,7 @@ using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.RoleAssign;
 
+
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomOption.Factory;
@@ -32,6 +33,76 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 	public IOption Get(int id)
 		=> this.internalFactory.Get(id);
+
+	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
+	public IOption CreateBoolOption<T>(
+		T option,
+		bool defaultValue,
+		IOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false) where T : struct, IConvertible
+		=> CreateBoolOption(option, defaultValue, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
+	
+	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
+	public IOption CreateFloatOption<T>(
+		T option,
+		float defaultValue,
+		float min, float max, float step,
+		IOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false) where T : struct, IConvertible
+		=> CreateFloatOption<T>(option, defaultValue, min, max, step, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
+
+	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
+	public IOption CreateIntOption<T>(
+		T option,
+		int defaultValue,
+		int min, int max, int step,
+		IOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false) where T : struct, IConvertible
+		=> CreateIntOption(option, defaultValue, min, max, step, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
+
+
+	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
+	public IOption CreateSelectionOption<T>(
+		T option,
+		string[] selections,
+		IOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false) where T : struct, IConvertible
+		=> CreateSelectionOption(option, selections, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
+
+	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
+	public IOption CreateSelectionOption<T, W>(
+		T option,
+		IOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false)
+		where T : struct, IConvertible
+		where W : struct, Enum
+		=> CreateSelectionOption<T, W>(option, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
+
+	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
+	public IOption Create0To100Percentage10StepOption<T>(
+		T option,
+		IOption? parent = null,
+		bool isHidden = false,
+		bool invert = false,
+		bool ignorePrefix = false,
+		int defaultGage = 0)
+		where T : struct, IConvertible
+		=> Create0To100Percentage10StepOption(option, OptionActivatorFactory.Create(parent, invert), isHidden, ignorePrefix, defaultGage);
 
 	public IOption CreateBoolOption<T>(
 		T option,
