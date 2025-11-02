@@ -19,18 +19,14 @@ public sealed class AlwaysActive : IOptionActivator
 public sealed class ParentActive(IOption parent) : IOptionActivator
 {
 	public IOption Parent { get; } = parent;
-	public bool IsActive => 
-		this.Parent.Selection != this.Parent.DefaultSelection &&
-		this.Parent.IsActive;
+	public bool IsActive => this.Parent.IsChangeDefault && this.Parent.IsActive;
 }
 
 public sealed class InvertActive(IOption parent) : IOptionActivator
 {
 
 	public IOption Parent { get; } = parent;
-	public bool IsActive =>
-		this.Parent.Selection == this.Parent.DefaultSelection &&
-		this.Parent.IsActive;
+	public bool IsActive => !this.Parent.IsChangeDefault && this.Parent.IsActive;
 }
 
 public sealed class VanillaRoleActive(RoleTypes target) : IOptionActivator

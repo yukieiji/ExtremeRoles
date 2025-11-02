@@ -40,11 +40,11 @@ public sealed class PresetOption : IOption
 		}
 	}
 
+	public bool IsChangeDefault => false;
+
 	public bool IsActive => true;
 	public bool IsViewActive => true;
-	public int DefaultSelection => this.holder.DefaultIndex;
 
-	private readonly IOptionActivator activator;
 	private readonly IValueHolder holder;
 
 	public event Action<int>? OnValueChanged;
@@ -63,7 +63,6 @@ public sealed class PresetOption : IOption
 		Info = new PresetOptionInfo(categoryId, $"{name}{OptionKey.Selection}");
 		this.holder = new IntOptionValue(1, 1, maxPresetNum, 1);
 
-		this.activator = new AlwaysActive();
 		this.Selection = 0;
 
 		this.OnValueChanged += (x) =>

@@ -105,7 +105,8 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 		foreach (var info in this.allPage)
 		{
 			var opt = info.Option;
-			if (opt.IsViewActive)
+
+			if (!opt.Info.IsHidden && opt.IsChangeDefault)
 			{
 				this.curSettedRole.Add(info);
 			}

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 
 namespace ExtremeRoles.Module.CustomOption.Interfaces;
@@ -12,9 +11,9 @@ public interface IOption
 	public string TransedValue { get; }
 
 	public int Range { get; }
-	public int Selection { get; set; }
 
-	public int DefaultSelection { get; }
+	public bool IsChangeDefault { get; }
+	public int Selection { get; set; }
 
 	public event Action<int> OnValueChanged;
 
