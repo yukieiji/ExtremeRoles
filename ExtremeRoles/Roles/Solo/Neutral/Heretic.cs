@@ -319,7 +319,7 @@ public sealed class Heretic :
 		factory.Create0To100Percentage10StepOption(
 			Option.MeetingButtonTaskGage, taskOptActive, defaultGage: 100);
 
-		var killModeOpt = factory.CreateNewSelectionOption<Option, KillMode>(Option.KillMode);
+		var killModeOpt = factory.CreateSelectionOption<Option, KillMode>(Option.KillMode);
 		var hereticKillModeActive = new HereticKillModeActive(killModeOpt);
 
 		factory.CreateNewFloatOption(

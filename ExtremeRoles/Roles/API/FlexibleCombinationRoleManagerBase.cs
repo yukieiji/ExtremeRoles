@@ -2,7 +2,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Roles.API;
@@ -198,11 +198,13 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			var assignRatioOption = factory.CreateBoolOption(
 				CombinationRoleCommonOption.IsRatioTeamAssign,
 				false, ignorePrefix: true);
+
 			var isImposterAssignOps = factory.CreateBoolOption(
 				CombinationRoleCommonOption.IsAssignImposter,
 				false, assignRatioOption,
 				ignorePrefix: true,
 				invert: true);
+
 			factory.CreateIntOption(
 				CombinationRoleCommonOption.ImposterSelectedRate,
 				10, 10, SingleRoleSpawnData.MaxSpawnRate, 10,
@@ -212,7 +214,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
 			factory.CreateSelectionOption<CombinationRoleCommonOption, ImpostorRatio.Ratio>(
 				CombinationRoleCommonOption.AssignRatio,
-				assignRatioOption,
+				new ParentActive(assignRatioOption),
 				ignorePrefix: true);
         }
         return factory;

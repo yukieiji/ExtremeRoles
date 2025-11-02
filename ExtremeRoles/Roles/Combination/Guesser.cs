@@ -9,6 +9,8 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -16,8 +18,6 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -612,7 +612,7 @@ public sealed class Guesser :
             GuesserOption.CanGuessNoneRole,
             false);
         factory.CreateSelectionOption<GuesserOption, GuessMode>(
-            GuesserOption.GuessNoneRoleMode, noneGuessRoleOpt);
+            GuesserOption.GuessNoneRoleMode, new ParentActive(noneGuessRoleOpt));
     }
 
     protected override void RoleSpecificInit()
