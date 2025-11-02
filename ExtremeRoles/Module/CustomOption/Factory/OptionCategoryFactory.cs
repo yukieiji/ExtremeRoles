@@ -20,7 +20,8 @@ namespace ExtremeRoles.Module.CustomOption.Factory;
 public class OptionCategoryFactory(
 	string name,
 	int groupId,
-	in Action<OptionTab, OptionCategory> registerOption,
+	in Action<IOption, IOption> childRegister,
+	in Action<OptionTab, OptionCategory> categoryRegister,
 	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) : IDisposable
 {
@@ -33,7 +34,8 @@ public class OptionCategoryFactory(
 
 	private readonly Color? color = color;
 	private readonly int groupid = groupId;
-	private readonly Action<OptionTab, OptionCategory> registerOption = registerOption;
+	private readonly Action<IOption, IOption> childRegister = childRegister;
+	private readonly Action<OptionTab, OptionCategory> categoryRegister = categoryRegister;
 	private readonly OptionPack optionPack = new OptionPack();
 
 	public IOption Get(int id)
@@ -241,7 +243,7 @@ public class OptionCategoryFactory(
 	public void Dispose()
 	{
 		var newGroup = new OptionCategory(this.Tab, groupid, this.Name, this.optionPack, this.color);
-		this.registerOption(Tab, newGroup);
+		this.categoryRegister.Invoke(Tab, newGroup);
 	}
 
 	protected static int CreateMaxValue(int min, int step, int defaultValue, int tempMaxValue)
@@ -264,6 +266,12 @@ public class OptionCategoryFactory(
 		var info = new OptionInfo(id, name, format, isHidden);
 		var opt = new ExROption(info, holder, activator);
 		this.AddOption(id, opt);
+
+		var parent = activator?.Parent;
+		if (parent is not null)
+		{
+			this.childRegister.Invoke(parent, opt);
+		}
 
 		return opt;
 	}

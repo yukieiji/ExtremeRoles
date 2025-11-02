@@ -11,7 +11,7 @@ public interface IInfoOverlayPanelModel
 	protected static string ToHudStringWithChildren(IOption option, int indent = 0)
 	{
 		var builder = new StringBuilder();
-		if (!option.Info.IsHidden && option.IsActive)
+		if (option.IsViewActive)
 		{
 			builder.AppendLine(toHudString(option));
 		}
@@ -25,19 +25,21 @@ public interface IInfoOverlayPanelModel
 		IOption parentOption,
 		int prefixIndentCount)
 	{
-		// 後で治します
-		/*
-		foreach (var child in parentOption.Relation.Children)
+		if (!OptionManager.Instance.TryGetChild(parentOption, out var child))
 		{
-			if (!child.Info.IsHidden && child.IsActiveAndEnable)
+			return;
+		}
+
+		foreach (var option in child)
+		{
+			if (option.IsViewActive)
 			{
 				builder.Append(' ', prefixIndentCount * 4);
-				builder.AppendLine(toHudString(child));
+				builder.AppendLine(toHudString(option));
 			}
 
-			addChildrenOptionHudString(in builder, child, prefixIndentCount + 1);
+			addChildrenOptionHudString(in builder, option, prefixIndentCount + 1);
 		}
-		*/
 	}
 
 	private static string toHudString(in IOption option)

@@ -8,12 +8,10 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Extension;
 
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 
 #nullable enable
@@ -26,6 +24,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	public readonly static OptionManager Instance = new ();
 
 	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
+	private readonly Dictionary<string, List<IOption>> children = new ();
 
 	public string ConfigPreset
 	{
@@ -94,6 +93,17 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	{
 		category = null;
 		return this.TryGetTab(tab, out var container) && container.TryGetCategory(categoryId, out category) && category is not null;
+	}
+
+	public bool TryGetChild(IOption option, [NotNullWhen(true)] out IReadOnlyList<IOption>? child)
+	{
+		if (!this.children.TryGetValue(option.Info.CodeRemovedName, out var c))
+		{
+			child = null;
+			return false;
+		}
+		child = c;
+		return true;
 	}
 
 	public void UpdateToStep(in OptionCategory category, in int id, int step)
@@ -173,6 +183,18 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			throw new ArgumentException($"Tab {tab} is not registered.");
 		}
 		container.AddGroup(group);
+	}
+
+	public void RegisterChild(IOption parent, IOption child)
+	{
+		string key = parent.Info.CodeRemovedName;
+		if (!this.children.TryGetValue(key, out var allChild) ||
+			allChild is null)
+		{
+			allChild = [];
+			this.children[key] = allChild;
+		}
+		allChild.Add(child);
 	}
 
 	private static void shareOptionCategory(

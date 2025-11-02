@@ -14,10 +14,11 @@ namespace ExtremeRoles.Module.CustomOption.Factory;
 public sealed class SequentialOptionCategoryFactory(
 	string name,
 	int groupId,
-	in Action<OptionTab, OptionCategory> action,
+	in Action<IOption, IOption> childRegister,
+	in Action<OptionTab, OptionCategory> categoryRegister,
 	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) :
-	OptionCategoryFactory(name, groupId, action, tab, color)
+	OptionCategoryFactory(name, groupId, childRegister, categoryRegister, tab, color)
 {
 	public int StartId => 0;
 	public int EndId => this.Offset - 1;

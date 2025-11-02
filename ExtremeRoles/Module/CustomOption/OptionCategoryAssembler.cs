@@ -16,7 +16,10 @@ public static class OptionCategoryAssembler
 		string name,
 		in OptionTab tab = OptionTab.GeneralTab,
 		Color? color = null)
-		=> new OptionCategoryFactory(name, id, OptionManager.Instance.RegisterOptionGroup, tab, color);
+	{
+		var mng = OptionManager.Instance;
+		return new OptionCategoryFactory(name, id, mng.RegisterChild, mng.RegisterOptionGroup, tab, color);
+	}
 
 	public static OptionCategoryFactory CreateOptionCategory<T>(
 		T option,
@@ -31,7 +34,10 @@ public static class OptionCategoryAssembler
 		string name,
 		in OptionTab tab = OptionTab.GeneralTab,
 		Color? color = null)
-		=> new SequentialOptionCategoryFactory(name, id, OptionManager.Instance.RegisterOptionGroup, tab, color);
+	{
+		var mng = OptionManager.Instance;
+		return new SequentialOptionCategoryFactory(name, id, mng.RegisterChild, mng.RegisterOptionGroup, tab, color);
+	}
 
 	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
 		int id,
