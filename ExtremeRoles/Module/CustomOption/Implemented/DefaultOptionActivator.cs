@@ -15,14 +15,8 @@ public sealed class AlwaysActive : IOptionActivator
 	public bool IsActive => true;
 }
 
+
 public sealed class ParentActive(IOption parent) : IOptionActivator
-{
-	public IOption Parent { get; } = parent;
-	public bool IsActive => this.Parent.IsActive;
-}
-
-
-public sealed class DefaultParentActive(IOption parent) : IOptionActivator
 {
 	public IOption Parent { get; } = parent;
 	public bool IsActive => 

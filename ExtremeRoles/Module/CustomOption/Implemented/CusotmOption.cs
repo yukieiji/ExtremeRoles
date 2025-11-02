@@ -47,7 +47,9 @@ public sealed class CustomOption : IOption
 		}
 	}
 
-	public bool IsActive => !this.Info.IsHidden && this.activator.IsActive;
+	public bool IsViewActive => !this.Info.IsHidden && this.IsActive;
+
+	public bool IsActive => this.activator.IsActive;
 	public int DefaultSelection => this.holder.DefaultIndex;
 
 	private readonly IOptionActivator activator;

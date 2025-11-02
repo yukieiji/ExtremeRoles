@@ -85,7 +85,7 @@ public sealed class OptionCategory(
 
 		foreach (var option in this.allOpt.Values)
 		{
-			if (!option.IsActive)
+			if (!option.IsViewActive)
 			{
 				continue;
 			}

@@ -17,6 +17,8 @@ public interface IOption
 	public int DefaultSelection { get; }
 
 	public event Action<int> OnValueChanged;
+
+	public bool IsViewActive { get; }
 	public bool IsActive { get; }
 
 	public void SwitchPreset();

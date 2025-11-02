@@ -200,7 +200,7 @@ public interface IShipGlobalOption
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.TaskWinOption))
 		{
 			var taskDisableOpt = factory.CreateBoolOption(TaskWinOption.DisableWhenNoneTaskCrew, false);
-			factory.CreateBoolOption(TaskWinOption.DisableAll, false,　new DefaultParentActive(taskDisableOpt));
+			factory.CreateBoolOption(TaskWinOption.DisableAll, false,　new ParentActive(taskDisableOpt));
 		}
 
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.NeutralWinOption))

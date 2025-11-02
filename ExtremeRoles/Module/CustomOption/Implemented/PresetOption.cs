@@ -41,7 +41,8 @@ public sealed class PresetOption : IOption
 		}
 	}
 
-	public bool IsActive => !this.Info.IsHidden && this.activator.IsActive;
+	public bool IsActive => true;
+	public bool IsViewActive => true;
 	public int DefaultSelection => this.holder.DefaultIndex;
 
 	private readonly IOptionActivator activator;

@@ -26,7 +26,7 @@ public static class OptionActivatorFactory
 		}
 		else
 		{
-			return new DefaultParentActive(parent);
+			return new ParentActive(parent);
 		}
 	}
 }

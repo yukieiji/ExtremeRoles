@@ -13,7 +13,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 	in OptionCategoryFactory factory,
 	in IOption? parent = null) : IDisposable
 {
-	public IOptionActivator? Activator { get; private set; } = parent is null ? null : new DefaultParentActive(parent);
+	public IOptionActivator? Activator { get; private set; } = parent is null ? null : new ParentActive(parent);
 	private readonly OptionCategoryFactory internalFactory = factory;
 
 	public int IdOffset
@@ -122,7 +122,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 		if (this.Activator is null)
 		{
-			this.Activator = new DefaultParentActive(newOption);
+			this.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -147,7 +147,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 		if (this.Activator is null)
 		{
-			this.Activator = new DefaultParentActive(newOption);
+			this.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -176,7 +176,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 		if (this.Activator is null)
 		{
-			this.Activator = new DefaultParentActive(newOption);
+			this.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -201,7 +201,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 		if (this.Activator is null)
 		{
-			this.Activator = new DefaultParentActive(newOption);
+			this.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -230,7 +230,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 		if (this.Activator is null)
 		{
-			this.Activator = new DefaultParentActive(newOption);
+			this.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -253,7 +253,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 		if (this.Activator is null)
 		{
-			this.Activator = new DefaultParentActive(newOption);
+			this.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -277,7 +277,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 		if (this.Activator is null)
 		{
-			this.Activator = new DefaultParentActive(newOption);
+			this.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}

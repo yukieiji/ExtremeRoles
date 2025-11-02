@@ -304,7 +304,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 						continue;
 					}
 
-					bool isActive = option.IsActive;
+					bool isActive = option.IsViewActive;
 
 					optionView.gameObject.SetActive(isActive);
 					if (!isActive)
