@@ -14,6 +14,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Migrator;
 using ExtremeRoles.Module.CustomOption.Implemented.Old;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 
 #nullable enable

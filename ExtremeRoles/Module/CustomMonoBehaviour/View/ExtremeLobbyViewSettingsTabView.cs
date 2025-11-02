@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,7 @@ using ExtremeRoles.GameMode;
 using IReadOnlyCategoryViews = System.Collections.Generic.IReadOnlyList<ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ViewSettingsInfoPanel>>;
 using CategoryViews = System.Collections.Generic.List<ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ViewSettingsInfoPanel>>;
 using ExtremeRoles.Module.CustomOption.View;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;

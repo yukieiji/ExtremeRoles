@@ -13,6 +13,7 @@ using ExtremeRoles.Roles.API.Interface.Status;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.OldAutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GhostRoles.API;
 

@@ -2,6 +2,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Roles.API;

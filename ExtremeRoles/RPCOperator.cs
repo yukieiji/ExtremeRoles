@@ -3,6 +3,7 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameResult;

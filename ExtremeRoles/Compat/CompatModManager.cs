@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,7 @@ using Hazel;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat.Initializer;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 
 namespace ExtremeRoles.Compat;

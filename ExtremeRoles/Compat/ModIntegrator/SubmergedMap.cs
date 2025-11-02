@@ -24,6 +24,7 @@ using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.Compat.Initializer;
 using ExtremeRoles.Module.CustomOption.Implemented.Old;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
 
