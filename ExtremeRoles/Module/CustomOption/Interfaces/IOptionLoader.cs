@@ -8,8 +8,8 @@ namespace ExtremeRoles.Module.CustomOption.Interfaces;
 
 public interface IOptionLoader
 {
-	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option);
-	public IOption Get<T>(T id) where T : Enum;
+	public bool TryGet(int id, [NotNullWhen(true)] out IOldOption? option);
+	public IOldOption Get<T>(T id) where T : Enum;
 
 	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IValueOption<T>? option)
 		where W : Enum

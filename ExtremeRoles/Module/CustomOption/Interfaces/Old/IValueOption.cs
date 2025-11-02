@@ -2,7 +2,7 @@ using System;
 
 namespace ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
-public interface IValueOption<ValueType> : IOption
+public interface IValueOption<ValueType> : IOldOption
 	where ValueType :
 		struct, IComparable, IConvertible,
 		IComparable<ValueType>, IEquatable<ValueType>

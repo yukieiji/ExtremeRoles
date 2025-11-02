@@ -10,7 +10,7 @@ namespace ExtremeRoles.Module.CustomOption.Factory;
 public static class OptionRelationFactory
 {
 	public static IOptionRelation Create(
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool invert=false,
 		in Func<bool>? hook = null)
 	{

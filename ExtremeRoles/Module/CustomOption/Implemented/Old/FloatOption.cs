@@ -14,7 +14,7 @@ public sealed class FloatCustomOption : CustomOptionBase<float, float>
 			relation, defaultValue)
 	{ }
 
-	public override float Value => OptionRange.Value;
+	public override float Value => OptionRange.RangedValue;
 }
 
 public sealed class FloatDynamicCustomOption : CustomOptionBase<float, float>, IDynamismOption<float>
@@ -33,7 +33,7 @@ public sealed class FloatDynamicCustomOption : CustomOptionBase<float, float>, I
 		this.step = step;
 	}
 
-	public override float Value => OptionRange.Value;
+	public override float Value => OptionRange.RangedValue;
 
 	public void Update(float newValue)
 	{

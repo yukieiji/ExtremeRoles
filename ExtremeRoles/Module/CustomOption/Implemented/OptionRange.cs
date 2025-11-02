@@ -15,15 +15,15 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 		notnull, IComparable, IConvertible,
 		IComparable<T>, IEquatable<T>
 {
-	public T Value => _option[Selection];
-	public T Min => _option[0];
-	public T Max => _option[Range - 1];
+	public T RangedValue => option[Selection];
+	public T Min => option[0];
+	public T Max => option[Range - 1];
 
-	public int Range => _option.Length;
+	public int Range => option.Length;
 
 	public int Selection
 	{
-		get => _selection;
+		get => selection;
 		set
 		{
 			int length = Range;
@@ -31,23 +31,23 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 				(value + length) % length,
 				0, length - 1);
 
-			_selection = clampedNewValue;
+			selection = clampedNewValue;
 		}
 	}
-	private readonly T[] _option = option;
-	private int _selection = 0;
+	private readonly T[] option = option;
+	private int selection = 0;
 
-	private OptionRange(IEnumerable<T> range) : this(range.ToArray())
+	protected OptionRange(IEnumerable<T> range) : this(range.ToArray())
 	{ }
 
 	public int GetIndex(T value)
 	{
-		int index = Array.IndexOf(_option, value);
+		int index = Array.IndexOf(option, value);
 		return Math.Max(0, index);
 	}
 
 	public override string ToString()
-		=> $"Cur:{Value} (Min:{Min}, Max:{Max}, Selected Index:{Selection})";
+		=> $"Cur:{RangedValue} (Min:{Min}, Max:{Max}, Selected Index:{Selection})";
 
 	public static OptionRange<int> Create(int min, int max, int step)
 	{
@@ -65,7 +65,7 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 		return new OptionRange<string>(range);
 	}
 
-	private static IEnumerable<string> GetEnumString<W>() where W : struct, Enum
+	protected static IEnumerable<string> GetEnumString<W>() where W : struct, Enum
 	{
 		foreach (W enumValue in Enum.GetValues<W>())
 		{
@@ -76,7 +76,7 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 		}
 	}
 
-	private static IEnumerable<int> GetIntRange(int min, int max, int step)
+	protected static IEnumerable<int> GetIntRange(int min, int max, int step)
 	{
 		for (int s = min; s <= max; s += step)
 		{
@@ -84,7 +84,7 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 		}
 	}
 
-	private static IEnumerable<float> GetFloatRange(float min, float max, float step)
+	protected static IEnumerable<float> GetFloatRange(float min, float max, float step)
 	{
 		decimal dStep = new decimal(step);
 		decimal dMin = new decimal(min);

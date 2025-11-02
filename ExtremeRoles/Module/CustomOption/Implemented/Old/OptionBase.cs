@@ -48,7 +48,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 	{
 		get
 		{
-			string? value = OptionRange.Value.ToString();
+			string? value = OptionRange.RangedValue.ToString();
 			if (string.IsNullOrEmpty(value))
 			{
 				value = "NOT_SUPPORT";

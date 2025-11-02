@@ -25,7 +25,7 @@ public sealed class PresetOption : IValueOption<int>
 	{
 		get
 		{
-			int value = optionRange.Value;
+			int value = optionRange.RangedValue;
 			string format = this.Info.Format;
 			return Tr.GetString(format, value);
 		}

@@ -123,7 +123,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		string name,
 		in OptionTab tab,
 		Color? color = null,
-		in IOption? parent = null)
+		in IOldOption? parent = null)
 	{
 		var internalFactory = CreateOptionCategory(id, name, tab, color);
 		var factory = new AutoParentSetOptionCategoryFactory(internalFactory, parent);
@@ -135,7 +135,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		T option,
 		in OptionTab tab = OptionTab.GeneralTab,
 		Color? color = null,
-		in IOption? parent = null) where T : Enum
+		in IOldOption? parent = null) where T : Enum
 		=> CreateAutoParentSetOptionCategory(
 			option.FastInt(),
 			option.ToString(),
@@ -147,7 +147,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		UpdateToStep(category, option, step);
 	}
 
-	public void UpdateToStep(in OptionCategory category, in IOption option, int step)
+	public void UpdateToStep(in OptionCategory category, in IOldOption option, int step)
 	{
 		int newSelection = 0;
 		if (Key.IsControlDown())
@@ -167,7 +167,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		Update(category, option, newIndex);
 	}
 
-	public void Update(in OptionCategory category, in IOption option, int newIndex)
+	public void Update(in OptionCategory category, in IOldOption option, int newIndex)
 	{
 		option.Selection = newIndex;
 

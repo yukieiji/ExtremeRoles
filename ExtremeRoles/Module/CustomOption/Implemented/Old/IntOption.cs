@@ -31,7 +31,7 @@ public sealed class IntCustomOption : CustomOptionBase<int, int>, IDynamismOptio
 		Selection = prevValue;
 	}
 
-	public override int Value => OptionRange.Value;
+	public override int Value => OptionRange.RangedValue;
 }
 
 public sealed class IntDynamicCustomOption : CustomOptionBase<int, int>, IDynamismOption<int>
@@ -49,7 +49,7 @@ public sealed class IntDynamicCustomOption : CustomOptionBase<int, int>, IDynami
 		this.step = step;
 	}
 
-	public override int Value => OptionRange.Value;
+	public override int Value => OptionRange.RangedValue;
 
 
 	public void Update(int newValue)

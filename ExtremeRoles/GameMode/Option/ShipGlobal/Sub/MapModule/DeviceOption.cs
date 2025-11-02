@@ -17,7 +17,7 @@ public interface IDeviceOption
 	public bool EnableLimit { get; }
 	public float LimitTime { get; }
 
-	public static IOption Create(in OptionCategoryFactory factory)
+	public static IOldOption Create(in OptionCategoryFactory factory)
 	{
 		var removeOpt = factory.CreateBoolOption(DeviceOptionType.IsRemove, false);
 		var enableLimit = factory.CreateBoolOption(

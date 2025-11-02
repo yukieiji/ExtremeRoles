@@ -7,7 +7,7 @@ public interface IOptionRange<T>
 		notnull, IComparable, IConvertible,
 		IComparable<T>, IEquatable<T>
 {
-	public T Value { get; }
+	public T RangedValue { get; }
 	public T Min { get; }
 	public T Max { get; }
 

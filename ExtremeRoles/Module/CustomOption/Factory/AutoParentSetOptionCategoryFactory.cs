@@ -10,9 +10,9 @@ namespace ExtremeRoles.Module.CustomOption.Factory;
 
 public sealed class AutoParentSetOptionCategoryFactory(
 	in OptionCategoryFactory factory,
-	in IOption? parent = null) : IDisposable
+	in IOldOption? parent = null) : IDisposable
 {
-	private IOption? parent = parent;
+	private IOldOption? parent = parent;
 	private readonly OptionCategoryFactory internalFactory = factory;
 
 	public int IdOffset
@@ -30,7 +30,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		}
 	}
 
-	public IOption Get(int id)
+	public IOldOption Get(int id)
 		=> this.internalFactory.Get(id);
 	public IValueOption<T> Get<T>(int id)
 		where T :
@@ -41,7 +41,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 	public BoolCustomOption CreateBoolOption<T>(
 		T option,
 		bool defaultValue,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -67,7 +67,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		T option,
 		float defaultValue,
 		float min, float max, float step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -94,7 +94,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		T option,
 		float defaultValue,
 		float min, float max, float step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -121,7 +121,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		T option,
 		float defaultValue,
 		float min, float step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -150,7 +150,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		T option,
 		int defaultValue,
 		int min, int max, int step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -177,7 +177,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		T option,
 		int defaultValue,
 		int min, int step,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -205,7 +205,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 	public SelectionCustomOption CreateSelectionOption<T>(
 		T option,
 		string[] selections,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -229,7 +229,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 	public SelectionCustomOption CreateSelectionOption<T, W>(
 		T option,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -255,7 +255,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 	public SelectionMultiEnableCustomOption CreateSelectionOption<T, W>(
 		T option,
 		IReadOnlyList<W> anotherDefault,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -281,7 +281,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 	public IntCustomOption Create0To100Percentage10StepOption<T>(
 		T option,
-		IOption? parent = null,
+		IOldOption? parent = null,
 		bool isHidden = false,
 		bool invert = false,
 		bool ignorePrefix = false,

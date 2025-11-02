@@ -8,31 +8,31 @@ namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
 
 public sealed class NoRelation() : IOptionRelation
 {
-	public List<IOption> Children => throw new NotImplementedException();
+	public List<IOldOption> Children => throw new NotImplementedException();
 }
 
 public sealed class DefaultRelation() : IOptionRelation
 {
-	public List<IOption> Children { get; } = new List<IOption>();
+	public List<IOldOption> Children { get; } = new List<IOldOption>();
 }
 
 public sealed class DefaultChain(in Func<bool> hook) : IOptionRelation, IOptionChain
 {
-	public List<IOption> Children { get; } = new List<IOption>();
+	public List<IOldOption> Children { get; } = new List<IOldOption>();
 	private readonly Func<bool> hook = hook;
 
 	public bool IsChainEnable => hook.Invoke();
 }
 
-public sealed class WithParentRelation(IOption parent) : IOptionRelation, IOptionParent, IOptionChain
+public sealed class WithParentRelation(IOldOption parent) : IOptionRelation, IOptionParent, IOptionChain
 {
-	public List<IOption> Children { get; } = new List<IOption>();
-	public IOption Parent { get; } = parent;
+	public List<IOldOption> Children { get; } = new List<IOldOption>();
+	public IOldOption Parent { get; } = parent;
 
 	public bool IsChainEnable
 		=> ParentChainEnable(Parent, false);
 
-	public static bool ParentChainEnable(IOption? parent, bool defaultInvert)
+	public static bool ParentChainEnable(IOldOption? parent, bool defaultInvert)
 	{
 		bool active = true;
 		bool isInvert = defaultInvert;
@@ -55,21 +55,21 @@ public sealed class WithParentRelation(IOption parent) : IOptionRelation, IOptio
 	}
 }
 
-public sealed class WithInvertParent(IOption parent) :
+public sealed class WithInvertParent(IOldOption parent) :
 	IOptionRelation, IOptionParent, IOptionInvertRelation, IOptionChain
 {
-	public List<IOption> Children { get; } = new List<IOption>();
-	public IOption Parent { get; } = parent;
+	public List<IOldOption> Children { get; } = new List<IOldOption>();
+	public IOldOption Parent { get; } = parent;
 
 	public bool IsChainEnable
 		=> WithParentRelation.ParentChainEnable(Parent, true);
 }
 
-public sealed class WithInvertParentAndCustomHook(IOption parent, in Func<bool> hook) :
+public sealed class WithInvertParentAndCustomHook(IOldOption parent, in Func<bool> hook) :
 	IOptionRelation, IOptionParent, IOptionChain, IOptionInvertRelation
 {
-	public List<IOption> Children { get; } = new List<IOption>();
-	public IOption Parent { get; } = parent;
+	public List<IOldOption> Children { get; } = new List<IOldOption>();
+	public IOldOption Parent { get; } = parent;
 	private readonly Func<bool> hook = hook;
 
 	public bool IsChainEnable

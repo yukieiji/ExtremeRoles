@@ -12,7 +12,7 @@ public sealed class AllGhostRoleInfoModel : RolePagePanelModelBase
 {
 	protected override void CreateAllRoleText()
 	{
-		IOption option;
+		IOldOption option;
 		string colorRoleName;
 		string roleFullDesc;
 

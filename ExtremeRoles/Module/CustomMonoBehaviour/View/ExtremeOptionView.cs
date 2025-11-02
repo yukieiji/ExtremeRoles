@@ -18,7 +18,7 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 	private TextMeshPro? valueText;
 
 	[HideFromIl2Cpp]
-	public IOption? OptionModel { private get; set; }
+	public IOldOption? OptionModel { private get; set; }
 
 	[HideFromIl2Cpp]
 	public OptionCategory? OptionCategoryModel { private get; set; }
