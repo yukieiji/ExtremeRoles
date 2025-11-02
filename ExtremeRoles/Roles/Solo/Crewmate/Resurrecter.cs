@@ -359,21 +359,21 @@ public sealed class Resurrecter :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             ResurrecterOption.AwakeTaskGage,
             100, 0, 100, 10,
             format: OptionUnit.Percentage);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             ResurrecterOption.ResurrectTaskGage,
             100, 50, 100, 10,
             format: OptionUnit.Percentage);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             ResurrecterOption.ResurrectDelayTime,
             5.0f, 4.0f, 60.0f, 0.1f,
             format: OptionUnit.Second);
 
-        var meetingResetOpt = factory.CreateBoolOption(
+        var meetingResetOpt = factory.CreateNewBoolOption(
             ResurrecterOption.IsMeetingCoolResetOnResurrect,
             true);
 
@@ -384,18 +384,18 @@ public sealed class Resurrecter :
             format: OptionUnit.Second,
             invert: true);
 
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             ResurrecterOption.ResurrectTaskResetMeetingNum,
             1, 1, 5, 1);
 
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             ResurrecterOption.ResurrectTaskResetGage,
             20, 10, 50, 5,
             format: OptionUnit.Percentage);
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             ResurrecterOption.CanResurrectAfterDeath,
             false);
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             ResurrecterOption.CanResurrectOnExil,
             false);
     }

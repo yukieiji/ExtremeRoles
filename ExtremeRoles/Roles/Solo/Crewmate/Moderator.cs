@@ -187,13 +187,13 @@ public sealed class Moderator :
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			ModeratorOption.AwakeTaskGage,
 			60, 0, 100, 10,
 			format: OptionUnit.Percentage);
 		IRoleAbility.CreateAbilityCountOption(
 			factory, 2, 10);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			ModeratorOption.MeetingTimerOffset,
 			30, 5, 360, 5, format: OptionUnit.Second);
 	}

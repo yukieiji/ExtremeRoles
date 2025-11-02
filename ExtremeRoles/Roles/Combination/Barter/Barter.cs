@@ -263,36 +263,36 @@ public sealed class BarterRole :
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
 		CreateKillerOption(factory, imposterSetting);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.AwakeTaskRate,
 			70, 0, 100, 10,
 			format: OptionUnit.Percentage);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.AwakeDeadPlayerNum,
 			7, 0, 12, 1);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.AwakeKillNum,
 			2, 0, 5, 1);
 
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.CanCallMeeting,
 			false);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.CastlingNum,
 			1, 1, 100, 1,
 			format: OptionUnit.Shot);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.MaxCastlingNumWhenMeeting,
 			1, 1, 25, 1,
 			format: OptionUnit.Shot);
 
-		var randOpt = factory.CreateBoolOption(Option.RandomCastling, false);
+		var randOpt = factory.CreateNewBoolOption(Option.RandomCastling, false);
 		factory.CreateIntOption(
 			Option.OneCastlingNum, 1, 1, 25, 1,
 			randOpt,
 			format: OptionUnit.Shot);
-		factory.CreateBoolOption(Option.ShowCastlingOther, false);
+		factory.CreateNewBoolOption(Option.ShowCastlingOther, false);
 	}
 
 	protected override void RoleSpecificInit()

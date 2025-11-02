@@ -157,16 +157,16 @@ public sealed class MadmateRole :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             MadmateOption.IsDontCountAliveCrew,
             false);
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             MadmateOption.CanFixSabotage,
             false);
-        var ventUseOpt = factory.CreateBoolOption(
+        var ventUseOpt = factory.CreateNewBoolOption(
             MadmateOption.CanUseVent,
             false);
-        var taskOpt = factory.CreateBoolOption(
+        var taskOpt = factory.CreateNewBoolOption(
             MadmateOption.HasTask,
             false);
         factory.CreateIntOption(

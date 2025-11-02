@@ -120,16 +120,16 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             TaskMasterOption.CanUseSabotage,
             true);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             TaskMasterOption.AddCommonTaskNum,
             1, 0, 15, 1);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             TaskMasterOption.AddLongTaskNum,
             1, 0, 15, 1);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             TaskMasterOption.AddNormalTaskNum,
             1, 0, 15, 1);
     }

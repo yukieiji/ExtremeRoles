@@ -38,14 +38,14 @@ public sealed class Neet : SingleRoleBase
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             NeetOption.CanCallMeeting,
             false);
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             NeetOption.CanRepairSabotage,
             false);
 
-        var neutralOps = factory.CreateBoolOption(
+        var neutralOps = factory.CreateNewBoolOption(
             NeetOption.IsNeutral,
             false);
         factory.CreateBoolOption(

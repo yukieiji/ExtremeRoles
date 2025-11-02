@@ -113,8 +113,8 @@ public sealed class Igniter : GhostRoleBase
     protected override void CreateSpecificOption(OptionFactory factory)
     {
 		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10, 15.0f);
-		factory.CreateBoolOption(IgniterOption.IsEffectImpostor, false);
-		factory.CreateBoolOption(IgniterOption.IsEffectNeutral, false);
+		factory.CreateNewBoolOption(IgniterOption.IsEffectImpostor, false);
+		factory.CreateNewBoolOption(IgniterOption.IsEffectNeutral, false);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

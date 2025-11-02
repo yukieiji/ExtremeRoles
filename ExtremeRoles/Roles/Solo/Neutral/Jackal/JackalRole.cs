@@ -89,11 +89,11 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
         {
             string roleName = ExtremeRoleId.Sidekick.ToString();
 
-			factory.CreateBoolOption(JackalOption.SidekickUseSabotage, true);
-			factory.CreateBoolOption(JackalOption.SidekickUseVent, true);
+			factory.CreateNewBoolOption(JackalOption.SidekickUseSabotage, true);
+			factory.CreateNewBoolOption(JackalOption.SidekickUseVent, true);
 
 
-			var sidekickKillerOps = factory.CreateBoolOption(JackalOption.SidekickCanKill, false);
+			var sidekickKillerOps = factory.CreateNewBoolOption(JackalOption.SidekickCanKill, false);
 
 			var killCoolOption = factory.CreateBoolOption(
 				JackalOption.SidekickHasOtherKillCool,
@@ -111,7 +111,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 				JackalOption.SidekickKillRange,
 				OptionCreator.Range, rangeOptActive);
 
-			var visionOption = factory.CreateBoolOption(
+			var visionOption = factory.CreateNewBoolOption(
 				JackalOption.SidekickHasOtherVision, false);
 
 			factory.CreateFloatOption(
@@ -449,7 +449,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
             JackalOption.RangeSidekickTarget,
             OptionCreator.Range);
 
-        var loverSkOpt = factory.CreateBoolOption(
+        var loverSkOpt = factory.CreateNewBoolOption(
             JackalOption.CanLoverSidekick,
             true);
 
@@ -458,11 +458,11 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
             true, loverSkOpt,
             invert: true);
 
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             JackalOption.UpgradeSidekickNum,
             1, 1, GameSystem.VanillaMaxPlayerNum - 1, 1);
 
-        var sidekickMakeSidekickOps = factory.CreateBoolOption(
+        var sidekickMakeSidekickOps = factory.CreateNewBoolOption(
             JackalOption.SidekickJackalCanMakeSidekick,
             false);
 
@@ -471,10 +471,10 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
             1, 1, GameSystem.VanillaMaxPlayerNum / 2, 1,
             sidekickMakeSidekickOps);
 
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             JackalOption.CanSetImpostorToSidekick, false);
 
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             JackalOption.CanSeeImpostorToSidekickImpostor, false);
 
     }

@@ -725,7 +725,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             CarpenterOption.AwakeTaskGage,
             70, 0, 100, 10,
             format: OptionUnit.Percentage);
@@ -754,27 +754,27 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
     private void createAbilityOption(AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             RoleAbilityCommonOption.AbilityCoolTime,
             15.0f, 2.0f, 60.0f, 0.5f,
             format: OptionUnit.Second);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             RoleAbilityCommonOption.AbilityCount,
             15, 5, 100, 1,
             format: OptionUnit.ScrewNum);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             CarpenterOption.RemoveVentScrew,
             10, 1, 20, 1,
             format: OptionUnit.ScrewNum);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             CarpenterOption.RemoveVentStopTime,
             5.0f, 2.0f, 15.0f, 0.5f,
             format: OptionUnit.Second);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             CarpenterOption.SetCameraScrew,
             5, 1, 10, 1,
             format: OptionUnit.ScrewNum);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             CarpenterOption.SetCameraStopTime,
             2.5f, 1.0f, 5.0f, 0.5f,
             format: OptionUnit.Second);

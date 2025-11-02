@@ -107,25 +107,25 @@ public sealed class YokoRole :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             YokoOption.CanRepairSabo,
             false);
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             YokoOption.CanUseVent,
             false);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             YokoOption.SearchRange,
             7.5f, 5.0f, 15.0f, 0.5f);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             YokoOption.SearchTime,
             10f, 3.0f, 30f, 0.5f,
             format: OptionUnit.Second);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             YokoOption.TrueInfoRate,
             50, 25, 80, 5,
             format: OptionUnit.Percentage);
 
-		var yashiroOpt = factory.CreateBoolOption(
+		var yashiroOpt = factory.CreateNewBoolOption(
 			YokoOption.UseYashiro,
 			false);
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 10, 5f, parentOpt: yashiroOpt);

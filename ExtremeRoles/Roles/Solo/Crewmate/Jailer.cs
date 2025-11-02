@@ -320,20 +320,20 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.AwakeTaskGage,
 			70, 0, 100, 10,
 			format: OptionUnit.Percentage);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.AwakeDeadPlayerNum,
 			7, 0, 12, 1);
 
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.UseAdmin, false);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.UseSecurity, true);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.UseVital, false);
 
 		IRoleAbility.CreateAbilityCountOption(
@@ -341,19 +341,19 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 		factory.CreateSelectionOption<Option, TargetMode>(
 			Option.TargetMode);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.CanReplaceAssassin,
 			true);
 
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.Range,
 			0.75f, 0.1f, 1.5f, 0.1f);
 
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.IsDeadAbilityZero,
 			true);
 
-		var lowBreakerOpt = factory.CreateBoolOption(
+		var lowBreakerOpt = factory.CreateNewBoolOption(
 			Option.IsMissingToDead, false);
 
 		var lowBreakerKillOpt = factory.CreateBoolOption(
@@ -391,28 +391,28 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		   invert: true);
 
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.YardbirdAddCommonTask,
 			2, 0, 15, 1);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.YardbirdAddNormalTask,
 			1, 0, 15, 1);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.YardbirdAddLongTask,
 			1, 0, 15, 1);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.YardbirdSpeedMod,
 			0.8f, 0.1f, 1.0f, 0.1f);
 
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.YardbirdUseAdmin, false);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.YardbirdUseSecurity, false);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.YardbirdUseVital, false);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.YardbirdUseVent, true);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.YardbirdUseSab, true);
 	}
 

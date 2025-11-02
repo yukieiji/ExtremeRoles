@@ -333,22 +333,22 @@ public sealed class UnderWarper :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             UnderWarperOption.AwakeKillCount,
             1, 0, 5, 1,
             format: OptionUnit.Shot);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             UnderWarperOption.VentLinkKillCout,
             2, 0, 5, 1,
             format: OptionUnit.Shot);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             UnderWarperOption.NoVentAnimeKillCout,
             2, 0, 5, 1,
             format: OptionUnit.Shot);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			UnderWarperOption.WallHackVent,
 			false);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
             UnderWarperOption.Range,
             2.75f, 0.75f, 10.0f, 0.25f);
 	}

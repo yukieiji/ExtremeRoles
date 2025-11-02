@@ -75,23 +75,23 @@ public sealed class Skater :
 
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 50, 5.0f);
 
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.Acceleration,
 			1.25f, 0.05f, 2.0f, 0.05f);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.MaxSpeed,
 			10, 5, 50, 1);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.Friction,
 			0.25f, -1.0f, 1.0f, 0.01f);
-		var eOpt = factory.CreateBoolOption(
+		var eOpt = factory.CreateNewBoolOption(
 			Option.UseE, true);
 		factory.CreateFloatOption(
 			Option.EValue,
 			0.9f, 0.0f, 2.0f, 0.01f,
 			eOpt,
 			invert: true);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.CanUseSpeed,
 			2.0f, 0.0f, 50.0f, 0.1f);
 	}

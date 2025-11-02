@@ -656,11 +656,11 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     {
         IRoleAbility.CreateCommonAbilityOption(
             factory, 5.0f);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             HeroOption.FeatKillPercentage,
             33, 20, 50, 1,
             format: OptionUnit.Percentage);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             HeroOption.FeatButtonAbilityPercentage,
             66, 50, 80, 1,
             format: OptionUnit.Percentage);
@@ -825,7 +825,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     {
         IRoleAbility.CreateCommonAbilityOption(
             factory, 5.0f);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             VillanOption.VigilanteSeeTime,
             2.5f, 1.0f, 10.0f, 0.5f,
             format: OptionUnit.Second);
@@ -1023,7 +1023,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 10, 5.0f);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             VigilanteOption.Range,
             3.0f, 1.2f, 5.0f, 0.1f);
     }

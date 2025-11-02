@@ -425,28 +425,28 @@ public sealed class Zombie :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             ZombieOption.AwakeKillCount,
             1, 0, 3, 1,
             format: OptionUnit.Shot);
 
         IRoleAbility.CreateAbilityCountOption(factory, 1, 3, 3f);
 
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             ZombieOption.ResurrectKillCount,
             2, 0, 3, 1,
             format: OptionUnit.Shot);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             ZombieOption.ShowMagicCircleTime,
             10.0f, 0.0f, 30.0f, 0.5f,
             format: OptionUnit.Second);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             ZombieOption.ResurrectDelayTime,
             5.0f, 4.0f, 60.0f, 0.1f,
             format: OptionUnit.Second);
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             ZombieOption.CanResurrectOnExil,
             false);
     }

@@ -330,23 +330,23 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             UmbrerOption.Range,
             1.0f, 0.1f, 4.0f, 0.1f);
 
         IRoleAbility.CreateCommonAbilityOption(
            factory, 3.0f);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             UmbrerOption.UpgradeVirusTime,
             3.5f, 0.5f, 10.0f, 0.1f,
             format: OptionUnit.Second);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             UmbrerOption.InfectRange,
             1.4f, 0.1f, 3.6f, 0.1f);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             UmbrerOption.KeepUpgradedVirus,
             10.0f, 2.5f, 360.0f, 0.5f,
             format: OptionUnit.Second);

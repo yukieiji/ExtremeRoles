@@ -42,7 +42,7 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 		public static void CreateOption(
 			AutoParentSetOptionCategoryFactory factory)
 		{
-			var visionOpt = factory.CreateBoolOption(
+			var visionOpt = factory.CreateNewBoolOption(
 				InvestigatorApprenticeOption.HasOtherVision,
 				false);
 
@@ -59,7 +59,7 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 			IRoleAbility.CreateAbilityCountOption(
 				factory, 1, 10, 3.0f);
 
-			var buttonOpt = factory.CreateBoolOption(
+			var buttonOpt = factory.CreateNewBoolOption(
 				InvestigatorApprenticeOption.HasOtherButton,
 				false);
 			factory.CreateIntOption(

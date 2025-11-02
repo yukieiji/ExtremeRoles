@@ -126,15 +126,15 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility, ITryKillT
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             CommanderOption.KillCoolReduceTime,
             2.0f, 0.5f, 5.0f, 0.1f,
             format: OptionUnit.Second);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             CommanderOption.KillCoolReduceImpBonus,
             1.5f, 0.1f, 3.0f, 0.1f,
             format: OptionUnit.Second);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             CommanderOption.IncreaseKillNum,
             2, 1, 3, 1,
             format: OptionUnit.Shot);

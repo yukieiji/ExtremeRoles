@@ -95,14 +95,14 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		var killOpt = factory.CreateBoolOption(
+		var killOpt = factory.CreateNewBoolOption(
 			Option.CanKill, true);
 		CreateKillerOption(factory, killOpt, true, true);
 		factory.CreateBoolOption(
 			Option.IsSubTeam, true, killOpt, invert: true);
-		factory.CreateBoolOption(Option.UseVent, false);
+		factory.CreateNewBoolOption(Option.UseVent, false);
 
-		var taskOpt = factory.CreateBoolOption(
+		var taskOpt = factory.CreateNewBoolOption(
 			Option.HasTask, false);
 		factory.CreateIntOption(
 			Option.SeeJackalTaskRate, 50, 0, 100, 10,

@@ -56,15 +56,15 @@ public sealed class TimeBreaker : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		IRoleAbility.CreateAbilityCountOption(
 			factory, 2, 100);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Opt.ActiveTime, 10.0f, 1.0f, 120.0f, 0.5f,
 			format: OptionUnit.Second);
-		var impOpt =　factory.CreateBoolOption(
+		var impOpt =　factory.CreateNewBoolOption(
 			Opt.EffectImp, true);
 		factory.CreateBoolOption(
 			Opt.EffectMarlin, false,
 			impOpt);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Opt.IsActiveScreen, true);
 	}
 

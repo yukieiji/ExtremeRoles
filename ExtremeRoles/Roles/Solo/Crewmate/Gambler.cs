@@ -89,15 +89,15 @@ public sealed class Gambler :
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             GamblerOption.ChangeVoteChance,
             50, 10, 100, 5,
             format: OptionUnit.Percentage);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
             GamblerOption.MinVoteNum,
             0, -100, 0, 1,
             format: OptionUnit.Percentage);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
             GamblerOption.MaxVoteNum,
             2, 2, 100, 1,
             format: OptionUnit.Percentage);

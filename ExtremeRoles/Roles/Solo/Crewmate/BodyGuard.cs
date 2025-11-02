@@ -710,28 +710,28 @@ public sealed class BodyGuard :
         AutoParentSetOptionCategoryFactory factory)
     {
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             BodyGuardOption.ShieldRange,
             1.0f, 0.0f, 2.0f, 0.1f);
 
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 5);
 
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             BodyGuardOption.FeatMeetingAbilityTaskGage,
             30, 0, 100, 10,
             format: OptionUnit.Percentage);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             BodyGuardOption.FeatMeetingReportTaskGage,
             60, 0, 100, 10,
             format: OptionUnit.Percentage);
-        var reportPlayerNameOpt = factory.CreateBoolOption(
+        var reportPlayerNameOpt = factory.CreateNewBoolOption(
             BodyGuardOption.IsReportPlayerName,
             false);
         factory.CreateSelectionOption<BodyGuardOption, BodyGuardReportPlayerNameMode>(
             BodyGuardOption.ReportPlayerMode,
             new ParentActive(reportPlayerNameOpt));
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             BodyGuardOption.IsBlockMeetingKill,
             true);
     }

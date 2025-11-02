@@ -140,7 +140,7 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
         IRoleAbility.CreateCommonAbilityOption(
             factory, 3.0f);
 
-        var boostOption = factory.CreateBoolOption(
+        var boostOption = factory.CreateNewBoolOption(
             SuperviosrOption.IsBoostTask,
             false);
         factory.CreateIntOption(

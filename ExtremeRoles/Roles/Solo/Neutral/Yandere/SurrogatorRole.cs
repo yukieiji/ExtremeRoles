@@ -158,16 +158,16 @@ public sealed class SurrogatorRole :
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateBoolOption(Option.UseVent, false);
-		var taskOpt = factory.CreateBoolOption(
+		factory.CreateNewBoolOption(Option.UseVent, false);
+		var taskOpt = factory.CreateNewBoolOption(
 			Option.HasTask, false);
 		factory.CreateIntOption(
 			Option.SeeYandereTaskRate, 50, 0, 100, 10,
 			taskOpt, format: OptionUnit.Percentage);
 		IRoleAbility.CreateAbilityCountOption(factory, 1, 10, 3.0f);
-		factory.CreateFloatOption(Option.Range, 0.7f, 0.1f, 3.5f, 0.1f);
-		factory.CreateIntOption(Option.PreventNum, 1, 0, 10, 1);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(Option.Range, 0.7f, 0.1f, 3.5f, 0.1f);
+		factory.CreateNewIntOption(Option.PreventNum, 1, 0, 10, 1);
+		factory.CreateNewFloatOption(
 			Option.PreventKillTime, 20.0f, 2.5f, 30.0f, 0.5f, format: OptionUnit.Second);
 	}
 

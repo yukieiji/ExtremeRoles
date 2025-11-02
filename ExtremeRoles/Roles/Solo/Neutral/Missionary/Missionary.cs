@@ -89,24 +89,24 @@ public sealed class MissionaryRole :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             MissionaryOption.TellDeparture,
             true);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             MissionaryOption.DepartureMinTime,
             10f, 1.0f, 15f, 0.5f,
 			format: OptionUnit.Second);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             MissionaryOption.DepartureMaxTime,
             30f, 15f, 120f, 0.5f
             , format: OptionUnit.Second);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             MissionaryOption.PropagateRange,
             1.2f, 0.0f, 2.0f, 0.1f);
 
         IRoleAbility.CreateCommonAbilityOption(factory);
 
-		var useOpt = factory.CreateBoolOption(
+		var useOpt = factory.CreateNewBoolOption(
 			MissionaryOption.IsUseSolemnJudgment,
 			false);
 		factory.CreateIntOption(

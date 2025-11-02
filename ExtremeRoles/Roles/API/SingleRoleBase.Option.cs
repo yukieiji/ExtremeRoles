@@ -19,12 +19,12 @@ public abstract partial class SingleRoleBase
         int spawnNum = this.IsImpostor() ?
             GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
             RoleCommonOption.RoleNum,
             1, 1, spawnNum, 1,
 			ignorePrefix: true);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1,
 			ignorePrefix: true);
@@ -35,7 +35,7 @@ public abstract partial class SingleRoleBase
     protected sealed override void CreateVisionOption(
         AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
     {
-        var visionOption = factory.CreateBoolOption(
+        var visionOption = factory.CreateNewBoolOption(
             RoleCommonOption.HasOtherVision,
             false,
 			ignorePrefix: ignorePrefix);
