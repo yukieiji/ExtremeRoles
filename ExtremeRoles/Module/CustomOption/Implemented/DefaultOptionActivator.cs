@@ -1,32 +1,35 @@
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.CustomOption.Implemented;
 
 public sealed class AlwaysActive : IOptionActivator
 {
+	public IOption? Parent { get; } = null;
 	public bool IsActive => true;
 }
 
 public sealed class ParentActive(IOption parent) : IOptionActivator
 {
-	private readonly IOption parent = parent;
-	public bool IsActive => this.parent.IsActive;
+	public IOption Parent { get; } = parent;
+	public bool IsActive => this.Parent.IsActive;
 }
 
 
 public sealed class DefaultParentActive(IOption parent) : IOptionActivator
 {
-	private readonly IOption parent = parent;
+	public IOption Parent { get; } = parent;
 	public bool IsActive => 
-		this.parent.Selection != this.parent.DefaultSelection &&
-		this.parent.IsActive;
+		this.Parent.Selection != this.Parent.DefaultSelection &&
+		this.Parent.IsActive;
 }
 
 public sealed class InvertActive(IOption parent) : IOptionActivator
 {
 
-	private readonly IOption parent = parent;
+	public IOption Parent { get; } = parent;
 	public bool IsActive =>
-		this.parent.Selection == this.parent.DefaultSelection &&
-		this.parent.IsActive;
+		this.Parent.Selection == this.Parent.DefaultSelection &&
+		this.Parent.IsActive;
 }
