@@ -93,17 +93,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		where W : struct, Enum
 		=> CreateNewSelectionOption<T, W>(option, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
 
-	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
-	public IOption Create0To100Percentage10StepOption<T>(
-		T option,
-		IOption? parent = null,
-		bool isHidden = false,
-		bool invert = false,
-		bool ignorePrefix = false,
-		int defaultGage = 0)
-		where T : struct, IConvertible
-		=> CreateNew0To100Percentage10StepOption(option, OptionActivatorFactory.Create(parent, invert), isHidden, ignorePrefix, defaultGage);
-
 	public IOption CreateNewBoolOption<T>(
 		T option,
 		bool defaultValue,
@@ -281,7 +270,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		return newOption;
 	}
 
-	public IOption CreateNew0To100Percentage10StepOption<T>(
+	public IOption Create0To100Percentage10StepOption<T>(
 		T option,
 		IOptionActivator? activator = null,
 		bool isHidden = false,

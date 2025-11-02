@@ -8,6 +8,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Patches.Button;
@@ -311,10 +312,12 @@ public sealed class Heretic :
 			Option.HasTask,
 			false);
 
+
+		var taskOptActive = new ParentActive(taskOpt);
 		factory.Create0To100Percentage10StepOption(
-			Option.SeeImpostorTaskGage, taskOpt);
+			Option.SeeImpostorTaskGage, taskOptActive);
 		factory.Create0To100Percentage10StepOption(
-			Option.MeetingButtonTaskGage, taskOpt, defaultGage: 100);
+			Option.MeetingButtonTaskGage, taskOptActive, defaultGage: 100);
 
 		var killModeOpt = factory.CreateNewSelectionOption<Option, KillMode>(Option.KillMode);
 		var hereticKillModeActive = new HereticKillModeActive(killModeOpt);
