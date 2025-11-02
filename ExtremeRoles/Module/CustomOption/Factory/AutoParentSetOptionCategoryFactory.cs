@@ -263,7 +263,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false)
 		where T : struct, IConvertible
 		where W : struct, Enum
