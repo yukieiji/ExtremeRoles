@@ -55,7 +55,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
-		=> CreateNewFloatOption<T>(option, defaultValue, min, max, step, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
+		=> CreateNewFloatOption(option, defaultValue, min, max, step, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
 
 	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
 	public IOption CreateIntOption<T>(
