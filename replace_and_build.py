@@ -2,13 +2,36 @@ import os
 import subprocess
 from typing import List, Tuple
 
-TARGET_DIR = "ExtremeRoles/Roles/"
+TARGET_ROLE_DIR = "ExtremeRoles/Roles/"
+TARGET_GHOST_DIR = "ExtremeRoles/GhostRoles/"
 SLN_FILE = "ExtremeRoles.sln"
 REPLACE_MAP = {
     ".CreateBool": ".CreateNewBool",
     ".CreateFloat": ".CreateNewFloat",
     ".CreateInt": ".CreateNewInt",
 }
+
+def force_read(filepath: str) -> str:
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            original_content = f.read()
+    except Exception as e:
+        try:
+            with open(filepath, 'r', encoding='utf-8-bom') as f:
+                original_content = f.read()
+            with open(filepath, "w", encoding='utf-8') as f:
+                f.write(original_content)
+            return original_content
+        except Exception as e:
+            try:
+                with open(filepath, 'r', encoding='shift-jis') as f:
+                    original_content = f.read()
+                with open(filepath, "w", encoding='utf-8') as f:
+                    f.write(original_content)
+                return original_content
+            except Exception as e:
+                print(f"Could not read file {filepath}: {e}")
+                return ""
 
 def find_cs_files(directory: str) -> List[str]:
     """指定されたディレクトリ内のすべての.csファイルを再帰的に検索する"""
@@ -42,7 +65,7 @@ def run_build() -> bool:
     print("--- Running build ---")
     try:
         result = subprocess.run(
-            ["dotnet", "build", "--nologo", "-v", "q", SLN_FILE],
+            ["msbuild", SLN_FILE, "-nologo", "/t:Rebuild"],
             capture_output=True,
             text=True,
             check=True,
@@ -69,7 +92,8 @@ def run_build() -> bool:
 
 def main():
     """メイン処理"""
-    cs_files = find_cs_files(TARGET_DIR)
+    cs_files = find_cs_files(TARGET_ROLE_DIR)
+    cs_files += find_cs_files(TARGET_GHOST_DIR)
     patterns = list(REPLACE_MAP.keys())
 
     total_changes_attempted = 0
@@ -82,8 +106,17 @@ def main():
             with open(filepath, 'r', encoding='utf-8') as f:
                 original_content = f.read()
         except Exception as e:
-            print(f"Could not read file {filepath}: {e}")
-            continue
+            try:
+                with open(filepath, 'r', encoding='utf-8-bom') as f:
+                    original_content = f.read()
+            except Exception as e:
+                try:
+                    with open(filepath, 'r', encoding='shift-jis') as f:
+                        original_content = f.read()
+                except Exception as e:
+                    print(f"Could not read file {filepath}: {e}")
+                    continue
+            
 
         # 変更が成功するたびにその状態を保存する
         last_successful_content = original_content
