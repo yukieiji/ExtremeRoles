@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
 namespace ExtremeRoles.Module.Interface;

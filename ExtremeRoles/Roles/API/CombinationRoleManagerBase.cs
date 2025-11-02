@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Roles.API;
@@ -31,11 +31,11 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
 
 	protected static Color DefaultColor => new Color(255f, 255f, 255f);
 
-	public sealed override IOldOptionLoader Loader
+	public sealed override IOptionLoader Loader
 	{
 		get
 		{
-			if (!OldOptionManager.Instance.TryGetCategory(
+			if (!OptionManager.Instance.TryGetCategory(
 					OptionTab.CombinationTab,
 					ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
 					out var cate))
@@ -68,7 +68,7 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
         int roleId, RoleTypes playerRoleType);
 
     protected sealed override void CreateVisionOption(
-        OldAutoParentSetOptionCategoryFactory factory, bool ignorePrefix)
+        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix)
     {
         // 複数のロールがまとまっているため、管理ロールで視界の設定はしない
         return;

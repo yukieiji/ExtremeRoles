@@ -12,7 +12,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -131,7 +131,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
 		factory.CreateBoolOption(
 		   HatterOption.CanRepairSabotage,

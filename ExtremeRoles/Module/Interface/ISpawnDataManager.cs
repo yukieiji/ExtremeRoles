@@ -1,5 +1,5 @@
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
@@ -20,7 +20,7 @@ public interface ISpawnDataManager
 	public IReadOnlyDictionary<ExtremeRoleType, int> CurrentSingleRoleUseNum { get; }
 
 	protected static int ComputeSpawnNum(
-		OldOptionCategory category,
+		OptionCategory category,
 		RoleSpawnOption minSpawnKey,
 		RoleSpawnOption maxSpawnKey)
 	{

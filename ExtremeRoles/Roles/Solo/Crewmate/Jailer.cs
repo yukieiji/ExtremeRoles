@@ -16,8 +16,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
@@ -317,7 +317,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		return true;
 	}
 
-	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateIntOption(
 			Option.AwakeTaskGage,
@@ -536,12 +536,12 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		bool Vent,
 		bool Sab);
 
-	public override IOldOptionLoader Loader { get; }
+	public override IOptionLoader Loader { get; }
 
 	private readonly List<int> allTask;
 
 	public Yardbird(
-		in IOldOptionLoader loader,
+		in IOptionLoader loader,
 		byte targetPlayerId,
 		Option option) : base(
 			RoleCore.BuildCrewmate(
@@ -581,7 +581,7 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		}
 	}
 
-	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}
@@ -628,10 +628,10 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 		bool Vent,
 		bool Sab);
 
-	public override IOldOptionLoader Loader { get; }
+	public override IOptionLoader Loader { get; }
 
 	public Lawbreaker(
-		IOldOptionLoader loader,
+		IOptionLoader loader,
 		Option option) : base(
 			RoleCore.BuildNeutral(
 				ExtremeRoleId.Lawbreaker,
@@ -653,7 +653,7 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 		}
 	}
 
-	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}

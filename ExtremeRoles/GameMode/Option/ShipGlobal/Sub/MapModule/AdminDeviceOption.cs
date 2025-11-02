@@ -1,4 +1,4 @@
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
@@ -23,7 +23,7 @@ public readonly struct AdminDeviceOption : IDeviceOption
 	public bool EnableLimit { get; }
 	public float LimitTime { get; }
 
-	public AdminDeviceOption(in OldOptionCategory cate)
+	public AdminDeviceOption(in OptionCategory cate)
 	{
 		AirShipEnable = (AirShipAdminMode)cate.GetValue<int>((int)AdminSpecialOption.AirShipEnable);
 
@@ -32,7 +32,7 @@ public readonly struct AdminDeviceOption : IDeviceOption
 		EnableLimit = device.EnableLimit;
 		LimitTime = device.LimitTime;
 	}
-	public static void Create(in OldOptionCategoryFactory factory)
+	public static void Create(in OptionCategoryFactory factory)
 	{
 		var removeOpt = IDeviceOption.Create(factory);
 

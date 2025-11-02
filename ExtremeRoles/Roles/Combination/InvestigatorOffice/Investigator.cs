@@ -14,7 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 #nullable enable
@@ -420,7 +420,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 	}
 
 	protected override void CreateSpecificOption(
-		OldAutoParentSetOptionCategoryFactory factory)
+		AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateFloatOption(
 			DetectiveOption.SearchRange,

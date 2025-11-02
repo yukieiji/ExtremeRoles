@@ -8,7 +8,7 @@ using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.Ability;
 using UnityEngine;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 
@@ -66,7 +66,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 5, 100);

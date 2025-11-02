@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Combination.Barter;
 
@@ -79,7 +79,7 @@ public sealed class CastlingNumInfo(int maxNumPerMeeting, int totalNum)
 
 public readonly record struct RandomCastling(bool On, int Num);
 
-public sealed class BarterStatus(IOldOptionLoader loader, bool isImpostor) : IStatusModel
+public sealed class BarterStatus(IOptionLoader loader, bool isImpostor) : IStatusModel
 {
 	private readonly CastlingNumInfo castlingNum = new CastlingNumInfo(
 			// オプション名が間違っているが後方互換性を持たせるためそのままにする

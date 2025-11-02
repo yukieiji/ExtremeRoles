@@ -5,7 +5,7 @@ using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
@@ -22,7 +22,7 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 	public IOldOption? OptionModel { private get; set; }
 
 	[HideFromIl2Cpp]
-	public OldOptionCategory? OptionCategoryModel { private get; set; }
+	public OptionCategory? OptionCategoryModel { private get; set; }
 
 	private readonly record struct AwakeProp(
 		TextMeshPro Title,
@@ -69,7 +69,7 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 		{
 			return;
 		}
-		OldOptionManager.Instance.UpdateToStep(OptionCategoryModel, OptionModel, -1);
+		OptionManager.Instance.UpdateToStep(OptionCategoryModel, OptionModel, -1);
 	}
 	public void Increase()
 	{
@@ -78,7 +78,7 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 		{
 			return;
 		}
-		OldOptionManager.Instance.UpdateToStep(OptionCategoryModel, OptionModel, 1);
+		OptionManager.Instance.UpdateToStep(OptionCategoryModel, OptionModel, 1);
 	}
 
 	public void SetMaterialLayer(int maskLayer)

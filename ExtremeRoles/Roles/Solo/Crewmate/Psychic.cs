@@ -17,7 +17,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -401,7 +401,7 @@ public sealed class Psychic :
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
             PsychicOption.AwakeTaskGage,

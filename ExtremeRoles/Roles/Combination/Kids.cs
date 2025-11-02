@@ -24,10 +24,10 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance.Il2Cpp;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.OldAutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
 #nullable enable
@@ -349,7 +349,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         return true;
     }
 
-    protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(factory, 7, 20);
         factory.CreateFloatOption(
@@ -387,19 +387,19 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 {
 	public MultiAssignRoleBase.OptionOffsetInfo? OffsetInfo { get; set; }
-	public override IOldOptionLoader Loader
+	public override IOptionLoader Loader
 	{
 		get
 		{
 			if (OffsetInfo is null ||
-				!OldOptionManager.Instance.TryGetCategory(
+				!OptionManager.Instance.TryGetCategory(
 					this.Tab,
 					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");
 			}
-			return new OldOptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
+			return new OptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
 		}
 	}
 

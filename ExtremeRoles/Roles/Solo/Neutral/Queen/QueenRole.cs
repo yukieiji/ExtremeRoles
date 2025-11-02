@@ -14,7 +14,7 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Queen;
@@ -431,7 +431,7 @@ public sealed class QueenRole :
         }
     }
 
-    protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateBoolOption(
             QueenOption.CanUseVent,

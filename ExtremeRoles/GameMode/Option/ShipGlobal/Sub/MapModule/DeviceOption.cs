@@ -1,5 +1,5 @@
-using ExtremeRoles.Module.CustomOption.Factory.Old;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
@@ -17,7 +17,7 @@ public interface IDeviceOption
 	public bool EnableLimit { get; }
 	public float LimitTime { get; }
 
-	public static IOldOption Create(in OldOptionCategoryFactory factory)
+	public static IOldOption Create(in OptionCategoryFactory factory)
 	{
 		var removeOpt = factory.CreateBoolOption(DeviceOptionType.IsRemove, false);
 		var enableLimit = factory.CreateBoolOption(
@@ -33,7 +33,7 @@ public interface IDeviceOption
 	}
 }
 
-public readonly struct DeviceOption(in OldOptionCategory category) : IDeviceOption
+public readonly struct DeviceOption(in OptionCategory category) : IDeviceOption
 {
 	public bool Disable { get; } = category.GetValue<bool>((int)DeviceOptionType.IsRemove);
 	public bool EnableLimit { get; } = category.GetValue<bool>((int)DeviceOptionType.EnableLimit);

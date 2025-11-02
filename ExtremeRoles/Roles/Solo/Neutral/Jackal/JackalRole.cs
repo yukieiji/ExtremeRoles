@@ -11,8 +11,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
@@ -85,7 +85,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
         public int KillRange = 0;
 
         public SidekickOptionHolder(
-            in OldAutoParentSetOptionCategoryFactory factory)
+            in AutoParentSetOptionCategoryFactory factory)
         {
             string roleName = ExtremeRoleId.Sidekick.ToString();
 
@@ -124,7 +124,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 				false, visionOption);
         }
 
-        public void ApplyOption(in IOldOptionLoader loader)
+        public void ApplyOption(in IOptionLoader loader)
         {
             var curOption = GameOptionsManager.Instance.CurrentGameOptions;
 
@@ -396,7 +396,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         // JackalOption
         createJackalOption(factory);
@@ -439,7 +439,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
         SidekickOption.ApplyOption(cate);
     }
 
-    private void createJackalOption(OldAutoParentSetOptionCategoryFactory factory)
+    private void createJackalOption(AutoParentSetOptionCategoryFactory factory)
     {
 
         IRoleAbility.CreateAbilityCountOption(

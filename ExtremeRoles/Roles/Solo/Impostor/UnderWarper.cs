@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
 
 using RoleEffectAction = Il2CppSystem.Action<RoleEffectAnimation>;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -331,7 +331,7 @@ public sealed class UnderWarper :
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
             UnderWarperOption.AwakeKillCount,

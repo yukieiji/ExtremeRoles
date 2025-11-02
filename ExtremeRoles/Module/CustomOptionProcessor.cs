@@ -13,7 +13,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Migrator;
-using ExtremeRoles.Module.CustomOption.Implemented.Old;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 
@@ -81,7 +81,7 @@ public static class CustomOptionCsvProcessor
 				string.Format("{1}{0}{2}{0}{3}{0}{4}",
 					comma, "Name", "OptionValue", "CustomOptionName", "SelectedIndex")); //ヘッダー
 
-			foreach (var (tab, tabContainer) in OldOptionManager.Instance)
+			foreach (var (tab, tabContainer) in OptionManager.Instance)
 			{
 				foreach (var cate in tabContainer.Category)
 				{
@@ -269,7 +269,7 @@ public static class CustomOptionCsvProcessor
 				MigratorManager.MigrateExportedOption(importedOption, version.Major);
 			}
 
-			var optionMng = OldOptionManager.Instance;
+			var optionMng = OptionManager.Instance;
 			var cleaner = new StringCleaner();
 
 			foreach (var (tab, tabContainer) in optionMng)

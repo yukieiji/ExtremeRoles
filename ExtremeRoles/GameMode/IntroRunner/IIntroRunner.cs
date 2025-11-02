@@ -114,7 +114,7 @@ public interface IIntroRunner
         else
         {
             // クライアントはここでオプション値を読み込むことで待ち時間を短く見せるトリック
-            OldOptionManager.Load();
+            OptionManager.Load();
 
             // ラグも有るかもしれないで1フレーム待機
             yield return null;

@@ -11,8 +11,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.OldAutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GhostRoles.API;
@@ -41,11 +41,11 @@ public abstract class GhostRoleBase
     protected readonly OptionTab Tab = OptionTab.GeneralTab;
     private int controlId;
 
-	public virtual IOldOptionLoader Loader
+	public virtual IOptionLoader Loader
 	{
 		get
 		{
-			if (!OldOptionManager.Instance.TryGetCategory(
+			if (!OptionManager.Instance.TryGetCategory(
 					this.Tab,
 					ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
 					out var cate))
@@ -232,7 +232,7 @@ public abstract class GhostRoleBase
 
     private OptionFactory createOptionFactory()
     {
-		var factory = OldOptionManager.CreateAutoParentSetOptionCategory(
+		var factory = OptionManager.CreateAutoParentSetOptionCategory(
 			ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
 			this.Name, this.Tab, this.Color);
 		factory.Create0To100Percentage10StepOption(

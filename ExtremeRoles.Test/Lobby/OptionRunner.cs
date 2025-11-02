@@ -55,7 +55,7 @@ public class OptionRunner
 
 	private void updateRandom()
 	{
-		var mng = OldOptionManager.Instance;
+		var mng = OptionManager.Instance;
 		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
 			if (!mng.TryGetTab(tab, out var tabObj))

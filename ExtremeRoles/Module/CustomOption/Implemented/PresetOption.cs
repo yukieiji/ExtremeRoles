@@ -77,7 +77,7 @@ public sealed class PresetOption : IOption
 	public static void Create(string name)
 	{
 		
-		using (var commonOptionFactory = OldOptionManager.CreateOptionCategory(
+		using (var commonOptionFactory = OptionManager.CreateOptionCategory(
 			categoryId, name, color: OptionCreator.DefaultOptionColor))
 		{
 			var presetOption = new PresetOption(name);

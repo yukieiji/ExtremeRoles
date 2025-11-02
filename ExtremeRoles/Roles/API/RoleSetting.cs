@@ -1,6 +1,6 @@
 using System;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.API;
@@ -34,7 +34,7 @@ public abstract class RoleOptionBase
 {
     public virtual bool CanKill { get; set; } = false;
 
-	public abstract IOldOptionLoader Loader { get; }
+	public abstract IOptionLoader Loader { get; }
 
 	public void Initialize()
     {
@@ -54,7 +54,7 @@ public abstract class RoleOptionBase
 		this.CreateRoleSpecificOption(factory);
     }
     public void CreateRoleSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
+        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
     {
         CreateVisionOption(factory, ignorePrefix);
 
@@ -65,20 +65,20 @@ public abstract class RoleOptionBase
 
         CreateSpecificOption(factory);
     }
-    protected abstract OldAutoParentSetOptionCategoryFactory CreateSpawnOption();
+    protected abstract AutoParentSetOptionCategoryFactory CreateSpawnOption();
 
     protected abstract void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory);
+        AutoParentSetOptionCategoryFactory factory);
     protected abstract void CreateVisionOption(
-        OldAutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true);
+        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true);
 
     protected abstract void CommonInit();
 
     protected abstract void RoleSpecificInit();
 
 	protected static void CreateKillerOption(
-		OldAutoParentSetOptionCategoryFactory factory,
-		IOldOption parent = null,
+		AutoParentSetOptionCategoryFactory factory,
+		IOption parent = null,
 		bool ignorePrefix = true,
 		bool invert = false)
 	{

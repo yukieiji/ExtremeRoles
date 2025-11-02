@@ -13,8 +13,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Tucker;
 
@@ -44,12 +44,12 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	private bool isTuckerDead;
 
 	public byte Parent { get; }
-	public override IOldOptionLoader Loader { get; }
+	public override IOptionLoader Loader { get; }
 	public override IStatusModel Status => status;
 	private readonly ChimeraStatus status;
 
 	public ChimeraRole(
-		IOldOptionLoader loader,
+		IOptionLoader loader,
 		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
 			RoleCore.BuildNeutral(
@@ -82,7 +82,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		isReviveNow = false;
 	}
 
-	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}

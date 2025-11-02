@@ -16,7 +16,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.Combination.Avalon;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -333,7 +333,7 @@ public sealed class Miner :
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
 		factory.CreateBoolOption(
 			MinerOption.LinkingAllVent,

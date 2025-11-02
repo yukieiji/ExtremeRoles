@@ -11,7 +11,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -185,7 +185,7 @@ public sealed class Moderator :
 	}
 
 	protected override void CreateSpecificOption(
-		OldAutoParentSetOptionCategoryFactory factory)
+		AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateIntOption(
 			ModeratorOption.AwakeTaskGage,

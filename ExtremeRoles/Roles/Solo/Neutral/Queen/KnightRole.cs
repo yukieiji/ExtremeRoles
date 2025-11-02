@@ -7,7 +7,7 @@ using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -110,7 +110,7 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 				ColorPalette.QueenWhite :
 				base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 
-	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateBoolOption(
 			Option.IsSubTeam, true);

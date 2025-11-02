@@ -1,14 +1,14 @@
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Roles.API;
 
 public abstract partial class SingleRoleBase
 {
-    protected sealed override OldAutoParentSetOptionCategoryFactory CreateSpawnOption()
+    protected sealed override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
-		var factory = OldOptionManager.CreateAutoParentSetOptionCategory(
+		var factory = OptionManager.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(this.Core.Id),
 			this.Core.Name, this.Tab, this.Core.Color);
 
@@ -33,7 +33,7 @@ public abstract partial class SingleRoleBase
     }
 
     protected sealed override void CreateVisionOption(
-        OldAutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
+        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
     {
         var visionOption = factory.CreateBoolOption(
             RoleCommonOption.HasOtherVision,

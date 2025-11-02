@@ -18,7 +18,7 @@ using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -105,7 +105,7 @@ public sealed class YokoRole :
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateBoolOption(
             YokoOption.CanRepairSabo,

@@ -17,7 +17,7 @@ public sealed class ExtremeSpawnLimiter : ISpawnLimiter
 	public ExtremeSpawnLimiter()
 	{
 
-		if (!OldOptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate))
+		if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate))
 		{
 			this.maxNum = [];
 			return;

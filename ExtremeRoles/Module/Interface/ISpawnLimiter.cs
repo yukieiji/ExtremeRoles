@@ -1,5 +1,5 @@
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Roles.API;
 
@@ -14,7 +14,7 @@ public interface ISpawnLimiter
 	public void Reduce(ExtremeRoleType Team, int num = 1);
 
 	public static int ComputeSpawnNum(
-		OldOptionCategory category,
+		OptionCategory category,
 		RoleSpawnOption minSpawnKey,
 		RoleSpawnOption maxSpawnKey)
 	{

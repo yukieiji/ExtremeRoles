@@ -135,7 +135,7 @@ public sealed class CompatModManager
 			ExtremeRolesPlugin.Logger.LogInfo(
 				$"CreateIntegrateOption:{mod.Name}");
 
-			using (var factory = OldOptionManager.CreateSequentialOptionCategory(
+			using (var factory = OptionManager.CreateSequentialOptionCategory(
 				startId + index, $"{mod.Name}Category"))
 			{
 				option.CreateIntegrateOption(factory);
@@ -151,7 +151,7 @@ public sealed class CompatModManager
 		StringBuilder builder = new StringBuilder();
 		for (int id = this.startOptionId; id <= this.endOptionId; ++id)
 		{
-			if (!OldOptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, id, out var cate))
+			if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, id, out var cate))
 			{
 				continue;
 			}

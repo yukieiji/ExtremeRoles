@@ -11,7 +11,7 @@ using ExtremeRoles.Roles.API.Interface.Status;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -201,7 +201,7 @@ public sealed class AcceleratorRole :
 	}
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
         CreateKillerOption(factory, imposterSetting);

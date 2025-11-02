@@ -15,7 +15,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using UnityObject = UnityEngine.Object;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 #nullable enable
@@ -367,7 +367,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 
-	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 50);
 		factory.CreateFloatOption(Option.Range, 10.0f, 5.0f, 30.0f, 0.5f);

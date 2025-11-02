@@ -6,7 +6,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 
@@ -75,7 +75,7 @@ public sealed class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 	}
 
 	protected override void CreateSpecificOption(
-		OldAutoParentSetOptionCategoryFactory factory)
+		AutoParentSetOptionCategoryFactory factory)
 	{ }
 
 	protected override void RoleSpecificInit()

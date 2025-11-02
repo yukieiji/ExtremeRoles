@@ -1,7 +1,7 @@
 using Il2CppSystem;
 
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
@@ -33,7 +33,7 @@ public sealed class SystemGetter(ShipStatus instance)
 	}
 }
 
-public sealed class EmergencyTaskOption(in OldOptionCategory category)
+public sealed class EmergencyTaskOption(in OptionCategory category)
 {
 	private readonly int skeldReactorTime = category.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.SkeldReactor);
 	private readonly int skeldOxygenTime = category.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.SkeldOxygen);
@@ -110,7 +110,7 @@ public sealed class EmergencyTaskOption(in OldOptionCategory category)
 		}
 	}
 
-	public static void Create(in OldOptionCategoryFactory factory)
+	public static void Create(in OptionCategoryFactory factory)
 	{
 		factory.CreateIntOption(
 			EmergencyTaskTimeOption.SkeldReactor,

@@ -9,7 +9,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -255,7 +255,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
     }
 
-    protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
             BuddyOption.AwakeTaskGage,

@@ -42,7 +42,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			{ ExtremeRoleType.Neutral , new Dictionary<int, SingleRoleSpawnData>() },
 		};
 
-		var opt = OldOptionManager.Instance;
+		var opt = OptionManager.Instance;
 
 		var allRoleNum = new Dictionary<ExtremeRoleType, int>()
 		{

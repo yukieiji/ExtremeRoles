@@ -16,7 +16,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Roles.Combination;
@@ -186,7 +186,7 @@ public sealed class Guesser :
                 {
                     case ExtremeRoleId.Jackal:
                         assignState.IsJackalOn = true;
-                        assignState.IsJackalForceReplaceLover = OldOptionManager.Instance.TryGetCategory(
+                        assignState.IsJackalForceReplaceLover = OptionManager.Instance.TryGetCategory(
 							OptionTab.NeutralTab,
 							ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Jackal),
 							out var cate) && cate.GetValue<JackalRole.JackalOption, bool>(JackalRole.JackalOption.ForceReplaceLover);
@@ -201,7 +201,7 @@ public sealed class Guesser :
                         break;
 					case ExtremeRoleId.Jailer:
 						add(ExtremeRoleId.Yardbird, ExtremeRoleType.Crewmate);
-						if (OldOptionManager.Instance.TryGetCategory(
+						if (OptionManager.Instance.TryGetCategory(
 								OptionTab.CrewmateTab,
 								ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Jailer),
 								out var jailer) && 
@@ -593,7 +593,7 @@ public sealed class Guesser :
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
 		CreateKillerOption(factory, imposterSetting);

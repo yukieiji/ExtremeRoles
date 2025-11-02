@@ -19,11 +19,11 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 
 using UnityObject = UnityEngine.Object;
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.OldSequentialOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.SequentialOptionCategoryFactory;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.Compat.Initializer;
-using ExtremeRoles.Module.CustomOption.Implemented.Old;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
@@ -176,7 +176,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 		this.elevatorOption = factory.CreateSelectionOption<ElevatorSelection>(SubmergedOption.EnableElevator);
 		this.replaceDoorMinigameOption = factory.CreateBoolOption(SubmergedOption.ReplaceDoorMinigame, false);
 
-		if (!OldOptionManager.Instance.TryGetCategory(
+		if (!OptionManager.Instance.TryGetCategory(
 				OptionTab.GeneralTab,
 				(int)ShipGlobalOptionCategory.RandomSpawnOption,
 				out var cate))

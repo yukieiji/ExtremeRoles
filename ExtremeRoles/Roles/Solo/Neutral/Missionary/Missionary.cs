@@ -19,7 +19,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.Combination.Avalon;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -87,7 +87,7 @@ public sealed class MissionaryRole :
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateBoolOption(
             MissionaryOption.TellDeparture,

@@ -10,8 +10,8 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Jackal;
@@ -25,7 +25,7 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 	private readonly bool sidekickJackalCanMakeSidekick = false;
 
 	public override IStatusModel? Status => status;
-	public override IOldOptionLoader Loader { get; }
+	public override IOptionLoader Loader { get; }
 
 	private readonly SidekickStatus status;
 
@@ -162,7 +162,7 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 	}
 
 	protected override void CreateSpecificOption(
-		OldAutoParentSetOptionCategoryFactory factory)
+		AutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}

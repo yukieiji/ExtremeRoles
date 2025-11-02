@@ -4,7 +4,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.GhostRoles;
 
@@ -83,7 +83,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         throw new System.Exception("Don't call this class method!!");
     }

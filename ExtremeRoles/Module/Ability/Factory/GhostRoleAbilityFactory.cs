@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.OldAutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 namespace ExtremeRoles.Module.Ability.Factory;
 

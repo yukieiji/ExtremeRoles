@@ -10,7 +10,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
@@ -156,7 +156,7 @@ public sealed class SurrogatorRole :
 			gurdNum);
 	}
 
-	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateBoolOption(Option.UseVent, false);
 		var taskOpt = factory.CreateBoolOption(

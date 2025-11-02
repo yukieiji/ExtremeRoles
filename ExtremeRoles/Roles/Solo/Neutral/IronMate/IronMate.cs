@@ -14,7 +14,7 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -102,7 +102,7 @@ public sealed class IronMateRole :
 	}
 
 	protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
 		factory.CreateIntOption(
 			Option.BlockNum,

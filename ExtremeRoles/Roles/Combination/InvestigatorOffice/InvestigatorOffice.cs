@@ -1,6 +1,6 @@
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 
@@ -19,7 +19,7 @@ public sealed class InvestigatorOfficeManager : ConstCombinationRoleManagerBase
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         base.CreateSpecificOption(factory);
 		factory.IdOffset = Roles.Count * ExtremeRoleManager.OptionOffsetPerRole;

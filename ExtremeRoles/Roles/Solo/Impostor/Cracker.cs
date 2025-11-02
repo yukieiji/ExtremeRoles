@@ -10,7 +10,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -136,7 +136,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 5);

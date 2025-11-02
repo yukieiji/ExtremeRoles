@@ -7,7 +7,7 @@ using ExtremeRoles.Module.Meeting;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -87,7 +87,7 @@ public sealed class Gambler :
         voteCount = 1;
     }
 
-    protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
             GamblerOption.ChangeVoteChance,

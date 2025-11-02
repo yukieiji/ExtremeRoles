@@ -16,7 +16,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 
 using BepInEx.Unity.IL2CPP.Utils;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 #nullable enable
@@ -141,7 +141,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 	protected override void CreateSpecificOption(
-		OldAutoParentSetOptionCategoryFactory factory)
+		AutoParentSetOptionCategoryFactory factory)
 	{
 		IRoleAbility.CreateAbilityCountOption(
 			factory, 2, 10);

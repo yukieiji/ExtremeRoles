@@ -7,7 +7,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
@@ -49,7 +49,7 @@ public interface IRoleSelector
 	public bool IsValidGlobalRoleOptionId(RoleSpawnOption optionId)
 		=> Enum.IsDefined(typeof(RoleSpawnOption), optionId);
 
-	public static bool RawXionUse => OldOptionManager.Instance.TryGetCategory(
+	public static bool RawXionUse => OptionManager.Instance.TryGetCategory(
 		OptionTab.GeneralTab,
 		ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 		out var cate) &&
@@ -67,20 +67,20 @@ public interface IRoleSelector
 
     public static void CreateRoleGlobalOption()
     {
-		using (var roleOptionFactory = OldOptionManager.CreateOptionCategory(
+		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
 			SpawnOptionCategory.RoleSpawnCategory,
 			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
 
-		using (var roleOptionFactory = OldOptionManager.CreateOptionCategory(
+		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
 			SpawnOptionCategory.GhostRoleSpawnCategory,
 			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
-		using (var xionCategory = OldOptionManager.CreateOptionCategory(
+		using (var xionCategory = OptionManager.CreateOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 			ExtremeRoleId.Xion.ToString(),
 			color: ColorPalette.XionBlue))
@@ -90,7 +90,7 @@ public interface IRoleSelector
 		}
 	}
 
-    private static void createExtremeRoleRoleSpawnOption(OldOptionCategoryFactory factory)
+    private static void createExtremeRoleRoleSpawnOption(OptionCategoryFactory factory)
     {
 		factory.CreateIntOption(
 			RoleSpawnOption.MinCrewmate,

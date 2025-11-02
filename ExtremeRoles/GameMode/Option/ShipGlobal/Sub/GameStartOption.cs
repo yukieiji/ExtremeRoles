@@ -1,4 +1,4 @@
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
@@ -25,7 +25,7 @@ public readonly struct GameStartOption
 		this.ReduceNum = 1;
 		this.FirstButtonCoolDown = 15;
 	}
-	public GameStartOption(in OldOptionCategory category)
+	public GameStartOption(in OptionCategory category)
 	{
 		this.IsKillCoolDownIsTen = category.GetValue<OnGameStartOption, bool>(
 			OnGameStartOption.IsKillCoolDownIsTen);
@@ -36,7 +36,7 @@ public readonly struct GameStartOption
 		this.FirstButtonCoolDown = category.GetValue<OnGameStartOption, int>(
 			OnGameStartOption.FirstButtonCoolDown);
 	}
-	public static void Create(in OldOptionCategoryFactory factory)
+	public static void Create(in OptionCategoryFactory factory)
 	{
 		var killCoolOpt = factory.CreateBoolOption(OnGameStartOption.IsKillCoolDownIsTen, true);
 		var buttonOpt = factory.CreateBoolOption(

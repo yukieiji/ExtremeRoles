@@ -9,7 +9,7 @@ using ExtremeRoles.Resources;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 #nullable enable
@@ -101,7 +101,7 @@ public sealed class Monika :
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
 		factory.CreateBoolOption(
 			Ops.IsSoloTeam, true);

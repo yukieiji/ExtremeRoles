@@ -5,7 +5,7 @@ using UnityEngine;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -37,7 +37,7 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
         this.CombGhostRole[id];
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
         base.CreateSpecificOption(factory);

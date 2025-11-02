@@ -1,7 +1,7 @@
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.RoleAssign;
 
@@ -153,9 +153,9 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			roleToImpostor(role) : role;
     }
 
-    protected override OldAutoParentSetOptionCategoryFactory CreateSpawnOption()
+    protected override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
-		var factory = OldOptionManager.CreateAutoParentSetOptionCategory(
+		var factory = OptionManager.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
 			this.RoleName,
 			OptionTab.CombinationTab,
@@ -221,7 +221,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         this.BaseRole.CreateRoleSpecificOption(
             factory);

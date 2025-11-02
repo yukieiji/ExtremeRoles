@@ -150,7 +150,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 
 		resetTimer();
 		bool isRefresh = false;
-		foreach (var (tab, container) in OldOptionManager.Instance)
+		foreach (var (tab, container) in OptionManager.Instance)
 		{
 			foreach (var cat in container.Category)
 			{
@@ -194,7 +194,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		vanillaSettings.settingsInfo.Clear();
 		optionObj.Clear();
 
-		foreach (var (tab, container) in OldOptionManager.Instance)
+		foreach (var (tab, container) in OptionManager.Instance)
 		{
 			var tabCategoryHeaderMasked = Instantiate(vanillaSettings.categoryHeaderOrigin);
 			tabCategoryHeaderMasked.transform.SetParent(
@@ -272,7 +272,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			this.tabPos.Add(tab, tabPos);
 			tabObj.transform.localPosition = tabPos;
 			yPos -= 0.9f;
-			if (!OldOptionManager.Instance.TryGetTab(tab, out var container))
+			if (!OptionManager.Instance.TryGetTab(tab, out var container))
 			{
 				continue;
 			}

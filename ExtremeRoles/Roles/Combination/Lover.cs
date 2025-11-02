@@ -10,8 +10,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Extension.Player;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -238,7 +238,7 @@ public sealed class Lover : MultiAssignRoleBase
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         var neutralSetting = factory.CreateBoolOption(
             LoverOption.IsNeutral,
@@ -333,7 +333,7 @@ public sealed class Lover : MultiAssignRoleBase
     }
 
     private void killerVisionSetting(
-		OldAutoParentSetOptionCategoryFactory factory,
+		AutoParentSetOptionCategoryFactory factory,
 		IOldOption killerOpt)
     {
         var visionOption = factory.CreateBoolOption(

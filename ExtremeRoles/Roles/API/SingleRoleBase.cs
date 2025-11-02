@@ -5,7 +5,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Roles.API;
@@ -42,11 +42,11 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
     public RoleCore Core { get; private set; }
 
-	public override IOldOptionLoader Loader
+	public override IOptionLoader Loader
 	{
 		get
 		{
-			if (!OldOptionManager.Instance.TryGetCategory(
+			if (!OptionManager.Instance.TryGetCategory(
 					this.Tab,
 					ExtremeRoleManager.GetRoleGroupId(this.Core.Id),
 					out var cate))

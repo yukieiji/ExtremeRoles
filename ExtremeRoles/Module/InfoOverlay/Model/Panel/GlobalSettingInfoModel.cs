@@ -21,14 +21,14 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 {
 	private StringBuilder printOption = new StringBuilder();
-	private OldOptionTabContainer? container;
+	private OptionTabContainer? container;
 
 	public (string, string) GetInfoText()
 	{
 		this.printOption.Clear();
 		if (container is null)
 		{
-			if (!OldOptionManager.Instance.TryGetTab(OptionTab.GeneralTab, out var tab))
+			if (!OptionManager.Instance.TryGetTab(OptionTab.GeneralTab, out var tab))
 			{
 				return ("", "");
 			}
@@ -77,7 +77,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		);
 	}
 
-	private static void tryAddHudString(OldOptionTabContainer tab, int categoryId, in StringBuilder builder)
+	private static void tryAddHudString(OptionTabContainer tab, int categoryId, in StringBuilder builder)
 	{
 		if (!tab.TryGetCategory(categoryId, out var category))
 		{
@@ -86,7 +86,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		category.AddHudString(builder);
 	}
 
-	private static void addRoleSpawnNumOptionHudString(OldOptionTabContainer tab, in StringBuilder builder)
+	private static void addRoleSpawnNumOptionHudString(OptionTabContainer tab, in StringBuilder builder)
 	{
 		// 生存役職周り
 		addSpawnNumOptionHudString(tab, SpawnOptionCategory.RoleSpawnCategory, builder, "Roles");
@@ -95,7 +95,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 	}
 
 	private static void addSpawnNumOptionHudString(
-		OldOptionTabContainer tab,
+		OptionTabContainer tab,
 		SpawnOptionCategory categoryId,
 		in StringBuilder builder,
 		string transKey)
@@ -126,7 +126,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 	}
 
 	private static string createRoleSpawnNumOptionHudStringLine(
-		OldOptionCategory category,
+		OptionCategory category,
 		string transKey,
 		RoleSpawnOption minOptKey,
 		RoleSpawnOption maxOptKey)
@@ -141,7 +141,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		return $"{optionName}: {optionValueStr}";
 	}
 
-	private static int getSpawnOptionValue(OldOptionCategory category, RoleSpawnOption optionKey)
+	private static int getSpawnOptionValue(OptionCategory category, RoleSpawnOption optionKey)
 		=> category.GetValue<int>((int)optionKey);
 
 	public void UpdateVisual()

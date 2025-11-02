@@ -8,7 +8,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
@@ -23,19 +23,19 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 
 	public OptionOffsetInfo? OffsetInfo { get; set; } = null;
 
-	public override IOldOptionLoader Loader
+	public override IOptionLoader Loader
 	{
 		get
 		{
 			if (OffsetInfo is null ||
-				!OldOptionManager.Instance.TryGetCategory(
+				!OptionManager.Instance.TryGetCategory(
 					this.Tab,
 					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");
 			}
-			return new OldOptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
+			return new OptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
 		}
 	}
 

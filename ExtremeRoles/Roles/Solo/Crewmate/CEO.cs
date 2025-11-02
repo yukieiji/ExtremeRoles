@@ -14,7 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 #nullable enable
@@ -341,7 +341,7 @@ public sealed class CEO : SingleRoleBase,
 		}
 	}
 
-	protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.Create0To100Percentage10StepOption(Option.AwakeTaskGage, defaultGage: 50);
 		factory.CreateBoolOption(Option.IsShowRolePlayerVote, true);

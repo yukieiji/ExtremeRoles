@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Interface;
 using Hazel;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -65,7 +65,7 @@ public sealed class SlaveDriver :
 	}
 
 	protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
 		factory.CreateBoolOption(
 			SlaveDriverOption.CanSeeTaskBar,

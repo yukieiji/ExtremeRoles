@@ -13,8 +13,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
@@ -31,7 +31,7 @@ public sealed class ServantRole :
 	private byte queenPlayerId;
 	private readonly FullScreenFlasher flasher = new FullScreenFlasher(new Color(0f, 0.8f, 0f));
 
-	public override IOldOptionLoader Loader { get; }
+	public override IOptionLoader Loader { get; }
 	public override IStatusModel Status => status;
 	private readonly ServantStatus status;
 
@@ -215,7 +215,7 @@ public sealed class ServantRole :
 	}
 
 	protected override void CreateSpecificOption(
-		OldAutoParentSetOptionCategoryFactory factory)
+		AutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}

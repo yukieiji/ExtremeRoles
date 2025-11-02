@@ -22,7 +22,7 @@ public static class KeyboardJoystickPatch
         { return; }
 
         if (ExtremeGameModeManager.Instance.RoleSelector.CanUseXion &&
-            OldOptionManager.Instance.TryGetCategory(
+            OptionManager.Instance.TryGetCategory(
 				OptionTab.GeneralTab,
 				ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 				out var cate) &&

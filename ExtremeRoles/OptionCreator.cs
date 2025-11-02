@@ -3,7 +3,7 @@ using UnityEngine;
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Module.CustomOption.Implemented.Old;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 
@@ -48,7 +48,7 @@ public static class OptionCreator
 
 		PresetOption.Create(CommonOption.PresetOption.ToString());
 
-		using (var commonOptionFactory = OldOptionManager.CreateOptionCategory(
+		using (var commonOptionFactory = OptionManager.CreateOptionCategory(
 			CommonOption.RandomOption, color: DefaultOptionColor))
 		{
 			var strongGen = commonOptionFactory.CreateBoolOption(

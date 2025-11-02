@@ -1,4 +1,4 @@
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
@@ -27,7 +27,7 @@ public readonly struct MeetingHudOption
 		this.MaxMeetingCount = 0;
 		this.UseRaiseHand = false;
 	}
-	public MeetingHudOption(in OldOptionCategory category)
+	public MeetingHudOption(in OptionCategory category)
 	{
 		this.MaxMeetingCount = category.GetValue<int>((int)MeetingOption.NumMeating);
 		this.UseRaiseHand = category.GetValue<bool>((int)MeetingOption.UseRaiseHand);
@@ -37,7 +37,7 @@ public readonly struct MeetingHudOption
 		this.DisableSelfVote = category.GetValue<bool>((int)MeetingOption.DisableSelfVote);
 	}
 
-	public static void Create(in OldOptionCategoryFactory factory)
+	public static void Create(in OptionCategoryFactory factory)
 	{
 		factory.CreateBoolOption(MeetingOption.UseRaiseHand, false);
 		factory.CreateIntOption(MeetingOption.NumMeating, 10, 0, 100, 1);

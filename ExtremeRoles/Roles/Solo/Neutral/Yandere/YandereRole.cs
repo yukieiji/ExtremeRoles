@@ -14,7 +14,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API.Interface;
 
 public sealed class YandereRole :
@@ -392,7 +392,7 @@ public sealed class YandereRole :
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(
             YandereOption.TargetKilledKillCoolReduceRate,

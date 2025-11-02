@@ -7,7 +7,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 
@@ -78,11 +78,11 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 
     }
 
-    protected override OldAutoParentSetOptionCategoryFactory CreateSpawnOption()
+    protected override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
 		// ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
 
-		var factory = OldOptionManager.CreateAutoParentSetOptionCategory(
+		var factory = OptionManager.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
 			this.RoleName,
 			OptionTab.CombinationTab,
@@ -112,7 +112,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
     }
 
     protected override void CreateSpecificOption(
-        OldAutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory)
     {
         IEnumerable<MultiAssignRoleBase> collection = Roles;
 

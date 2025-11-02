@@ -1,6 +1,6 @@
 
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.CustomOption.Factory.Old;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -11,7 +11,7 @@ public sealed class SpecialImpostor : SingleRoleBase
         true, false, true, true)
     {}
 
-    protected override void CreateSpecificOption(OldAutoParentSetOptionCategoryFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         return;
     }
