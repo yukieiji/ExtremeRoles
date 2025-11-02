@@ -8,6 +8,7 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 
@@ -165,37 +166,38 @@ public sealed class PsychoKiller :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             PsychoKillerOption.KillCoolReduceRate,
             5, 1, 15, 1,
             format: OptionUnit.Percentage);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             PsychoKillerOption.CombMax,
             2, 1, 5, 1);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             PsychoKillerOption.CombResetWhenMeeting,
             true);
 
-		var hasSelfKillTimer = factory.CreateNewBoolOption(
+		var hasSelfKillTimer = factory.CreateBoolOption(
 			PsychoKillerOption.HasSelfKillTimer,
 			false);
+		var hasSelfTimerActive = new ParentActive(hasSelfKillTimer);
+
 		factory.CreateFloatOption(
 			PsychoKillerOption.SelfKillTimerTime,
 			30.0f, 5.0f, 120.0f, 0.5f,
-			hasSelfKillTimer,
+			hasSelfTimerActive,
 			format: OptionUnit.Second);
 		var timerOpt = factory.CreateBoolOption(
 			PsychoKillerOption.IsForceRestartWhenMeetingEnd,
-			false, hasSelfKillTimer);
+			false, hasSelfTimerActive);
 		factory.CreateBoolOption(
 			PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd,
-			false, timerOpt,
-			invert: true);
+			false, new InvertActive(timerOpt));
 		factory.CreateIntOption(
 			PsychoKillerOption.SelfKillTimerModRate,
-			0, -50, 50, 1, hasSelfKillTimer,
+			0, -50, 50, 1, hasSelfTimerActive,
 			format: OptionUnit.Percentage);
 	}
 

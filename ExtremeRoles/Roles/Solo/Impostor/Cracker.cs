@@ -141,11 +141,11 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 5);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             CrackerOption.CanCrackDistance,
             1.0f, 1.0f, 5.0f, 0.5f);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             CrackerOption.RemoveDeadBody,
             false);
     }

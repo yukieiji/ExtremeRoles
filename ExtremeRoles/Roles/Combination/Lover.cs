@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -240,13 +241,13 @@ public sealed class Lover : MultiAssignRoleBase
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        var neutralSetting = factory.CreateNewBoolOption(
+        var neutralSetting = factory.CreateBoolOption(
             LoverOption.IsNeutral,
             false);
 
         var killerSetting = factory.CreateBoolOption(
             LoverOption.BecomNeutral,
-            false, neutralSetting);
+            false, new ParentActive(neutralSetting));
 
 		var target = factory.Get((int)CombinationRoleCommonOption.AssignsNum);
 
@@ -255,12 +256,14 @@ public sealed class Lover : MultiAssignRoleBase
 			1, 1, 1, target,
 			tempMaxValue: GameSystem.VanillaMaxPlayerNum - 1);
 
-        CreateKillerOption(factory, killerSetting);
-        killerVisionSetting(factory, killerSetting);
+		var killerSettingActive = new ParentActive(killerSetting);
+
+        CreateKillerOption(factory, killerSettingActive);
+        killerVisionSetting(factory, killerSettingActive);
 
         factory.CreateBoolOption(
             LoverOption.BecomeNeutralLoverCanUseVent,
-            false, killerSetting);
+            false, killerSettingActive);
     }
 
     protected override void RoleSpecificInit()
@@ -333,18 +336,20 @@ public sealed class Lover : MultiAssignRoleBase
 
     private void killerVisionSetting(
 		AutoParentSetOptionCategoryFactory factory,
-		IOption killerOpt)
+		IOptionActivator activator)
     {
         var visionOption = factory.CreateBoolOption(
             LoverOption.BecomeNeutralLoverHasOtherVision,
-            false, killerOpt);
+            false, activator);
+		var visonActive = new ParentActive(visionOption);
+
         factory.CreateFloatOption(LoverOption.BecomeNeutralLoverVision,
             2f, 0.25f, 5.0f, 0.25f,
-            visionOption, format: OptionUnit.Multiplier);
+			visonActive, format: OptionUnit.Multiplier);
 
         factory.CreateBoolOption(
             LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect,
-            false, visionOption);
+            false, visonActive);
     }
 
     private void exiledUpdate(

@@ -20,6 +20,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.Combination.Avalon;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -89,30 +90,30 @@ public sealed class MissionaryRole :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             MissionaryOption.TellDeparture,
             true);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             MissionaryOption.DepartureMinTime,
             10f, 1.0f, 15f, 0.5f,
 			format: OptionUnit.Second);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             MissionaryOption.DepartureMaxTime,
             30f, 15f, 120f, 0.5f
             , format: OptionUnit.Second);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             MissionaryOption.PropagateRange,
             1.2f, 0.0f, 2.0f, 0.1f);
 
         IRoleAbility.CreateCommonAbilityOption(factory);
 
-		var useOpt = factory.CreateNewBoolOption(
+		var useOpt = factory.CreateBoolOption(
 			MissionaryOption.IsUseSolemnJudgment,
 			false);
 		factory.CreateIntOption(
 			MissionaryOption.MaxJudgementNum,
 			3, 1, GameSystem.VanillaMaxPlayerNum, 1,
-			useOpt);
+			new ParentActive(useOpt));
 	}
 
     protected override void RoleSpecificInit()

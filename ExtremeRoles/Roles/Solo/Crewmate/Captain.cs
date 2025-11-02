@@ -329,15 +329,15 @@ public sealed class Captain :
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             CaptainOption.AwakeTaskGage,
             70, 0, 100, 10,
             format: OptionUnit.Percentage);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             CaptainOption.ChargeVoteWhenSkip,
             0.7f, 0.1f, 100.0f, 0.1f,
             format: OptionUnit.VoteNum);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             CaptainOption.AwakedDefaultVoteNum,
             0.0f, 0.0f, 100.0f, 0.1f,
             format: OptionUnit.VoteNum);

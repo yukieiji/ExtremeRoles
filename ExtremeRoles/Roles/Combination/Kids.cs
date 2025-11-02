@@ -352,7 +352,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(factory, 7, 20);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             DelinqentOption.Range,
             3.6f, 1.0f, 5.0f, 0.1f);
     }
@@ -525,23 +525,23 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 
     protected override void CreateSpecificOption(OptionFactory factory)
     {
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
             WispOption.WinNum,
             0, -5, 5, 1);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
             WispOption.TorchAbilityNum,
             1, 0, 5, 1);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
             WispOption.TorchNum,
             1, 1, 5, 1);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
             WispOption.TorchRange,
             1.6f, 1.0f, 5.0f, 0.1f);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
             WispOption.TorchActiveTime,
             10.0f, 5.0f, 60.0f, 0.1f,
             format: OptionUnit.Second);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
             WispOption.BlackOutTime,
             10.0f, 2.5f, 30.0f, 0.1f,
             format: OptionUnit.Second);

@@ -7,6 +7,7 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -157,30 +158,32 @@ public sealed class MadmateRole :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             MadmateOption.IsDontCountAliveCrew,
             false);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             MadmateOption.CanFixSabotage,
             false);
-        var ventUseOpt = factory.CreateNewBoolOption(
+        var ventUseOpt = factory.CreateBoolOption(
             MadmateOption.CanUseVent,
             false);
-        var taskOpt = factory.CreateNewBoolOption(
+        var taskOpt = factory.CreateBoolOption(
             MadmateOption.HasTask,
             false);
-        factory.CreateIntOption(
+		var taskOptActive = new ParentActive(taskOpt);
+
+		factory.CreateIntOption(
             MadmateOption.SeeImpostorTaskGage,
             70, 0, 100, 10,
-            taskOpt,
+			taskOptActive,
             format: OptionUnit.Percentage);
         var impFromSeeOpt = factory.CreateBoolOption(
             MadmateOption.CanSeeFromImpostor,
-            false, taskOpt);
+            false, taskOptActive);
         factory.CreateIntOption(
             MadmateOption.CanSeeFromImpostorTaskGage,
             70, 0, 100, 10,
-            impFromSeeOpt,
+            new ParentActive(impFromSeeOpt),
             format: OptionUnit.Percentage);
 
         IRoleAbility.CreateCommonAbilityOption(factory);

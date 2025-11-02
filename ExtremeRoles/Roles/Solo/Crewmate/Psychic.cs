@@ -18,6 +18,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -403,28 +404,30 @@ public sealed class Psychic :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             PsychicOption.AwakeTaskGage,
             30, 0, 100, 10,
             format: OptionUnit.Percentage);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 		   PsychicOption.AwakeDeadPlayerNum,
 		   2, 0, 7, 1);
 
         IRoleAbility.CreateAbilityCountOption(
             factory, 1, 5, 3.0f);
 
-		var isUpgradeOpt = factory.CreateNewBoolOption(
+		var isUpgradeOpt = factory.CreateBoolOption(
 			PsychicOption.IsUpgradeAbility,
 			false);
+		var isUpgradeOptActive = new ParentActive(isUpgradeOpt);
+
 		factory.CreateIntOption(
 			PsychicOption.UpgradeTaskGage,
 			70, 0, 100, 10,
-			isUpgradeOpt,
+			isUpgradeOptActive,
 			format: OptionUnit.Percentage);
 		factory.CreateIntOption(
 		   PsychicOption.UpgradeDeadPlayerNum,
-		   5, 0, 15, 1, isUpgradeOpt);
+		   5, 0, 15, 1, isUpgradeOptActive);
 	}
 
 	protected override void RoleSpecificInit()

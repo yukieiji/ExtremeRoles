@@ -19,6 +19,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -107,49 +108,51 @@ public sealed class YokoRole :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             YokoOption.CanRepairSabo,
             false);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             YokoOption.CanUseVent,
             false);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             YokoOption.SearchRange,
             7.5f, 5.0f, 15.0f, 0.5f);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             YokoOption.SearchTime,
             10f, 3.0f, 30f, 0.5f,
             format: OptionUnit.Second);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             YokoOption.TrueInfoRate,
             50, 25, 80, 5,
             format: OptionUnit.Percentage);
 
-		var yashiroOpt = factory.CreateNewBoolOption(
+		var yashiroOpt = factory.CreateBoolOption(
 			YokoOption.UseYashiro,
 			false);
-		IRoleAbility.CreateAbilityCountOption(factory, 3, 10, 5f, parentOpt: yashiroOpt);
+		var yashiroActive = new ParentActive(yashiroOpt);
+
+		IRoleAbility.CreateAbilityCountOption(factory, 3, 10, 5f, activator: yashiroActive);
 
 		factory.CreateIntOption(
 			YokoOption.YashiroActiveTime,
 			30, 1, 360, 1,
-			yashiroOpt,
+			yashiroActive,
 			format: OptionUnit.Second);
 
 		factory.CreateIntOption(
 			YokoOption.YashiroSeelTime,
 			10, 1, 360, 1,
-			yashiroOpt,
+			yashiroActive,
 			format: OptionUnit.Second);
 
 		factory.CreateFloatOption(
 			YokoOption.YashiroProtectRange,
 			5.0f, 1.0f, 10.0f, 0.1f,
-			yashiroOpt);
+			yashiroActive);
 
 		factory.CreateBoolOption(
 			YokoOption.YashiroUpdateWithMeeting,
-			true, yashiroOpt);
+			true, yashiroActive);
 	}
     protected override void RoleSpecificInit()
     {

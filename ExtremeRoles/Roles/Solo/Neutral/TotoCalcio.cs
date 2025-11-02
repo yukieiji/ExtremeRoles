@@ -184,13 +184,13 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
         AutoParentSetOptionCategoryFactory factory)
     {
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             TotocalcioOption.Range,
             1.0f, 0.0f, 2.0f, 0.1f);
 
         IRoleAbility.CreateAbilityCountOption(factory, 3, 5);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             TotocalcioOption.FinalCoolTime,
             80.0f, 45.0f, 180.0f, 0.1f,
             format: OptionUnit.Second);

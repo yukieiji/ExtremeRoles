@@ -232,11 +232,11 @@ public sealed class Shutter : GhostRoleBase
     protected override void CreateSpecificOption(OptionFactory factory)
     {
 		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
             ShutterOption.PhotoRange,
             7.5f, 0.5f, 25f, 0.5f);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
             ShutterOption.RightPlayerNameRate,
             50, 25, 100, 5,
             format: OptionUnit.Percentage);

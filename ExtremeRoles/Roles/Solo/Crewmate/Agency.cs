@@ -250,13 +250,13 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			AgencyOption.CanSeeTaskBar,
 			true);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
             AgencyOption.MaxTaskNum,
             2, 1, 3, 1);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             AgencyOption.TakeTaskRange,
             1.0f, 0.5f, 2.0f, 0.1f);
 

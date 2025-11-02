@@ -1,23 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using TMPro;
-using UnityEngine;
-
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
-using ExtremeRoles.Module.CustomOption.Factory;
+
 
 
 #nullable enable
@@ -261,38 +260,38 @@ public sealed class BarterRole :
 		AutoParentSetOptionCategoryFactory factory)
 	{
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
+		CreateKillerOption(factory, new ParentActive(imposterSetting));
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.AwakeTaskRate,
 			70, 0, 100, 10,
 			format: OptionUnit.Percentage);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.AwakeDeadPlayerNum,
 			7, 0, 12, 1);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.AwakeKillNum,
 			2, 0, 5, 1);
 
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			Option.CanCallMeeting,
 			false);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.CastlingNum,
 			1, 1, 100, 1,
 			format: OptionUnit.Shot);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.MaxCastlingNumWhenMeeting,
 			1, 1, 25, 1,
 			format: OptionUnit.Shot);
 
-		var randOpt = factory.CreateNewBoolOption(Option.RandomCastling, false);
+		var randOpt = factory.CreateBoolOption(Option.RandomCastling, false);
 		factory.CreateIntOption(
 			Option.OneCastlingNum, 1, 1, 25, 1,
-			randOpt,
+			new ParentActive(randOpt),
 			format: OptionUnit.Shot);
-		factory.CreateNewBoolOption(Option.ShowCastlingOther, false);
+		factory.CreateBoolOption(Option.ShowCastlingOther, false);
 	}
 
 	protected override void RoleSpecificInit()

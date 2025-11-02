@@ -9,6 +9,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -175,40 +176,42 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             SheriffOption.CanShootAssassin,
             false);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             SheriffOption.CanShootNeutral,
             true);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             SheriffOption.ShootNum,
             1, 1, GameSystem.VanillaMaxPlayerNum - 1, 1,
             format: OptionUnit.Shot);
 
-        var enableTaskRelatedOps = factory.CreateNewBoolOption(
+        var enableTaskRelatedOps = factory.CreateBoolOption(
             SheriffOption.EnableTaskRelated,
             false);
+		var taskOptActive = new ParentActive(enableTaskRelatedOps);
 
         factory.CreateFloatOption(
             SheriffOption.ReduceCurKillCool,
             2.0f, 1.0f, 5.0f,
-            0.1f, enableTaskRelatedOps,
+            0.1f, taskOptActive,
             format:OptionUnit.Second);
 
         factory.CreateBoolOption(
             SheriffOption.IsPerm,
-            false, enableTaskRelatedOps);
+            false, taskOptActive);
 
         var syncOpt = factory.CreateBoolOption(
             SheriffOption.IsSyncTaskAndShootNum,
-            false, enableTaskRelatedOps);;
+            false, taskOptActive);
         factory.CreateIntOption(
             SheriffOption.SyncShootTaskGage,
             5, 5, 100, 1,
-            syncOpt, format: OptionUnit.Percentage);
+            new ParentActive(syncOpt),
+			format: OptionUnit.Percentage);
     }
 
     protected override void RoleSpecificInit()

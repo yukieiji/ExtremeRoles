@@ -595,20 +595,20 @@ public sealed class Guesser :
         AutoParentSetOptionCategoryFactory factory)
     {
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
+		CreateKillerOption(factory, new ParentActive(imposterSetting));
 
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
             GuesserOption.CanCallMeeting,
             false);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             GuesserOption.GuessNum,
             1, 1, GameSystem.MaxImposterNum, 1,
             format: OptionUnit.Shot);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             GuesserOption.MaxGuessNumWhenMeeting,
             1, 1, GameSystem.MaxImposterNum, 1,
             format: OptionUnit.Shot);
-        var noneGuessRoleOpt = factory.CreateNewBoolOption(
+        var noneGuessRoleOpt = factory.CreateBoolOption(
             GuesserOption.CanGuessNoneRole,
             false);
         factory.CreateSelectionOption<GuesserOption, GuessMode>(

@@ -17,6 +17,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -470,27 +471,27 @@ public sealed class Photographer :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             PhotographerOption.AwakeTaskGage,
             30, 0, 100, 10,
             format: OptionUnit.Percentage);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             PhotographerOption.UpgradePhotoTaskGage,
             60, 0, 100, 10,
             format: OptionUnit.Percentage);
 
-        var chatUpgradeOpt = factory.CreateNewBoolOption(
+        var chatUpgradeOpt = factory.CreateBoolOption(
             PhotographerOption.EnableAllSendChat,
             false);
 
         factory.CreateIntOption(
             PhotographerOption.UpgradeAllSendChatTaskGage,
             80, 0, 100, 10,
-            chatUpgradeOpt,
+            new ParentActive(chatUpgradeOpt),
             format: OptionUnit.Percentage);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             PhotographerOption.PhotoRange,
             10.0f, 2.5f, 50f, 0.5f);
 

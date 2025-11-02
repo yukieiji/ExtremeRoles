@@ -125,17 +125,17 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
     {
         IRoleAbility.CreateAbilityCountOption(factory, 1, 10);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             MagicianOption.TeleportTargetRate,
             100, 10, 100, 10,
             format: OptionUnit.Percentage);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             MagicianOption.DupeTeleportTargetTo,
             true);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             MagicianOption.IncludeSpawnPoint,
             false);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             MagicianOption.IncludeRolePlayer,
             false);
     }

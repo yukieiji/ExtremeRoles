@@ -394,44 +394,44 @@ public sealed class YandereRole :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             YandereOption.TargetKilledKillCoolReduceRate,
             85, 25, 99, 1,
             format: OptionUnit.Percentage);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             YandereOption.NoneTargetKilledKillCoolMultiplier,
             1.2f, 1.0f, 2.0f, 0.1f,
             format: OptionUnit.Multiplier);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             YandereOption.BlockTargetTime,
             5.0f, 0.5f, 30.0f, 0.5f,
 			format: OptionUnit.Second);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             YandereOption.SetTargetRange,
             1.8f, 0.5f, 5.0f, 0.1f);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             YandereOption.SetTargetTime,
             2.0f, 0.1f, 7.5f, 0.1f,
             format: OptionUnit.Second);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             YandereOption.MaxTargetNum,
             5, 1, GameSystem.VanillaMaxPlayerNum, 1);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             YandereOption.RunawayTime,
             60.0f, 25.0f, 120.0f, 0.25f,
             format: OptionUnit.Second);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             YandereOption.HasOneSidedArrow,
             true);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             YandereOption.HasTargetArrow,
             true);
     }

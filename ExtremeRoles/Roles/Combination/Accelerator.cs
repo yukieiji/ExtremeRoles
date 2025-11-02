@@ -1,17 +1,15 @@
-using UnityEngine;
-
-using Hazel;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
+using Hazel;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -204,14 +202,14 @@ public sealed class AcceleratorRole :
         AutoParentSetOptionCategoryFactory factory)
     {
         var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-        CreateKillerOption(factory, imposterSetting);
+        CreateKillerOption(factory, new ParentActive(imposterSetting));
 
         IRoleAbility.CreateAbilityCountOption(
             factory, 3, 10, 30.0f);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.Speed, 1.0f, 0.1f,
 			3.0f, 0.1f);
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			Option.UseOtherPlayer,
 			true);
     }

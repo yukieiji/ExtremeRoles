@@ -192,23 +192,23 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 	protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             OverLoaderOption.AwakeImpostorNum,
             GameSystem.MaxImposterNum, 1,
             GameSystem.MaxImposterNum, 1);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             OverLoaderOption.AwakeKillCount,
             0, 0, 3, 1);
 
         IRoleAbility.CreateCommonAbilityOption(
             factory, 7.5f);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             OverLoaderOption.KillCoolReduceRate,
             75.0f, 50.0f, 90.0f, 1.0f,
             format: OptionUnit.Percentage);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             OverLoaderOption.MoveSpeed,
             1.5f, 1.0f, 3.0f, 0.1f,
             format: OptionUnit.Multiplier);

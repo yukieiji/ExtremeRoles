@@ -182,12 +182,12 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
         AutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(factory, 2, 5);
-		factory.CreateNewFloatOption(Option.StraightChargeTime, 3.0f, 0.1f, 30.0f, 0.1f, format: OptionUnit.Second);
-		factory.CreateNewFloatOption(Option.StraightRange, 1.2f, 0.1f, 3.0f, 0.1f);
-		factory.CreateNewIntOption(Option.StraightFirstSpeed, 15, 1, 100, 1);
-		factory.CreateNewFloatOption(Option.StraightAcceleration, -2.5f, -10.0f, 10.0f, 0.25f);
-		factory.CreateNewFloatOption(Option.StraightKillSpeed, 10.0f, 1.0f, 200.0f, 0.5f);
-		factory.CreateNewFloatOption(Option.StraightReflectionE, 0.5f, 0.0f, 2.0f, 0.1f);
+		factory.CreateFloatOption(Option.StraightChargeTime, 3.0f, 0.1f, 30.0f, 0.1f, format: OptionUnit.Second);
+		factory.CreateFloatOption(Option.StraightRange, 1.2f, 0.1f, 3.0f, 0.1f);
+		factory.CreateIntOption(Option.StraightFirstSpeed, 15, 1, 100, 1);
+		factory.CreateFloatOption(Option.StraightAcceleration, -2.5f, -10.0f, 10.0f, 0.25f);
+		factory.CreateFloatOption(Option.StraightKillSpeed, 10.0f, 1.0f, 200.0f, 0.5f);
+		factory.CreateFloatOption(Option.StraightReflectionE, 0.5f, 0.0f, 2.0f, 0.1f);
 	}
 
     protected override void RoleSpecificInit()

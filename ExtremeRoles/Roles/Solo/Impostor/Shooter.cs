@@ -13,6 +13,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using TMPro;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -357,35 +358,34 @@ public sealed class Shooter :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             ShooterOption.IsInitAwake,
             false);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             ShooterOption.AwakeKillNum,
             1, 0, 5, 1,
             format: OptionUnit.Shot);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             ShooterOption.AwakeImpNum,
             1, 1, GameSystem.MaxImposterNum, 1);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             ShooterOption.NoneAwakeWhenShoot,
             true);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             ShooterOption.ShootKillCoolPenalty,
             5.0f, 0.0f, 30.0f, 0.5f,
             format: OptionUnit.Second);
 
-        var meetingOps = factory.CreateNewBoolOption(
+        var meetingOps = factory.CreateBoolOption(
             ShooterOption.CanCallMeeting,
             true);
 
         factory.CreateBoolOption(
             ShooterOption.CanShootSelfCallMeeting,
-            true, meetingOps,
-            invert: true);
+            true, new InvertActive(meetingOps));
 
-        var maxShootOps = factory.CreateNewIntOption(
+        var maxShootOps = factory.CreateIntOption(
            ShooterOption.MaxShootNum,
            1, 1, 14, 1,
            format: OptionUnit.Shot);
@@ -404,11 +404,11 @@ public sealed class Shooter :
 			format: OptionUnit.Shot,
             tempMaxValue: 14);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             ShooterOption.ShootChargeTime,
             90.0f, 30.0f, 120.0f, 5.0f,
             format: OptionUnit.Second);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             ShooterOption.ShootKillNum,
             1, 0, 5, 1,
             format: OptionUnit.Shot);

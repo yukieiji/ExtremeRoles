@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API;
 
 using BepInEx.Unity.IL2CPP.Utils;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 #nullable enable
@@ -145,17 +146,17 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		IRoleAbility.CreateAbilityCountOption(
 			factory, 2, 10);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Ops.Range, 1.5f, 0.1f, 7.5f, 0.1f);
-		var impOpt = factory.CreateNewBoolOption(
+		var impOpt = factory.CreateBoolOption(
 			Ops.EffectOnImpo, false);
 		factory.CreateBoolOption(
 			Ops.EffectOnMarlin, false,
-			impOpt, invert: true);
-		factory.CreateNewFloatOption(
+			new InvertActive(impOpt));
+		factory.CreateFloatOption(
 			Ops.Delay, 5.0f, 0.0f, 30.0f, 0.5f,
 			format: OptionUnit.Second);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Ops.ActiveTime, 10, 1, 120, 1,
 			format: OptionUnit.Second);
 		this.allPos = [];

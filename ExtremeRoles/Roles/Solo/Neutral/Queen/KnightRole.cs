@@ -1,13 +1,14 @@
-using UnityEngine;
-
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory;
+using UnityEngine;
+
 
 #nullable enable
 
@@ -112,18 +113,20 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			Option.IsSubTeam, true);
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			Option.UseVent, false);
-		var taskOpt = factory.CreateNewBoolOption(
+		var taskOpt = factory.CreateBoolOption(
 			Option.HasTask, false);
+		var taskOptActive = new ParentActive(taskOpt);
+
 		factory.CreateIntOption(
 			Option.SeeQueenTaskRate, 50, 0, 100, 10,
-			taskOpt, format: OptionUnit.Percentage);
+			taskOptActive, format: OptionUnit.Percentage);
 
-		factory.CreateBoolOption(Option.CanKillQueen, true, taskOpt);
-		factory.CreateBoolOption(Option.CanKillServant, true, taskOpt);
+		factory.CreateBoolOption(Option.CanKillQueen, true, taskOptActive);
+		factory.CreateBoolOption(Option.CanKillServant, true, taskOptActive);
 	}
 
 	protected override void RoleSpecificInit()

@@ -1,14 +1,16 @@
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Module.Ability;
 using UnityEngine;
-using ExtremeRoles.Module.CustomOption.Factory;
+
 
 
 
@@ -70,27 +72,28 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 5, 100);
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			TeroristOption.CanActiveOtherSabotage,
 			false);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			TeroristOption.ExplosionTime,
 			45.0f, 10.0f, 240.0f, 1.0f,
 			format: OptionUnit.Second);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			TeroristOption.BombNum,
 			3, 1, 6, 1);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			TeroristOption.PlayerActivateTime,
 			3.0f, 0.25f, 10.0f, 0.25f,
 			format: OptionUnit.Second);
-		var deadPlayerOpt = factory.CreateNewBoolOption(
+		var deadPlayerOpt = factory.CreateBoolOption(
 			TeroristOption.CanUseDeadPlayer,
 			false);
 		factory.CreateFloatOption(
 			TeroristOption.DeadPlayerActivateTime,
 			10.0f, 3.0f, 45.0f, 1.0f,
-			deadPlayerOpt, format: OptionUnit.Second);
+			new ParentActive(deadPlayerOpt),
+			format: OptionUnit.Second);
 	}
 
     protected override void RoleSpecificInit()

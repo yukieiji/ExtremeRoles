@@ -109,7 +109,7 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
         IRoleAbility.CreateAbilityCountOption(
             factory, 1, 14);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             SmasherOption.SmashPenaltyKillCool,
             4.0f, 0.0f, 30f, 0.5f,
             format: OptionUnit.Second);

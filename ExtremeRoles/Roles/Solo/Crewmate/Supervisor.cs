@@ -8,6 +8,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -140,13 +141,13 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
         IRoleAbility.CreateCommonAbilityOption(
             factory, 3.0f);
 
-        var boostOption = factory.CreateNewBoolOption(
+        var boostOption = factory.CreateBoolOption(
             SuperviosrOption.IsBoostTask,
             false);
         factory.CreateIntOption(
             SuperviosrOption.TaskGage,
             100, 50, 100, 5,
-            boostOption,
+            new ParentActive(boostOption),
             format:OptionUnit.Percentage);
     }
 

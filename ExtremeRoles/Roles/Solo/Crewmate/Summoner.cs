@@ -158,7 +158,7 @@ public sealed class Summoner :
         AutoParentSetOptionCategoryFactory factory)
     {
 
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
 			IRoleAbility.DefaultCoolTime,
 			IRoleAbility.MinCoolTime,
@@ -166,15 +166,15 @@ public sealed class Summoner :
 			IRoleAbility.Step,
 			format: OptionUnit.Second);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.MarkingCount,
 			3, 1, 10, 1);
 
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.Range,
 			2.5f, 0.0f, 7.5f, 0.1f);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.SummonCount,
 			3, 1, 10, 1);
 	}

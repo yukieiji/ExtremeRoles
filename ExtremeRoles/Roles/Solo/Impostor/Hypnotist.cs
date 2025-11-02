@@ -565,47 +565,47 @@ public sealed class Hypnotist :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             HypnotistOption.AwakeCheckImpostorNum,
             1, 1, GameSystem.MaxImposterNum, 1);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             HypnotistOption.AwakeCheckTaskGage,
             60, 0, 100, 10,
             format: OptionUnit.Percentage);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             HypnotistOption.AwakeKillCount,
             2, 0, 5, 1,
             format: OptionUnit.Shot);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             HypnotistOption.Range,
             1.6f, 0.5f, 5.0f, 0.1f);
 
         IRoleAbility.CreateAbilityCountOption(factory, 1, 5);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             HypnotistOption.HideArrowRange,
             10.0f, 5.0f, 25.0f, 0.5f);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             HypnotistOption.DefaultRedAbilityPart,
             0, 0, 10, 1);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             HypnotistOption.HideKillButtonTime,
             15.0f, 2.5f, 60.0f, 0.5f,
             format: OptionUnit.Second);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             HypnotistOption.DollKillCoolReduceRate,
             10, 0, 75, 1,
             format: OptionUnit.Percentage);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             HypnotistOption.IsResetKillCoolWhenDollKill,
             true);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             HypnotistOption.DollCrakingCoolTime,
             30.0f, 0.5f, 120.0f, 0.5f,
             format: OptionUnit.Second);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             HypnotistOption.DollCrakingActiveTime,
             3.0f, 0.5f, 60.0f, 0.5f,
             format: OptionUnit.Second);

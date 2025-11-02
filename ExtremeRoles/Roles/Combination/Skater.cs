@@ -2,10 +2,12 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Combination;
@@ -71,27 +73,26 @@ public sealed class Skater :
         AutoParentSetOptionCategoryFactory factory)
     {
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
+		CreateKillerOption(factory, new ParentActive(imposterSetting));
 
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 50, 5.0f);
 
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.Acceleration,
 			1.25f, 0.05f, 2.0f, 0.05f);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.MaxSpeed,
 			10, 5, 50, 1);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.Friction,
 			0.25f, -1.0f, 1.0f, 0.01f);
-		var eOpt = factory.CreateNewBoolOption(
+		var eOpt = factory.CreateBoolOption(
 			Option.UseE, true);
 		factory.CreateFloatOption(
 			Option.EValue,
 			0.9f, 0.0f, 2.0f, 0.01f,
-			eOpt,
-			invert: true);
-		factory.CreateNewFloatOption(
+			new InvertActive(eOpt));
+		factory.CreateFloatOption(
 			Option.CanUseSpeed,
 			2.0f, 0.0f, 50.0f, 0.1f);
 	}

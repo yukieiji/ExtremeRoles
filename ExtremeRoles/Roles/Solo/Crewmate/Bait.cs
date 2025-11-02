@@ -179,22 +179,22 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 	protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.AwakeTaskGage,
 			70, 0, 100, 10,
 			format: OptionUnit.Percentage);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.DelayUntilForceReport,
 			5.0f, 0.0f, 30.0f, 0.5f,
 			format: OptionUnit.Second);
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			Option.EnableBaitBenefit,
 			true);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.KillCoolReduceMulti,
 			2.0f, 1.1f, 5.0f, 0.1f,
 			format: OptionUnit.Multiplier);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.ReduceTimer,
 			5.0f, 1.0f, 30.0f, 0.5f,
 			format: OptionUnit.Second);

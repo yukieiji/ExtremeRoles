@@ -125,7 +125,7 @@ public sealed class Poltergeist : GhostRoleBase
 
     protected override void CreateSpecificOption(OptionFactory factory)
     {
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
             Option.Range, 1.0f,
             0.2f, 3.0f, 0.1f);
 		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 1, 5, 3.0f);

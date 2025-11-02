@@ -292,38 +292,38 @@ public sealed class DelusionerRole :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             DelusionerOption.AwakeVoteNum,
             3, 0, 8, 1,
             format: OptionUnit.VoteNum);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             DelusionerOption.IsOnetimeAwake,
             false);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             DelusionerOption.Range,
             2.5f, 0.0f, 7.5f, 0.1f);
 
         IRoleAbility.CreateAbilityCountOption(
             factory, 3, 25);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             DelusionerOption.VoteCoolTimeReduceRate,
             5, 0, 100, 5,
             format: OptionUnit.Percentage);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             DelusionerOption.DeflectDamagePenaltyRate,
             10, 0, 100, 5,
             format: OptionUnit.Percentage);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             DelusionerOption.IsIncludeLocalPlayer,
             true);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             DelusionerOption.IsIncludeSpawnPoint,
             false);
 
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			DelusionerOption.EnableCounter,
 			false);
 

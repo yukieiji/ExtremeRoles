@@ -1351,7 +1351,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
 			IRoleAbility.DefaultCoolTime,
 			IRoleAbility.MinCoolTime,
@@ -1359,14 +1359,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			IRoleAbility.Step,
 			format: OptionUnit.Second);
 
-		var randomWepon = factory.CreateNewBoolOption(
+		var randomWepon = factory.CreateBoolOption(
 			Option.IsRandomInitAbility,
 			false);
 
-		factory.CreateBoolOption(
+		factory.CreateOldBoolOption(
 			Option.AllowDupe,
 			false, randomWepon);
-		factory.CreateBoolOption(
+		factory.CreateOldBoolOption(
 			Option.AllowAdvancedWeapon,
 			false, randomWepon);
 
@@ -1374,85 +1374,85 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Option.InitAbility,
 			new InvertActive(randomWepon));
 
-		var mapSetOps = factory.CreateNewBoolOption(
+		var mapSetOps = factory.CreateBoolOption(
 			Option.IsSetWeapon, true);
 
-		factory.CreateBoolOption(
+		factory.CreateOldBoolOption(
 			Option.SyncWeapon,
 			true, mapSetOps,
 			invert: true);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.HandGunCount,
 			1, 0, 10, 1);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.HandGunSpeed,
 			10.0f, 0.5f, 15.0f, 0.5f);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.HandGunRange,
 			3.5f, 0.1f, 5.0f, 0.1f);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.FlameCount,
 			1, 0, 10, 1);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.FlameChargeTime,
 			2.0f, 0.1f, 5.0f, 0.1f,
 			format: OptionUnit.Second);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.FlameActiveTime,
 			25.0f, 5.0f, 120.0f, 0.5f,
 			format: OptionUnit.Second);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.FlameFireSecond,
 			3.5f, 0.1f, 10.0f, 0.1f,
 			format: OptionUnit.Second);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.FlameDeadSecond,
 			3.5f, 0.1f, 10.0f, 0.1f,
 			format: OptionUnit.Second);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.SwordCount,
 			1, 0, 10, 1);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.SwordChargeTime,
 			3.0f, 0.5f, 30.0f, 0.5f,
 			format: OptionUnit.Second);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.SwordActiveTime,
 			15.0f, 0.5f, 60.0f, 0.5f,
 			format: OptionUnit.Second);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.SwordR,
 			1.0f, 0.25f, 5.0f, 0.25f);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.SniperRifleCount,
 			1, 0, 10, 1);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.SniperRifleSpeed,
 			50.0f, 25.0f, 75.0f, 0.5f);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.BeamRifleCount,
 			1, 0, 10, 1);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.BeamRifleSpeed,
 			7.0f, 0.1f, 10.0f, 0.1f);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.BeamRifleRange,
 			20.0f, 0.5f, 30.0f, 0.5f);
 
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.BeamSaberCount,
 			1, 0, 10, 1);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.BeamSaberChargeTime,
 			5, 1, 60, 1,
 			format: OptionUnit.Second);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.BeamSaberRange,
 			3.5f, 0.1f, 7.5f, 0.1f);
 
@@ -1465,7 +1465,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			5, 1, 60, 1,
 			format: OptionUnit.Second);
 		*/
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.WeaponMixTime,
 			3.0f, 0.5f, 25.0f, 0.5f,
 			format: OptionUnit.Second);

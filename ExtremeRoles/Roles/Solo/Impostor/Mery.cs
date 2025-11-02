@@ -319,10 +319,10 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         IRoleAbility.CreateAbilityCountOption(
             factory, 3, 5);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             MeryOption.ActiveNum,
             3, 1, 5, 1);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             MeryOption.ActiveRange,
             2.0f, 0.1f, 3.0f, 0.1f);
     }

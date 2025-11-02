@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
@@ -359,43 +360,42 @@ public sealed class Resurrecter :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             ResurrecterOption.AwakeTaskGage,
             100, 0, 100, 10,
             format: OptionUnit.Percentage);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             ResurrecterOption.ResurrectTaskGage,
             100, 50, 100, 10,
             format: OptionUnit.Percentage);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             ResurrecterOption.ResurrectDelayTime,
             5.0f, 4.0f, 60.0f, 0.1f,
             format: OptionUnit.Second);
 
-        var meetingResetOpt = factory.CreateNewBoolOption(
+        var meetingResetOpt = factory.CreateBoolOption(
             ResurrecterOption.IsMeetingCoolResetOnResurrect,
             true);
 
         factory.CreateFloatOption(
             ResurrecterOption.ResurrectMeetingCooltime,
             20.0f, 5.0f, 60.0f, 0.25f,
-            meetingResetOpt,
-            format: OptionUnit.Second,
-            invert: true);
+            new InvertActive(meetingResetOpt),
+            format: OptionUnit.Second);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             ResurrecterOption.ResurrectTaskResetMeetingNum,
             1, 1, 5, 1);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             ResurrecterOption.ResurrectTaskResetGage,
             20, 10, 50, 5,
             format: OptionUnit.Percentage);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             ResurrecterOption.CanResurrectAfterDeath,
             false);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             ResurrecterOption.CanResurrectOnExil,
             false);
     }

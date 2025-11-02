@@ -142,24 +142,24 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             EvolverOption.IsEvolvedAnimation,
             true);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             EvolverOption.IsEatingEndCleanBody,
             true);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             EvolverOption.EatingRange,
             2.5f, 0.5f, 5.0f, 0.5f);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             EvolverOption.KillCoolReduceRate,
             10, 1, 50, 1,
             format: OptionUnit.Percentage);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             EvolverOption.KillCoolResuceRateMulti,
             1.0f, 1.0f, 5.0f, 0.1f,
             format: OptionUnit.Multiplier);

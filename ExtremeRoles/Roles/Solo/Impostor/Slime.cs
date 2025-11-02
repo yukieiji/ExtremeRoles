@@ -200,7 +200,7 @@ public sealed class Slime :
     {
         IRoleAbility.CreateCommonAbilityOption(
             factory, 30.0f);
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			Option.SeeMorphMerlin, false);
     }
 

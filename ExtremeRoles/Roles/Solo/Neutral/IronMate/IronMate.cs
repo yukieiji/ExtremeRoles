@@ -104,25 +104,25 @@ public sealed class IronMateRole :
 	protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			Option.BlockNum,
 			1, 0, 10, 1);
 
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.SlowTime,
 			10.0f, 0.0f, 30.0f, 0.5f,
 			format: OptionUnit.Second);
 
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.SlowMod,
 			0.7f, 0.1f, 1.0f, 0.1f,
 			format: OptionUnit.Multiplier);
 
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.PlayerShowTime,
 			10f, 0.0f, 30.0f, 0.1f,
 			format: OptionUnit.Second);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.DeadBodyShowTimeOnAfterPlayer,
 			10f, 0.0f, 30.0f, 0.1f,
 			format: OptionUnit.Second);

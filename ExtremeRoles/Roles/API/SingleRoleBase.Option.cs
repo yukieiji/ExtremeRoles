@@ -1,5 +1,6 @@
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Roles.API;
@@ -19,12 +20,12 @@ public abstract partial class SingleRoleBase
         int spawnNum = this.IsImpostor() ?
             GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
             RoleCommonOption.RoleNum,
             1, 1, spawnNum, 1,
 			ignorePrefix: true);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1,
 			ignorePrefix: true);
@@ -35,18 +36,20 @@ public abstract partial class SingleRoleBase
     protected sealed override void CreateVisionOption(
         AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
     {
-        var visionOption = factory.CreateNewBoolOption(
+        var visionOption = factory.CreateBoolOption(
             RoleCommonOption.HasOtherVision,
             false,
 			ignorePrefix: ignorePrefix);
+		var visonOptActive = new ParentActive(visionOption);
+
 		factory.CreateFloatOption(RoleCommonOption.Vision,
             2f, 0.25f, 5.0f, 0.25f,
-            visionOption, format: OptionUnit.Multiplier,
+			visonOptActive, format: OptionUnit.Multiplier,
 			ignorePrefix: ignorePrefix);
 
 		factory.CreateBoolOption(
             RoleCommonOption.ApplyEnvironmentVisionEffect,
-            this.IsCrewmate(), visionOption,
+            this.IsCrewmate(), visonOptActive,
 			ignorePrefix: ignorePrefix);
     }
 }

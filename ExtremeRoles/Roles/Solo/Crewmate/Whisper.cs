@@ -7,6 +7,7 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 #nullable enable
@@ -195,31 +196,31 @@ public sealed class Whisper :
         AutoParentSetOptionCategoryFactory factory)
     {
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             WhisperOption.AbilityOffTime,
             2.0f, 1.0f, 5.0f, 0.5f,
             format: OptionUnit.Second);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             WhisperOption.AbilityOnTime,
             4.0f, 1.0f, 10.0f, 0.5f,
             format: OptionUnit.Second);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             WhisperOption.TellTextTime,
             3.0f, 1.0f, 25.0f, 0.5f,
             format: OptionUnit.Second);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             WhisperOption.MaxTellText,
             3, 1, 10, 1);
-		var awakeOpt = factory.CreateNewBoolOption(
+		var awakeOpt = factory.CreateBoolOption(
 			WhisperOption.EnableAwakeAbility,
 			false);
 		factory.CreateIntOption(
 			WhisperOption.AbilityTaskGage,
 			70, 0, 100, 10,
-			awakeOpt,
+			new ParentActive(awakeOpt),
 			format: OptionUnit.Percentage);
 	}
 

@@ -307,8 +307,8 @@ public sealed class Heretic :
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateNewBoolOption(Option.UseVent, false);
-		var taskOpt = factory.CreateNewBoolOption(
+		factory.CreateBoolOption(Option.UseVent, false);
+		var taskOpt = factory.CreateBoolOption(
 			Option.HasTask,
 			false);
 
@@ -322,7 +322,7 @@ public sealed class Heretic :
 		var killModeOpt = factory.CreateSelectionOption<Option, KillMode>(Option.KillMode);
 		var hereticKillModeActive = new HereticKillModeActive(killModeOpt);
 
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
 			IRoleAbility.DefaultCoolTime,
 			IRoleAbility.MinCoolTime,
@@ -330,12 +330,12 @@ public sealed class Heretic :
 			IRoleAbility.Step,
 			hereticKillModeActive,
 			format: OptionUnit.Second);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.Range,
 			1.2f, 0.1f, 2.5f, 0.1f,
 			hereticKillModeActive);
 
-		factory.CreateNewBoolOption(Option.CanKillImpostor, false);
+		factory.CreateBoolOption(Option.CanKillImpostor, false);
 	}
 
 	protected override void RoleSpecificInit()

@@ -167,7 +167,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			GameSystem.MaxImposterNum :
 			(GameSystem.VanillaMaxPlayerNum - 1);
 
-		var roleSetNumOption = factory.CreateNewIntOption(
+		var roleSetNumOption = factory.CreateIntOption(
 			RoleCommonOption.RoleNum,
 			1, 1, maxSetNum, 1,
 			ignorePrefix: true);
@@ -176,39 +176,38 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		int roleAssignNum = this.BaseRole.IsImpostor() ?
 			GameSystem.MaxImposterNum :
 			GameSystem.VanillaMaxPlayerNum - 1;
-		var roleAssignNumOption = factory.CreateNewIntOption(
+		var roleAssignNumOption = factory.CreateIntOption(
 			CombinationRoleCommonOption.AssignsNum,
 			this.minimumRoleNum, this.minimumRoleNum,
 			roleAssignNum, 1,
 			isHidden: isHideMultiAssign,
 			ignorePrefix: true);
 
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			CombinationRoleCommonOption.IsMultiAssign, false,
 			ignorePrefix: true,
 			isHidden: this.RoleType is CombinationRoleType.Traitor);
 
 		// 後で直す roleAssignNumOption.AddWithUpdate(roleSetNumOption);
 
-		factory.CreateNewIntOption(RoleCommonOption.AssignWeight,
+		factory.CreateIntOption(RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1, ignorePrefix: true);
 
         if (this.canAssignImposter)
         {
-			var assignRatioOption = factory.CreateNewBoolOption(
+			var assignRatioOption = factory.CreateBoolOption(
 				CombinationRoleCommonOption.IsRatioTeamAssign,
 				false, ignorePrefix: true);
 
 			var isImposterAssignOps = factory.CreateBoolOption(
 				CombinationRoleCommonOption.IsAssignImposter,
-				false, assignRatioOption,
-				ignorePrefix: true,
-				invert: true);
+				false, new InvertActive(assignRatioOption),
+				ignorePrefix: true);
 
 			factory.CreateIntOption(
 				CombinationRoleCommonOption.ImposterSelectedRate,
 				10, 10, SingleRoleSpawnData.MaxSpawnRate, 10,
-				isImposterAssignOps,
+				new ParentActive(isImposterAssignOps),
 				format: OptionUnit.Percentage,
 				ignorePrefix: true);
 

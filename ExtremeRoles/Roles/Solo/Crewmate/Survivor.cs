@@ -197,15 +197,15 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             SurvivorOption.AwakeTaskGage,
             70, 0, 100, 10,
             format: OptionUnit.Percentage);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             SurvivorOption.DeadWinTaskGage,
             100, 50, 100, 10,
             format: OptionUnit.Percentage);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             SurvivorOption.NoWinSurvivorAssignGhostRole,
             true);
     }

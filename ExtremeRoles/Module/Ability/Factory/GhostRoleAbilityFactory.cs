@@ -29,7 +29,7 @@ public static class GhostRoleAbilityFactory
 		float defaultActiveTime = float.MaxValue)
 	{
 
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
 			defaultCoolTime, minCoolTime,
 			maxCoolTime, step,
@@ -40,13 +40,13 @@ public static class GhostRoleAbilityFactory
 			defaultActiveTime = Mathf.Clamp(
 				defaultActiveTime, minActiveTime, maxActiveTime);
 
-			factory.CreateNewFloatOption(
+			factory.CreateFloatOption(
 				RoleAbilityCommonOption.AbilityActiveTime,
 				defaultActiveTime, minActiveTime, maxActiveTime, step,
 				format: OptionUnit.Second);
 		}
 
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 		   GhostRoleOption.IsReportAbility,
 		   true);
 	}
@@ -59,7 +59,7 @@ public static class GhostRoleAbilityFactory
 	{
 		CreateButtonOption(factory, defaultActiveTime);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			RoleAbilityCommonOption.AbilityCount,
 			defaultAbilityCount, 1,
 			maxAbilityCount, 1,

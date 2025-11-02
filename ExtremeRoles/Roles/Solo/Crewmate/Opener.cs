@@ -137,14 +137,14 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 5);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             OpenerOption.Range,
             2.0f, 0.5f, 5.0f, 0.1f);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             OpenerOption.ReduceRate,
             45, 5, 95, 1,
             format: OptionUnit.Percentage);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             OpenerOption.PlusAbility,
             5, 1, 10, 1,
             format: OptionUnit.Shot);

@@ -35,7 +35,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		=> this.internalFactory.Get(id);
 
 	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
-	public IOption CreateBoolOption<T>(
+	public IOption CreateOldBoolOption<T>(
 		T option,
 		bool defaultValue,
 		IOption? parent = null,
@@ -43,10 +43,10 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
-		=> CreateNewBoolOption(option, defaultValue, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
+		=> CreateBoolOption(option, defaultValue, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
 	
 	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
-	public IOption CreateFloatOption<T>(
+	public IOption CreateOldFloatOption<T>(
 		T option,
 		float defaultValue,
 		float min, float max, float step,
@@ -55,21 +55,9 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
-		=> CreateNewFloatOption(option, defaultValue, min, max, step, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
+		=> CreateFloatOption(option, defaultValue, min, max, step, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
 
-	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
-	public IOption CreateIntOption<T>(
-		T option,
-		int defaultValue,
-		int min, int max, int step,
-		IOption? parent = null,
-		bool isHidden = false,
-		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		bool ignorePrefix = false) where T : struct, IConvertible
-		=> CreateNewIntOption(option, defaultValue, min, max, step, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
-
-	public IOption CreateNewBoolOption<T>(
+	public IOption CreateBoolOption<T>(
 		T option,
 		bool defaultValue,
 		IOptionActivator? activator = null,
@@ -92,7 +80,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		return newOption;
 	}
 
-	public IOption CreateNewFloatOption<T>(
+	public IOption CreateFloatOption<T>(
 		T option,
 		float defaultValue,
 		float min, float max, float step,
@@ -146,7 +134,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		return newOption;
 	}
 
-	public IOption CreateNewIntOption<T>(
+	public IOption CreateIntOption<T>(
 		T option,
 		int defaultValue,
 		int min, int max, int step,
@@ -252,7 +240,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool isHidden = false,
 		bool ignorePrefix = false,
 		int defaultGage = 0) where T : struct, IConvertible
-		=> CreateNewIntOption(
+		=> CreateIntOption(
 			option,
 			defaultGage, 0, SingleRoleSpawnData.MaxSpawnRate, 10,
 			activator,

@@ -124,7 +124,7 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		IRoleAbility.CreateCommonAbilityOption(
 			factory);
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			Option.SeeDummyMerlin,
 			true);
 	}

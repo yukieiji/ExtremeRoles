@@ -146,10 +146,10 @@ public sealed class Artist :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			ArtistOption.CanUseVent,
 			false);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			ArtistOption.WinAreaSize,
 			15, 1, 100, 1);
         IRoleAbility.CreateCommonAbilityOption(

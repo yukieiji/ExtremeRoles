@@ -5,6 +5,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Loner;
 
@@ -52,16 +53,17 @@ public sealed class LonerRole : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-		factory.CreateNewIntOption(Option.StressMaxGage, 10, 1, 100, 1);
-		factory.CreateNewFloatOption(Option.StressRange, 2.5f, 0.5f, 3.0f, 0.1f);
-		factory.CreateNewIntOption(Option.StressIgnoreTime, 10, 1, 30, 1, format: OptionUnit.Second);
-		factory.CreateNewBoolOption(Option.StressProgressOnTask, false);
-		factory.CreateNewBoolOption(Option.StressProgressOnVentPlayer, true);
-		factory.CreateNewBoolOption(Option.StressProgressOnMovingPlatPlayer, false);
+		factory.CreateIntOption(Option.StressMaxGage, 10, 1, 100, 1);
+		factory.CreateFloatOption(Option.StressRange, 2.5f, 0.5f, 3.0f, 0.1f);
+		factory.CreateIntOption(Option.StressIgnoreTime, 10, 1, 30, 1, format: OptionUnit.Second);
+		factory.CreateBoolOption(Option.StressProgressOnTask, false);
+		factory.CreateBoolOption(Option.StressProgressOnVentPlayer, true);
+		factory.CreateBoolOption(Option.StressProgressOnMovingPlatPlayer, false);
 		
-		var arrowOpt = factory.CreateNewBoolOption(Option.IsShowArrow, true);
-		factory.CreateIntOption(Option.ArrowNum, 1, 1, 5, 1, arrowOpt, invert: true);
-		factory.CreateBoolOption(Option.ArrowShowVentPlayer, true, arrowOpt, invert: true);
+		var arrowOpt = factory.CreateBoolOption(Option.IsShowArrow, true);
+		var arrowOptActive = new InvertActive(arrowOpt);
+		factory.CreateIntOption(Option.ArrowNum, 1, 1, 5, 1, arrowOptActive);
+		factory.CreateBoolOption(Option.ArrowShowVentPlayer, true, arrowOptActive);
 	}
 
 	protected override void RoleSpecificInit()

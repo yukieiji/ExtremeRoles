@@ -126,12 +126,12 @@ public interface IRoleAbility : IRoleResetMeeting
 	public static void CreateCommonAbilityOption(
 		AutoParentSetOptionCategoryFactory factory,
 		float defaultActiveTime = float.MaxValue,
-		IOption parentOpt = null)
+		IOptionActivator activator = null)
 	{
 		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
 			DefaultCoolTime, MinCoolTime, MaxCoolTime, Step,
-			parentOpt,
+			activator,
 			format: OptionUnit.Second);
 
 		if (defaultActiveTime != float.MaxValue)
@@ -141,7 +141,7 @@ public interface IRoleAbility : IRoleResetMeeting
 			factory.CreateFloatOption(
 				RoleAbilityCommonOption.AbilityActiveTime,
 				defaultActiveTime, minActiveTime, maxActiveTime, Step,
-				parentOpt,
+				activator,
 				format: OptionUnit.Second);
 		}
 
@@ -153,17 +153,18 @@ public interface IRoleAbility : IRoleResetMeeting
 		int maxAbilityCount,
 		float defaultActiveTime = float.MaxValue,
 		int minAbilityCount = 1,
-		IOption parentOpt = null)
+		IOptionActivator activator = null)
 	{
 		CreateCommonAbilityOption(
 			factory,
 			defaultActiveTime,
-			parentOpt);
+			activator);
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			RoleAbilityCommonOption.AbilityCount,
 			defaultAbilityCount, minAbilityCount,
 			maxAbilityCount, 1,
+			activator,
 			format: OptionUnit.Shot);
 
 	}

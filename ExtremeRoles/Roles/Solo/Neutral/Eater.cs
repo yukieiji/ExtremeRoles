@@ -303,32 +303,32 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         AutoParentSetOptionCategoryFactory factory)
     {
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             EaterOption.CanUseVent,
             true);
 
 		IRoleAbility.CreateAbilityCountOption(
 			factory, 5, 7, 7.5f);
 
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
             EaterOption.EatRange,
             1.0f, 0.0f, 2.0f, 0.1f);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
             EaterOption.DeadBodyEatActiveCoolTimePenalty,
             10, 0, 25, 1,
             format: OptionUnit.Percentage);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
             EaterOption.KillEatCoolTimePenalty,
             10, 0, 25, 1,
             format: OptionUnit.Percentage);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
             EaterOption.KillEatActiveCoolTimeReduceRate,
             10, 0, 50, 1,
             format: OptionUnit.Percentage);
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
             EaterOption.IsResetCoolTimeWhenMeeting,
             false);
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
             EaterOption.IsShowArrowForDeadBody,
             true);
     }

@@ -1,12 +1,13 @@
-using UnityEngine;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory;
+using UnityEngine;
+
 
 #nullable enable
 
@@ -66,13 +67,13 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			Option.UseVent, false);
-		var taskOpt = factory.CreateNewBoolOption(
+		var taskOpt = factory.CreateBoolOption(
 			Option.HasTask, false);
 		factory.CreateIntOption(
 			Option.SeeQueenTaskRate, 50, 0, 100, 10,
-			taskOpt, format: OptionUnit.Percentage);
+			new ParentActive(taskOpt), format: OptionUnit.Percentage);
 	}
 
 	protected override void RoleSpecificInit()

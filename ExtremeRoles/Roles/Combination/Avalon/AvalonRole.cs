@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -60,26 +61,28 @@ public sealed class Assassin : MultiAssignRoleBase
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             AssassinOption.HasTask,
             false);
-        var killedOps = factory.CreateNewBoolOption(
+        var killedOps = factory.CreateBoolOption(
             AssassinOption.CanKilled,
             false);
+		var killOptActive = new ParentActive(killedOps);
+
         factory.CreateBoolOption(
             AssassinOption.CanKilledFromCrew,
-            false, killedOps);
+            false, killOptActive);
         factory.CreateBoolOption(
             AssassinOption.CanKilledFromNeutral,
-            false, killedOps);
+            false, killOptActive);
         var meetingOpt = factory.CreateBoolOption(
             AssassinOption.IsDeadForceMeeting,
-            true, killedOps);
+            true, killOptActive);
         factory.CreateBoolOption(
             AssassinOption.CanSeeRoleBeforeFirstMeeting,
-            false, meetingOpt);
+            false, new ParentActive(meetingOpt));
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
              AssassinOption.CanSeeVote,
             true);
     }
@@ -273,21 +276,21 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             MarlinOption.HasTask,
             false);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             MarlinOption.CanSeeAssassin,
             true);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             MarlinOption.CanSeeVote,
             true);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             MarlinOption.CanSeeNeutral,
             false);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             MarlinOption.CanUseVent,
             false);
     }

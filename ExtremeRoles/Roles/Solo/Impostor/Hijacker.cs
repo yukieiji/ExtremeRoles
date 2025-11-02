@@ -136,7 +136,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 	{
 		IRoleAbility.CreateAbilityCountOption(
 			factory, 3, 10, 10f);
-		factory.CreateNewBoolOption(Option.IsRandomPlayer, true);
+		factory.CreateBoolOption(Option.IsRandomPlayer, true);
 	}
 
 	protected override void RoleSpecificInit()

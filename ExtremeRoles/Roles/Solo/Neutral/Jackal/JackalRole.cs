@@ -89,39 +89,42 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
         {
             string roleName = ExtremeRoleId.Sidekick.ToString();
 
-			factory.CreateNewBoolOption(JackalOption.SidekickUseSabotage, true);
-			factory.CreateNewBoolOption(JackalOption.SidekickUseVent, true);
+			factory.CreateBoolOption(JackalOption.SidekickUseSabotage, true);
+			factory.CreateBoolOption(JackalOption.SidekickUseVent, true);
 
 
-			var sidekickKillerOps = factory.CreateNewBoolOption(JackalOption.SidekickCanKill, false);
+			var sidekickKillerOps = factory.CreateBoolOption(JackalOption.SidekickCanKill, false);
+			var sideKickKillerOptActe = new ParentActive(sidekickKillerOps);
 
 			var killCoolOption = factory.CreateBoolOption(
 				JackalOption.SidekickHasOtherKillCool,
-				false, sidekickKillerOps);
+				false, sideKickKillerOptActe);
 			factory.CreateFloatOption(
 				JackalOption.SidekickKillCoolDown,
 				30f, 1.0f, 120f, 0.5f,
-				killCoolOption, format: OptionUnit.Second);
+				new ParentActive(killCoolOption),
+				format: OptionUnit.Second);
 
 			var killRangeOption = factory.CreateBoolOption(
 				JackalOption.SidekickHasOtherKillRange,
-				false, sidekickKillerOps);
+				false, sideKickKillerOptActe);
 			var rangeOptActive = new ParentActive(killRangeOption);
 			factory.CreateSelectionOption(
 				JackalOption.SidekickKillRange,
 				OptionCreator.Range, rangeOptActive);
 
-			var visionOption = factory.CreateNewBoolOption(
+			var visionOption = factory.CreateBoolOption(
 				JackalOption.SidekickHasOtherVision, false);
+			var visionOptionActive = new ParentActive(visionOption);
 
 			factory.CreateFloatOption(
 				JackalOption.SidekickVision,
-				2f, 0.25f, 5f, 0.25f,
-				visionOption, format: OptionUnit.Multiplier);
+				2f, 0.25f, 5f, 0.25f, visionOptionActive,
+				format: OptionUnit.Multiplier);
 
 			factory.CreateBoolOption(
 				JackalOption.SidekickApplyEnvironmentVisionEffect,
-				false, visionOption);
+				false, visionOptionActive);
         }
 
         public void ApplyOption(in IOptionLoader loader)
@@ -449,32 +452,31 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
             JackalOption.RangeSidekickTarget,
             OptionCreator.Range);
 
-        var loverSkOpt = factory.CreateNewBoolOption(
+        var loverSkOpt = factory.CreateBoolOption(
             JackalOption.CanLoverSidekick,
             true);
 
         factory.CreateBoolOption(
             JackalOption.ForceReplaceLover,
-            true, loverSkOpt,
-            invert: true);
+            true, new InvertActive(loverSkOpt));
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             JackalOption.UpgradeSidekickNum,
             1, 1, GameSystem.VanillaMaxPlayerNum - 1, 1);
 
-        var sidekickMakeSidekickOps = factory.CreateNewBoolOption(
+        var sidekickMakeSidekickOps = factory.CreateBoolOption(
             JackalOption.SidekickJackalCanMakeSidekick,
             false);
 
         factory.CreateIntOption(
             JackalOption.SidekickLimitNum,
             1, 1, GameSystem.VanillaMaxPlayerNum / 2, 1,
-            sidekickMakeSidekickOps);
+            new ParentActive(sidekickMakeSidekickOps));
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             JackalOption.CanSetImpostorToSidekick, false);
 
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             JackalOption.CanSeeImpostorToSidekickImpostor, false);
 
     }

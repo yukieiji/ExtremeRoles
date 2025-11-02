@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -133,12 +134,12 @@ public sealed class FurryRole : SingleRoleBase,
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateNewBoolOption(Option.UseVent, false);
-		var taskOpt = factory.CreateNewBoolOption(
+		factory.CreateBoolOption(Option.UseVent, false);
+		var taskOpt = factory.CreateBoolOption(
 			Option.HasTask, false);
 		factory.CreateIntOption(
 			Option.SeeJackalTaskRate, 50, 0, 100, 10,
-			taskOpt, format: OptionUnit.Percentage);
+			new ParentActive(taskOpt), format: OptionUnit.Percentage);
 	}
 
 	protected override void RoleSpecificInit()

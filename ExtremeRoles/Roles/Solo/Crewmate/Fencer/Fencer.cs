@@ -171,7 +171,7 @@ public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 7, 3.0f);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             FencerOption.ResetTime,
             5.0f, 2.5f, 30.0f, 0.5f,
             format: OptionUnit.Second);

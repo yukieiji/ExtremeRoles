@@ -105,22 +105,22 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 5, 2.5f);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             BomberOption.ExplosionRange,
             2, 1, 5, 1);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             BomberOption.ExplosionKillChance,
             50, 25, 75, 1,
             format: OptionUnit.Percentage);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             BomberOption.TimerMinTime,
             15f, 5.0f, 30f, 0.5f,
             format: OptionUnit.Second);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             BomberOption.TimerMaxTime,
             60f, 45f, 75f, 0.5f,
             format: OptionUnit.Second);
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             BomberOption.TellExplosion,
             true);
     }

@@ -344,8 +344,8 @@ public sealed class CEO : SingleRoleBase,
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.Create0To100Percentage10StepOption(Option.AwakeTaskGage, defaultGage: 50);
-		factory.CreateNewBoolOption(Option.IsShowRolePlayerVote, true);
-		factory.CreateNewBoolOption(Option.IsUseCEOMeeting, true);
+		factory.CreateBoolOption(Option.IsShowRolePlayerVote, true);
+		factory.CreateBoolOption(Option.IsUseCEOMeeting, true);
 	}
 
 	protected override void RoleSpecificInit()

@@ -277,11 +277,11 @@ public sealed class CurseMaker :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             CurseMakerOption.CursingRange,
             2.5f, 0.5f, 5.0f, 0.5f);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             CurseMakerOption.AdditionalKillCool,
             5.0f, 1.0f, 30.0f, 0.1f,
             format: OptionUnit.Second);
@@ -289,51 +289,49 @@ public sealed class CurseMaker :
         IRoleAbility.CreateAbilityCountOption(
             factory, 1, 3, 5.0f);
 
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             CurseMakerOption.TaskCurseTimeReduceRate,
             0, 0, 10, 1,
             format: OptionUnit.Percentage);
 
-        var removeDeadBodyOpt = factory.CreateNewBoolOption(
+        var removeDeadBodyOpt = factory.CreateBoolOption(
             CurseMakerOption.IsNotRemoveDeadBodyByTask,
             false);
 
         factory.CreateIntOption(
             CurseMakerOption.NotRemoveDeadBodyTaskGage,
-            100, 0, 100, 5, removeDeadBodyOpt,
+            100, 0, 100, 5, new ParentActive(removeDeadBodyOpt),
             format: OptionUnit.Percentage);
 
-        var searchDeadBodyOption = factory.CreateNewBoolOption(
+        var searchDeadBodyOption = factory.CreateBoolOption(
             CurseMakerOption.IsDeadBodySearch,
             true);
+		var searchDeadBodyOptActive = new InvertActive(searchDeadBodyOption);
 
         factory.CreateBoolOption(
             CurseMakerOption.IsMultiDeadBodySearch,
-            false, searchDeadBodyOption,
-            invert: true);
+            false, searchDeadBodyOptActive);
 
         var searchTimeOpt = factory.CreateFloatOption(
             CurseMakerOption.SearchDeadBodyTime,
             60.0f, 0.5f, 120.0f, 0.5f,
-            searchDeadBodyOption, format: OptionUnit.Second,
-            invert: true);
+			searchDeadBodyOptActive, format: OptionUnit.Second);
 
         var taskBoostOpt = factory.CreateBoolOption(
             CurseMakerOption.IsReduceSearchForTask,
-            false, searchDeadBodyOption,
-            invert: true);
+            false, searchDeadBodyOptActive);
+		var taskBoostOptActive = new InvertActive(taskBoostOpt);
 
-        factory.CreateIntOption(
+		factory.CreateIntOption(
             CurseMakerOption.ReduceSearchTaskGage,
             100, 25, 100, 5,
-            taskBoostOpt,
-            format: OptionUnit.Percentage,
-            invert: true);
+			taskBoostOptActive,
+            format: OptionUnit.Percentage);
 
         var reduceTimeOpt = factory.CreateFloatDynamicOption(
             CurseMakerOption.ReduceSearchDeadBodyTime,
             30f, 0.5f, 0.5f, searchTimeOpt,
-			new InvertActive(taskBoostOpt),
+			taskBoostOptActive,
             format: OptionUnit.Second,
             tempMaxValue: 120.0f);
     }

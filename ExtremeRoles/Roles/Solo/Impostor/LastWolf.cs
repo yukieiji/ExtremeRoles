@@ -261,16 +261,16 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             LastWolfOption.AwakeImpostorNum,
             1, 1, GameSystem.MaxImposterNum, 1);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             LastWolfOption.DeadPlayerNumBonus,
             1.0f, 2.0f, 6.5f, 0.1f,
             format: OptionUnit.Percentage);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             LastWolfOption.KillPlayerNumBonus,
             2.5f, 4.0f, 10.0f, 0.1f,
             format: OptionUnit.Percentage);
@@ -278,7 +278,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
         IRoleAbility.CreateCommonAbilityOption(
             factory, 10.0f);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             LastWolfOption.LightOffVision,
             0.1f, 0.0f, 1.0f, 0.1f);
     }

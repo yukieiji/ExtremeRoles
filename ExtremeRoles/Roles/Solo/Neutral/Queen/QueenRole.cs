@@ -433,33 +433,33 @@ public sealed class QueenRole :
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateNewBoolOption(
+        factory.CreateBoolOption(
             QueenOption.CanUseVent,
             false);
 
         IRoleAbility.CreateAbilityCountOption(
             factory, 1, 3);
 
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             QueenOption.Range,
             1.0f, 0.5f, 2.6f, 0.1f);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             QueenOption.ServantKillKillCoolReduceRate,
             40, 0, 85, 1,
             format:OptionUnit.Percentage);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             QueenOption.ServantTaskKillCoolReduceRate,
             75, 0, 99, 1,
             format: OptionUnit.Percentage);
-        factory.CreateNewIntOption(
+        factory.CreateIntOption(
             QueenOption.ServantTaskCompKillCoolReduceRate,
             30, 0, 75, 1,
             format: OptionUnit.Percentage);
-        factory.CreateNewFloatOption(
+        factory.CreateFloatOption(
             QueenOption.ServantSelfKillCool,
             30.0f, 0.5f, 60.0f, 0.5f,
             format: OptionUnit.Second);
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			QueenOption.ServantSucideWithQueenWhenHasKill,
 			true);
     }

@@ -96,16 +96,16 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
             this.maxSetNum == int.MaxValue ?
             (int)Math.Floor((decimal)GameSystem.VanillaMaxPlayerNum / this.setPlayerNum) : this.maxSetNum;
 
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			RoleCommonOption.RoleNum,
             1, 1, thisMaxRoleNum, 1,
 			ignorePrefix: true);
 
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			CombinationRoleCommonOption.IsMultiAssign, false,
 			ignorePrefix: true);
 
-		factory.CreateNewIntOption(RoleCommonOption.AssignWeight,
+		factory.CreateIntOption(RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1, ignorePrefix: true);
 
         return factory;

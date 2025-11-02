@@ -67,14 +67,14 @@ public sealed class SlaveDriver :
 	protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			SlaveDriverOption.CanSeeTaskBar,
 			true);
 		IRoleAbility.CreateAbilityCountOption(factory, 2, 10);
-		factory.CreateNewIntOption(
+		factory.CreateIntOption(
 			SlaveDriverOption.RevartTaskNum,
 			2, 1, 5, 1);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			SlaveDriverOption.Range,
 			0.75f, 0.25f, 3.5f, 0.25f);
 	}

@@ -16,6 +16,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -258,67 +259,68 @@ public sealed class TuckerRole :
 	{
 		IRoleAbility.CreateAbilityCountOption(factory, 1, 10);
 
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.Range,
 			0.7f, 0.1f, 1.2f, 0.1f);
 
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.ShadowTimer,
 			15.0f, 0.5f, 60.0f, 0.1f,
 			format: OptionUnit.Second);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.ShadowOffset,
 			0.5f, 0.0f, 2.5f, 0.1f);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.RemoveShadowTime,
 			3.0f, 0.1f, 30.0f, 0.1f,
 			format: OptionUnit.Second);
 
-		var triggerOpt = factory.CreateNewBoolOption(
+		var triggerOpt = factory.CreateBoolOption(
 			Option.IsKillCoolReduceOnRemove, true);
+		var triggerOptActive = new InvertActive(triggerOpt);
+
 		factory.CreateFloatOption(
 			Option.KillCoolReduceOnRemoveShadow,
 			2.5f, 0.1f, 30.0f, 0.1f,
-			triggerOpt,
-			format: OptionUnit.Second,
-			invert: true);
+			triggerOptActive,
+			format: OptionUnit.Second);
 		factory.CreateBoolOption(
 			Option.IsReduceInitKillCoolOnRemove,
-			false, triggerOpt,
-			invert: true);
+			false, triggerOptActive);
 
-		var visionOption = factory.CreateNewBoolOption(
+		var visionOption = factory.CreateBoolOption(
 			Option.ChimeraHasOtherVision,
 			false);
+		var visionOptionActive = new ParentActive(visionOption);
+
 		factory.CreateFloatOption(
 			Option.ChimeraVision,
 			2f, 0.25f, 5.0f, 0.25f,
-			visionOption, format: OptionUnit.Multiplier);
+			visionOptionActive, format: OptionUnit.Multiplier);
 		factory.CreateBoolOption(
 			Option.ChimeraApplyEnvironmentVisionEffect,
-			IsCrewmate(), visionOption);
+			IsCrewmate(), visionOptionActive);
 
 		CreateKillerOption(factory, ignorePrefix: false);
 
-		factory.CreateNewBoolOption(
+		factory.CreateBoolOption(
 			Option.ChimeraCanUseVent, false);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.ChimeraReviveTime,
 			5.0f, 4.0f, 60.0f, 0.1f,
 			format: OptionUnit.Second);
-		factory.CreateNewFloatOption(
+		factory.CreateFloatOption(
 			Option.ChimeraDeathKillCoolOffset,
 			2.5f, -30.0f, 30.0f, 0.1f,
 			format: OptionUnit.Second);
-		var chimeraDeathOpt = factory.CreateNewBoolOption(
+		var chimeraDeathOpt = factory.CreateBoolOption(
 			Option.TuckerDeathWithChimera,
 			false);
 		factory.CreateFloatOption(
 			Option.TuckerDeathKillCoolOffset,
 			2.5f, -30.0f, 30.0f, 0.1f,
-			chimeraDeathOpt,
-			format: OptionUnit.Second,
-			invert: true);
+			new InvertActive(chimeraDeathOpt),
+			format: OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
