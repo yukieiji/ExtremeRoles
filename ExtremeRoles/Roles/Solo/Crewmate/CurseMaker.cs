@@ -15,6 +15,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -329,16 +330,12 @@ public sealed class CurseMaker :
             format: OptionUnit.Percentage,
             invert: true);
 
-		/* 後で直す
         var reduceTimeOpt = factory.CreateFloatDynamicOption(
             CurseMakerOption.ReduceSearchDeadBodyTime,
-            30f, 0.5f, 0.5f, taskBoostOpt,
+            30f, 0.5f, 0.5f, searchTimeOpt,
+			new InvertActive(taskBoostOpt),
             format: OptionUnit.Second,
-            invert: true,
             tempMaxValue: 120.0f);
-
-        searchTimeOpt.AddWithUpdate(reduceTimeOpt);
-		*/
     }
 
     protected override void RoleSpecificInit()
