@@ -10,6 +10,6 @@ public static class PlayerControlRpcSyncSettingsPatch
 {
 	public static void Postfix()
 	{
-		OptionManager.Instance.ShereAllOption();
+		OldOptionManager.Instance.ShereAllOption();
 	}
 }

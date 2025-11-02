@@ -28,7 +28,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 		get
 		{
 			if (OffsetInfo is null ||
-				!OptionManager.Instance.TryGetCategory(
+				!OldOptionManager.Instance.TryGetCategory(
 					this.Tab,
 					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
 					out var cate))

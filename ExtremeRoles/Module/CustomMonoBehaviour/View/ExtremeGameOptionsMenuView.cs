@@ -163,7 +163,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 
 	private void onTabChange(OptionTab tab)
 	{
-		if (!OptionManager.Instance.TryGetTab(tab, out var tabContainer))
+		if (!OldOptionManager.Instance.TryGetTab(tab, out var tabContainer))
 		{
 			return;
 		}

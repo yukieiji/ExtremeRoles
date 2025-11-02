@@ -81,7 +81,7 @@ public static class CustomOptionCsvProcessor
 				string.Format("{1}{0}{2}{0}{3}{0}{4}",
 					comma, "Name", "OptionValue", "CustomOptionName", "SelectedIndex")); //ヘッダー
 
-			foreach (var (tab, tabContainer) in OptionManager.Instance)
+			foreach (var (tab, tabContainer) in OldOptionManager.Instance)
 			{
 				foreach (var cate in tabContainer.Category)
 				{
@@ -269,7 +269,7 @@ public static class CustomOptionCsvProcessor
 				MigratorManager.MigrateExportedOption(importedOption, version.Major);
 			}
 
-			var optionMng = OptionManager.Instance;
+			var optionMng = OldOptionManager.Instance;
 			var cleaner = new StringCleaner();
 
 			foreach (var (tab, tabContainer) in optionMng)

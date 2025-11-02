@@ -31,5 +31,5 @@ public sealed class ConfigBinder
 	}
 	private ConfigEntry<int> GetOrCreateConfig(string key)
 		=> ExtremeRolesPlugin.Instance.Config.Bind(
-			OptionManager.Instance.ConfigPreset, key, DefaultValue);
+			OldOptionManager.Instance.ConfigPreset, key, DefaultValue);
 }

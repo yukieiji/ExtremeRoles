@@ -186,7 +186,7 @@ public sealed class Guesser :
                 {
                     case ExtremeRoleId.Jackal:
                         assignState.IsJackalOn = true;
-                        assignState.IsJackalForceReplaceLover = OptionManager.Instance.TryGetCategory(
+                        assignState.IsJackalForceReplaceLover = OldOptionManager.Instance.TryGetCategory(
 							OptionTab.NeutralTab,
 							ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Jackal),
 							out var cate) && cate.GetValue<JackalRole.JackalOption, bool>(JackalRole.JackalOption.ForceReplaceLover);
@@ -201,7 +201,7 @@ public sealed class Guesser :
                         break;
 					case ExtremeRoleId.Jailer:
 						add(ExtremeRoleId.Yardbird, ExtremeRoleType.Crewmate);
-						if (OptionManager.Instance.TryGetCategory(
+						if (OldOptionManager.Instance.TryGetCategory(
 								OptionTab.CrewmateTab,
 								ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Jailer),
 								out var jailer) && 

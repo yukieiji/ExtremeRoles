@@ -300,7 +300,7 @@ public static class RPCOperator
 
     public static void ShareOption(in MessageReader reader)
     {
-		OptionManager.ShareOption(reader);
+		OldOptionManager.ShareOption(reader);
     }
 
     public static void ReplaceDeadReason(byte playerId, byte reason)

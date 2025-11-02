@@ -46,7 +46,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 	{
 		get
 		{
-			if (!OptionManager.Instance.TryGetCategory(
+			if (!OldOptionManager.Instance.TryGetCategory(
 					this.Tab,
 					ExtremeRoleManager.GetRoleGroupId(this.Core.Id),
 					out var cate))

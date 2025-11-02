@@ -41,7 +41,7 @@ public static class GameUtility
 
 	public static void ChangePresetTo(int newPreset)
 	{
-		var mng = OptionManager.Instance;
+		var mng = OldOptionManager.Instance;
 		if (!mng.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.PresetOption, out var presetCate))
 		{
 			return;
@@ -83,7 +83,7 @@ public static class GameUtility
 	{
 		logger.LogInfo("Update Option....");
 		// オプションを適当にアプデ
-		var mng = OptionManager.Instance;
+		var mng = OldOptionManager.Instance;
 		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
 			if (!mng.TryGetTab(tab, out var tabObj))
@@ -135,7 +135,7 @@ public static class GameUtility
 	{
 		logger.LogInfo("Update Option....");
 		// オプションを適当にアプデ
-		var mng = OptionManager.Instance;
+		var mng = OldOptionManager.Instance;
 		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
 			if (!mng.TryGetTab(tab, out var tabObj))
@@ -189,7 +189,7 @@ public static class GameUtility
 		logger.LogInfo("Update Option....");
 		// オプションを適当にアプデ
 
-		var mng = OptionManager.Instance;
+		var mng = OldOptionManager.Instance;
 		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
 			if (!mng.TryGetTab(tab, out var tabObj))
@@ -258,9 +258,9 @@ public static class GameUtility
 
 	public static void UpdateExROption(OptionTab tab, int categoryId, in RequireOption<int, int> option)
 	{
-		if (OptionManager.Instance.TryGetCategory(tab, categoryId, out var category))
+		if (OldOptionManager.Instance.TryGetCategory(tab, categoryId, out var category))
 		{
-			OptionManager.Instance.Update(category, option.OptionId, option.Velue);
+			OldOptionManager.Instance.Update(category, option.OptionId, option.Velue);
 		}
 	}
 
@@ -288,12 +288,12 @@ public static class GameUtility
 
 	private static void disableXion()
 	{
-		if (OptionManager.Instance.TryGetCategory(
+		if (OldOptionManager.Instance.TryGetCategory(
 				OptionTab.GeneralTab,
 				ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 				out var category))
 		{
-			OptionManager.Instance.Update(category, 0, 0);
+			OldOptionManager.Instance.Update(category, 0, 0);
 		}
 	}
 
@@ -317,24 +317,24 @@ public static class GameUtility
 	{
 		SingleRoleBase role = RandomRoleProvider.GetNormalRole();
 
-		if (OptionManager.Instance.TryGetCategory(
+		if (OldOptionManager.Instance.TryGetCategory(
 				role.Tab,
 				ExtremeRoleManager.GetRoleGroupId(role.Core.Id),
 				out var category))
 		{
-			OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 9);
+			OldOptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 9);
 		}
 		logger.LogInfo($"Enable:{role.Core.Id}");
 	}
 	private static void enableRandomCombRole(ManualLogSource logger)
 	{
 		CombinationRoleType role = (CombinationRoleType)RandomRoleProvider.GetCombRole();
-		if (OptionManager.Instance.TryGetCategory(
+		if (OldOptionManager.Instance.TryGetCategory(
 				OptionTab.CombinationTab,
 				ExtremeRoleManager.GetCombRoleGroupId(role),
 				out var category))
 		{
-			OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 9);
+			OldOptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 9);
 		}
 		logger.LogInfo($"Enable:{role}");
 	}
@@ -343,12 +343,12 @@ public static class GameUtility
 	{
 		foreach (byte id in RandomRoleProvider.AllCombRole())
 		{
-			if (OptionManager.Instance.TryGetCategory(
+			if (OldOptionManager.Instance.TryGetCategory(
 					OptionTab.CombinationTab,
 					ExtremeRoleManager.GetCombRoleGroupId((CombinationRoleType)id),
 					out var category))
 			{
-				OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 0);
+				OldOptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 0);
 			}
 		}
 	}
@@ -357,21 +357,21 @@ public static class GameUtility
 	{
 		foreach (var id in RandomRoleProvider.AllNeutral())
 		{
-			if (OptionManager.Instance.TryGetCategory(
+			if (OldOptionManager.Instance.TryGetCategory(
 					OptionTab.NeutralTab,
 					ExtremeRoleManager.GetRoleGroupId(id),
 					out var category))
 			{
-				OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 0);
+				OldOptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 0);
 			}
 		}
 	}
 
 	private static void disableCategory(OptionTab tab, int id)
 	{
-		if (OptionManager.Instance.TryGetCategory(tab, id, out var category))
+		if (OldOptionManager.Instance.TryGetCategory(tab, id, out var category))
 		{
-			OptionManager.Instance.Update(category, 0, 0);
+			OldOptionManager.Instance.Update(category, 0, 0);
 		}
 	}
 }

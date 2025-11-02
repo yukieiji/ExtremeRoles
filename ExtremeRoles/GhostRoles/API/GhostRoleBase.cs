@@ -45,7 +45,7 @@ public abstract class GhostRoleBase
 	{
 		get
 		{
-			if (!OptionManager.Instance.TryGetCategory(
+			if (!OldOptionManager.Instance.TryGetCategory(
 					this.Tab,
 					ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
 					out var cate))
@@ -232,7 +232,7 @@ public abstract class GhostRoleBase
 
     private OptionFactory createOptionFactory()
     {
-		var factory = OptionManager.CreateAutoParentSetOptionCategory(
+		var factory = OldOptionManager.CreateAutoParentSetOptionCategory(
 			ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
 			this.Name, this.Tab, this.Color);
 		factory.Create0To100Percentage10StepOption(

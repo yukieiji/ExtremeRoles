@@ -26,7 +26,7 @@ public sealed class RoleDependencyRuleFactory : IRoleDependencyRuleFactory
 		ExtremeRoleId checkRoleId, ExtremeRoleId dependRoleId, OptionTab tab, params T[] options) where T : Enum
 		=> new(checkRoleId, dependRoleId,
 			() =>
-				OptionManager.Instance.TryGetCategory(tab, ExtremeRoleManager.GetRoleGroupId(checkRoleId), out var category) &&
+				OldOptionManager.Instance.TryGetCategory(tab, ExtremeRoleManager.GetRoleGroupId(checkRoleId), out var category) &&
 				!options.All(x => category.GetValue<T, bool>(x))
 			);
 }

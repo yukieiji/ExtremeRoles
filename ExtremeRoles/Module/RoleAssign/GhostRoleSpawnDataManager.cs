@@ -44,7 +44,7 @@ public sealed class GhostRoleSpawnDataManager :
 			}
 		}
 
-		var opt = OptionManager.Instance;
+		var opt = OldOptionManager.Instance;
 
 		if (opt.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.GhostRoleSpawnCategory, out var cate))
 		{

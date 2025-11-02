@@ -155,7 +155,7 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 	private static RoleAssignFilterModel getNewModel()
 	{
 		var config = ExtremeRolesPlugin.Instance.Config.Bind(
-			"RoleAssignFilter", OptionManager.Instance.ConfigPreset, defaultValue);
+			"RoleAssignFilter", OldOptionManager.Instance.ConfigPreset, defaultValue);
 		return new RoleAssignFilterModel(config);
 	}
 }

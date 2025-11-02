@@ -21,9 +21,9 @@ using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Module.CustomOption.OLDS;
 
-public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTabContainer>>
+public sealed class OldOptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTabContainer>>
 {
-	public readonly static OptionManager Instance = new ();
+	public readonly static OldOptionManager Instance = new ();
 
 	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
 
@@ -38,7 +38,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 
 	private const string OptionChangeFontPlace = "<font=\"Barlow-Black SDF\" material=\"Barlow-Black Outline\">{0}</font>";
 
-	private OptionManager()
+	private OldOptionManager()
 	{
 		foreach (var tab in Enum.GetValues<OptionTab>())
 		{

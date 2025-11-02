@@ -165,7 +165,7 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 			}
 		}
 
-		if (!OptionManager.Instance.TryGetCategory(
+		if (!OldOptionManager.Instance.TryGetCategory(
 				OptionTab.CombinationTab,
 				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.InvestigatorOffice),
 				out var cate))

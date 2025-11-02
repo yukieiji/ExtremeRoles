@@ -19,7 +19,7 @@ public static class RandomGenerator
             if (instance == null)
             {
                 createGlobalRandomGenerator(
-					OptionManager.Instance.TryGetCategory(
+					OldOptionManager.Instance.TryGetCategory(
 						OptionTab.GeneralTab,
 						randCategoryKey,
 						out var category) &&
@@ -29,7 +29,7 @@ public static class RandomGenerator
         }
     }
 
-	public static bool IsUsingStrongGenerator => OptionManager.Instance.TryGetCategory(
+	public static bool IsUsingStrongGenerator => OldOptionManager.Instance.TryGetCategory(
 			OptionTab.GeneralTab,
 			randCategoryKey,
 			out var category) &&
@@ -46,7 +46,7 @@ public static class RandomGenerator
 
     public static void Initialize()
     {
-		if (!OptionManager.Instance.TryGetCategory(
+		if (!OldOptionManager.Instance.TryGetCategory(
 				OptionTab.GeneralTab,
 				randCategoryKey,
 				out var category))
@@ -86,7 +86,7 @@ public static class RandomGenerator
     private static void createGlobalRandomGenerator(bool isStrong)
     {
 		Logging.Debug("Initialize RNG");
-		if (OptionManager.Instance.TryGetCategory(
+		if (OldOptionManager.Instance.TryGetCategory(
 				OptionTab.GeneralTab,
 				randCategoryKey,
 				out var category) &&

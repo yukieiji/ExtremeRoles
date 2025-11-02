@@ -56,7 +56,7 @@ public static class GameStartManagerPatch
 
         InfoOverlay.Instance.Hide();
         // ホストはここでオプションを読み込み
-        OptionManager.Load();
+        OldOptionManager.Load();
 
         if (ExtremeGameModeManager.Instance.ShipOption.IsRandomMap)
         {
