@@ -3,24 +3,42 @@ using System.Linq;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API.Extension.Neutral;
-using ExtremeRoles.Roles.Solo.Crewmate;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Patches.Button;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.Neutral;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Roles.Solo.Crewmate;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 #nullable enable
+
+public sealed class HereticKillModeActive(IOption option) : IOptionActivator
+{
+	public IOption Parent { get; } = option;
+
+	public bool IsActive
+	{
+		get
+		{
+			var mode = (Heretic.KillMode)Parent.Value<int>();
+			return
+				mode is Heretic.KillMode.AbilityOnTaskPhase or Heretic.KillMode.AbilityOnTaskPhaseTarget &&
+				Parent.IsActive;
+		}
+
+	}
+}
 
 public sealed class Heretic :
 	SingleRoleBase,
@@ -288,8 +306,8 @@ public sealed class Heretic :
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateBoolOption(Option.UseVent, false);
-		var taskOpt = factory.CreateBoolOption(
+		factory.CreateNewBoolOption(Option.UseVent, false);
+		var taskOpt = factory.CreateNewBoolOption(
 			Option.HasTask,
 			false);
 
@@ -298,33 +316,23 @@ public sealed class Heretic :
 		factory.Create0To100Percentage10StepOption(
 			Option.MeetingButtonTaskGage, taskOpt, defaultGage: 100);
 
-		var killModeOpt = factory.CreateSelectionOption<Option, KillMode>(Option.KillMode);
+		var killModeOpt = factory.CreateNewSelectionOption<Option, KillMode>(Option.KillMode);
+		var hereticKillModeActive = new HereticKillModeActive(killModeOpt);
 
-		/* 後で直す
-		 * [
-				KillMode.AbilityOnTaskPhase,
-				KillMode.AbilityOnTaskPhaseTarget
-			]
-		 */
-
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
 			IRoleAbility.DefaultCoolTime,
 			IRoleAbility.MinCoolTime,
 			IRoleAbility.MaxCoolTime,
 			IRoleAbility.Step,
-			killModeOpt,
-			invert: true,
+			hereticKillModeActive,
 			format: OptionUnit.Second);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.Range,
 			1.2f, 0.1f, 2.5f, 0.1f,
-			killModeOpt,
-			invert: true);
+			hereticKillModeActive);
 
-		factory.CreateBoolOption(
-			Option.CanKillImpostor,
-			false);
+		factory.CreateNewBoolOption(Option.CanKillImpostor, false);
 	}
 
 	protected override void RoleSpecificInit()
