@@ -82,7 +82,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
     {
 		// ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
 
-		var factory = OptionManager.CreateAutoParentSetOptionCategory(
+		var factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
 			this.RoleName,
 			OptionTab.CombinationTab,

@@ -96,51 +96,6 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		return this.TryGetTab(tab, out var container) && container.TryGetCategory(categoryId, out category) && category is not null;
 	}
 
-	public static OptionCategoryFactory CreateOptionCategory(
-		int id,
-		string name,
-		in OptionTab tab = OptionTab.GeneralTab,
-		Color? color = null)
-		=> new OptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
-
-	public static OptionCategoryFactory CreateOptionCategory<T>(
-		T option,
-		in OptionTab tab = OptionTab.GeneralTab,
-		Color? color = null) where T : Enum
-		=> CreateOptionCategory(
-			option.FastInt(),
-			option.ToString(), tab, color);
-
-	public static SequentialOptionCategoryFactory CreateSequentialOptionCategory(
-		int id,
-		string name,
-		in OptionTab tab = OptionTab.GeneralTab,
-		Color? color = null)
-		=> new SequentialOptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
-
-	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
-		int id,
-		string name,
-		in OptionTab tab,
-		Color? color = null,
-		in IOption? parent = null)
-	{
-		var internalFactory = CreateOptionCategory(id, name, tab, color);
-		var factory = new AutoParentSetOptionCategoryFactory(internalFactory, parent);
-
-		return factory;
-	}
-
-	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
-		T option,
-		in OptionTab tab = OptionTab.GeneralTab,
-		Color? color = null,
-		in IOption? parent = null) where T : Enum
-		=> CreateAutoParentSetOptionCategory(
-			option.FastInt(),
-			option.ToString(),
-			tab, color, parent);
-
 	public void UpdateToStep(in OptionCategory category, in int id, int step)
 	{
 		var option = category.Get(id);
@@ -211,7 +166,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		}
 	}
 
-	private void registerOptionGroup(OptionTab tab, OptionCategory group)
+	public void RegisterOptionGroup(OptionTab tab, OptionCategory group)
 	{
 		if (!this.options.TryGetValue(tab, out var container))
 		{

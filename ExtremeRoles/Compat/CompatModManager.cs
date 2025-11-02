@@ -135,7 +135,7 @@ public sealed class CompatModManager
 			ExtremeRolesPlugin.Logger.LogInfo(
 				$"CreateIntegrateOption:{mod.Name}");
 
-			using (var factory = OptionManager.CreateSequentialOptionCategory(
+			using (var factory = OptionCategoryAssembler.CreateSequentialOptionCategory(
 				startId + index, $"{mod.Name}Category"))
 			{
 				option.CreateIntegrateOption(factory);

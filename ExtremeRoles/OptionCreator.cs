@@ -48,7 +48,7 @@ public static class OptionCreator
 
 		PresetOption.Create(CommonOption.PresetOption.ToString());
 
-		using (var commonOptionFactory = OptionManager.CreateOptionCategory(
+		using (var commonOptionFactory = OptionCategoryAssembler.CreateOptionCategory(
 			CommonOption.RandomOption, color: DefaultOptionColor))
 		{
 			var strongGen = commonOptionFactory.CreateBoolOption(

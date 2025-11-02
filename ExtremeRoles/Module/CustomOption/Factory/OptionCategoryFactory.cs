@@ -20,7 +20,7 @@ namespace ExtremeRoles.Module.CustomOption.Factory;
 public class OptionCategoryFactory(
 	string name,
 	int groupId,
-	in Action<OptionTab, OptionCategory> action,
+	in Action<OptionTab, OptionCategory> registerOption,
 	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) : IDisposable
 {
@@ -33,7 +33,7 @@ public class OptionCategoryFactory(
 
 	private readonly Color? color = color;
 	private readonly int groupid = groupId;
-	private readonly Action<OptionTab, OptionCategory> registerOption = action;
+	private readonly Action<OptionTab, OptionCategory> registerOption = registerOption;
 	private readonly OptionPack optionPack = new OptionPack();
 
 	public IOption Get(int id)
