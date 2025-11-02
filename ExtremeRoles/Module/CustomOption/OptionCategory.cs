@@ -60,7 +60,7 @@ public sealed class OptionCategory(
 	OptionTab tab,
 	int id,
 	string name,
-	in OptionPack option,
+	in OldOptionPack option,
 	in Color? color = null) : IOptionLoader
 {
 	public Color? Color { get; } = color;

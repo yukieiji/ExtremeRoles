@@ -5,7 +5,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 namespace ExtremeRoles.Module.CustomOption;
 
-public sealed class OptionPack
+public sealed class OldOptionPack
 {
 	public IReadOnlyDictionary<int, IValueOption<int>> IntOptions => intOpt;
 	public IReadOnlyDictionary<int, IValueOption<float>> FloatOptions => floatOpt;

@@ -32,7 +32,7 @@ public class OldOptionCategoryFactory(
 	private readonly Color? color = color;
 	private readonly int groupid = groupId;
 	private readonly Action<OptionTab, OptionCategory> registerOption = action;
-	private readonly OptionPack optionPack = new OptionPack();
+	private readonly OldOptionPack optionPack = new OldOptionPack();
 
 	public IOldOption Get(int id)
 		=> this.optionPack.Get(id);
