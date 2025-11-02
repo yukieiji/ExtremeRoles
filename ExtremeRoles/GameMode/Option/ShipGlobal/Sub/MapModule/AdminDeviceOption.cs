@@ -23,7 +23,7 @@ public readonly struct AdminDeviceOption : IDeviceOption
 	public bool EnableLimit { get; }
 	public float LimitTime { get; }
 
-	public AdminDeviceOption(in OptionCategory cate)
+	public AdminDeviceOption(in OldOptionCategory cate)
 	{
 		AirShipEnable = (AirShipAdminMode)cate.GetValue<int>((int)AdminSpecialOption.AirShipEnable);
 

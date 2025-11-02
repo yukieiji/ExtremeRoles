@@ -126,7 +126,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 	}
 
 	private static string createRoleSpawnNumOptionHudStringLine(
-		OptionCategory category,
+		OldOptionCategory category,
 		string transKey,
 		RoleSpawnOption minOptKey,
 		RoleSpawnOption maxOptKey)
@@ -141,7 +141,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		return $"{optionName}: {optionValueStr}";
 	}
 
-	private static int getSpawnOptionValue(OptionCategory category, RoleSpawnOption optionKey)
+	private static int getSpawnOptionValue(OldOptionCategory category, RoleSpawnOption optionKey)
 		=> category.GetValue<int>((int)optionKey);
 
 	public void UpdateVisual()

@@ -18,7 +18,7 @@ namespace ExtremeRoles.Module.CustomOption.Factory.Old;
 public sealed class OldSequentialOptionCategoryFactory(
 	string name,
 	int groupId,
-	in Action<OptionTab, OptionCategory> action,
+	in Action<OptionTab, OldOptionCategory> action,
 	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) :
 	OldOptionCategoryFactory(name, groupId, action, tab, color)

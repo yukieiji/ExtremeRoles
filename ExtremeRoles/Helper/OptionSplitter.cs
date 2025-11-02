@@ -13,7 +13,7 @@ public static class OptionSplitter
 {
 	public static HashSet<int> AllEnable => [];
 
-	public static bool TryGetValidOption(in OptionCategory cate, [NotNullWhen(true)] out IReadOnlySet<int>? optionId)
+	public static bool TryGetValidOption(in OldOptionCategory cate, [NotNullWhen(true)] out IReadOnlySet<int>? optionId)
 	{
 		int id = cate.Id;
 

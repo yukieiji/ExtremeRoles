@@ -68,7 +68,7 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 				format: OptionUnit.Shot);
 		}
 
-		public static InvestigatorApprenticeOptionHolder LoadOptions(in OptionLoadWrapper loader)
+		public static InvestigatorApprenticeOptionHolder LoadOptions(in OldOptionLoadWrapper loader)
 		{
 			return new InvestigatorApprenticeOptionHolder()
 			{
@@ -102,10 +102,10 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 	private ExtremeAbilityButton meetingButton;
 	private Minigame meeting;
 
-	public override IOptionLoader Loader { get; }
+	public override IOldOptionLoader Loader { get; }
 
 	public InvestigatorApprentice(
-		IOptionLoader loader,
+		IOldOptionLoader loader,
 		int gameControlId,
 		InvestigatorApprenticeOptionHolder option
 		) : base(
@@ -174,7 +174,7 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 		}
 
 		int offset = 2 * ExtremeRoleManager.OptionOffsetPerRole;
-		var loader = new OptionLoadWrapper(cate, offset);
+		var loader = new OldOptionLoadWrapper(cate, offset);
 		InvestigatorApprentice newRole = new InvestigatorApprentice(
 			loader,
 			prevRole.GameControlId,

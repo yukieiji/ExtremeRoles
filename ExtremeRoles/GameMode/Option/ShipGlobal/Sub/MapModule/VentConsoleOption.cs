@@ -32,7 +32,7 @@ public readonly struct VentConsoleOption(
 	public readonly bool CanKillVentInPlayer = canKillVentInPlayer;
 	public readonly VentAnimationMode AnimationMode = ventAnimation;
 
-	public VentConsoleOption(in OptionCategory category) : this(
+	public VentConsoleOption(in OldOptionCategory category) : this(
 		category.GetValue<bool>((int)VentOption.Disable),
 		category.GetValue<bool>((int)VentOption.EngineerUseImpostor),
 		category.GetValue<bool>((int)VentOption.CanKillInPlayer),

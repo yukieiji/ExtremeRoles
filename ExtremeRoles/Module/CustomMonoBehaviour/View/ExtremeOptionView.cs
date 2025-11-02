@@ -22,7 +22,7 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 	public IOldOption? OptionModel { private get; set; }
 
 	[HideFromIl2Cpp]
-	public OptionCategory? OptionCategoryModel { private get; set; }
+	public OldOptionCategory? OptionCategoryModel { private get; set; }
 
 	private readonly record struct AwakeProp(
 		TextMeshPro Title,

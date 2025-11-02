@@ -31,7 +31,7 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
 
 	protected static Color DefaultColor => new Color(255f, 255f, 255f);
 
-	public sealed override IOptionLoader Loader
+	public sealed override IOldOptionLoader Loader
 	{
 		get
 		{

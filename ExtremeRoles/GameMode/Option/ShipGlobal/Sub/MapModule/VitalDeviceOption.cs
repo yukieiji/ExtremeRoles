@@ -23,7 +23,7 @@ public readonly struct VitalDeviceOption : IDeviceOption
 	public bool EnableLimit { get; }
 	public float LimitTime { get; }
 
-	public VitalDeviceOption(in OptionCategory cate)
+	public VitalDeviceOption(in OldOptionCategory cate)
 	{
 		PolusPos = (PolusVitalPos)cate.GetValue<int>((int)VitalSpecialOption.PolusVitalPos);
 

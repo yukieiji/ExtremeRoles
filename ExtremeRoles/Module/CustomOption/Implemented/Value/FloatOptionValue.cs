@@ -6,15 +6,24 @@ namespace ExtremeRoles.Module.CustomOption.Implemented.Value;
 
 
 public sealed class FloatOptionValue(
-	float @default, float min, float max, float step) :
-	OptionRange<float>(GetFloatRange(min, max, step)),
+	float @default, float min, float max, float step) : 
 	IValue<float>,
 	IValueHolder
 {
+	public OptionRange<float> InnerRange { get; set; } = new OptionRange<float>(
+		OptionRange<float>.GetFloatRange(min, max, step));
+
 	private readonly float @default = @default;
 
-	public int DefaultIndex => GetIndex(@default);
-
-	public float Value => this.RangedValue;
+	public int DefaultIndex => this.InnerRange.GetIndex(@default);
+	public float Value => this.InnerRange.RangedValue;
 	public string StrValue => this.Value.ToString();
+
+	public int Selection
+	{
+		get => this.InnerRange.Selection;
+		set => this.InnerRange.Selection = value;
+	}
+
+	public int Range => this.InnerRange.Range;
 }

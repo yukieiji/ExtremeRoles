@@ -7,7 +7,7 @@ using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
-public readonly struct GhostRoleOption(in OptionCategory category)
+public readonly struct GhostRoleOption(in OldOptionCategory category)
 {
 	public readonly float HauntMinigameMaxSpeed = category.GetValue<GhostRoleGlobalOption, float>(GhostRoleGlobalOption.HauntMinigameMaxSpeed);
 	public readonly bool IsAssignNeutralToVanillaCrewGhostRole = category.GetValue<GhostRoleGlobalOption, bool>(GhostRoleGlobalOption.IsAssignNeutralToVanillaCrewGhostRole);

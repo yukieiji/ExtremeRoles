@@ -536,12 +536,12 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		bool Vent,
 		bool Sab);
 
-	public override IOptionLoader Loader { get; }
+	public override IOldOptionLoader Loader { get; }
 
 	private readonly List<int> allTask;
 
 	public Yardbird(
-		in IOptionLoader loader,
+		in IOldOptionLoader loader,
 		byte targetPlayerId,
 		Option option) : base(
 			RoleCore.BuildCrewmate(
@@ -628,10 +628,10 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 		bool Vent,
 		bool Sab);
 
-	public override IOptionLoader Loader { get; }
+	public override IOldOptionLoader Loader { get; }
 
 	public Lawbreaker(
-		IOptionLoader loader,
+		IOldOptionLoader loader,
 		Option option) : base(
 			RoleCore.BuildNeutral(
 				ExtremeRoleId.Lawbreaker,

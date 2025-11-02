@@ -34,7 +34,7 @@ public abstract class RoleOptionBase
 {
     public virtual bool CanKill { get; set; } = false;
 
-	public abstract IOptionLoader Loader { get; }
+	public abstract IOldOptionLoader Loader { get; }
 
 	public void Initialize()
     {

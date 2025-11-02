@@ -14,7 +14,7 @@ public interface ISpawnLimiter
 	public void Reduce(ExtremeRoleType Team, int num = 1);
 
 	public static int ComputeSpawnNum(
-		OptionCategory category,
+		OldOptionCategory category,
 		RoleSpawnOption minSpawnKey,
 		RoleSpawnOption maxSpawnKey)
 	{

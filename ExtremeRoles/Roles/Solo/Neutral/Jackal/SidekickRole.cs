@@ -25,7 +25,7 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 	private readonly bool sidekickJackalCanMakeSidekick = false;
 
 	public override IStatusModel? Status => status;
-	public override IOptionLoader Loader { get; }
+	public override IOldOptionLoader Loader { get; }
 
 	private readonly SidekickStatus status;
 

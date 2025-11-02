@@ -31,7 +31,7 @@ public sealed class ServantRole :
 	private byte queenPlayerId;
 	private readonly FullScreenFlasher flasher = new FullScreenFlasher(new Color(0f, 0.8f, 0f));
 
-	public override IOptionLoader Loader { get; }
+	public override IOldOptionLoader Loader { get; }
 	public override IStatusModel Status => status;
 	private readonly ServantStatus status;
 

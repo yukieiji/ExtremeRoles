@@ -224,7 +224,7 @@ public interface IShipGlobalOption
 		}
 	}
 
-	protected static OptionCategory GetOptionCategory(ShipGlobalOptionCategory category)
+	protected static OldOptionCategory GetOptionCategory(ShipGlobalOptionCategory category)
 	{
 		if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)category, out var cate))
 		{

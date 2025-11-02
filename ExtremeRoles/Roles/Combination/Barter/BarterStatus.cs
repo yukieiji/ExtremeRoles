@@ -79,7 +79,7 @@ public sealed class CastlingNumInfo(int maxNumPerMeeting, int totalNum)
 
 public readonly record struct RandomCastling(bool On, int Num);
 
-public sealed class BarterStatus(IOptionLoader loader, bool isImpostor) : IStatusModel
+public sealed class BarterStatus(IOldOptionLoader loader, bool isImpostor) : IStatusModel
 {
 	private readonly CastlingNumInfo castlingNum = new CastlingNumInfo(
 			// オプション名が間違っているが後方互換性を持たせるためそのままにする

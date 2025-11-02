@@ -48,8 +48,7 @@ public sealed class CustomOption : IOption
 	}
 
 	public bool IsActive => !this.Info.IsHidden && this.activator.IsActive;
-
-	public int DefaultSelection => throw new NotImplementedException();
+	public int DefaultSelection => this.holder.DefaultIndex;
 
 	private readonly IOptionActivator activator;
 

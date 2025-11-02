@@ -20,7 +20,7 @@ public enum ConfirmExileMode : byte
 	AllTeam
 }
 
-public readonly struct ExileOption(in OptionCategory category)
+public readonly struct ExileOption(in OldOptionCategory category)
 {
 	public readonly ConfirmExileMode Mode = (ConfirmExileMode)category.GetValue<int>((int)ExiledOption.ConfirmExilMode);
 	public readonly bool IsConfirmRole = category.GetValue<bool>((int)ExiledOption.IsConfirmRole);

@@ -42,7 +42,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
     public RoleCore Core { get; private set; }
 
-	public override IOptionLoader Loader
+	public override IOldOptionLoader Loader
 	{
 		get
 		{

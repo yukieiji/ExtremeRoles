@@ -124,7 +124,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 				false, visionOption);
         }
 
-        public void ApplyOption(in IOptionLoader loader)
+        public void ApplyOption(in IOldOptionLoader loader)
         {
             var curOption = GameOptionsManager.Instance.CurrentGameOptions;
 

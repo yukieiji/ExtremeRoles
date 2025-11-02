@@ -387,7 +387,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 {
 	public MultiAssignRoleBase.OptionOffsetInfo? OffsetInfo { get; set; }
-	public override IOptionLoader Loader
+	public override IOldOptionLoader Loader
 	{
 		get
 		{
@@ -399,7 +399,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 			{
 				throw new ArgumentException("Can't find category");
 			}
-			return new OptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
+			return new OldOptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
 		}
 	}
 

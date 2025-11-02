@@ -44,12 +44,12 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	private bool isTuckerDead;
 
 	public byte Parent { get; }
-	public override IOptionLoader Loader { get; }
+	public override IOldOptionLoader Loader { get; }
 	public override IStatusModel Status => status;
 	private readonly ChimeraStatus status;
 
 	public ChimeraRole(
-		IOptionLoader loader,
+		IOldOptionLoader loader,
 		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
 			RoleCore.BuildNeutral(

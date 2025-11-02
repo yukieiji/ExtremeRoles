@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
-public interface IOptionLoader
+public interface IOldOptionLoader
 {
 	public bool TryGet(int id, [NotNullWhen(true)] out IOldOption? option);
 	public IOldOption Get<T>(T id) where T : Enum;

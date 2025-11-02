@@ -27,7 +27,7 @@ public readonly struct MeetingHudOption
 		this.MaxMeetingCount = 0;
 		this.UseRaiseHand = false;
 	}
-	public MeetingHudOption(in OptionCategory category)
+	public MeetingHudOption(in OldOptionCategory category)
 	{
 		this.MaxMeetingCount = category.GetValue<int>((int)MeetingOption.NumMeating);
 		this.UseRaiseHand = category.GetValue<bool>((int)MeetingOption.UseRaiseHand);

@@ -33,7 +33,7 @@ public sealed class SystemGetter(ShipStatus instance)
 	}
 }
 
-public sealed class EmergencyTaskOption(in OptionCategory category)
+public sealed class EmergencyTaskOption(in OldOptionCategory category)
 {
 	private readonly int skeldReactorTime = category.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.SkeldReactor);
 	private readonly int skeldOxygenTime = category.GetValue<EmergencyTaskTimeOption, int>(EmergencyTaskTimeOption.SkeldOxygen);

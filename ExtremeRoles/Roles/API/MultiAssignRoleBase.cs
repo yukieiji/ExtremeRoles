@@ -23,7 +23,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 
 	public OptionOffsetInfo? OffsetInfo { get; set; } = null;
 
-	public override IOptionLoader Loader
+	public override IOldOptionLoader Loader
 	{
 		get
 		{
@@ -35,7 +35,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 			{
 				throw new ArgumentException("Can't find category");
 			}
-			return new OptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
+			return new OldOptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
 		}
 	}
 

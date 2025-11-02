@@ -33,7 +33,7 @@ public interface IDeviceOption
 	}
 }
 
-public readonly struct DeviceOption(in OptionCategory category) : IDeviceOption
+public readonly struct DeviceOption(in OldOptionCategory category) : IDeviceOption
 {
 	public bool Disable { get; } = category.GetValue<bool>((int)DeviceOptionType.IsRemove);
 	public bool EnableLimit { get; } = category.GetValue<bool>((int)DeviceOptionType.EnableLimit);

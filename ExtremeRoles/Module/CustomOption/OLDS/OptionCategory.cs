@@ -15,9 +15,9 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.CustomOption.OLDS;
 
-public sealed class OptionLoadWrapper(in OptionCategory category, int idOffset) : IOptionLoader
+public sealed class OldOptionLoadWrapper(in OldOptionCategory category, int idOffset) : IOldOptionLoader
 {
-	private readonly OptionCategory category = category;
+	private readonly OldOptionCategory category = category;
 	private readonly int idOffset = idOffset;
 
 	public bool TryGet(int id, [NotNullWhen(true)] out IOldOption? option)
@@ -55,12 +55,12 @@ public sealed class OptionLoadWrapper(in OptionCategory category, int idOffset) 
 		=> this.category.GetValue<T>(id + idOffset);
 }
 
-public sealed class OptionCategory(
+public sealed class OldOptionCategory(
 	OptionTab tab,
 	int id,
 	string name,
 	in OldOptionPack option,
-	in Color? color = null) : IOptionLoader
+	in Color? color = null) : IOldOptionLoader
 {
 	public Color? Color { get; } = color;
 

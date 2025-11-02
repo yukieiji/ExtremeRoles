@@ -25,7 +25,7 @@ public readonly struct GameStartOption
 		this.ReduceNum = 1;
 		this.FirstButtonCoolDown = 15;
 	}
-	public GameStartOption(in OptionCategory category)
+	public GameStartOption(in OldOptionCategory category)
 	{
 		this.IsKillCoolDownIsTen = category.GetValue<OnGameStartOption, bool>(
 			OnGameStartOption.IsKillCoolDownIsTen);

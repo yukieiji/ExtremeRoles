@@ -15,7 +15,7 @@ public enum RandomSpawnOption : int
 	IsAutoSelect,
 }
 
-public readonly struct SpawnOption(in OptionCategory cate)
+public readonly struct SpawnOption(in OldOptionCategory cate)
 {
 	public readonly bool EnableSpecialSetting = cate.GetValue<bool>((int)RandomSpawnOption.Enable);
 

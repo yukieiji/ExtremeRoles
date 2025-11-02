@@ -20,7 +20,7 @@ public interface ISpawnDataManager
 	public IReadOnlyDictionary<ExtremeRoleType, int> CurrentSingleRoleUseNum { get; }
 
 	protected static int ComputeSpawnNum(
-		OptionCategory category,
+		OldOptionCategory category,
 		RoleSpawnOption minSpawnKey,
 		RoleSpawnOption maxSpawnKey)
 	{
