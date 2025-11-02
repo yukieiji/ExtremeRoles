@@ -1,6 +1,5 @@
 using System;
 using ExtremeRoles.Module.CustomOption.Factory.Old;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 using ExtremeRoles.Roles.API.Interface;
 

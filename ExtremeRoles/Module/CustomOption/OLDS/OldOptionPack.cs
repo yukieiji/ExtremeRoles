@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
-namespace ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.CustomOption.OLDS;
 
 public sealed class OldOptionPack
 {

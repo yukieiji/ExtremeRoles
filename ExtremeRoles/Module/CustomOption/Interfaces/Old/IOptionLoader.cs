@@ -1,10 +1,9 @@
-using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Interfaces;
+namespace ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 public interface IOptionLoader
 {

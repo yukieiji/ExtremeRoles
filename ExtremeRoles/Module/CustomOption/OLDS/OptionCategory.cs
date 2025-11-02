@@ -1,6 +1,5 @@
 using ExtremeRoles.Extension;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.CustomOption.OLDS;
 
 public sealed class OptionLoadWrapper(in OptionCategory category, int idOffset) : IOptionLoader
 {

@@ -7,12 +7,12 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.Old.OldAutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 namespace ExtremeRoles.GhostRoles.API;
 

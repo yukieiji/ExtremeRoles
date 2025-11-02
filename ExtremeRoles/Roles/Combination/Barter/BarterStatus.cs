@@ -1,6 +1,5 @@
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Status;
 using System;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExtremeRoles.Module.CustomOption.Interfaces.Old;
 
 namespace ExtremeRoles.Roles.Combination.Barter;
 
