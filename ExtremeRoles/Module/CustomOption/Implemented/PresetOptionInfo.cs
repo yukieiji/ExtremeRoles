@@ -1,6 +1,6 @@
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-namespace ExtremeRoles.Module.CustomOption.Implemented.Old;
+namespace ExtremeRoles.Module.CustomOption.Implemented;
 
 public sealed class PresetOptionInfo(int id, string name) : IOptionInfo
 {

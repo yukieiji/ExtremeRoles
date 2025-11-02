@@ -22,4 +22,7 @@ public sealed class IntOptionValue(int @default, int min, int max, int step) :
 	}
 
 	public int Range => this.InnerRange.Range;
+
+	public override string ToString()
+		=> this.Range.ToString();
 }

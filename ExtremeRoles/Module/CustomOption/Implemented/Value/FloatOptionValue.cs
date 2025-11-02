@@ -26,4 +26,6 @@ public sealed class FloatOptionValue(
 	}
 
 	public int Range => this.InnerRange.Range;
+	public override string ToString()
+		=> this.Range.ToString();
 }
