@@ -1,10 +1,9 @@
-using ExtremeRoles.Module.CustomOption.OLDS;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.CustomOption.OLDS;
 
-public sealed class OptionTabContainer(OptionTab tab)
+public sealed class OldOptionTabContainer(OptionTab tab)
 {
 	public string Name { get; } = tab.ToString();
 	public int Count => this.allCategory.Count;

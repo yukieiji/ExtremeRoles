@@ -21,7 +21,7 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 {
 	private StringBuilder printOption = new StringBuilder();
-	private OptionTabContainer? container;
+	private OldOptionTabContainer? container;
 
 	public (string, string) GetInfoText()
 	{
@@ -77,7 +77,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		);
 	}
 
-	private static void tryAddHudString(OptionTabContainer tab, int categoryId, in StringBuilder builder)
+	private static void tryAddHudString(OldOptionTabContainer tab, int categoryId, in StringBuilder builder)
 	{
 		if (!tab.TryGetCategory(categoryId, out var category))
 		{
@@ -86,7 +86,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		category.AddHudString(builder);
 	}
 
-	private static void addRoleSpawnNumOptionHudString(OptionTabContainer tab, in StringBuilder builder)
+	private static void addRoleSpawnNumOptionHudString(OldOptionTabContainer tab, in StringBuilder builder)
 	{
 		// 生存役職周り
 		addSpawnNumOptionHudString(tab, SpawnOptionCategory.RoleSpawnCategory, builder, "Roles");
@@ -95,7 +95,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 	}
 
 	private static void addSpawnNumOptionHudString(
-		OptionTabContainer tab,
+		OldOptionTabContainer tab,
 		SpawnOptionCategory categoryId,
 		in StringBuilder builder,
 		string transKey)

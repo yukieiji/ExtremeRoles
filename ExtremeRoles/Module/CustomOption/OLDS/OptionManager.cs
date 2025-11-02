@@ -21,11 +21,11 @@ using ExtremeRoles.Module.CustomOption.Factory.Old;
 
 namespace ExtremeRoles.Module.CustomOption.OLDS;
 
-public sealed class OldOptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTabContainer>>
+public sealed class OldOptionManager : IEnumerable<KeyValuePair<OptionTab, OldOptionTabContainer>>
 {
 	public readonly static OldOptionManager Instance = new ();
 
-	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
+	private readonly Dictionary<OptionTab, OldOptionTabContainer> options = new ();
 
 	public string ConfigPreset
 	{
@@ -42,7 +42,7 @@ public sealed class OldOptionManager : IEnumerable<KeyValuePair<OptionTab, Optio
 	{
 		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
-			options.Add(tab, new OptionTabContainer(tab));
+			options.Add(tab, new OldOptionTabContainer(tab));
 		}
 	}
 
@@ -84,10 +84,10 @@ public sealed class OldOptionManager : IEnumerable<KeyValuePair<OptionTab, Optio
 		}
 	}
 
-	public IEnumerator<KeyValuePair<OptionTab, OptionTabContainer>> GetEnumerator() => this.options.GetEnumerator();
+	public IEnumerator<KeyValuePair<OptionTab, OldOptionTabContainer>> GetEnumerator() => this.options.GetEnumerator();
 	IEnumerator IEnumerable.GetEnumerator() { throw new Exception(); }
 
-	public bool TryGetTab(OptionTab tab, [NotNullWhen(true)] out OptionTabContainer? container)
+	public bool TryGetTab(OptionTab tab, [NotNullWhen(true)] out OldOptionTabContainer? container)
 		=> this.options.TryGetValue(tab, out container) && container is not null;
 
 	public bool TryGetCategory(OptionTab tab, int categoryId, [NotNullWhen(true)] out OldOptionCategory? category)

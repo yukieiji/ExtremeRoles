@@ -75,7 +75,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 	private float blockTimer = blockTime;
 	private OptionTab curTab = (OptionTab)byte.MaxValue;
 
-	private readonly Dictionary<OptionTab, (OptionTabContainer, TabView)> allTabView = new Dictionary<OptionTab, (OptionTabContainer, TabView)>(8);
+	private readonly Dictionary<OptionTab, (OldOptionTabContainer, TabView)> allTabView = new Dictionary<OptionTab, (OldOptionTabContainer, TabView)>(8);
 
 	private readonly Il2CppUiElementList uiElements = new Il2CppUiElementList();
 	private readonly List<OptionBehaviour> Children = new List<OptionBehaviour>();
@@ -214,7 +214,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 
 
 	[HideFromIl2Cpp]
-	private TabView initializeTab(OptionTabContainer tab)
+	private TabView initializeTab(OldOptionTabContainer tab)
 	{
 		if (this.tabPicker == null)
 		{
@@ -327,7 +327,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 	}
 
 	[HideFromIl2Cpp]
-	public void refresh(OptionTabContainer tab, TabView view)
+	public void refresh(OldOptionTabContainer tab, TabView view)
 	{
 		if (this.scroller == null)
 		{
