@@ -370,11 +370,11 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 50);
-		factory.CreateFloatOption(Option.Range, 10.0f, 5.0f, 30.0f, 0.5f);
+		factory.CreateNewFloatOption(Option.Range, 10.0f, 5.0f, 30.0f, 0.5f);
 		factory.CreateSelectionOption<Option, EmitAttentionMode>(Option.AttentionMode);
 
-		factory.CreateFloatOption(Option.ShowTime, 2.0f, 0.5f, 15.0f, 0.25f, format: OptionUnit.Second);
-		var deadBodyOpt = factory.CreateBoolOption(Option.IsDetectDeadBody, false);
+		factory.CreateNewFloatOption(Option.ShowTime, 2.0f, 0.5f, 15.0f, 0.25f, format: OptionUnit.Second);
+		var deadBodyOpt = factory.CreateNewBoolOption(Option.IsDetectDeadBody, false);
 		factory.CreateBoolOption(Option.CanSeparatePlayer, false, deadBodyOpt);
 	}
 

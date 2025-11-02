@@ -103,19 +103,19 @@ public sealed class Monika :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Ops.IsSoloTeam, true);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Ops.CanUseVent, false);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Ops.CanUseSabotage, false);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Ops.UseOtherButton, true);
 		IRoleAbility.CreateCommonAbilityOption(
             factory);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Ops.Range, 1.3f, 0.1f, 3.0f, 0.1f);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Ops.CanSeeTrash, false);
 	}
 

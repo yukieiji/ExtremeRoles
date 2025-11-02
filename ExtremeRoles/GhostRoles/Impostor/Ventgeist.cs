@@ -73,7 +73,7 @@ public sealed class Ventgeist : GhostRoleBase
 
     protected override void CreateSpecificOption(OptionFactory factory)
     {
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
             Option.Range, 1.0f,
             0.2f, 3.0f, 0.1f);
 		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 2, 10);

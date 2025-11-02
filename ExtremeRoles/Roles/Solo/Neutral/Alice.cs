@@ -191,26 +191,26 @@ public sealed class Alice :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             AliceOption.CanUseSabotage,
             true);
 
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 100);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             AliceOption.RevartLongTaskNum,
             1, 0, 15, 1);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             AliceOption.RevartCommonTaskNum,
             1, 0, 15, 1);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             AliceOption.RevartNormalTaskNum,
             1, 0, 15, 1);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			AliceOption.WinTaskRate,
 			0, 0, 100, 10,
 			format: OptionUnit.Percentage);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			AliceOption.WinKillNum,
 			0, 0, 5, 1);
 	}

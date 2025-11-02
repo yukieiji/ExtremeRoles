@@ -470,17 +470,17 @@ public sealed class Photographer :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             PhotographerOption.AwakeTaskGage,
             30, 0, 100, 10,
             format: OptionUnit.Percentage);
 
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             PhotographerOption.UpgradePhotoTaskGage,
             60, 0, 100, 10,
             format: OptionUnit.Percentage);
 
-        var chatUpgradeOpt = factory.CreateBoolOption(
+        var chatUpgradeOpt = factory.CreateNewBoolOption(
             PhotographerOption.EnableAllSendChat,
             false);
 
@@ -490,7 +490,7 @@ public sealed class Photographer :
             chatUpgradeOpt,
             format: OptionUnit.Percentage);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             PhotographerOption.PhotoRange,
             10.0f, 2.5f, 50f, 0.5f);
 

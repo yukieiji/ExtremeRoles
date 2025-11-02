@@ -258,23 +258,23 @@ public sealed class TuckerRole :
 	{
 		IRoleAbility.CreateAbilityCountOption(factory, 1, 10);
 
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.Range,
 			0.7f, 0.1f, 1.2f, 0.1f);
 
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.ShadowTimer,
 			15.0f, 0.5f, 60.0f, 0.1f,
 			format: OptionUnit.Second);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.ShadowOffset,
 			0.5f, 0.0f, 2.5f, 0.1f);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.RemoveShadowTime,
 			3.0f, 0.1f, 30.0f, 0.1f,
 			format: OptionUnit.Second);
 
-		var triggerOpt = factory.CreateBoolOption(
+		var triggerOpt = factory.CreateNewBoolOption(
 			Option.IsKillCoolReduceOnRemove, true);
 		factory.CreateFloatOption(
 			Option.KillCoolReduceOnRemoveShadow,
@@ -287,7 +287,7 @@ public sealed class TuckerRole :
 			false, triggerOpt,
 			invert: true);
 
-		var visionOption = factory.CreateBoolOption(
+		var visionOption = factory.CreateNewBoolOption(
 			Option.ChimeraHasOtherVision,
 			false);
 		factory.CreateFloatOption(
@@ -300,17 +300,17 @@ public sealed class TuckerRole :
 
 		CreateKillerOption(factory, ignorePrefix: false);
 
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.ChimeraCanUseVent, false);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.ChimeraReviveTime,
 			5.0f, 4.0f, 60.0f, 0.1f,
 			format: OptionUnit.Second);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.ChimeraDeathKillCoolOffset,
 			2.5f, -30.0f, 30.0f, 0.1f,
 			format: OptionUnit.Second);
-		var chimeraDeathOpt = factory.CreateBoolOption(
+		var chimeraDeathOpt = factory.CreateNewBoolOption(
 			Option.TuckerDeathWithChimera,
 			false);
 		factory.CreateFloatOption(

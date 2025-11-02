@@ -336,15 +336,15 @@ public sealed class Miner :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			MinerOption.LinkingAllVent,
 			false);
 		IRoleAbility.CreateCommonAbilityOption(
             factory, 2.0f);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             MinerOption.MineKillRange,
             1.8f, 0.5f, 5f, 0.1f);
-		var showOpt = factory.CreateBoolOption(
+		var showOpt = factory.CreateNewBoolOption(
 			MinerOption.CanShowMine,
 			false);
 
@@ -362,11 +362,11 @@ public sealed class Miner :
 		factory.CreateBoolOption(
 			MinerOption.CanShowNoneActiveAnotherPlayer,
 			false, anotherPlayerShowMode);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
             MinerOption.NoneActiveTime,
             20.0f, 1.0f, 45f, 0.5f,
 			format: OptionUnit.Second);
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             MinerOption.ShowKillLog,
             true);
 	}

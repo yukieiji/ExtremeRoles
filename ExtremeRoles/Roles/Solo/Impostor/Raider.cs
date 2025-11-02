@@ -290,27 +290,27 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         IRoleAbility.CreateAbilityCountOption(
             factory, 2, 10);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			RoleAbilityCommonOption.AbilityActiveTime,
 			25, 2, 90, 1,
 			format: OptionUnit.Second);
 
-		var limitOpt = factory.CreateBoolOption(
+		var limitOpt = factory.CreateNewBoolOption(
 			Option.IsOpenLimit, true);
 		factory.CreateIntOption(
 			Option.LimitNum, 4, 1, 100, 1,
 			limitOpt, invert: true);
 
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.IsHidePlayerOnOpen, true);
 
 		var type = factory.CreateSelectionOption<Option, RaiderBombSystem.BombType>(Option.BombType);
 		factory.CreateIntOption(Option.BombNum, 5, 2, 100, 1, type);
 		factory.CreateFloatOption(Option.BombTargetRange, 1.7f, 0.1f, 25.0f, 0.1f, type);
-		factory.CreateFloatOption(Option.BombRange, 1.7f, 0.1f, 5.0f, 0.1f);
-		factory.CreateFloatOption(Option.BombAliveTime, 5.0f, 0.5f, 30.0f, 0.1f, format: OptionUnit.Second);
+		factory.CreateNewFloatOption(Option.BombRange, 1.7f, 0.1f, 5.0f, 0.1f);
+		factory.CreateNewFloatOption(Option.BombAliveTime, 5.0f, 0.5f, 30.0f, 0.1f, format: OptionUnit.Second);
 
-		factory.CreateBoolOption(Option.BombShowOtherPlayer, true);
+		factory.CreateNewBoolOption(Option.BombShowOtherPlayer, true);
 	}
 
     protected override void RoleSpecificInit()

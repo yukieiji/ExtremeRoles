@@ -1351,7 +1351,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
 			IRoleAbility.DefaultCoolTime,
 			IRoleAbility.MinCoolTime,
@@ -1359,7 +1359,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			IRoleAbility.Step,
 			format: OptionUnit.Second);
 
-		var randomWepon = factory.CreateBoolOption(
+		var randomWepon = factory.CreateNewBoolOption(
 			Option.IsRandomInitAbility,
 			false);
 
@@ -1374,7 +1374,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Option.InitAbility,
 			new InvertActive(randomWepon));
 
-		var mapSetOps = factory.CreateBoolOption(
+		var mapSetOps = factory.CreateNewBoolOption(
 			Option.IsSetWeapon, true);
 
 		factory.CreateBoolOption(
@@ -1382,90 +1382,90 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			true, mapSetOps,
 			invert: true);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.HandGunCount,
 			1, 0, 10, 1);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.HandGunSpeed,
 			10.0f, 0.5f, 15.0f, 0.5f);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.HandGunRange,
 			3.5f, 0.1f, 5.0f, 0.1f);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.FlameCount,
 			1, 0, 10, 1);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.FlameChargeTime,
 			2.0f, 0.1f, 5.0f, 0.1f,
 			format: OptionUnit.Second);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.FlameActiveTime,
 			25.0f, 5.0f, 120.0f, 0.5f,
 			format: OptionUnit.Second);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.FlameFireSecond,
 			3.5f, 0.1f, 10.0f, 0.1f,
 			format: OptionUnit.Second);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.FlameDeadSecond,
 			3.5f, 0.1f, 10.0f, 0.1f,
 			format: OptionUnit.Second);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.SwordCount,
 			1, 0, 10, 1);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.SwordChargeTime,
 			3.0f, 0.5f, 30.0f, 0.5f,
 			format: OptionUnit.Second);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.SwordActiveTime,
 			15.0f, 0.5f, 60.0f, 0.5f,
 			format: OptionUnit.Second);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.SwordR,
 			1.0f, 0.25f, 5.0f, 0.25f);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.SniperRifleCount,
 			1, 0, 10, 1);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.SniperRifleSpeed,
 			50.0f, 25.0f, 75.0f, 0.5f);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.BeamRifleCount,
 			1, 0, 10, 1);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.BeamRifleSpeed,
 			7.0f, 0.1f, 10.0f, 0.1f);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.BeamRifleRange,
 			20.0f, 0.5f, 30.0f, 0.5f);
 
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.BeamSaberCount,
 			1, 0, 10, 1);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.BeamSaberChargeTime,
 			5, 1, 60, 1,
 			format: OptionUnit.Second);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.BeamSaberRange,
 			3.5f, 0.1f, 7.5f, 0.1f);
 
 		/*
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.AguniCount,
 			1, 0, 10, 1);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.AguniChargeTime,
 			5, 1, 60, 1,
 			format: OptionUnit.Second);
 		*/
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.WeaponMixTime,
 			3.0f, 0.5f, 25.0f, 0.5f,
 			format: OptionUnit.Second);

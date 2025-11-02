@@ -257,7 +257,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             BuddyOption.AwakeTaskGage,
             50, 0, 100, 10,
             format: OptionUnit.Percentage);

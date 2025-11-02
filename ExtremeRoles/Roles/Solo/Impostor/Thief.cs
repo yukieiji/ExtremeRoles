@@ -131,11 +131,11 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
     {
 		IRoleAbility.CreateAbilityCountOption(
             factory, 2, 5, 2.0f);
-		factory.CreateFloatOption(ThiefOption.Range, 0.1f, 1.8f, 3.6f, 0.1f);
-		factory.CreateIntOption(ThiefOption.SetTimeOffset, 30, 10, 360, 5, format: OptionUnit.Second);
-		factory.CreateIntOption(ThiefOption.SetNum, 5, 1, 10, 1);
-		factory.CreateIntOption(ThiefOption.PickUpTimeOffset, 6, 1, 60, 1, format: OptionUnit.Second);
-		factory.CreateBoolOption(ThiefOption.IsAddEffect, true);
+		factory.CreateNewFloatOption(ThiefOption.Range, 0.1f, 1.8f, 3.6f, 0.1f);
+		factory.CreateNewIntOption(ThiefOption.SetTimeOffset, 30, 10, 360, 5, format: OptionUnit.Second);
+		factory.CreateNewIntOption(ThiefOption.SetNum, 5, 1, 10, 1);
+		factory.CreateNewIntOption(ThiefOption.PickUpTimeOffset, 6, 1, 60, 1, format: OptionUnit.Second);
+		factory.CreateNewBoolOption(ThiefOption.IsAddEffect, true);
 	}
 
     protected override void RoleSpecificInit()

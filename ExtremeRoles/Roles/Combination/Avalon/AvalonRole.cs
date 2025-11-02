@@ -60,10 +60,10 @@ public sealed class Assassin : MultiAssignRoleBase
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             AssassinOption.HasTask,
             false);
-        var killedOps = factory.CreateBoolOption(
+        var killedOps = factory.CreateNewBoolOption(
             AssassinOption.CanKilled,
             false);
         factory.CreateBoolOption(
@@ -79,7 +79,7 @@ public sealed class Assassin : MultiAssignRoleBase
             AssassinOption.CanSeeRoleBeforeFirstMeeting,
             false, meetingOpt);
 
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
              AssassinOption.CanSeeVote,
             true);
     }
@@ -273,21 +273,21 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             MarlinOption.HasTask,
             false);
 
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             MarlinOption.CanSeeAssassin,
             true);
 
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             MarlinOption.CanSeeVote,
             true);
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             MarlinOption.CanSeeNeutral,
             false);
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             MarlinOption.CanUseVent,
             false);
     }

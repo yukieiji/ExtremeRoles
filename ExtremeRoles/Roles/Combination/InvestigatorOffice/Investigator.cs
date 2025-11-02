@@ -422,32 +422,32 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			DetectiveOption.SearchRange,
 			1.0f, 0.5f, 2.8f, 0.1f);
 
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			DetectiveOption.SearchTime,
 			6.0f, 3.0f, 10.0f, 0.1f,
 			format: OptionUnit.Second);
 
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			DetectiveOption.SearchAssistantTime,
 			4.0f, 2.0f, 7.5f, 0.1f,
 			format: OptionUnit.Second);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			DetectiveOption.ContinueSearch,
 			false);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			DetectiveOption.SearchCanFindName,
 			false);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			DetectiveOption.SearchCanContineMeetingNum,
 			1, 1, 10, 1);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			DetectiveOption.ForceMeetingOnSearchEnd,
 			false);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			DetectiveOption.TextShowTime,
 			60.0f, 5.0f, 120.0f, 0.1f,
 			format: OptionUnit.Second);

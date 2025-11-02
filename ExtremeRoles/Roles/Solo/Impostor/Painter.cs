@@ -138,7 +138,7 @@ public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
         IRoleAbility.CreateCommonAbilityOption(
             factory);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             PainterOption.CanPaintDistance,
             1.0f, 1.0f, 5.0f, 0.5f);
     }

@@ -208,10 +208,10 @@ public sealed class AcceleratorRole :
 
         IRoleAbility.CreateAbilityCountOption(
             factory, 3, 10, 30.0f);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.Speed, 1.0f, 0.1f,
 			3.0f, 0.1f);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.UseOtherPlayer,
 			true);
     }

@@ -195,25 +195,25 @@ public sealed class Whisper :
         AutoParentSetOptionCategoryFactory factory)
     {
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             WhisperOption.AbilityOffTime,
             2.0f, 1.0f, 5.0f, 0.5f,
             format: OptionUnit.Second);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             WhisperOption.AbilityOnTime,
             4.0f, 1.0f, 10.0f, 0.5f,
             format: OptionUnit.Second);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             WhisperOption.TellTextTime,
             3.0f, 1.0f, 25.0f, 0.5f,
             format: OptionUnit.Second);
 
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             WhisperOption.MaxTellText,
             3, 1, 10, 1);
-		var awakeOpt = factory.CreateBoolOption(
+		var awakeOpt = factory.CreateNewBoolOption(
 			WhisperOption.EnableAwakeAbility,
 			false);
 		factory.CreateIntOption(

@@ -71,7 +71,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 		AutoParentSetOptionCategoryFactory factory)
 	{
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 50);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.DelaySecond, 5.0f, 0.5f, 30.0f, 0.5f, format:OptionUnit.Second);
 	}
 

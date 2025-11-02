@@ -133,8 +133,8 @@ public sealed class FurryRole : SingleRoleBase,
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateBoolOption(Option.UseVent, false);
-		var taskOpt = factory.CreateBoolOption(
+		factory.CreateNewBoolOption(Option.UseVent, false);
+		var taskOpt = factory.CreateNewBoolOption(
 			Option.HasTask, false);
 		factory.CreateIntOption(
 			Option.SeeJackalTaskRate, 50, 0, 100, 10,

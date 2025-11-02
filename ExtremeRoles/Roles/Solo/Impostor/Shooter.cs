@@ -357,26 +357,26 @@ public sealed class Shooter :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             ShooterOption.IsInitAwake,
             false);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             ShooterOption.AwakeKillNum,
             1, 0, 5, 1,
             format: OptionUnit.Shot);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             ShooterOption.AwakeImpNum,
             1, 1, GameSystem.MaxImposterNum, 1);
 
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             ShooterOption.NoneAwakeWhenShoot,
             true);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             ShooterOption.ShootKillCoolPenalty,
             5.0f, 0.0f, 30.0f, 0.5f,
             format: OptionUnit.Second);
 
-        var meetingOps = factory.CreateBoolOption(
+        var meetingOps = factory.CreateNewBoolOption(
             ShooterOption.CanCallMeeting,
             true);
 
@@ -385,7 +385,7 @@ public sealed class Shooter :
             true, meetingOps,
             invert: true);
 
-        var maxShootOps = factory.CreateIntOption(
+        var maxShootOps = factory.CreateNewIntOption(
            ShooterOption.MaxShootNum,
            1, 1, 14, 1,
            format: OptionUnit.Shot);
@@ -404,11 +404,11 @@ public sealed class Shooter :
 			format: OptionUnit.Shot,
             tempMaxValue: 14);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             ShooterOption.ShootChargeTime,
             90.0f, 30.0f, 120.0f, 5.0f,
             format: OptionUnit.Second);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             ShooterOption.ShootKillNum,
             1, 0, 5, 1,
             format: OptionUnit.Shot);

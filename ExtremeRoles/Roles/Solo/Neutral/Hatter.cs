@@ -133,28 +133,28 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 		   HatterOption.CanRepairSabotage,
 		   false);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 		   HatterOption.WinCount,
 		   3, 1, 10, 1);
 
 		IRoleAbility.CreateAbilityCountOption(
 			factory, 3, 10, minAbilityCount: 0);
 
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			HatterOption.HideMeetingTimer, true);
 
 		// 後で直す
 		/*
-		var lowerOpt = factory.CreateIntDynamicOption(
+		var lowerOpt = factory.CreateNewIntDynamicOption(
 			HatterOption.MeetingTimerDecreaseLower,
 			0, 0, 5,
 			format: OptionUnit.Percentage);
 
-		var upperOpt = factory.CreateIntOption(
+		var upperOpt = factory.CreateNewIntOption(
 			HatterOption.MeetingTimerDecreaseUpper,
 			20, 0, 50, 5,
 			format: OptionUnit.Percentage);
@@ -162,11 +162,11 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		upperOpt.AddWithUpdate(lowerOpt);
 		*/
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			HatterOption.IncreaseTaskGage,
 			50, 0, 100, 10,
 			format: OptionUnit.Percentage);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			HatterOption.IncreseNum,
 			3, 1, 10, 1);
 	}

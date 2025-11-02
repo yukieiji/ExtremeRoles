@@ -403,18 +403,18 @@ public sealed class Psychic :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             PsychicOption.AwakeTaskGage,
             30, 0, 100, 10,
             format: OptionUnit.Percentage);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 		   PsychicOption.AwakeDeadPlayerNum,
 		   2, 0, 7, 1);
 
         IRoleAbility.CreateAbilityCountOption(
             factory, 1, 5, 3.0f);
 
-		var isUpgradeOpt = factory.CreateBoolOption(
+		var isUpgradeOpt = factory.CreateNewBoolOption(
 			PsychicOption.IsUpgradeAbility,
 			false);
 		factory.CreateIntOption(

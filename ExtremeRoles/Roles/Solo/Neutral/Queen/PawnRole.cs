@@ -66,9 +66,9 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			Option.UseVent, false);
-		var taskOpt = factory.CreateBoolOption(
+		var taskOpt = factory.CreateNewBoolOption(
 			Option.HasTask, false);
 		factory.CreateIntOption(
 			Option.SeeQueenTaskRate, 50, 0, 100, 10,

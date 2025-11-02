@@ -240,7 +240,7 @@ public sealed class Lover : MultiAssignRoleBase
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        var neutralSetting = factory.CreateBoolOption(
+        var neutralSetting = factory.CreateNewBoolOption(
             LoverOption.IsNeutral,
             false);
 

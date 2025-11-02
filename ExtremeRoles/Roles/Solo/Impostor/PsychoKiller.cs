@@ -165,20 +165,20 @@ public sealed class PsychoKiller :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             PsychoKillerOption.KillCoolReduceRate,
             5, 1, 15, 1,
             format: OptionUnit.Percentage);
 
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             PsychoKillerOption.CombMax,
             2, 1, 5, 1);
 
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             PsychoKillerOption.CombResetWhenMeeting,
             true);
 
-		var hasSelfKillTimer = factory.CreateBoolOption(
+		var hasSelfKillTimer = factory.CreateNewBoolOption(
 			PsychoKillerOption.HasSelfKillTimer,
 			false);
 		factory.CreateFloatOption(

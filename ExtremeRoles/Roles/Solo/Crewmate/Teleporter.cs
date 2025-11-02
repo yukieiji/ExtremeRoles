@@ -297,12 +297,12 @@ public sealed class Teleporter :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             TeleporterOption.CanUseOtherPlayer,
             false);
         IRoleAbility.CreateAbilityCountOption(
             factory, 1, 3);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			TeleporterOption.InitAbilityNum,
 			0, 0, 10, 1);
     }

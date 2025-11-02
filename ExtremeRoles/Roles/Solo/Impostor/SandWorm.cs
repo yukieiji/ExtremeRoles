@@ -217,21 +217,21 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility, ITryKillTo
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             SandWormOption.KillCoolPenalty,
             5.0f, 1.0f, 10.0f, 0.1f,
             format: OptionUnit.Second);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             SandWormOption.AssaultKillCoolReduce,
             3.0f, 1.0f, 5.0f, 0.1f,
             format: OptionUnit.Second);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             SandWormOption.AssaultRange,
             2.0f, 0.1f, 3.0f, 0.1f);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             RoleAbilityCommonOption.AbilityCoolTime,
             15.0f, 0.5f, 45.0f, 0.1f,
             format: OptionUnit.Second);

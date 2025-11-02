@@ -106,22 +106,22 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
         AutoParentSetOptionCategoryFactory factory)
     {
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             BountyHunterOption.TargetUpdateTime,
             60f, 30.0f, 120f, 0.5f,
             format: OptionUnit.Second);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             BountyHunterOption.TargetKillCoolTime,
             5f, 1.0f, 60f, 0.5f,
             format: OptionUnit.Second);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             BountyHunterOption.NoneTargetKillCoolTime,
             45f, 1.0f, 120f, 0.5f,
             format: OptionUnit.Second);
 
-        var arrowOption = factory.CreateBoolOption(
+        var arrowOption = factory.CreateNewBoolOption(
             BountyHunterOption.IsShowArrow,
             false);
 

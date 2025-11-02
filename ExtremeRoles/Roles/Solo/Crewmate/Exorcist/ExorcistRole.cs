@@ -115,10 +115,10 @@ public sealed class ExorcistRole :
 		factory.Create0To100Percentage10StepOption(Option.AwakeTaskGage);
 
 		IRoleAbility.CreateAbilityCountOption(factory, 1, 5, 3.0f);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			Option.Range,
 			1.7f, 0.1f, 3.5f, 0.1f);
-		factory.CreateBoolOption(Option.WithName, false);
+		factory.CreateNewBoolOption(Option.WithName, false);
 		factory.CreateSelectionOption<Option, BlockMode>(Option.CrewBlockSystemType);
 	}
 

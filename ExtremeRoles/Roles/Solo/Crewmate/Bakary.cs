@@ -26,7 +26,7 @@ public sealed class Bakary : SingleRoleBase
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        var changeCooking = factory.CreateBoolOption(
+        var changeCooking = factory.CreateNewBoolOption(
             BakaryOption.ChangeCooking,
             true);
 

@@ -175,20 +175,20 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             SheriffOption.CanShootAssassin,
             false);
 
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             SheriffOption.CanShootNeutral,
             true);
 
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             SheriffOption.ShootNum,
             1, 1, GameSystem.VanillaMaxPlayerNum - 1, 1,
             format: OptionUnit.Shot);
 
-        var enableTaskRelatedOps = factory.CreateBoolOption(
+        var enableTaskRelatedOps = factory.CreateNewBoolOption(
             SheriffOption.EnableTaskRelated,
             false);
 

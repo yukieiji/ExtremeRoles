@@ -70,21 +70,21 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
     {
         IRoleAbility.CreateAbilityCountOption(
             factory, 5, 100);
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			TeroristOption.CanActiveOtherSabotage,
 			false);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			TeroristOption.ExplosionTime,
 			45.0f, 10.0f, 240.0f, 1.0f,
 			format: OptionUnit.Second);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			TeroristOption.BombNum,
 			3, 1, 6, 1);
-		factory.CreateFloatOption(
+		factory.CreateNewFloatOption(
 			TeroristOption.PlayerActivateTime,
 			3.0f, 0.25f, 10.0f, 0.25f,
 			format: OptionUnit.Second);
-		var deadPlayerOpt = factory.CreateBoolOption(
+		var deadPlayerOpt = factory.CreateNewBoolOption(
 			TeroristOption.CanUseDeadPlayer,
 			false);
 		factory.CreateFloatOption(

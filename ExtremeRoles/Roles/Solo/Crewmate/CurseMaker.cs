@@ -277,11 +277,11 @@ public sealed class CurseMaker :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             CurseMakerOption.CursingRange,
             2.5f, 0.5f, 5.0f, 0.5f);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             CurseMakerOption.AdditionalKillCool,
             5.0f, 1.0f, 30.0f, 0.1f,
             format: OptionUnit.Second);
@@ -289,12 +289,12 @@ public sealed class CurseMaker :
         IRoleAbility.CreateAbilityCountOption(
             factory, 1, 3, 5.0f);
 
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             CurseMakerOption.TaskCurseTimeReduceRate,
             0, 0, 10, 1,
             format: OptionUnit.Percentage);
 
-        var removeDeadBodyOpt = factory.CreateBoolOption(
+        var removeDeadBodyOpt = factory.CreateNewBoolOption(
             CurseMakerOption.IsNotRemoveDeadBodyByTask,
             false);
 
@@ -303,7 +303,7 @@ public sealed class CurseMaker :
             100, 0, 100, 5, removeDeadBodyOpt,
             format: OptionUnit.Percentage);
 
-        var searchDeadBodyOption = factory.CreateBoolOption(
+        var searchDeadBodyOption = factory.CreateNewBoolOption(
             CurseMakerOption.IsDeadBodySearch,
             true);
 

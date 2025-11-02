@@ -167,7 +167,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			GameSystem.MaxImposterNum :
 			(GameSystem.VanillaMaxPlayerNum - 1);
 
-		var roleSetNumOption = factory.CreateIntOption(
+		var roleSetNumOption = factory.CreateNewIntOption(
 			RoleCommonOption.RoleNum,
 			1, 1, maxSetNum, 1,
 			ignorePrefix: true);
@@ -176,26 +176,26 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		int roleAssignNum = this.BaseRole.IsImpostor() ?
 			GameSystem.MaxImposterNum :
 			GameSystem.VanillaMaxPlayerNum - 1;
-		var roleAssignNumOption = factory.CreateIntOption(
+		var roleAssignNumOption = factory.CreateNewIntOption(
 			CombinationRoleCommonOption.AssignsNum,
 			this.minimumRoleNum, this.minimumRoleNum,
 			roleAssignNum, 1,
 			isHidden: isHideMultiAssign,
 			ignorePrefix: true);
 
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
 			CombinationRoleCommonOption.IsMultiAssign, false,
 			ignorePrefix: true,
 			isHidden: this.RoleType is CombinationRoleType.Traitor);
 
 		// 後で直す roleAssignNumOption.AddWithUpdate(roleSetNumOption);
 
-		factory.CreateIntOption(RoleCommonOption.AssignWeight,
+		factory.CreateNewIntOption(RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1, ignorePrefix: true);
 
         if (this.canAssignImposter)
         {
-			var assignRatioOption = factory.CreateBoolOption(
+			var assignRatioOption = factory.CreateNewBoolOption(
 				CombinationRoleCommonOption.IsRatioTeamAssign,
 				false, ignorePrefix: true);
 

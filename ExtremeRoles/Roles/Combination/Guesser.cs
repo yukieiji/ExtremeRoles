@@ -597,18 +597,18 @@ public sealed class Guesser :
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
 		CreateKillerOption(factory, imposterSetting);
 
-		factory.CreateBoolOption(
+		factory.CreateNewBoolOption(
             GuesserOption.CanCallMeeting,
             false);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             GuesserOption.GuessNum,
             1, 1, GameSystem.MaxImposterNum, 1,
             format: OptionUnit.Shot);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             GuesserOption.MaxGuessNumWhenMeeting,
             1, 1, GameSystem.MaxImposterNum, 1,
             format: OptionUnit.Shot);
-        var noneGuessRoleOpt = factory.CreateBoolOption(
+        var noneGuessRoleOpt = factory.CreateNewBoolOption(
             GuesserOption.CanGuessNoneRole,
             false);
         factory.CreateSelectionOption<GuesserOption, GuessMode>(

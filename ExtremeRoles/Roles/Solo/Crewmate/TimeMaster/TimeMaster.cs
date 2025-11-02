@@ -160,7 +160,7 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
         IRoleAbility.CreateCommonAbilityOption(
             factory, 3.0f);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             TimeMasterOption.RewindTime,
             5.0f, 1.0f, 60.0f, 0.5f,
             format: OptionUnit.Second);

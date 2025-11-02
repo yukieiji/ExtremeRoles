@@ -204,30 +204,30 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
     {
         IRoleAbility.CreateCommonAbilityOption(factory);
 
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             AssaultMasterOption.StockLimit,
             2, 1, 10, 1,
             format: OptionUnit.ScrewNum);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             AssaultMasterOption.StockNumWhenReport,
             1, 1, 5, 1,
             format: OptionUnit.ScrewNum);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             AssaultMasterOption.StockNumWhenMeetingButton,
             3, 1, 10, 1,
             format: OptionUnit.ScrewNum);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             AssaultMasterOption.CockingKillCoolReduceTime,
             2.0f, 1.0f, 5.0f, 0.1f,
             format: OptionUnit.Second);
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             AssaultMasterOption.ReloadReduceKillCoolTimePerStock,
             5.0f, 2.0f, 10.0f, 0.1f,
             format: OptionUnit.Second);
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             AssaultMasterOption.IsResetReloadCoolTimeWhenKill,
             true);
-        factory.CreateIntOption(
+        factory.CreateNewIntOption(
             AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock,
             75, 30, 90, 1,
             format: OptionUnit.Percentage);

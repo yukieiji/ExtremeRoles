@@ -237,12 +237,12 @@ public abstract class GhostRoleBase
 
         int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
             RoleCommonOption.RoleNum,
             1, 1, spawnNum, 1,
 			ignorePrefix: true);
 
-		factory.CreateIntOption(RoleCommonOption.AssignWeight, 500, 1, 1000, 1, ignorePrefix: true);
+		factory.CreateNewIntOption(RoleCommonOption.AssignWeight, 500, 1, 1000, 1, ignorePrefix: true);
 
 		return factory;
     }

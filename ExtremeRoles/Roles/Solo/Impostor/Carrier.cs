@@ -207,11 +207,11 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
         IRoleAbility.CreateCommonAbilityOption(
             factory, 5.0f);
 
-        factory.CreateFloatOption(
+        factory.CreateNewFloatOption(
             CarrierOption.CarryDistance,
             1.0f, 1.0f, 5.0f, 0.5f);
 
-        factory.CreateBoolOption(
+        factory.CreateNewBoolOption(
             CarrierOption.CanReportOnCarry,
             true);
     }

@@ -160,7 +160,7 @@ public interface IRoleAbility : IRoleResetMeeting
 			defaultActiveTime,
 			parentOpt);
 
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			RoleAbilityCommonOption.AbilityCount,
 			defaultAbilityCount, minAbilityCount,
 			maxAbilityCount, 1,
