@@ -1,11 +1,11 @@
+using System;
+
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
-using Rewired.Utils.Platforms.Windows;
-using System;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -182,7 +182,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		var roleAssinNumRange = ValueHolderAssembler.CreateIntValue(
 			this.minimumRoleNum, this.minimumRoleNum,
 			roleAssignNum, 1);
-		var roleAssignNumOption = factory.CreateOption(
+		factory.CreateOption(
 			CombinationRoleCommonOption.AssignsNum,
 			roleAssinNumRange,
 			isHidden: isHideMultiAssign,

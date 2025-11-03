@@ -1,3 +1,5 @@
+using System;
+
 using UnityEngine;
 
 using ExtremeRoles.Extension.Il2Cpp;
@@ -5,6 +7,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Resources;
@@ -12,7 +16,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -147,20 +150,26 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		factory.CreateBoolOption(
 			HatterOption.HideMeetingTimer, true);
 
-		// 後で直す
-		/*
-		var lowerOpt = factory.CreateNewIntDynamicOption(
+		var lowerOpt = factory.CreateIntOption(
 			HatterOption.MeetingTimerDecreaseLower,
-			0, 0, 5,
+			0, 0, 5, 1,
 			format: OptionUnit.Percentage);
 
-		var upperOpt = factory.CreateNewIntOption(
-			HatterOption.MeetingTimerDecreaseUpper,
-			20, 0, 50, 5,
+		var upperOptRange = ValueHolderAssembler.CreateIntValue(20, 0, 50, 5);
+		factory.CreateOption(
+			CombinationRoleCommonOption.AssignsNum,
+			upperOptRange,
 			format: OptionUnit.Percentage);
 
-		upperOpt.AddWithUpdate(lowerOpt);
-		*/
+		lowerOpt.OnValueChanged += (x) =>
+		{
+			int prevSelection = upperOptRange.Selection;
+			int miniValue = lowerOpt.Value<int>();
+			int newMinValue = Math.Max(0, miniValue);
+
+			upperOptRange.InnerRange = OptionRange<int>.Create(newMinValue, 50, 5);
+			upperOptRange.Selection = prevSelection;
+		};
 
 		factory.CreateIntOption(
 			HatterOption.IncreaseTaskGage,
