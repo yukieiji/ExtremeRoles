@@ -169,8 +169,7 @@ public sealed class SlaveDriver :
 
 	public bool IsAbilityUse()
 	{
-		var target = Player.GetClosestPlayerInRange(
-			PlayerControl.LocalPlayer, this, this.range);
+		var target = Player.GetClosestPlayerInRange(this.range);
 
 		if (target == null) { return false; }
 

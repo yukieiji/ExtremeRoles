@@ -149,9 +149,7 @@ public sealed class MissionaryRole :
 
     public bool IsAbilityUse()
     {
-		this.targetPlayer = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this,
-			this.propagateRange);
+		this.targetPlayer = Player.GetClosestPlayerInRange(this.propagateRange);
 
 		if (this.targetPlayer == null)
 		{
