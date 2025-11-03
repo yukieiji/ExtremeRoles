@@ -3,13 +3,12 @@ using System;
 using UnityEngine;
 
 using ExtremeRoles.Extension;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
 
-namespace ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.CustomOption.Factory;
 
 public static class OptionCategoryAssembler
 {

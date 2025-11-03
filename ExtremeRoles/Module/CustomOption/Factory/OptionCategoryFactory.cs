@@ -53,7 +53,7 @@ public class OptionCategoryFactory(
 	{
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
-		var boolRange = new BoolOptionValue(defaultValue);
+		var boolRange = ValueHolderAssembler.CreateBoolValue(defaultValue);
 
 		return CreateOption(optionId, name, format, isHidden, boolRange, activator);
 	}
@@ -72,7 +72,7 @@ public class OptionCategoryFactory(
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		var floatRange = new FloatOptionValue(defaultValue, min, max, step);
+		var floatRange = ValueHolderAssembler.CreateFloatValue(defaultValue, min, max, step);
 
 		return CreateOption(optionId, name, format, isHidden, floatRange, activator);
 	}
@@ -92,8 +92,7 @@ public class OptionCategoryFactory(
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		float max = CreateMaxValue(min, step, defaultValue, tempMaxValue);
-		var floatRange = new FloatOptionValue(defaultValue, min, max, step);
+		var floatRange = ValueHolderAssembler.CreateDynamicFloatValue(defaultValue, min, step, tempMaxValue);
 
 		var opt = CreateOption(optionId, name, format, isHidden, floatRange, activator);
 
@@ -122,7 +121,7 @@ public class OptionCategoryFactory(
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		var intRange = new IntOptionValue(defaultValue, min, max, step);
+		var intRange = ValueHolderAssembler.CreateIntValue(defaultValue, min, max, step);
 
 		return CreateOption(optionId, name, format, isHidden, intRange, activator);
 	}
@@ -142,8 +141,7 @@ public class OptionCategoryFactory(
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		int max = CreateMaxValue(min, step, defaultValue, tempMaxValue);
-		var intRange = new IntOptionValue(defaultValue, min, max, step);
+		var intRange = ValueHolderAssembler.CreateDynamicIntValue(defaultValue, min, step, tempMaxValue);
 
 		var opt = CreateOption(optionId, name, format, isHidden, intRange, activator);
 
@@ -245,15 +243,6 @@ public class OptionCategoryFactory(
 		var newGroup = new OptionCategory(this.Tab, groupid, this.Name, this.optionPack, this.color);
 		this.categoryRegister.Invoke(Tab, newGroup);
 	}
-
-	protected static int CreateMaxValue(int min, int step, int defaultValue, int tempMaxValue)
-		=> tempMaxValue == 0 ?
-			min + step < defaultValue ? defaultValue : min + step :
-			tempMaxValue;
-	protected static float CreateMaxValue(float min, float step, float defaultValue, float tempMaxValue)
-		=> tempMaxValue == 0.0f ?
-			min + step < defaultValue ? defaultValue : min + step :
-			tempMaxValue;
 
 	protected IOption CreateOption(
 		int id,

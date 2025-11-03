@@ -13,6 +13,7 @@ using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat.Initializer;
 using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 namespace ExtremeRoles.Compat;

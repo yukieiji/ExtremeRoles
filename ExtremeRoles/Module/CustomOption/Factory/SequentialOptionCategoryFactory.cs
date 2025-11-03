@@ -37,7 +37,7 @@ public sealed class SequentialOptionCategoryFactory(
 		int optionId = getOptionIdAndUpdate();
 		string name = getOptionName(option, ignorePrefix);
 
-		var boolRange = new BoolOptionValue(defaultValue);
+		var boolRange = ValueHolderAssembler.CreateBoolValue(defaultValue);
 	
 		return CreateOption(optionId, name, format, isHidden, boolRange, activator);
 	}
@@ -57,8 +57,7 @@ public sealed class SequentialOptionCategoryFactory(
 		int optionId = getOptionIdAndUpdate();
 		string name = getOptionName(option, ignorePrefix);
 
-		float max = CreateMaxValue(min, step, defaultValue, tempMaxValue);
-		var floatRange = new FloatOptionValue(defaultValue, min, max, step);
+		var floatRange = ValueHolderAssembler.CreateDynamicFloatValue(defaultValue, min, step, tempMaxValue);
 
 		var opt = CreateOption(optionId, name, format, isHidden, floatRange, activator);
 
@@ -86,7 +85,7 @@ public sealed class SequentialOptionCategoryFactory(
 		int optionId = getOptionIdAndUpdate();
 		string name = getOptionName(option, ignorePrefix);
 
-		var intRange = new IntOptionValue(defaultValue, min, max, step);
+		var intRange = ValueHolderAssembler.CreateIntValue(defaultValue, min, max, step);
 
 		return CreateOption(optionId, name, format, isHidden, intRange, activator);
 	}
@@ -106,8 +105,7 @@ public sealed class SequentialOptionCategoryFactory(
 		int optionId = getOptionIdAndUpdate();
 		string name = getOptionName(option, ignorePrefix);
 
-		int max = CreateMaxValue(min, step, defaultValue, tempMaxValue);
-		var intRange = new IntOptionValue(defaultValue, min, max, step);
+		var intRange = ValueHolderAssembler.CreateDynamicIntValue(defaultValue, min, step, tempMaxValue);
 
 		var opt = CreateOption(optionId, name, format, isHidden, intRange, activator);
 
