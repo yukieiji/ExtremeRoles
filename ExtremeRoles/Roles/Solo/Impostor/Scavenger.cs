@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 using Hazel;
 using TMPro;
@@ -16,6 +15,9 @@ using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -24,13 +26,24 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using UnityObject = UnityEngine.Object;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
+
+public sealed class ScavengerMapWepenSetIsActive(
+	IOption parent,
+	IOption isRandomInitOpt,
+	IOption isInitWeponOpt) : IOptionActivator
+{
+	public IOption Parent { get; } = parent;
+
+	private readonly IOption isRandomInitOpt = isRandomInitOpt;
+	private readonly IOption isInitWeponOpt = isInitWeponOpt;
+
+	public bool IsActive => Parent.IsActive && (isRandomInitOpt.IsChangeDefault || isInitWeponOpt.IsChangeDefault);
+}
 
 
 public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
@@ -1207,13 +1220,17 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				var loader = this.Loader;
 
-				ScavengerAbilitySystem.RandomOption? randOpt = loader.GetValue<Option, bool>(Option.IsRandomInitAbility) ?
+				bool isRandomInit = loader.GetValue<Option, bool>(Option.IsRandomInitAbility);
+
+				ScavengerAbilitySystem.RandomOption? randOpt = isRandomInit ?
 					new(loader.GetValue<Option, bool>(Option.AllowDupe),
 						loader.GetValue<Option, bool>(Option.AllowAdvancedWeapon)) : null;
 
+				var ability = (Ability)loader.GetValue<Option, int>(Option.InitAbility);
+
 				return new ScavengerAbilitySystem(
-					(Ability)loader.GetValue<Option, int>(Option.InitAbility),
-					loader.GetValue<Option, bool>(Option.IsSetWeapon),
+					ability,
+					loader.GetValue<Option, bool>(Option.IsSetWeapon) || ability is Ability.ScavengerNull || !isRandomInit,
 					loader.GetValue<Option, bool>(Option.SyncWeapon),
 					randOpt);
 			});
@@ -1362,25 +1379,29 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		var randomWepon = factory.CreateBoolOption(
 			Option.IsRandomInitAbility,
 			false);
+		var randomWeponActive = new ParentActive(randomWepon);
 
-		factory.CreateOldBoolOption(
+		factory.CreateBoolOption(
 			Option.AllowDupe,
-			false, randomWepon);
-		factory.CreateOldBoolOption(
+			false, randomWeponActive);
+		factory.CreateBoolOption(
 			Option.AllowAdvancedWeapon,
-			false, randomWepon);
+			false, randomWeponActive);
 
-		factory.CreateSelectionOption<Option, Ability>(
+		var initAbirityOpt = factory.CreateSelectionOption<Option, Ability>(
 			Option.InitAbility,
 			new InvertActive(randomWepon));
 
 		var mapSetOps = factory.CreateBoolOption(
-			Option.IsSetWeapon, true);
+			Option.IsSetWeapon, true,
+			new ScavengerMapWepenSetIsActive(
+				factory.Activator!.Parent!,
+				randomWepon, initAbirityOpt));
 
-		factory.CreateOldBoolOption(
+
+		factory.CreateBoolOption(
 			Option.SyncWeapon,
-			true, mapSetOps,
-			invert: true);
+			true, new InvertActive(mapSetOps));
 
 		factory.CreateIntOption(
 			Option.HandGunCount,
