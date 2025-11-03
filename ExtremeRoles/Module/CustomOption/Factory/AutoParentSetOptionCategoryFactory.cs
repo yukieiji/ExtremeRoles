@@ -34,29 +34,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 	public IOption Get(int id)
 		=> this.internalFactory.Get(id);
 
-	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
-	public IOption CreateOldBoolOption<T>(
-		T option,
-		bool defaultValue,
-		IOption? parent = null,
-		bool isHidden = false,
-		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		bool ignorePrefix = false) where T : struct, IConvertible
-		=> CreateBoolOption(option, defaultValue, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
-	
-	[Obsolete("parentやignorePrefixを使わず、OptionActivatorを使用するように調整してください")]
-	public IOption CreateOldFloatOption<T>(
-		T option,
-		float defaultValue,
-		float min, float max, float step,
-		IOption? parent = null,
-		bool isHidden = false,
-		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		bool ignorePrefix = false) where T : struct, IConvertible
-		=> CreateFloatOption(option, defaultValue, min, max, step, OptionActivatorFactory.Create(parent, invert), isHidden, format, ignorePrefix);
-
 	public IOption CreateBoolOption<T>(
 		T option,
 		bool defaultValue,
