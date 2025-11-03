@@ -157,7 +157,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 		var upperOptRange = ValueHolderAssembler.CreateIntValue(20, 0, 50, 5);
 		factory.CreateOption(
-			CombinationRoleCommonOption.AssignsNum,
+			HatterOption.MeetingTimerDecreaseUpper,
 			upperOptRange,
 			format: OptionUnit.Percentage);
 
