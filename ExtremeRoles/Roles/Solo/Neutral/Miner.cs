@@ -9,14 +9,15 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
+using ExtremeRoles.Roles.Combination.Avalon;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.Combination.Avalon;
 
 #nullable enable
 
@@ -346,18 +347,21 @@ public sealed class Miner :
 		var showOpt = factory.CreateBoolOption(
 			MinerOption.CanShowMine,
 			false);
+
+		var showOptActive = new ParentActive(showOpt);
 		factory.CreateSelectionOption(
 			MinerOption.RolePlayerShowMode,
 			[
 				ShowMode.MineSeeOnlySe.ToString(),
 				ShowMode.MineSeeOnlyImg.ToString(),
 				ShowMode.MineSeeBoth.ToString(),
-			], showOpt);
+			], showOptActive);
 		var anotherPlayerShowMode = factory.CreateSelectionOption<MinerOption, ShowMode>(
-			MinerOption.AnotherPlayerShowMode, showOpt);
+			MinerOption.AnotherPlayerShowMode, showOptActive);
+
 		factory.CreateBoolOption(
 			MinerOption.CanShowNoneActiveAnotherPlayer,
-			false, anotherPlayerShowMode);
+			false, new ParentActive(anotherPlayerShowMode));
 		factory.CreateFloatOption(
             MinerOption.NoneActiveTime,
             20.0f, 1.0f, 45f, 0.5f,

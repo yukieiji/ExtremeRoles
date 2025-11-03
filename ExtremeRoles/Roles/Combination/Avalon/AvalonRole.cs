@@ -8,9 +8,9 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -67,18 +67,20 @@ public sealed class Assassin : MultiAssignRoleBase
         var killedOps = factory.CreateBoolOption(
             AssassinOption.CanKilled,
             false);
+		var killOptActive = new ParentActive(killedOps);
+
         factory.CreateBoolOption(
             AssassinOption.CanKilledFromCrew,
-            false, killedOps);
+            false, killOptActive);
         factory.CreateBoolOption(
             AssassinOption.CanKilledFromNeutral,
-            false, killedOps);
+            false, killOptActive);
         var meetingOpt = factory.CreateBoolOption(
             AssassinOption.IsDeadForceMeeting,
-            true, killedOps);
+            true, killOptActive);
         factory.CreateBoolOption(
             AssassinOption.CanSeeRoleBeforeFirstMeeting,
-            false, meetingOpt);
+            false, new ParentActive(meetingOpt));
 
         factory.CreateBoolOption(
              AssassinOption.CanSeeVote,

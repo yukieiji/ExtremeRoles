@@ -11,9 +11,9 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using TMPro;
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -383,8 +383,7 @@ public sealed class Shooter :
 
         factory.CreateBoolOption(
             ShooterOption.CanShootSelfCallMeeting,
-            true, meetingOps,
-            invert: true);
+            true, new InvertActive(meetingOps));
 
         var maxShootOps = factory.CreateIntOption(
            ShooterOption.MaxShootNum,
@@ -394,13 +393,15 @@ public sealed class Shooter :
         var initShootOps = factory.CreateIntDynamicOption(
             ShooterOption.InitShootNum,
             0, 0, 1,
-            format: OptionUnit.Shot,
+			maxShootOps,
+			format: OptionUnit.Shot,
             tempMaxValue: 14);
 
         var maxMeetingShootOps = factory.CreateIntDynamicOption(
             ShooterOption.MaxMeetingShootNum,
             1, 1, 1,
-            format: OptionUnit.Shot,
+			maxShootOps,
+			format: OptionUnit.Shot,
             tempMaxValue: 14);
 
         factory.CreateFloatOption(
@@ -411,10 +412,6 @@ public sealed class Shooter :
             ShooterOption.ShootKillNum,
             1, 0, 5, 1,
             format: OptionUnit.Shot);
-
-        maxShootOps.AddWithUpdate(initShootOps);
-        maxShootOps.AddWithUpdate(maxMeetingShootOps);
-
     }
 
     protected override void RoleSpecificInit()

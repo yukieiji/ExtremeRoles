@@ -6,9 +6,9 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 
 namespace ExtremeRoles.Roles.API;
@@ -82,7 +82,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
     {
 		// ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
 
-		var factory = OptionManager.CreateAutoParentSetOptionCategory(
+		var factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
 			this.RoleName,
 			OptionTab.CombinationTab,

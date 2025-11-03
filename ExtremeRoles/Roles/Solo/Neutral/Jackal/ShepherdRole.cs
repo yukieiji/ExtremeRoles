@@ -1,12 +1,13 @@
-using UnityEngine;
-
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using UnityEngine;
+
 
 #nullable enable
 
@@ -97,19 +98,22 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 	{
 		var killOpt = factory.CreateBoolOption(
 			Option.CanKill, true);
-		CreateKillerOption(factory, killOpt, true, true);
+		var killOptActive = new InvertActive(killOpt);
+
+		CreateKillerOption(factory, killOptActive, true);
 		factory.CreateBoolOption(
-			Option.IsSubTeam, true, killOpt, invert: true);
+			Option.IsSubTeam, true, killOptActive);
 		factory.CreateBoolOption(Option.UseVent, false);
 
 		var taskOpt = factory.CreateBoolOption(
 			Option.HasTask, false);
+		var taskOptActive = new ParentActive(taskOpt);
 		factory.CreateIntOption(
 			Option.SeeJackalTaskRate, 50, 0, 100, 10,
-			taskOpt, format: OptionUnit.Percentage);
+			taskOptActive, format: OptionUnit.Percentage);
 
-		factory.CreateBoolOption(Option.CanKillJackal, true, taskOpt);
-		factory.CreateBoolOption(Option.CanKillSidekick, true, taskOpt);
+		factory.CreateBoolOption(Option.CanKillJackal, true, taskOptActive);
+		factory.CreateBoolOption(Option.CanKillSidekick, true, taskOptActive);
 	}
 
 	protected override void RoleSpecificInit()

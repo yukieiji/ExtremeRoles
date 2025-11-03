@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
@@ -106,7 +105,8 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 		foreach (var info in this.allPage)
 		{
 			var opt = info.Option;
-			if (opt.IsEnable && !opt.Info.IsHidden)
+
+			if (!opt.Info.IsHidden && opt.IsChangeDefault)
 			{
 				this.curSettedRole.Add(info);
 			}

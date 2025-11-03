@@ -3,10 +3,11 @@ using UnityEngine;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 #nullable enable
@@ -219,7 +220,7 @@ public sealed class Whisper :
 		factory.CreateIntOption(
 			WhisperOption.AbilityTaskGage,
 			70, 0, 100, 10,
-			awakeOpt,
+			new ParentActive(awakeOpt),
 			format: OptionUnit.Percentage);
 	}
 

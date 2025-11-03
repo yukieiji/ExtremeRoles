@@ -1,5 +1,3 @@
-using ExtremeRoles.Helper;
-
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -7,8 +5,12 @@ using System.Text.RegularExpressions;
 
 using UnityEngine;
 
-using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Implemented.Value;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+
+using ExROption = ExtremeRoles.Module.CustomOption.Implemented.CustomOption;
 
 
 #nullable enable
@@ -18,7 +20,8 @@ namespace ExtremeRoles.Module.CustomOption.Factory;
 public class OptionCategoryFactory(
 	string name,
 	int groupId,
-	in Action<OptionTab, OptionCategory> action,
+	in Action<IOption, IOption> childRegister,
+	in Action<OptionTab, OptionCategory> categoryRegister,
 	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) : IDisposable
 {
@@ -31,211 +34,164 @@ public class OptionCategoryFactory(
 
 	private readonly Color? color = color;
 	private readonly int groupid = groupId;
-	private readonly Action<OptionTab, OptionCategory> registerOption = action;
+	private readonly Action<IOption, IOption> childRegister = childRegister;
+	private readonly Action<OptionTab, OptionCategory> categoryRegister = categoryRegister;
 	private readonly OptionPack optionPack = new OptionPack();
 
 	public IOption Get(int id)
 		=> this.optionPack.Get(id);
-	public IValueOption<T> Get<T>(int id)
-		where T :
-			struct, IComparable, IConvertible,
-			IComparable<T>, IEquatable<T>
-		=> this.optionPack.Get<T>(id);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public BoolCustomOption CreateBoolOption<T>(
+	public IOption CreateBoolOption<T>(
 		T option,
 		bool defaultValue,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		bool ignorePrefix = false,
-		in Func<bool>? hook = null) where T : struct, IConvertible
+		bool ignorePrefix = false
+	) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
+		var boolRange = ValueHolderAssembler.CreateBoolValue(defaultValue);
 
-		var opt = new BoolCustomOption(
-			new OptionInfo(optionId, name, format, isHidden),
-			defaultValue,
-			OptionRelationFactory.Create(parent, invert, hook));
-
-		this.AddOption(optionId, opt);
-		return opt;
+		return CreateOption(optionId, name, format, isHidden, boolRange, activator);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public FloatCustomOption CreateFloatOption<T>(
+	public IOption CreateFloatOption<T>(
 		T option,
 		float defaultValue,
 		float min, float max, float step,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		bool ignorePrefix = false) where T : struct, IConvertible
+		bool ignorePrefix = false
+	) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		var opt = new FloatCustomOption(
-			new OptionInfo(optionId, name, format, isHidden),
-			defaultValue, min, max, step,
-			OptionRelationFactory.Create(parent, invert));
+		var floatRange = ValueHolderAssembler.CreateFloatValue(defaultValue, min, max, step);
 
-		this.AddOption(optionId, opt);
-		return opt;
+		return CreateOption(optionId, name, format, isHidden, floatRange, activator);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public FloatDynamicCustomOption CreateFloatDynamicOption<T>(
+	public IOption CreateFloatDynamicOption<T>(
 		T option,
 		float defaultValue,
 		float min, float step,
-		IOption? parent = null,
+		IOption checkValueOption,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		var opt = new FloatDynamicCustomOption(
-			new OptionInfo(optionId, name, format, isHidden),
-			defaultValue, min, step,
-			OptionRelationFactory.Create(parent, invert),
-			tempMaxValue);
+		var floatRange = ValueHolderAssembler.CreateDynamicFloatValue(defaultValue, min, step, tempMaxValue);
 
-		this.AddOption(optionId, opt);
+		var opt = CreateOption(optionId, name, format, isHidden, floatRange, activator);
+
+		checkValueOption.OnValueChanged += (x) => {
+
+			int prevSelection = floatRange.Selection;
+			float newMax = checkValueOption.Value<float>();
+			floatRange.InnerRange = OptionRange<float>.Create(min, newMax, step);
+			floatRange.Selection = prevSelection;
+		};
+
 		return opt;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public IntCustomOption CreateIntOption<T>(
+	public IOption CreateIntOption<T>(
 		T option,
 		int defaultValue,
 		int min, int max, int step,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		bool ignorePrefix = false) where T : struct, IConvertible
+		bool ignorePrefix = false
+	) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		var opt = new IntCustomOption(
-			new OptionInfo(optionId, name, format, isHidden),
-			defaultValue, min, max, step,
-			OptionRelationFactory.Create(parent, invert));
+		var intRange = ValueHolderAssembler.CreateIntValue(defaultValue, min, max, step);
 
-		this.AddOption(optionId, opt);
-		return opt;
+		return CreateOption(optionId, name, format, isHidden, intRange, activator);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public IntDynamicCustomOption CreateIntDynamicOption<T>(
+	public IOption CreateIntDynamicOption<T>(
 		T option,
 		int defaultValue,
 		int min, int step,
-		IOption? parent = null,
+		IOption checkValueOption,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		int tempMaxValue = 0,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		var opt = new IntDynamicCustomOption(
-			new OptionInfo(optionId, name, format, isHidden),
-			defaultValue, min, step,
-			OptionRelationFactory.Create(parent, invert),
-			tempMaxValue);
+		var intRange = ValueHolderAssembler.CreateDynamicIntValue(defaultValue, min, step, tempMaxValue);
 
-		this.AddOption(optionId, opt);
+		var opt = CreateOption(optionId, name, format, isHidden, intRange, activator);
+
+		checkValueOption.OnValueChanged += (x) => {
+
+			int prevSelection = intRange.Selection;
+			int newMax = checkValueOption.Value<int>();
+			intRange.InnerRange = OptionRange<int>.Create(min, newMax, step);
+			intRange.Selection = prevSelection;
+
+		};
 		return opt;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public SelectionCustomOption CreateSelectionOption<T>(
+	public IOption CreateSelectionOption<T>(
 		T option,
 		string[] selections,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		var opt = new SelectionCustomOption(
-			new OptionInfo(optionId, name, format, isHidden),
-			selections,
-			OptionRelationFactory.Create(parent, invert));
+		var selection = new SelectionOptionValue(selections);
 
-		this.AddOption(optionId, opt);
-		return opt;
+		return CreateOption(optionId, name, format, isHidden, selection, activator);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public SelectionCustomOption CreateSelectionOption<T, W>(
+	public IOption CreateSelectionOption<T, W>(
 		T option,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		bool ignorePrefix = false,
-		in Func<bool>? hook = null)
+		bool ignorePrefix = false)
 		where T : struct, IConvertible
 		where W : struct, Enum
 	{
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
 
-		var opt = SelectionCustomOption.CreateFromEnum<W>(
-			new OptionInfo(optionId, name, format, isHidden),
-			OptionRelationFactory.Create(parent, invert, hook));
+		var selection = SelectionOptionValue.CreateFromEnum<W>();
 
-		this.AddOption(optionId, opt);
-		return opt;
+		return CreateOption(optionId, name, format, isHidden, selection, activator);
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public SelectionMultiEnableCustomOption CreateSelectionOption<T, W>(
-		T option,
-		IReadOnlyList<W> anotherDefault,
-		IOption? parent = null,
-		bool isHidden = false,
-		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		bool ignorePrefix = false,
-		in Func<bool>? hook = null)
-		where T : struct, IConvertible
-		where W : struct, Enum
-	{
-		int optionId = GetOptionId(option);
-		string name = GetOptionName(option, ignorePrefix);
-
-		var opt = SelectionMultiEnableCustomOption.CreateFromEnum(
-			new OptionInfo(optionId, name, format, isHidden),
-			anotherDefault,
-			OptionRelationFactory.Create(parent, invert, hook));
-
-		this.AddOption(optionId, opt);
-		return opt;
-	}
-
-	public void AddOption<SelectionType>(
-		int id,
-		IValueOption<SelectionType> option) where SelectionType :
-		struct, IComparable, IConvertible,
-		IComparable<SelectionType>, IEquatable<SelectionType>
+	public void AddOption(int id, IOption option)
 	{
 		optionPack.AddOption(id, option);
 	}
@@ -246,7 +202,7 @@ public class OptionCategoryFactory(
 		return Convert.ToInt32(option) + IdOffset;
 	}
 
-	protected string GetOptionName<T>(T option, bool ignorePrefix = false) where T : struct, IConvertible
+	public string GetOptionName<T>(T option, bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		string cleanedName = this.NameCleaner.Replace(this.OptionPrefix, string.Empty).Trim();
 
@@ -285,6 +241,27 @@ public class OptionCategoryFactory(
 	public void Dispose()
 	{
 		var newGroup = new OptionCategory(this.Tab, groupid, this.Name, this.optionPack, this.color);
-		this.registerOption(Tab, newGroup);
+		this.categoryRegister.Invoke(Tab, newGroup);
+	}
+
+	public IOption CreateOption(
+		int id,
+		string name,
+		OptionUnit format,
+		bool isHidden,
+		IValueHolder holder,
+		IOptionActivator? activator = null)
+	{
+		var info = new OptionInfo(id, name, format, isHidden);
+		var opt = new ExROption(info, holder, activator);
+		this.AddOption(id, opt);
+
+		var parent = activator?.Parent;
+		if (parent is not null)
+		{
+			this.childRegister.Invoke(parent, opt);
+		}
+
+		return opt;
 	}
 }

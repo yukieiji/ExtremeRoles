@@ -1,10 +1,11 @@
 using UnityEngine;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Loner;
 
@@ -60,8 +61,9 @@ public sealed class LonerRole : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
 		factory.CreateBoolOption(Option.StressProgressOnMovingPlatPlayer, false);
 		
 		var arrowOpt = factory.CreateBoolOption(Option.IsShowArrow, true);
-		factory.CreateIntOption(Option.ArrowNum, 1, 1, 5, 1, arrowOpt, invert: true);
-		factory.CreateBoolOption(Option.ArrowShowVentPlayer, true, arrowOpt, invert: true);
+		var arrowOptActive = new InvertActive(arrowOpt);
+		factory.CreateIntOption(Option.ArrowNum, 1, 1, 5, 1, arrowOptActive);
+		factory.CreateBoolOption(Option.ArrowShowVentPlayer, true, arrowOptActive);
 	}
 
 	protected override void RoleSpecificInit()

@@ -7,11 +7,12 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
@@ -380,9 +381,8 @@ public sealed class Resurrecter :
         factory.CreateFloatOption(
             ResurrecterOption.ResurrectMeetingCooltime,
             20.0f, 5.0f, 60.0f, 0.25f,
-            meetingResetOpt,
-            format: OptionUnit.Second,
-            invert: true);
+            new InvertActive(meetingResetOpt),
+            format: OptionUnit.Second);
 
         factory.CreateIntOption(
             ResurrecterOption.ResurrectTaskResetMeetingNum,

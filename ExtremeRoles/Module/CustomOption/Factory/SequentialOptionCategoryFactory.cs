@@ -1,17 +1,11 @@
-﻿using ExtremeRoles.Helper;
-
 using System;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
-
-
-
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Implemented;
-
+using ExtremeRoles.Module.CustomOption.Implemented.Value;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
@@ -20,10 +14,11 @@ namespace ExtremeRoles.Module.CustomOption.Factory;
 public sealed class SequentialOptionCategoryFactory(
 	string name,
 	int groupId,
-	in Action<OptionTab, OptionCategory> action,
+	in Action<IOption, IOption> childRegister,
+	in Action<OptionTab, OptionCategory> categoryRegister,
 	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) :
-	OptionCategoryFactory(name, groupId, action, tab, color)
+	OptionCategoryFactory(name, groupId, childRegister, categoryRegister, tab, color)
 {
 	public int StartId => 0;
 	public int EndId => this.Offset - 1;
@@ -31,141 +26,132 @@ public sealed class SequentialOptionCategoryFactory(
 	public int Offset { private get; set; } = 0;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public BoolCustomOption CreateBoolOption(
+	public IOption CreateBoolOption(
 		object option,
 		bool defaultValue,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
 		string name = getOptionName(option, ignorePrefix);
 
-		var opt = new BoolCustomOption(
-			new OptionInfo(optionId, name, format, isHidden),
-			defaultValue,
-			OptionRelationFactory.Create(parent, invert));
-
-		this.AddOption(optionId, opt);
-		return opt;
+		var boolRange = ValueHolderAssembler.CreateBoolValue(defaultValue);
+	
+		return CreateOption(optionId, name, format, isHidden, boolRange, activator);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public FloatDynamicCustomOption CreateFloatDynamicOption(
+	public IOption CreateFloatDynamicOption(
 		object option,
 		float defaultValue,
 		float min, float step,
-		IOption? parent = null,
+		IOption checkValueOption,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
 		string name = getOptionName(option, ignorePrefix);
 
-		var opt = new FloatDynamicCustomOption(
-			new OptionInfo(optionId, name, format, isHidden),
-			defaultValue, min, step,
-			OptionRelationFactory.Create(parent, invert),
-			tempMaxValue);
+		var floatRange = ValueHolderAssembler.CreateDynamicFloatValue(defaultValue, min, step, tempMaxValue);
 
-		this.AddOption(optionId, opt);
+		var opt = CreateOption(optionId, name, format, isHidden, floatRange, activator);
+
+		checkValueOption.OnValueChanged += (x) => {
+
+			int prevSelection = floatRange.Selection;
+			float newMax = checkValueOption.Value<float>();
+			floatRange.InnerRange = OptionRange<float>.Create(min, newMax, step);
+			floatRange.Selection = prevSelection;
+		};
+
 		return opt;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public IntCustomOption CreateIntOption(
+	public IOption CreateIntOption(
 		object option,
 		int defaultValue,
 		int min, int max, int step,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
 		string name = getOptionName(option, ignorePrefix);
 
-		var opt = new IntCustomOption(
-			new OptionInfo(optionId, name, format, isHidden),
-			defaultValue, min, max, step,
-			OptionRelationFactory.Create(parent, invert));
+		var intRange = ValueHolderAssembler.CreateIntValue(defaultValue, min, max, step);
 
-		this.AddOption(optionId, opt);
-		return opt;
+		return CreateOption(optionId, name, format, isHidden, intRange, activator);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public IntDynamicCustomOption CreateIntDynamicOption(
+	public IOption CreateIntDynamicOption(
 		object option,
 		int defaultValue,
 		int min, int step,
-		IOption? parent = null,
+		IOption checkValueOption,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		int tempMaxValue = 0,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
 		string name = getOptionName(option, ignorePrefix);
 
-		var opt = new IntDynamicCustomOption(
-			new OptionInfo(optionId, name, format, isHidden),
-			defaultValue, min, step,
-			OptionRelationFactory.Create(parent, invert),
-			tempMaxValue);
+		var intRange = ValueHolderAssembler.CreateDynamicIntValue(defaultValue, min, step, tempMaxValue);
 
-		this.AddOption(optionId, opt);
+		var opt = CreateOption(optionId, name, format, isHidden, intRange, activator);
+
+		checkValueOption.OnValueChanged += (x) => {
+
+			int prevSelection = intRange.Selection;
+			int newMax = checkValueOption.Value<int>();
+			intRange.InnerRange = OptionRange<int>.Create(min, newMax, step);
+			intRange.Selection = prevSelection;
+
+		};
 		return opt;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public SelectionCustomOption CreateSelectionOption(
+	public IOption CreateSelectionOption(
 		object option,
 		string[] selections,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
 		string name = getOptionName(option, ignorePrefix);
 
-		var opt = new SelectionCustomOption(
-			new OptionInfo(optionId, name, format, isHidden),
-			selections,
-			OptionRelationFactory.Create(parent, invert));
+		var selection = new SelectionOptionValue(selections);
 
-		this.AddOption(optionId, opt);
-		return opt;
+		return CreateOption(optionId, name, format, isHidden, selection, activator);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public SelectionCustomOption CreateSelectionOption<W>(
+	public IOption CreateSelectionOption<W>(
 		object option,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false)
 		where W : struct, Enum
 	{
 		int optionId = getOptionIdAndUpdate();
 		string name = getOptionName(option, ignorePrefix);
 
-		var opt = SelectionCustomOption.CreateFromEnum<W>(
-			new OptionInfo(optionId, name, format, isHidden),
-			OptionRelationFactory.Create(parent, invert));
+		var selection = SelectionOptionValue.CreateFromEnum<W>();
 
-		this.AddOption(optionId, opt);
-		return opt;
+		return CreateOption(optionId, name, format, isHidden, selection, activator);
 	}
 
 	private string getOptionName(object option, bool ignorePrefix = false)

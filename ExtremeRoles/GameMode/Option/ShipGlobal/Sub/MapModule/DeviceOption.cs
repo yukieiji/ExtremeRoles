@@ -1,8 +1,7 @@
-﻿
 using ExtremeRoles.Module.CustomOption.Factory;
-
-
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
@@ -24,11 +23,11 @@ public interface IDeviceOption
 		var removeOpt = factory.CreateBoolOption(DeviceOptionType.IsRemove, false);
 		var enableLimit = factory.CreateBoolOption(
 			DeviceOptionType.EnableLimit, false,
-			removeOpt, invert: true);
+			new InvertActive(removeOpt));
 		factory.CreateFloatOption(
 			DeviceOptionType.LimitTime,
 			30.0f, 5.0f, 120.0f, 0.5f,
-			enableLimit,
+			new ParentActive(enableLimit),
 			format: OptionUnit.Second);
 
 		return removeOpt;

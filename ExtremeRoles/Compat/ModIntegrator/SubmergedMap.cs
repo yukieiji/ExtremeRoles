@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -19,12 +19,12 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 
 using UnityObject = UnityEngine.Object;
-
-using ExtremeRoles.Module.CustomOption.Implemented;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.SequentialOptionCategoryFactory;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.Compat.Initializer;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -78,7 +78,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 	public ShipStatus.MapType MapType => (ShipStatus.MapType)MapId;
 	public bool CanPlaceCamera => false;
 	public bool IsCustomCalculateLightRadius => true;
-	public SpawnSetting Spawn => (SpawnSetting)this.enableSubMergedRandomSpawn.Value;
+	public SpawnSetting Spawn => (SpawnSetting)this.enableSubMergedRandomSpawn.Value<int>();
 
 	public TaskTypes RetrieveOxygenMask;
 
@@ -104,9 +104,9 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 	private MonoBehaviour? submarineStatus;
 #pragma warning disable CS8618
 
-	private SelectionCustomOption elevatorOption;
-	private BoolCustomOption replaceDoorMinigameOption;
-	private SelectionCustomOption enableSubMergedRandomSpawn;
+	private IOption elevatorOption;
+	private IOption replaceDoorMinigameOption;
+	private IOption enableSubMergedRandomSpawn;
 
 	public SubmergedIntegrator(SubmergedInitializer init) : base(init)
 #pragma warning restore CS8618
@@ -186,7 +186,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 
 		var randomSpawnOpt = cate.Get(RandomSpawnOption.Enable);
 		this.enableSubMergedRandomSpawn = factory.CreateSelectionOption<SpawnSetting>(
-			SubmergedOption.SubmergedSpawnSetting, randomSpawnOpt, invert: true);
+			SubmergedOption.SubmergedSpawnSetting, new InvertActive(randomSpawnOpt));
 	}
 
 	public void Destroy()
@@ -472,7 +472,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 
 	private void disableElevator()
 	{
-		var useElevator = (ElevatorSelection)this.elevatorOption.Value;
+		var useElevator = (ElevatorSelection)this.elevatorOption.Value<int>();
 
 		switch (useElevator)
 		{
@@ -510,12 +510,17 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 
 	private void replaceDoorMinigame()
 	{
-		if (!this.replaceDoorMinigameOption.Value || ShipStatus.Instance == null)
-		{ return; }
+		if (!this.replaceDoorMinigameOption.Value<bool>() || ShipStatus.Instance == null)
+		{
+			return;
+		}
 
 		object? transformValue = this.submarineStatusReference.GetValue(this.submarineStatus);
 		if (transformValue == null ||
-			transformValue is not Transform transform) { return; }
+			transformValue is not Transform transform)
+		{
+			return;
+		}
 
 		// AirShip持ってくる
 		ShipStatus ship = GameSystem.GetShipObj(4);

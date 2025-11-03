@@ -9,8 +9,6 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -18,6 +16,9 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -354,38 +355,38 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 		var lowBreakerOpt = factory.CreateBoolOption(
 			Option.IsMissingToDead, false);
+		var lowBreakerOptActive = new InvertActive(lowBreakerOpt);
 
 		var lowBreakerKillOpt = factory.CreateBoolOption(
 		   Option.LawbreakerCanKill,
-		   true, lowBreakerOpt,
-		   invert: true);
+		   true, lowBreakerOptActive);
+		var lowBreakerKillOptActive = new InvertActive(lowBreakerKillOpt);
 
 		var killCoolOption = factory.CreateBoolOption(
 			KillerCommonOption.HasOtherKillCool,
-			false, lowBreakerKillOpt,
-			invert: true);
+			false, lowBreakerKillOptActive);
 		factory.CreateFloatOption(
 			KillerCommonOption.KillCoolDown,
 			30f, 1.0f, 120f, 0.5f,
-			killCoolOption, format: OptionUnit.Second);
+			new ParentActive(killCoolOption),
+			format: OptionUnit.Second);
 
 		var killRangeOption = factory.CreateBoolOption(
 			KillerCommonOption.HasOtherKillRange,
-			false, lowBreakerKillOpt,
-			invert: true);
+			false, lowBreakerKillOptActive);
+
+		var rangeOptActive = new ParentActive(killRangeOption);
 		factory.CreateSelectionOption(
 			KillerCommonOption.KillRange,
 			OptionCreator.Range,
-			killRangeOption);
+			rangeOptActive);
 
 		factory.CreateBoolOption(
 		   Option.LawbreakerUseVent,
-		   true, lowBreakerOpt,
-		   invert: true);
+		   true, lowBreakerOptActive);
 		factory.CreateBoolOption(
 		   Option.LawbreakerUseSab,
-		   true, lowBreakerOpt,
-		   invert: true);
+		   true, lowBreakerOptActive);
 
 
 		factory.CreateIntOption(

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,7 @@ using ExtremeRoles.GameMode;
 using IReadOnlyCategoryViews = System.Collections.Generic.IReadOnlyList<ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ViewSettingsInfoPanel>>;
 using CategoryViews = System.Collections.Generic.List<ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ViewSettingsInfoPanel>>;
 using ExtremeRoles.Module.CustomOption.View;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
@@ -303,7 +304,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 						continue;
 					}
 
-					bool isActive = option.IsActiveAndEnable;
+					bool isActive = option.IsViewActive;
 
 					optionView.gameObject.SetActive(isActive);
 					if (!isActive)
@@ -311,7 +312,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 						continue;
 					}
 					++activeObjNum;
-					setInfo(optionView, option.Title, option.ValueString);
+					setInfo(optionView, option.TransedTitle, option.TransedValue);
 
 					// ジェネレラルタブ以外 = 役職周りで、最初のオプション = 役職のスポーンレート
 					if (tab is not OptionTab.GeneralTab &&

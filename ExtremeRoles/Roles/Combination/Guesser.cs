@@ -10,6 +10,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -313,10 +314,9 @@ public sealed class Guesser :
 
                     if (multiAssign)
                     {
-                        if (loader.TryGetValueOption<CombinationRoleCommonOption, bool>(
+                        if (loader.TryGetValue(
 								CombinationRoleCommonOption.IsAssignImposter,
-                                out var option) &&
-                            option.Value)
+                                out bool isImp) && isImp)
                         {
                             listAddTargetTeam(
                                 baseRoleId,
@@ -595,7 +595,7 @@ public sealed class Guesser :
         AutoParentSetOptionCategoryFactory factory)
     {
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
+		CreateKillerOption(factory, new ParentActive(imposterSetting));
 
 		factory.CreateBoolOption(
             GuesserOption.CanCallMeeting,
@@ -612,7 +612,7 @@ public sealed class Guesser :
             GuesserOption.CanGuessNoneRole,
             false);
         factory.CreateSelectionOption<GuesserOption, GuessMode>(
-            GuesserOption.GuessNoneRoleMode, noneGuessRoleOpt);
+            GuesserOption.GuessNoneRoleMode, new ParentActive(noneGuessRoleOpt));
     }
 
     protected override void RoleSpecificInit()

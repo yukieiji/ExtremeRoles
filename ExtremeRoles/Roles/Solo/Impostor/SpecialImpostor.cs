@@ -1,7 +1,5 @@
 
 using ExtremeRoles.Roles.API;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

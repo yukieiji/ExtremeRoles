@@ -1,5 +1,6 @@
-﻿
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
@@ -37,6 +38,6 @@ public readonly struct VitalDeviceOption : IDeviceOption
 		var removeOpt = IDeviceOption.Create(factory);
 
 		factory.CreateSelectionOption<VitalSpecialOption, PolusVitalPos>(
-			VitalSpecialOption.PolusVitalPos, removeOpt, invert: true);
+			VitalSpecialOption.PolusVitalPos, new InvertActive(removeOpt));
 	}
 }

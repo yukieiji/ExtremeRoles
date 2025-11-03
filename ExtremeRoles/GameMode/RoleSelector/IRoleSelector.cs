@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -7,9 +7,8 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -68,20 +67,20 @@ public interface IRoleSelector
 
     public static void CreateRoleGlobalOption()
     {
-		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
+		using (var roleOptionFactory = OptionCategoryAssembler.CreateOptionCategory(
 			SpawnOptionCategory.RoleSpawnCategory,
 			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
 
-		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
+		using (var roleOptionFactory = OptionCategoryAssembler.CreateOptionCategory(
 			SpawnOptionCategory.GhostRoleSpawnCategory,
 			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
-		using (var xionCategory = OptionManager.CreateOptionCategory(
+		using (var xionCategory = OptionCategoryAssembler.CreateOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 			ExtremeRoleId.Xion.ToString(),
 			color: ColorPalette.XionBlue))

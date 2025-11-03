@@ -9,13 +9,14 @@ using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 #nullable enable
@@ -375,7 +376,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 		factory.CreateFloatOption(Option.ShowTime, 2.0f, 0.5f, 15.0f, 0.25f, format: OptionUnit.Second);
 		var deadBodyOpt = factory.CreateBoolOption(Option.IsDetectDeadBody, false);
-		factory.CreateBoolOption(Option.CanSeparatePlayer, false, deadBodyOpt);
+		factory.CreateBoolOption(Option.CanSeparatePlayer, false, new ParentActive(deadBodyOpt));
 	}
 
 	protected override void RoleSpecificInit()

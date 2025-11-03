@@ -7,7 +7,6 @@ using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
@@ -19,6 +18,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.Combination.Avalon;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 
