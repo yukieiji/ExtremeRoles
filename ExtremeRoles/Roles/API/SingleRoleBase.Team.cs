@@ -13,18 +13,18 @@ public abstract partial class SingleRoleBase
 
     public bool IsNeutral() => this.Core.Team == ExtremeRoleType.Neutral;
 
-        public bool IsLiberal() => this.Team == ExtremeRoleType.Liberal;
+    public bool IsLiberal() => this.Core.Team == ExtremeRoleType.Liberal;
 
-        public virtual bool IsSameTeam(SingleRoleBase targetRole)
+    public virtual bool IsSameTeam(SingleRoleBase targetRole)
+    {
+        if (this.IsLiberal())
         {
-            if (this.IsLiberal())
-            {
-                return targetRole.Team == ExtremeRoleType.Liberal;
-            }
+            return targetRole.IsLiberal();
+        }
 
         if (this.IsImpostor())
         {
-            return targetRole.Core.Team == ExtremeRoleType.Impostor;
+            return targetRole.IsImpostor();
         }
 
         if (targetRole is MultiAssignRoleBase multiAssignRole &&

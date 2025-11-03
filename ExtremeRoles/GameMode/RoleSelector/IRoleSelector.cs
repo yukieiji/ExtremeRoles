@@ -2,12 +2,6 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Roles;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
