@@ -4,6 +4,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
+using Rewired.Utils.Platforms.Windows;
+using System;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -176,19 +178,35 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		int roleAssignNum = this.BaseRole.IsImpostor() ?
 			GameSystem.MaxImposterNum :
 			GameSystem.VanillaMaxPlayerNum - 1;
-		var roleAssignNumOption = factory.CreateIntOption(
-			CombinationRoleCommonOption.AssignsNum,
+		
+		var roleAssinNumRange = ValueHolderAssembler.CreateIntValue(
 			this.minimumRoleNum, this.minimumRoleNum,
-			roleAssignNum, 1,
+			roleAssignNum, 1);
+		var roleAssignNumOption = factory.CreateOption(
+			CombinationRoleCommonOption.AssignsNum,
+			roleAssinNumRange,
 			isHidden: isHideMultiAssign,
 			ignorePrefix: true);
+
+		roleSetNumOption.OnValueChanged += (x) =>
+		{
+			if (isHideMultiAssign)
+			{
+				return;
+			}
+			int prevSelection = roleAssinNumRange.Selection;
+			int num = roleSetNumOption.Value<int>();
+			int newMaxValue = Math.Max(this.minimumRoleNum, roleAssignNum / num);
+			
+			roleAssinNumRange.InnerRange = OptionRange<int>.Create(
+				this.minimumRoleNum, newMaxValue, 1);
+			roleAssinNumRange.Selection = prevSelection;
+		};
 
 		factory.CreateBoolOption(
 			CombinationRoleCommonOption.IsMultiAssign, false,
 			ignorePrefix: true,
 			isHidden: this.RoleType is CombinationRoleType.Traitor);
-
-		// 後で直す roleAssignNumOption.AddWithUpdate(roleSetNumOption);
 
 		factory.CreateIntOption(RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1, ignorePrefix: true);

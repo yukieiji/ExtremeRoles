@@ -1,8 +1,9 @@
-using System;
-
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.RoleAssign;
+using System;
+using static UnityEngine.UIElements.BaseVerticalCollectionView;
+
 
 
 #nullable enable
@@ -203,6 +204,30 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			isHidden,
 			format,
 			ignorePrefix);
+
+		if (this.Activator is null)
+		{
+			this.Activator = new ParentActive(newOption);
+		}
+		return newOption;
+	}
+
+	public IOption CreateOption<T>(
+		T option,
+		IValueHolder holder,
+		IOptionActivator? activator = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool ignorePrefix = false)
+		where T : struct, IConvertible
+	{
+
+		int optionId = this.internalFactory.GetOptionId(option);
+		string name = this.internalFactory.GetOptionName(option, ignorePrefix);
+
+		var newOption = this.internalFactory.CreateOption(
+			optionId, name, format, isHidden, holder,
+			activator is null ? this.Activator : activator);
 
 		if (this.Activator is null)
 		{

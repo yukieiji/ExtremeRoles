@@ -202,7 +202,7 @@ public class OptionCategoryFactory(
 		return Convert.ToInt32(option) + IdOffset;
 	}
 
-	protected string GetOptionName<T>(T option, bool ignorePrefix = false) where T : struct, IConvertible
+	public string GetOptionName<T>(T option, bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		string cleanedName = this.NameCleaner.Replace(this.OptionPrefix, string.Empty).Trim();
 
@@ -244,7 +244,7 @@ public class OptionCategoryFactory(
 		this.categoryRegister.Invoke(Tab, newGroup);
 	}
 
-	protected IOption CreateOption(
+	public IOption CreateOption(
 		int id,
 		string name,
 		OptionUnit format,
