@@ -100,6 +100,7 @@ public sealed class PresetOption : IOption
 	{
 	}
 
+	// 基本的にPresetOptionはこのメソッドを使わないが一応実装しておく、コンストラクタ内でint型になることは証明済み
 	public T Value<T>() where T : struct, IComparable, IConvertible, IComparable<T>, IEquatable<T>
 	{
 		if (typeof(T) == typeof(int))
