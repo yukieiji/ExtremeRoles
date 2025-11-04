@@ -1,7 +1,14 @@
+using System;
+using System.Collections.Generic;
+
+using UnityEngine;
+
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -92,7 +99,31 @@ public interface IRoleSelector
 		createMinMaxSpawnOption(factory, RoleSpawnOption.MinCrewmate, RoleSpawnOption.MaxCrewmate, (GameSystem.VanillaMaxPlayerNum - 1) * 2);
 		createMinMaxSpawnOption(factory, RoleSpawnOption.MinNeutral, RoleSpawnOption.MaxNeutral, (GameSystem.VanillaMaxPlayerNum - 2) * 2);
 		createMinMaxSpawnOption(factory, RoleSpawnOption.MinImpostor, RoleSpawnOption.MaxImpostor, GameSystem.MaxImposterNum * 2);
-    }
+
+		/*
+		var minLiberal = factory.CreateIntOption(
+			RoleSpawnOption.MinLiberal,
+			0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
+		var maxLiberal = factory.CreateIntOption(
+			RoleSpawnOption.MaxLiberal,
+			0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
+
+		var isLiberalEnabled = factory.CreateMultiDepentOption(
+			RoleSpawnOption.IsLiberalEnabled,
+			new() { minLiberal, maxLiberal },
+			(parents) =>
+			{
+				var min = (ExtremeRoles.Module.CustomOption.Interfaces.IValueOption<int>)parents[0];
+				var max = (ExtremeRoles.Module.CustomOption.Interfaces.IValueOption<int>)parents[1];
+				return min.Value > 0 || max.Value > 0;
+			});
+
+		factory.CreateFloatOption(
+			RoleSpawnOption.LiberalWinMoney,
+			100f, 10f, 1000f, 10f,
+			isLiberalEnabled);
+		*/
+	}
 
 	private static void createMinMaxSpawnOption(OptionCategoryFactory factory, RoleSpawnOption miniOptionEnum, RoleSpawnOption maxOptionEnum, int maxNum)
 	{
