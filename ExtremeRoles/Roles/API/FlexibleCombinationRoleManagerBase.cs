@@ -188,19 +188,17 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			isHidden: isHideMultiAssign,
 			ignorePrefix: true);
 
-		roleSetNumOption.OnValueChanged += (x) =>
+		roleSetNumOption.OnValueChanged += () =>
 		{
 			if (isHideMultiAssign)
 			{
 				return;
 			}
-			int prevSelection = roleAssinNumRange.Selection;
-			int num = roleSetNumOption.Value<int>();
-			int newMaxValue = Math.Max(this.minimumRoleNum, roleAssignNum / num);
 			
+			int roleSetNum = roleSetNumOption.Value<int>();
+			int newMaxValue = Math.Max(this.minimumRoleNum, roleAssignNum / roleSetNum);
 			roleAssinNumRange.InnerRange = OptionRange<int>.Create(
 				this.minimumRoleNum, newMaxValue, 1);
-			roleAssinNumRange.Selection = prevSelection;
 		};
 
 		factory.CreateBoolOption(

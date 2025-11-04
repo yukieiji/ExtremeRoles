@@ -8,7 +8,17 @@ public sealed class IntOptionValue(int @default, int min, int max, int step) :
 {
 	private readonly int @default = @default;
 
-	public OptionRange<int> InnerRange { get; set; } = new OptionRange<int>(
+	public OptionRange<int> InnerRange
+	{
+		get => innerRange;
+		set
+		{
+			int prevValue = this.Value;
+			innerRange = value;
+			this.Selection = innerRange.GetIndex(prevValue);
+		}
+	}
+	private OptionRange<int> innerRange = new OptionRange<int>(
 		OptionRange<int>.GetIntRange(min, max, step));
 
 	public int DefaultIndex => this.InnerRange.GetIndex(@default);

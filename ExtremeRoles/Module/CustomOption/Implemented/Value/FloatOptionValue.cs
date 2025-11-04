@@ -10,7 +10,17 @@ public sealed class FloatOptionValue(
 	IValue<float>,
 	IValueHolder
 {
-	public OptionRange<float> InnerRange { get; set; } = new OptionRange<float>(
+	public OptionRange<float> InnerRange
+	{
+		get => innerRange;
+		set
+		{
+			float prevValue = this.Value;
+			innerRange = value;
+			this.Selection = innerRange.GetIndex(prevValue);
+		}
+	}
+	private OptionRange<float> innerRange = new OptionRange<float>(
 		OptionRange<float>.GetFloatRange(min, max, step));
 
 	private readonly float @default = @default;

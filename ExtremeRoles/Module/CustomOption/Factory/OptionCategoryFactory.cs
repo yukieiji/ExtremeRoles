@@ -78,7 +78,7 @@ public class OptionCategoryFactory(
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public IOption CreateFloatDynamicOption<T>(
+	public IOption CreateFloatDynamicMaxOption<T>(
 		T option,
 		float defaultValue,
 		float min, float step,
@@ -96,12 +96,9 @@ public class OptionCategoryFactory(
 
 		var opt = CreateOption(optionId, name, format, isHidden, floatRange, activator);
 
-		checkValueOption.OnValueChanged += (x) => {
-
-			int prevSelection = floatRange.Selection;
+		checkValueOption.OnValueChanged += () => {
 			float newMax = checkValueOption.Value<float>();
 			floatRange.InnerRange = OptionRange<float>.Create(min, newMax, step);
-			floatRange.Selection = prevSelection;
 		};
 
 		return opt;
@@ -127,7 +124,7 @@ public class OptionCategoryFactory(
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public IOption CreateIntDynamicOption<T>(
+	public IOption CreateIntDynamicMaxOption<T>(
 		T option,
 		int defaultValue,
 		int min, int step,
@@ -145,13 +142,9 @@ public class OptionCategoryFactory(
 
 		var opt = CreateOption(optionId, name, format, isHidden, intRange, activator);
 
-		checkValueOption.OnValueChanged += (x) => {
-
-			int prevSelection = intRange.Selection;
+		checkValueOption.OnValueChanged += () => {
 			int newMax = checkValueOption.Value<int>();
 			intRange.InnerRange = OptionRange<int>.Create(min, newMax, step);
-			intRange.Selection = prevSelection;
-
 		};
 		return opt;
 	}
@@ -242,6 +235,26 @@ public class OptionCategoryFactory(
 	{
 		var newGroup = new OptionCategory(this.Tab, groupid, this.Name, this.optionPack, this.color);
 		this.categoryRegister.Invoke(Tab, newGroup);
+	}
+
+	public IOption CreateOption<T>(
+		T option,
+		IValueHolder holder,
+		IOptionActivator? activator = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool ignorePrefix = false)
+		where T : struct, IConvertible
+	{
+
+		int optionId = this.GetOptionId(option);
+		string name = this.GetOptionName(option, ignorePrefix);
+
+		var newOption = this.CreateOption(
+			optionId, name, format, isHidden, holder,
+			activator);
+
+		return newOption;
 	}
 
 	public IOption CreateOption(

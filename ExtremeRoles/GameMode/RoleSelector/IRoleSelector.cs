@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-
-using UnityEngine;
-
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Roles;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Roles;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -92,25 +91,24 @@ public interface IRoleSelector
 
     private static void createExtremeRoleRoleSpawnOption(OptionCategoryFactory factory)
     {
-		factory.CreateIntOption(
-			RoleSpawnOption.MinCrewmate,
-			0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1);
-		factory.CreateIntOption(
-			RoleSpawnOption.MaxCrewmate,
-			0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1);
-
-		factory.CreateIntOption(
-			RoleSpawnOption.MinNeutral,
-			0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
-		factory.CreateIntOption(
-			RoleSpawnOption.MaxNeutral,
-			0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
-
-		factory.CreateIntOption(
-			RoleSpawnOption.MinImpostor,
-			0, 0, GameSystem.MaxImposterNum * 2, 1);
-		factory.CreateIntOption(
-			RoleSpawnOption.MaxImpostor,
-			0, 0, GameSystem.MaxImposterNum * 2, 1);
+		createMinMaxSpawnOption(factory, RoleSpawnOption.MinCrewmate, RoleSpawnOption.MaxCrewmate, (GameSystem.VanillaMaxPlayerNum - 1) * 2);
+		createMinMaxSpawnOption(factory, RoleSpawnOption.MinNeutral, RoleSpawnOption.MaxNeutral, (GameSystem.VanillaMaxPlayerNum - 2) * 2);
+		createMinMaxSpawnOption(factory, RoleSpawnOption.MinImpostor, RoleSpawnOption.MaxImpostor, GameSystem.MaxImposterNum * 2);
     }
+
+	private static void createMinMaxSpawnOption(OptionCategoryFactory factory, RoleSpawnOption miniOptionEnum, RoleSpawnOption maxOptionEnum, int maxNum)
+	{
+		var miniOption = factory.CreateIntOption(
+			miniOptionEnum,
+			0, 0, maxNum, 1);
+
+		var intRange = ValueHolderAssembler.CreateIntValue(0, 0, maxNum, 1);
+
+		factory.CreateOption(maxOptionEnum, intRange);
+
+		miniOption.OnValueChanged += () => {
+			int newMini = miniOption.Value<int>();
+			intRange.InnerRange = OptionRange<int>.Create(newMini, maxNum, 1);
+		};
+	}
 }

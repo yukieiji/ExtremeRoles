@@ -15,7 +15,7 @@ public interface IOption
 	public bool IsChangeDefault { get; }
 	public int Selection { get; set; }
 
-	public event Action<int> OnValueChanged;
+	public event Action OnValueChanged;
 
 	public bool IsViewActive { get; }
 	public bool IsActive { get; }

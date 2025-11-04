@@ -36,7 +36,7 @@ public sealed class CustomOption : IOption
 		{
 			this.holder.Selection = value;
 
-			this.OnValueChanged?.Invoke(value);
+			this.OnValueChanged?.Invoke();
 
 			var amongUs = AmongUsClient.Instance;
 			if (amongUs != null &&
@@ -58,7 +58,7 @@ public sealed class CustomOption : IOption
 	private readonly ConfigBinder config;
 	private readonly IValueHolder holder;
 
-	public event Action<int>? OnValueChanged;
+	public event Action? OnValueChanged;
 
 	public CustomOption(
 		IOptionInfo info,

@@ -161,14 +161,11 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			upperOptRange,
 			format: OptionUnit.Percentage);
 
-		lowerOpt.OnValueChanged += (x) =>
+		lowerOpt.OnValueChanged += () =>
 		{
-			int prevSelection = upperOptRange.Selection;
 			int miniValue = lowerOpt.Value<int>();
 			int newMinValue = Math.Max(0, miniValue);
-
 			upperOptRange.InnerRange = OptionRange<int>.Create(newMinValue, 50, 5);
-			upperOptRange.Selection = prevSelection;
 		};
 
 		factory.CreateIntOption(

@@ -43,7 +43,7 @@ public sealed class SequentialOptionCategoryFactory(
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public IOption CreateFloatDynamicOption(
+	public IOption CreateFloatDynamicMaxOption(
 		object option,
 		float defaultValue,
 		float min, float step,
@@ -61,12 +61,9 @@ public sealed class SequentialOptionCategoryFactory(
 
 		var opt = CreateOption(optionId, name, format, isHidden, floatRange, activator);
 
-		checkValueOption.OnValueChanged += (x) => {
-
-			int prevSelection = floatRange.Selection;
+		checkValueOption.OnValueChanged += () => {
 			float newMax = checkValueOption.Value<float>();
 			floatRange.InnerRange = OptionRange<float>.Create(min, newMax, step);
-			floatRange.Selection = prevSelection;
 		};
 
 		return opt;
@@ -91,7 +88,7 @@ public sealed class SequentialOptionCategoryFactory(
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public IOption CreateIntDynamicOption(
+	public IOption CreateIntDynamicMaxOption(
 		object option,
 		int defaultValue,
 		int min, int step,
@@ -109,13 +106,9 @@ public sealed class SequentialOptionCategoryFactory(
 
 		var opt = CreateOption(optionId, name, format, isHidden, intRange, activator);
 
-		checkValueOption.OnValueChanged += (x) => {
-
-			int prevSelection = intRange.Selection;
+		checkValueOption.OnValueChanged += () => {
 			int newMax = checkValueOption.Value<int>();
 			intRange.InnerRange = OptionRange<int>.Create(min, newMax, step);
-			intRange.Selection = prevSelection;
-
 		};
 		return opt;
 	}

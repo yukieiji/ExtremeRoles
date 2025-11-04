@@ -251,7 +251,7 @@ public sealed class Lover : MultiAssignRoleBase
 
 		var target = factory.Get((int)CombinationRoleCommonOption.AssignsNum);
 
-		var deathSetting = factory.CreateIntDynamicOption(
+		var deathSetting = factory.CreateIntDynamicMaxOption(
             LoverOption.DethWhenUnderAlive,
 			1, 1, 1, target,
 			tempMaxValue: GameSystem.VanillaMaxPlayerNum - 1);

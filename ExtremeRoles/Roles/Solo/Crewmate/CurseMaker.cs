@@ -328,7 +328,7 @@ public sealed class CurseMaker :
 			taskBoostOptActive,
             format: OptionUnit.Percentage);
 
-        var reduceTimeOpt = factory.CreateFloatDynamicOption(
+        var reduceTimeOpt = factory.CreateFloatDynamicMaxOption(
             CurseMakerOption.ReduceSearchDeadBodyTime,
             30f, 0.5f, 0.5f, searchTimeOpt,
 			taskBoostOptActive,

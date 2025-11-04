@@ -83,7 +83,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		return newOption;
 	}
 
-	public IOption CreateFloatDynamicOption<T>(
+	public IOption CreateFloatDynamicMaxOption<T>(
 		T option,
 		float defaultValue,
 		float min, float step,
@@ -94,7 +94,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		var newOption = this.internalFactory.CreateFloatDynamicOption(
+		var newOption = this.internalFactory.CreateFloatDynamicMaxOption(
 			option,
 			defaultValue,
 			min, step,
@@ -137,7 +137,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		return newOption;
 	}
 
-	public IOption CreateIntDynamicOption<T>(
+	public IOption CreateIntDynamicMaxOption<T>(
 		T option,
 		int defaultValue,
 		int min, int step,
@@ -148,7 +148,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		int tempMaxValue = 0,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		var newOption = this.internalFactory.CreateIntDynamicOption(
+		var newOption = this.internalFactory.CreateIntDynamicMaxOption(
 			option,
 			defaultValue,
 			min, step,

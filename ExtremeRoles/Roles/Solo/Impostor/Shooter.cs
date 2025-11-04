@@ -390,14 +390,14 @@ public sealed class Shooter :
            1, 1, 14, 1,
            format: OptionUnit.Shot);
 
-        var initShootOps = factory.CreateIntDynamicOption(
+        var initShootOps = factory.CreateIntDynamicMaxOption(
             ShooterOption.InitShootNum,
             0, 0, 1,
 			maxShootOps,
 			format: OptionUnit.Shot,
             tempMaxValue: 14);
 
-        var maxMeetingShootOps = factory.CreateIntDynamicOption(
+        var maxMeetingShootOps = factory.CreateIntDynamicMaxOption(
             ShooterOption.MaxMeetingShootNum,
             1, 1, 1,
 			maxShootOps,
