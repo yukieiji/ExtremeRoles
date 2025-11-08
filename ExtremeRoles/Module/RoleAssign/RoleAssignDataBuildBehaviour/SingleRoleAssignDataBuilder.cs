@@ -49,6 +49,12 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 
 	private void addNeutralSingleExtremeRoleAssignData(in PreparationData data)
 	{
+		int neutralNum = data.Limit.Get(ExtremeRoleType.Neutral);
+		if (neutralNum <= 0)
+		{
+			return;
+		}
+
 		Logging.Debug(
 			$"------------------------- SingleRoleAssign - Neutral - Start -------------------------");
 		var neutralAssignTargetPlayer = new List<VanillaRolePlayerAssignData>();
@@ -73,7 +79,7 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 		}
 
 		int assignNum = Math.Clamp(
-			data.Limit.Get(ExtremeRoleType.Neutral),
+			neutralNum,
 			0, Math.Min(
 				neutralAssignTargetPlayer.Count,
 				data.RoleSpawn.CurrentSingleRoleUseNum[ExtremeRoleType.Neutral]));
@@ -103,7 +109,7 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 			data.Assign.GetCanCrewmateAssignPlayer(),
 			vanillaCrewRoleType);
 		Logging.Debug(
-			$"------------------------- SingleRoleAssign - Neutral - Start -------------------------");
+			$"------------------------- SingleRoleAssign - Crewmate - End -------------------------");
 	}
 
 	private void addSingleExtremeRoleAssignDataFromTeamAndPlayer(
