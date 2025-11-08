@@ -260,19 +260,20 @@ public sealed class BarterRole :
 		AutoParentSetOptionCategoryFactory factory)
 	{
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, new ParentActive(imposterSetting));
+		var impstorActive = new ParentActive(imposterSetting);
+		CreateKillerOption(factory, impstorActive);
 
 		factory.CreateIntOption(
 			Option.AwakeTaskRate,
 			70, 0, 100, 10,
 			format: OptionUnit.Percentage);
-
 		factory.CreateIntOption(
 			Option.AwakeDeadPlayerNum,
 			7, 0, 12, 1);
+
 		factory.CreateIntOption(
 			Option.AwakeKillNum,
-			2, 0, 5, 1);
+			2, 0, 5, 1, impstorActive);
 
 		factory.CreateBoolOption(
 			Option.CanCallMeeting,
