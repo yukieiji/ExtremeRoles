@@ -108,11 +108,6 @@ public static class PlayerControlHandleRpcPatch
 				byte reviveTargetId = reader.ReadByte();
 				RPCOperator.UncheckedRevive(reviveTargetId);
 				break;
-			case RPCOperator.Command.UncheckedReportDeadbody:
-				byte reporter = reader.ReadByte();
-				byte reportTargetId = reader.ReadByte();
-				RPCOperator.UncheckedReportDeadBody(reporter, reportTargetId);
-				break;
 			case RPCOperator.Command.CleanDeadBody:
 				byte deadBodyPlayerId = reader.ReadByte();
 				RPCOperator.CleanDeadBody(deadBodyPlayerId);
