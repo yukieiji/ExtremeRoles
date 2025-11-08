@@ -306,7 +306,6 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		add<GlobalCheckpointSystem>(GlobalCheckpointSystem.Type);
 		add<MeetingCountSystem>(MeetingCountSystem.Type);
 		add<GameProgressSystem>(ExtremeSystemType.GameProgress);
-		add<LiberalMoneyBankSystem>(LiberalMoneyBankSystem.SystemType);
 	}
 
 	private void add<T>(ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()
