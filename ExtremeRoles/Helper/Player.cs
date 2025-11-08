@@ -367,24 +367,6 @@ public static class Player
         RPCOperator.CleanDeadBody(targetPlayerId);
     }
 
-	public static void RpcUncheckReportDeadBody(NetworkedPlayerInfo playerInfo)
-	{
-		var localPlayer = PlayerControl.LocalPlayer;
-		if (AmongUsClient.Instance.AmHost &&
-			localPlayer != null)
-		{
-			localPlayer.ReportDeadBody(playerInfo);
-			return;
-		}
-
-		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.UncheckedReportDeadbody))
-		{
-			caller.WriteByte(localPlayer.PlayerId);
-			caller.WriteByte(playerInfo == null ? byte.MaxValue : playerInfo.PlayerId);
-		}
-	}
-
 	public static void SetPlayerOutLine(PlayerControl target, Color color)
     {
         if (target == null || target.cosmetics.currentBodySprite.BodySprite == null) { return; }

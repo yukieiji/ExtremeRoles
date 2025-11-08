@@ -7,6 +7,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Patches.MapModule;
 
+
 [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
 public static class ConsoleCanUsePatch
 {
