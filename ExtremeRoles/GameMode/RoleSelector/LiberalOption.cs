@@ -73,7 +73,7 @@ public sealed class LiberalOption
 
 		int curMini = liberalMilitantMini.Value<int>();
 		var intRange = ValueHolderAssembler.CreateIntValue(curMini, curMini, liberalMaxNumSetting.Value<int>(), 1);
-		var maxOption = factory.CreateOption(LiberalGlobalSetting.LiberalMilitantMax, intRange);
+		var maxOption = factory.CreateOption(LiberalGlobalSetting.LiberalMilitantMax, intRange, isMilitantActive);
 
 		var valueCangeEvent = () => {
 			int newMini = liberalMilitantMini.Value<int>();
