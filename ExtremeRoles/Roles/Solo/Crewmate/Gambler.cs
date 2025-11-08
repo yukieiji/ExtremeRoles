@@ -97,11 +97,11 @@ public sealed class Gambler :
 		factory.CreateIntOption(
             GamblerOption.MinVoteNum,
             0, -100, 0, 1,
-            format: OptionUnit.Percentage);
+            format: OptionUnit.VoteNum);
 		factory.CreateIntOption(
             GamblerOption.MaxVoteNum,
             2, 2, 100, 1,
-            format: OptionUnit.Percentage);
+            format: OptionUnit.VoteNum);
     }
 
     protected override void RoleSpecificInit()
