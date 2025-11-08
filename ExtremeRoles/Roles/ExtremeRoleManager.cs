@@ -32,6 +32,7 @@ using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using ExtremeRoles.Roles.Solo.Neutral.Yoko;
+using ExtremeRoles.Roles.Solo.Liberal;
 
 namespace ExtremeRoles.Roles;
 
@@ -382,6 +383,9 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Surrogator, new SurrogatorRole()},
 			{(int)ExtremeRoleId.Knight    , new KnightRole()},
 			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
+
+
+			{(int)ExtremeRoleId.Leader    , new Leader()},
 
 		}.ToImmutableDictionary();
 
