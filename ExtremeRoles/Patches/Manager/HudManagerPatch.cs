@@ -161,14 +161,15 @@ public static class HudManagerUpdatePatch
 
     public static void Postfix()
     {
-        if (!GameProgressSystem.IsGameNow)
+		var player = PlayerControl.LocalPlayer;
+
+		if (!GameProgressSystem.IsGameNow || player == null)
 		{
 			return;
 		}
 
         SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
         GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
-        PlayerControl player = PlayerControl.LocalPlayer;
 
         resetNameTagsAndColors(player);
 
@@ -246,9 +247,16 @@ public static class HudManagerUpdatePatch
     {
         foreach (PlayerControl player in PlayerCache.AllPlayerControl)
         {
-            player.cosmetics.SetName(player.CurrentOutfit.PlayerName);
+			if (player == null)
+			{
+				continue;
+			}
 
-            if (localPlayer.Data.Role.IsImpostor &&
+			player.cosmetics.SetName(player.CurrentOutfit.PlayerName);
+
+            if (localPlayer.Data != null &&
+				localPlayer.Data.Role != null &&
+				localPlayer.Data.Role.IsImpostor &&
 				player.Data != null &&
 				player.Data.Role != null &&
 				player.Data.Role.IsImpostor)
