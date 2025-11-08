@@ -1,27 +1,16 @@
-using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.RoleAssign;
 
 using System;
-
 
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomOption.Factory;
 
-public sealed class AutoParentSetOptionCategoryFactory : IDisposable
+public class AutoActivatorSetFactory(OptionCategoryFactory factory) : IDisposable
 {
-	private readonly AutoActivatorSetFactory internalFactory;
-
-	public IOptionActivator? Activator => this.internalFactory.Activator;
-
-	public AutoParentSetOptionCategoryFactory(
-		in OptionCategoryFactory factory,
-		in IOption? parent = null)
-	{
-		this.internalFactory = new AutoActivatorSetFactory(factory);
-		this.internalFactory.Activator = parent is null ? null : new ParentActive(parent);
-	}
-
+	public IOptionActivator? Activator { get; set; } = null;
+	private readonly OptionCategoryFactory internalFactory = factory;
 	public int IdOffset
 	{
 		set
@@ -51,15 +40,11 @@ public sealed class AutoParentSetOptionCategoryFactory : IDisposable
 		var newOption = this.internalFactory.CreateBoolOption(
 			option,
 			defaultValue,
-			activator,
+			activator is null ? this.Activator : activator,
 			isHidden,
 			format,
 			ignorePrefix);
 
-		if (this.internalFactory.Activator is null)
-		{
-			this.internalFactory.Activator = new ParentActive(newOption);
-		}
 		return newOption;
 	}
 
@@ -76,15 +61,11 @@ public sealed class AutoParentSetOptionCategoryFactory : IDisposable
 			option,
 			defaultValue,
 			min, max, step,
-			activator,
+			activator is null ? this.Activator : activator,
 			isHidden,
 			format,
 			ignorePrefix);
 
-		if (this.internalFactory.Activator is null)
-		{
-			this.internalFactory.Activator = new ParentActive(newOption);
-		}
 		return newOption;
 	}
 
@@ -104,16 +85,12 @@ public sealed class AutoParentSetOptionCategoryFactory : IDisposable
 			defaultValue,
 			min, step,
 			checkValueOption,
-			activator,
+			activator is null ? this.Activator : activator,
 			isHidden,
 			format,
 			tempMaxValue,
 			ignorePrefix);
 
-		if (this.internalFactory.Activator is null)
-		{
-			this.internalFactory.Activator = new ParentActive(newOption);
-		}
 		return newOption;
 	}
 
@@ -130,15 +107,11 @@ public sealed class AutoParentSetOptionCategoryFactory : IDisposable
 			option,
 			defaultValue,
 			min, max, step,
-			activator,
+			activator is null ? this.Activator : activator,
 			isHidden,
 			format,
 			ignorePrefix);
 
-		if (this.internalFactory.Activator is null)
-		{
-			this.internalFactory.Activator = new ParentActive(newOption);
-		}
 		return newOption;
 	}
 
@@ -158,16 +131,12 @@ public sealed class AutoParentSetOptionCategoryFactory : IDisposable
 			defaultValue,
 			min, step,
 			checkValueOption,
-			activator,
+			activator is null ? this.Activator : activator,
 			isHidden,
 			format,
 			tempMaxValue,
 			ignorePrefix);
 
-		if (this.internalFactory.Activator is null)
-		{
-			this.internalFactory.Activator = new ParentActive(newOption);
-		}
 		return newOption;
 	}
 
@@ -182,15 +151,11 @@ public sealed class AutoParentSetOptionCategoryFactory : IDisposable
 		var newOption = this.internalFactory.CreateSelectionOption(
 			option,
 			selections,
-			activator,
+			activator is null ? this.Activator : activator,
 			isHidden,
 			format,
 			ignorePrefix);
 
-		if (this.internalFactory.Activator is null)
-		{
-			this.internalFactory.Activator = new ParentActive(newOption);
-		}
 		return newOption;
 	}
 
@@ -205,14 +170,12 @@ public sealed class AutoParentSetOptionCategoryFactory : IDisposable
 	{
 		var newOption = this.internalFactory.CreateSelectionOption<T, W>(
 			option,
-			activator,
+			activator is null ? this.Activator : activator,
 			isHidden,
 			format,
 			ignorePrefix);
-		if (this.internalFactory.Activator is null)
-		{
-			this.internalFactory.Activator = new ParentActive(newOption);
-		}
+
+
 		return newOption;
 	}
 
@@ -225,11 +188,14 @@ public sealed class AutoParentSetOptionCategoryFactory : IDisposable
 		bool ignorePrefix = false)
 		where T : struct, IConvertible
 	{
-		var newOption = this.internalFactory.CreateOption(option, holder, activator, isHidden, format, ignorePrefix);
-		if (this.internalFactory.Activator is null)
-		{
-			this.internalFactory.Activator = new ParentActive(newOption);
-		}
+
+		int optionId = this.internalFactory.GetOptionId(option);
+		string name = this.internalFactory.GetOptionName(option, ignorePrefix);
+
+		var newOption = this.internalFactory.CreateOption(
+			optionId, name, format, isHidden, holder,
+			activator is null ? this.Activator : activator);
+
 		return newOption;
 	}
 
@@ -239,14 +205,13 @@ public sealed class AutoParentSetOptionCategoryFactory : IDisposable
 		bool isHidden = false,
 		bool ignorePrefix = false,
 		int defaultGage = 0) where T : struct, IConvertible
-	{
-		var newOption = this.internalFactory.Create0To100Percentage10StepOption(option, activator, isHidden, ignorePrefix, defaultGage);
-		if (this.internalFactory.Activator is null)
-		{
-			this.internalFactory.Activator = new ParentActive(newOption);
-		}
-		return newOption;
-	}
+		=> CreateIntOption(
+			option,
+			defaultGage, 0, SingleRoleSpawnData.MaxSpawnRate, 10,
+			activator,
+			isHidden,
+			OptionUnit.Percentage,
+			ignorePrefix);
 
 	public void Dispose()
 	{

@@ -42,10 +42,7 @@ public class LiberalMoneyBankSystem : IDirtableSystemType
     {
         if (timing == ResetTiming.MeetingStart)
         {
-            if (OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate))
-            {
-                winMoney = cate.GetValue<float>((int)RoleSpawnOption.LiberalWinMoney);
-            }
+            
         }
         Money = 0f;
         IsDirty = false;
