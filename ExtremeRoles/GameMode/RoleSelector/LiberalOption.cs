@@ -58,12 +58,12 @@ public sealed class LiberalOption
 		var leaderTaskSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanHasTaskLeader, false);
 		var leaderTaskActive = new ParentActive(leaderTaskSetting);
 		factory.CreateFloatOption(LiberalGlobalSetting.LeaderTaskBoost, 1.0f, 1.0f, 10.0f, 0.25f, leaderTaskActive);
-		factory.CreateIntOption(LiberalGlobalSetting.LeaderTaskCompletedMoney, 5, 1, 1000, 1);
+		factory.CreateIntOption(LiberalGlobalSetting.LeaderTaskCompletedMoney, 5, 1, 1000, 1, leaderTaskActive);
 
 		var leaderKillSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKillLeader, false);
 		var leaderKillActive = new ParentActive(leaderKillSetting);
 		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKillBoost, 1.0f, 1.0f, 10.0f, 0.25f, leaderKillActive);
-		factory.CreateIntOption(LiberalGlobalSetting.LeaderKillMoney, 10, 1, 1000, 1);
+		factory.CreateIntOption(LiberalGlobalSetting.LeaderKillMoney, 10, 1, 1000, 1, leaderKillActive);
 
 		var leaderKilledSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledLeader, false);
 		factory.CreateFloatOption(LiberalGlobalSetting.LeaderExiledBoost, 1.0f, 1.0f, 10.0f, 0.25f, new ParentActive(leaderKillSetting));
