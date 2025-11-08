@@ -159,6 +159,10 @@ public enum ExtremeRoleId : int
 	Knight,
 	Pawn,
 
+	Leader,
+	Dove,
+	Militant,
+
 	Xion,
 }
 

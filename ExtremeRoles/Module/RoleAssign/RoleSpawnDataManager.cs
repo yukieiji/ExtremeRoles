@@ -6,7 +6,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.GameMode;
 
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -50,6 +49,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			{ ExtremeRoleType.Crewmate, 0 },
 			{ ExtremeRoleType.Impostor, 0 },
 			{ ExtremeRoleType.Neutral , 0 },
+			{ ExtremeRoleType.Liberal, 0 },
 		};
 
 		log.LogInfo("---- RoleSpawnDataManager - Phase1 : instance variable initialize - END ----");
