@@ -1,6 +1,5 @@
 using ExtremeRoles.Module.Interface;
 using Hazel;
-using ExtremeRoles.GameMode.RoleSelector;
 
 namespace ExtremeRoles.Module.SystemType;
 
@@ -21,7 +20,6 @@ public class LiberalMoneyBankSystem : IDirtableSystemType
     {
         // TODO: Implement money gain logic here.
         // For now, just increment money for testing purposes.
-        Money += deltaTime;
         if (Money >= winMoney)
         {
             IsDirty = true;
