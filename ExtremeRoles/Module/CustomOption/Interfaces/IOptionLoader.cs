@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 #nullable enable
@@ -8,29 +8,31 @@ namespace ExtremeRoles.Module.CustomOption.Interfaces;
 public interface IOptionLoader
 {
 	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option);
+
+	public bool TryGet<T>(T id, [NotNullWhen(true)] out IOption? option) where T : Enum;
+
+	public bool TryGetValue<T>(int id, [NotNullWhen(true)] out T value)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>;
+
+	public bool TryGetValue<W, T>(W id, [NotNullWhen(true)] out T value)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+		where W : Enum;
+
+	public IOption Get(int id);
 	public IOption Get<T>(T id) where T : Enum;
 
-	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IValueOption<T>? option)
-		where W : Enum
+	public T GetValue<W, T>(W id)
 		where T :
 			struct, IComparable, IConvertible,
-			IComparable<T>, IEquatable<T>;
+			IComparable<T>, IEquatable<T> 
+		where W : Enum;
 
-	public bool TryGetValueOption<T>(int id, [NotNullWhen(true)] out IValueOption<T>? option)
+	public T GetValue<T>(int id)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>;
-
-	public IValueOption<T> GetValueOption<W, T>(W id)
-		where W : Enum
-		where T :
-			struct, IComparable, IConvertible,
-			IComparable<T>, IEquatable<T>;
-	public IValueOption<T> GetValueOption<T>(int id)
-		where T :
-			struct, IComparable, IConvertible,
-			IComparable<T>, IEquatable<T>;
-
-	public T GetValue<W, T>(W id) where W : Enum;
-	public T GetValue<T>(int id);
 }

@@ -1,18 +1,18 @@
-using System;
-using System.Collections.Generic;
-
-using UnityEngine;
 using AmongUs.GameOptions;
-
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
 
 #nullable enable
 
@@ -94,34 +94,37 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 
 
 			var sidekickKillerOps = factory.CreateBoolOption(JackalOption.SidekickCanKill, false);
+			var sideKickKillerOptActe = new ParentActive(sidekickKillerOps);
 
 			var killCoolOption = factory.CreateBoolOption(
 				JackalOption.SidekickHasOtherKillCool,
-				false, sidekickKillerOps);
+				false, sideKickKillerOptActe);
 			factory.CreateFloatOption(
 				JackalOption.SidekickKillCoolDown,
 				30f, 1.0f, 120f, 0.5f,
-				killCoolOption, format: OptionUnit.Second);
+				new ParentActive(killCoolOption),
+				format: OptionUnit.Second);
 
 			var killRangeOption = factory.CreateBoolOption(
 				JackalOption.SidekickHasOtherKillRange,
-				false, sidekickKillerOps);
+				false, sideKickKillerOptActe);
+			var rangeOptActive = new ParentActive(killRangeOption);
 			factory.CreateSelectionOption(
 				JackalOption.SidekickKillRange,
-				OptionCreator.Range,
-				killRangeOption);
+				OptionCreator.Range, rangeOptActive);
 
 			var visionOption = factory.CreateBoolOption(
 				JackalOption.SidekickHasOtherVision, false);
+			var visionOptionActive = new ParentActive(visionOption);
 
 			factory.CreateFloatOption(
 				JackalOption.SidekickVision,
-				2f, 0.25f, 5f, 0.25f,
-				visionOption, format: OptionUnit.Multiplier);
+				2f, 0.25f, 5f, 0.25f, visionOptionActive,
+				format: OptionUnit.Multiplier);
 
 			factory.CreateBoolOption(
 				JackalOption.SidekickApplyEnvironmentVisionEffect,
-				false, visionOption);
+				false, visionOptionActive);
         }
 
         public void ApplyOption(in IOptionLoader loader)
@@ -455,8 +458,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 
         factory.CreateBoolOption(
             JackalOption.ForceReplaceLover,
-            true, loverSkOpt,
-            invert: true);
+            true, new InvertActive(loverSkOpt));
 
         factory.CreateIntOption(
             JackalOption.UpgradeSidekickNum,
@@ -469,7 +471,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
         factory.CreateIntOption(
             JackalOption.SidekickLimitNum,
             1, 1, GameSystem.VanillaMaxPlayerNum / 2, 1,
-            sidekickMakeSidekickOps);
+            new ParentActive(sidekickMakeSidekickOps));
 
         factory.CreateBoolOption(
             JackalOption.CanSetImpostorToSidekick, false);

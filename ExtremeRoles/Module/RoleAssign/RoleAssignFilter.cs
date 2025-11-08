@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -7,6 +7,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 
 #nullable enable

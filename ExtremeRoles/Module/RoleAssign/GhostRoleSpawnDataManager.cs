@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using ExtremeRoles.Helper;
@@ -9,6 +9,7 @@ using ExtremeRoles.Module.Interface;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Module.RoleAssign;
 

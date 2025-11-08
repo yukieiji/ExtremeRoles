@@ -1,4 +1,6 @@
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
@@ -39,9 +41,9 @@ public readonly struct GameStartOption
 	{
 		var killCoolOpt = factory.CreateBoolOption(OnGameStartOption.IsKillCoolDownIsTen, true);
 		var buttonOpt = factory.CreateBoolOption(
-			OnGameStartOption.RemoveSomeoneButton, true, killCoolOpt);
+			OnGameStartOption.RemoveSomeoneButton, true, new ParentActive(killCoolOpt));
 		factory.CreateIntOption(
-			OnGameStartOption.ReduceNum, 1, 1, 5, 1, buttonOpt, invert: true);
+			OnGameStartOption.ReduceNum, 1, 1, 5, 1, new InvertActive(buttonOpt));
 		factory.CreateIntOption(
 			OnGameStartOption.FirstButtonCoolDown, 15, 0, 60, 1, format: OptionUnit.Second);
 	}

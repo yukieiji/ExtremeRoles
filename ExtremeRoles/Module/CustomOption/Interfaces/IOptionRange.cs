@@ -1,21 +1,21 @@
-﻿using System;
+using System;
 
 namespace ExtremeRoles.Module.CustomOption.Interfaces;
 
-public interface IOptionRange<SelectionType>
-	where SelectionType :
+public interface IOptionRange<T>
+	where T :
 		notnull, IComparable, IConvertible,
-		IComparable<SelectionType>, IEquatable<SelectionType>
+		IComparable<T>, IEquatable<T>
 {
-	public SelectionType Value { get; }
-	public SelectionType Min { get; }
-	public SelectionType Max { get; }
+	public T RangedValue { get; }
+	public T Min { get; }
+	public T Max { get; }
 
 	public int Range { get; }
 
 	public int Selection { get; set; }
 
-	public int GetIndex(SelectionType value);
+	public int GetIndex(T value);
 
 	public string ToString();
 }

@@ -1,19 +1,22 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using UnityEngine;
-
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.GameResult.StatusOverrider;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 
+
 #nullable enable
 
 namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
-public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInitialize
+public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IVoterShiftor, IVoterValidtor
 {
+	public bool SkipButtonActive => false;
+
 	public byte VoteTarget
 	{
 		get => this.winPlayer == null ? byte.MaxValue : this.winPlayer.PlayerId;
@@ -35,6 +38,32 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 			this.notSelectPlayer = notSelectPlayer;
 			ExtremeRolesPlugin.Logger.LogInfo(
 				$"Winner:{this.winPlayer.PlayerName} NoWinner:{this.notSelectPlayer.PlayerName}");
+		}
+	}
+
+	public IEnumerable<byte> ValidPlayer
+	{
+		get
+		{
+			foreach (var player in GameData.Instance.AllPlayers)
+			{
+
+				if (!(
+					player == null ||
+					player.IsDead ||
+					player.Disconnected ||
+					this.system.InvalidPlayer(player) ||
+					(
+						ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
+						role.Core.Id is ExtremeRoleId.Monika
+					) // モニカは投票権を持つが会議の投票先には表示さない)
+				))
+				{
+					// このメソッドは開始時一回しか呼ばれないことが保証されているため
+					this.target.Add(player);
+					yield return player.PlayerId;
+				}
+			}
 		}
 	}
 
@@ -84,7 +113,6 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 			{
 				return;
 			}
-			throw new InvalidOperationException("Meeting target always TWO!!!!");
 		}
 
 		public bool Contain(byte playerId)
@@ -121,6 +149,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 	private readonly MonikaTrashSystem system;
 	private readonly MeetingTarget target;
 	// 会議の投票先は常に2つ
+	private const float xOffset = 0.75f;
 
 	public MonikaLoveTargetMeeting()
 	{
@@ -246,6 +275,18 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 		else
 		{
 			return "MonikaMeetingOther";
+		}
+	}
+
+	public void Shift(Vector3 origin, Vector2 offset, PlayerVoteArea[] pvas)
+	{
+		int index = 0;
+		foreach (var pva in pvas)
+		{
+			pva.transform.position = new Vector3(
+				offset.x * (index == 0 ? xOffset : -xOffset), 0.0f,
+				origin.z - 0.9f);
+			index++;
 		}
 	}
 }

@@ -2,9 +2,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 
 using ExtremeRoles.Roles.API;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -52,8 +51,7 @@ public sealed class Neet : SingleRoleBase
             false);
         factory.CreateBoolOption(
             NeetOption.HasTask,
-            false, neutralOps,
-            invert: true);
+            false, new InvertActive(neutralOps));
     }
 
     protected override void RoleSpecificInit()

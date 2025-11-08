@@ -40,19 +40,19 @@ public interface IRoleAbility : IRoleResetMeeting
 			cate.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
 		if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
-			cate.TryGetValueOption<RoleAbilityCommonOption, float>(
+			cate.TryGetValue(
 				RoleAbilityCommonOption.AbilityActiveTime,
-				out var activeTimeOption))
+				out float activeTime))
 		{
-			activatingBehavior.ActiveTime = activeTimeOption.Value;
+			activatingBehavior.ActiveTime = activeTime;
 		}
 
 		if (this.Button.Behavior is ICountBehavior countBehavior &&
-			cate.TryGetValueOption<RoleAbilityCommonOption, int>(
+			cate.TryGetValue(
 				RoleAbilityCommonOption.AbilityCount,
-				out var countOption))
+				out int count))
 		{
-			countBehavior.SetAbilityCount(countOption.Value);
+			countBehavior.SetAbilityCount(count);
 		}
 
 		this.Button.OnMeetingEnd();
@@ -126,12 +126,12 @@ public interface IRoleAbility : IRoleResetMeeting
 	public static void CreateCommonAbilityOption(
 		AutoParentSetOptionCategoryFactory factory,
 		float defaultActiveTime = float.MaxValue,
-		IOption parentOpt = null)
+		IOptionActivator activator = null)
 	{
 		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
 			DefaultCoolTime, MinCoolTime, MaxCoolTime, Step,
-			parentOpt,
+			activator,
 			format: OptionUnit.Second);
 
 		if (defaultActiveTime != float.MaxValue)
@@ -141,7 +141,7 @@ public interface IRoleAbility : IRoleResetMeeting
 			factory.CreateFloatOption(
 				RoleAbilityCommonOption.AbilityActiveTime,
 				defaultActiveTime, minActiveTime, maxActiveTime, Step,
-				parentOpt,
+				activator,
 				format: OptionUnit.Second);
 		}
 
@@ -153,17 +153,18 @@ public interface IRoleAbility : IRoleResetMeeting
 		int maxAbilityCount,
 		float defaultActiveTime = float.MaxValue,
 		int minAbilityCount = 1,
-		IOption parentOpt = null)
+		IOptionActivator activator = null)
 	{
 		CreateCommonAbilityOption(
 			factory,
 			defaultActiveTime,
-			parentOpt);
+			activator);
 
 		factory.CreateIntOption(
 			RoleAbilityCommonOption.AbilityCount,
 			defaultAbilityCount, minAbilityCount,
 			maxAbilityCount, 1,
+			activator,
 			format: OptionUnit.Shot);
 
 	}

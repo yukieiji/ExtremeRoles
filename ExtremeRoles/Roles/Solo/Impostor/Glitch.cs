@@ -9,7 +9,6 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
@@ -17,6 +16,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 #nullable enable
@@ -151,7 +152,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 			Ops.EffectOnImpo, false);
 		factory.CreateBoolOption(
 			Ops.EffectOnMarlin, false,
-			impOpt, invert: true);
+			new InvertActive(impOpt));
 		factory.CreateFloatOption(
 			Ops.Delay, 5.0f, 0.0f, 30.0f, 0.5f,
 			format: OptionUnit.Second);

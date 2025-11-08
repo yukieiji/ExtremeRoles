@@ -1,5 +1,6 @@
-﻿
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
@@ -37,6 +38,6 @@ public readonly struct AdminDeviceOption : IDeviceOption
 		var removeOpt = IDeviceOption.Create(factory);
 
 		factory.CreateSelectionOption<AdminSpecialOption, AirShipAdminMode>(
-			AdminSpecialOption.AirShipEnable, removeOpt, invert: true);
+			AdminSpecialOption.AirShipEnable, new InvertActive(removeOpt));
 	}
 }

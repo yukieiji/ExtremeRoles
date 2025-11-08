@@ -16,9 +16,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.Ability;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -489,7 +488,7 @@ public sealed class Photographer :
         factory.CreateIntOption(
             PhotographerOption.UpgradeAllSendChatTaskGage,
             80, 0, 100, 10,
-            chatUpgradeOpt,
+            new ParentActive(chatUpgradeOpt),
             format: OptionUnit.Percentage);
 
         factory.CreateFloatOption(

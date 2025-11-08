@@ -3,7 +3,6 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -11,6 +10,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
@@ -163,7 +164,7 @@ public sealed class SurrogatorRole :
 			Option.HasTask, false);
 		factory.CreateIntOption(
 			Option.SeeYandereTaskRate, 50, 0, 100, 10,
-			taskOpt, format: OptionUnit.Percentage);
+			new ParentActive(taskOpt), format: OptionUnit.Percentage);
 		IRoleAbility.CreateAbilityCountOption(factory, 1, 10, 3.0f);
 		factory.CreateFloatOption(Option.Range, 0.7f, 0.1f, 3.5f, 0.1f);
 		factory.CreateIntOption(Option.PreventNum, 1, 0, 10, 1);

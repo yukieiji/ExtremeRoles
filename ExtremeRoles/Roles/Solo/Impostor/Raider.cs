@@ -9,12 +9,13 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -238,8 +239,8 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
 		var img = UnityObjectLoader.LoadFromResources(ExtremeRoleId.Raider);
 		string name = Tr.GetString("OpenBombUI");
-		if (this.Loader.TryGetValueOption<Option, bool>(Option.IsOpenLimit, out var opt) &&
-			opt.Value)
+		if (this.Loader.TryGetValue(Option.IsOpenLimit, out bool isOpenLimit) &&
+			isOpenLimit)
 		{
 			this.CreateAbilityCountButton(name, img, null, forceAbilityOff);
 		}
@@ -299,14 +300,15 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			Option.IsOpenLimit, true);
 		factory.CreateIntOption(
 			Option.LimitNum, 4, 1, 100, 1,
-			limitOpt, invert: true);
+			new InvertActive(limitOpt));
 
 		factory.CreateBoolOption(
 			Option.IsHidePlayerOnOpen, true);
 
 		var type = factory.CreateSelectionOption<Option, RaiderBombSystem.BombType>(Option.BombType);
-		factory.CreateIntOption(Option.BombNum, 5, 2, 100, 1, type);
-		factory.CreateFloatOption(Option.BombTargetRange, 1.7f, 0.1f, 25.0f, 0.1f, type);
+		var typeOptActive = new ParentActive(type);
+		factory.CreateIntOption(Option.BombNum, 5, 2, 100, 1, typeOptActive);
+		factory.CreateFloatOption(Option.BombTargetRange, 1.7f, 0.1f, 25.0f, 0.1f, typeOptActive);
 		factory.CreateFloatOption(Option.BombRange, 1.7f, 0.1f, 5.0f, 0.1f);
 		factory.CreateFloatOption(Option.BombAliveTime, 5.0f, 0.5f, 30.0f, 0.1f, format: OptionUnit.Second);
 
@@ -317,16 +319,16 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
 		var cate = this.Loader;
 
-		if (!cate.TryGetValueOption<RoleAbilityCommonOption, int>(
+		if (!cate.TryGetValue(
 				RoleAbilityCommonOption.AbilityActiveTime,
-				out var activeTimeOption))
+				out int activeTime))
 		{
 			return;
 		}
 
 		this.param = new UiParameter(
 			cate.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount),
-			activeTimeOption.Value,
+			activeTime,
 			cate.GetValue<Option, bool>(Option.IsHidePlayerOnOpen) ? PlayerShowSystem.Get() : null);
 		var _ = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.RaiderBomb,
@@ -350,21 +352,16 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			cate.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
 		if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
-			cate.TryGetValueOption<RoleAbilityCommonOption, float>(
-				RoleAbilityCommonOption.AbilityActiveTime,
-				out var activeTimeOption))
+			cate.TryGetValue(RoleAbilityCommonOption.AbilityActiveTime, out float activeTime))
 		{
-			activatingBehavior.ActiveTime = activeTimeOption.Value;
+			activatingBehavior.ActiveTime = activeTime;
 		}
 
-		if (cate.TryGetValueOption<Option, bool>(Option.IsOpenLimit, out var limitOpt) &&
-			limitOpt.Value &&
+		if (cate.TryGetValue(Option.IsOpenLimit, out bool islimit) && islimit &&
 			this.Button.Behavior is ICountBehavior countBehavior &&
-			cate.TryGetValueOption<Option, int>(
-				Option.LimitNum,
-				out var countOption))
+			cate.TryGetValue(Option.LimitNum, out int count))
 		{
-			countBehavior.SetAbilityCount(countOption.Value);
+			countBehavior.SetAbilityCount(count);
 		}
 
 		this.Button.OnMeetingEnd();
