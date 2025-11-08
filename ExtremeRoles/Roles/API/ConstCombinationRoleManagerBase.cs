@@ -58,6 +58,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 					}
 					break;
                 case ExtremeRoleType.Neutral:
+				case ExtremeRoleType.Liberal:
                     if (VanillaRoleProvider.IsDefaultCrewmateRole(playerRoleType))
                     {
                         return checkRole;
@@ -69,7 +70,6 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
                         return checkRole;
                     }
                     break;
-                case ExtremeRoleType.Liberal:
                 default:
                     break;
             }

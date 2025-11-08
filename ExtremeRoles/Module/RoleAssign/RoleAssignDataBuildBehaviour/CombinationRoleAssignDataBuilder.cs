@@ -283,6 +283,7 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 				limiter.CanSpawn(ExtremeRoleType.Neutral, reduceNeutralRoleNum) &&
 				isLimitCrewAssignNum
 			)
+			// リベラルのスポーン上限チェック
 			&&
 			(
 				limiter.CanSpawn(ExtremeRoleType.Liberal, reduceLiberalRoleNum) &&

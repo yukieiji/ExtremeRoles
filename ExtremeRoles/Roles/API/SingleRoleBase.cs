@@ -100,7 +100,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
                     this.Tab = OptionTab.NeutralTab;
                     break;
                 case ExtremeRoleType.Liberal:
-                    this.Tab = OptionTab.LiberalTab;
+                    // this.Tab = OptionTab.LiberalTab;
                     break;
                 default:
                     this.Tab = OptionTab.GeneralTab;
