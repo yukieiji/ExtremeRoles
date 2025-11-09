@@ -36,22 +36,22 @@ public sealed class WinnerBuilder : IDisposable
 		];
 	}
 
-	public IReadOnlyList<FinalSummary.PlayerSummary> Build(WinnerContainer tempData)
+	public IReadOnlyList<FinalSummary.PlayerSummary> Build(WinnerContainer winner)
 	{
 		var logger = ExtremeRolesPlugin.Logger;
 
 		logger.LogInfo("---- Start: Creating Winner ----");
 
-		var result = this.initializer.Initialize(tempData);
+		var result = this.initializer.Initialize(winner);
 
 		foreach (var processor in this.processors)
 		{
-			processor.Process(tempData, result.Winner);
+			processor.Process(winner, result.Winner);
 		}
 		logger.LogInfo("--- End: Creating Winner ----");
 
 #if DEBUG
-		logger.LogInfo(tempData.ToString());
+		logger.LogInfo(winner.ToString());
 #endif
 		return result.Summary;
 	}
