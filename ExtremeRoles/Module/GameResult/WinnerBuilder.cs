@@ -118,6 +118,11 @@ public sealed class WinnerBuilder : IDisposable
 				logger.LogInfo($"Remove Winner(Reason:Neutral) : {playerName}");
 				this.tempData.Remove(playerInfo);
 			}
+			else if (role.IsLiberal())
+			{
+				logger.LogInfo($"Remove Winner(Reason:Liberal) : {playerName}");
+				this.tempData.Remove(playerInfo);
+			}
 			else if (role.Core.Id is ExtremeRoleId.Xion)
 			{
 				logger.LogInfo($"Remove Winner(Reason:Xion Player) : {playerName}");
