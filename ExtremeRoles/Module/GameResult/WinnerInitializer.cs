@@ -10,13 +10,11 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
-using Player = NetworkedPlayerInfo;
-
 namespace ExtremeRoles.Module.GameResult;
 
-public readonly record struct NeutralRoleInfo(Player Player, SingleRoleBase Role);
-public readonly record struct WinModRoleInfo(Player Player, IRoleWinPlayerModifier Role);
-public readonly record struct GhostRoleWinInfo(Player Player, IGhostRoleWinable Role);
+public readonly record struct NeutralRoleInfo(NetworkedPlayerInfo Player, SingleRoleBase Role);
+public readonly record struct WinModRoleInfo(NetworkedPlayerInfo Player, IRoleWinPlayerModifier Role);
+public readonly record struct GhostRoleWinInfo(NetworkedPlayerInfo Player, IGhostRoleWinable Role);
 
 public readonly record struct WinnerState(
 	IReadOnlyList<NeutralRoleInfo> NeutralNoWinner,
