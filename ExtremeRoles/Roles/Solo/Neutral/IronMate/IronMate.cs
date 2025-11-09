@@ -158,7 +158,7 @@ public sealed class IronMateRole :
 	public void Update(PlayerControl rolePlayer)
 	{　}
 
-	public void ModifiedWinPlayer(NetworkedPlayerInfo rolePlayerInfo, GameOverReason reason, in WinnerTempData winner)
+	public void ModifiedWinPlayer(NetworkedPlayerInfo rolePlayerInfo, GameOverReason reason, in WinnerContainer winner)
 	{
 		switch (reason)
 		{
