@@ -101,7 +101,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
     {
 		if (this.betPlayer == null ||
 			!ExtremeRoleManager.TryGetRole(this.betPlayer.PlayerId, out var role) ||

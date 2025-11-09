@@ -96,7 +96,7 @@ public sealed class Heretic :
 	public void ModifiedWinPlayer(
 		NetworkedPlayerInfo rolePlayerInfo,
 		GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
 	{
 		switch (reason)
 		{

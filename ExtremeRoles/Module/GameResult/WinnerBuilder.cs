@@ -6,15 +6,12 @@ using System.Text;
 using Player = NetworkedPlayerInfo;
 
 using ExtremeRoles.GameMode;
-using ExtremeRoles.GhostRoles;
-using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.GameResult.StatusOverrider;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Module.GameResult.WinnerProcessor;
 
 
 namespace ExtremeRoles.Module.GameResult;
@@ -23,41 +20,32 @@ namespace ExtremeRoles.Module.GameResult;
 
 public sealed class WinnerBuilder : IDisposable
 {
-	private readonly WinnerTempData tempData;
-	private readonly List<(Player, SingleRoleBase)> neutralNoWinner = [];
-	private readonly List<(Player, IRoleWinPlayerModifier)> modRole = [];
-	private readonly List<(Player, IGhostRoleWinable)> ghostWinCheckRole = [];
-	private readonly PlayerSummaryBuilder finalSummaryBuilder;
 	private readonly int winGameControlId;
+
+	private readonly WinnerInitializer initializer;
 
 	private readonly GameOverReason gameOverReason;
 	private readonly RoleGameOverReason roleGameOverReason;
 
 	public WinnerBuilder(
 		int winGameControlId,
-		WinnerTempData tempData,
 		IReadOnlyDictionary<byte, ExtremeGameResultManager.TaskInfo> taskInfo)
 	{
 		this.winGameControlId = winGameControlId;
-		this.tempData = tempData;
 
 		var state = ExtremeRolesPlugin.ShipState;
 		this.gameOverReason = state.EndReason;
 		this.roleGameOverReason = (RoleGameOverReason)this.gameOverReason;
 
-		this.finalSummaryBuilder = new PlayerSummaryBuilder(
+		var finalSummaryBuilder = new PlayerSummaryBuilder(
 			this.gameOverReason,
 			state.DeadPlayerInfo,
 			taskInfo);
 
-		int playerNum = GameData.Instance.AllPlayers.Count;
-
-		this.neutralNoWinner.Capacity = playerNum;
-		this.modRole.Capacity = playerNum;
-		this.ghostWinCheckRole.Capacity = playerNum;
+		this.initializer = new WinnerInitializer(finalSummaryBuilder);
 	}
 
-	public IReadOnlyList<FinalSummary.PlayerSummary> Build()
+	public IReadOnlyList<FinalSummary.PlayerSummary> Build(WinnerContainer tempData)
 	{
 		var logger = ExtremeRolesPlugin.Logger;
 
@@ -73,160 +61,23 @@ public sealed class WinnerBuilder : IDisposable
 
 		logger.LogInfo("---- Start: Creating Winner ----");
 
-		var summaries = this.initialize();
+		var result = this.initializer.Initialize(tempData);
 
-		removeAddPlusWinner();
-		addNeutralWiner();
+		new RemoveAddPlusWinnerProcessor().Process(tempData, result.Winner);
+		new AddNeutralWinerProcessor().Process(tempData, result.Winner);
+
 		replaceWinner();
-		mergeWinner();
-		addGhostRoleWinner();
-		modifiedWinner();
+
+		new MergeWinnerProcessor().Process(tempData, result.Winner);
+		new AddGhostRoleWinnerProcessor().Process(tempData, result.Winner);
+		new ModifiedWinnerProcessor().Process(tempData, result.Winner);
 
 		logger.LogInfo("--- End: Creating Winner ----");
 
 #if DEBUG
-		logger.LogInfo(this.tempData.ToString());
+		logger.LogInfo(tempData.ToString());
 #endif
-		return summaries;
-	}
-
-	private List<FinalSummary.PlayerSummary> initialize()
-	{
-		var summaries = new List<FinalSummary.PlayerSummary>(this.neutralNoWinner.Capacity);
-		var logger = ExtremeRolesPlugin.Logger;
-
-		foreach (Player playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
-		{
-			byte playerId = playerInfo.PlayerId;
-			if (!ExtremeRoleManager.TryGetRole(playerId, out var role))
-			{
-				continue;
-			}
-
-			string playerName = playerInfo.PlayerName;
-			if (role.IsNeutral())
-			{
-				if (ExtremeRoleManager.IsAliveWinNeutral(role, playerInfo))
-				{
-					logger.LogInfo($"AddPlusWinner(Reason:Alive Win) : {playerName}");
-					this.tempData.AddPlusWinner(playerInfo);
-				}
-				else
-				{
-					this.neutralNoWinner.Add((playerInfo, role));
-				}
-				logger.LogInfo($"Remove Winner(Reason:Neutral) : {playerName}");
-				this.tempData.Remove(playerInfo);
-			}
-			else if (role.IsLiberal())
-			{
-				logger.LogInfo($"Remove Winner(Reason:Liberal) : {playerName}");
-				this.tempData.Remove(playerInfo);
-			}
-			else if (role.Core.Id is ExtremeRoleId.Xion)
-			{
-				logger.LogInfo($"Remove Winner(Reason:Xion Player) : {playerName}");
-				this.tempData.Remove(playerInfo);
-			}
-
-			if (role is IRoleWinPlayerModifier winModRole)
-			{
-				this.modRole.Add((playerInfo, winModRole));
-			}
-
-			if (role is MultiAssignRoleBase multiAssignRole &&
-				multiAssignRole.AnotherRole is IRoleWinPlayerModifier multiWinModRole)
-			{
-				this.modRole.Add((playerInfo, multiWinModRole));
-			}
-
-			if (ExtremeGhostRoleManager.GameRole.TryGetValue(
-					playerId, out GhostRoleBase? ghostRole) &&
-				ghostRole is not null &&
-				ghostRole.IsNeutral() &&
-				ghostRole is IGhostRoleWinable winCheckGhostRole)
-			{
-				this.ghostWinCheckRole.Add((playerInfo, winCheckGhostRole));
-			}
-
-			var summary = this.finalSummaryBuilder.Create(
-				playerInfo, role, ghostRole);
-			if (summary.HasValue)
-			{
-				summaries.Add(summary.Value);
-			}
-		}
-
-		return summaries;
-	}
-
-	private void removeAddPlusWinner()
-	{
-		foreach (Player winner in this.tempData.PlusedWinner)
-		{
-			ExtremeRolesPlugin.Logger.LogInfo($"Remove Winner(Dupe Player) : {winner.PlayerName}");
-			this.tempData.Remove(winner);
-		}
-	}
-
-	private void addNeutralWiner()
-	{
-		if (!ExtremeGameModeManager.Instance.ShipOption.DisableNeutralSpecialForceEnd)
-		{
-			return;
-		}
-
-		HashSet<(ExtremeRoleId, int)> winRole = new HashSet<(ExtremeRoleId, int)>();
-
-		foreach (Player playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
-		{
-			if (!ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var role))
-			{
-				continue;
-			}
-
-			if (role is MultiAssignRoleBase multiAssignRole &&
-				multiAssignRole.AnotherRole is not null &&
-				tryAddWinRole(
-					multiAssignRole.AnotherRole,
-						playerInfo, in winRole))
-			{
-				continue;
-			}
-			tryAddWinRole(role, playerInfo, in winRole);
-		}
-	}
-
-	private bool tryAddWinRole(
-		in SingleRoleBase role,
-		in Player playerInfo,
-		in HashSet<(ExtremeRoleId, int)> winRole)
-	{
-		int gameControlId = role.GameControlId;
-
-		if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-		{
-			gameControlId = PlayerStatistics.SameNeutralGameControlId;
-		}
-
-		var logger = ExtremeRolesPlugin.Logger;
-		var item = (role.Core.Id, gameControlId);
-
-		if (winRole.Contains(item))
-		{
-			logger.LogInfo($"Add Winner(Reason:Additional Neutral Win) : {playerInfo.PlayerName}");
-			this.tempData.Add(playerInfo);
-			return true;
-		}
-		else if (role.IsNeutral() && role.IsWin)
-		{
-			winRole.Add(item);
-
-			logger.LogInfo($"Add Winner(Reason:Additional Neutral Win) : {playerInfo.PlayerName}");
-			this.tempData.Add(playerInfo);
-			return true;
-		}
-		return false;
+		return result.Summary;
 	}
 
 	private void replaceWinner()
@@ -473,52 +324,8 @@ public sealed class WinnerBuilder : IDisposable
 		}
 	}
 
-	private void mergeWinner()
-	{
-		var logger = ExtremeRolesPlugin.Logger;
-
-		logger.LogInfo($"-- Start: merge plused win player --");
-		foreach (var player in this.tempData.PlusedWinner)
-		{
-			logger.LogInfo($"marge to winner:{player.PlayerName}");
-			this.tempData.Add(player);
-		}
-		logger.LogInfo($"-- End: merge plused win player --");
-	}
-
-	private void addGhostRoleWinner()
-	{
-		var logger = ExtremeRolesPlugin.Logger;
-
-		logger.LogInfo($"-- Start: add ghostrole win player --");
-
-		foreach (var (playerInfo, winCheckRole) in this.ghostWinCheckRole)
-		{
-			if (winCheckRole.IsWin(this.gameOverReason, playerInfo))
-			{
-				ExtremeRolesPlugin.Logger.LogInfo($"Add Winner(Reason:Ghost Role win) : {playerInfo.PlayerName}");
-				this.tempData.AddWithPlus(playerInfo);
-			}
-		}
-		logger.LogInfo($"-- End: add ghostrole win player --");
-	}
-
-	private void modifiedWinner()
-	{
-		var logger = ExtremeRolesPlugin.Logger;
-		logger.LogInfo($"-- Start: modified win player --");
-		foreach (var (playerInfo, winModRole) in modRole)
-		{
-			winModRole.ModifiedWinPlayer(
-				playerInfo,
-				ExtremeRolesPlugin.ShipState.EndReason, // 更新され続けるため、新しいのを常に渡す
-				in this.tempData);
-		}
-		logger.LogInfo($"-- End: modified win player --");
-	}
-
 	public void Dispose()
 	{
-		this.finalSummaryBuilder.Dispose();
+		this.initializer.Dispose();
 	}
 }

@@ -57,7 +57,7 @@ public sealed class SurrogatorRole :
 	public void ModifiedWinPlayer(
 		NetworkedPlayerInfo rolePlayerInfo,
 		GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
 	{
 		switch (reason)
 		{
