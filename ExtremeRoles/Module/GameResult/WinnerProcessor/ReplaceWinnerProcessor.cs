@@ -10,7 +10,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.GameResult.WinnerProcessor;
 
-file sealed class NeutalWinnerProcessor(int winGameControlId, WinnerContainer winnerContainer, WinnerState state)
+file sealed class NeutralWinnerProcessor(int winGameControlId, WinnerContainer winnerContainer, WinnerState state)
 {
 	private readonly int winGameControlId = winGameControlId;
 	private readonly WinnerContainer winner = winnerContainer;
@@ -144,7 +144,7 @@ public sealed class ReplaceWinnerProcessor(int winGameControlId) : IWinnerProces
 		}
 
 		// 以下ニュートラル役職の処理
-		var processor = new NeutalWinnerProcessor(this.winGameControlId, winner, state);
+		var processor = new NeutralWinnerProcessor(this.winGameControlId, winner, state);
 		switch ((RoleGameOverReason)ExtremeRolesPlugin.ShipState.EndReason)
 		{
 			case RoleGameOverReason.AliceKilledByImposter:
