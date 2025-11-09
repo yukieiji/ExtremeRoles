@@ -9,7 +9,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.GameResult.WinnerProcessor;
 
-public sealed class AddNeutralWinerProcessor : IWinnerProcessor
+public sealed class AddNeutralWinnerProcessor : IWinnerProcessor
 {
 	private readonly HashSet<(ExtremeRoleId, int)> winRoleCache = new HashSet<(ExtremeRoleId, int)>();
 

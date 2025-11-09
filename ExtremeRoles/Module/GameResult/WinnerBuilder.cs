@@ -28,7 +28,7 @@ public sealed class WinnerBuilder : IDisposable
 
 		this.processors = [
 			new RemoveAddPlusWinnerProcessor(),
-			new AddNeutralWinerProcessor(),
+			new AddNeutralWinnerProcessor(),
 			new ReplaceWinnerProcessor(winGameControlId),
 			new MergeWinnerProcessor(),
 			new AddGhostRoleWinnerProcessor(),
