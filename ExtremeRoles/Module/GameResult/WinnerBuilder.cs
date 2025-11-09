@@ -21,11 +21,7 @@ namespace ExtremeRoles.Module.GameResult;
 public sealed class WinnerBuilder : IDisposable
 {
 	private readonly int winGameControlId;
-
 	private readonly WinnerInitializer initializer;
-
-	private readonly GameOverReason gameOverReason;
-	private readonly RoleGameOverReason roleGameOverReason;
 
 	public WinnerBuilder(
 		int winGameControlId,
@@ -34,11 +30,8 @@ public sealed class WinnerBuilder : IDisposable
 		this.winGameControlId = winGameControlId;
 
 		var state = ExtremeRolesPlugin.ShipState;
-		this.gameOverReason = state.EndReason;
-		this.roleGameOverReason = (RoleGameOverReason)this.gameOverReason;
-
 		var finalSummaryBuilder = new PlayerSummaryBuilder(
-			this.gameOverReason,
+			state.EndReason,
 			state.DeadPlayerInfo,
 			taskInfo);
 
@@ -48,16 +41,6 @@ public sealed class WinnerBuilder : IDisposable
 	public IReadOnlyList<FinalSummary.PlayerSummary> Build(WinnerContainer tempData)
 	{
 		var logger = ExtremeRolesPlugin.Logger;
-
-		string resonStr = Enum.IsDefined(this.roleGameOverReason) ?
-			this.roleGameOverReason.ToString() : this.gameOverReason.ToString();
-		logger.LogInfo($"GameEnd : {resonStr}");
-
-		if (this.roleGameOverReason is RoleGameOverReason.UmbrerBiohazard)
-		{
-			PlayerSummaryBuilder.AddStatusOverride<UmbrerBiohazardStatusOverrider>(
-				(GameOverReason)RoleGameOverReason.UmbrerBiohazard);
-		}
 
 		logger.LogInfo("---- Start: Creating Winner ----");
 
@@ -82,7 +65,7 @@ public sealed class WinnerBuilder : IDisposable
 
 	private void replaceWinner()
 	{
-		switch (this.roleGameOverReason)
+		switch ((RoleGameOverReason)ExtremeRolesPlugin.ShipState.EndReason)
 		{
 			case RoleGameOverReason.AssassinationMarin:
 			case RoleGameOverReason.TeroristoTeroWithShip:
