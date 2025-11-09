@@ -1,8 +1,6 @@
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.RoleAssign;
-using static ExtremeRoles.Roles.Solo.Neutral.Miner;
 
 
 
