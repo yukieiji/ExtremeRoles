@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Player = NetworkedPlayerInfo;
-
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.GameResult.WinnerProcessor;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.GameResult.StatusOverrider;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.GameResult.WinnerProcessor;
 
 
 namespace ExtremeRoles.Module.GameResult;
@@ -214,7 +211,7 @@ public sealed class WinnerBuilder : IDisposable
 		}
 	}
 
-	private void addSpecificRoleToSameControlIdPlayer(in SingleRoleBase role, in Player player)
+	private void addSpecificRoleToSameControlIdPlayer(in SingleRoleBase role, in NetworkedPlayerInfo player)
 	{
 		if (this.winGameControlId != int.MaxValue &&
 			this.winGameControlId == role.GameControlId)
@@ -250,7 +247,7 @@ public sealed class WinnerBuilder : IDisposable
 		}
 	}
 
-	private void addSpecificNeutralRoleToSameControlIdPlayer(in SingleRoleBase role, in Player player)
+	private void addSpecificNeutralRoleToSameControlIdPlayer(in SingleRoleBase role, in NetworkedPlayerInfo player)
 	{
 		if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
 		{
