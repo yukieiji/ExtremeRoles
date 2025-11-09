@@ -36,7 +36,7 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 	public void ModifiedWinPlayer(
 		NetworkedPlayerInfo rolePlayerInfo,
 		GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
 	{
 		switch (reason)
 		{

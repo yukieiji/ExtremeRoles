@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 
 using ExtremeRoles.Helper;
@@ -8,7 +8,7 @@ using Player = NetworkedPlayerInfo;
 
 namespace ExtremeRoles.Module.GameResult;
 
-public class WinnerTempData
+public sealed class WinnerContainer
 {
 	public readonly record struct Result(
 		IReadOnlyList<CachedPlayerData> Winner,

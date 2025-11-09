@@ -68,7 +68,7 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
     {
 
         if (!rolePlayerInfo.IsDead || this.isDeadWin) { return; }

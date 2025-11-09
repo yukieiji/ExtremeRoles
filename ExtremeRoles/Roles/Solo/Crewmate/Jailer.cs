@@ -667,7 +667,7 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 	public void ModifiedWinPlayer(
 		NetworkedPlayerInfo rolePlayerInfo,
 		GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
 	{
 		if (reason is
 				GameOverReason.CrewmatesByTask or

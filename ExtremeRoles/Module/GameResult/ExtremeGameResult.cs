@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour;
@@ -14,16 +14,16 @@ public sealed class ExtremeGameResultManager : NullableSingleton<ExtremeGameResu
 {
 	public readonly record struct TaskInfo(int CompletedTask, int TotalTask);
 
-	public WinnerTempData.Result Winner => winner.Convert();
+	public WinnerContainer.Result Winner => winner.Convert();
 	public IReadOnlyList<FinalSummary.PlayerSummary> PlayerSummaries { get; private set; }
 
 	private readonly int winGameControlId;
 	private readonly Dictionary<byte, TaskInfo> playerTaskInfo = new Dictionary<byte, TaskInfo>();
-	private WinnerTempData winner;
+	private WinnerContainer winner;
 
 	public ExtremeGameResultManager()
 	{
-		this.winner = new WinnerTempData();
+		this.winner = new WinnerContainer();
 		this.PlayerSummaries = new List<FinalSummary.PlayerSummary>();
 		this.winGameControlId = ExtremeRolesPlugin.ShipState.WinGameControlId;
 	}
@@ -44,7 +44,7 @@ public sealed class ExtremeGameResultManager : NullableSingleton<ExtremeGameResu
 	{
 		this.winner.SetWinner();
 
-		using var builder = new WinnerBuilder(this.winGameControlId, this.winner, this.playerTaskInfo);
-		this.PlayerSummaries = builder.Build();
+		using var builder = new WinnerBuilder(this.winGameControlId, this.playerTaskInfo);
+		this.PlayerSummaries = builder.Build(this.winner);
 	}
 }

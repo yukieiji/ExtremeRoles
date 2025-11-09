@@ -1,4 +1,4 @@
-﻿namespace ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.CustomOption;
 
 public enum OptionTab : byte
 {
@@ -7,6 +7,7 @@ public enum OptionTab : byte
 	CrewmateTab,
 	ImpostorTab,
 	NeutralTab,
+	// LiberalTab,
 	CombinationTab,
 
 	GhostCrewmateTab,

@@ -16,6 +16,7 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using PlayerIl2CppList = Il2CppSystem.Collections.Generic.List<PlayerControl>;
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -156,6 +157,14 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 			text.text = Tr.GetString("yourHost");
 			text.color = ColorPalette.XionBlue;
 		}
+		else if (role.IsLiberal())
+		{
+			instance.BackgroundBar.material.color = ColorPalette.LiberalColor;
+			instance.ImpostorText.text = Tr.GetString("liberalIntro");
+
+			text.text = Tr.GetString("Liberal");
+			text.color = ColorPalette.LiberalColor;
+		}
 	}
 
 	private static void setupRole()
@@ -188,8 +197,19 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 
+        if (role.IsLiberal())
+        {
+            yourTeam.Clear();
+            foreach (var p in PlayerCache.AllPlayerControl)
+            {
+                if (ExtremeRoleManager.TryGetRole(p.PlayerId, out var r) && r.IsLiberal())
+                {
+                    yourTeam.Add(p);
+                }
+            }
+        }
 		// Intro solo teams
-		if (role.IsNeutral() || role.Core.Id is ExtremeRoleId.Xion)
+		else if (role.IsNeutral() || role.Core.Id is ExtremeRoleId.Xion)
 		{
 			var (main, sub) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleAwake<RoleTypes>>();
 			if ((main is not null && !main.IsAwake) || (sub is not null && !sub.IsAwake))

@@ -1,30 +1,47 @@
 using System;
 using System.Collections.Generic;
 
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module.GameResult.StatusOverrider;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 
 using DeadInfo = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.DeadInfo;
 using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.PlayerStatus;
-using TaskInfo = ExtremeRoles.Module.GameResult.ExtremeGameResultManager.TaskInfo;
 using PlayerSummary = ExtremeRoles.Module.CustomMonoBehaviour.FinalSummary.PlayerSummary;
+using TaskInfo = ExtremeRoles.Module.GameResult.ExtremeGameResultManager.TaskInfo;
 
 #nullable enable
 
 namespace ExtremeRoles.Module.GameResult;
 
 
-public sealed class PlayerSummaryBuilder(
-	GameOverReason reason,
-	IReadOnlyDictionary<byte, DeadInfo> deadInfo,
-	IReadOnlyDictionary<byte, TaskInfo> taskInfo) : IDisposable
+public sealed class PlayerSummaryBuilder : IDisposable
 {
-	private readonly GameOverReason reason = reason;
-	private readonly IReadOnlyDictionary<byte, DeadInfo> deadInfo = deadInfo;
-	private readonly IReadOnlyDictionary<byte, TaskInfo> taskInfo = taskInfo;
-	private readonly IReadOnlyDictionary<GameOverReason, IStatusOverrider> statusOverride = staticStatusOverride;
+	private readonly GameOverReason reason;
+	private readonly IReadOnlyDictionary<byte, DeadInfo> deadInfo;
+	private readonly IReadOnlyDictionary<byte, TaskInfo> taskInfo;
+	private IReadOnlyDictionary<GameOverReason, IStatusOverrider> statusOverride => staticStatusOverride;
 	private static Dictionary<GameOverReason, IStatusOverrider> staticStatusOverride = new Dictionary<GameOverReason, IStatusOverrider>();
+
+	public PlayerSummaryBuilder(
+		GameOverReason reason,
+		IReadOnlyDictionary<byte, DeadInfo> deadInfo,
+		IReadOnlyDictionary<byte, TaskInfo> taskInfo)
+	{
+		this.reason = reason;
+		this.deadInfo = deadInfo;
+		this.taskInfo = taskInfo;
+
+		var roleGameOverReason = (RoleGameOverReason)reason;
+		string resonStr = Enum.IsDefined(reason) ? reason.ToString() : roleGameOverReason.ToString();
+		ExtremeRolesPlugin.Logger.LogInfo($"GameEnd : {resonStr}");
+
+		if (roleGameOverReason is RoleGameOverReason.UmbrerBiohazard)
+		{
+			AddStatusOverride<UmbrerBiohazardStatusOverrider>((GameOverReason)RoleGameOverReason.UmbrerBiohazard);
+		}
+	}
 
 	public static void AddStatusOverride(GameOverReason reason, IStatusOverrider @override)
 	{

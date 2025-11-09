@@ -27,6 +27,9 @@ public sealed class RoleCore(ExtremeRoleId id, ExtremeRoleType team, Color color
 	public static RoleCore BuildCrewmate(ExtremeRoleId id, Color color)
 		=> new RoleCore(id, ExtremeRoleType.Crewmate, color);
 
+	public static RoleCore BuildLiberal(ExtremeRoleId id, Color color)
+		=> new RoleCore(id, ExtremeRoleType.Liberal, color);
+
 	public static RoleCore BuildNeutral(ExtremeRoleId id, Color color)
 		=> new RoleCore(id, ExtremeRoleType.Neutral, color);
 }
