@@ -1,4 +1,3 @@
-
 namespace ExtremeRoles.Module.GameResult.WinnerProcessor;
 
 public sealed class ModifiedWinnerProcessor : IWinnerProcessor
