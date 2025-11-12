@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using UnityEngine;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 using ExtremeRoles.Module;
 using ExtremeRoles.Test.Helper;
-
+using ExtremeRoles.Test.Performance;
 
 namespace ExtremeRoles.Test;
 
@@ -72,4 +73,21 @@ public class ExtremeRolesTestPluginBehaviour : MonoBehaviour
 			Instance.coStart(
 				provider.GetServices<ITestStep>()).WrapToIl2Cpp());
 	}
+
+	public static void StartPerformanceTests()
+	{
+		var provider = ExtremeRolesTestPlugin.Instance.Provider;
+        var steps = provider.GetServices<ITestStep>()
+            .Where(s => s is IPerformanceTest)
+            .ToList();
+
+		Instance.StartCoroutine(
+			Instance.coStartPerformanceTests(steps).WrapToIl2Cpp());
+	}
+
+    public IEnumerator coStartPerformanceTests(IReadOnlyList<ITestStep> testSteps)
+    {
+        yield return PerformanceTestRunner.RunComparison(testSteps);
+        EndTest();
+    }
 }
