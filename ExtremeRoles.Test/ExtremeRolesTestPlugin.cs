@@ -7,6 +7,7 @@ using HarmonyLib;
 using ExtremeRoles.Module;
 using ExtremeRoles.Test.Helper;
 using ExtremeRoles.Test.Lobby;
+using ExtremeRoles.Test.Performance;
 
 using Microsoft.Extensions.DependencyInjection;
 using ExtremeRoles.Test.InGame.GameLoop;
@@ -35,6 +36,7 @@ public partial class ExtremeRolesTestPlugin : BasePlugin
 		{
 			GameLoopTestStep.Register(collection);
 			LobbyTestStep.Register(collection, assembly);
+            PerformanceTestStep.Register(collection, assembly);
 			ExtremeRolesTestPluginBehaviour.Register(collection, assembly);
 		}
 		Provider = collection.BuildServiceProvider();
@@ -55,10 +57,15 @@ public static class ChatControllerSendChatPatch
 {
 	public static void Prefix(ChatController __instance)
 	{
-		if (__instance.freeChatField.Text == "/RunTest")
-		{
-			GameUtility.ChangePresetTo(19);
-			ExtremeRolesTestPluginBehaviour.Start();
-		}
+        switch (__instance.freeChatField.Text)
+        {
+            case "/RunTest":
+                GameUtility.ChangePresetTo(19);
+                ExtremeRolesTestPluginBehaviour.Start();
+                break;
+            case "/Performance":
+                ExtremeRolesTestPluginBehaviour.StartPerformanceTests();
+                break;
+        }
 	}
 }
