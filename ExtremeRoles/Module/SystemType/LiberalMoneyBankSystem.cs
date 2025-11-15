@@ -1,4 +1,5 @@
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Roles;
 using Hazel;
 
 namespace ExtremeRoles.Module.SystemType;
@@ -9,9 +10,16 @@ public class LiberalMoneyBankSystem : IDirtableSystemType
 
     public bool IsDirty { get; private set; }
     public float Money { get; private set; }
-    private float winMoney;
+	public float WinMoney { get; init; } = 0.5f;
+	public bool IsLeaderDead { get; private set; }
 
-    public void MarkClean()
+	public static bool IsCanKillTo(byte targetPlayerId)
+		=> ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
+			targetRole.Core.Id is ExtremeRoleId.Leader &&
+			ExtremeSystemTypeManager.Instance.TryGet<LiberalMoneyBankSystem>(ExtremeSystemType.LiberalMoneyBank, out var system) &&
+			system.IsLeaderDead;
+
+	public void MarkClean()
     {
         IsDirty = false;
     }
@@ -20,11 +28,16 @@ public class LiberalMoneyBankSystem : IDirtableSystemType
     {
         // TODO: Implement money gain logic here.
         // For now, just increment money for testing purposes.
-        if (Money >= winMoney)
+        if (Money >= this.WinMoney)
         {
             IsDirty = true;
         }
     }
+
+	public void RpcAddKillMoney()
+	{
+
+	}
 
     public void Serialize(MessageWriter writer, bool initialState)
     {
