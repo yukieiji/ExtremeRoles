@@ -35,6 +35,11 @@ public static class PlayerControlMurderPlayerPatch
 			return true;
 		}
 
+		if (LiberalMoneyBankSystem.IsCanKillTo(target.PlayerId))
+		{
+			return false;
+		}
+
 		bool hasOtherKillCool = role.TryGetKillCool(out float killCool);
 
 		if (role.Core.Id == ExtremeRoleId.Villain)
@@ -94,8 +99,10 @@ public static class PlayerControlMurderPlayerPatch
 
 		PlayerControl player = PlayerControl.LocalPlayer;
 
-		if (!target.Data.IsDead ||
-			player == null) { return; }
+		if (!target.Data.IsDead || player == null)
+		{
+			return;
+		}
 
 		byte targetPlayerId = target.PlayerId;
 		byte localPlayerId = player.PlayerId;

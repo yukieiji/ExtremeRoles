@@ -1,10 +1,9 @@
 using HarmonyLib;
 
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -13,12 +12,16 @@ namespace ExtremeRoles.Patches.Player;
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
 public static class PlayerControlExiledPatch
 {
+	public static bool Prefix(PlayerControl __instance)
+		=> !LiberalMoneyBankSystem.IsCanKillTo(__instance.PlayerId);
+
 	public static void Postfix(
 		PlayerControl __instance)
 	{
 		if (!(
 				GameProgressSystem.IsGameNow &&
-				 ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var exiledPlayerRole)
+				 ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var exiledPlayerRole) &&
+				 __instance.Data.IsDead
 			))
 		{
 			return;

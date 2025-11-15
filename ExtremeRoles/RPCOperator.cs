@@ -377,18 +377,18 @@ public static class RPCOperator
     public static void UncheckedMurderPlayer(
         byte sourceId, byte targetId, byte useAnimation)
     {
-		if (Helper.GameSystem.IsLobby) { return; }
+		if (Helper.GameSystem.IsLobby)
+		{
+			return;
+		}
 
 		PlayerControl source = Helper.Player.GetPlayerControlById(sourceId);
         PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
 
         if (source != null && target != null)
         {
-            if (useAnimation == 0)
-            {
-                Patches.KillAnimationCoPerformKillMoveNextPatch.HideNextAnimation = true;
-            }
-            source.MurderPlayer(target);
+			Patches.KillAnimationCoPerformKillMoveNextPatch.HideNextAnimation = useAnimation == 0;
+			source.MurderPlayer(target);
         }
 
 		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
