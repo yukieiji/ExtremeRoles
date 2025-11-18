@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -77,15 +77,13 @@ public class ExtremeRolesTestPluginBehaviour : MonoBehaviour
 	public static void StartPerformanceTests()
 	{
 		var provider = ExtremeRolesTestPlugin.Instance.Provider;
-        var steps = provider.GetServices<ITestStep>()
-            .Where(s => s is IPerformanceTest)
-            .ToList();
+		var steps = provider.GetServices<IPerformanceTest>();
 
 		Instance.StartCoroutine(
 			Instance.coStartPerformanceTests(steps).WrapToIl2Cpp());
 	}
 
-    public IEnumerator coStartPerformanceTests(IReadOnlyList<ITestStep> testSteps)
+    public IEnumerator coStartPerformanceTests(IEnumerable<IPerformanceTest> testSteps)
     {
         yield return PerformanceTestRunner.RunComparison(testSteps);
         EndTest();

@@ -1,25 +1,23 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ExtremeRoles.Test.Performance
+namespace ExtremeRoles.Test.Performance;
+
+public static class PerformanceTestStep
 {
-    public static class PerformanceTestStep
+    public static void Register(IServiceCollection services, Assembly dll)
     {
-        public static void Register(IServiceCollection services, Assembly dll)
+        var performanceTestType = typeof(IPerformanceTest);
+
+        foreach (var type in dll.GetTypes())
         {
-            var testStepType = typeof(ITestStep);
-            var performanceTestType = typeof(IPerformanceTest);
-
-            foreach (var type in dll.GetTypes())
+            if (!performanceTestType.IsAssignableFrom(type) ||
+                type.IsInterface || type.IsAbstract)
             {
-                if (!performanceTestType.IsAssignableFrom(type) ||
-                    type.IsInterface || type.IsAbstract)
-                {
-                    continue;
-                }
-
-                services.AddTransient(testStepType, type);
+                continue;
             }
+
+            services.AddTransient(performanceTestType, type);
         }
     }
 }
