@@ -3,19 +3,20 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.Vector;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.AutoActivator;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -276,27 +277,29 @@ public sealed class TuckerRole :
 
 		var triggerOpt = factory.CreateBoolOption(
 			Option.IsKillCoolReduceOnRemove, true);
+		var triggerOptActive = new InvertActive(triggerOpt);
+
 		factory.CreateFloatOption(
 			Option.KillCoolReduceOnRemoveShadow,
 			2.5f, 0.1f, 30.0f, 0.1f,
-			triggerOpt,
-			format: OptionUnit.Second,
-			invert: true);
+			triggerOptActive,
+			format: OptionUnit.Second);
 		factory.CreateBoolOption(
 			Option.IsReduceInitKillCoolOnRemove,
-			false, triggerOpt,
-			invert: true);
+			false, triggerOptActive);
 
 		var visionOption = factory.CreateBoolOption(
 			Option.ChimeraHasOtherVision,
 			false);
+		var visionOptionActive = new ParentActive(visionOption);
+
 		factory.CreateFloatOption(
 			Option.ChimeraVision,
 			2f, 0.25f, 5.0f, 0.25f,
-			visionOption, format: OptionUnit.Multiplier);
+			visionOptionActive, format: OptionUnit.Multiplier);
 		factory.CreateBoolOption(
 			Option.ChimeraApplyEnvironmentVisionEffect,
-			IsCrewmate(), visionOption);
+			IsCrewmate(), visionOptionActive);
 
 		CreateKillerOption(factory, ignorePrefix: false);
 
@@ -316,9 +319,8 @@ public sealed class TuckerRole :
 		factory.CreateFloatOption(
 			Option.TuckerDeathKillCoolOffset,
 			2.5f, -30.0f, 30.0f, 0.1f,
-			chimeraDeathOpt,
-			format: OptionUnit.Second,
-			invert: true);
+			new InvertActive(chimeraDeathOpt),
+			format: OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
@@ -437,7 +439,7 @@ public sealed class TuckerRole :
 		{
 			return false;
 		}
-		return local.GetTruePosition() == removeInfo.StartPos;
+		return local.GetTruePosition().IsCloseTo(removeInfo.StartPos);
 	}
 
 	private void remove()

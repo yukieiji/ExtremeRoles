@@ -10,10 +10,6 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Module.Ability;
-
-
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

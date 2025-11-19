@@ -6,6 +6,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Roles.API;
 

@@ -6,6 +6,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.GameMode;
 
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Module.RoleAssign;
 

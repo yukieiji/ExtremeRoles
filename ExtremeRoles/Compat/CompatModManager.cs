@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,8 @@ using Hazel;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat.Initializer;
+using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 namespace ExtremeRoles.Compat;
@@ -134,7 +136,7 @@ public sealed class CompatModManager
 			ExtremeRolesPlugin.Logger.LogInfo(
 				$"CreateIntegrateOption:{mod.Name}");
 
-			using (var factory = OptionManager.CreateSequentialOptionCategory(
+			using (var factory = OptionCategoryAssembler.CreateSequentialOptionCategory(
 				startId + index, $"{mod.Name}Category"))
 			{
 				option.CreateIntegrateOption(factory);

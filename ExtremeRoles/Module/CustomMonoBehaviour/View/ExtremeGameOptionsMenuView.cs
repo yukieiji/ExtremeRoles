@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,6 +18,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 
 using CategoryView = ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ExtremeRoles.Module.CustomMonoBehaviour.View.ExtremeOptionView>;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
 
@@ -364,7 +365,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 					continue;
 				}
 
-				bool isActive = option.IsActiveAndEnable;
+				bool isActive = option.IsViewActive;
 
 				optionObj.gameObject.SetActive(isActive);
 				if (!isActive)

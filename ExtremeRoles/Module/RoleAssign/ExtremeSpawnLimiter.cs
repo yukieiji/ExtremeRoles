@@ -1,9 +1,10 @@
-﻿using System.Text;
+using System.Text;
 using System.Collections.Generic;
 
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
 

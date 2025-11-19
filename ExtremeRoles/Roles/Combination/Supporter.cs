@@ -5,10 +5,11 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
-using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -174,7 +175,7 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
         AutoParentSetOptionCategoryFactory factory)
     {
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
+		CreateKillerOption(factory, new ParentActive(imposterSetting));
 	}
 
     protected override void RoleSpecificInit()

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using TMPro;
 using UnityEngine;
@@ -6,6 +6,7 @@ using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
 
@@ -105,11 +106,11 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 
 		if (this.titleText != null)
 		{
-			this.titleText.text = this.OptionModel.Title;
+			this.titleText.text = this.OptionModel.TransedTitle;
 		}
 		if (this.valueText != null)
 		{
-			this.valueText.text = this.OptionModel.ValueString;
+			this.valueText.text = this.OptionModel.TransedValue;
 		}
 	}
 

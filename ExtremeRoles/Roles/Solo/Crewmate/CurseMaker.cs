@@ -14,9 +14,8 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -301,44 +300,40 @@ public sealed class CurseMaker :
 
         factory.CreateIntOption(
             CurseMakerOption.NotRemoveDeadBodyTaskGage,
-            100, 0, 100, 5, removeDeadBodyOpt,
+            100, 0, 100, 5, new ParentActive(removeDeadBodyOpt),
             format: OptionUnit.Percentage);
 
         var searchDeadBodyOption = factory.CreateBoolOption(
             CurseMakerOption.IsDeadBodySearch,
             true);
+		var searchDeadBodyOptActive = new InvertActive(searchDeadBodyOption);
 
         factory.CreateBoolOption(
             CurseMakerOption.IsMultiDeadBodySearch,
-            false, searchDeadBodyOption,
-            invert: true);
+            false, searchDeadBodyOptActive);
 
         var searchTimeOpt = factory.CreateFloatOption(
             CurseMakerOption.SearchDeadBodyTime,
             60.0f, 0.5f, 120.0f, 0.5f,
-            searchDeadBodyOption, format: OptionUnit.Second,
-            invert: true);
+			searchDeadBodyOptActive, format: OptionUnit.Second);
 
         var taskBoostOpt = factory.CreateBoolOption(
             CurseMakerOption.IsReduceSearchForTask,
-            false, searchDeadBodyOption,
-            invert: true);
+            false, searchDeadBodyOptActive);
+		var taskBoostOptActive = new InvertActive(taskBoostOpt);
 
-        factory.CreateIntOption(
+		factory.CreateIntOption(
             CurseMakerOption.ReduceSearchTaskGage,
             100, 25, 100, 5,
-            taskBoostOpt,
-            format: OptionUnit.Percentage,
-            invert: true);
+			taskBoostOptActive,
+            format: OptionUnit.Percentage);
 
-        var reduceTimeOpt = factory.CreateFloatDynamicOption(
+        var reduceTimeOpt = factory.CreateFloatDynamicMaxOption(
             CurseMakerOption.ReduceSearchDeadBodyTime,
-            30f, 0.5f, 0.5f, taskBoostOpt,
+            30f, 0.5f, 0.5f, searchTimeOpt,
+			taskBoostOptActive,
             format: OptionUnit.Second,
-            invert: true,
             tempMaxValue: 120.0f);
-
-        searchTimeOpt.AddWithUpdate(reduceTimeOpt);
     }
 
     protected override void RoleSpecificInit()

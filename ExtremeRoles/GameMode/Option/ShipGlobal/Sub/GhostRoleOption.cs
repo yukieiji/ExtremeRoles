@@ -1,8 +1,10 @@
-﻿
+
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
@@ -22,12 +24,6 @@ public readonly struct GhostRoleOption(in OptionCategory category)
 		factory.CreateBoolOption(GhostRoleGlobalOption.IsRemoveAngleIcon, false);
 		factory.CreateBoolOption(
 			GhostRoleGlobalOption.IsBlockGAAbilityReport, false,
-			hook: () =>
-			{
-				var currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
-				return
-					currentGameOptions.IsTryCast<NormalGameOption>(out var normal) &&
-					normal.RoleOptions.GetChancePerGame(RoleTypes.GuardianAngel) > 0;
-			});
+			new VanillaRoleActive(RoleTypes.GuardianAngel));
 	}
 }

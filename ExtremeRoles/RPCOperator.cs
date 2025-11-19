@@ -3,6 +3,7 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameResult;
@@ -76,6 +77,8 @@ public static class RPCOperator
 		BaitAwakeRole,
 		SummonerOps,
 		ExorcistOps,
+		CEOOps,
+		EchoOps,
 
 		// インポスター
 		CarrierAbility,
@@ -612,6 +615,16 @@ public static class RPCOperator
 	public static void ExorcistRpcOps(in MessageReader reader)
 	{
 		Roles.Solo.Crewmate.Exorcist.ExorcistRole.RpcOps(reader);
+	}
+
+	public static void CEORpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Crewmate.CEO.RpcOps(reader);
+	}
+
+	public static void EchoRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Crewmate.Echo.Rpc(reader);
 	}
 
 	public static void CarrierAbility(

@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
 
@@ -142,71 +145,72 @@ public interface IShipGlobalOption
 
 	public static void Create()
     {
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.OnGameStartOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.OnGameStartOption))
 		{
 			GameStartOption.Create(factory);
 		}
 
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.MeetingOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.MeetingOption))
 		{
 			MeetingHudOption.Create(factory);
 		}
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.ExiledOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.ExiledOption))
 		{
 			ExileOption.Create(factory);
 		}
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.VentOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.VentOption))
 		{
 			VentConsoleOption.Create(factory);
 		}
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.TaskOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.TaskOption))
 		{
 			factory.CreateBoolOption(TaskOption.ParallelMedBayScans, false);
 
 			var fixTaskOpt = factory.CreateBoolOption(TaskOption.IsFixWallHaskTask, false);
+			var fixTaskActive = new ParentActive(fixTaskOpt);
 			for (int i = (int)TaskOption.GarbageTask; i <= (int)TaskOption.DivertPowerTask; ++i)
 			{
-				factory.CreateBoolOption((TaskOption)i, false, parent: fixTaskOpt);
+				factory.CreateBoolOption((TaskOption)i, false, fixTaskActive);
 			}
 		}
 
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.RandomSpawnOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.RandomSpawnOption))
 		{
 			SpawnOption.Create(factory);
 		}
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.EmergencyTaskOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.EmergencyTaskOption))
 		{
 			EmergencyTaskOption.Create(factory);
 		}
 
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.AdminOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.AdminOption))
 		{
 			AdminDeviceOption.Create(factory);
 		}
 		createMapObjectOptions(ShipGlobalOptionCategory.SecurityOption);
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.VitalOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.VitalOption))
 		{
 			VitalDeviceOption.Create(factory);
 		}
 
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.RandomMapOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.RandomMapOption))
 		{
 			factory.CreateBoolOption(RandomMap.Enable, false);
 		}
 
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.TaskWinOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.TaskWinOption))
 		{
 			var taskDisableOpt = factory.CreateBoolOption(TaskWinOption.DisableWhenNoneTaskCrew, false);
-			factory.CreateBoolOption(TaskWinOption.DisableAll, false, taskDisableOpt);
+			factory.CreateBoolOption(TaskWinOption.DisableAll, false, new ParentActive(taskDisableOpt));
 		}
 
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.NeutralWinOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.NeutralWinOption))
 		{
 			factory.CreateBoolOption(NeutralWinOption.IsSame, true);
 			factory.CreateBoolOption(NeutralWinOption.DisableSpecialEnd, false);
 		}
 
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.GhostRoleGlobalOption))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(ShipGlobalOptionCategory.GhostRoleGlobalOption))
 		{
 			GhostRoleOption.Create(factory);
 		}
@@ -217,7 +221,7 @@ public interface IShipGlobalOption
 
 	private static void createMapObjectOptions(ShipGlobalOptionCategory category)
 	{
-		using (var factory = OptionManager.CreateOptionCategory(category))
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(category))
 		{
 			IDeviceOption.Create(factory);
 		}

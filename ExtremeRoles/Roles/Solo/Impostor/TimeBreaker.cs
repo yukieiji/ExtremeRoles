@@ -2,10 +2,11 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -63,7 +64,7 @@ public sealed class TimeBreaker : SingleRoleBase, IRoleAutoBuildAbility
 			Opt.EffectImp, true);
 		factory.CreateBoolOption(
 			Opt.EffectMarlin, false,
-			impOpt);
+			new ParentActive(impOpt));
 		factory.CreateBoolOption(
 			Opt.IsActiveScreen, true);
 	}
