@@ -261,13 +261,10 @@ public sealed record PlayerStatistics(
 					// アサシンがニュートラルを切れない時
 					if (roleId == ExtremeRoleId.Assassin &&
 						role is Assassin assassin &&
-						assassin.Status is AssassinStatusModel status)
+						assassin.Status is AssassinStatusModel status &&
+						(status.IsBlockKill || status.IsBlockKillFromNeutral))
 					{
-						bool canNeutralKill = status.CanKilledFromNeutral;
-						if (!canNeutralKill || (canNeutralKill && !status.CanKilled))
-						{
-							++numAssassinAlive;
-						}
+						++numAssassinAlive;
 					}
 
 					++numImpostorAlive;

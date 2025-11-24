@@ -21,6 +21,9 @@ public sealed class MonikaAbilityHandler(MonikaTrashSystem trashSystem) : IAbili
 {
 	private readonly MonikaTrashSystem trashSystem = trashSystem;
 
+	public bool IsBlockKillFrom(byte? fromTarget)
+		=> true;
+
 	public bool IsValidTarget(byte target)
 		=> !this.trashSystem.InvalidPlayer(target);
 }

@@ -1,33 +1,43 @@
 using ExtremeRoles.Roles.API.Interface.Ability;
-using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Combination.Avalon;
 
-public class AssassinAbilityHandler : IAbility, IKilledFrom
+public class AssassinAbilityHandler : IAbility, IInvincible
 {
-    private AssassinStatusModel status;
+	private AssassinStatusModel status;
 
-    public AssassinAbilityHandler(AssassinStatusModel status)
-    {
-        this.status = status;
-    }
+	public AssassinAbilityHandler(AssassinStatusModel status)
+	{
+		this.status = status;
+	}
 
-    public bool TryKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
-    {
-        if (!(status.CanKilled && ExtremeRoleManager.TryGetRole(fromPlayer.PlayerId, out var fromPlayerRole)))
-        {
-            return false;
-        }
+	public bool IsBlockKillFrom(byte? fromPlayer)
+	{
+		if (status.IsBlockKill)
+		{
+			return true;
+		}
+		if (!fromPlayer.HasValue)
+		{
+			return false;
+		}
 
-        if (fromPlayerRole.IsNeutral())
-        {
-            return status.CanKilledFromNeutral;
-        }
-        else if (fromPlayerRole.IsCrewmate())
-        {
-            return status.CanKilledFromCrew;
-        }
+		if (!ExtremeRoleManager.TryGetRole(fromPlayer.Value, out var fromPlayerRole))
+		{
+			return true;
+		}
 
-        return false;
-    }
+		if (fromPlayerRole.IsNeutral())
+		{
+			return status.IsBlockKillFromNeutral;
+		}
+		else if (fromPlayerRole.IsCrewmate())
+		{
+			return status.IsBlockKillFromCrew;
+		}
+		return true;
+	}
+
+	public bool IsValidTarget(byte target)
+		=> true;
 }

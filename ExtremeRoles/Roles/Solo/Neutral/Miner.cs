@@ -12,12 +12,12 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API.Extension.Neutral;
-using ExtremeRoles.Roles.Combination.Avalon;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.Neutral;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Ability;
 
 #nullable enable
 
@@ -230,10 +230,14 @@ public sealed class Miner :
             return;
         }
 
-        if (this.mines.Count == 0) { return; }
+        if (this.mines.Count == 0)
+		{
+			return;
+		}
 
         HashSet<int> activateMine = new HashSet<int>();
         HashSet<byte> killedPlayer = new HashSet<byte>();
+		byte rolePlayerId = rolePlayer.PlayerId;
 
         foreach (var (id, mine) in this.mines)
         {
@@ -253,10 +257,11 @@ public sealed class Miner :
 					continue;
 				}
 
-                if (ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(
-						playerInfo.PlayerId, out var assassin) &&
-					assassin.Status is AssassinStatusModel status &&
-					(!status.CanKilled || !status.CanKilledFromNeutral))
+				byte playerId = playerInfo.PlayerId;
+
+				if (ExtremeRoleManager.TryGetRole(playerId, out var role) &&
+					role.AbilityClass is IInvincible invincible &&
+					invincible.IsBlockKillFrom(rolePlayerId))
                 {
 					continue;
 				}
@@ -274,7 +279,7 @@ public sealed class Miner :
 							magnitude, Constants.ShipAndObjectsMask))
 					{
 						activateMine.Add(id);
-						killedPlayer.Add(playerInfo.PlayerId);
+						killedPlayer.Add(playerId);
 						break;
 					}
 				}
@@ -288,7 +293,7 @@ public sealed class Miner :
 				using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.MinerHandle))
 				{
 					caller.WriteByte((byte)MinerRpc.RemoveMine);
-					caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+					caller.WriteByte(rolePlayerId);
 					caller.WriteInt(id);
 				}
 			}

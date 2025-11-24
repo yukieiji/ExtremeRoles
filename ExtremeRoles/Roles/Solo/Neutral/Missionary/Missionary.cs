@@ -2,25 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API.Extension.Neutral;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Roles.Combination.Avalon;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.Neutral;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Ability;
+using ExtremeRoles.Roles.API.Interface.Status;
+
 
 #nullable enable
 
@@ -236,21 +236,18 @@ public sealed class MissionaryRole :
 
     public bool UseAbility()
     {
-		if (this.targetPlayer == null) { return false; }
+		if (this.targetPlayer == null)
+		{
+			return false;
+		}
 
 		byte playerId = this.targetPlayer.PlayerId;
 
-		if (ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(playerId, out var assassin) &&
-			assassin.Status is AssassinStatusModel status)
+		if (ExtremeRoleManager.TryGetRole(playerId, out var role) &&
+			role.AbilityClass is IInvincible invincible &&
+			invincible.IsBlockKillFrom(PlayerControl.LocalPlayer.PlayerId))
 		{
-			if (!status.CanKilled)
-			{
-				return false;
-			}
-			if (!status.CanKilledFromNeutral)
-			{
-				return false;
-			}
+			return false;
 		}
 
 		if (this.status is not null &&

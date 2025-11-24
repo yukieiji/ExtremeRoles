@@ -10,9 +10,10 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.Solo.Crewmate;
+
 using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.PlayerStatus;
-using ExtremeRoles.Roles.Combination.Avalon;
 
 
 #nullable enable
@@ -130,11 +131,9 @@ public sealed class RaiderBomb : MonoBehaviour
 			PlayerControl target = playerInfo.Object;
 			byte targetPlayerId = playerInfo.PlayerId;
 
-			if ((
-					ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(playerInfo.PlayerId, out var assassin) &&
-					assassin.Status is AssassinStatusModel status &&
-					!status.CanKilled
-				))
+			if (ExtremeRoleManager.TryGetRole(targetPlayerId, out var role) &&
+				role.AbilityClass is IInvincible invincible &&
+				invincible.IsBlockKillFrom(null))
 			{
 				continue;
 			}
