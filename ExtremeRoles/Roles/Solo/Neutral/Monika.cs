@@ -10,11 +10,20 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Roles.API.Interface.Ability;
 
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
+
+public sealed class MonikaAbilityHandler(MonikaTrashSystem trashSystem) : IAbility, IInvincible
+{
+	private readonly MonikaTrashSystem trashSystem = trashSystem;
+
+	public bool IsValidTarget(byte target)
+		=> !this.trashSystem.InvalidPlayer(target);
+}
 
 public sealed class Monika :
 	SingleRoleBase,
@@ -125,6 +134,7 @@ public sealed class Monika :
 		this.trashSystem = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.MonikaTrashSystem,
 			() => new MonikaTrashSystem(loader.GetValue<Ops, bool>(Ops.CanSeeTrash)));
+		this.AbilityClass = new MonikaAbilityHandler(this.trashSystem);
 
 		this.UseVent = loader.GetValue<Ops, bool>(Ops.CanUseVent);
 		this.UseSabotage = loader.GetValue<Ops, bool>(Ops.CanUseSabotage);

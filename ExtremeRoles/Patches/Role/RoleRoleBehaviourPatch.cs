@@ -3,9 +3,9 @@ using HarmonyLib;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface.Ability;
 
 namespace ExtremeRoles.Patches.Role;
 
@@ -73,7 +73,7 @@ public static class RoleBehaviourIsValidTargetPatch
 			!target.Object.inMovingPlat &&
 			ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
 			!role.IsSameTeam(targetRole) &&
-			!MonikaTrashSystem.InvalidTarget(targetRole, instancePlayerId);
+			(role.AbilityClass is not IInvincible invincible || invincible.IsValidTarget(targetPlayerId));
 
         return false;
     }
