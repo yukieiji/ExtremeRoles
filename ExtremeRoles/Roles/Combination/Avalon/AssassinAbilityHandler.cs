@@ -35,6 +35,10 @@ public class AssassinAbilityHandler : IAbility, IInvincible
 		{
 			return status.IsBlockKillFromCrew;
 		}
+		else if (fromPlayerRole.IsLiberal())
+		{
+			return status.IsBlockKillFromLiberal;
+		}
 		return true;
 	}
 
