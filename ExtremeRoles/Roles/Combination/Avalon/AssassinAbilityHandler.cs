@@ -2,14 +2,9 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 
 namespace ExtremeRoles.Roles.Combination.Avalon;
 
-public class AssassinAbilityHandler : IAbility, IInvincible
+public class AssassinAbilityHandler(AssassinStatusModel status) : IAbility, IInvincible
 {
-	private AssassinStatusModel status;
-
-	public AssassinAbilityHandler(AssassinStatusModel status)
-	{
-		this.status = status;
-	}
+	private AssassinStatusModel status = status;
 
 	public bool IsBlockKillFrom(byte? fromPlayer)
 	{
