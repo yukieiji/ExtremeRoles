@@ -14,6 +14,7 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -209,32 +210,43 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         HashSet<PlayerControl> result = new HashSet<PlayerControl>();
 
         Vector2 truePosition = sourcePlayer.GetTruePosition();
+		byte sourcePlayerId = sourcePlayer.PlayerId;
 
         foreach (NetworkedPlayerInfo playerInfo in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
 
+			byte playerId = playerInfo.PlayerId;
+
             if (!playerInfo.Disconnected &&
                 !playerInfo.IsDead &&
-                (playerInfo.PlayerId != sourcePlayer.PlayerId) &&
-                (!playerInfo.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer) &&
-                (!ExtremeRoleManager.GameRole[playerInfo.PlayerId].IsImpostor() ||
-                 playerInfo.PlayerId == rolePlayer.PlayerId))
+                (playerId != sourcePlayerId) &&
+				playerInfo.Object != null &&
+				(!playerInfo.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer) &&
+                ExtremeRoleManager.TryGetRole(playerId, out var role) &&
+				(
+					!role.IsImpostor() ||
+					playerId == rolePlayer.PlayerId ||
+					
+					role.AbilityClass is not IInvincible invincible ||
+					!invincible.IsBlockKillFrom(sourcePlayerId) ||
+					
+					role is not MultiAssignRoleBase multiAssignRoleBase ||
+					multiAssignRoleBase is not IInvincible invincible2 ||
+					!invincible2.IsBlockKillFrom(sourcePlayerId)
+				))
             {
-                PlayerControl @object = playerInfo.Object;
-                if (@object)
-                {
-                    Vector2 vector = @object.GetTruePosition() - truePosition;
-                    float magnitude = vector.magnitude;
-                    if (magnitude <= this.explosionRange &&
-                        !PhysicsHelpers.AnyNonTriggersBetween(
-                            truePosition, vector.normalized,
-                            magnitude, Constants.ShipAndObjectsMask))
-                    {
-                        result.Add(@object);
-                    }
-                }
-            }
+                var player = playerInfo.Object;
+				Vector2 vector = player.GetTruePosition() - truePosition;
+				float magnitude = vector.magnitude;
+				if (magnitude <= this.explosionRange &&
+					!PhysicsHelpers.AnyNonTriggersBetween(
+						truePosition, vector.normalized,
+						magnitude, Constants.ShipAndObjectsMask))
+				{
+					result.Add(player);
+				}
+			}
         }
 
         return result;
