@@ -16,17 +16,14 @@ public enum LiberalGlobalSetting
 
 	CanKillLeader,
 	LeaderKillBoost,
-	LeaderTaskCompletedMoney,
+	LeaderKillMoney,
 
 	CanHasTaskLeader,
 	LeaderTaskBoost,
-	LeaderKillMoney,
+	LeaderTaskCompletedMoney,
 
 	CanKilledLeader,
 	LeaderKilledBoost,
-
-	CanExiledLeader,
-	LeaderExiledBoost,
 
 	LiberalMilitantMini,
 	LiberalMilitantMax,
@@ -64,7 +61,7 @@ public sealed class LiberalOption
 		factory.CreateIntOption(LiberalGlobalSetting.LeaderKillMoney, 10, 1, 1000, 1, leaderKillActive);
 
 		var leaderKilledSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledLeader, false);
-		factory.CreateFloatOption(LiberalGlobalSetting.LeaderExiledBoost, 1.0f, 1.0f, 10.0f, 0.25f, new ParentActive(leaderKilledSetting));
+		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKilledBoost, 1.0f, 1.0f, 10.0f, 0.25f, new ParentActive(leaderKilledSetting));
 
 		var isMilitantActive = new LiberalSettingCheck(liberalMaxNumSetting, 2);
 		var liberalMilitantMini = factory.CreateIntDynamicMaxOption(LiberalGlobalSetting.LiberalMilitantMini, 0, 0, 1, liberalMaxNumSetting, isMilitantActive);
