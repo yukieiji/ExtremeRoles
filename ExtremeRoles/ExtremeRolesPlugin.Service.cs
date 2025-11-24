@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Roles.Solo.Liberal;
 
 
 namespace ExtremeRoles;
@@ -46,7 +44,16 @@ public partial class ExtremeRolesPlugin
 			.AddTransient<IRoleAssignValidator, RoleAssignValidator>()
 
 			.AddTransient<IRoleAssignDataChecker, RoleAssignDependencyChecker>()
-			.AddTransient<IRoleDependencyRuleFactory, RoleDependencyRuleFactory>();
+			.AddTransient<IRoleDependencyRuleFactory, RoleDependencyRuleFactory>()
+
+			.AddTransient<IRoleProvider, RoleProvider>();
+
+		// Liberal
+		collection
+			.AddTransient(
+				x => ExtremeSystemTypeManager.Instance.CreateOrGet<LiberalMoneyBankSystem>(ExtremeSystemType.LiberalMoneyBank)
+			)
+			.AddTransient<LeaderAbilityHandler>();
 
 		// EventManager
 		collection.AddSingleton<IEventManager, Module.Event.EventManager>();
