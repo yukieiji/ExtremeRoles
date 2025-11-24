@@ -73,16 +73,16 @@ public sealed class LiberalOption
 		var intRange = ValueHolderAssembler.CreateIntValue(curMini, curMini, liberalMaxNumSetting.Value<int>(), 1);
 		var liberalMilitantMax = factory.CreateOption(LiberalGlobalSetting.LiberalMilitantMax, intRange, isMilitantActive);
 
-		var valueCangeEvent = () => {
+		var valueChangedEvent = () => {
 			int newMini = liberalMilitantMini.Value<int>();
-			int newMaxNum = liberalMilitantMax.Value<int>();
+			int newMaxNum = liberalMaxNumSetting.Value<int>();
 			intRange.InnerRange = OptionRange<int>.Create(newMini, newMaxNum, 1);
 			
 			// Selectionを再設定
 			liberalMilitantMax.Selection = intRange.Selection;
 		};
 
-		liberalMilitantMini.OnValueChanged += valueCangeEvent;
-		liberalMaxNumSetting.OnValueChanged += valueCangeEvent;
+		liberalMilitantMini.OnValueChanged += valueChangedEvent;
+		liberalMaxNumSetting.OnValueChanged += valueChangedEvent;
 	}
 }

@@ -109,10 +109,10 @@ public interface IRoleSelector
 
     private static void createExtremeRoleRoleSpawnOption(OptionCategoryFactory factory)
     {
-		int maxNum = (GameSystem.VanillaMaxPlayerNum - 1) * 2;
-		createMinMaxSpawnOption(factory, RoleSpawnOption.MinCrewmate, RoleSpawnOption.MaxCrewmate, maxNum);
-		createMinMaxSpawnOption(factory, RoleSpawnOption.MinNeutral, RoleSpawnOption.MaxNeutral, maxNum);
-		createMinMaxSpawnOption(factory, RoleSpawnOption.MinImpostor, RoleSpawnOption.MaxImpostor, GameSystem.MaxImposterNum * 2);
+		int maxNum = GameSystem.VanillaMaxPlayerNum;
+		createMinMaxSpawnOption(factory, RoleSpawnOption.MinCrewmate, RoleSpawnOption.MaxCrewmate, (maxNum - 1) * 2);
+		createMinMaxSpawnOption(factory, RoleSpawnOption.MinNeutral, RoleSpawnOption.MaxNeutral, (maxNum - 2) * 2);
+		createMinMaxSpawnOption(factory, RoleSpawnOption.MinImpostor, RoleSpawnOption.MaxImpostor, maxNum * 2);
 	}
 
 	private static IOption createMinMaxSpawnOption(OptionCategoryFactory factory, RoleSpawnOption miniOptionEnum, RoleSpawnOption maxOptionEnum, int maxNum)

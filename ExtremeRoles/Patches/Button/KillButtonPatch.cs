@@ -204,7 +204,7 @@ public static class KillButtonDoClickPatch
 	private static bool isPreventKillFromInvincible(SingleRoleBase? role, PlayerControl killer)
 		=>
 			role?.AbilityClass is IInvincible targetKillFromInvincibleCheckRole &&
-			!targetKillFromInvincibleCheckRole.IsBlockKillFrom(killer.PlayerId);
+			targetKillFromInvincibleCheckRole.IsBlockKillFrom(killer.PlayerId);
 
 	private static bool isPreventKillFrom(SingleRoleBase? role, PlayerControl killer, PlayerControl target)
 		=>
