@@ -4,14 +4,12 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -68,7 +66,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
 
     public static void SwitchLight(bool lightOn)
     {
-        var vision = VisionComputer.Instance;
+        var vision = ExtremeVisionModder.Instance;
 
         if (lightOn)
         {
@@ -77,7 +75,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
         else
         {
             vision.SetModifier(
-               VisionComputer.Modifier.LastWolfLightOff);
+			   ExtremeVisionModder.Modifier.LastWolfLightOff);
         }
     }
 
@@ -95,7 +93,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
     public bool IsAbilityUse() =>
         this.IsAwake &&
         IRoleAbility.IsCommonUse() &&
-        VisionComputer.Instance.IsModifierResetted();
+		ExtremeVisionModder.Instance.IsModifierResetted();
 
     public void ResetOnMeetingStart()
     {

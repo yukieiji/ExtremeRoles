@@ -1,9 +1,15 @@
+using System;
+using System.Collections.Generic;
+
+using Hazel;
+using InnerNet;
+
 using AmongUs.GameOptions;
+
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Extension.Ship;
-using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameResult;
@@ -12,11 +18,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Neutral.Madmate;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
-using Hazel;
-using InnerNet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 
 
@@ -245,7 +246,6 @@ public static class RPCOperator
 
         // 各種表示系リセット
         Patches.Manager.HudManagerUpdatePatch.Reset();
-        Module.VisionComputer.Instance.ResetModifier();
 
         // ミーティング能力リセット
         Patches.Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);

@@ -10,6 +10,8 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.GameResult;
 
 public readonly record struct NeutralRoleInfo(NetworkedPlayerInfo Player, SingleRoleBase Role);
