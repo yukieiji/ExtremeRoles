@@ -187,7 +187,7 @@ public sealed class LiberalOption
 		// リベラルが一人になったときに無敵が剥がれるように => 条件: リベラル2人 and 死なない設定
 		var leaderCanNotKill = new InvertActive(leaderKilledSetting);
 		var autoCanKilled = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledWhenLeaderSolo,
-			false,　new MultiActive(isLiberalMoreTwo, leaderCanNotKill));
+			false, new MultiActive(isLiberalMoreTwo, leaderCanNotKill));
 
 		// 死んだときに自動的に復活する => 条件: 無敵ではない or 無敵が剥がれたとき
 		var autoRevive = factory.CreateBoolOption(LiberalGlobalSetting.IsAutoRevive, true, new OrActive(killedActive, new ParentActive(autoCanKilled)));

@@ -4,6 +4,8 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.GameEnd;
 
 public sealed class ExtremeGameEndChecker
