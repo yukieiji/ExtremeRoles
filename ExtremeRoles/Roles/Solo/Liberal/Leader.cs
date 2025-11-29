@@ -59,8 +59,8 @@ public sealed class Leader : SingleRoleBase
 			this.KillRange = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.LeaderKillRange);
 		}
 
-		this.HasOtherKillRange = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.LeaderHasOtherKillCool);
-		if (this.HasOtherKillRange)
+		this.HasOtherKillCool = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.LeaderHasOtherKillCool);
+		if (this.HasOtherKillCool)
 		{
 			this.KillCoolTime = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.LeaderKillCool);
 		}
