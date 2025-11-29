@@ -1,6 +1,10 @@
+using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 
 
@@ -14,19 +18,102 @@ public enum LiberalGlobalSetting
 	TaskCompletedMoney,
 	KillMoney,
 
-	CanKillLeader,
-	LeaderKillBoost,
-	LeaderKillMoney,
+	LiberalVison,
+
+	LeaderHasOtherVisonSize,
+	LeadeVison,
 
 	CanHasTaskLeader,
 	LeaderTaskBoost,
 	LeaderTaskCompletedMoney,
+
+	CanKillLeader,
+	LeaderKillBoost,
+	LeaderKillMoney,
+
+	LeaderHasOtherKillCool,
+	LeaderKillCool,
+	LeaderHasOtherKillRange,
+	LeaderKillRange,
 
 	CanKilledLeader,
 	LeaderKilledBoost,
 
 	LiberalMilitantMini,
 	LiberalMilitantMax,
+
+	MiltantHasOtherKillCool,
+	MiltantKillCool,
+	MiltantHasOtherKillRange,
+	MiltantKillRange,
+}
+
+public class LiberalDefaultOptipnLoader : IOptionLoader
+{
+	public IReadOnlyList<IOption> GlobalOption { get; }
+	public IReadOnlyList<IOption> LeaderOption { get; }
+	public IReadOnlyList<IOption> MiltantOption { get; }
+
+	private readonly OptionCategory category;
+
+	public LiberalDefaultOptipnLoader()
+	{
+		if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.LiberalSetting, out var category))
+		{
+			throw new ArgumentException("Cannot find liberal setting");
+		}
+		this.category = category;
+
+		this.GlobalOption = [
+			this.category.Get(LiberalGlobalSetting.WinMoney),
+			this.category.Get(LiberalGlobalSetting.TaskCompletedMoney),
+			this.category.Get(LiberalGlobalSetting.KillMoney),
+			this.category.Get(LiberalGlobalSetting.LiberalVison)
+		];
+
+		this.LeaderOption = [
+			this.category.Get(LiberalGlobalSetting.LeaderHasOtherVisonSize),
+			this.category.Get(LiberalGlobalSetting.CanHasTaskLeader),
+			this.category.Get(LiberalGlobalSetting.CanKillLeader),
+			this.category.Get(LiberalGlobalSetting.CanKilledLeader),
+		];
+
+
+		this.MiltantOption = [
+			this.category.Get(LiberalGlobalSetting.LiberalMilitantMini),
+			this.category.Get(LiberalGlobalSetting.LiberalMilitantMax),
+			this.category.Get(LiberalGlobalSetting.MiltantHasOtherKillCool),
+			this.category.Get(LiberalGlobalSetting.MiltantKillRange),
+		];
+	}
+
+	public IOption Get(int id)
+		=> this.category.Get(id);
+
+	public IOption Get<T>(T id) where T : Enum
+		=> this.category.Get(id);
+
+	public T GetValue<W, T>(W id)
+		where W : Enum
+		where T : struct, IComparable, IConvertible, IComparable<T>, IEquatable<T>
+		=> this.category.GetValue<W, T>(id);
+
+	public T GetValue<T>(int id) where T : struct, IComparable, IConvertible, IComparable<T>, IEquatable<T>
+		=> this.category.GetValue<T>(id);
+
+	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option)
+		=> this.category.TryGet(id, out option);
+
+	public bool TryGet<T>(T id, [NotNullWhen(true)] out IOption? option) where T : Enum
+		=> this.category.TryGet(id, out option);
+
+	public bool TryGetValue<T>(int id, [NotNullWhen(true)] out T value) where T : struct, IComparable, IConvertible, IComparable<T>, IEquatable<T>
+		=> this.category.TryGetValue(id, out value);
+
+	public bool TryGetValue<W, T>(W id, [NotNullWhen(true)] out T value)
+		where W : Enum
+		where T : struct, IComparable, IConvertible, IComparable<T>, IEquatable<T>
+		=> this.category.TryGetValue(id, out value);
 }
 
 public sealed class LiberalSettingCheck(IOption maxLiberalOption, int num) : IOptionActivator
@@ -50,15 +137,41 @@ public sealed class LiberalOption
 		factory.CreateIntOption(LiberalGlobalSetting.TaskCompletedMoney, 5, 1, 1000, 1);
 		factory.CreateIntOption(LiberalGlobalSetting.KillMoney, 10, 1, 1000, 1);
 
+		factory.CreateFloatOption(LiberalGlobalSetting.LiberalVison,
+			2f, 0.25f, 5.0f, 0.25f, format: OptionUnit.Multiplier);
+
+		var visionOption = factory.CreateBoolOption(LiberalGlobalSetting.LeaderHasOtherVisonSize, false);
+		factory.CreateFloatOption(LiberalGlobalSetting.LeadeVison,
+			2f, 0.25f, 5.0f, 0.25f, new ParentActive(visionOption), format: OptionUnit.Multiplier);
+
 		var leaderTaskSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanHasTaskLeader, false);
 		var leaderTaskActive = new ParentActive(leaderTaskSetting);
 		factory.CreateFloatOption(LiberalGlobalSetting.LeaderTaskBoost, 1.0f, 1.0f, 10.0f, 0.25f, leaderTaskActive);
 		factory.CreateIntOption(LiberalGlobalSetting.LeaderTaskCompletedMoney, 5, 1, 1000, 1, leaderTaskActive);
 
+
 		var leaderKillSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKillLeader, false);
 		var leaderKillActive = new ParentActive(leaderKillSetting);
 		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKillBoost, 1.0f, 1.0f, 10.0f, 0.25f, leaderKillActive);
 		factory.CreateIntOption(LiberalGlobalSetting.LeaderKillMoney, 10, 1, 1000, 1, leaderKillActive);
+
+		var leaderKillCoolOption = factory.CreateBoolOption(
+			LiberalGlobalSetting.LeaderHasOtherKillCool,
+			false, leaderKillActive);
+		factory.CreateFloatOption(
+			LiberalGlobalSetting.LeaderKillCool,
+			30f, 1.0f, 120f, 0.5f,
+			new ParentActive(leaderKillCoolOption),
+			format: OptionUnit.Second);
+
+		var leaderKillRangeOption = factory.CreateBoolOption(
+			LiberalGlobalSetting.LeaderHasOtherKillRange,
+			false, leaderKillActive);
+		factory.CreateSelectionOption(
+			LiberalGlobalSetting.LeaderKillRange,
+			OptionCreator.Range,
+			new ParentActive(leaderKillRangeOption));
+
 
 		var leaderKilledSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledLeader, false);
 		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKilledBoost, 1.0f, 1.0f, 10.0f, 0.25f, new ParentActive(leaderKilledSetting));
@@ -81,5 +194,23 @@ public sealed class LiberalOption
 
 		liberalMilitantMini.OnValueChanged += valueChangedEvent;
 		liberalMaxNumSetting.OnValueChanged += valueChangedEvent;
+
+
+		var miltantKillCoolOption = factory.CreateBoolOption(
+			LiberalGlobalSetting.MiltantHasOtherKillCool,
+			false, isMilitantActive);
+		factory.CreateFloatOption(
+			LiberalGlobalSetting.MiltantKillCool,
+			30f, 1.0f, 120f, 0.5f,
+			new ParentActive(miltantKillCoolOption),
+			format: OptionUnit.Second);
+
+		var miltantKillRangeOption = factory.CreateBoolOption(
+			LiberalGlobalSetting.MiltantHasOtherKillRange,
+			false, isMilitantActive);
+		factory.CreateSelectionOption(
+			LiberalGlobalSetting.MiltantKillRange,
+			OptionCreator.Range,
+			new ParentActive(miltantKillRangeOption));
 	}
 }

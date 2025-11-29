@@ -51,12 +51,7 @@ public class LiberalMoneyBankSystem : IDirtableSystemType
 
     public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
     {
-        if (timing == ResetTiming.MeetingStart)
-        {
-            
-        }
-        Money = 0f;
-        IsDirty = false;
+
     }
 
     public void UpdateSystem(PlayerControl player, MessageReader msgReader)

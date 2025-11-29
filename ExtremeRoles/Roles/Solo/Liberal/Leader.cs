@@ -46,6 +46,7 @@ public sealed class Leader : SingleRoleBase
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
+
 	}
 
 	protected override void RoleSpecificInit()

@@ -9,6 +9,7 @@ using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.Solo.Liberal;
+using ExtremeRoles.GameMode.RoleSelector;
 
 
 namespace ExtremeRoles;
@@ -50,6 +51,7 @@ public partial class ExtremeRolesPlugin
 
 		// Liberal
 		collection
+			.AddSingleton<LiberalDefaultOptipnLoader>()
 			.AddTransient(
 				x => ExtremeSystemTypeManager.Instance.CreateOrGet<LiberalMoneyBankSystem>(ExtremeSystemType.LiberalMoneyBank)
 			)
