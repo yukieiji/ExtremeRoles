@@ -39,8 +39,8 @@ public sealed class CustomOption : IOption
 			this.onValueChanged?.Invoke();
 
 			var amongUs = AmongUsClient.Instance;
-			if (amongUs != null &&
-				amongUs.AmHost)
+			if (LobbyBehaviour.Instance != null &&
+				amongUs != null && amongUs.AmHost)
 			{
 				config.Value = value;
 			}
