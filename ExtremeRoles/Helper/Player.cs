@@ -487,7 +487,7 @@ public static class Player
 			!targetPlayer.Object.onLadder &&
 			ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
             !role.IsSameTeam(targetRole) &&
-			(role.AbilityClass is not IInvincible invincible || invincible.IsValidTarget(targetPlayerId))
+			(targetRole.AbilityClass is not IInvincible invincible || invincible.IsValidAbilitySource(sourcePlayerId))
         );
     }
 }

@@ -6,9 +6,10 @@ public class AssassinAbilityHandler(AssassinStatusModel status) : IAbility, IInv
 {
 	private AssassinStatusModel status = status;
 
+	// アサシンは能力の対象にはなるけど、キルの対象と絶対的なキルを防げる
 	public bool IsBlockKillFrom(byte? fromPlayer)
 	{
-		if (status.IsBlockKill)
+		if (this.status.IsBlockKill)
 		{
 			return true;
 		}
@@ -24,19 +25,22 @@ public class AssassinAbilityHandler(AssassinStatusModel status) : IAbility, IInv
 
 		if (fromPlayerRole.IsNeutral())
 		{
-			return status.IsBlockKillFromNeutral;
+			return this.status.IsBlockKillFromNeutral;
 		}
 		else if (fromPlayerRole.IsCrewmate())
 		{
-			return status.IsBlockKillFromCrew;
+			return this.status.IsBlockKillFromCrew;
 		}
 		else if (fromPlayerRole.IsLiberal())
 		{
-			return status.IsBlockKillFromLiberal;
+			return this.status.IsBlockKillFromLiberal;
 		}
 		return true;
 	}
 
-	public bool IsValidTarget(byte target)
+	public bool IsValidKillFromSource(byte target)
+		=> !IsBlockKillFrom(target);
+
+	public bool IsValidAbilitySource(byte target)
 		=> true;
 }

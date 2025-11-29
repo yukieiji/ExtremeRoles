@@ -1,15 +1,12 @@
 using ExtremeRoles.Helper;
-
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
-
 using ExtremeRoles.Resources;
-
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API.Interface.Ability;
 
 
@@ -21,11 +18,22 @@ public sealed class MonikaAbilityHandler(MonikaTrashSystem trashSystem) : IAbili
 {
 	private readonly MonikaTrashSystem trashSystem = trashSystem;
 
+	// モニカはゴミ箱プレイヤーからの干渉を受けない
 	public bool IsBlockKillFrom(byte? fromTarget)
-		=> true;
+	{
+		if (!fromTarget.HasValue)
+		{
+			return false;
+		}
+		
+		return this.trashSystem.InvalidPlayer(fromTarget.Value);
+	}
 
-	public bool IsValidTarget(byte target)
-		=> !this.trashSystem.InvalidPlayer(target);
+	public bool IsValidAbilitySource(byte source)
+		=> !this.trashSystem.InvalidPlayer(source);
+
+	public bool IsValidKillFromSource(byte source)
+		=> !this.trashSystem.InvalidPlayer(source);
 }
 
 public sealed class Monika :
