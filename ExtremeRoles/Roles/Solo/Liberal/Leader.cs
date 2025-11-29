@@ -2,45 +2,88 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Ability;
-using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.Meeting;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Liberal;
 
-public sealed class LeaderAbilityHandler(LiberalDefaultOptipnLoader option) : IAbility, IInvincible
+public sealed class LeaderStatus : IStatusModel
 {
+	public int OtherLiberal { get; private set; }
+
+	public void Update()
+	{
+		OtherLiberal = 0;
+		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+		{
+			if (player == null ||
+				player.IsDead ||
+				player.Disconnected ||
+				!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
+				!role.IsLiberal() ||
+				role.Core.Id is ExtremeRoleId.Leader)
+			{
+				continue;
+			}
+			++OtherLiberal;
+		}
+
+	}
+}
+
+
+public sealed class LeaderAbilityHandler(
+	LiberalDefaultOptipnLoader option,
+	LeaderStatus status) : IAbility, IInvincible
+{
+	private readonly LeaderStatus status = status;
 	private readonly bool isBlockKill = !option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.CanKilledLeader);
+	private readonly bool isAutoCanKillWhenSolo = 
+		option.TryGet(LiberalGlobalSetting.CanKilledWhenLeaderSolo, out var autoCanKillSetting) &&
+		autoCanKillSetting.IsViewActive && autoCanKillSetting.Value<bool>();
 
 	// 設定次第でキル等の対象には取れる
 	public bool IsBlockKillFrom(byte? fromPlayer)
-		=> isBlockKill;
+	{
+		if (this.isAutoCanKillWhenSolo && this.status.OtherLiberal <= 0)
+		{
+			return false;
+		}
+		return isBlockKill;
+	}
 	public bool IsValidKillFromSource(byte target)
-		=> !isBlockKill;
+		=> !IsBlockKillFrom(target);
 
 	// リーダーが消えるのは困るので能力の対象には取れない
 	public bool IsValidAbilitySource(byte source)
 		=> false;
 }
 
-public sealed class Leader : SingleRoleBase, IRoleVoteModifier
+public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 {
 	private readonly LiberalMoneyBankSystem system;
 
 	public int Order => 114514;
+	public override IStatusModel? Status => this.status;
 
+	private readonly LeaderStatus status;
 	private readonly LeaderAbilityHandler abilityHandler;
+	private readonly bool isAutoExit;
+	private readonly bool isAutoRevive;
 
 	public Leader(
 		LiberalDefaultOptipnLoader option,
-		LeaderAbilityHandler abilityHandler,
+		LeaderStatus status,
 		LiberalMoneyBankSystem system) : base(
 		RoleCore.BuildLiberal(
 			ExtremeRoleId.Leader,
@@ -51,8 +94,16 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier
 	{
 		this.system = system;
 
-		this.abilityHandler = abilityHandler;
-		this.AbilityClass = abilityHandler;
+		this.status = status;
+		this.abilityHandler = new LeaderAbilityHandler(option, status);
+		this.AbilityClass = this.abilityHandler;
+
+		this.isAutoExit =
+			option.TryGet(LiberalGlobalSetting.IsAutoExitWhenLeaderSolo, out var autoExitSetting) &&
+			autoExitSetting.IsViewActive && autoExitSetting.Value<bool>();
+		this.isAutoRevive =
+			option.TryGet(LiberalGlobalSetting.IsAutoRevive, out var autoReviveSetting) &&
+			autoReviveSetting.IsViewActive && autoReviveSetting.Value<bool>();
 
 		LiberalSettingOverrider.OverrideDefault(this, option);
 
@@ -105,6 +156,13 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier
 
 	public IEnumerable<VoteInfo> GetModdedVoteInfo(VoteInfoCollector collector, NetworkedPlayerInfo rolePlayer)
 	{
+		// ローカルの人以外のstatusは更新されてないので更新をここでいれる
+		if (PlayerControl.LocalPlayer == null ||
+			rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+		{
+			this.status.Update();
+		}
+
 		if (!this.abilityHandler.IsBlockKillFrom(null))
 		{
 			yield break;
@@ -124,5 +182,27 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier
 	public void ResetModifier()
 	{
 
+	}
+
+	public void Update(PlayerControl rolePlayer)
+	{
+		if (!GameProgressSystem.IsGameNow)
+		{
+			return;
+		}
+
+		this.status.Update();
+
+		if (this.status.OtherLiberal <= 0 && this.isAutoExit)
+		{
+			// 死亡処理を入れる
+		}
+
+		// 無敵のときに死んだら復活処理する
+		if (!this.isAutoRevive)
+		{
+			return;
+		}
+		// 復活処理をここに書く
 	}
 }

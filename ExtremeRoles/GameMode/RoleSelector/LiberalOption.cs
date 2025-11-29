@@ -39,9 +39,10 @@ public enum LiberalGlobalSetting
 
 	CanKilledLeader,
 	LeaderKilledBoost,
+	IsAutoRevive,
 
-	IsAutoDeadWhenLeaderSolo,
-	CanKillWhenLeaderSolo,
+	IsAutoExitWhenLeaderSolo,
+	CanKilledWhenLeaderSolo,
 
 	LiberalMilitantMini,
 	LiberalMilitantMax,
@@ -177,19 +178,25 @@ public sealed class LiberalOption
 			OptionCreator.Range,
 			new ParentActive(leaderKillRangeOption));
 
-
 		var leaderKilledSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledLeader, false);
-		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKilledBoost, 1.0f, 1.0f, 10.0f, 0.25f, new ParentActive(leaderKilledSetting));
+		var killedActive = new ParentActive(leaderKilledSetting);
+		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKilledBoost, 1.0f, 1.0f, 10.0f, 0.25f, killedActive);
 
 		var isLiberalMoreTwo = new LiberalSettingCheck(liberalMaxNumSetting, 2);
 
-		var isAutoDead = factory.CreateBoolOption(LiberalGlobalSetting.IsAutoDeadWhenLeaderSolo, false, isLiberalMoreTwo);
-		factory.CreateBoolOption(LiberalGlobalSetting.CanKillWhenLeaderSolo,
-			false,
-			new MultiActive(
-				isLiberalMoreTwo,
-				new InvertActive(leaderKilledSetting),
-				new InvertActive(isAutoDead)));
+		// リベラルが一人になったときに無敵が剥がれるように => 条件: リベラル2人 and 死なない設定
+		var leaderCanNotKill = new InvertActive(leaderKilledSetting);
+		var autoCanKilled = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledWhenLeaderSolo,
+			false,　new MultiActive(isLiberalMoreTwo, leaderCanNotKill));
+
+		// 死んだときに自動的に復活する => 条件: 無敵ではない or 無敵が剥がれたとき
+		var autoRevive = factory.CreateBoolOption(LiberalGlobalSetting.IsAutoRevive, true, new OrActive(killedActive, new ParentActive(autoCanKilled)));
+
+		// リベラルが一人になったときに強制的に退場 => リベラルの勝利を完全に消す　条件: リベラルが2人以上 and 無敵設定 and 無敵が剥がれない設定時)
+		var isAutoDead = factory.CreateBoolOption(
+			LiberalGlobalSetting.IsAutoExitWhenLeaderSolo,
+			false, new MultiActive(isLiberalMoreTwo, leaderCanNotKill, new InvertActive(autoCanKilled)));
+
 
 		var liberalMilitantMini = factory.CreateIntDynamicMaxOption(LiberalGlobalSetting.LiberalMilitantMini, 0, 0, 1, liberalMaxNumSetting, isLiberalMoreTwo);
 
