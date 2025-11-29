@@ -1,16 +1,17 @@
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using Hazel;
 
 namespace ExtremeRoles.Module.SystemType;
 
-public class LiberalMoneyBankSystem : IDirtableSystemType
+public class LiberalMoneyBankSystem(LiberalDefaultOptipnLoader option) : IDirtableSystemType
 {
     public const ExtremeSystemType SystemType = ExtremeSystemType.LiberalMoneyBank;
 
     public bool IsDirty { get; private set; }
-    public float Money { get; private set; }
-	public float WinMoney { get; init; } = 0.5f;
+	public float Money { get; private set; } = 0.0f;
+	public float WinMoney { get; init; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.WinMoney);
 	public bool IsLeaderDead { get; private set; }
 
 	public static bool IsCanKillTo(byte targetPlayerId)

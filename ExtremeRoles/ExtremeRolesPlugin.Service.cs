@@ -53,7 +53,11 @@ public partial class ExtremeRolesPlugin
 		collection
 			.AddSingleton<LiberalDefaultOptipnLoader>()
 			.AddTransient(
-				x => ExtremeSystemTypeManager.Instance.CreateOrGet<LiberalMoneyBankSystem>(ExtremeSystemType.LiberalMoneyBank)
+				x => ExtremeSystemTypeManager.Instance.CreateOrGet(ExtremeSystemType.LiberalMoneyBank, () =>
+				{
+					var option = x.GetRequiredService<LiberalDefaultOptipnLoader>();
+					return new LiberalMoneyBankSystem(option);
+				})
 			)
 			.AddTransient<LeaderAbilityHandler>()
 			.AddTransient<Leader>()

@@ -6,6 +6,7 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.GameMode.RoleSelector;
+using UnityEngine;
 
 #nullable enable
 
@@ -67,7 +68,7 @@ public sealed class Leader : SingleRoleBase
 	}
 
 	public override string GetRoleTag()
-		=> $" ({this.system.Money}/{this.system.WinMoney})";
+		=> $" ({Mathf.CeilToInt(this.system.Money)}/{Mathf.CeilToInt(this.system.WinMoney)})";
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 		=> this.GetRoleTag();
 
