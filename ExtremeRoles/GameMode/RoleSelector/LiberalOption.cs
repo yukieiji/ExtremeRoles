@@ -19,9 +19,10 @@ public enum LiberalGlobalSetting
 	KillMoney,
 
 	LiberalVison,
+	UseVent,
 
 	LeaderHasOtherVisonSize,
-	LeadeVison,
+	LeaderVison,
 
 	CanHasTaskLeader,
 	LeaderTaskBoost,
@@ -139,9 +140,10 @@ public sealed class LiberalOption
 
 		factory.CreateFloatOption(LiberalGlobalSetting.LiberalVison,
 			2f, 0.25f, 5.0f, 0.25f, format: OptionUnit.Multiplier);
+		factory.CreateBoolOption(LiberalGlobalSetting.UseVent, true);
 
 		var visionOption = factory.CreateBoolOption(LiberalGlobalSetting.LeaderHasOtherVisonSize, false);
-		factory.CreateFloatOption(LiberalGlobalSetting.LeadeVison,
+		factory.CreateFloatOption(LiberalGlobalSetting.LeaderVison,
 			2f, 0.25f, 5.0f, 0.25f, new ParentActive(visionOption), format: OptionUnit.Multiplier);
 
 		var leaderTaskSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanHasTaskLeader, false);
