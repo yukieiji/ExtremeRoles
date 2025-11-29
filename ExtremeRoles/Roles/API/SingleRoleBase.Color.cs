@@ -34,7 +34,13 @@ public abstract partial class SingleRoleBase
             return Palette.ImpostorRed;
         }
 
-        if (targetRole is MultiAssignRoleBase multiAssignRole &&
+		if (targetRole.IsLiberal() && this.IsImpostor())
+		{
+			// 後でリベラルの色に変える
+			return Palette.ImpostorRed;
+		}
+
+		if (targetRole is MultiAssignRoleBase multiAssignRole &&
 			multiAssignRole.AnotherRole != null)
         {
 			return this.GetTargetRoleSeeColor(
