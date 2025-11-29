@@ -108,11 +108,14 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 
 		var leaderPlayer = liberalAssignTargetPlayer.OrderBy(x => RandomGenerator.Instance.Next()).Take(1).First();
 
+		Logging.Debug($"Liberal Leader: {leaderPlayer.PlayerId}");
+
 		// leaderの確実な割当
 		data.Limit.Reduce(liberalTeam);
 		data.Assign.AddAssignData(
 			new PlayerToSingleRoleAssignData(
 				leaderPlayer.PlayerId, intedLeaderId, data.Assign.ControlId));
+		data.Assign.RemvePlayer(leaderPlayer);
 		RoleAssignFilter.Instance.Update(intedLeaderId);
 
 		var remainLiberalAssignTargetPlayer = getAssignablePlayer(data.Assign, liberalTeam);

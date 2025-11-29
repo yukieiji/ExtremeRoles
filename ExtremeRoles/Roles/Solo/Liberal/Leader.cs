@@ -15,12 +15,12 @@ public sealed class LeaderAbilityHandler : IAbility, IInvincible
 {
 	public bool IsBlockKillFrom(byte? fromPlayer)
 	{
-		throw new System.NotImplementedException();
+		return true;
 	}
 
 	public bool IsValidTarget(byte target)
 	{
-		throw new System.NotImplementedException();
+		return true;
 	}
 }
 

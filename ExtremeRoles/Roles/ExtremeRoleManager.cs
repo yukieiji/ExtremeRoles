@@ -550,23 +550,21 @@ public static class ExtremeRoleManager
 
         if (!Enum.IsDefined(typeof(RoleTypes), Convert.ToUInt16(roleId)))
         {
-            SingleRoleBase role;
-            if (roleId != (int)ExtremeRoleId.Xion)
+            if (!NormalRole.TryGetValue(roleId, out var role) ||
+				role is null)
             {
-                role = NormalRole[roleId];
-            }
-			// Liberalのリーダーとデフォルト役職はDI経由で作る
-			else if (
-				roleId == (int)ExtremeRoleId.Leader ||
-				roleId == (int)ExtremeRoleId.Dove ||
-				roleId == (int)ExtremeRoleId.Militant)
-			{
-				setPlyerIdToSingleRoleFromProvidoer(playerId, roleId, controlId);
-				return;
-			}
-			else
-			{
-				role = new Xion(playerId);
+				if (
+					roleId == (int)ExtremeRoleId.Leader ||
+					roleId == (int)ExtremeRoleId.Dove ||
+					roleId == (int)ExtremeRoleId.Militant)
+				{
+					setPlyerIdToSingleRoleFromProvidoer(playerId, roleId, controlId);
+					return;
+				}
+				else
+				{
+					role = new Xion(playerId);
+				}
 			}
 
             setPlyerIdToSingleRole(playerId, role, controlId);
