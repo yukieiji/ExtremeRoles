@@ -70,8 +70,6 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 	private static (string, string, string) getRoleInfoAndOption(SingleRoleBase role)
 	{
-		string roleOptionString = "";
-
 		var id = role.Core.Id;
 		var builder = new StringBuilder();
 
@@ -107,6 +105,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 			IInfoOverlayPanelModel.AddHudStringWithChildren(builder, option);
 		}
 
+		string roleOptionString = builder.ToString();
 		string colorRoleName = role.GetColoredRoleName();
 		string roleFullDesc = role.GetFullDescription();
 
