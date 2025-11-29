@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;

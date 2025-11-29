@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;

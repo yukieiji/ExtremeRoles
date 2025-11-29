@@ -1,15 +1,15 @@
-using System;
-
-using Microsoft.Extensions.DependencyInjection;
-
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.Solo.Liberal;
-using ExtremeRoles.GameMode.RoleSelector;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 
 namespace ExtremeRoles;
@@ -59,6 +59,8 @@ public partial class ExtremeRolesPlugin
 			.AddTransient<Leader>()
 			.AddTransient<Dove>()
 			.AddTransient<Militant>();
+
+		collection.AddTransient<ExtremeGameEndChecker>();
 
 		// EventManager
 		collection.AddSingleton<IEventManager, Module.Event.EventManager>();

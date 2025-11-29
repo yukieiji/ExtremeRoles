@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Module.Interface
+using ExtremeRoles.Module.GameEnd;
+
+namespace ExtremeRoles.Module.Interface
 {
 	public interface IWinChecker
 	{
