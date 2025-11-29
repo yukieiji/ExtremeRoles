@@ -16,8 +16,8 @@ public sealed class RoleProvider(IServiceProvider provider) : IRoleProvider
 		var type = id switch
 		{ 
 			ExtremeRoleId.Leader => typeof(Leader),
-			ExtremeRoleId.Dove => typeof(Leader),
-			ExtremeRoleId.Militant => typeof(Leader),
+			ExtremeRoleId.Dove => typeof(Dove),
+			ExtremeRoleId.Militant => typeof(Militant),
 			_ => throw new NotSupportedException()
 		};
 

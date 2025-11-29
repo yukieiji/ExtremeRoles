@@ -56,7 +56,9 @@ public partial class ExtremeRolesPlugin
 				x => ExtremeSystemTypeManager.Instance.CreateOrGet<LiberalMoneyBankSystem>(ExtremeSystemType.LiberalMoneyBank)
 			)
 			.AddTransient<LeaderAbilityHandler>()
-			.AddTransient<Leader>();
+			.AddTransient<Leader>()
+			.AddTransient<Dove>()
+			.AddTransient<Militant>();
 
 		// EventManager
 		collection.AddSingleton<IEventManager, Module.Event.EventManager>();

@@ -171,9 +171,11 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 				!RoleAssignFilter.Instance.IsBlock(intedTargetId))
 			{
 				data.Limit.Reduce(ExtremeRoleType.Liberal);
+				Logging.Debug($"Liberal Default Role:{intedTargetId} to {player.PlayerId}");
 				data.Assign.AddAssignData(
 					new PlayerToSingleRoleAssignData(
 						player.PlayerId, intedTargetId, data.Assign.ControlId));
+				data.Assign.RemvePlayer(player);
 				RoleAssignFilter.Instance.Update(intedTargetId);
 			}
 		}
