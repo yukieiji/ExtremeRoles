@@ -1,4 +1,3 @@
-using ExtremeRoles.Module.CustomOption.OLDS;
 using HarmonyLib;
 
 namespace ExtremeRoles.Patches.Player;

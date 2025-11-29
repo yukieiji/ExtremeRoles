@@ -258,15 +258,17 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			{
 				int id = reader.ReadPackedInt32();
 				int selection = reader.ReadPackedInt32();
-				if (!category.TryGet(id, out var option))
+				if (!category.TryGet(id, out var option) ||
+					option.Selection == selection)
 				{
 					continue;
 				}
+
 				int curSelection = option.Selection;
 				option.Selection = selection;
 
 				// 値が変更されたのでポップアップ通知
-				if (isShow && curSelection != option.Selection)
+				if (isShow)
 				{
 					string showStr = Tr.GetString(
 						"OptionSettingChange",
