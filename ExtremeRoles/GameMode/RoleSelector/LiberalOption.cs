@@ -40,6 +40,9 @@ public enum LiberalGlobalSetting
 	CanKilledLeader,
 	LeaderKilledBoost,
 
+	IsAutoDeadWhenLeaderSolo,
+	CanKillWhenLeaderSolo,
+
 	LiberalMilitantMini,
 	LiberalMilitantMax,
 
@@ -178,12 +181,21 @@ public sealed class LiberalOption
 		var leaderKilledSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledLeader, false);
 		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKilledBoost, 1.0f, 1.0f, 10.0f, 0.25f, new ParentActive(leaderKilledSetting));
 
-		var isMilitantActive = new LiberalSettingCheck(liberalMaxNumSetting, 2);
-		var liberalMilitantMini = factory.CreateIntDynamicMaxOption(LiberalGlobalSetting.LiberalMilitantMini, 0, 0, 1, liberalMaxNumSetting, isMilitantActive);
+		var isLiberalMoreTwo = new LiberalSettingCheck(liberalMaxNumSetting, 2);
+
+		var isAutoDead = factory.CreateBoolOption(LiberalGlobalSetting.IsAutoDeadWhenLeaderSolo, false, isLiberalMoreTwo);
+		factory.CreateBoolOption(LiberalGlobalSetting.CanKillWhenLeaderSolo,
+			false,
+			new MultiActive(
+				isLiberalMoreTwo,
+				new InvertActive(leaderKilledSetting),
+				new InvertActive(isAutoDead)));
+
+		var liberalMilitantMini = factory.CreateIntDynamicMaxOption(LiberalGlobalSetting.LiberalMilitantMini, 0, 0, 1, liberalMaxNumSetting, isLiberalMoreTwo);
 
 		int curMini = liberalMilitantMini.Value<int>();
 		var intRange = ValueHolderAssembler.CreateIntValue(curMini, curMini, liberalMaxNumSetting.Value<int>(), 1);
-		var liberalMilitantMax = factory.CreateOption(LiberalGlobalSetting.LiberalMilitantMax, intRange, isMilitantActive);
+		var liberalMilitantMax = factory.CreateOption(LiberalGlobalSetting.LiberalMilitantMax, intRange, isLiberalMoreTwo);
 
 		var valueChangedEvent = () => {
 			int newMini = liberalMilitantMini.Value<int>();
@@ -200,7 +212,7 @@ public sealed class LiberalOption
 
 		var miltantKillCoolOption = factory.CreateBoolOption(
 			LiberalGlobalSetting.MiltantHasOtherKillCool,
-			false, isMilitantActive);
+			false, isLiberalMoreTwo);
 		factory.CreateFloatOption(
 			LiberalGlobalSetting.MiltantKillCool,
 			30f, 1.0f, 120f, 0.5f,
@@ -209,7 +221,7 @@ public sealed class LiberalOption
 
 		var miltantKillRangeOption = factory.CreateBoolOption(
 			LiberalGlobalSetting.MiltantHasOtherKillRange,
-			false, isMilitantActive);
+			false, isLiberalMoreTwo);
 		factory.CreateSelectionOption(
 			LiberalGlobalSetting.MiltantKillRange,
 			OptionCreator.Range,
