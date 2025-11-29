@@ -32,7 +32,7 @@ public sealed class Leader : SingleRoleBase
 		LiberalDefaultOptipnLoader option,
 		LeaderAbilityHandler abilityHandler,
 		LiberalMoneyBankSystem system) : base(
-		RoleCore.BuildCrewmate(
+		RoleCore.BuildLiberal(
 			ExtremeRoleId.Leader,
 			ColorPalette.AgencyYellowGreen),
 		option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.CanKillLeader),
