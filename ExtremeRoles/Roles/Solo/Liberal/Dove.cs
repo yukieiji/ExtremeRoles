@@ -1,5 +1,3 @@
-using TMPro;
-
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;

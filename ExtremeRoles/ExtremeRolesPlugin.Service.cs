@@ -61,14 +61,15 @@ public partial class ExtremeRolesPlugin
 					return new LiberalMoneyBankSystem(option);
 				})
 			)
-			.AddTransient<LeaderCoreOption>(x =>
+			.AddTransient(x =>
 			{
 				var option = x.GetRequiredService<LiberalDefaultOptipnLoader>();
 				return new LeaderCoreOption(option);
 			})
-			.AddTransient<DoveCommonAbilityHandler>()
 			.AddTransient<LeaderAbilityHandler>()
+			.AddTransient<LeaderStatus>()
 			.AddTransient<Leader>()
+			.AddTransient<DoveCommonAbilityHandler>()
 			.AddTransient<Dove>()
 			.AddTransient<Militant>();
 

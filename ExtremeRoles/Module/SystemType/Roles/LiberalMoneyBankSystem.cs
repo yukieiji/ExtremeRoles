@@ -72,7 +72,7 @@ public class LiberalMoneyBankSystem(LiberalDefaultOptipnLoader option) : IDirtab
 		this.delta.Deserialize(reader);
 		
 		this.boost += this.delta.Boost;
-		this.Money += this.delta.Money * this.boost;
+		this.Money += (this.delta.Money * this.boost);
 
 		this.delta.Clear();
     }
@@ -101,6 +101,9 @@ public class LiberalMoneyBankSystem(LiberalDefaultOptipnLoader option) : IDirtab
 
 		this.Money += this.delta.Money;
 		this.boost += this.delta.Boost;
+
+		Helper.Logging.Debug($"まねー: {this.Money}");
+		Helper.Logging.Debug($"ブースト: {this.boost}");
 
 		this.IsDirty = this.delta.IsDirty;
 	}

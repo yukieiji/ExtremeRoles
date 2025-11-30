@@ -1,23 +1,60 @@
+using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
 using System.Collections.Generic;
 
 using UnityEngine;
 
-using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Liberal;
+
+public sealed class LeaderCoreOption(LiberalDefaultOptipnLoader option)
+{
+	public bool IsAutoExit { get; } = option.TryGet(LiberalGlobalSetting.IsAutoExitWhenLeaderSolo, out var autoExitSetting) &&
+		autoExitSetting.IsViewActive && autoExitSetting.Value<bool>();
+	public bool IsAutoRevive { get; } =
+			option.TryGet(LiberalGlobalSetting.IsAutoRevive, out var autoReviveSetting) &&
+			autoReviveSetting.IsViewActive && autoReviveSetting.Value<bool>();
+	public bool IsAutoCanKillWhenSolo { get; } = 
+		option.TryGet(LiberalGlobalSetting.CanKilledWhenLeaderSolo, out var autoCanKillSetting) &&
+		autoCanKillSetting.IsViewActive && autoCanKillSetting.Value<bool>();
+
+	public bool CanKilled { get; } = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.CanKilledLeader);
+
+	public bool CanKill { get; } = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.CanKillLeader);
+	public bool HasTask { get; } = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.CanHasTaskLeader);
+
+	public bool HasOtherVison { get; } = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.LeaderHasOtherVisonSize);
+	public float Vison { get; } = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderVison);
+
+	public bool HasOtherKillRange { get; } = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.LeaderHasOtherKillRange);
+	public int KillRange { get; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.LeaderKillRange);
+
+	public bool HasOtherKillCool { get; } = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.LeaderHasOtherKillCool);
+	public float KillCool { get; } = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderKillCool);
+
+	public float KilledBoost { get; } = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderKilledBoost);
+
+	public int KillMoney { get; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.KillMoney);
+	public int LeaderKillMoney { get; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.KillMoney);
+	public float LeaderKillBoostDelta { get; } = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderKillBoost);
+
+	public int TaskMoney { get; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.TaskCompletedMoney);
+	public float TaskBootDelta { get; } = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderTaskBoost);
+}
 
 public sealed class LeaderStatus : IStatusModel
 {
@@ -43,33 +80,13 @@ public sealed class LeaderStatus : IStatusModel
 	}
 }
 
-public class LeaderCoreOption(LiberalDefaultOptipnLoader option)
-{
-	public readonly bool IsAutoExit = option.TryGet(LiberalGlobalSetting.IsAutoExitWhenLeaderSolo, out var autoExitSetting) &&
-		autoExitSetting.IsViewActive && autoExitSetting.Value<bool>();
-	public readonly bool IsAutoRevive =
-			option.TryGet(LiberalGlobalSetting.IsAutoRevive, out var autoReviveSetting) &&
-			autoReviveSetting.IsViewActive && autoReviveSetting.Value<bool>();
-
-	public readonly float KilledBoost = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderKilledBoost);
-
-	public readonly int KillMoney = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.KillMoney);
-	public readonly float KillBoost = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderKillBoost);
-
-	public readonly int TaskMoney = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.TaskCompletedMoney);
-	public readonly float TaskBoot = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderTaskBoost);
-}
-
-
 public sealed class LeaderAbilityHandler(
-	LiberalDefaultOptipnLoader option,
+	LeaderCoreOption option,
 	LeaderStatus status) : IAbility, IInvincible
 {
 	private readonly LeaderStatus status = status;
-	private readonly bool isBlockKill = !option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.CanKilledLeader);
-	private readonly bool isAutoCanKillWhenSolo = 
-		option.TryGet(LiberalGlobalSetting.CanKilledWhenLeaderSolo, out var autoCanKillSetting) &&
-		autoCanKillSetting.IsViewActive && autoCanKillSetting.Value<bool>();
+	private readonly bool isBlockKill = !option.CanKilled;
+	private readonly bool isAutoCanKillWhenSolo = option.IsAutoCanKillWhenSolo;
 
 	// 設定次第でキル等の対象には取れる
 	public bool IsBlockKillFrom(byte? fromPlayer)
@@ -88,7 +105,7 @@ public sealed class LeaderAbilityHandler(
 		=> false;
 }
 
-public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
+public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRoleMurderPlayerHook
 {
 	private readonly LiberalMoneyBankSystem system;
 
@@ -97,9 +114,15 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 
 	private readonly LeaderStatus status;
 	private readonly LeaderAbilityHandler abilityHandler;
-	private readonly LeaderCoreOption option;
 
 	private readonly DoveCommonAbilityHandler? doveHandler;
+	private readonly ReviveSetting revive;
+
+	private readonly record struct ReviveSetting(bool IsAutoExit, bool IsAutoRevive);
+
+	private readonly KillSetting killSetting;
+	// リベラルがキルしたロジックはリーダーが全部引き受けるため
+	private readonly record struct KillSetting(int KillMoney, int LeadeKillMoney, float LeadeKillBoostDelta);
 
 	public Leader(
 		LeaderCoreOption leaderCoreOption,
@@ -109,42 +132,42 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 		RoleCore.BuildLiberal(
 			ExtremeRoleId.Leader,
 			ColorPalette.AgencyYellowGreen),
-		option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.CanKillLeader),
-		option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.CanHasTaskLeader),
+		leaderCoreOption.CanKill,
+		leaderCoreOption.HasTask,
 		false, false)
 	{
 		this.system = system;
 
 		this.status = status;
-		this.abilityHandler = new LeaderAbilityHandler(option, status);
+		this.abilityHandler = new LeaderAbilityHandler(leaderCoreOption, status);
+		this.revive = new ReviveSetting(leaderCoreOption.IsAutoExit, leaderCoreOption.IsAutoRevive);
+		this.killSetting = new KillSetting(leaderCoreOption.KillMoney, leaderCoreOption.LeaderKillMoney, leaderCoreOption.LeaderKillBoostDelta);
 		this.AbilityClass = this.abilityHandler;
-
-		this.option = leaderCoreOption;
 
 		LiberalSettingOverrider.OverrideDefault(this, option);
 
-		this.doveHandler = this.HasTask ? new DoveCommonAbilityHandler(leaderCoreOption.TaskMoney, leaderCoreOption.TaskBoot) : null;
+		this.doveHandler = this.HasTask ? new DoveCommonAbilityHandler(leaderCoreOption.TaskMoney, leaderCoreOption.TaskBootDelta) : null;
 
-		this.HasOtherVision = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.LeaderHasOtherVisonSize);
+		this.HasOtherVision = leaderCoreOption.HasOtherVison;
 		if (this.HasOtherVision)
 		{
-			this.Vision = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderVison);
+			this.Vision = leaderCoreOption.Vison;
 		}
 		if (!this.CanKill)
 		{
 			return;
 		}
 
-		this.HasOtherKillRange = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.LeaderHasOtherKillRange);
+		this.HasOtherKillRange = leaderCoreOption.HasOtherKillRange;
 		if (this.HasOtherKillRange)
 		{
-			this.KillRange = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.LeaderKillRange);
+			this.KillRange = leaderCoreOption.KillRange;
 		}
 
-		this.HasOtherKillCool = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.LeaderHasOtherKillCool);
+		this.HasOtherKillCool = leaderCoreOption.HasOtherKillCool;
 		if (this.HasOtherKillCool)
 		{
-			this.KillCoolTime = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.LeaderKillCool);
+			this.KillCoolTime = leaderCoreOption.KillCool;
 		}
 	}
 
@@ -213,16 +236,37 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 		this.doveHandler?.Update(rolePlayer);
 		this.status.Update();
 
-		if (this.status.OtherLiberal <= 0 && this.option.IsAutoExit)
+		if (this.status.OtherLiberal <= 0 && this.revive.IsAutoExit)
 		{
-			// 死亡処理を入れる
+			// リベラルが0になったので自動排除
+			Player.RpcUncheckMurderPlayer(
+				rolePlayer.PlayerId, rolePlayer.PlayerId,
+				byte.MinValue);
+			return;
 		}
 
 		// 無敵のときに死んだら復活処理する
-		if (!this.option.IsAutoRevive)
+		if (!this.revive.IsAutoRevive)
 		{
 			return;
 		}
 		// 復活処理をここに書く
+	}
+
+	public void HookMuderPlayer(PlayerControl source, PlayerControl target)
+	{
+		if (!(
+				ExtremeRoleManager.TryGetRole(source.PlayerId, out var role) &&
+				role.IsLiberal()
+			))
+		{
+			return;
+		}
+		
+		bool isLeader = role.Core.Id is ExtremeRoleId.Leader;
+		float money = isLeader ? this.killSetting.LeadeKillMoney : this.killSetting.KillMoney;
+		float delta = isLeader ? this.killSetting.LeadeKillBoostDelta : 0.0f;
+
+		LiberalMoneyBankSystem.RpcUpdateSystem(money, delta);
 	}
 }

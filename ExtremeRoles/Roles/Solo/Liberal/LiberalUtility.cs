@@ -50,11 +50,15 @@ public sealed class DoveCommonAbilityHandler
 		{
 			cachePlayer = GameData.Instance.GetPlayerById(player.PlayerId);
 		}
+		if (cachePlayer == null || cachePlayer.Tasks.Count == 0)
+		{
+			return;
+		}
 
 		for (int i = 0; i < cachePlayer.Tasks.Count; ++i)
 		{
 			var task = cachePlayer.Tasks[i];
-			if (task.Complete)
+			if (!task.Complete)
 			{
 				continue;
 			}
