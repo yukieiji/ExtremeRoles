@@ -186,8 +186,15 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 
 	public override string GetRoleTag()
 		=> this.visual.Tag;
+
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
-		=> this.GetRoleTag();
+	{
+		if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
+		{
+			return GetRoleTag();
+		}
+		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
