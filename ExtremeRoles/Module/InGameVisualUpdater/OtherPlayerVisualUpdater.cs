@@ -75,7 +75,7 @@ public sealed class OtherPlayerVisualUpdater(
 		byte id = this.PlayerId;
 		if (!ExtremeRoleManager.TryGetRole(id, out var targetRole))
 		{
-			ExtremeRolesPlugin.Logger.LogError($"Role not found for PlayerId: {id} in HudManagerPatch.setPlayerNameColor");
+			ExtremeRolesPlugin.Logger.LogError($"Role not found for PlayerId: {id} in OtherPlayerVisualUpdater.Update");
 			return;
 		}
 		GhostRoleBase? targetGhostRole;

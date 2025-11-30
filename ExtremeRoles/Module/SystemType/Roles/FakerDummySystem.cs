@@ -12,8 +12,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module.InGameVisualUpdater;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Impostor;
 
 
