@@ -116,7 +116,6 @@ public static class HudManagerUpdatePatch
     public const string RoleInfoObjectName = "Info";
     private const float infoScale = 0.25f;
 
-    private static bool buttonCreated = false;
     private static bool isActiveUpdate = true;
 
     public static Dictionary<byte, TextMeshPro> PlayerInfoText => allPlayerInfo;
