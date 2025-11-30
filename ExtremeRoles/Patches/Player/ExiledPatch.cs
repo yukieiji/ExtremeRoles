@@ -12,9 +12,6 @@ namespace ExtremeRoles.Patches.Player;
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
 public static class PlayerControlExiledPatch
 {
-	public static bool Prefix(PlayerControl __instance)
-		=> !LiberalMoneyBankSystem.IsCanKillTo(__instance.PlayerId);
-
 	public static void Postfix(
 		PlayerControl __instance)
 	{

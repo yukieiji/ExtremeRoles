@@ -5,7 +5,6 @@ using AmongUs.GameOptions;
 using Assets.CoreScripts;
 
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Patches.Manager;
 using ExtremeRoles.Roles;
@@ -33,11 +32,6 @@ public static class PlayerControlMurderPlayerPatch
 			!ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var role))
 		{
 			return true;
-		}
-
-		if (LiberalMoneyBankSystem.IsCanKillTo(target.PlayerId))
-		{
-			return false;
 		}
 
 		bool hasOtherKillCool = role.TryGetKillCool(out float killCool);

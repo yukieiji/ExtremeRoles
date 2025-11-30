@@ -12,6 +12,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 #nullable enable
 
@@ -39,6 +41,23 @@ public sealed class LeaderStatus : IStatusModel
 		}
 
 	}
+}
+
+public readonly struct LeaderCoreOption(LiberalDefaultOptipnLoader option)
+{
+	public readonly bool IsAutoExit = option.TryGet(LiberalGlobalSetting.IsAutoExitWhenLeaderSolo, out var autoExitSetting) &&
+		autoExitSetting.IsViewActive && autoExitSetting.Value<bool>();
+	public readonly bool IsAutoRevive =
+			option.TryGet(LiberalGlobalSetting.IsAutoRevive, out var autoReviveSetting) &&
+			autoReviveSetting.IsViewActive && autoReviveSetting.Value<bool>();
+
+	public readonly float KilledBoost = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderKilledBoost);
+
+	public readonly int KillMoney = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.KillMoney);
+	public readonly float KillBoost = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderKillBoost);
+
+	public readonly int TaskMoney = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.TaskCompletedMoney);
+	public readonly float TaskBoot = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderTaskBoost);
 }
 
 
@@ -78,10 +97,10 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 
 	private readonly LeaderStatus status;
 	private readonly LeaderAbilityHandler abilityHandler;
-	private readonly bool isAutoExit;
-	private readonly bool isAutoRevive;
+	private readonly LeaderCoreOption option;
 
 	public Leader(
+		LeaderCoreOption leaderCoreOption,
 		LiberalDefaultOptipnLoader option,
 		LeaderStatus status,
 		LiberalMoneyBankSystem system) : base(
@@ -98,12 +117,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 		this.abilityHandler = new LeaderAbilityHandler(option, status);
 		this.AbilityClass = this.abilityHandler;
 
-		this.isAutoExit =
-			option.TryGet(LiberalGlobalSetting.IsAutoExitWhenLeaderSolo, out var autoExitSetting) &&
-			autoExitSetting.IsViewActive && autoExitSetting.Value<bool>();
-		this.isAutoRevive =
-			option.TryGet(LiberalGlobalSetting.IsAutoRevive, out var autoReviveSetting) &&
-			autoReviveSetting.IsViewActive && autoReviveSetting.Value<bool>();
+		this.option = leaderCoreOption;
 
 		LiberalSettingOverrider.OverrideDefault(this, option);
 
@@ -156,16 +170,16 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 
 	public IEnumerable<VoteInfo> GetModdedVoteInfo(VoteInfoCollector collector, NetworkedPlayerInfo rolePlayer)
 	{
+		if (!this.abilityHandler.IsBlockKillFrom(null) || OnemanMeetingSystemManager.IsActive)
+		{
+			yield break;
+		}
+
 		// ローカルの人以外のstatusは更新されてないので更新をここでいれる
 		if (PlayerControl.LocalPlayer == null ||
 			rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
 		{
 			this.status.Update();
-		}
-
-		if (!this.abilityHandler.IsBlockKillFrom(null))
-		{
-			yield break;
 		}
 
 		foreach (var info in collector.Vote)
@@ -193,13 +207,13 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 
 		this.status.Update();
 
-		if (this.status.OtherLiberal <= 0 && this.isAutoExit)
+		if (this.status.OtherLiberal <= 0 && this.option.IsAutoExit)
 		{
 			// 死亡処理を入れる
 		}
 
 		// 無敵のときに死んだら復活処理する
-		if (!this.isAutoRevive)
+		if (!this.option.IsAutoRevive)
 		{
 			return;
 		}

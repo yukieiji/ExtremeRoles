@@ -10,6 +10,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.Solo.Liberal;
 
 
@@ -60,6 +61,11 @@ public partial class ExtremeRolesPlugin
 					return new LiberalMoneyBankSystem(option);
 				})
 			)
+			.AddTransient<LeaderCoreOption>(x =>
+			{
+				var option = x.GetRequiredService<LiberalDefaultOptipnLoader>();
+				return new LeaderCoreOption(option);
+			})
 			.AddTransient<LeaderAbilityHandler>()
 			.AddTransient<Leader>()
 			.AddTransient<Dove>()

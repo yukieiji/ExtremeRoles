@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 
 #nullable enable
 

@@ -1,5 +1,5 @@
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.GameEnd;
