@@ -94,7 +94,7 @@ public sealed class CEO : SingleRoleBase,
 		VoteInfoCollector collector,
 		NetworkedPlayerInfo rolePlayer)
 	{
-		if (this.isShowRolePlayerVote || !this.IsAwake || this.isMeExiled)
+		if (this.isShowRolePlayerVote || !this.IsAwake || this.isMeExiled || OnemanMeetingSystemManager.IsActive)
 		{
 			yield break;
 		}
@@ -224,7 +224,7 @@ public sealed class CEO : SingleRoleBase,
 
 	public void ModifiedVote(byte rolePlayerId, ref Dictionary<byte, byte> voteTarget, ref Dictionary<byte, int> voteResult)
 	{
-		if (this.isShowRolePlayerVote || !this.IsAwake || voteResult.Count <= 0)
+		if (this.isShowRolePlayerVote || !this.IsAwake || voteResult.Count <= 0 || OnemanMeetingSystemManager.IsActive)
 		{
 			return;
 		}
