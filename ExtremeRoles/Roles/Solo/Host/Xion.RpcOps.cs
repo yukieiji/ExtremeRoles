@@ -257,7 +257,7 @@ public sealed partial class Xion
             Player.GetPlayerControlById(hostPlayerId), hostPlayerId);
         setNewRole(hostPlayerId, xionBuffer);
 
-        if (Patches.Manager.HudManagerUpdatePatch.PlayerInfoText.TryGetValue(
+        if (Patches.Manager.HudManagerUpdatePatch.TryGetRoleInfo(
             hostPlayerId, out TextMeshPro info))
         {
             info.text = xionBuffer.GetColoredRoleName(true);
