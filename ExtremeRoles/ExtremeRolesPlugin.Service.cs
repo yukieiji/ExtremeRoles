@@ -66,6 +66,7 @@ public partial class ExtremeRolesPlugin
 				var option = x.GetRequiredService<LiberalDefaultOptipnLoader>();
 				return new LeaderCoreOption(option);
 			})
+			.AddTransient<LeaderVisual>()
 			.AddTransient<LeaderAbilityHandler>()
 			.AddTransient<LeaderStatus>()
 			.AddTransient<Leader>()
