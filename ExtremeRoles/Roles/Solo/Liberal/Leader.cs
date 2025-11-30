@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
@@ -279,6 +280,6 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		float money = isLeader ? this.killSetting.LeadeKillMoney : this.killSetting.KillMoney;
 		float delta = isLeader ? this.killSetting.LeadeKillBoostDelta : 0.0f;
 
-		LiberalMoneyBankSystem.RpcUpdateSystem(money, delta);
+		LiberalMoneyBankSystem.RpcUpdateSystem(source.PlayerId, LiberalMoneyHistory.Reason.AddOnKill, money, delta);
 	}
 }

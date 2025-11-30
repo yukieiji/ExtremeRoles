@@ -1,6 +1,8 @@
 using AmongUs.GameOptions;
+
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.API;
@@ -77,8 +79,9 @@ public sealed class DoveCommonAbilityHandler
 			{
 				taskIndex = GameSystem.GetRandomLongTask();
 			}
-			GameSystem.RpcReplaceNewTask(cachePlayer.PlayerId, i, taskIndex);
-			LiberalMoneyBankSystem.RpcUpdateSystem(taskDelta, boostDelta);
+			byte playerId = cachePlayer.PlayerId;
+			GameSystem.RpcReplaceNewTask(playerId, i, taskIndex);
+			LiberalMoneyBankSystem.RpcUpdateSystem(playerId, LiberalMoneyHistory.Reason.AddOnTask, taskDelta, boostDelta);
 			break;
 		}
 	}
