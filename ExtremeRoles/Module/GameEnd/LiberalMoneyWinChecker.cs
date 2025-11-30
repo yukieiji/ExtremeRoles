@@ -11,6 +11,6 @@ public sealed class LiberalMoneyWinChecker(LiberalMoneyBankSystem system) : IGam
 	public bool TryCheckGameEnd(out GameOverReason reason)
 	{
 		reason = (GameOverReason)RoleGameOverReason.LiberalRevolution;
-		return this.bankSystem.Money > this.bankSystem.WinMoney;
+		return this.bankSystem.Money >= this.bankSystem.WinMoney;
 	}
 }
