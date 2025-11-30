@@ -10,8 +10,8 @@ using HarmonyLib;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.InGameVisualUpdater;
 using ExtremeRoles.Module.Interface;
-
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
@@ -227,7 +227,7 @@ public sealed class FakerDummySystem(bool seeDummyMerlin) : IExtremeSystemType
 		private void removeRoleInfo(GameObject nameTextObjct)
 		{
 			Transform info = nameTextObjct.transform.FindChild(
-				Patches.Manager.HudManagerUpdatePatch.RoleInfoObjectName);
+				InGameVisualUpdatorBase.RoleInfoObjectName);
 			if (info != null)
 			{
 				Object.Destroy(info.gameObject);
