@@ -15,6 +15,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Roles.API.Interface.Visual;
 
 
 #nullable enable
@@ -54,6 +55,16 @@ public sealed class LeaderCoreOption(LiberalDefaultOptipnLoader option)
 
 	public int TaskMoney { get; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.TaskCompletedMoney);
 	public float TaskBootDelta { get; } = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderTaskBoost);
+}
+
+public sealed class LeaderVisual(LiberalMoneyBankSystem system) : IVisual, ILookedTag
+{
+	private readonly LiberalMoneyBankSystem system = system;
+
+	public string Tag
+		=> $" ({Mathf.CeilToInt(this.system.Money)}/{Mathf.CeilToInt(this.system.WinMoney)})";
+
+	public string GetLookedToThisTag(byte _) => Tag;
 }
 
 public sealed class LeaderStatus : IStatusModel
@@ -107,11 +118,12 @@ public sealed class LeaderAbilityHandler(
 
 public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRoleMurderPlayerHook
 {
-	private readonly LiberalMoneyBankSystem system;
-
 	public int Order => 114514;
+
+	public override IVisual? Visual => this.visual;
 	public override IStatusModel? Status => this.status;
 
+	private readonly LeaderVisual visual;
 	private readonly LeaderStatus status;
 	private readonly LeaderAbilityHandler abilityHandler;
 
@@ -125,10 +137,10 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	private readonly record struct KillSetting(int KillMoney, int LeadeKillMoney, float LeadeKillBoostDelta);
 
 	public Leader(
+		LeaderVisual visual,
 		LeaderCoreOption leaderCoreOption,
 		LiberalDefaultOptipnLoader option,
-		LeaderStatus status,
-		LiberalMoneyBankSystem system) : base(
+		LeaderStatus status) : base(
 		RoleCore.BuildLiberal(
 			ExtremeRoleId.Leader,
 			ColorPalette.AgencyYellowGreen),
@@ -136,9 +148,9 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		leaderCoreOption.HasTask,
 		false, false)
 	{
-		this.system = system;
-
+		this.visual = visual;
 		this.status = status;
+
 		this.abilityHandler = new LeaderAbilityHandler(leaderCoreOption, status);
 		this.revive = new ReviveSetting(leaderCoreOption.IsAutoExit, leaderCoreOption.IsAutoRevive);
 		this.killSetting = new KillSetting(leaderCoreOption.KillMoney, leaderCoreOption.LeaderKillMoney, leaderCoreOption.LeaderKillBoostDelta);
@@ -172,7 +184,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	}
 
 	public override string GetRoleTag()
-		=> $" ({Mathf.CeilToInt(this.system.Money)}/{Mathf.CeilToInt(this.system.WinMoney)})";
+		=> this.visual.Tag;
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 		=> this.GetRoleTag();
 
