@@ -174,7 +174,6 @@ public sealed class OtherPlayerVisualUpdater(
 			this.NameText.transform.localPosition + Vector3.up * InfoScale;
 
 		var data = this.Data;
-		var localPlayerData = this.local.Data;
 		var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(data);
 
 		string roleNames = targetRole.GetColoredRoleName(this.local.Data.IsDead);
