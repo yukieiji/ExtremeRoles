@@ -168,10 +168,9 @@ public static class HudManagerUpdatePatch
 			return;
 		}
 
+		// 初期化
         SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
         GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
-
-        resetNameTagsAndColors(player);
 
         bool blockCondition = isBlockCondition(player, role) || ghostRole != null;
         bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo() || ghostRole != null;
@@ -185,7 +184,10 @@ public static class HudManagerUpdatePatch
                playeringInfoBlock || multiRole.AnotherRole.IsBlockShowPlayingRoleInfo();
         }
 
-        playerInfoUpdate(
+		// 名前消す
+		resetNameTagsAndColors(player);
+
+		playerInfoUpdate(
             player,
             blockCondition,
             playeringInfoBlock);
@@ -197,19 +199,15 @@ public static class HudManagerUpdatePatch
             playeringInfoBlock);
         setPlayerNameTag(role);
 
-        buttonCreate(role);
+		// ローカルの処理
         roleUpdate(player, role);
 
-        MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
-        if (multiAssignRole != null)
+        if (role is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole != null)
         {
-            if (multiAssignRole.AnotherRole != null)
-            {
-                buttonCreate(multiAssignRole.AnotherRole);
-                roleUpdate(player, multiAssignRole.AnotherRole);
-                multiAssignRole.OverrideAnotherRoleSetting();
-            }
-        }
+			roleUpdate(player, multiAssignRole.AnotherRole);
+			multiAssignRole.OverrideAnotherRoleSetting();
+		}
 
         /* TODO:幽霊役職タスク
         if (ghostRole != null)
@@ -218,29 +216,6 @@ public static class HudManagerUpdatePatch
         }
         */
 
-    }
-    private static void buttonCreate(SingleRoleBase checkRole)
-    {
-        if (buttonCreated) { return; }
-
-        var abilityRole = checkRole as IRoleAbility;
-
-        if (abilityRole != null)
-        {
-            if (abilityRole.Button == null)
-            {
-                buttonCreated = true; //一時的にブロック
-
-                abilityRole.CreateAbility();
-                abilityRole.RoleAbilityInit();
-
-                buttonCreated = abilityRole.Button != null; // 作れたかどうか
-            }
-            else
-            {
-                buttonCreated = true;
-            }
-        }
     }
 
     private static void resetNameTagsAndColors(PlayerControl localPlayer)
