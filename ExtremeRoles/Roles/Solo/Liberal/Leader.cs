@@ -161,7 +161,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 	// 無敵 => 投票すら打ち消す
 	public void ModifiedVote(byte rolePlayerId, ref Dictionary<byte, byte> voteTarget, ref Dictionary<byte, int> voteResult)
 	{
-		if (!this.abilityHandler.IsBlockKillFrom(null) || voteResult.Count <= 0)
+		if (!this.abilityHandler.IsBlockKillFrom(null) || voteResult.Count <= 0 || OnemanMeetingSystemManager.IsActive)
 		{
 			return;
 		}
