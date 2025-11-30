@@ -82,7 +82,7 @@ public sealed class LocalPlayerVisualUpdator(PlayerControl local) : InGameVisual
 		{
 			if (tabText == null)
 			{
-				tabText = HudManager.Instance.TaskPanel.tab.transform.FindChild(
+				tabText = HudManager.Instance.TaskPanel.tab.transform.Find(
 					"TabText_TMP").GetComponent<TextMeshPro>();
 			}
 			tabText.SetText(

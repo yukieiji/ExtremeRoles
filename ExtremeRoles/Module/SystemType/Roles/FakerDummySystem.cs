@@ -226,7 +226,7 @@ public sealed class FakerDummySystem(bool seeDummyMerlin) : IExtremeSystemType
 
 		private void removeRoleInfo(GameObject nameTextObjct)
 		{
-			Transform info = nameTextObjct.transform.FindChild(
+			Transform info = nameTextObjct.transform.Find(
 				InGameVisualUpdatorBase.RoleInfoObjectName);
 			if (info != null)
 			{

@@ -91,7 +91,7 @@ public sealed class OtherPlayerVisualUpdator(
 	{
 		SetNameText(this.PlayerName);
 		SetNameColor(
-			this.Data.Role.IsImpostor && this.Data.Role.IsImpostor ?
+			this.local.Data.Role.IsImpostor && this.Data.Role.IsImpostor ?
 			Palette.ImpostorRed : Palette.White);
 	}
 
@@ -156,10 +156,15 @@ public sealed class OtherPlayerVisualUpdator(
 		SingleRoleBase localRole,
 		GhostRoleBase? localGhostRole)
 	{
+		var clientOption = ClientOption.Instance;
+		bool isGhostSeeRole = clientOption.GhostsSeeRole.Value;
+		bool isGhostSeeTask = clientOption.GhostsSeeTask.Value;
+
 		if (!this.local.Data.IsDead ||
 			this.condition.IsBlockShowPlayerInfo ||
 			this.condition.IsBlockShowName ||
-			!this.IsVisual)
+			!this.IsVisual ||
+			(!isGhostSeeRole && !isGhostSeeTask))
 		{
 			this.Info.gameObject.SetActive(false);
 			return;
@@ -183,26 +188,18 @@ public sealed class OtherPlayerVisualUpdator(
 		string completedStr = IsCommActive(this.local) ? "?" : tasksCompleted.ToString();
 		string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
 
-		var clientOption = ClientOption.Instance;
-		bool isGhostSeeRole = clientOption.GhostsSeeRole.Value;
-		bool isGhostSeeTask = clientOption.GhostsSeeTask.Value;
-
-		string playerInfoText = string.Empty;
-
-		if (isGhostSeeRole && isGhostSeeTask)
+		this.builder.Clear();
+		
+		if (isGhostSeeRole)
 		{
-			playerInfoText = $"{roleNames} {taskInfo}".Trim();
+			this.builder.Append(roleNames);
 		}
-		else if (isGhostSeeTask)
+		if (isGhostSeeTask)
 		{
-			playerInfoText = $"{taskInfo}".Trim();
-		}
-		else if (isGhostSeeRole)
-		{
-			playerInfoText = $"{roleNames}";
+			this.builder.Append(taskInfo);
 		}
 
-		this.Info.text = playerInfoText;
+		this.Info.text = this.builder.ToString();
 		this.Info.gameObject.SetActive(true);
 	}
 }
