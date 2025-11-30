@@ -68,7 +68,7 @@ def add_keys_to_resx_text_based(file_path: str, keys: list[str]) -> None:
 
 if __name__ == '__main__':
     try:
-        faction_name = input("陣営名 (例: Crewmate, Impostor, Text) を入力してください: ").strip()
+        faction_name = input("陣営名 (例: Crewmate, Impostor, Liberal, Text) を入力してください: ").strip()
 
         if not faction_name:
             print("陣営名が入力されていません。")
