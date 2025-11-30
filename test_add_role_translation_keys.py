@@ -184,6 +184,11 @@ def valid_env(tmp_path: Path) -> Path:
     roles_dir.mkdir(parents=True, exist_ok=True)
     (roles_dir / "DummyRole.cs").write_text(DUMMY_CS_VALID, encoding="utf-8")
 
+    # Liberal役職用ディレクトリ
+    liberal_roles_dir: Path = tmp_path / "ExtremeRoles" / "Roles" / "Solo" / "Liberal"
+    liberal_roles_dir.mkdir(parents=True, exist_ok=True)
+    (liberal_roles_dir / "DummyLiberalRole.cs").write_text(DUMMY_CS_VALID.replace("DummyRole", "DummyLiberalRole"), encoding="utf-8")
+
     # ゴースト役職用ディレクトリ
     ghost_roles_dir: Path = tmp_path / "ExtremeRoles" / "GhostRoles" / "Crewmate"
     ghost_roles_dir.mkdir(parents=True, exist_ok=True)
@@ -196,6 +201,7 @@ def valid_env(tmp_path: Path) -> Path:
     trans_dir.mkdir(parents=True, exist_ok=True)
     # ダミーの.resxファイルを作成
     (trans_dir / "Crewmate.resx").write_text("<root></root>", encoding="utf-8")
+    (trans_dir / "Liberal.resx").write_text("<root></root>", encoding="utf-8")
     (trans_dir / "GhostCrewmate.resx").write_text("<root></root>", encoding="utf-8")
 
     return tmp_path
@@ -312,6 +318,28 @@ def test_main_skips_intro_for_ghost_role(
     content = resx_path.read_text(encoding="utf-8")
     assert 'name="DummyGhostRoleIntroDescription"' not in content
     assert 'name="DummyGhostRole"' in content  # 他のキーは存在すること
+
+
+def test_main_logic_with_liberal_role(
+    valid_env: Path, monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]
+) -> None:
+    """メインスクリプトのロジックがLiberal陣営のロールを正しく処理できるかテストします。"""
+    monkeypatch.chdir(valid_env)
+    monkeypatch.setattr(sys, "argv", ["add_role_translation_keys.py", "DummyLiberalRole"])
+    main()
+    captured = capsys.readouterr()
+    assert "役職クラス 'DummyLiberalRole' をファイル内で発見" in captured.out
+    assert (
+        "定義済みのオプション 1個、実装済みのオプション 1個を発見しました。"
+        in captured.out
+    )
+
+    # resxファイルの内容を直接チェック
+    resx_path = (
+        valid_env / "ExtremeRoles" / "Translation" / "resx" / "Liberal.resx"
+    )
+    content = resx_path.read_text(encoding="utf-8")
+    assert 'name="DummyLiberalRole"' in content
 
 
 # --- Hypothesis Strategies ---
