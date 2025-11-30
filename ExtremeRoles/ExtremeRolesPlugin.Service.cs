@@ -66,6 +66,7 @@ public partial class ExtremeRolesPlugin
 				var option = x.GetRequiredService<LiberalDefaultOptipnLoader>();
 				return new LeaderCoreOption(option);
 			})
+			.AddTransient<DoveCommonAbilityHandler>()
 			.AddTransient<LeaderAbilityHandler>()
 			.AddTransient<Leader>()
 			.AddTransient<Dove>()

@@ -1,0 +1,91 @@
+using AmongUs.GameOptions;
+using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Roles.API;
+
+#nullable enable
+
+namespace ExtremeRoles.Roles.Solo.Liberal;
+
+public sealed class DoveCommonAbilityHandler
+{
+	private readonly float taskDelta;
+	private readonly float boostDelta;
+
+	private readonly int shortTask;
+	private readonly int normalTask;
+	private readonly int allTaskNum;
+
+	public DoveCommonAbilityHandler(LiberalDefaultOptipnLoader option) : this(
+		option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.TaskCompletedMoney),
+		0.0f)
+	{
+
+	}
+
+	public DoveCommonAbilityHandler(float taskDelta, float boostDelta)
+	{
+		var option = GameOptionsManager.Instance.CurrentGameOptions;
+		this.shortTask = option.GetInt(Int32OptionNames.NumShortTasks);
+		this.normalTask = option.GetInt(Int32OptionNames.NumCommonTasks);
+
+		this.allTaskNum = this.shortTask + this.normalTask + option.GetInt(Int32OptionNames.NumLongTasks);
+
+		this.taskDelta = taskDelta;
+		this.boostDelta = boostDelta;
+	}
+
+	private NetworkedPlayerInfo? cachePlayer;
+
+	public void Update(PlayerControl player)
+	{
+		if (!GameProgressSystem.IsTaskPhase)
+		{
+			return;
+		}
+
+		if (cachePlayer == null)
+		{
+			cachePlayer = GameData.Instance.GetPlayerById(player.PlayerId);
+		}
+
+		for (int i = 0; i < cachePlayer.Tasks.Count; ++i)
+		{
+			var task = cachePlayer.Tasks[i];
+			if (task.Complete)
+			{
+				continue;
+			}
+			int taskTarget = RandomGenerator.Instance.Next(0, this.allTaskNum);
+
+			int taskIndex;
+			if (taskTarget < this.shortTask)
+			{
+				taskIndex = GameSystem.GetRandomShortTaskId();
+			}
+			else if (taskTarget < this.normalTask)
+			{
+				taskIndex = GameSystem.GetRandomCommonTaskId();
+			}
+			else
+			{
+				taskIndex = GameSystem.GetRandomLongTask();
+			}
+			GameSystem.RpcReplaceNewTask(cachePlayer.PlayerId, i, taskIndex);
+			LiberalMoneyBankSystem.RpcUpdateSystem(taskDelta, boostDelta);
+			break;
+		}
+	}
+}
+
+public static class LiberalSettingOverrider
+{
+	public static void OverrideDefault(SingleRoleBase role, LiberalDefaultOptipnLoader option)
+	{
+		role.IsApplyEnvironmentVision = false;
+		role.UseVent = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.UseVent);
+		role.Vision = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LiberalVison);
+	}
+}

@@ -1,7 +1,9 @@
+using Hazel;
+
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Roles;
-using Hazel;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
@@ -80,14 +82,14 @@ public class LiberalMoneyBankSystem(LiberalDefaultOptipnLoader option) : IDirtab
 
     }
 
-	public static void RpcUpdateSystem(float deltaMoney=0.0f, float deltaBost = 0.0f)
+	public static void RpcUpdateSystem(float deltaMoney=0.0f, float deltaBoost = 0.0f)
 	{
 		ExtremeSystemTypeManager.RpcUpdateSystem(
 			SystemType,
 			x =>
 			{
 				x.Write(deltaMoney);
-				x.Write(deltaBost);
+				x.Write(deltaBoost);
 			});
 	}
 

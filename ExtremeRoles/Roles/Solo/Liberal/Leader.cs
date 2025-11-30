@@ -43,7 +43,7 @@ public sealed class LeaderStatus : IStatusModel
 	}
 }
 
-public readonly struct LeaderCoreOption(LiberalDefaultOptipnLoader option)
+public class LeaderCoreOption(LiberalDefaultOptipnLoader option)
 {
 	public readonly bool IsAutoExit = option.TryGet(LiberalGlobalSetting.IsAutoExitWhenLeaderSolo, out var autoExitSetting) &&
 		autoExitSetting.IsViewActive && autoExitSetting.Value<bool>();
@@ -99,6 +99,8 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 	private readonly LeaderAbilityHandler abilityHandler;
 	private readonly LeaderCoreOption option;
 
+	private readonly DoveCommonAbilityHandler? doveHandler;
+
 	public Leader(
 		LeaderCoreOption leaderCoreOption,
 		LiberalDefaultOptipnLoader option,
@@ -121,6 +123,8 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 
 		LiberalSettingOverrider.OverrideDefault(this, option);
 
+		this.doveHandler = this.HasTask ? new DoveCommonAbilityHandler(leaderCoreOption.TaskMoney, leaderCoreOption.TaskBoot) : null;
+
 		this.HasOtherVision = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.LeaderHasOtherVisonSize);
 		if (this.HasOtherVision)
 		{
@@ -130,6 +134,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 		{
 			return;
 		}
+
 		this.HasOtherKillRange = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.LeaderHasOtherKillRange);
 		if (this.HasOtherKillRange)
 		{
@@ -205,6 +210,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate
 			return;
 		}
 
+		this.doveHandler?.Update(rolePlayer);
 		this.status.Update();
 
 		if (this.status.OtherLiberal <= 0 && this.option.IsAutoExit)
