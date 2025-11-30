@@ -16,15 +16,15 @@ using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
 
 namespace ExtremeRoles.Module.InGameVisualUpdater;
 
-public sealed class OtherPlayerVisualUpdator(
+public sealed class OtherPlayerVisualUpdater(
 	PlayerControl local,
 	PlayerControl target) :
-	InGameVisualUpdatorBase(target)
+	InGameVisualUpdaterBase(target)
 {
 	private readonly PlayerControl local = local;
 	private readonly StringBuilder builder = new StringBuilder();
 
-	public class BlockCondition(PlayerControl localPlayer)
+	private sealed class BlockCondition(PlayerControl localPlayer)
 	{
 		private readonly NetworkedPlayerInfo data = localPlayer.Data;
 
@@ -68,7 +68,7 @@ public sealed class OtherPlayerVisualUpdator(
 	public override void Update()
 	{
 		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-		GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+		GhostRoleBase? ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 
 		this.condition.UpdateCondition(role, ghostRole);
 

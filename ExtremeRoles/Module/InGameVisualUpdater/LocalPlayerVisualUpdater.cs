@@ -12,14 +12,14 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Module.InGameVisualUpdater;
 
-public sealed class LocalPlayerVisualUpdator(PlayerControl local) : InGameVisualUpdatorBase(local)
+public sealed class LocalPlayerVisualUpdater(PlayerControl local) : InGameVisualUpdaterBase(local)
 {
 	private TextMeshPro? tabText;
 
 	public override void Update()
 	{
 		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-		GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+		GhostRoleBase? ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 
 		reset();
 		setNameColor(role, ghostRole);
@@ -82,11 +82,17 @@ public sealed class LocalPlayerVisualUpdator(PlayerControl local) : InGameVisual
 		{
 			if (tabText == null)
 			{
-				tabText = HudManager.Instance.TaskPanel.tab.transform.Find(
-					"TabText_TMP").GetComponent<TextMeshPro>();
+				var transform = HudManager.Instance.TaskPanel.tab.transform.Find("TabText_TMP");
+				if (transform != null)
+				{
+					tabText = transform.GetComponent<TextMeshPro>();
+				}
 			}
-			tabText.SetText(
-				$"{TranslationController.Instance.GetString(StringNames.Tasks)} {taskInfo}");
+			if (tabText != null)
+			{
+				tabText.SetText(
+					$"{TranslationController.Instance.GetString(StringNames.Tasks)} {taskInfo}");
+			}
 		}
 
 		if (!this.IsVisual)

@@ -4,7 +4,7 @@ using TMPro;
 
 namespace ExtremeRoles.Module.InGameVisualUpdater;
 
-public abstract class InGameVisualUpdatorBase(PlayerControl target)
+public abstract class InGameVisualUpdaterBase(PlayerControl target)
 {
 	public const string RoleInfoObjectName = "Info";
 	public const float InfoScale = 0.25f;

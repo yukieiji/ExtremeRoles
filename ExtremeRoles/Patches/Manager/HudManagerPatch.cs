@@ -110,7 +110,7 @@ public static class HudManagerUpdatePatch
 {
     private static bool isActiveUpdate = true;
 
-	private static List<InGameVisualUpdatorBase> allUpdator = [];
+	private static List<InGameVisualUpdaterBase> allUpdator = [];
 
     public static void Reset()
     {
@@ -161,8 +161,8 @@ public static class HudManagerUpdatePatch
 			{
 				allUpdator.Add(
 					pc.PlayerId == local.PlayerId ?
-						new LocalPlayerVisualUpdator(local) :
-						new OtherPlayerVisualUpdator(local, pc));
+						new LocalPlayerVisualUpdater(local) :
+						new OtherPlayerVisualUpdater(local, pc));
 			}
 		}
 
