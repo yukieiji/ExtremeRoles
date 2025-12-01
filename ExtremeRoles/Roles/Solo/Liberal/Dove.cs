@@ -17,7 +17,7 @@ public sealed class Dove : SingleRoleBase, IRoleUpdate
 		LiberalDefaultOptipnLoader option) : base(
 		RoleCore.BuildLiberal(
 			ExtremeRoleId.Dove,
-			ColorPalette.AgencyYellowGreen),
+			ColorPalette.LiberalColor),
 		false, true,
 		false, false)
 	{

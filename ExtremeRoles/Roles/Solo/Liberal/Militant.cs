@@ -15,7 +15,7 @@ public sealed class Militant : SingleRoleBase
 	public Militant(LiberalDefaultOptipnLoader option) : base(
 		RoleCore.BuildLiberal(
 			ExtremeRoleId.Militant,
-			ColorPalette.AgencyYellowGreen),
+			ColorPalette.LiberalColor),
 		true, false,
 		false, false)
 	{

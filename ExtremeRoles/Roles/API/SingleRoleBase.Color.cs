@@ -38,8 +38,7 @@ public abstract partial class SingleRoleBase
 		if (targetRole.Core.Id is ExtremeRoleId.Leader ||
 			(targetRole.IsLiberal() && this.IsLiberal()))
 		{
-			// 後でリベラルの色に変える
-			return ColorPalette.AgencyYellowGreen;
+			return ColorPalette.LiberalColor;
 		}
 
 		if (targetRole is MultiAssignRoleBase multiAssignRole &&

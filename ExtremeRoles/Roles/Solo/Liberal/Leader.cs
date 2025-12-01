@@ -144,7 +144,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		LeaderStatus status) : base(
 		RoleCore.BuildLiberal(
 			ExtremeRoleId.Leader,
-			ColorPalette.AgencyYellowGreen),
+			ColorPalette.LiberalColor),
 		leaderCoreOption.CanKill,
 		leaderCoreOption.HasTask,
 		false, false)
