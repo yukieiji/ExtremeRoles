@@ -126,9 +126,9 @@ public sealed class LiberalSettingCheck(IOption maxLiberalOption, int num) : IOp
 	public IOption? Parent => null;
 
 	private readonly IOption liberalMaxOption = maxLiberalOption;
-	private readonly int num = num - 1;
+	private readonly int num = num;
 
-	public bool IsActive => liberalMaxOption.Value<int>() > num;
+	public bool IsActive => liberalMaxOption.Value<int>() >= num;
 }
 
 public sealed class LiberalOption
