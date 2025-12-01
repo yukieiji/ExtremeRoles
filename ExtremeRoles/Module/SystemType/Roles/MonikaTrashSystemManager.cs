@@ -44,11 +44,6 @@ public sealed class MonikaTrashSystem(bool canSeeCrew) : IDirtableSystemType
 	public static bool TryGet([NotNullWhen(true)] out MonikaTrashSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.MonikaTrashSystem, out system);
 
-	public static bool InvalidTarget(SingleRoleBase targetRole, byte sourcePlayerId)
-		=> targetRole.Core.Id is ExtremeRoleId.Monika &&
-			TryGet(out var system) &&
-			system.InvalidPlayer(sourcePlayerId);
-
 	public void RpcAddTrash(byte targetPlayerId)
 	{
 		if (!this.isMonikaAlive)

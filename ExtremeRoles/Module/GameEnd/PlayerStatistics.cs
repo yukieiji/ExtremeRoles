@@ -1,4 +1,3 @@
-using System.Text;
 using System.Collections.Generic;
 
 using ExtremeRoles.GameMode;
@@ -7,17 +6,16 @@ using ExtremeRoles.Module.SpecialWinChecker;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface.Status;
-
-using Monika = ExtremeRoles.Roles.Solo.Neutral.Monika;
-using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateRole;
 using ExtremeRoles.Roles.Combination.Avalon;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
+using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Roles.Solo.Neutral.Madmate;
 
+using System.Text;
 
-#nullable enable
-
-namespace ExtremeRoles.Module;
+namespace ExtremeRoles.Module.GameEnd;
 
 public sealed class NeutralSeparateTeamContainer()
 {
@@ -41,6 +39,12 @@ public sealed class NeutralSeparateTeamContainer()
 	}
 	private readonly Dictionary<NeutralTeam, int> neutralTeam = [];
 	private readonly Dictionary<NeutralSubTeam, int> subTeam = [];
+
+	public void Clear()
+	{
+		this.neutralTeam.Clear();
+		this.subTeam.Clear();
+	}
 
 	public void Add(NeutralSeparateTeam team, int id)
 	{
@@ -68,11 +72,16 @@ public sealed class NeutralSeparateTeamContainer()
 	}
 }
 
-file sealed class NeutralSeparateTeamBuilder()
+public sealed class NeutralSeparateTeamBuilder()
 {
 	public IReadOnlyDictionary<NeutralSeparateTeamContainer.NeutralTeam, int> Team => neutralTeam.Team;
 	private readonly NeutralSeparateTeamContainer neutralTeam = new NeutralSeparateTeamContainer();
 	private int cacheId = 0;
+
+	public void Clear()
+	{
+		this.cacheId = 0;
+	}
 
 	public void Add(
 		in SingleRoleBase role,
@@ -149,17 +158,27 @@ file sealed class NeutralSeparateTeamBuilder()
 	}
 }
 
-public sealed record PlayerStatistics(
-	int AllTeamCrewmate,
-	int TeamImpostorAlive,
-	int TeamCrewmateAlive,
-	int TeamNeutralAlive,
-	int TotalAlive,
-	int AssassinAlive,
-	IReadOnlyDictionary<int, IWinChecker> SpecialWinCheckRoleAlive,
-	IReadOnlyDictionary<NeutralSeparateTeamContainer.NeutralTeam, int> SeparatedNeutralAlive)
+public sealed class PlayerStatistics()
 {
+	public int AllTeamCrewmate { get; private set; }
+	
+	public int TeamImpostorAlive { get; private set; }
+	public int TeamCrewmateAlive { get; private set; }
+	
+	public int TeamNeutralAlive { get; private set; }
+	
+	public int TeamLiberalAlive { get; private set; }
+	public int LiberalKillerAlive { get; private set; }
+	
+	public int TotalAlive { get; private set; }
+	public int AssassinAlive { get; private set; }
+
+	public IReadOnlyDictionary<int, IWinChecker> SpecialWinCheckRoleAlive => this.specialWinCheckRoleAlive;
+	public IReadOnlyDictionary<NeutralSeparateTeamContainer.NeutralTeam, int> SeparatedNeutralAlive => this.builder.Team;
+
 	public const int SameNeutralGameControlId = int.MaxValue;
+	private readonly NeutralSeparateTeamBuilder builder = new NeutralSeparateTeamBuilder();
+	private readonly Dictionary<int, IWinChecker> specialWinCheckRoleAlive = [];
 
 	public override string ToString()
 	{
@@ -171,6 +190,7 @@ public sealed record PlayerStatistics(
 		builder.AppendLine($"Impostor Alive :{this.TeamImpostorAlive}");
 		builder.AppendLine($"Assassin Alive : {this.AssassinAlive}");
 		builder.AppendLine($"Neutral Alive : {this.TeamNeutralAlive}");
+		builder.AppendLine($"Liberal Alive : {this.TeamLiberalAlive}");
 
 		builder.AppendLine("------ Neutral Win Special Checker ------");
 		foreach (var (id, winChecker) in this.SpecialWinCheckRoleAlive)
@@ -189,21 +209,26 @@ public sealed record PlayerStatistics(
 		return builder.ToString();
 	}
 
-	public static PlayerStatistics Create()
+	public void Update()
 	{
-		int numTotalAlive = 0;
+		this.TotalAlive = 0;
 
-		int numCrew = 0;
-		int numCrewAlive = 0;
+		this.AllTeamCrewmate = 0;
+		this.TeamCrewmateAlive = 0;
 
-		int numImpostorAlive = 0;
+		this.TeamNeutralAlive = 0;
 
-		int numNeutralAlive = 0;
+		this.TeamImpostorAlive = 0;
 
-		int numAssassinAlive = 0;
-		var builder = new NeutralSeparateTeamBuilder();
-		Dictionary<int, IWinChecker> specialWinCheckRoleAlive = new Dictionary<
-			int, IWinChecker>();
+
+		this.TeamLiberalAlive = 0;
+		this.LiberalKillerAlive = 0;
+
+		this.AssassinAlive = 0;
+
+		this.builder.Clear();
+		this.specialWinCheckRoleAlive.Clear();
+
 
 		foreach (NetworkedPlayerInfo playerInfo in
 			GameData.Instance.AllPlayers.GetFastEnumerator())
@@ -221,7 +246,7 @@ public sealed record PlayerStatistics(
 			// クルーのカウントを数える
 			if (role.IsCrewmate())
 			{
-				++numCrew;
+				++this.AllTeamCrewmate;
 			}
 
 			// 死んでたら次のプレイヤーへ
@@ -231,14 +256,14 @@ public sealed record PlayerStatistics(
 			}
 
 			// マッドメイトの生存をカウントしないオプション
-			if (roleId == ExtremeRoleId.Madmate &&
-				role is NeutralMad madmate &&
+			if (roleId is ExtremeRoleId.Madmate &&
+				role is MadmateRole madmate &&
 				madmate.IsDontCountAliveCrew)
 			{
 				continue;
 			}
 
-			++numTotalAlive;
+			++this.TotalAlive;
 			int gameControlId = role.GameControlId;
 
 			if (ExtremeRoleManager.SpecialWinCheckRole.Contains(roleId))
@@ -254,23 +279,20 @@ public sealed record PlayerStatistics(
 			switch (team)
 			{
 				case ExtremeRoleType.Crewmate:
-					++numCrewAlive;
+					++this.TeamCrewmateAlive;
 					break;
 				case ExtremeRoleType.Impostor:
 
 					// アサシンがニュートラルを切れない時
 					if (roleId == ExtremeRoleId.Assassin &&
 						role is Assassin assassin &&
-						assassin.Status is AssassinStatusModel status)
+						assassin.Status is AssassinStatusModel status &&
+						(status.IsBlockKill || status.IsBlockKillFromNeutral))
 					{
-						bool canNeutralKill = status.CanKilledFromNeutral;
-						if (!canNeutralKill || (canNeutralKill && !status.CanKilled))
-						{
-							++numAssassinAlive;
-						}
+						++this.AssassinAlive;
 					}
 
-					++numImpostorAlive;
+					++this.TeamImpostorAlive;
 					break;
 				case ExtremeRoleType.Neutral:
 
@@ -279,28 +301,20 @@ public sealed record PlayerStatistics(
 						gameControlId = SameNeutralGameControlId;
 					}
 
-					++numNeutralAlive;
-					builder.Add(role, roleId, gameControlId);
+					++this.TeamNeutralAlive;
+					this.builder.Add(role, roleId, gameControlId);
 					break;
-
+				case ExtremeRoleType.Liberal:
+					++this.TeamLiberalAlive;
+					if (role.CanKill())
+					{
+						++this.LiberalKillerAlive;
+					}
+					break;
 				default:
 					break;
 			}
 		}
-
-		return new PlayerStatistics(
-
-			AllTeamCrewmate: numCrew,
-
-			TeamImpostorAlive: numImpostorAlive,
-			TeamCrewmateAlive: numCrewAlive,
-			TeamNeutralAlive: numNeutralAlive,
-			TotalAlive: numTotalAlive,
-			AssassinAlive: numAssassinAlive,
-
-			SpecialWinCheckRoleAlive: specialWinCheckRoleAlive,
-			SeparatedNeutralAlive: builder.Team
-		);
 	}
 
 	private static void addSpecialWinCheckRole(

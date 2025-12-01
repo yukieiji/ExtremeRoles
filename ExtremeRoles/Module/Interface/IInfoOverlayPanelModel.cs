@@ -8,15 +8,19 @@ public interface IInfoOverlayPanelModel
 	public void UpdateVisual();
 	public (string, string) GetInfoText();
 
-	protected static string ToHudStringWithChildren(IOption option, int indent = 0)
+	protected static void AddHudStringWithChildren(StringBuilder builder, IOption option, int indent = 0)
 	{
-		var builder = new StringBuilder();
 		if (option.IsViewActive)
 		{
 			builder.AppendLine(toHudString(option));
 		}
-
 		addChildrenOptionHudString(builder, option, indent + 1);
+	}
+
+	protected static string ToHudStringWithChildren(IOption option, int indent = 0)
+	{
+		var builder = new StringBuilder();
+		AddHudStringWithChildren(builder, option, indent);
 		return builder.ToString();
 	}
 

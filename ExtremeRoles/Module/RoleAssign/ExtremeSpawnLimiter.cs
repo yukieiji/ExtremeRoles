@@ -23,7 +23,7 @@ public sealed class ExtremeSpawnLimiter : ISpawnLimiter
 			return;
 		}
 
-		this.maxNum = new Dictionary<ExtremeRoleType, int>(3)
+		this.maxNum = new Dictionary<ExtremeRoleType, int>(4)
 		{
 			{
 				ExtremeRoleType.Crewmate,
@@ -45,6 +45,13 @@ public sealed class ExtremeSpawnLimiter : ISpawnLimiter
 					cate,
 					RoleSpawnOption.MinNeutral,
 					RoleSpawnOption.MaxNeutral)
+			},
+			{
+				ExtremeRoleType.Liberal,
+				ISpawnLimiter.ComputeSpawnNum(
+					cate,
+					RoleSpawnOption.MinLiberal,
+					RoleSpawnOption.MaxLiberal)
 			},
 		};
 	}

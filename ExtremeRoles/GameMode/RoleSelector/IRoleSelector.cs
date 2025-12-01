@@ -1,13 +1,17 @@
+using System;
+using System.Collections.Generic;
+
+using UnityEngine;
+
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
+
+#nullable enable
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -19,18 +23,22 @@ public enum RoleSpawnOption : int
     MaxNeutral,
     MinImpostor,
     MaxImpostor,
+    MinLiberal,
+    MaxLiberal,
 }
 
 public enum SpawnOptionCategory : int
 {
 	RoleSpawnCategory = 5,
 	GhostRoleSpawnCategory,
+	LiberalSetting,
 }
 
 public enum XionOption : int
 {
 	UseXion,
 }
+
 
 public interface IRoleSelector
 {
@@ -66,11 +74,13 @@ public interface IRoleSelector
 
     public static void CreateRoleGlobalOption()
     {
+		IOption maxLiberalSetting;
 		using (var roleOptionFactory = OptionCategoryAssembler.CreateOptionCategory(
 			SpawnOptionCategory.RoleSpawnCategory,
 			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
+			maxLiberalSetting = createMinMaxSpawnOption(roleOptionFactory, RoleSpawnOption.MinLiberal, RoleSpawnOption.MaxLiberal, (GameSystem.VanillaMaxPlayerNum - 1) * 2);
 		}
 
 		using (var roleOptionFactory = OptionCategoryAssembler.CreateOptionCategory(
@@ -79,6 +89,7 @@ public interface IRoleSelector
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
+
 		using (var xionCategory = OptionCategoryAssembler.CreateOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 			ExtremeRoleId.Xion.ToString(),
@@ -87,16 +98,24 @@ public interface IRoleSelector
 			xionCategory.CreateBoolOption(
 				XionOption.UseXion, false);
 		}
+
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(
+			SpawnOptionCategory.LiberalSetting,
+			color: defaultOptionColor))
+		{
+			LiberalOption.Create(factory, maxLiberalSetting);
+		}
 	}
 
     private static void createExtremeRoleRoleSpawnOption(OptionCategoryFactory factory)
     {
-		createMinMaxSpawnOption(factory, RoleSpawnOption.MinCrewmate, RoleSpawnOption.MaxCrewmate, (GameSystem.VanillaMaxPlayerNum - 1) * 2);
-		createMinMaxSpawnOption(factory, RoleSpawnOption.MinNeutral, RoleSpawnOption.MaxNeutral, (GameSystem.VanillaMaxPlayerNum - 2) * 2);
+		int maxNum = GameSystem.VanillaMaxPlayerNum;
+		createMinMaxSpawnOption(factory, RoleSpawnOption.MinCrewmate, RoleSpawnOption.MaxCrewmate, (maxNum - 1) * 2);
+		createMinMaxSpawnOption(factory, RoleSpawnOption.MinNeutral, RoleSpawnOption.MaxNeutral, (maxNum - 2) * 2);
 		createMinMaxSpawnOption(factory, RoleSpawnOption.MinImpostor, RoleSpawnOption.MaxImpostor, GameSystem.MaxImposterNum * 2);
-    }
+	}
 
-	private static void createMinMaxSpawnOption(OptionCategoryFactory factory, RoleSpawnOption miniOptionEnum, RoleSpawnOption maxOptionEnum, int maxNum)
+	private static IOption createMinMaxSpawnOption(OptionCategoryFactory factory, RoleSpawnOption miniOptionEnum, RoleSpawnOption maxOptionEnum, int maxNum)
 	{
 		var miniOption = factory.CreateIntOption(
 			miniOptionEnum,
@@ -104,11 +123,15 @@ public interface IRoleSelector
 
 		var intRange = ValueHolderAssembler.CreateIntValue(0, 0, maxNum, 1);
 
-		factory.CreateOption(maxOptionEnum, intRange);
+		var maxOption = factory.CreateOption(maxOptionEnum, intRange);
 
 		miniOption.OnValueChanged += () => {
 			int newMini = miniOption.Value<int>();
 			intRange.InnerRange = OptionRange<int>.Create(newMini, maxNum, 1);
+
+			// Selectionを再設定
+			maxOption.Selection = intRange.Selection;
 		};
+		return maxOption;
 	}
 }

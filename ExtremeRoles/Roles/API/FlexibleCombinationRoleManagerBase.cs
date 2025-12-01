@@ -1,11 +1,10 @@
-using System;
-
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
+using System;
+using static ExtremeRoles.Roles.Solo.Impostor.TimeBreaker;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -182,7 +181,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		var roleAssinNumRange = ValueHolderAssembler.CreateIntValue(
 			this.minimumRoleNum, this.minimumRoleNum,
 			roleAssignNum, 1);
-		factory.CreateOption(
+		var numSetting = factory.CreateOption(
 			CombinationRoleCommonOption.AssignsNum,
 			roleAssinNumRange,
 			isHidden: isHideMultiAssign,
@@ -199,6 +198,9 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			int newMaxValue = Math.Max(this.minimumRoleNum, roleAssignNum / roleSetNum);
 			roleAssinNumRange.InnerRange = OptionRange<int>.Create(
 				this.minimumRoleNum, newMaxValue, 1);
+
+			// Selectionを再設定
+			numSetting.Selection = roleAssinNumRange.Selection;
 		};
 
 		factory.CreateBoolOption(

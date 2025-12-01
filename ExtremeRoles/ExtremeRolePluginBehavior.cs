@@ -1,9 +1,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles;
 
@@ -18,12 +16,6 @@ public sealed class ExtremeRolePluginBehavior : MonoBehaviour
             Logging.Dump();
         }
 #if DEBUG
-        if (Input.GetKeyDown(KeyCode.F9) &&
-            ExtremeRolesPlugin.DebugMode.Value &&
-			GameProgressSystem.IsTaskPhase)
-        {
-            Logging.Debug($"{PlayerStatistics.Create()}");
-        }
         if (Input.GetKeyDown(KeyCode.F10) &&
             ExtremeRolesPlugin.DebugMode.Value)
         {

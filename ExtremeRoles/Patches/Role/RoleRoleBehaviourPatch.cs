@@ -3,9 +3,10 @@ using HarmonyLib;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface.Ability;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches.Role;
 
@@ -73,8 +74,30 @@ public static class RoleBehaviourIsValidTargetPatch
 			!target.Object.inMovingPlat &&
 			ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
 			!role.IsSameTeam(targetRole) &&
-			!MonikaTrashSystem.InvalidTarget(targetRole, instancePlayerId);
+			(targetRole.AbilityClass is not IInvincible invincible || invincible.IsValidKillFromSource(instancePlayerId));
 
         return false;
     }
+
+	public static void Postfix(
+		RoleBehaviour __instance,
+		ref bool __result,
+		[HarmonyArgument(0)] NetworkedPlayerInfo target)
+	{
+		if (!(
+				GameProgressSystem.IsGameNow &&
+				__result &&
+				(	
+					__instance.Role == RoleTypes.Detective || 
+					__instance.Role == RoleTypes.Tracker
+				) &&
+				ExtremeRoleManager.TryGetRole(target.PlayerId, out var targetRole) &&
+				targetRole.AbilityClass is IInvincible invincible
+			))
+		{
+			return;
+		}
+		// 探偵とトラッカーの能力の対象からモニカやリーダーを外す処理
+		__result &= invincible.IsValidAbilitySource(__instance.Player.PlayerId);
+	}
 }

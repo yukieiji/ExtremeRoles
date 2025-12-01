@@ -37,7 +37,8 @@ public sealed class Assassin : MultiAssignRoleBase
         CanKilled,
         CanKilledFromCrew,
         CanKilledFromNeutral,
-        IsDeadForceMeeting,
+		CanKilledFromLiberal,
+		IsDeadForceMeeting,
         CanSeeRoleBeforeFirstMeeting,
         CanSeeVote,
     }
@@ -75,7 +76,10 @@ public sealed class Assassin : MultiAssignRoleBase
         factory.CreateBoolOption(
             AssassinOption.CanKilledFromNeutral,
             false, killOptActive);
-        var meetingOpt = factory.CreateBoolOption(
+		factory.CreateBoolOption(
+			AssassinOption.CanKilledFromLiberal,
+			false, killOptActive);
+		var meetingOpt = factory.CreateBoolOption(
             AssassinOption.IsDeadForceMeeting,
             true, killOptActive);
         factory.CreateBoolOption(
@@ -146,8 +150,9 @@ public sealed class Assassin : MultiAssignRoleBase
 		this.status = new AssassinStatusModel(
             loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilled),
             loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromCrew),
-            loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromNeutral)
-        );
+            loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromNeutral),
+			loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromLiberal)
+		);
 		this.AbilityClass = new AssassinAbilityHandler(status);
 
 		this.HasTask = loader.GetValue<AssassinOption, bool>(
@@ -193,13 +198,14 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
         CanSeeAssassin,
         CanSeeVote,
         CanSeeNeutral,
-        CanUseVent,
+		CanSeeLiberal,
+		CanUseVent,
     }
 
-    public bool IsAssassinate = false;
-    public bool CanSeeVote = false;
-    public bool CanSeeNeutral = false;
-    private bool canSeeAssassin = false;
+    public bool CanSeeVote { get; private set; }
+    private bool canSeeNeutral = false;
+	private bool canSeeLiberal = false;
+	private bool canSeeAssassin = false;
     private GridArrange? grid;
 
     private Dictionary<byte, PoolablePlayer> PlayerIcon = [];
@@ -264,7 +270,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
         {
             return Palette.ImpostorRed;
         }
-        else if (targetRole.IsNeutral() && CanSeeNeutral)
+        else if (targetRole.IsNeutral() && canSeeNeutral)
         {
             return ColorPalette.NeutralColor;
         }
@@ -290,14 +296,16 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
         factory.CreateBoolOption(
             MarlinOption.CanSeeNeutral,
             false);
-        factory.CreateBoolOption(
+		factory.CreateBoolOption(
+			MarlinOption.CanSeeLiberal,
+			false);
+		factory.CreateBoolOption(
             MarlinOption.CanUseVent,
             false);
     }
 
     protected override void RoleSpecificInit()
     {
-		this.IsAssassinate = false;
 
         var loader = this.Loader;
 
@@ -307,8 +315,10 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
             MarlinOption.CanSeeAssassin);
 		this.CanSeeVote = loader.GetValue<MarlinOption, bool>(
             MarlinOption.CanSeeVote);
-		this.CanSeeNeutral = loader.GetValue<MarlinOption, bool>(
+		this.canSeeNeutral = loader.GetValue<MarlinOption, bool>(
             MarlinOption.CanSeeNeutral);
+		this.canSeeLiberal = loader.GetValue<MarlinOption, bool>(
+			MarlinOption.CanSeeLiberal);
 		this.UseVent = loader.GetValue<MarlinOption, bool>(
             MarlinOption.CanUseVent);
 		this.PlayerIcon = new Dictionary<byte, PoolablePlayer>();
@@ -329,8 +339,9 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
             }
 
             if (role.IsCrewmate() ||
-                (role.IsNeutral() && !this.CanSeeNeutral) ||
-                (role.Core.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin))
+                (role.IsNeutral() && !this.canSeeNeutral) ||
+				(role.IsLiberal() && !this.canSeeLiberal) ||
+				(role.Core.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin))
             {
                 poolPlayer.gameObject.SetActive(false);
             }

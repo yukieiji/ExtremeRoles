@@ -11,9 +11,9 @@ using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
-using ExtremeRoles.Roles.Combination.Avalon;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -175,13 +175,14 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
     public bool UseAbility()
     {
 		// ターゲットが存在するときのチェック
-		if (this.tmpTarget != null)
+		if (this.tmpTarget != null &&
+			PlayerControl.LocalPlayer != null)
 		{
 			byte playerId = this.tmpTarget.PlayerId;
 
-			if (ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(playerId, out var assassin) &&
-				assassin.Status is AssassinStatusModel status &&
-				(!status.CanKilled || !status.CanKilledFromNeutral))
+			if (ExtremeRoleManager.TryGetRole(playerId, out var role) &&
+				role.AbilityClass is IInvincible invincible &&
+				invincible.IsBlockKillFrom(PlayerControl.LocalPlayer.PlayerId))
 			{
 				return false;
 			}

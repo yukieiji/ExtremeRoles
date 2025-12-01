@@ -1,15 +1,16 @@
 using Il2CppSystem.Collections;
 
 using HarmonyLib;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Compat;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
+using ExtremeRoles.Performance;
 
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+#nullable enable
 
 namespace ExtremeRoles.Patches.Ship;
 
@@ -40,10 +41,7 @@ public static class ShipStatusCalculateLightRadiusPatch
         ref float __result,
         ShipStatus __instance,
         [HarmonyArgument(0)] NetworkedPlayerInfo playerInfo)
-    {
-        return VisionComputer.Instance.IsVanillaVisionAndGetVision(
-            __instance, playerInfo, out __result);
-    }
+		=> ExtremeVisionModder.Instance.IsVanillaVisionAndGetVision(__instance, playerInfo, out __result);
 
 }
 

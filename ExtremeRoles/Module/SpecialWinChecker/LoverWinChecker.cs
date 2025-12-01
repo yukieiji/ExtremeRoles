@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Module.Interface;
 
+
+using ExtremeRoles.Module.GameEnd;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
-using ExtremeRoles.Roles.Solo.Neutral.Queen;
 
 
 namespace ExtremeRoles.Module.SpecialWinChecker;

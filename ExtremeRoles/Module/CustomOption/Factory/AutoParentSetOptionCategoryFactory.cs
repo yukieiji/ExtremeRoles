@@ -1,21 +1,26 @@
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.RoleAssign;
-using System;
-using static UnityEngine.UIElements.BaseVerticalCollectionView;
 
+using System;
 
 
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomOption.Factory;
 
-public sealed class AutoParentSetOptionCategoryFactory(
-	in OptionCategoryFactory factory,
-	in IOption? parent = null) : IDisposable
+public sealed class AutoParentSetOptionCategoryFactory : IDisposable
 {
-	public IOptionActivator? Activator { get; private set; } = parent is null ? null : new ParentActive(parent);
-	private readonly OptionCategoryFactory internalFactory = factory;
+	private readonly AutoActivatorSetFactory internalFactory;
+
+	public IOptionActivator? Activator => this.internalFactory.Activator;
+
+	public AutoParentSetOptionCategoryFactory(
+		in OptionCategoryFactory factory,
+		in IOption? parent = null)
+	{
+		this.internalFactory = new AutoActivatorSetFactory(factory);
+		this.internalFactory.Activator = parent is null ? null : new ParentActive(parent);
+	}
 
 	public int IdOffset
 	{
@@ -46,14 +51,14 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		var newOption = this.internalFactory.CreateBoolOption(
 			option,
 			defaultValue,
-			activator is null ? this.Activator : activator,
+			activator,
 			isHidden,
 			format,
 			ignorePrefix);
 
-		if (this.Activator is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.Activator = new ParentActive(newOption);
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -71,14 +76,14 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			option,
 			defaultValue,
 			min, max, step,
-			activator is null ? this.Activator : activator,
+			activator,
 			isHidden,
 			format,
 			ignorePrefix);
 
-		if (this.Activator is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.Activator = new ParentActive(newOption);
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -99,15 +104,15 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			defaultValue,
 			min, step,
 			checkValueOption,
-			activator is null ? this.Activator : activator,
+			activator,
 			isHidden,
 			format,
 			tempMaxValue,
 			ignorePrefix);
 
-		if (this.Activator is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.Activator = new ParentActive(newOption);
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -125,14 +130,14 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			option,
 			defaultValue,
 			min, max, step,
-			activator is null ? this.Activator : activator,
+			activator,
 			isHidden,
 			format,
 			ignorePrefix);
 
-		if (this.Activator is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.Activator = new ParentActive(newOption);
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -153,15 +158,15 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			defaultValue,
 			min, step,
 			checkValueOption,
-			activator is null ? this.Activator : activator,
+			activator,
 			isHidden,
 			format,
 			tempMaxValue,
 			ignorePrefix);
 
-		if (this.Activator is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.Activator = new ParentActive(newOption);
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -177,14 +182,14 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		var newOption = this.internalFactory.CreateSelectionOption(
 			option,
 			selections,
-			activator is null ? this.Activator : activator,
+			activator,
 			isHidden,
 			format,
 			ignorePrefix);
 
-		if (this.Activator is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.Activator = new ParentActive(newOption);
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -200,14 +205,13 @@ public sealed class AutoParentSetOptionCategoryFactory(
 	{
 		var newOption = this.internalFactory.CreateSelectionOption<T, W>(
 			option,
-			activator is null ? this.Activator : activator,
+			activator,
 			isHidden,
 			format,
 			ignorePrefix);
-
-		if (this.Activator is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.Activator = new ParentActive(newOption);
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -221,17 +225,10 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool ignorePrefix = false)
 		where T : struct, IConvertible
 	{
-
-		int optionId = this.internalFactory.GetOptionId(option);
-		string name = this.internalFactory.GetOptionName(option, ignorePrefix);
-
-		var newOption = this.internalFactory.CreateOption(
-			optionId, name, format, isHidden, holder,
-			activator is null ? this.Activator : activator);
-
-		if (this.Activator is null)
+		var newOption = this.internalFactory.CreateOption(option, holder, activator, isHidden, format, ignorePrefix);
+		if (this.internalFactory.Activator is null)
 		{
-			this.Activator = new ParentActive(newOption);
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
@@ -242,13 +239,14 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool isHidden = false,
 		bool ignorePrefix = false,
 		int defaultGage = 0) where T : struct, IConvertible
-		=> CreateIntOption(
-			option,
-			defaultGage, 0, SingleRoleSpawnData.MaxSpawnRate, 10,
-			activator,
-			isHidden,
-			OptionUnit.Percentage,
-			ignorePrefix);
+	{
+		var newOption = this.internalFactory.Create0To100Percentage10StepOption(option, activator, isHidden, ignorePrefix, defaultGage);
+		if (this.internalFactory.Activator is null)
+		{
+			this.internalFactory.Activator = new ParentActive(newOption);
+		}
+		return newOption;
+	}
 
 	public void Dispose()
 	{

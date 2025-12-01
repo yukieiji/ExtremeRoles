@@ -43,3 +43,9 @@ public sealed class MultiActive(params IOptionActivator[] activators) : IOptionA
 	public IOption? Parent { get; } = activators[0].Parent;
 	public bool IsActive => activators.All(x => x.IsActive);
 }
+
+public sealed class OrActive(params IOptionActivator[] activators) : IOptionActivator
+{
+	public IOption? Parent { get; } = activators[0].Parent;
+	public bool IsActive => activators.Any(x => x.IsActive);
+}
