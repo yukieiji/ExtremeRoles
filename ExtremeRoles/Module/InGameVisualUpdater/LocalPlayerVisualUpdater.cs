@@ -18,6 +18,11 @@ public sealed class LocalPlayerVisualUpdater(PlayerControl local) : InGameVisual
 
 	public override void Update()
 	{
+		if (InValid(this.Owner))
+		{
+			return;
+		}
+
 		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
 		GhostRoleBase? ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 

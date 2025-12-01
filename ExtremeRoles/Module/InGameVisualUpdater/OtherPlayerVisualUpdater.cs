@@ -67,6 +67,11 @@ public sealed class OtherPlayerVisualUpdater(
 
 	public override void Update()
 	{
+		if (InValid(this.local) || InValid(this.Owner))
+		{
+			return;
+		}
+
 		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
 		GhostRoleBase? ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 

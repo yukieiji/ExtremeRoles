@@ -50,4 +50,7 @@ public abstract class InGameVisualUpdaterBase(PlayerControl target)
 	{
 		this.Owner.cosmetics.SetNameColor(color);
 	}
+
+	protected static bool InValid(PlayerControl pc)
+		=> pc == null && pc.Data == null && pc.Data.Role == null;
 }
