@@ -56,7 +56,9 @@ public sealed class AllRoleInfoModel : RolePagePanelModelBase
 			roleFullDesc = Tr.GetString($"{id}FullDescription");
 			roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
-			AddPage(new RoleInfo("", roleFullDesc, new LiberalOptionToString(defaultOpt, additional)));
+			AddPage(new RoleInfo(
+				$"<color=#F9F06F>{Tr.GetString(id.ToString())}</color>",
+				roleFullDesc, new LiberalOptionToString(defaultOpt, additional)));
 		}
 
 

@@ -1361,4 +1361,13 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="Liberal" xml:space="preserve">
     <value>リベラル</value>
   </data>
+  <data name="Leader" xml:space="preserve">
+    <value>リーダー</value>
+  </data>
+  <data name="Dove" xml:space="preserve">
+    <value>ドーヴ</value>
+  </data>
+  <data name="Militant" xml:space="preserve">
+    <value>ミリタント</value>
+  </data>
 </root>

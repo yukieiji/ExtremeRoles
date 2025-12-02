@@ -105,7 +105,7 @@ public sealed class Guesser :
 			bool liberalOn = liberalOption.Get(LiberalGlobalSetting.WinMoney).IsViewActive;
 			bool militantOn = liberalOption.Get(LiberalGlobalSetting.LiberalMilitantMini).IsViewActive;
 
-			addVanillaRole(includeNoneRole);
+			addVanillaRole(includeNoneRole, liberalOn, militantOn);
 
 			this.separetedRoleId[ExtremeRoleType.Crewmate].Add((ExtremeRoleId)RoleTypes.Crewmate);
 			this.separetedRoleId[ExtremeRoleType.Impostor].Add((ExtremeRoleId)RoleTypes.Impostor);

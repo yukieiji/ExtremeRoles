@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -22,6 +23,8 @@ public sealed class RoleAssignFilterModel(ConfigEntry<string> config)
 	public Dictionary<int, ExtremeRoleId> NormalRole { get; } = new Dictionary<int, ExtremeRoleId>();
 	public Dictionary<int, CombinationRoleType> CombRole { get; } = new Dictionary<int, CombinationRoleType>();
 	public Dictionary<int, ExtremeGhostRoleId> GhostRole { get; } = new Dictionary<int, ExtremeGhostRoleId>();
+
+	private const string version = "v1";
 
 	private const char splitChar = '|';
 
@@ -45,14 +48,18 @@ public sealed class RoleAssignFilterModel(ConfigEntry<string> config)
 		{
 			serializeStr = serializeStr.Remove(serializeStr.Length - 1);
 		}
-		return serializeStr;
+		return $"{version}|{serializeStr}";
 	}
 
 	public void DeserializeFromString(string serializedStr)
 	{
 		string[] splitedSerializedStr = serializedStr.Split(splitChar);
 
-		foreach (string encodingFilter in splitedSerializedStr)
+		bool liberalMigrateOn = false;
+		liberalMigrateOn = splitedSerializedStr[0] != version;
+		int startIndex = liberalMigrateOn ? 0 : 1;
+
+		foreach (string encodingFilter in splitedSerializedStr[startIndex..])
 		{
 			byte[] deserializedBytes = Convert.FromBase64String(encodingFilter);
 
@@ -64,10 +71,34 @@ public sealed class RoleAssignFilterModel(ConfigEntry<string> config)
 				obj = serializer.ReadObject(stream);
 			}
 
-			if (obj is RoleFilterData model)
+			if (obj is not RoleFilterData model)
 			{
-				this.FilterSet.Add(Guid.NewGuid(), model);
+				continue;
 			}
+
+			if (liberalMigrateOn)
+			{
+				migrateLiberal(model);
+			}
+			this.FilterSet.Add(Guid.NewGuid(), model);
 		}
+	}
+
+	// リベラル実装に伴い0, 1, 2がリベラル陣営の固定役職になったためIDを全体的に3ずらす
+	private static void migrateLiberal(RoleFilterData model)
+	{
+		const int offset = 3;
+		model.FilterNormalId = offsetId(model.FilterNormalId, offset);
+		model.FilterCombinationId = offsetId(model.FilterCombinationId, offset);
+		model.FilterGhostRole = offsetId(model.FilterGhostRole, offset);
+	}
+	private static Dictionary<int, T> offsetId<T>(Dictionary<int, T> target, int offset)
+	{
+		var newDict = new Dictionary<int, T>(target.Count);
+		foreach (var (k, v) in target)
+		{
+			newDict[k + offset] = v;
+		}
+		return newDict;
 	}
 }

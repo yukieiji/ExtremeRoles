@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-
-using TMPro;
-using UnityEngine.Events;
-using UnityEngine;
-using UnityEngine.UI;
-using Il2CppInterop.Runtime.Attributes;
-
+using AmongUs.GameOptions;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Roles;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.RoleAssign.Update;
+using ExtremeRoles.Roles;
+using Il2CppInterop.Runtime.Attributes;
+using System;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+
 
 #nullable enable
 
@@ -87,11 +87,13 @@ public sealed class AddRoleMenuView : MonoBehaviour
 		ButtonWrapper button, RoleAssignFilterModel model,
 		Guid filterId, int id, Transform targetFilterTransform)
 	{
-		if (model.NormalRole.TryGetValue(id, out var normalRoleId) &&
-			ExtremeRoleManager.NormalRole.TryGetValue((int)normalRoleId, out var role) &&
-			role is not null)
+		if (model.NormalRole.TryGetValue(id, out var normalRoleId))
 		{
-			string roleName = role.GetColoredRoleName(true);
+			string roleName =
+				ExtremeRoleManager.NormalRole.TryGetValue((int)normalRoleId, out var role) &&
+				role is not null ? 
+					role.GetColoredRoleName(true) : 
+					$"<color=#F9F06F>{Tr.GetString(normalRoleId.ToString())}</color>";
 			button.SetButtonText(roleName);
 			return () =>
 			{
