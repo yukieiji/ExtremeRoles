@@ -33,15 +33,15 @@ public interface IInfoOverlayPanelModel
 		{
 			return;
 		}
-
+		string indent = new string(' ', prefixIndentCount * 4);
 		foreach (var option in child)
 		{
 			if (option.IsViewActive)
 			{
-				var indent = new string(' ', prefixIndentCount * 4);
 				builder.Append(indent);
 
-				var text = toHudString(option)
+				string text = toHudString(option)
+					.TrimEnd('\r', '\n')
 					.Replace("\r\n", "\n")
 					.Replace("\n", $"\n{indent}");
 				builder.AppendLine(text);
