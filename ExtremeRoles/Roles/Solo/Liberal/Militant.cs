@@ -22,16 +22,16 @@ public sealed class Militant : SingleRoleBase
 
 		LiberalSettingOverrider.OverrideDefault(this, option);
 
-		this.HasOtherKillRange = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.MiltantHasOtherKillRange);
+		this.HasOtherKillRange = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.MilitantHasOtherKillRange);
 		if (this.HasOtherKillRange)
 		{
-			this.KillRange = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.MiltantKillCool);
+			this.KillRange = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.MilitantKillCool);
 		}
 
-		this.HasOtherKillCool = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.MiltantHasOtherKillCool);
+		this.HasOtherKillCool = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.MilitantHasOtherKillCool);
 		if (this.HasOtherKillCool)
 		{
-			this.KillCoolTime = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.MiltantKillCool);
+			this.KillCoolTime = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.MilitantKillCool);
 		}
 	}
 

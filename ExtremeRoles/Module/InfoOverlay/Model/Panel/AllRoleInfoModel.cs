@@ -49,7 +49,7 @@ public sealed class AllRoleInfoModel : RolePagePanelModelBase
 			var additional = id switch
 			{
 				ExtremeRoleId.Leader => liberalOption.LeaderOption,
-				ExtremeRoleId.Militant => liberalOption.MiltantOption,
+				ExtremeRoleId.Militant => liberalOption.MilitantOption,
 				_ => []
 			};
 

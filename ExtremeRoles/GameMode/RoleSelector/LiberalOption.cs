@@ -21,6 +21,13 @@ public enum LiberalGlobalSetting
 	LiberalVison,
 	UseVent,
 
+	CanKilledLeader,
+	LeaderKilledBoost,
+	IsAutoRevive,
+
+	IsAutoExitWhenLeaderSolo,
+	CanKilledWhenLeaderSolo,
+
 	LeaderHasOtherVisonSize,
 	LeaderVison,
 
@@ -37,27 +44,20 @@ public enum LiberalGlobalSetting
 	LeaderHasOtherKillRange,
 	LeaderKillRange,
 
-	CanKilledLeader,
-	LeaderKilledBoost,
-	IsAutoRevive,
-
-	IsAutoExitWhenLeaderSolo,
-	CanKilledWhenLeaderSolo,
-
 	LiberalMilitantMini,
 	LiberalMilitantMax,
 
-	MiltantHasOtherKillCool,
-	MiltantKillCool,
-	MiltantHasOtherKillRange,
-	MiltantKillRange,
+	MilitantHasOtherKillCool,
+	MilitantKillCool,
+	MilitantHasOtherKillRange,
+	MilitantKillRange,
 }
 
 public class LiberalDefaultOptipnLoader : IOptionLoader
 {
 	public IReadOnlyList<IOption> GlobalOption { get; }
 	public IReadOnlyList<IOption> LeaderOption { get; }
-	public IReadOnlyList<IOption> MiltantOption { get; }
+	public IReadOnlyList<IOption> MilitantOption { get; }
 
 	private readonly OptionCategory category;
 
@@ -84,11 +84,11 @@ public class LiberalDefaultOptipnLoader : IOptionLoader
 		];
 
 
-		this.MiltantOption = [
+		this.MilitantOption = [
 			this.category.Get(LiberalGlobalSetting.LiberalMilitantMini),
 			this.category.Get(LiberalGlobalSetting.LiberalMilitantMax),
-			this.category.Get(LiberalGlobalSetting.MiltantHasOtherKillCool),
-			this.category.Get(LiberalGlobalSetting.MiltantKillRange),
+			this.category.Get(LiberalGlobalSetting.MilitantHasOtherKillCool),
+			this.category.Get(LiberalGlobalSetting.MilitantKillRange),
 		];
 	}
 
@@ -146,6 +146,25 @@ public sealed class LiberalOption
 			2f, 0.25f, 5.0f, 0.25f, format: OptionUnit.Multiplier);
 		factory.CreateBoolOption(LiberalGlobalSetting.UseVent, true);
 
+		var leaderKilledSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledLeader, false);
+		var killedActive = new ParentActive(leaderKilledSetting);
+		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKilledBoost, 1.0f, 1.0f, 10.0f, 0.25f, killedActive);
+
+		var isLiberalMoreTwo = new LiberalSettingCheck(liberalMaxNumSetting, 2);
+
+		// リベラルが一人になったときに無敵が剥がれるように => 条件: リベラル2人 and 死なない設定
+		var leaderCanNotKill = new InvertActive(leaderKilledSetting);
+		var autoCanKilled = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledWhenLeaderSolo,
+			false, new MultiActive(isLiberalMoreTwo, leaderCanNotKill));
+
+		// 死んだときに自動的に復活する => 条件: 無敵ではない or 無敵が剥がれたとき
+		var autoRevive = factory.CreateBoolOption(LiberalGlobalSetting.IsAutoRevive, true, new OrActive(killedActive, new ParentActive(autoCanKilled)));
+
+		// リベラルが一人になったときに強制的に退場 => リベラルの勝利を完全に消す　条件: リベラルが2人以上 and 無敵設定 and 無敵が剥がれない設定時)
+		var isAutoDead = factory.CreateBoolOption(
+			LiberalGlobalSetting.IsAutoExitWhenLeaderSolo,
+			false, new MultiActive(isLiberalMoreTwo, leaderCanNotKill, new InvertActive(autoCanKilled)));
+
 		var visionOption = factory.CreateBoolOption(LiberalGlobalSetting.LeaderHasOtherVisonSize, false);
 		factory.CreateFloatOption(LiberalGlobalSetting.LeaderVison,
 			2f, 0.25f, 5.0f, 0.25f, new ParentActive(visionOption), format: OptionUnit.Multiplier);
@@ -178,25 +197,6 @@ public sealed class LiberalOption
 			OptionCreator.Range,
 			new ParentActive(leaderKillRangeOption));
 
-		var leaderKilledSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledLeader, false);
-		var killedActive = new ParentActive(leaderKilledSetting);
-		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKilledBoost, 1.0f, 1.0f, 10.0f, 0.25f, killedActive);
-
-		var isLiberalMoreTwo = new LiberalSettingCheck(liberalMaxNumSetting, 2);
-
-		// リベラルが一人になったときに無敵が剥がれるように => 条件: リベラル2人 and 死なない設定
-		var leaderCanNotKill = new InvertActive(leaderKilledSetting);
-		var autoCanKilled = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledWhenLeaderSolo,
-			false, new MultiActive(isLiberalMoreTwo, leaderCanNotKill));
-
-		// 死んだときに自動的に復活する => 条件: 無敵ではない or 無敵が剥がれたとき
-		var autoRevive = factory.CreateBoolOption(LiberalGlobalSetting.IsAutoRevive, true, new OrActive(killedActive, new ParentActive(autoCanKilled)));
-
-		// リベラルが一人になったときに強制的に退場 => リベラルの勝利を完全に消す　条件: リベラルが2人以上 and 無敵設定 and 無敵が剥がれない設定時)
-		var isAutoDead = factory.CreateBoolOption(
-			LiberalGlobalSetting.IsAutoExitWhenLeaderSolo,
-			false, new MultiActive(isLiberalMoreTwo, leaderCanNotKill, new InvertActive(autoCanKilled)));
-
 
 		var liberalMilitantMini = factory.CreateIntDynamicMaxOption(LiberalGlobalSetting.LiberalMilitantMini, 0, 0, 1, liberalMaxNumSetting, isLiberalMoreTwo);
 
@@ -217,21 +217,21 @@ public sealed class LiberalOption
 		liberalMaxNumSetting.OnValueChanged += valueChangedEvent;
 
 
-		var miltantKillCoolOption = factory.CreateBoolOption(
-			LiberalGlobalSetting.MiltantHasOtherKillCool,
+		var MilitantKillCoolOption = factory.CreateBoolOption(
+			LiberalGlobalSetting.MilitantHasOtherKillCool,
 			false, isLiberalMoreTwo);
 		factory.CreateFloatOption(
-			LiberalGlobalSetting.MiltantKillCool,
+			LiberalGlobalSetting.MilitantKillCool,
 			30f, 1.0f, 120f, 0.5f,
-			new ParentActive(miltantKillCoolOption),
+			new ParentActive(MilitantKillCoolOption),
 			format: OptionUnit.Second);
 
-		var miltantKillRangeOption = factory.CreateBoolOption(
-			LiberalGlobalSetting.MiltantHasOtherKillRange,
+		var MilitantKillRangeOption = factory.CreateBoolOption(
+			LiberalGlobalSetting.MilitantHasOtherKillRange,
 			false, isLiberalMoreTwo);
 		factory.CreateSelectionOption(
-			LiberalGlobalSetting.MiltantKillRange,
+			LiberalGlobalSetting.MilitantKillRange,
 			OptionCreator.Range,
-			new ParentActive(miltantKillRangeOption));
+			new ParentActive(MilitantKillRangeOption));
 	}
 }

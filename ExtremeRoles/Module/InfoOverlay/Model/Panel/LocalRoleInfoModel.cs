@@ -91,7 +91,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 			var targets = id switch
 			{ 
 				ExtremeRoleId.Leader => liberalSetting.LeaderOption,
-				ExtremeRoleId.Militant => liberalSetting.MiltantOption,
+				ExtremeRoleId.Militant => liberalSetting.MilitantOption,
 				_ => []
 			};
 			foreach (var target in targets)

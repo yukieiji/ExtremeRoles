@@ -132,9 +132,6 @@
   <data name="NeutralTab" xml:space="preserve">
     <value>獨立陣營職業設置</value>
   </data>
-  <data name="LiberalTab" xml:space="preserve">
-    <value>&lt;color=#FFFF00FF&gt;自由人角色設置&lt;/color&gt;</value>
-  </data>
   <data name="CombinationTab" xml:space="preserve">
     <value>特殊職業設置</value>
   </data>
@@ -605,9 +602,6 @@
   </data>
   <data name="neutralShotCall" xml:space="preserve">
     <value>野心家</value>
-  </data>
-  <data name="liberalIntro" xml:space="preserve">
-    <value>為自由而活</value>
   </data>
   <data name="Liberal" xml:space="preserve">
     <value>自由人</value>
