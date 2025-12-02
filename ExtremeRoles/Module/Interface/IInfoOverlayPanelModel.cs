@@ -8,7 +8,7 @@ public interface IInfoOverlayPanelModel
 	public void UpdateVisual();
 	public (string, string) GetInfoText();
 
-	protected static void AddHudStringWithChildren(StringBuilder builder, IOption option, int indent = 0)
+	protected static void AddHudStringWithChildren(StringBuilder builder, IOption option, int indent = -1)
 	{
 		if (option.IsViewActive)
 		{
@@ -52,5 +52,5 @@ public interface IInfoOverlayPanelModel
 	}
 
 	private static string toHudString(in IOption option)
-		=> $"{option.TransedTitle}: {option.TransedValue}";
+		=> $"・{option.TransedTitle}: {option.TransedValue}";
 }

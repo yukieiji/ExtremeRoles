@@ -38,7 +38,7 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 					combRole.Loader : role.Loader;
 
 			var option = useLoader.Get(RoleCommonOption.SpawnRate);
-			roleOptionString = IInfoOverlayPanelModel.ToHudStringWithChildren(option);
+			roleOptionString = IInfoOverlayPanelModel.ToHudStringWithChildren(option, -1);
 		}
 
 		string roleFullDesc = role.GetFullDescription();

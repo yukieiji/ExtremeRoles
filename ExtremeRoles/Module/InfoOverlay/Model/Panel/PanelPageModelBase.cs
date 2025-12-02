@@ -22,7 +22,7 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 		public bool IsActive => !option.Info.IsHidden && option.IsChangeDefault;
 
 		public override string ToString()
-			=> IInfoOverlayPanelModel.ToHudStringWithChildren(option);
+			=> IInfoOverlayPanelModel.ToHudStringWithChildren(option, -1);
 	}
 
 
@@ -104,7 +104,7 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 
 		return (
 			$"<size=150%>・{colorRoleName}</size>\n{info.FullDec}",
-			$"<size=115%>・{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionStr}"
+			$"<size=115%>{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionStr}"
 		);
 	}
 

@@ -29,7 +29,7 @@ public sealed class AllRoleInfoModel : RolePagePanelModelBase
 			var builder = new StringBuilder();
 			foreach (var opt in allOption)
 			{
-				IInfoOverlayPanelModel.AddHudStringWithChildren(builder, opt);
+				IInfoOverlayPanelModel.AddHudStringWithChildren(builder, opt, 0);
 			}
 			return builder.ToString();
 		}

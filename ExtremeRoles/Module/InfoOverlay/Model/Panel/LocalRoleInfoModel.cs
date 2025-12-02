@@ -33,7 +33,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 			return (
 				$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}",
-				$"<size=115%>・{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionString}"
+				$"<size=115%>{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionString}"
 			);
 		}
 	}
@@ -63,7 +63,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 		{
 			return (
 				$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}",
-				$"<size=115%>・{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionString}"
+				$"<size=115%>{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionString}"
 			);
 		}
 	}
@@ -79,7 +79,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 			var liberalSetting = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptipnLoader>();
 			foreach (var target in liberalSetting.GlobalOption)
 			{
-				IInfoOverlayPanelModel.AddHudStringWithChildren(builder, target);
+				IInfoOverlayPanelModel.AddHudStringWithChildren(builder, target, 0);
 			}
 		}
 		if (id is
@@ -96,7 +96,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 			};
 			foreach (var target in targets)
 			{
-				IInfoOverlayPanelModel.AddHudStringWithChildren(builder, target);
+				IInfoOverlayPanelModel.AddHudStringWithChildren(builder, target, 0);
 			}
 		}
 		else if (!role.IsVanillaRole())
