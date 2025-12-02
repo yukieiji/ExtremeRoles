@@ -73,14 +73,14 @@ public class LiberalDefaultOptipnLoader : IOptionLoader
 			this.category.Get(LiberalGlobalSetting.WinMoney),
 			this.category.Get(LiberalGlobalSetting.TaskCompletedMoney),
 			this.category.Get(LiberalGlobalSetting.KillMoney),
-			this.category.Get(LiberalGlobalSetting.LiberalVison)
+			this.category.Get(LiberalGlobalSetting.LiberalVison),
+			this.category.Get(LiberalGlobalSetting.CanKilledLeader),
 		];
 
 		this.LeaderOption = [
 			this.category.Get(LiberalGlobalSetting.LeaderHasOtherVisonSize),
 			this.category.Get(LiberalGlobalSetting.CanHasTaskLeader),
 			this.category.Get(LiberalGlobalSetting.CanKillLeader),
-			this.category.Get(LiberalGlobalSetting.CanKilledLeader),
 		];
 
 
