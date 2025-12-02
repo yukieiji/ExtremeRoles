@@ -1370,4 +1370,7 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="Militant" xml:space="preserve">
     <value>ミリタント</value>
   </data>
+  <data name="LiberalSetting" xml:space="preserve">
+    <value>リベラルの共通設定</value>
+  </data>
 </root>
