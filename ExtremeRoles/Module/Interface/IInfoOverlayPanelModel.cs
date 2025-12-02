@@ -38,8 +38,13 @@ public interface IInfoOverlayPanelModel
 		{
 			if (option.IsViewActive)
 			{
-				builder.Append(' ', prefixIndentCount * 4);
-				builder.AppendLine(toHudString(option));
+				var indent = new string(' ', prefixIndentCount * 4);
+				builder.Append(indent);
+
+				var text = toHudString(option)
+					.Replace("\r\n", "\n")
+					.Replace("\n", $"\n{indent}");
+				builder.AppendLine(text);
 			}
 
 			addChildrenOptionHudString(in builder, option, prefixIndentCount + 1);
