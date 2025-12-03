@@ -12,15 +12,15 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class ExtremeGameEndCheckBehavior(IntPtr ptr) : MonoBehaviour(ptr)
 {
-	public ExtremeGameEndChecker? Master { get; private set; }
+	private ExtremeGameEndChecker? master;
 
 	public void Awake()
 	{
-		this.Master = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<ExtremeGameEndChecker>();
+		this.master = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<ExtremeGameEndChecker>();
 	}
 
 	public void CheckGameEnd()
 	{
-		this.Master?.Check();
+		this.master?.Check();
 	}
 }
