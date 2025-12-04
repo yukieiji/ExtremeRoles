@@ -33,7 +33,7 @@ public static class Update
 		{
 			initializeModel(model);
 		}
-		else if (model.PanelModel.Count >= 4)
+		else if (model.PanelModel.Count >= 5)
 		{
 			foreach (var value in System.Enum.GetValues<InfoOverlayModel.Type>())
 			{
@@ -108,6 +108,10 @@ public static class Update
 			{
 				InfoOverlayModel.Type.GlobalSettingPanel,
 				new GlobalSettingInfoModel()
+			},
+			{
+				InfoOverlayModel.Type.Liberal,
+				new LiberalInfoModel()
 			}
 		};
 	}
