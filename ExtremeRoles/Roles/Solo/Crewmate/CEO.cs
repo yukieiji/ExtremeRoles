@@ -136,7 +136,7 @@ public sealed class CEO : SingleRoleBase,
 
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
-		if (!this.isMonikaMeeting)
+		if (this.isMonikaMeeting)
 		{
 			this.isMonikaMeeting = false;
 			return;
