@@ -3,10 +3,8 @@ using System;
 using AmongUs.GameOptions;
 using UnityEngine;
 
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.GhostRoles.Impostor;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Compat;
@@ -20,7 +18,7 @@ using ExtremeRoles.Extension.Il2Cpp;
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
 [Il2CppRegister]
-public class ExtremeVisionModder(IntPtr ptr) : MonoBehaviour(ptr)
+public sealed class ExtremeVisionModder(IntPtr ptr) : MonoBehaviour(ptr)
 {
 	public enum Modifier
 	{

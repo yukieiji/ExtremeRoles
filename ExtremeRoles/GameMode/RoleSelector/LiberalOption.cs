@@ -53,7 +53,7 @@ public enum LiberalGlobalSetting
 	MilitantKillRange,
 }
 
-public class LiberalDefaultOptipnLoader : IOptionLoader
+public sealed class LiberalDefaultOptipnLoader : IOptionLoader
 {
 	public IReadOnlyList<IOption> GlobalOption { get; }
 	public IReadOnlyList<IOption> LeaderOption { get; }

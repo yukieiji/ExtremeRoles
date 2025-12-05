@@ -7,7 +7,7 @@ using System;
 
 namespace ExtremeRoles.Module.CustomOption.Factory;
 
-public class AutoActivatorSetFactory(OptionCategoryFactory factory) : IDisposable
+public sealed class AutoActivatorSetFactory(OptionCategoryFactory factory) : IDisposable
 {
 	public IOptionActivator? Activator { get; set; } = null;
 	private readonly OptionCategoryFactory internalFactory = factory;

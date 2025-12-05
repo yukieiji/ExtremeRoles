@@ -7,7 +7,7 @@ using System.Collections.Immutable;
 namespace ExtremeRoles.Analyzers;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class VectorComparisonAnalyzer : DiagnosticAnalyzer
+public sealed class VectorComparisonAnalyzer : DiagnosticAnalyzer
 {
     private const string Category = "Usage";
 
