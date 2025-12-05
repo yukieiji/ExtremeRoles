@@ -189,11 +189,12 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		}
 
 		var finalVoteInfo = new Dictionary<byte, int>();
-		foreach (var (originalPlayer, originalVote) in voteInfo)
+		foreach (var (originalTarget, originalVote) in voteInfo)
 		{
-			if (!swapInfo.TryGetValue(originalPlayer, out byte target))
+			if (!swapInfo.TryGetValue(originalTarget, out byte target))
 			{
-				continue;
+				// スワップ先が見つからない時に票が消えないようにするため元のやつをいれる
+				target = originalTarget;
 			}
 			finalVoteInfo[target] = finalVoteInfo.GetValueOrDefault(target, 0) + originalVote;
 		}

@@ -18,7 +18,7 @@ public static class PlayerControlSetKillTimernPatch
 		PlayerControl __instance, [HarmonyArgument(0)] float time)
 	{
 		if (!(
-				GameProgressSystem.IsGameNow &&
+				GameProgressSystem.IsRoleSetUpEnd &&
 				ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var role)
 			))
 		{

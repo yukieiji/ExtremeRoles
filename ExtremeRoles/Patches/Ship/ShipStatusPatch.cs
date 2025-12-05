@@ -66,7 +66,6 @@ public static class ShipStatusPrespawnStepPatch
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 		if (!spawnOpt.EnableSpecialSetting)
 		{
-			GameProgressSystem.Current = GameProgressSystem.Progress.Task;
 			return true;
 		}
 
@@ -84,7 +83,6 @@ public static class ShipStatusPrespawnStepPatch
 			__result = ExtremeSpawnSelectorMinigame.WaiteSpawn().WrapToIl2Cpp();
 			return false;
 		}
-		GameProgressSystem.Current = GameProgressSystem.Progress.Task;
 		return true;
 	}
 }

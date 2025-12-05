@@ -29,9 +29,6 @@ public sealed class Gambler :
 	private int minVoteNum;
 	private int maxVoteNum;
 
-    private byte votedFor = PlayerVoteArea.HasNotVoted;
-    private int voteCount = 1;
-
     public Gambler() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Gambler,
@@ -44,27 +41,30 @@ public sealed class Gambler :
         ref Dictionary<byte, byte> voteTarget,
         ref Dictionary<byte, int> voteResult)
     {
-        if (!voteTarget.TryGetValue(rolePlayerId, out votedFor) ||
-            !voteResult.TryGetValue(votedFor, out int curVoteNum))
+        if (!(
+				voteTarget.TryGetValue(rolePlayerId, out byte votedFor) && 
+				voteResult.TryGetValue(votedFor, out int curVoteNum)
+			))
         {
             return;
         }
 
 		int index = RandomGenerator.Instance.Next(1, 101);
+		int voteCount = 1;
 		if (index <= this.normalVoteIndex)
 		{
-			this.voteCount = 1;
+			voteCount = 1;
 		}
 		else
 		{
 			do
 			{
-				this.voteCount = RandomGenerator.Instance.Next(this.minVoteNum, this.maxVoteNum);
+				voteCount = RandomGenerator.Instance.Next(this.minVoteNum, this.maxVoteNum);
 			}
-			while (this.voteCount == 1);
+			while (voteCount == 1);
 		}
 
-		if (this.voteCount == 1)
+		if (voteCount == 1)
         {
             return;
         }
@@ -72,7 +72,7 @@ public sealed class Gambler :
 		// 自分の票数がもともと入っていて票数=curVoteNumなので、入っていた票数を消して足す
 		int newVotedNum = curVoteNum + voteCount - 1;
 		Logging.Debug($"New vote num : {newVotedNum}");
-		voteResult[this.votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
+		voteResult[votedFor] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
 
     public IEnumerable<VoteInfo> GetModdedVoteInfo(VoteInfoCollector collector, NetworkedPlayerInfo rolePlayer)
@@ -83,8 +83,7 @@ public sealed class Gambler :
 
     public void ResetModifier()
     {
-        votedFor = PlayerVoteArea.HasNotVoted;
-        voteCount = 1;
+
     }
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -96,11 +95,11 @@ public sealed class Gambler :
 		factory.CreateIntOption(
             GamblerOption.MinVoteNum,
             0, -100, 0, 1,
-            format: OptionUnit.Percentage);
+            format: OptionUnit.VoteNum);
 		factory.CreateIntOption(
             GamblerOption.MaxVoteNum,
             2, 2, 100, 1,
-            format: OptionUnit.Percentage);
+            format: OptionUnit.VoteNum);
     }
 
     protected override void RoleSpecificInit()
