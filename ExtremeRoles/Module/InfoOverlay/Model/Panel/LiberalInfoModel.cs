@@ -39,7 +39,7 @@ public sealed class LiberalInfoModel : IInfoOverlayPanelModel
 		this.printOption.AppendLine();
 
 		return (
-			$"LiberalInfo",
+			Tr.GetString("liberalGlobalInfo"),
 			$"<size=135%>{Tr.GetString("gameOption")}</size>\n\n{this.printOption}"
 		);
 	}
