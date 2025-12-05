@@ -32,14 +32,10 @@ public sealed class CEOForceMeeting : IOnemanMeeting, IVoterValidtor
 	public IOnemanMeeting.ExiledInfo CreateExiledInfo(byte _)
 	{
 		var player = GameData.Instance.GetPlayerById(this.VoteTarget);
-		if (player == null)
-		{
-			return new IOnemanMeeting.ExiledInfo(false, "CEOはスキップを選択した");
-		}
-		else
-		{
-			return new IOnemanMeeting.ExiledInfo(true, $"CEOの権限により「{player.PlayerName}」が追放された");
-		}
+		return
+			player == null ?
+			new IOnemanMeeting.ExiledInfo(false, Tr.GetString("CEOMeetingSkip")) :
+			new IOnemanMeeting.ExiledInfo(true, Tr.GetString("CEOMeetingSelect", player.PlayerName));
 	}
 
 	public IOnemanMeeting.VoteResult CreateVoteResult(MeetingHud meeting, byte voteTarget)
@@ -49,8 +45,8 @@ public sealed class CEOForceMeeting : IOnemanMeeting, IVoterValidtor
 		return new IOnemanMeeting.VoteResult(voteTarget, target);
 	}
 
-	public string GetTitle(byte _)
-		=> "CEO会議";
+	public string GetTitle(byte caller)
+		=> Tr.GetString(caller == PlayerControl.LocalPlayer.PlayerId ? "CEOMeetingCEO" : "CEOMeetingOther");
 
 	public VoteAreaState GetVoteAreaState(NetworkedPlayerInfo player)
 		=> VoteAreaState.None;

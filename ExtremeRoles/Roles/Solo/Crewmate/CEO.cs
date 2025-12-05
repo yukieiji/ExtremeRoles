@@ -24,7 +24,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 public sealed class CEOAbilityHandler(CEOStatus status) : IAbility, IExiledAnimationOverrideWhenExiled
 {
 	private readonly CEOStatus status = status;
-	public OverrideInfo? OverrideInfo => this.status.IsAwake ? new OverrideInfo(null, "CEO権限により本投票は無効になりました") : null;
+	public OverrideInfo? OverrideInfo => this.status.IsAwake ? new OverrideInfo(null, Tr.GetString("CEOExiledOverride")) : null;
 }
 
 public sealed class CEOStatus : IStatusModel
@@ -136,7 +136,7 @@ public sealed class CEO : SingleRoleBase,
 
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
-		if (this.isMonikaMeeting)
+		if (!this.IsAwake || this.isMonikaMeeting)
 		{
 			this.isMonikaMeeting = false;
 			return;

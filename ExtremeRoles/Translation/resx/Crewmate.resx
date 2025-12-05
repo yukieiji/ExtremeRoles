@@ -1459,4 +1459,53 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="BlockModeNone" xml:space="preserve">
     <value>デメリットなし</value>
   </data>
+  <data name="CEO" xml:space="preserve">
+    <value>C.E.O</value>
+  </data>
+  <data name="CEOFullDescription" xml:space="preserve">
+    <value>会議で吊ったときに必ず復活する役職
+
+この役職が会議で吊られた時、5秒後にデメリット無しで
+自動復活する
+「この役職への投票を表示するか」がオフのとき、
+この役職が吊られる票数の場合は票が表示される
+
+特殊会議「C.E.O会議」
+　設定が有効時、C.E.Oが吊られたときに発動する
+　起こしたC.E.Oが全権限(スキップ、吊り)を持つ会議であり、
+　通常会議の参加者が参加できるが投票権を持たない
+　起こしたC.E.O自身を選択することは出来ない</value>
+  </data>
+  <data name="CEOShortDescription" xml:space="preserve">
+    <value>私を吊ろうとする会議は</value>
+  </data>
+  <data name="CEOIntroDescription" xml:space="preserve">
+    <value>私が、私こそが、C.E.Oだ</value>
+  </data>
+  <data name="CEOAwakeTaskGage" xml:space="preserve">
+    <value>覚醒するタスク進捗率</value>
+  </data>
+  <data name="CEOIsShowRolePlayerVote" xml:space="preserve">
+    <value>この役職への投票を表示するか</value>
+  </data>
+  <data name="CEOIsUseCEOMeeting" xml:space="preserve">
+    <value>特殊会議「C.E.O会議」</value>
+  </data>
+  <data name="CEOMeetingCEO" xml:space="preserve">
+    <value>C.E.O会議
+(あなたがすべての権限を持ちます)</value>
+  </data>
+  <data name="CEOMeetingOther" xml:space="preserve">
+    <value>C.E.O会議
+(C.E.Oに助言をしましょう)</value>
+  </data>
+  <data name="CEOMeetingSkip" xml:space="preserve">
+    <value>C.E.Oはスキップを選択した</value>
+  </data>
+  <data name="CEOMeetingSelect" xml:space="preserve">
+    <value>C.E.Oの権限により「{0}」が追放された</value>
+  </data>
+  <data name="CEOExiledOverride" xml:space="preserve">
+    <value>C.E.O権限により本投票は無効になりました</value>
+  </data>
 </root>

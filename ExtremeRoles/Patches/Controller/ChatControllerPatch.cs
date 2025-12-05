@@ -71,7 +71,9 @@ public static class ChatControllerAddChatPatch
 			)
 			||
 			(
-				isOneMan && !system!.IsValidShowChatPlayer(sourcePlayer)
+				isOneMan && !system!.IsValidShowChatPlayer(sourcePlayer) && 
+				// モニカがいてゴミ箱の人が参加できるのはおかしいので・・・・
+				(!isMonikaOn || !monikaSystem!.CanChatBetween(sourcePlayerData, localPlayerData))
 			)
 			||
 			(
