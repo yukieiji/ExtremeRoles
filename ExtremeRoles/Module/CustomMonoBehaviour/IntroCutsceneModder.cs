@@ -160,7 +160,8 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 		else if (role.IsLiberal())
 		{
 			instance.BackgroundBar.material.color = ColorPalette.LiberalColor;
-			instance.ImpostorText.text = Tr.GetString("liberalIntro");
+			int targetIndex = RandomGenerator.Instance.Next(3);
+			instance.ImpostorText.text = Tr.GetString($"liberalIntro{targetIndex}");
 
 			text.text = Tr.GetString("Liberal");
 			text.color = ColorPalette.LiberalColor;

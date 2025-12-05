@@ -1373,4 +1373,13 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="LiberalSetting" xml:space="preserve">
     <value>リベラルの共通設定</value>
   </data>
+  <data name="liberalIntro0" xml:space="preserve">
+    <value>束縛を否定し、"自由"の名の下に集う者たち</value>
+  </data>
+  <data name="liberalIntro1" xml:space="preserve">
+    <value>停滞を切り拓く、革新の刃となれ</value>
+  </data>
+  <data name="liberalIntro2" xml:space="preserve">
+    <value>我々の武器は理性、議論で真の変革を呼べ</value>
+  </data>
 </root>
