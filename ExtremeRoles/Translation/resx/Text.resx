@@ -1251,10 +1251,10 @@ ExR等を最低限の機能のみで起動しています</value>
 表示する</value>
   </data>
   <data name="RoleSpawnCategoryMinLiberal" xml:space="preserve">
-    <value>リベラルの人数　最少</value>
+    <value>リベラルのロール数　最少</value>
   </data>
   <data name="RoleSpawnCategoryMaxLiberal" xml:space="preserve">
-    <value>リベラルの人数　最大</value>
+    <value>リベラルのロール数　最大</value>
   </data>
   <data name="LiberalSettingWinMoney" xml:space="preserve">
     <value>勝利に必要な資金</value>
@@ -1338,11 +1338,11 @@ ExR等を最低限の機能のみで起動しています</value>
   </data>
   <data name="LiberalSettingLiberalMilitantMini" xml:space="preserve">
     <value>&lt;color=#F9F06F&gt;ミリタント&lt;/color&gt;
-最小人数</value>
+ロール数　最小</value>
   </data>
   <data name="LiberalSettingLiberalMilitantMax" xml:space="preserve">
     <value>&lt;color=#F9F06F&gt;ミリタント&lt;/color&gt;
-最大人数</value>
+ロール数　最大</value>
   </data>
   <data name="LiberalSettingMilitantHasOtherKillCool" xml:space="preserve">
     <value>&lt;color=#F9F06F&gt;ミリタント&lt;/color&gt;

@@ -48,14 +48,14 @@ public sealed class LeaderCoreOption(LiberalDefaultOptipnLoader option)
 	public bool HasOtherKillCool { get; } = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.LeaderHasOtherKillCool);
 	public float KillCool { get; } = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderKillCool);
 
-	public float KilledBoost { get; } = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderKilledBoost);
+	public float KilledBoost { get; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.LeaderKilledBoost) / 100.0f;
 
 	public int KillMoney { get; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.KillMoney);
 	public int LeaderKillMoney { get; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.KillMoney);
-	public float LeaderKillBoostDelta { get; } = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderKillBoost);
+	public float LeaderKillBoostDelta { get; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.LeaderKillBoost) / 100.0f;
 
 	public int TaskMoney { get; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.TaskCompletedMoney);
-	public float TaskBootDelta { get; } = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LeaderTaskBoost);
+	public float TaskBootDelta { get; } = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.LeaderTaskBoost) / 100.0f;
 }
 
 public sealed class LeaderVisual(LiberalMoneyBankSystem system) : IVisual, ILookedTag

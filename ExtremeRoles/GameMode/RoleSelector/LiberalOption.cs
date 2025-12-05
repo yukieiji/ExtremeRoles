@@ -148,7 +148,7 @@ public sealed class LiberalOption
 
 		var leaderKilledSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledLeader, false);
 		var killedActive = new ParentActive(leaderKilledSetting);
-		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKilledBoost, 1.0f, 1.0f, 10.0f, 0.25f, killedActive);
+		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKilledBoost, 10, 0, 1000, 5, killedActive, format: OptionUnit.Percentage);
 
 		var isLiberalMoreTwo = new LiberalSettingCheck(liberalMaxNumSetting, 2);
 
@@ -171,13 +171,13 @@ public sealed class LiberalOption
 
 		var leaderTaskSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanHasTaskLeader, false);
 		var leaderTaskActive = new ParentActive(leaderTaskSetting);
-		factory.CreateFloatOption(LiberalGlobalSetting.LeaderTaskBoost, 0.0f, 0.0f, 10.0f, 0.05f, leaderTaskActive);
+		factory.CreateIntOption(LiberalGlobalSetting.LeaderTaskBoost, 0, 0, 1000, 5, leaderTaskActive, format: OptionUnit.Percentage);
 		factory.CreateIntOption(LiberalGlobalSetting.LeaderTaskCompletedMoney, 5, 1, 1000, 1, leaderTaskActive);
 
 
 		var leaderKillSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKillLeader, false);
 		var leaderKillActive = new ParentActive(leaderKillSetting);
-		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKillBoost, 0.0f, 0.0f, 5.0f, 0.05f, leaderKillActive);
+		factory.CreateIntOption(LiberalGlobalSetting.LeaderKillBoost, 0, 0, 1000, 5, leaderKillActive, format: OptionUnit.Percentage);
 		factory.CreateIntOption(LiberalGlobalSetting.LeaderKillMoney, 10, 1, 1000, 1, leaderKillActive);
 
 		var leaderKillCoolOption = factory.CreateBoolOption(
