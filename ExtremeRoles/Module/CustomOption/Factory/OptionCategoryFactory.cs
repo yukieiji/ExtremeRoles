@@ -148,9 +148,6 @@ public class OptionCategoryFactory(
 		checkValueOption.OnValueChanged += () => {
 			int newMax = checkValueOption.Value<int>();
 			intRange.InnerRange = OptionRange<int>.Create(min, newMax, step);
-
-			// Selectionを再設定
-			opt.Selection = intRange.Selection;
 		};
 		return opt;
 	}

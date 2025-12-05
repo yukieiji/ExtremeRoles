@@ -208,9 +208,6 @@ public sealed class LiberalOption
 			int newMini = liberalMilitantMini.Value<int>();
 			int newMaxNum = liberalMaxNumSetting.Value<int>();
 			intRange.InnerRange = OptionRange<int>.Create(newMini, newMaxNum, 1);
-			
-			// Selectionを再設定
-			liberalMilitantMax.Selection = intRange.Selection;
 		};
 
 		liberalMilitantMini.OnValueChanged += valueChangedEvent;
