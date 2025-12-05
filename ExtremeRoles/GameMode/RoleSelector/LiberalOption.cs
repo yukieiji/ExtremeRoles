@@ -148,7 +148,7 @@ public sealed class LiberalOption
 
 		var leaderKilledSetting = factory.CreateBoolOption(LiberalGlobalSetting.CanKilledLeader, false);
 		var killedActive = new ParentActive(leaderKilledSetting);
-		factory.CreateFloatOption(LiberalGlobalSetting.LeaderKilledBoost, 10, 0, 1000, 5, killedActive, format: OptionUnit.Percentage);
+		factory.CreateIntOption(LiberalGlobalSetting.LeaderKilledBoost, 10, 0, 1000, 5, killedActive, format: OptionUnit.Percentage);
 
 		var isLiberalMoreTwo = new LiberalSettingCheck(liberalMaxNumSetting, 2);
 

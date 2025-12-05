@@ -278,6 +278,7 @@ public sealed class FinalSummary : MonoBehaviour
 		{
 			{ SummaryType.Role, new SummaryTextBuilder("roleSummaryInfo") },
 			{ SummaryType.RoleHistory, new SummaryTextBuilder("roleHistorySummary") },
+			{ SummaryType.LiberalMoneyHistory, new SummaryTextBuilder("liberalMoneySummaryInfo") },
 			{ SummaryType.GhostRole, new SummaryTextBuilder("ghostRoleSummaryInfo") },
 		};
 

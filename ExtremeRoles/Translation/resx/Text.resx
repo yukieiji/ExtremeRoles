@@ -1405,4 +1405,13 @@ ExR等を最低限の機能のみで起動しています</value>
 　と表記される
 　「タイプ: ミリタント」のデフォルト役職名も「ミリタント」である</value>
   </data>
+  <data name="liberalMoneySummaryInfo" xml:space="preserve">
+    <value>リベラルの資金収支</value>
+  </data>
+  <data name="AddOnTask" xml:space="preserve">
+    <value>タスク</value>
+  </data>
+  <data name="AddOnKill" xml:space="preserve">
+    <value>キル</value>
+  </data>
 </root>

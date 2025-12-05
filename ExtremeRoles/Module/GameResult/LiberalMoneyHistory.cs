@@ -31,8 +31,10 @@ public static class LiberalMoneyHistory
 				{
 					return;
 				}
+				int diff = Mathf.CeilToInt(hist.Amount);
+				string prefix = diff > 0 ? "+" : "";
 				this.builder.AppendLine(
-					$"<pos=3%>・ {summary.PlayerName} : {Mathf.CeilToInt(hist.Amount)} ({hist.Reason})");
+					$"<pos=3%>・ {summary.PlayerName} : {prefix}{diff} ({hist.Reason})");
 			}
 		}
 
