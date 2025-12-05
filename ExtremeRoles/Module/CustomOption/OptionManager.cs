@@ -273,7 +273,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 					string showStr = Tr.GetString(
 						"OptionSettingChange",
 						tabName, category.TransedName,
-						option.TransedValue, option.TransedValue);
+						option.TransedTitle, option.TransedValue);
 
 					HudManager.Instance.Notifier.SettingsChangeMessageLogic(
 						key, string.Format(OptionChangeFontPlace, showStr),
