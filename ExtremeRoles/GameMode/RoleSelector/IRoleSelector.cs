@@ -128,9 +128,6 @@ public interface IRoleSelector
 		miniOption.OnValueChanged += () => {
 			int newMini = miniOption.Value<int>();
 			intRange.InnerRange = OptionRange<int>.Create(newMini, maxNum, 1);
-
-			// Selectionを再設定
-			maxOption.Selection = intRange.Selection;
 		};
 		return maxOption;
 	}
