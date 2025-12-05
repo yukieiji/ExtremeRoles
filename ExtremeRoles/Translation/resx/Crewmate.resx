@@ -1508,4 +1508,55 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="CEOExiledOverride" xml:space="preserve">
     <value>C.E.O権限により本投票は無効になりました</value>
   </data>
+  <data name="Echo" xml:space="preserve">
+    <value>エコー</value>
+  </data>
+  <data name="EchoFullDescription" xml:space="preserve">
+    <value>「エコーロケーション」で位置を知ることができる役職
+
+ボタン能力「エコーロケーション」
+　- ボタンを押して発動
+　-1秒かけて範囲内の対象をスキャン
+　- 最も近いプレイヤーから距離で変動する
+　アイコンで位置を可視化する
+　- 設定次第で死体も対象にできる
+　　- 通知が分離されている場合、死体を検知した
+　　　アイコンの色は赤となる</value>
+  </data>
+  <data name="EchoShortDescription" xml:space="preserve">
+    <value>「エコーロケーション」でプレイヤーの位置を確認しよう</value>
+  </data>
+  <data name="EchoIntroDescription" xml:space="preserve">
+    <value>あなたの音はどこから？</value>
+  </data>
+  <data name="EchoRange" xml:space="preserve">
+    <value>「エコーロケーション」の範囲</value>
+  </data>
+  <data name="EchoShowTime" xml:space="preserve">
+    <value>「エコーロケーション」の通知時間</value>
+  </data>
+  <data name="EchoCanSeparatePlayer" xml:space="preserve">
+    <value>プレイヤーと死体の通知を分離</value>
+  </data>
+  <data name="EchoAttentionMode" xml:space="preserve">
+    <value>「エコーロケーション」を発動した地点の通知</value>
+  </data>
+  <data name="EchoIsDetectDeadBody" xml:space="preserve">
+    <value>「エコーロケーション」で死体を検知できるか</value>
+  </data>
+  <data name="echoLocation" xml:space="preserve">
+    <value>エコーロケーション</value>
+  </data>
+  <data name="EchoAbilityCoolTime" xml:space="preserve">
+    <value>「エコーロケーション」のクールタイム</value>
+  </data>
+  <data name="EchoAbilityCount" xml:space="preserve">
+    <value>「エコーロケーション」の使用回数</value>
+  </data>
+  <data name="EmitAll" xml:space="preserve">
+    <value>全プレイヤーに通知</value>
+  </data>
+  <data name="EmitNotCrewmate" xml:space="preserve">
+    <value>クルーメイト以外に通知</value>
+  </data>
 </root>

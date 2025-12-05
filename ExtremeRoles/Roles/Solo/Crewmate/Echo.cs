@@ -38,7 +38,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		EmitAll,
 		EmitNotCrewmate,
-		EmitDisable,
+		DisableKey,
 	}
 
 	public enum RpcOps
@@ -139,7 +139,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 	public void ResetOnMeetingStart()
 	{
-		if (this.mode is not EmitAttentionMode.EmitDisable)
+		if (this.mode is not EmitAttentionMode.DisableKey)
 		{
 			var localPlayer = PlayerControl.LocalPlayer;
 			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EchoOps))
@@ -176,7 +176,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 
 	public bool UseAbility()
 	{
-		if (this.mode is not EmitAttentionMode.EmitDisable)
+		if (this.mode is not EmitAttentionMode.DisableKey)
 		{
 			var localPlayer = PlayerControl.LocalPlayer;
 			var pos = localPlayer.GetTruePosition();
