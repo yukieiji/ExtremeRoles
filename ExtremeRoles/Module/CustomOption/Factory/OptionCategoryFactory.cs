@@ -99,9 +99,6 @@ public class OptionCategoryFactory(
 		checkValueOption.OnValueChanged += () => {
 			float newMax = checkValueOption.Value<float>();
 			floatRange.InnerRange = OptionRange<float>.Create(min, newMax, step);
-
-			// Selectionを再設定
-			opt.Selection = floatRange.Selection;
 		};
 
 		return opt;
