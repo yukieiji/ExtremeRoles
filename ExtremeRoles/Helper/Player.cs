@@ -367,7 +367,7 @@ public static class Player
         RPCOperator.CleanDeadBody(targetPlayerId);
     }
 
-    public static void SetPlayerOutLine(PlayerControl target, Color color)
+	public static void SetPlayerOutLine(PlayerControl target, Color color)
     {
         if (target == null || target.cosmetics.currentBodySprite.BodySprite == null) { return; }
 

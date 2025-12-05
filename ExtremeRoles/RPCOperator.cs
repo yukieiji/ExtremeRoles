@@ -433,7 +433,6 @@ public static class RPCOperator
 		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 	}
 
-
     public static void SetWinGameControlId(int id)
     {
         ExtremeRolesPlugin.ShipState.SetWinControlId(id);
