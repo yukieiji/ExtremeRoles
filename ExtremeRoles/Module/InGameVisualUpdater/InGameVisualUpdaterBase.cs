@@ -52,5 +52,5 @@ public abstract class InGameVisualUpdaterBase(PlayerControl target)
 	}
 
 	protected static bool InValid(PlayerControl pc)
-		=> pc == null && pc.Data == null && pc.Data.Role == null;
+		=> pc == null || pc.Data == null || pc.Data.Role == null;
 }
