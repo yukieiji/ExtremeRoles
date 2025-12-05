@@ -341,6 +341,12 @@ public sealed class CEO : SingleRoleBase,
 		}
 	}
 
+	public override bool IsBlockShowMeetingRoleInfo()
+		=> this.exiledTimer > 0.0f;
+	public override bool IsBlockShowPlayingRoleInfo()
+		=> this.exiledTimer > 0.0f;
+
+
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.Create0To100Percentage10StepOption(Option.AwakeTaskGage, defaultGage: 50);
@@ -350,6 +356,8 @@ public sealed class CEO : SingleRoleBase,
 
 	protected override void RoleSpecificInit()
 	{
+		_ = OnemanMeetingSystemManager.CreateOrGet();
+
 		this.status = new CEOStatus();
 		this.AbilityClass = new CEOAbilityHandler(this.status);
 
