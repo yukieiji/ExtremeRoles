@@ -111,7 +111,6 @@ public static class HudManagerToggleMapVisibletPatch
 public static class HudManagerUpdatePatch
 {
     private static bool isActiveUpdate = true;
-
 	private static List<InGameVisualUpdaterBase> allUpdator = [];
 
     public static void Reset()
@@ -130,7 +129,15 @@ public static class HudManagerUpdatePatch
         if (OnemanMeetingSystemManager.IsActive)
         {
             __instance.UseButton.ToggleVisible(false);
+
             __instance.AbilityButton.ToggleVisible(false);
+			
+			var second = __instance.SecondaryAbilityButton;
+			if (second != null)
+			{
+				second.ToggleVisible(false);
+			}
+
             __instance.ReportButton.ToggleVisible(false);
             __instance.KillButton.ToggleVisible(false);
             __instance.SabotageButton.ToggleVisible(false);
@@ -138,8 +145,7 @@ public static class HudManagerUpdatePatch
             __instance.TaskPanel.gameObject.SetActive(false);
             __instance.roomTracker.gameObject.SetActive(false);
 
-            IVirtualJoystick virtualJoystick = __instance.joystick;
-
+			var virtualJoystick = __instance.joystick;
             if (virtualJoystick != null)
             {
                 virtualJoystick.ToggleVisuals(false);
@@ -152,19 +158,26 @@ public static class HudManagerUpdatePatch
     {
 		var local = PlayerControl.LocalPlayer;
 
-		if (!GameProgressSystem.IsGameNow || local == null)
+		if (!(
+				isActiveUpdate &&
+				GameProgressSystem.IsGameNow && 
+				local != null
+			))
 		{
 			return;
 		}
 
 		if (allUpdator.Count == 0)
 		{
+			allUpdator.Add(new LocalPlayerVisualUpdater(local));
+			byte localPlayerId = local.PlayerId;
+
 			foreach (var pc in PlayerCache.AllPlayerControl)
 			{
-				allUpdator.Add(
-					pc.PlayerId == local.PlayerId ?
-						new LocalPlayerVisualUpdater(local) :
-						new OtherPlayerVisualUpdater(local, pc));
+				if (pc.PlayerId != localPlayerId)
+				{
+					allUpdator.Add(new OtherPlayerVisualUpdater(local, pc));
+				}
 			}
 		}
 
