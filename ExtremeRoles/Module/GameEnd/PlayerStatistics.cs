@@ -14,6 +14,7 @@ using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Neutral.Madmate;
 
 using System.Text;
+using ExtremeRoles.Roles.Solo.Liberal;
 
 namespace ExtremeRoles.Module.GameEnd;
 
@@ -168,7 +169,7 @@ public sealed class PlayerStatistics()
 	public int TeamNeutralAlive { get; private set; }
 	
 	public int TeamLiberalAlive { get; private set; }
-	public int LiberalKillerAlive { get; private set; }
+	public int LiberalMilitantAlive { get; private set; }
 	
 	public int TotalAlive { get; private set; }
 	public int AssassinAlive { get; private set; }
@@ -222,7 +223,7 @@ public sealed class PlayerStatistics()
 
 
 		this.TeamLiberalAlive = 0;
-		this.LiberalKillerAlive = 0;
+		this.LiberalMilitantAlive = 0;
 
 		this.AssassinAlive = 0;
 
@@ -306,9 +307,16 @@ public sealed class PlayerStatistics()
 					break;
 				case ExtremeRoleType.Liberal:
 					++this.TeamLiberalAlive;
-					if (role.CanKill())
+
+					if (role.CanKill() && 
+						(
+							// リーダーが無敵の場合Militantのカウントをしない
+							role.Core.Id is not ExtremeRoleId.Leader ||
+							role.AbilityClass is not LeaderAbilityHandler leaderAbility ||
+							!leaderAbility.IsBlockKill
+						))
 					{
-						++this.LiberalKillerAlive;
+						++this.LiberalMilitantAlive;
 					}
 					break;
 				default:

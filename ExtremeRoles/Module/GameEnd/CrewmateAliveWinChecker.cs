@@ -12,14 +12,14 @@ public sealed class CrewmateAliveWinChecker(PlayerStatistics statistics) : IGame
 		return
 			(
 				this.statistics.TeamCrewmateAlive > 0 &&
-				this.statistics.LiberalKillerAlive <= 0 &&
+				this.statistics.LiberalMilitantAlive <= 0 &&
 				this.statistics.TeamImpostorAlive <= 0 &&
 				this.statistics.SeparatedNeutralAlive.Count <= 0
 			)
 			||
 			(
 				this.statistics.TeamCrewmateAlive <= 0 &&
-				this.statistics.LiberalKillerAlive <= 0 &&
+				this.statistics.LiberalMilitantAlive <= 0 &&
 				this.statistics.TeamImpostorAlive <= 0 &&
 				this.statistics.SeparatedNeutralAlive.Count <= 0 &&
 				this.statistics.TotalAlive == statistics.TeamNeutralAlive

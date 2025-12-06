@@ -98,17 +98,14 @@ public sealed class LeaderAbilityHandler(
 {
 	private readonly LeaderStatus status = status;
 	private readonly bool isBlockKill = !option.CanKilled;
-	private readonly bool isAutoCanKillWhenSolo = option.IsAutoCanKillWhenSolo;
+	private readonly bool isBlockKillWhenMultiLiberal = !option.IsAutoCanKillWhenSolo;
+
+	public bool IsBlockKill => (this.status.OtherLiberal > 0 || this.isBlockKillWhenMultiLiberal) && this.isBlockKill;
 
 	// 設定次第でキル等の対象には取れる
 	public bool IsBlockKillFrom(byte? fromPlayer)
-	{
-		if (this.isAutoCanKillWhenSolo && this.status.OtherLiberal <= 0)
-		{
-			return false;
-		}
-		return isBlockKill;
-	}
+		=> IsBlockKill;
+
 	public bool IsValidKillFromSource(byte target)
 		=> !IsBlockKillFrom(target);
 
