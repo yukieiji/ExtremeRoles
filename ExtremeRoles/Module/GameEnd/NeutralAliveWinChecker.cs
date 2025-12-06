@@ -13,7 +13,8 @@ public sealed class NeutralAliveWinChecker(PlayerStatistics statistics) : IGameE
 	{
 		reason = (GameOverReason)RoleGameOverReason.UnKnown;
 
-		if (this.statistics.SeparatedNeutralAlive.Count != 1)
+		if (this.statistics.SeparatedNeutralAlive.Count != 1 ||
+			this.statistics.LiberalMilitantAlive > 0)
 		{
 			return false;
 		}
@@ -25,7 +26,7 @@ public sealed class NeutralAliveWinChecker(PlayerStatistics statistics) : IGameE
 			return false;
 		}
 
-		RoleGameOverReason endReason = RoleGameOverReason.UnKnown;
+		var endReason = RoleGameOverReason.UnKnown;
 
 		// アリス vs インポスターは絶対にインポスターが勝てないので
 		// 別の殺人鬼が存在しないかつ、生存者数がアリスの生存者以下になれば勝利
@@ -60,6 +61,7 @@ public sealed class NeutralAliveWinChecker(PlayerStatistics statistics) : IGameE
 				NeutralSeparateTeam.JackalSub => RoleGameOverReason.AllJackalWin,
 				NeutralSeparateTeam.YandereSub => RoleGameOverReason.AllYandereWin,
 				NeutralSeparateTeam.QueenSub => RoleGameOverReason.AllQueenWin,
+
 				_ => RoleGameOverReason.UnKnown
 			};
 		}
