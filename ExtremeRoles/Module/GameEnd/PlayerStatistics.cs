@@ -170,7 +170,8 @@ public sealed class PlayerStatistics()
 	
 	public int TeamLiberalAlive { get; private set; }
 	public int LiberalMilitantAlive { get; private set; }
-	
+	public bool LeaderIsBlockKill { get; private set; }
+
 	public int TotalAlive { get; private set; }
 	public int AssassinAlive { get; private set; }
 
@@ -224,6 +225,7 @@ public sealed class PlayerStatistics()
 
 		this.TeamLiberalAlive = 0;
 		this.LiberalMilitantAlive = 0;
+		this.LeaderIsBlockKill = false;
 
 		this.AssassinAlive = 0;
 
@@ -308,13 +310,15 @@ public sealed class PlayerStatistics()
 				case ExtremeRoleType.Liberal:
 					++this.TeamLiberalAlive;
 
-					if (role.CanKill() && 
-						(
-							// リーダーが無敵の場合Militantのカウントをしない
-							role.Core.Id is not ExtremeRoleId.Leader ||
-							role.AbilityClass is not LeaderAbilityHandler leaderAbility ||
-							!leaderAbility.IsBlockKill
-						))
+					// リーダーは一人だけなのでここが更新されるのは生存中かつこのメソッドが呼ばれて一回のみ
+					// なので生存していない場合falseになるんですねぇ
+					if (role.AbilityClass is LeaderAbilityHandler leaderAbility)
+					{
+						this.LeaderIsBlockKill = leaderAbility.IsBlockKill;
+					}
+
+					// ミリタントを数えるが、リーダーがミリタントのときは無敵設定されてるとカウントしないように
+					if (role.CanKill() && !this.LeaderIsBlockKill)
 					{
 						++this.LiberalMilitantAlive;
 					}

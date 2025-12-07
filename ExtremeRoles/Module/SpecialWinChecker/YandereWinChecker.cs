@@ -4,6 +4,7 @@ using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
 
@@ -29,14 +30,18 @@ internal sealed class YandereWinChecker : IWinChecker
 	public bool IsWin(
 		PlayerStatistics statistics)
 	{
-		List<PlayerControl> aliveOneSideLover = new List<PlayerControl>();
+		List<PlayerControl> aliveOneSideLover = [];
 
 		int oneSidedLoverImpNum = 0;
 		int oneSidedLoverNeutralNum = 0;
+		int oneSidedLoverLiberalMillitant = 0;
 
 		foreach (YandereRole role in aliveYandere)
 		{
-			if (role.OneSidedLover == null) { continue; }
+			if (role.OneSidedLover == null)
+			{
+				continue;
+			}
 
 			var playerInfo = role.OneSidedLover.Data;
 			var oneSidedLoverRole = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
@@ -73,6 +78,15 @@ internal sealed class YandereWinChecker : IWinChecker
 						break;
 				}
 			}
+			else if (
+				oneSidedLoverRole.IsLiberal() &&
+				oneSidedLoverRole.CanKill() &&
+				// リーダーではないか、無敵ではないリーダーの時だけ増やす
+				/// ミリタントの計算時、キル持ち無敵のリーダーはミリタントではない扱いなので
+				(oneSidedLoverRole.Core.Id is not ExtremeRoleId.Leader || !statistics.LeaderIsBlockKill))
+			{
+				++oneSidedLoverLiberalMillitant;
+			}
 		}
 
 		int aliveNum = aliveYandere.Count + aliveOneSideLover.Count;
@@ -81,7 +95,8 @@ internal sealed class YandereWinChecker : IWinChecker
 			aliveYandere.Count == 0 ||
 			aliveNum < statistics.TotalAlive - aliveNum ||
 			statistics.TeamImpostorAlive - statistics.AssassinAlive - oneSidedLoverImpNum > 0 ||
-			statistics.SeparatedNeutralAlive.Count - oneSidedLoverNeutralNum > 1)
+			statistics.SeparatedNeutralAlive.Count - oneSidedLoverNeutralNum > 1 ||
+			statistics.LiberalMilitantAlive - oneSidedLoverLiberalMillitant > 1)
 		{
 			return false;
 		}

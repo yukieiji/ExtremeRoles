@@ -54,7 +54,10 @@ internal sealed class LoverWinChecker : IWinChecker
 	{
 		int aliveNum = this.aliveLover.Count;
 
-		if (aliveNum == 0) { return false; }
+		if (aliveNum == 0)
+		{
+			return false;
+		}
 		if (roles.Count == 1)
 		{
 			if (roles.Contains(ExtremeRoleType.Crewmate) ||
@@ -63,18 +66,22 @@ internal sealed class LoverWinChecker : IWinChecker
 				return false;
 			}
 		}
-		if (aliveNum < this.loverNum) { return false; }
-		if (aliveNum == this.nonTasker) { return false; }
-		if (aliveNum < statistics.TotalAlive - aliveNum) { return false; }
+		if (aliveNum < this.loverNum ||
+			aliveNum == this.nonTasker ||
+			aliveNum < statistics.TotalAlive - aliveNum)
+		{
+			return false;
+		}
 
 		foreach (byte playerId in this.aliveLover)
 		{
-
-			var lover = (Lover)ExtremeRoleManager.GameRole[playerId];
+			if (!ExtremeRoleManager.TryGetSafeCastedRole<Lover>(playerId, out var lover))
+			{
+				continue;
+			}
 
 			if (lover.CanHasAnotherRole)
 			{
-
 				switch (lover.AnotherRole.Core.Id)
 				{
 					case ExtremeRoleId.Sidekick:
@@ -126,12 +133,10 @@ internal sealed class LoverWinChecker : IWinChecker
 						break;
 				}
 			}
-			if (lover.IsImpostor())
+			if (lover.IsImpostor() &&
+				statistics.SeparatedNeutralAlive.Count == 0) // キル能力を持つ別陣営はインポスターのみ
 			{
-				if (statistics.SeparatedNeutralAlive.Count == 0) // キル能力を持つ別陣営はインポスターのみ
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 
@@ -143,12 +148,10 @@ internal sealed class LoverWinChecker : IWinChecker
 		{
 			var (compTask, totalTask) = Helper.GameSystem.GetTaskInfo(
 				Helper.Player.GetPlayerControlById(playerId).Data);
-			allCompTask = allCompTask + compTask;
-			allTask = allTask + totalTask;
+			allCompTask += compTask;
+			allTask += totalTask;
 		}
-		if (allCompTask >= allTask) { return true; }
 
-
-		return false;
+		return allCompTask >= allTask;
 	}
 }

@@ -26,6 +26,7 @@ internal sealed class HatterWinChecker : IWinChecker
 		{
 			killerPlayer += num;
 		}
+		killerPlayer += statistics.LiberalMilitantAlive;
 
 		int otherPlayerNum = statistics.TotalAlive - killerPlayer - this.hatterAliveNum;
 

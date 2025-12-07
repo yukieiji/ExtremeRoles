@@ -21,22 +21,21 @@ internal sealed class VigilanteWinChecker : IWinChecker
 		int villanNum = 0;
 		int vigilanteNum = 0;
 
-
 		foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
 		{
 			var playerInfo = GameData.Instance.GetPlayerById(playerId);
 			if (!playerInfo.IsDead)
 			{
 				var id = role.Core.Id;
-				if (id == ExtremeRoleId.Hero)
+				if (id is ExtremeRoleId.Hero)
 				{
 					++heroNum;
 				}
-				else if (id == ExtremeRoleId.Villain)
+				else if (id is ExtremeRoleId.Villain)
 				{
 					++villanNum;
 				}
-				else if (id == ExtremeRoleId.Vigilante)
+				else if (id is ExtremeRoleId.Vigilante)
 				{
 					++vigilanteNum;
 				}
@@ -47,10 +46,6 @@ internal sealed class VigilanteWinChecker : IWinChecker
 			}
 		}
 
-		if (heroNum > 0 && villanNum > 0 && vigilanteNum > 0)
-		{
-			return true;
-		}
-		return false;
+		return heroNum > 0 && villanNum > 0 && vigilanteNum > 0;
 	}
 }

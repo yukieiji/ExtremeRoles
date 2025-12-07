@@ -3,17 +3,16 @@ using System;
 using UnityEngine;
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Helper;
+using TMPro;
 
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Roles.Solo.Liberal;
 using ExtremeRoles.Performance.Il2Cpp;
-
-using TMPro;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -89,13 +88,18 @@ public sealed class Shooter :
     {
         byte target = instance.TargetPlayerId;
 
-        return
-            this.curShootNum <= 0 ||
-            !(
-                this.shootCounter < this.maxMeetingShootNum &&
-                this.canShootThisMeeting
-            ) ||
-            ExtremeRoleManager.GameRole[target].Core.Id == ExtremeRoleId.Assassin;
+		return
+			this.curShootNum <= 0 ||
+			!(
+				this.shootCounter < this.maxMeetingShootNum &&
+				this.canShootThisMeeting
+			) ||
+			(
+				ExtremeRoleManager.TryGetRole(target, out var role) && (
+					role.Core.Id is ExtremeRoleId.Assassin || 
+					(role.AbilityClass is LeaderAbilityHandler leaderAbility && leaderAbility.IsBlockKill)
+				)
+			);
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
