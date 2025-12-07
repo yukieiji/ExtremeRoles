@@ -1337,10 +1337,10 @@
     <value>驱魔</value>
   </data>
   <data name="ExorcistReport" xml:space="preserve">
-    <value>“{0}”似乎是“{1}”杀的，凶手正在“{2}”</value>
+    <value>“{0}”的死因是“{1}”，凶手目前的状态是“{2}”</value>
   </data>
   <data name="ExorcistReportWithName" xml:space="preserve">
-    <value>“{1}”被“{0}”的手杀害了，原因是“{2}”</value>
+    <value>“{1}”被“{0}”的杀害了，原因是“{2}”</value>
   </data>
   <data name="Loner" xml:space="preserve">
     <value>地雷系</value>
@@ -1429,5 +1429,112 @@
   </data>
   <data name="BlockModeNone" xml:space="preserve">
     <value>无</value>
+  </data>
+  <data name="GamblerChangeVoteChance" xml:space="preserve">
+    <value>投票变化概率</value>
+  </data>
+  <data name="GamblerFullDescription" xml:space="preserve">
+    <value>投机者属于船员阵营
+
+·被动技能“投机取巧”
+投机者每次投票都会有几率随机在设置的最多和最少票数中间选一个数的票数投出
+显示为1票但会有变化</value>
+  </data>
+  <data name="CEO" xml:space="preserve">
+    <value>C.E.O</value>
+    <comment>.</comment>
+  </data>
+  <data name="CEOFullDescription" xml:space="preserve">
+    <value>C.E.O属于船员职业
+当C.E.O被票出时，C.E.O将会复活
+
+当C.E.O被票出时，5秒后将会复活。当“显示投给C.E.O的票”关闭时，C.E.O被处决会显示所有投给C.E.O的投票
+
+·特殊会议“全船大会”
+如设置C.E.O可开启“全船大会”时，C.E.O被票出将触发
+在“全船大会”上，C.E.O可以选择”跳过会议“或”票出一人“
+其他人可以参加会议但没有投票权
+C.E.O不能票出自己</value>
+  </data>
+  <data name="CEOShortDescription" xml:space="preserve">
+    <value>一场决定我生死的会议</value>
+  </data>
+  <data name="CEOIntroDescription" xml:space="preserve">
+    <value>我还不能离开！</value>
+  </data>
+  <data name="CEOAwakeTaskGage" xml:space="preserve">
+    <value>觉醒职业所需任务数</value>
+  </data>
+  <data name="CEOIsShowRolePlayerVote" xml:space="preserve">
+    <value>是否显示投给C.E.O的票</value>
+  </data>
+  <data name="CEOIsUseCEOMeeting" xml:space="preserve">
+    <value>特殊会议“全船大会”</value>
+  </data>
+  <data name="CEOMeetingCEO" xml:space="preserve">
+    <value>全船大会
+（其他人的权力）</value>
+  </data>
+  <data name="CEOMeetingOther" xml:space="preserve">
+    <value>全船大会
+（给C.E.O提供建议）</value>
+  </data>
+  <data name="CEOMeetingSkip" xml:space="preserve">
+    <value>C.E.O选择了跳过</value>
+  </data>
+  <data name="CEOMeetingSelect" xml:space="preserve">
+    <value>C.E.O选择票出{0}</value>
+  </data>
+  <data name="CEOExiledOverride" xml:space="preserve">
+    <value>C.E.O结束了这次会议</value>
+  </data>
+  <data name="Echo" xml:space="preserve">
+    <value>蝙蝠</value>
+  </data>
+  <data name="EchoFullDescription" xml:space="preserve">
+    <value>蝙蝠属于船员阵营
+蝙蝠可以使用回声知晓他人位置
+
+·主动技能“回声”
+使用技能1秒后发出回声
+知晓附近玩家的位置，通过图标可知位置
+根据设置也可以知晓尸体的位置
+根据设置检测到尸体图标会变红</value>
+  </data>
+  <data name="EchoShortDescription" xml:space="preserve">
+    <value>通过“回声”确定位置</value>
+  </data>
+  <data name="EchoIntroDescription" xml:space="preserve">
+    <value>你听到什么了吗？</value>
+  </data>
+  <data name="EchoRange" xml:space="preserve">
+    <value>“回声”范围</value>
+  </data>
+  <data name="EchoShowTime" xml:space="preserve">
+    <value>“回声”响应时间</value>
+  </data>
+  <data name="EchoCanSeparatePlayer" xml:space="preserve">
+    <value>玩家与尸体分开知晓位置</value>
+  </data>
+  <data name="EchoAttentionMode" xml:space="preserve">
+    <value>那些阵营会知晓蝙蝠使用“回声”</value>
+  </data>
+  <data name="EchoIsDetectDeadBody" xml:space="preserve">
+    <value>“回声”能知晓尸体位置</value>
+  </data>
+  <data name="echoLocation" xml:space="preserve">
+    <value>回声</value>
+  </data>
+  <data name="EchoAbilityCoolTime" xml:space="preserve">
+    <value>“回声”冷却时间</value>
+  </data>
+  <data name="EchoAbilityCount" xml:space="preserve">
+    <value>“回声”可使用次数</value>
+  </data>
+  <data name="EmitAll" xml:space="preserve">
+    <value>所有人都会知晓蝙蝠使用“回声”</value>
+  </data>
+  <data name="EmitNotCrewmate" xml:space="preserve">
+    <value>仅非船员知晓蝙蝠使用“回声”</value>
   </data>
 </root>
