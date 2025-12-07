@@ -1340,7 +1340,7 @@
     <value>“{0}”的死因是“{1}”，凶手目前的状态是“{2}”</value>
   </data>
   <data name="ExorcistReportWithName" xml:space="preserve">
-    <value>“{1}”被“{0}”的杀害了，原因是“{2}”</value>
+    <value>“{1}”被“{0}”杀害了，原因是“{2}”</value>
   </data>
   <data name="Loner" xml:space="preserve">
     <value>地雷系</value>
