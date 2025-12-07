@@ -88,7 +88,7 @@ public sealed class LiberalDefaultOptipnLoader : IOptionLoader
 			this.category.Get(LiberalGlobalSetting.LiberalMilitantMini),
 			this.category.Get(LiberalGlobalSetting.LiberalMilitantMax),
 			this.category.Get(LiberalGlobalSetting.MilitantHasOtherKillCool),
-			this.category.Get(LiberalGlobalSetting.MilitantKillRange),
+			this.category.Get(LiberalGlobalSetting.MilitantHasOtherKillRange),
 		];
 	}
 

@@ -25,13 +25,13 @@ public sealed class Militant : SingleRoleBase
 		this.HasOtherKillRange = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.MilitantHasOtherKillRange);
 		if (this.HasOtherKillRange)
 		{
-			this.KillRange = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.MilitantKillCool);
+			this.KillRange = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.MilitantKillRange);
 		}
 
 		this.HasOtherKillCool = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.MilitantHasOtherKillCool);
 		if (this.HasOtherKillCool)
 		{
-			this.KillCoolTime = option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.MilitantKillCool);
+			this.KillCoolTime = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.MilitantKillCool);
 		}
 	}
 
