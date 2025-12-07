@@ -100,7 +100,7 @@ public sealed class LeaderAbilityHandler(
 	private readonly bool isBlockKill = !option.CanKilled;
 	private readonly bool isBlockKillWhenMultiLiberal = !option.IsAutoCanKillWhenSolo;
 
-	public bool IsBlockKill => (this.status.OtherLiberal > 0 || this.isBlockKillWhenMultiLiberal) && this.isBlockKill;
+	public bool IsBlockKill => this.isBlockKill && (this.status.OtherLiberal > 0 || this.isBlockKillWhenMultiLiberal);
 
 	// 設定次第でキル等の対象には取れる
 	public bool IsBlockKillFrom(byte? fromPlayer)
