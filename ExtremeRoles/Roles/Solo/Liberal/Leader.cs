@@ -221,13 +221,6 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 			yield break;
 		}
 
-		// ローカルの人以外のstatusは更新されてないので更新をここでいれる
-		if (PlayerControl.LocalPlayer == null ||
-			rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-		{
-			this.status.Update();
-		}
-
 		foreach (var info in collector.Vote)
 		{
 			// 自分に入っている票だけ打ち消す票情報を追加
