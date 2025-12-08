@@ -13,6 +13,7 @@ using ExtremeRoles.Test.Helper;
 
 using UnityResource = UnityEngine.Resources;
 using Microsoft.Extensions.DependencyInjection;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Test.InGame.GameLoop;
 
@@ -69,6 +70,11 @@ public class GameLoopTestStep(GameLoopTestCaseFactory factory) : TestStepBase
 			while (IntroCutscene.Instance != null)
 			{
 				yield return new WaitForSeconds(10.0f);
+			}
+
+			if (!GameProgressSystem.IsRoleSetUpEnd)
+			{
+				yield return new WaitForSeconds(1.0f);
 			}
 
 			if (testCase.PreTestCase is not null)

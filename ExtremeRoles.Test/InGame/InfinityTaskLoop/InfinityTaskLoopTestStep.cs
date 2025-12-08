@@ -1,18 +1,14 @@
-using System;
-using System.Linq;
-
 using AmongUs.GameOptions;
-
-using Microsoft.Extensions.DependencyInjection;
-using UnityEngine;
-
-
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Test.Helper;
-
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
+using UnityEngine;
 using UnityResource = UnityEngine.Resources;
 
 namespace ExtremeRoles.Test.InGame.InfinityTaskLoop;
@@ -79,6 +75,11 @@ public sealed class InfinityTaskLoopTestStep() : TestStepBase
 				while (IntroCutscene.Instance != null)
 				{
 					yield return new WaitForSeconds(10.0f);
+				}
+
+				if (!GameProgressSystem.IsRoleSetUpEnd)
+				{
+					yield return new WaitForSeconds(1.0f);
 				}
 
 				noTask = !(ExtremeRoleManager.TryGetRole(PlayerControl.LocalPlayer.PlayerId, out var role) && role.IsCrewmate());
