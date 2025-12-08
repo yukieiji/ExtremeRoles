@@ -662,9 +662,13 @@ public static class ExtremeRoleManager
 
     public static void SetNewAnothorRole(byte playerId, SingleRoleBase newRole)
     {
-        ((MultiAssignRoleBase)GameRole[playerId]).SetAnotherRole(newRole);
-        ExtremeRolesPlugin.ShipState.AddGlobalActionRole(newRole);
-    }
+		lock (GameRole)
+		{
+			((MultiAssignRoleBase)GameRole[playerId]).SetAnotherRole(newRole);
+			ExtremeRolesPlugin.ShipState.AddGlobalActionRole(newRole);
+		}
+		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
+	}
 
 	private static void setPlyerIdToSingleRoleFromProvidoer(
 		byte playerId, int roleId, int controlId)
