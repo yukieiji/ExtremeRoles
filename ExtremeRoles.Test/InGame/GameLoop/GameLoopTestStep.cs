@@ -87,7 +87,7 @@ public class GameLoopTestStep(GameLoopTestCaseFactory factory) : TestStepBase
 					continue;
 				}
 
-				this.Log.LogInfo($"Killed : {player.PlayerId}, Remain: {PlayerCache.AllPlayerControl.Count}");
+				this.Log.LogInfo($"Killed : {player.PlayerId}");
 				Player.RpcUncheckMurderPlayer(player.PlayerId, player.PlayerId, byte.MinValue);
 				yield return new WaitForSeconds(1.0f);
 			}
