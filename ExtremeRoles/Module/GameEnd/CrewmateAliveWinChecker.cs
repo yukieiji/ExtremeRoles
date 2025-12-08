@@ -22,7 +22,7 @@ public sealed class CrewmateAliveWinChecker(PlayerStatistics statistics) : IGame
 				this.statistics.LiberalMilitantAlive <= 0 &&
 				this.statistics.TeamImpostorAlive <= 0 &&
 				this.statistics.SeparatedNeutralAlive.Count <= 0 &&
-				this.statistics.TotalAlive == statistics.TeamNeutralAlive
+				this.statistics.TotalAlive == this.statistics.TeamNeutralAlive
 			);
 	}
 }
