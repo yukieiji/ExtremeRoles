@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.API.Interface.Visual;
+using ExtremeRoles.Roles.API.Extension.State;
 
 
 #nullable enable
@@ -274,7 +275,9 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	{
 		if (!(
 				ExtremeRoleManager.TryGetRole(source.PlayerId, out var role) &&
-				role.IsLiberal()
+				role.IsLiberal() &&
+				role.CanKill() &&
+				source.PlayerId != target.PlayerId
 			))
 		{
 			return;
