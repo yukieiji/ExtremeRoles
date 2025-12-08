@@ -238,12 +238,12 @@ public sealed class PlayerStatistics()
 			GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
 			if (playerInfo == null ||
-				playerInfo.Disconnected)
+				playerInfo.Disconnected ||
+				!ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var role))
 			{
 				continue;
 			}
 
-			SingleRoleBase role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
 			ExtremeRoleType team = role.Core.Team;
 			ExtremeRoleId roleId = role.Core.Id;
 
