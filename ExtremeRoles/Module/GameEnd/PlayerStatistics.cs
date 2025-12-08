@@ -82,6 +82,7 @@ public sealed class NeutralSeparateTeamBuilder()
 	public void Clear()
 	{
 		this.cacheId = 0;
+		this.neutralTeam.Clear();
 	}
 
 	public void Add(
