@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module
 {
@@ -11,7 +13,7 @@ namespace ExtremeRoles.Module
 
         public bool IsReviving => token != null;
 
-        public void Start(float resurrectTime, Action onRevive)
+        public void Start(float resurrectTime, PlayerControl rolePlayer, Action onReviveCompleted)
         {
             if (resurrectText == null)
             {
@@ -22,6 +24,7 @@ namespace ExtremeRoles.Module
                 resurrectText.enableWordWrapping = false;
             }
 
+            Action onRevive = () => executeRevive(rolePlayer, onReviveCompleted);
             token = new InnerToken(resurrectTime, resurrectText, onRevive, () => token = null);
         }
 
@@ -33,6 +36,32 @@ namespace ExtremeRoles.Module
         public void Reset()
         {
             token?.Reset();
+        }
+
+        private void executeRevive(PlayerControl rolePlayer, Action onReviveCompleted)
+        {
+            if (rolePlayer == null) return;
+
+            byte playerId = rolePlayer.PlayerId;
+
+            Player.RpcUncheckRevive(playerId);
+
+            if (rolePlayer.Data == null ||
+                rolePlayer.Data.IsDead ||
+                rolePlayer.Data.Disconnected)
+            {
+                return;
+            }
+
+            List<Vector2> randomPos = new List<Vector2>();
+            Map.AddSpawnPoint(randomPos, playerId);
+
+            Player.RpcUncheckSnap(playerId, randomPos[
+                RandomGenerator.Instance.Next(randomPos.Count)]);
+
+            HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
+
+            onReviveCompleted?.Invoke();
         }
     }
 }

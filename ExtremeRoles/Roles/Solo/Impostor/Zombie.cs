@@ -364,7 +364,7 @@ public sealed class Zombie :
 
         if (this.canResurrect)
         {
-            playerReviver.Start(resurrectDelayTime, () => revive(rolePlayer));
+            playerReviver.Start(resurrectDelayTime, rolePlayer, revive);
         }
     }
 
@@ -376,7 +376,7 @@ public sealed class Zombie :
 
         if (this.canResurrect)
         {
-            playerReviver.Start(resurrectDelayTime, () => revive(rolePlayer));
+            playerReviver.Start(resurrectDelayTime, rolePlayer, revive);
         }
     }
 
@@ -469,34 +469,15 @@ public sealed class Zombie :
         }
     }
 
-    private void revive(PlayerControl rolePlayer)
+    private void revive()
     {
-        if (rolePlayer == null) { return; }
-
-        byte playerId = rolePlayer.PlayerId;
-
-        Player.RpcUncheckRevive(playerId);
-
-        if (rolePlayer.Data == null ||
-            rolePlayer.Data.IsDead ||
-            rolePlayer.Data.Disconnected) { return; }
-
-		List<Vector2> randomPos = new List<Vector2>();
-
-		Map.AddSpawnPoint(randomPos, playerId);
-
-        Player.RpcUncheckSnap(playerId, randomPos[
-            RandomGenerator.Instance.Next(randomPos.Count)]);
-
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.ZombieRpc))
         {
             caller.WriteByte((byte)ZombieRpcOps.UseResurrect);
-            caller.WriteByte(playerId);
+            caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
         }
         UseResurrect(this);
-
-        HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
     }
 
     private void updateReviveState(bool isReduceAfter)

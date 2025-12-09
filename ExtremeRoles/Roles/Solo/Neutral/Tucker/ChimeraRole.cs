@@ -134,7 +134,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			return;
 		}
 
-        playerReviver.Start(resurrectTime, () => revive(rolePlayer));
+        playerReviver.Start(resurrectTime, rolePlayer, () => revive(rolePlayer));
 	}
 
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
@@ -187,25 +187,10 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 	private void revive(PlayerControl rolePlayer)
 	{
-		if (rolePlayer == null || tuckerPlayer == null) { return; }
-
-		byte playerId = rolePlayer.PlayerId;
+		if (tuckerPlayer == null) { return; }
 
 		updateKillCoolTime(reviveKillCoolOffset);
-		Player.RpcUncheckRevive(playerId);
-
-		if (rolePlayer.Data == null ||
-			rolePlayer.Data.IsDead ||
-			rolePlayer.Data.Disconnected) { return; }
-
-		List<Vector2> randomPos = new List<Vector2>();
-		Map.AddSpawnPoint(randomPos, playerId);
-		Player.RpcUncheckSnap(playerId, randomPos[
-			RandomGenerator.Instance.Next(randomPos.Count)]);
-
 		rolePlayer.killTimer = KillCoolTime;
-
-		HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
 
 		ExtremeSystemTypeManager.RpcUpdateSystem(
 			TuckerShadowSystem.Type, x =>

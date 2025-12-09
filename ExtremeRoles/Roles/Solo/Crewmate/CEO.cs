@@ -143,7 +143,7 @@ public sealed class CEO : SingleRoleBase,
 			return;
 		}
 
-        playerReviver.Start(5.0f, () => revive(rolePlayer));
+        playerReviver.Start(5.0f, rolePlayer, () => {});
 		
 		if (OnemanMeetingSystemManager.IsActive ||
 			!this.useCEOMeeting ||
@@ -293,7 +293,7 @@ public sealed class CEO : SingleRoleBase,
 			if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting) && 
 				playerReviver.IsReviving)
 			{
-                playerReviver.Start(5.0f, () => revive(rolePlayer));
+                playerReviver.Start(5.0f, rolePlayer, () => {});
 			}
 			return;
 		}
@@ -356,32 +356,5 @@ public sealed class CEO : SingleRoleBase,
 			this.IsAwake = false;
 			this.HasOtherVision = false;
 		}
-	}
-
-	private void revive(PlayerControl rolePlayer)
-	{
-		if (rolePlayer == null)
-		{
-			return;
-		}
-
-		byte playerId = rolePlayer.PlayerId;
-
-		Player.RpcUncheckRevive(playerId);
-
-		if (rolePlayer.Data == null ||
-			rolePlayer.Data.IsDead ||
-			rolePlayer.Data.Disconnected)
-		{
-			return;
-		}
-
-		List<Vector2> randomPos = new List<Vector2>();
-		Map.AddSpawnPoint(randomPos, playerId);
-
-		Player.RpcUncheckSnap(playerId, randomPos[
-			RandomGenerator.Instance.Next(randomPos.Count)]);
-
-		HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
 	}
 }
