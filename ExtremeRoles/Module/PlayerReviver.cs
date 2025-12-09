@@ -12,28 +12,27 @@ public sealed class PlayerReviver
     private readonly Action onRevive;
     private float resurrectTimer;
     private readonly float resurrectTime;
-    private bool activateResurrectTimer;
 
     private TMPro.TextMeshPro? resurrectText;
 
-    public bool IsReviving => activateResurrectTimer;
+    public bool IsReviving { get; private set; }
 
     public PlayerReviver(float resurrectTime, Action onRevive)
     {
         this.resurrectTime = resurrectTime;
         this.resurrectTimer = resurrectTime;
         this.onRevive = onRevive;
-        this.activateResurrectTimer = false;
+        this.IsReviving = false;
     }
 
     public void Start()
     {
-        activateResurrectTimer = true;
+        IsReviving = true;
     }
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (!activateResurrectTimer || !rolePlayer.Data.IsDead)
+        if (!IsReviving || !rolePlayer.Data.IsDead)
         {
             return;
         }
@@ -55,7 +54,7 @@ public sealed class PlayerReviver
 
         if (resurrectTimer <= 0.0f)
         {
-            activateResurrectTimer = false;
+            IsReviving = false;
             Revive(rolePlayer);
         }
     }
@@ -91,7 +90,7 @@ public sealed class PlayerReviver
 
     public void Stop()
     {
-        activateResurrectTimer = false;
+        IsReviving = false;
         if (resurrectText != null)
         {
             resurrectText.gameObject.SetActive(false);
