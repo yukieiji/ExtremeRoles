@@ -143,7 +143,10 @@ public sealed class CEO : SingleRoleBase,
 			return;
 		}
 
-        playerReviver?.Start(rolePlayer);
+		if (rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+		{
+			playerReviver?.Start(rolePlayer);
+		}
 		
 		if (OnemanMeetingSystemManager.IsActive ||
 			!this.useCEOMeeting ||

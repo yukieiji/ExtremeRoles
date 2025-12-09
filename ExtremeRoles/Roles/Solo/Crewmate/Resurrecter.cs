@@ -301,7 +301,8 @@ public sealed class Resurrecter :
 			return;
 		}
 
-        if (this.canResurrect)
+        if (this.canResurrect && 
+			rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
             playerReviver?.Start(rolePlayer);
         }
@@ -322,10 +323,11 @@ public sealed class Resurrecter :
 
         this.isExild = false;
 
-        if (this.canResurrect)
+        if (this.canResurrect &&
+			rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
-            playerReviver?.Start(rolePlayer);
-        }
+			playerReviver?.Start(rolePlayer);
+		}
         else if (!this.canResurrectAfterDeath)
         {
             this.isResurrected = true;

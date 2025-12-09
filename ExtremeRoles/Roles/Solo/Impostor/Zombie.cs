@@ -355,12 +355,10 @@ public sealed class Zombie :
     public override void ExiledAction(
         PlayerControl rolePlayer)
     {
-        if (this.isResurrected) { return; }
-
-        // 追放でオフ時は以下の処理を行わない
-        if (!this.canResurrectOnExil) { return; }
-
-        if (this.canResurrect)
+        if (!this.isResurrected &&
+			this.canResurrectOnExil &&
+			this.canResurrect && 
+			rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
             playerReviver?.Start(rolePlayer);
         }
@@ -370,9 +368,9 @@ public sealed class Zombie :
         PlayerControl rolePlayer,
         PlayerControl killerPlayer)
     {
-        if (this.isResurrected) { return; }
-
-        if (this.canResurrect)
+        if (!this.isResurrected &&
+			this.canResurrect &&
+			rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
             playerReviver?.Start(rolePlayer);
         }
