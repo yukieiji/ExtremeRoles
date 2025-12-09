@@ -86,7 +86,7 @@ public sealed class CEO : SingleRoleBase,
 			ColorPalette.CaptainLightKonjou),
 		false, true, false, false)
 	{
-        playerReviver = new PlayerReviver();
+        playerReviver = new PlayerReviver(5.0f);
     }
 
 	public string GetFakeOptionString() => "";
@@ -143,7 +143,7 @@ public sealed class CEO : SingleRoleBase,
 			return;
 		}
 
-        playerReviver.Start(5.0f, rolePlayer, () => {});
+        playerReviver.Start(rolePlayer, () => {});
 		
 		if (OnemanMeetingSystemManager.IsActive ||
 			!this.useCEOMeeting ||
@@ -293,7 +293,7 @@ public sealed class CEO : SingleRoleBase,
 			if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting) && 
 				playerReviver.IsReviving)
 			{
-                playerReviver.Start(5.0f, rolePlayer, () => {});
+                playerReviver.Start(rolePlayer, () => {});
 			}
 			return;
 		}

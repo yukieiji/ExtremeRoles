@@ -8,12 +8,18 @@ namespace ExtremeRoles.Module
 {
     public sealed class PlayerReviver
     {
-        private InnerToken? token;
+        private ReviveToken? token;
         private TextMeshPro? resurrectText;
+        private readonly float resurrectTime;
 
         public bool IsReviving => token != null;
 
-        public void Start(float resurrectTime, PlayerControl rolePlayer, Action onReviveCompleted)
+        public PlayerReviver(float resurrectTime)
+        {
+            this.resurrectTime = resurrectTime;
+        }
+
+        public void Start(PlayerControl rolePlayer, Action onReviveCompleted)
         {
             if (resurrectText == null)
             {
@@ -24,8 +30,7 @@ namespace ExtremeRoles.Module
                 resurrectText.enableWordWrapping = false;
             }
 
-            Action onRevive = () => executeRevive(rolePlayer, onReviveCompleted);
-            token = new InnerToken(resurrectTime, resurrectText, onRevive, () => token = null);
+            token = new ReviveToken(resurrectTime, resurrectText, rolePlayer, onReviveCompleted, () => token = null);
         }
 
         public void Update()
@@ -38,30 +43,73 @@ namespace ExtremeRoles.Module
             token?.Reset();
         }
 
-        private void executeRevive(PlayerControl rolePlayer, Action onReviveCompleted)
+        private sealed class ReviveToken
         {
-            if (rolePlayer == null) return;
+            private float resurrectTimer;
+            private readonly TextMeshPro resurrectText;
+            private readonly PlayerControl rolePlayer;
+            private readonly Action onReviveCompleted;
+            private readonly Action onDispose;
 
-            byte playerId = rolePlayer.PlayerId;
-
-            Player.RpcUncheckRevive(playerId);
-
-            if (rolePlayer.Data == null ||
-                rolePlayer.Data.IsDead ||
-                rolePlayer.Data.Disconnected)
+            public ReviveToken(float resurrectTime, TextMeshPro resurrectText, PlayerControl rolePlayer, Action onReviveCompleted, Action onDispose)
             {
-                return;
+                this.resurrectTimer = resurrectTime;
+                this.resurrectText = resurrectText;
+                this.rolePlayer = rolePlayer;
+                this.onReviveCompleted = onReviveCompleted;
+                this.onDispose = onDispose;
             }
 
-            List<Vector2> randomPos = new List<Vector2>();
-            Map.AddSpawnPoint(randomPos, playerId);
+            public void Update()
+            {
+                if (resurrectTimer <= 0.0f) return;
 
-            Player.RpcUncheckSnap(playerId, randomPos[
-                RandomGenerator.Instance.Next(randomPos.Count)]);
+                resurrectText.gameObject.SetActive(true);
+                resurrectTimer -= Time.deltaTime;
+                resurrectText.text = string.Format(
+                    Tr.GetString("resurrectText"),
+                    Mathf.CeilToInt(resurrectTimer));
 
-            HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
+                if (resurrectTimer <= 0.0f)
+                {
+                    executeRevive();
+                    onDispose?.Invoke();
+                }
+            }
 
-            onReviveCompleted?.Invoke();
+            public void Reset()
+            {
+                if (resurrectText != null)
+                {
+                    resurrectText.gameObject.SetActive(false);
+                }
+            }
+
+            private void executeRevive()
+            {
+                if (rolePlayer == null) return;
+
+                byte playerId = rolePlayer.PlayerId;
+
+                Player.RpcUncheckRevive(playerId);
+
+                if (rolePlayer.Data == null ||
+                    rolePlayer.Data.IsDead ||
+                    rolePlayer.Data.Disconnected)
+                {
+                    return;
+                }
+
+                List<Vector2> randomPos = new List<Vector2>();
+                Map.AddSpawnPoint(randomPos, playerId);
+
+                Player.RpcUncheckSnap(playerId, randomPos[
+                    RandomGenerator.Instance.Next(randomPos.Count)]);
+
+                HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
+
+                onReviveCompleted?.Invoke();
+            }
         }
     }
 }

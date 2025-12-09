@@ -32,7 +32,6 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 	private NetworkedPlayerInfo? tuckerPlayer;
 	private readonly float reviveKillCoolOffset;
-	private readonly float resurrectTime;
 	private readonly float tuckerDeathKillCoolOffset;
 	private readonly float initCoolTime;
 
@@ -59,7 +58,6 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		this.tuckerPlayer = tuckerPlayer;
 		reviveKillCoolOffset = option.RevieKillCoolOffset;
 		tuckerDeathKillCoolOffset = option.TukerKillCoolOffset;
-		resurrectTime = option.ResurrectTime;
 
 		var killOption = option.KillOption;
 		HasOtherKillCool = true;
@@ -74,7 +72,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		IsApplyEnvironmentVision = vision.ApplyEffect;
 
 		isTuckerDead = tuckerPlayer.IsDead;
-        playerReviver = new PlayerReviver();
+        playerReviver = new PlayerReviver(option.ResurrectTime);
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -134,7 +132,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			return;
 		}
 
-        playerReviver.Start(resurrectTime, rolePlayer, () => revive(rolePlayer));
+        playerReviver.Start(rolePlayer, () => revive(rolePlayer));
 	}
 
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
