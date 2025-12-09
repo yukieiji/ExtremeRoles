@@ -11,15 +11,17 @@ namespace ExtremeRoles.Module
         private ReviveToken? token;
         private TextMeshPro? resurrectText;
         private readonly float resurrectTime;
+        private readonly Action<PlayerControl> onReviveCompleted;
 
         public bool IsReviving => token != null;
 
-        public PlayerReviver(float resurrectTime)
+        public PlayerReviver(float resurrectTime, Action<PlayerControl> onReviveCompleted)
         {
             this.resurrectTime = resurrectTime;
+            this.onReviveCompleted = onReviveCompleted;
         }
 
-        public void Start(PlayerControl rolePlayer, Action onReviveCompleted)
+        public void Start(PlayerControl rolePlayer)
         {
             if (resurrectText == null)
             {
@@ -48,10 +50,10 @@ namespace ExtremeRoles.Module
             private float resurrectTimer;
             private readonly TextMeshPro resurrectText;
             private readonly PlayerControl rolePlayer;
-            private readonly Action onReviveCompleted;
+            private readonly Action<PlayerControl> onReviveCompleted;
             private readonly Action onDispose;
 
-            public ReviveToken(float resurrectTime, TextMeshPro resurrectText, PlayerControl rolePlayer, Action onReviveCompleted, Action onDispose)
+            public ReviveToken(float resurrectTime, TextMeshPro resurrectText, PlayerControl rolePlayer, Action<PlayerControl> onReviveCompleted, Action onDispose)
             {
                 this.resurrectTimer = resurrectTime;
                 this.resurrectText = resurrectText;
@@ -108,7 +110,7 @@ namespace ExtremeRoles.Module
 
                 HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
 
-                onReviveCompleted?.Invoke();
+                onReviveCompleted?.Invoke(rolePlayer);
             }
         }
     }

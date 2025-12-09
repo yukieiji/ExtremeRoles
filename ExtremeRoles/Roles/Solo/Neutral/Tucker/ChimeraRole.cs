@@ -72,7 +72,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		IsApplyEnvironmentVision = vision.ApplyEffect;
 
 		isTuckerDead = tuckerPlayer.IsDead;
-        playerReviver = new PlayerReviver(option.ResurrectTime);
+        playerReviver = new PlayerReviver(option.ResurrectTime, revive);
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -132,7 +132,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			return;
 		}
 
-        playerReviver.Start(rolePlayer, () => revive(rolePlayer));
+        playerReviver.Start(rolePlayer);
 	}
 
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)

@@ -362,7 +362,7 @@ public sealed class Zombie :
 
         if (this.canResurrect)
         {
-            playerReviver?.Start(rolePlayer, revive);
+            playerReviver?.Start(rolePlayer);
         }
     }
 
@@ -374,7 +374,7 @@ public sealed class Zombie :
 
         if (this.canResurrect)
         {
-            playerReviver?.Start(rolePlayer, revive);
+            playerReviver?.Start(rolePlayer);
         }
     }
 
@@ -425,7 +425,7 @@ public sealed class Zombie :
         this.showMagicCircleTime = cate.GetValue<ZombieOption, float>(
             ZombieOption.ShowMagicCircleTime);
         this.playerReviver = new PlayerReviver(
-            cate.GetValue<ZombieOption, float>(ZombieOption.ResurrectDelayTime));
+            cate.GetValue<ZombieOption, float>(ZombieOption.ResurrectDelayTime), revive);
         this.canResurrectOnExil = cate.GetValue<ZombieOption, bool>(
             ZombieOption.CanResurrectOnExil);
 
@@ -467,13 +467,13 @@ public sealed class Zombie :
         }
     }
 
-    private void revive()
+    private void revive(PlayerControl rolePlayer)
     {
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.ZombieRpc))
         {
             caller.WriteByte((byte)ZombieRpcOps.UseResurrect);
-            caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+            caller.WriteByte(rolePlayer.PlayerId);
         }
         UseResurrect(this);
     }
