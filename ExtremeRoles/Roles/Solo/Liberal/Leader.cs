@@ -247,12 +247,18 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		this.doveHandler?.Update(rolePlayer);
 		this.status.Update();
 
-		if (this.status.OtherLiberal <= 0 && this.revive.IsAutoExit)
+		if (this.revive.IsAutoExit && this.status.OtherLiberal <= 0)
 		{
 			// リベラルが0になったので自動排除
-			Player.RpcUncheckMurderPlayer(
-				rolePlayer.PlayerId, rolePlayer.PlayerId,
-				byte.MinValue);
+			if (rolePlayer != null &&
+				rolePlayer.Data != null &&
+				!rolePlayer.Data.IsDead &&
+				!rolePlayer.Data.Disconnected)
+			{
+				Player.RpcUncheckMurderPlayer(
+					rolePlayer.PlayerId, rolePlayer.PlayerId,
+					byte.MinValue);
+			}
 			return;
 		}
 
