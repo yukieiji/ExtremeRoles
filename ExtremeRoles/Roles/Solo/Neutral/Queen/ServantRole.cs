@@ -64,7 +64,7 @@ public sealed class ServantRole :
 		CanKill = id switch
 		{
 			ExtremeRoleId.Fencer => false,
-			ExtremeRoleId.Yandere or ExtremeRoleId.Hero => true,
+			ExtremeRoleId.Sheriff or ExtremeRoleId.Yandere or ExtremeRoleId.Hero => true,
 			_ => CanKill,
 		};
 
@@ -77,6 +77,7 @@ public sealed class ServantRole :
 			HasOtherVision = baseRole.HasOtherVision;
 		}
 		Vision = baseRole.Vision;
+
 		IsApplyEnvironmentVision = baseRole.IsApplyEnvironmentVision;
 
 		HasOtherKillCool = baseRole.HasOtherKillCool;
