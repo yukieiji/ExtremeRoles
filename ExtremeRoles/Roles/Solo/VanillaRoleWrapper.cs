@@ -1,12 +1,12 @@
-using System;
 using AmongUs.GameOptions;
-
 using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using System;
 
 
 namespace ExtremeRoles.Roles.Solo;
@@ -34,7 +34,12 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
             this.KillCoolTime = Player.DefaultKillCoolTime;
             this.KillRange = curOption.GetInt(Int32OptionNames.KillDistance);
         }
-        switch (id)
+
+		this.Vision = this.IsImpostor() ?
+			curOption.GetFloat(FloatOptionNames.ImpostorLightMod) :
+			curOption.GetFloat(FloatOptionNames.CrewLightMod);
+
+		switch (id)
         {
             case RoleTypes.Engineer:
                 this.UseVent = true;
