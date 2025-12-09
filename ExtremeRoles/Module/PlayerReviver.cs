@@ -74,6 +74,7 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? on
             if (this.resurrectTimer <= 0.0f)
             {
                 executeRevive();
+				this.resurrectText.gameObject.SetActive(false);
 				this.onDispose.Invoke();
             }
         }
@@ -114,8 +115,7 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? on
                 RandomGenerator.Instance.Next(randomPos.Count)]);
 
             HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
-
-            this.onReviveCompleted.Invoke(rolePlayer);
+			this.onReviveCompleted.Invoke(rolePlayer);
         }
     }
 }
