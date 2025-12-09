@@ -484,7 +484,7 @@ public sealed class Zombie :
         }
         else
         {
-            return this.canResurrect;
+            return playerReviver.IsReviving;
         }
     }
 

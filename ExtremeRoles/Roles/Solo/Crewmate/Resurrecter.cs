@@ -436,11 +436,11 @@ public sealed class Resurrecter :
         }
         else if (!this.canResurrect || this.isExild)
         {
-            return this.canResurrectAfterDeath || this.canResurrect;
+            return this.canResurrectAfterDeath || playerReviver.IsReviving;
         }
         else
         {
-            return this.canResurrect;
+            return playerReviver.IsReviving;
         }
     }
 
