@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -16,6 +15,8 @@ using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
+
+#nullable enable
 
 public sealed class Resurrecter :
     SingleRoleBase,
@@ -168,8 +169,6 @@ public sealed class Resurrecter :
 
     public void Update(PlayerControl rolePlayer)
     {
-        playerReviver?.Update();
-
         if (rolePlayer.Data.IsDead && this.infoBlock())
         {
             HudManager.Instance.Chat.gameObject.SetActive(false);
@@ -198,7 +197,10 @@ public sealed class Resurrecter :
                 if (this.canResurrectAfterDeath &&
                     rolePlayer.Data.IsDead)
                 {
-                    playerReviver?.Start(rolePlayer);
+					// 即復活を行うため、かなり短い時間で作ってReviveさせる
+					var reviver = new PlayerReviver(0.0f, revive);
+					reviver.Start(rolePlayer);
+					reviver.Update();
                 }
                 else
                 {
@@ -207,7 +209,14 @@ public sealed class Resurrecter :
                 }
             }
         }
-    }
+
+		if (this.isResurrected)
+		{
+			return;
+		}
+
+		playerReviver?.Update();
+	}
 
     public override string GetColoredRoleName(bool isTruthColor = false)
     {
@@ -279,12 +288,18 @@ public sealed class Resurrecter :
     public override void ExiledAction(
         PlayerControl rolePlayer)
     {
-        if (this.isResurrected) { return; }
+        if (this.isResurrected)
+		{
+			return;
+		}
 
         this.isExild = true;
 
         // 追放でオフ時は以下の処理を行わない
-        if (!this.canResurrectOnExil) { return; }
+        if (!this.canResurrectOnExil)
+		{
+			return;
+		}
 
         if (this.canResurrect)
         {
@@ -300,7 +315,10 @@ public sealed class Resurrecter :
         PlayerControl rolePlayer,
         PlayerControl killerPlayer)
     {
-        if (this.isResurrected) { return; }
+        if (this.isResurrected)
+		{
+			return;
+		}
 
         this.isExild = false;
 
@@ -450,39 +468,45 @@ public sealed class Resurrecter :
 
         foreach (int i in shuffleTaskIndex)
         {
-            if (replaceTaskNum >= maxReplaceTaskNum) { break; }
+            if (replaceTaskNum >= maxReplaceTaskNum)
+			{
+				break;
+			}
 
-            if (playerInfo.Tasks[i].Complete)
+			var task = playerInfo.Tasks[i];
+
+            if (!task.Complete)
             {
-
-                int taskIndex;
-                int replaceTaskId = playerInfo.Tasks[i].TypeId;
-
-                if (ShipStatus.Instance.CommonTasks.Any(
-                    (NormalPlayerTask t) => t.Index == replaceTaskId))
-                {
-                    taskIndex = GameSystem.GetRandomCommonTaskId();
-                }
-                else if (ShipStatus.Instance.LongTasks.Any(
-                    (NormalPlayerTask t) => t.Index == replaceTaskId))
-                {
-                    taskIndex = GameSystem.GetRandomLongTask();
-                }
-                else if (ShipStatus.Instance.ShortTasks.Any(
-                    (NormalPlayerTask t) => t.Index == replaceTaskId))
-                {
-                    taskIndex = GameSystem.GetRandomShortTaskId();
-                }
-                else
-                {
-                    continue;
-                }
-
-                GameSystem.RpcReplaceNewTask(
-                    rolePlayer.PlayerId, i, taskIndex);
-
-                ++replaceTaskNum;
+				continue;
             }
-        }
+
+			int taskIndex;
+			int replaceTaskId = task.TypeId;
+
+			if (ShipStatus.Instance.CommonTasks.Any(
+				(NormalPlayerTask t) => t.Index == replaceTaskId))
+			{
+				taskIndex = GameSystem.GetRandomCommonTaskId();
+			}
+			else if (ShipStatus.Instance.LongTasks.Any(
+				(NormalPlayerTask t) => t.Index == replaceTaskId))
+			{
+				taskIndex = GameSystem.GetRandomLongTask();
+			}
+			else if (ShipStatus.Instance.ShortTasks.Any(
+				(NormalPlayerTask t) => t.Index == replaceTaskId))
+			{
+				taskIndex = GameSystem.GetRandomShortTaskId();
+			}
+			else
+			{
+				continue;
+			}
+
+			GameSystem.RpcReplaceNewTask(
+				rolePlayer.PlayerId, i, taskIndex);
+
+			++replaceTaskNum;
+		}
     }
 }

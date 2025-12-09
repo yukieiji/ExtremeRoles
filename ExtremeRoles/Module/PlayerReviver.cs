@@ -4,114 +4,109 @@ using UnityEngine;
 using TMPro;
 using ExtremeRoles.Helper;
 
-namespace ExtremeRoles.Module
+namespace ExtremeRoles.Module;
+
+#nullable enable
+
+public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl> onReviveCompleted)
 {
-    public sealed class PlayerReviver
+    private ReviveToken? token;
+    private TextMeshPro? resurrectText;
+	private readonly float resurrectTime = resurrectTime;
+    private readonly Action<PlayerControl> onReviveCompleted = onReviveCompleted;
+
+    public bool IsReviving => token != null;
+
+    public void Start(PlayerControl rolePlayer)
     {
-        private ReviveToken? token;
-        private TextMeshPro? resurrectText;
-        private readonly float resurrectTime;
-        private readonly Action<PlayerControl> onReviveCompleted;
-
-        public bool IsReviving => token != null;
-
-        public PlayerReviver(float resurrectTime, Action<PlayerControl> onReviveCompleted)
+        if (this.resurrectText == null)
         {
-            this.resurrectTime = resurrectTime;
-            this.onReviveCompleted = onReviveCompleted;
+			this.resurrectText = UnityEngine.Object.Instantiate(
+                HudManager.Instance.KillButton.cooldownTimerText,
+                Camera.main.transform, false);
+			this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
+			this.resurrectText.enableWordWrapping = false;
         }
 
-        public void Start(PlayerControl rolePlayer)
-        {
-            if (resurrectText == null)
-            {
-                resurrectText = UnityEngine.Object.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText,
-                    Camera.main.transform, false);
-                resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-                resurrectText.enableWordWrapping = false;
-            }
+        token = new ReviveToken(
+			this.resurrectTime,
+			this.resurrectText,
+			rolePlayer,
+			this.onReviveCompleted,
+			() => this.token = null);
+    }
 
-            token = new ReviveToken(resurrectTime, resurrectText, rolePlayer, onReviveCompleted, () => token = null);
-        }
+    public void Update()
+    {
+		this.token?.Update();
+    }
+
+    public void Reset()
+    {
+		this.token?.Reset();
+    }
+
+    private sealed class ReviveToken(float resurrectTime, TextMeshPro resurrectText, PlayerControl rolePlayer, Action<PlayerControl> onReviveCompleted, Action onDispose)
+	{
+        private float resurrectTimer = resurrectTime;
+        private readonly TextMeshPro resurrectText = resurrectText;
+        private readonly PlayerControl rolePlayer = rolePlayer;
+        private readonly Action<PlayerControl> onReviveCompleted = onReviveCompleted;
+		private readonly Action onDispose = onDispose;
 
         public void Update()
         {
-            token?.Update();
+			if (this.resurrectTimer > 0.0f)
+			{
+				this.resurrectText.gameObject.SetActive(true);
+				this.resurrectTimer -= Time.deltaTime;
+				this.resurrectText.text = string.Format(
+					Tr.GetString("resurrectText"),
+					Mathf.CeilToInt(this.resurrectTimer));
+			}
+
+            if (this.resurrectTimer <= 0.0f)
+            {
+                executeRevive();
+				this.onDispose.Invoke();
+            }
         }
 
         public void Reset()
         {
-            token?.Reset();
+            if (resurrectText != null)
+            {
+                resurrectText.gameObject.SetActive(false);
+            }
         }
 
-        private sealed class ReviveToken
+        private void executeRevive()
         {
-            private float resurrectTimer;
-            private readonly TextMeshPro resurrectText;
-            private readonly PlayerControl rolePlayer;
-            private readonly Action<PlayerControl> onReviveCompleted;
-            private readonly Action onDispose;
+			if (rolePlayer == null)
+			{
+				return;
+			}
 
-            public ReviveToken(float resurrectTime, TextMeshPro resurrectText, PlayerControl rolePlayer, Action<PlayerControl> onReviveCompleted, Action onDispose)
+            byte playerId = rolePlayer.PlayerId;
+
+            Player.RpcUncheckRevive(playerId);
+
+            if (this.rolePlayer.Data == null ||
+				this.rolePlayer.Data.IsDead ||
+				this.rolePlayer.Data.Disconnected)
             {
-                this.resurrectTimer = resurrectTime;
-                this.resurrectText = resurrectText;
-                this.rolePlayer = rolePlayer;
-                this.onReviveCompleted = onReviveCompleted;
-                this.onDispose = onDispose;
+                return;
             }
 
-            public void Update()
-            {
-                if (resurrectTimer <= 0.0f) return;
+			List<Vector2> randomPos = [];
+            Map.AddSpawnPoint(randomPos, playerId);
 
-                resurrectText.gameObject.SetActive(true);
-                resurrectTimer -= Time.deltaTime;
-                resurrectText.text = string.Format(
-                    Tr.GetString("resurrectText"),
-                    Mathf.CeilToInt(resurrectTimer));
+            Player.RpcUncheckSnap(playerId, randomPos[
+                RandomGenerator.Instance.Next(randomPos.Count)]);
 
-                if (resurrectTimer <= 0.0f)
-                {
-                    executeRevive();
-                    onDispose?.Invoke();
-                }
-            }
+            HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
 
-            public void Reset()
-            {
-                if (resurrectText != null)
-                {
-                    resurrectText.gameObject.SetActive(false);
-                }
-            }
-
-            private void executeRevive()
-            {
-                if (rolePlayer == null) return;
-
-                byte playerId = rolePlayer.PlayerId;
-
-                Player.RpcUncheckRevive(playerId);
-
-                if (rolePlayer.Data == null ||
-                    rolePlayer.Data.IsDead ||
-                    rolePlayer.Data.Disconnected)
-                {
-                    return;
-                }
-
-                List<Vector2> randomPos = new List<Vector2>();
-                Map.AddSpawnPoint(randomPos, playerId);
-
-                Player.RpcUncheckSnap(playerId, randomPos[
-                    RandomGenerator.Instance.Next(randomPos.Count)]);
-
-                HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
-
-                onReviveCompleted?.Invoke(rolePlayer);
-            }
+            onReviveCompleted?.Invoke(rolePlayer);
         }
     }
 }
