@@ -8,18 +8,21 @@ namespace ExtremeRoles.Module;
 
 #nullable enable
 
-public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl> onReviveCompleted)
+public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? onReviveCompleted = null)
 {
-    private ReviveToken? token;
-    private TextMeshPro? resurrectText;
+	private ReviveToken? token;
+	private TextMeshPro? resurrectText;
 	private readonly float resurrectTime = resurrectTime;
-    private readonly Action<PlayerControl> onReviveCompleted = onReviveCompleted;
+	private readonly Action<PlayerControl> onReviveCompleted = onReviveCompleted != null ? onReviveCompleted : (_) => { };
 
     public bool IsReviving => token != null;
 
     public void Start(PlayerControl rolePlayer)
     {
-        if (this.resurrectText == null)
+		// チャットは消しておく
+		HudManager.Instance.Chat.gameObject.SetActive(false);
+
+		if (this.resurrectText == null)
         {
 			this.resurrectText = UnityEngine.Object.Instantiate(
                 HudManager.Instance.KillButton.cooldownTimerText,
@@ -28,7 +31,7 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl> onR
 			this.resurrectText.enableWordWrapping = false;
         }
 
-        token = new ReviveToken(
+        this.token = new ReviveToken(
 			this.resurrectTime,
 			this.resurrectText,
 			rolePlayer,
@@ -49,6 +52,7 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl> onR
     private sealed class ReviveToken(float resurrectTime, TextMeshPro resurrectText, PlayerControl rolePlayer, Action<PlayerControl> onReviveCompleted, Action onDispose)
 	{
         private float resurrectTimer = resurrectTime;
+		private readonly float maxTime = resurrectTime;
         private readonly TextMeshPro resurrectText = resurrectText;
         private readonly PlayerControl rolePlayer = rolePlayer;
         private readonly Action<PlayerControl> onReviveCompleted = onReviveCompleted;
@@ -56,6 +60,8 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl> onR
 
         public void Update()
         {
+			HudManager.Instance.Chat.gameObject.SetActive(false);
+
 			if (this.resurrectTimer > 0.0f)
 			{
 				this.resurrectText.gameObject.SetActive(true);
@@ -74,7 +80,10 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl> onR
 
         public void Reset()
         {
-            if (resurrectText != null)
+			HudManager.Instance.Chat.gameObject.SetActive(false);
+			this.resurrectTimer = this.maxTime;
+
+			if (resurrectText != null)
             {
                 resurrectText.gameObject.SetActive(false);
             }

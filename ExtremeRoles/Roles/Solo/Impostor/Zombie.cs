@@ -231,8 +231,6 @@ public sealed class Zombie :
 
     public void Update(PlayerControl rolePlayer)
     {
-        playerReviver?.Update();
-
         bool isDead = rolePlayer.Data.IsDead;
 		bool isNotTaskPhase = !GameProgressSystem.IsTaskPhase;
         bool isNotAwake = !this.IsAwake;
@@ -244,16 +242,18 @@ public sealed class Zombie :
             arrow.Update();
         }
 
-        if (isNotAwake)
+		if (isNotAwake)
         {
             this.Button?.SetButtonShow(false);
             return;
         }
 
-        if (isDead && this.infoBlock())
-        {
-            HudManager.Instance.Chat.gameObject.SetActive(false);
-        }
+		if (this.isResurrected)
+		{
+			return;
+		}
+
+		playerReviver?.Update();
     }
 
     public bool TryRolePlayerKillTo(

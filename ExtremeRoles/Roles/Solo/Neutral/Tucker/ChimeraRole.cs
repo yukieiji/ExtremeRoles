@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 
 using UnityEngine;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
@@ -52,27 +50,27 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 				ColorPalette.TuckerMerdedoie),
 			true, false, option.Vent, false)
 	{
-		Loader = loader;
+		this.Loader = loader;
 		this.status = new ChimeraStatus(tuckerPlayer, this);
 
 		this.tuckerPlayer = tuckerPlayer;
-		reviveKillCoolOffset = option.RevieKillCoolOffset;
-		tuckerDeathKillCoolOffset = option.TukerKillCoolOffset;
+		this.reviveKillCoolOffset = option.RevieKillCoolOffset;
+		this.tuckerDeathKillCoolOffset = option.TukerKillCoolOffset;
 
 		var killOption = option.KillOption;
-		HasOtherKillCool = true;
-		initCoolTime = killOption.KillCool;
-		KillCoolTime = initCoolTime;
-		HasOtherKillRange = killOption.OtherRange;
-		KillRange = killOption.Range;
+		this.HasOtherKillCool = true;
+		this.initCoolTime = killOption.KillCool;
+		this.KillCoolTime = initCoolTime;
+		this.HasOtherKillRange = killOption.OtherRange;
+		this.KillRange = killOption.Range;
 
 		var vision = option.VisionOption;
-		HasOtherVision = vision.OtherVision;
-		Vision = vision.Vision;
-		IsApplyEnvironmentVision = vision.ApplyEffect;
+		this.HasOtherVision = vision.OtherVision;
+		this.Vision = vision.Vision;
+		this.IsApplyEnvironmentVision = vision.ApplyEffect;
 
-		isTuckerDead = tuckerPlayer.IsDead;
-        playerReviver = new PlayerReviver(option.ResurrectTime, revive);
+		this.isTuckerDead = tuckerPlayer.IsDead;
+		this.playerReviver = new PlayerReviver(option.ResurrectTime, revive);
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -105,11 +103,9 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 	public void Update(PlayerControl rolePlayer)
 	{
-        playerReviver.Update();
-
 		if (!GameProgressSystem.IsTaskPhase)
 		{
-            playerReviver.Reset();
+			this.playerReviver.Reset();
 			return;
 		}
 
@@ -122,26 +118,28 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			}
 		}
 
+		this.playerReviver.Update();
+
 		// 復活処理
 		if (tuckerPlayer == null ||
 			!rolePlayer.Data.IsDead ||
 			tuckerPlayer.Disconnected ||
 			tuckerPlayer.IsDead ||
-            playerReviver.IsReviving)
+			this.playerReviver.IsReviving)
 		{
 			return;
 		}
 
-        playerReviver.Start(rolePlayer);
+		this.playerReviver.Start(rolePlayer);
 	}
 
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
 	{
-		if (tuckerPlayer != null &&
+		if (this.tuckerPlayer != null &&
 			targetRole.Core.Id is ExtremeRoleId.Tucker &&
-			targetPlayerId == tuckerPlayer.PlayerId)
+			targetPlayerId == this.tuckerPlayer.PlayerId)
 		{
-			return Core.Color;
+			return this.Core.Color;
 		}
 		return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 	}
@@ -172,20 +170,23 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	public override string GetFullDescription()
 	{
 		string full = base.GetFullDescription();
-		if (tuckerPlayer == null)
+		if (this.tuckerPlayer == null)
 		{
 			return full;
 		}
 		return string.Format(
-			full, tuckerPlayer.DefaultOutfit.PlayerName);
+			full, this.tuckerPlayer.DefaultOutfit.PlayerName);
 	}
 
 	private bool infoBlock()
-		=> !isTuckerDead;
+		=> !this.isTuckerDead;
 
 	private void revive(PlayerControl rolePlayer)
 	{
-		if (tuckerPlayer == null) { return; }
+		if (this.tuckerPlayer == null)
+		{
+			return;
+		}
 
 		updateKillCoolTime(reviveKillCoolOffset);
 		rolePlayer.killTimer = KillCoolTime;
@@ -194,7 +195,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			TuckerShadowSystem.Type, x =>
 			{
 				x.Write((byte)TuckerShadowSystem.Ops.ChimeraRevive);
-				x.Write(tuckerPlayer.PlayerId);
+				x.Write(this.tuckerPlayer.PlayerId);
 			});
 	}
 
@@ -206,12 +207,12 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			return;
 		}
 		// 累積していたキルクールのオフセットを無効化しておく
-		KillCoolTime = initCoolTime;
+		this.KillCoolTime = this.initCoolTime;
 	}
 
 	private void updateKillCoolTime(float offset, float min = 0.1f)
 	{
-		KillCoolTime = Mathf.Clamp(KillCoolTime + offset, min, float.MaxValue);
+		this.KillCoolTime = Mathf.Clamp(this.KillCoolTime + offset, min, float.MaxValue);
 	}
 
 	private bool isSameChimeraTeam(SingleRoleBase targetRole)

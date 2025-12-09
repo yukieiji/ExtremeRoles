@@ -78,7 +78,7 @@ public sealed class CEO : SingleRoleBase,
 
 	private bool isMonikaMeeting = false;
 	private bool isMeExiled = false;
-    private readonly PlayerReviver playerReviver;
+    private PlayerReviver? playerReviver;
 
 	public CEO() : base(
 		RoleCore.BuildCrewmate(
@@ -86,8 +86,8 @@ public sealed class CEO : SingleRoleBase,
 			ColorPalette.CaptainLightKonjou),
 		false, true, false, false)
 	{
-        playerReviver = new PlayerReviver(5.0f, _ => {});
-    }
+
+	}
 
 	public string GetFakeOptionString() => "";
 
@@ -143,7 +143,7 @@ public sealed class CEO : SingleRoleBase,
 			return;
 		}
 
-        playerReviver.Start(rolePlayer);
+        playerReviver?.Start(rolePlayer);
 		
 		if (OnemanMeetingSystemManager.IsActive ||
 			!this.useCEOMeeting ||
@@ -276,7 +276,7 @@ public sealed class CEO : SingleRoleBase,
 			OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
 			system.TryGetOnemanMeeting<MonikaLoveTargetMeeting>(out _);
 
-        playerReviver.Reset();
+        playerReviver?.Reset();
 	}
 
 	public void ResetModifier()
@@ -286,12 +286,11 @@ public sealed class CEO : SingleRoleBase,
 
 	public void Update(PlayerControl rolePlayer)
 	{
-        playerReviver.Update();
 
 		if (!GameProgressSystem.IsTaskPhase)
 		{
 			if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting) && 
-				playerReviver.IsReviving)
+				(playerReviver?.IsReviving ?? false))
 			{
                 playerReviver.Start(rolePlayer);
 			}
@@ -300,6 +299,7 @@ public sealed class CEO : SingleRoleBase,
 
 		if (this.IsAwake)
 		{
+			playerReviver?.Update();
 			return;
 		}
 
@@ -320,9 +320,9 @@ public sealed class CEO : SingleRoleBase,
 	}
 
 	public override bool IsBlockShowMeetingRoleInfo()
-		=> playerReviver.IsReviving;
+		=> playerReviver?.IsReviving ?? false;
 	public override bool IsBlockShowPlayingRoleInfo()
-		=> playerReviver.IsReviving;
+		=> playerReviver?.IsReviving ?? false;
 
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -338,6 +338,8 @@ public sealed class CEO : SingleRoleBase,
 
 		this.status = new CEOStatus();
 		this.AbilityClass = new CEOAbilityHandler(this.status);
+
+		this.playerReviver = new PlayerReviver(5.0f);
 
 
 		this.isShowRolePlayerVote = this.Loader.GetValue<Option, bool>(Option.IsShowRolePlayerVote);
