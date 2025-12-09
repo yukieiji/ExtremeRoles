@@ -20,11 +20,7 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? on
 
     public void Start(PlayerControl rolePlayer)
     {
-		// 特殊会議以外はチャットは消しておく
-		if (!OnemanMeetingSystemManager.IsActive)
-		{
-			HudManager.Instance.Chat.gameObject.SetActive(false);
-		}
+		hideChatWhenMeeting();
 
 		if (this.resurrectText == null)
         {
@@ -53,6 +49,15 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? on
 		this.token?.Reset();
     }
 
+	private static void hideChatWhenMeeting()
+	{
+		// 特殊会議以外はチャットは消しておく
+		if (!OnemanMeetingSystemManager.IsActive)
+		{
+			HudManager.Instance.Chat.gameObject.SetActive(false);
+		}
+	}
+
     private sealed class ReviveToken(float resurrectTime, TextMeshPro resurrectText, PlayerControl rolePlayer, Action<PlayerControl> onReviveCompleted, Action onDispose)
 	{
         private float resurrectTimer = resurrectTime;
@@ -64,11 +69,7 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? on
 
         public void Update()
         {
-			// 特殊会議以外はチャットは消しておく
-			if (!OnemanMeetingSystemManager.IsActive)
-			{
-				HudManager.Instance.Chat.gameObject.SetActive(false);
-			}
+			hideChatWhenMeeting();
 
 			if (this.resurrectTimer > 0.0f)
 			{
@@ -89,11 +90,7 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? on
 
         public void Reset()
         {
-			// 特殊会議以外はチャットは消しておく
-			if (!OnemanMeetingSystemManager.IsActive)
-			{
-				HudManager.Instance.Chat.gameObject.SetActive(false);
-			}
+			hideChatWhenMeeting();
 			this.resurrectTimer = this.maxTime;
 
 			if (resurrectText != null)
