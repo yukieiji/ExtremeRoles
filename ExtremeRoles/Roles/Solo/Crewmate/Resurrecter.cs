@@ -279,7 +279,6 @@ public sealed class Resurrecter :
     public override void ExiledAction(
         PlayerControl rolePlayer)
     {
-
         if (this.isResurrected) { return; }
 
         this.isExild = true;
@@ -405,6 +404,14 @@ public sealed class Resurrecter :
 
     private bool infoBlock()
     {
+        // ・詳細
+        // 復活を使用後に死亡 => 常に見える
+        // 非復活可能状態でキル、死亡後復活出来ない => 常に見える
+        // 非復活可能状態でキル、死亡後復活出来る => 復活できるまで見えない
+        // 非復活可能状態で追放、死亡後復活できる => 見えない
+        // 非復活可能状態で追放、死亡後復活出来ない => 常に見える
+        // 復活可能状態で死亡か追放 => 見えない
+
         if (this.isResurrected)
         {
             return false;
