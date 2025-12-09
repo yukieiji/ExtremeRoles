@@ -115,7 +115,7 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? on
 
             HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
 
-            onReviveCompleted?.Invoke(rolePlayer);
+            this.onReviveCompleted.Invoke(rolePlayer);
         }
     }
 }
