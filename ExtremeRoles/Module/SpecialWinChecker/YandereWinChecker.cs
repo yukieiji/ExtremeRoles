@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-
 using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using System.Collections.Generic;
 
 
 namespace ExtremeRoles.Module.SpecialWinChecker;
@@ -36,15 +36,18 @@ internal sealed class YandereWinChecker : IWinChecker
 		int oneSidedLoverNeutralNum = 0;
 		int oneSidedLoverLiberalMillitant = 0;
 
-		foreach (YandereRole role in aliveYandere)
+		foreach (var role in aliveYandere)
 		{
-			if (role.OneSidedLover == null)
+			if (role.OneSidedLover == null ||
+				role.OneSidedLover.Data == null ||
+				!ExtremeRoleManager.TryGetRole(
+					role.OneSidedLover.Data.PlayerId,
+					out var oneSidedLoverRole))
 			{
 				continue;
 			}
 
 			var playerInfo = role.OneSidedLover.Data;
-			var oneSidedLoverRole = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
 
 			if (playerInfo.IsDead || playerInfo.Disconnected)
 			{
@@ -74,7 +77,22 @@ internal sealed class YandereWinChecker : IWinChecker
 					case ExtremeRoleId.Chimera:
 						++oneSidedLoverNeutralNum;
 						break;
+
 					default:
+						// どっちかがサーヴァント
+						if (ExtremeRoleManager.TryGetSafeCastedRole<ServantRole>(playerInfo.PlayerId, out var servant) &&
+							!servant.Loader.GetValue<QueenRole.QueenOption, bool>(QueenRole.QueenOption.ServantSucideWithQueenWhenHasKill) &&
+							servant.CanKill() &&
+							servant.Status is ServantStatus servantStatus)
+						{
+							byte parent = servantStatus.Parent;
+							var parentPlayer = GameData.Instance.GetPlayerById(parent);
+							if (parentPlayer != null && 
+								(parentPlayer.IsDead ||parentPlayer.Disconnected))
+							{
+								++oneSidedLoverNeutralNum;
+							}
+						}
 						break;
 				}
 			}
@@ -89,15 +107,18 @@ internal sealed class YandereWinChecker : IWinChecker
 			}
 		}
 
-		int aliveNum = aliveYandere.Count + aliveOneSideLover.Count;
+		int aliveNum = this.aliveYandere.Count + aliveOneSideLover.Count;
 
 		if (aliveOneSideLover.Count == 0 ||
-			aliveYandere.Count == 0 ||
+			this.aliveYandere.Count == 0 ||
 			aliveNum < statistics.TotalAlive - aliveNum ||
 			statistics.TeamImpostorAlive - statistics.AssassinAlive - oneSidedLoverImpNum > 0 ||
 			statistics.SeparatedNeutralAlive.Count - oneSidedLoverNeutralNum > 1 ||
 			statistics.LiberalMilitantAlive - oneSidedLoverLiberalMillitant > 1)
 		{
+			ExtremeRolesPlugin.Logger.LogInfo($"ImpCount: {statistics.TeamImpostorAlive}");
+			ExtremeRolesPlugin.Logger.LogInfo($"oneSideNeut: {oneSidedLoverNeutralNum}");
+			ExtremeRolesPlugin.Logger.LogInfo($"NeutralCount: {statistics.SeparatedNeutralAlive.Count}");
 			return false;
 		}
 
