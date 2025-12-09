@@ -66,6 +66,7 @@ public sealed class Zombie :
     private bool awakeHasOtherVision;
     private int awakeKillCount;
     private int resurrectKillCount;
+    private float resurrectDelayTime;
 
     private int killCount;
 
@@ -73,22 +74,22 @@ public sealed class Zombie :
     private bool canResurrectOnExil;
     private bool isResurrected;
 
-    private bool activateResurrectTimer;
-    private float resurrectTimer;
     private float showMagicCircleTime;
 
     private Vector3 curPos;
 
-    private TMPro.TextMeshPro resurrectText;
     private Dictionary<SystemTypes, Arrow> setRooms;
     private SystemTypes targetRoom;
 
     private Collider2D cachedColider = null;
+    private readonly PlayerReviver playerReviver;
 
     public Zombie() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Zombie),
         true, false, true, true)
-    { }
+    {
+        playerReviver = new PlayerReviver();
+    }
 
     public static void RpcAbility(ref MessageReader reader)
     {
@@ -117,8 +118,8 @@ public sealed class Zombie :
     public static void UseResurrect(Zombie zombie)
     {
         zombie.isResurrected = true;
-        zombie.activateResurrectTimer = false;
     }
+
     private static void setMagicCircle(Vector2 pos, float activeTime)
     {
         GameObject circle = new GameObject("MagicCircle");
@@ -169,7 +170,6 @@ public sealed class Zombie :
             arrow.UpdateTarget(room.roomArea.bounds.center);
             this.setRooms.Add(roomId, arrow);
         }
-
     }
 
     public bool IsActivate()
@@ -217,10 +217,7 @@ public sealed class Zombie :
 
     public void ResetOnMeetingStart()
     {
-        if (this.resurrectText != null)
-        {
-            this.resurrectText.gameObject.SetActive(false);
-        }
+        playerReviver.Reset();
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
@@ -230,13 +227,13 @@ public sealed class Zombie :
 
     public void ReviveAction(PlayerControl player)
     {
-
     }
 
     public string GetFakeOptionString() => "";
 
     public void Update(PlayerControl rolePlayer)
     {
+        playerReviver.Update();
 
         bool isDead = rolePlayer.Data.IsDead;
 		bool isNotTaskPhase = !GameProgressSystem.IsTaskPhase;
@@ -258,39 +255,6 @@ public sealed class Zombie :
         if (isDead && this.infoBlock())
         {
             HudManager.Instance.Chat.gameObject.SetActive(false);
-        }
-
-        if (!rolePlayer.moveable || isNotTaskPhase)
-        {
-            return;
-        }
-
-        if (this.isResurrected) { return; }
-
-        if (rolePlayer.Data.IsDead &&
-            this.activateResurrectTimer &&
-            this.canResurrect)
-        {
-            if (this.resurrectText == null)
-            {
-                this.resurrectText = Object.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText,
-                    Camera.main.transform, false);
-                this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-                this.resurrectText.enableWordWrapping = false;
-            }
-
-            this.resurrectText.gameObject.SetActive(true);
-            this.resurrectTimer -= Time.deltaTime;
-            this.resurrectText.text = string.Format(
-                Tr.GetString("resurrectText"),
-                Mathf.CeilToInt(this.resurrectTimer));
-
-            if (this.resurrectTimer <= 0.0f)
-            {
-                this.activateResurrectTimer = false;
-                revive(rolePlayer);
-            }
         }
     }
 
@@ -326,6 +290,7 @@ public sealed class Zombie :
                 Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
         }
     }
+
     public override string GetFullDescription()
     {
         if (IsAwake)
@@ -345,7 +310,6 @@ public sealed class Zombie :
         if (IsAwake)
         {
             return base.GetImportantText(isContainFakeTask);
-
         }
         else
         {
@@ -393,7 +357,6 @@ public sealed class Zombie :
     public override void ExiledAction(
         PlayerControl rolePlayer)
     {
-
         if (this.isResurrected) { return; }
 
         // 追放でオフ時は以下の処理を行わない
@@ -401,7 +364,7 @@ public sealed class Zombie :
 
         if (this.canResurrect)
         {
-            this.activateResurrectTimer = true;
+            playerReviver.Start(resurrectDelayTime, () => revive(rolePlayer));
         }
     }
 
@@ -413,14 +376,13 @@ public sealed class Zombie :
 
         if (this.canResurrect)
         {
-            this.activateResurrectTimer = true;
+            playerReviver.Start(resurrectDelayTime, () => revive(rolePlayer));
         }
     }
 
     public override bool IsBlockShowMeetingRoleInfo() => this.infoBlock();
 
     public override bool IsBlockShowPlayingRoleInfo() => this.infoBlock();
-
 
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
@@ -464,7 +426,7 @@ public sealed class Zombie :
 
         this.showMagicCircleTime = cate.GetValue<ZombieOption, float>(
             ZombieOption.ShowMagicCircleTime);
-        this.resurrectTimer = cate.GetValue<ZombieOption, float>(
+        this.resurrectDelayTime = cate.GetValue<ZombieOption, float>(
             ZombieOption.ResurrectDelayTime);
         this.canResurrectOnExil = cate.GetValue<ZombieOption, bool>(
             ZombieOption.CanResurrectOnExil);
@@ -472,7 +434,6 @@ public sealed class Zombie :
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;
         this.isResurrected = false;
-        this.activateResurrectTimer = false;
 
         this.cachedColider = null;
 
@@ -504,7 +465,7 @@ public sealed class Zombie :
         }
         else
         {
-            return this.activateResurrectTimer;
+            return playerReviver.IsReviving;
         }
     }
 
@@ -536,10 +497,6 @@ public sealed class Zombie :
         UseResurrect(this);
 
         HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
-        if (this.resurrectText != null)
-        {
-            this.resurrectText.gameObject.SetActive(false);
-        }
     }
 
     private void updateReviveState(bool isReduceAfter)

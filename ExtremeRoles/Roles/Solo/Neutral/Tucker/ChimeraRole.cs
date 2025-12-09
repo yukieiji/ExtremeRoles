@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 
 using UnityEngine;
-using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -10,7 +9,6 @@ using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -38,15 +36,13 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	private readonly float tuckerDeathKillCoolOffset;
 	private readonly float initCoolTime;
 
-	private TextMeshPro? resurrectText;
-	private float resurrectTimer;
-	private bool isReviveNow;
 	private bool isTuckerDead;
 
 	public byte Parent { get; }
 	public override IOptionLoader Loader { get; }
 	public override IStatusModel Status => status;
 	private readonly ChimeraStatus status;
+    private readonly PlayerReviver playerReviver;
 
 	public ChimeraRole(
 		IOptionLoader loader,
@@ -64,7 +60,6 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		reviveKillCoolOffset = option.RevieKillCoolOffset;
 		tuckerDeathKillCoolOffset = option.TukerKillCoolOffset;
 		resurrectTime = option.ResurrectTime;
-		resurrectTimer = resurrectTime;
 
 		var killOption = option.KillOption;
 		HasOtherKillCool = true;
@@ -79,7 +74,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		IsApplyEnvironmentVision = vision.ApplyEffect;
 
 		isTuckerDead = tuckerPlayer.IsDead;
-		isReviveNow = false;
+        playerReviver = new PlayerReviver();
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -112,12 +107,11 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 	public void Update(PlayerControl rolePlayer)
 	{
+        playerReviver.Update();
+
 		if (!GameProgressSystem.IsTaskPhase)
 		{
-			if (resurrectText != null)
-			{
-				resurrectText.gameObject.SetActive(false);
-			}
+            playerReviver.Reset();
 			return;
 		}
 
@@ -130,41 +124,17 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			}
 		}
 
-
 		// 復活処理
 		if (tuckerPlayer == null ||
 			!rolePlayer.Data.IsDead ||
 			tuckerPlayer.Disconnected ||
 			tuckerPlayer.IsDead ||
-			isReviveNow)
+            playerReviver.IsReviving)
 		{
-			if (resurrectText != null)
-			{
-				resurrectText.gameObject.SetActive(false);
-			}
 			return;
 		}
 
-
-		if (resurrectText == null)
-		{
-			resurrectText = UnityEngine.Object.Instantiate(
-				HudManager.Instance.KillButton.cooldownTimerText,
-				Camera.main.transform, false);
-			resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-			resurrectText.enableWordWrapping = false;
-		}
-
-		resurrectText.gameObject.SetActive(true);
-		resurrectTimer -= Time.deltaTime;
-		resurrectText.text = string.Format(
-			Tr.GetString("resurrectText"),
-			Mathf.CeilToInt(resurrectTimer));
-
-		if (resurrectTimer <= 0.0f)
-		{
-			revive(rolePlayer);
-		}
+        playerReviver.Start(resurrectTime, () => revive(rolePlayer));
 	}
 
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
@@ -218,8 +188,6 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	private void revive(PlayerControl rolePlayer)
 	{
 		if (rolePlayer == null || tuckerPlayer == null) { return; }
-		isReviveNow = true;
-		resurrectTimer = resurrectTime;
 
 		byte playerId = rolePlayer.PlayerId;
 
@@ -238,10 +206,6 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		rolePlayer.killTimer = KillCoolTime;
 
 		HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
-		if (resurrectText != null)
-		{
-			resurrectText.gameObject.SetActive(false);
-		}
 
 		ExtremeSystemTypeManager.RpcUpdateSystem(
 			TuckerShadowSystem.Type, x =>
@@ -249,8 +213,6 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 				x.Write((byte)TuckerShadowSystem.Ops.ChimeraRevive);
 				x.Write(tuckerPlayer.PlayerId);
 			});
-
-		isReviveNow = false;
 	}
 
 	public void AllReset(PlayerControl rolePlayer)

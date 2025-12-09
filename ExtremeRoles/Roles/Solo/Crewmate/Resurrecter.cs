@@ -61,6 +61,7 @@ public sealed class Resurrecter :
     private float awakeTaskGage;
     private bool awakeHasOtherVision;
     private float resurrectTaskGage;
+    private float resurrectDelayTime;
 
     private bool canResurrect;
     private bool canResurrectAfterDeath;
@@ -72,16 +73,13 @@ public sealed class Resurrecter :
     private int meetingCounter;
     private int maxMeetingCount;
 
-    private bool activateResurrectTimer;
-    private float resurrectTimer;
-
     private bool isMeetingCoolResetOnResurrect;
     private float meetingCoolDown;
 
     private float resetTaskGage;
-    private TMPro.TextMeshPro resurrectText;
 
 	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.ResurrecterBlue);
+    private readonly PlayerReviver playerReviver;
 
     public Resurrecter() : base(
 		RoleCore.BuildCrewmate(
@@ -89,7 +87,8 @@ public sealed class Resurrecter :
 			ColorPalette.ResurrecterBlue),
         false, true, false, false)
     {
-	}
+        playerReviver = new PlayerReviver();
+    }
 
     public static void RpcAbility(ref MessageReader reader)
     {
@@ -119,7 +118,6 @@ public sealed class Resurrecter :
     {
         resurrecter.isResurrected = true;
         resurrecter.isActiveMeetingCount = true;
-        resurrecter.activateResurrectTimer = false;
     }
 
     public void ResetOnMeetingStart()
@@ -129,10 +127,7 @@ public sealed class Resurrecter :
             ++this.meetingCounter;
         }
 
-        if (this.resurrectText != null)
-        {
-            this.resurrectText.gameObject.SetActive(false);
-        }
+        playerReviver.Reset();
 
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.ResurrecterRpc))
@@ -175,6 +170,7 @@ public sealed class Resurrecter :
 
     public void Update(PlayerControl rolePlayer)
     {
+        playerReviver.Update();
 
         if (rolePlayer.Data.IsDead && this.infoBlock())
         {
@@ -204,44 +200,13 @@ public sealed class Resurrecter :
                 if (this.canResurrectAfterDeath &&
                     rolePlayer.Data.IsDead)
                 {
-                    revive(rolePlayer);
+                    playerReviver.Start(resurrectDelayTime, () => revive(rolePlayer));
                 }
                 else
                 {
                     this.canResurrect = true;
                     this.isResurrected = false;
                 }
-            }
-        }
-
-        if (this.isResurrected)
-		{ 
-			return;
-		}
-
-        if (rolePlayer.Data.IsDead &&
-            this.activateResurrectTimer &&
-            this.canResurrect)
-        {
-            if (this.resurrectText == null)
-            {
-                this.resurrectText = Object.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText,
-                    Camera.main.transform, false);
-                this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-                this.resurrectText.enableWordWrapping = false;
-            }
-
-            this.resurrectText.gameObject.SetActive(true);
-            this.resurrectTimer -= Time.deltaTime;
-            this.resurrectText.text = Tr.GetString(
-				"resurrectText",
-                Mathf.CeilToInt(this.resurrectTimer));
-
-            if (this.resurrectTimer <= 0.0f)
-            {
-                this.activateResurrectTimer = false;
-                revive(rolePlayer);
             }
         }
     }
@@ -326,7 +291,7 @@ public sealed class Resurrecter :
 
         if (this.canResurrect)
         {
-            this.activateResurrectTimer = true;
+            playerReviver.Start(resurrectDelayTime, () => revive(rolePlayer));
         }
         else if (!this.canResurrectAfterDeath)
         {
@@ -344,7 +309,7 @@ public sealed class Resurrecter :
 
         if (this.canResurrect)
         {
-            this.activateResurrectTimer = true;
+            playerReviver.Start(resurrectDelayTime, () => revive(rolePlayer));
         }
         else if (!this.canResurrectAfterDeath)
         {
@@ -411,7 +376,7 @@ public sealed class Resurrecter :
         this.resetTaskGage = loader.GetValue<ResurrecterOption, int>(
             ResurrecterOption.ResurrectTaskResetGage) / 100.0f;
 
-        this.resurrectTimer = loader.GetValue<ResurrecterOption, float>(
+        this.resurrectDelayTime = loader.GetValue<ResurrecterOption, float>(
             ResurrecterOption.ResurrectDelayTime);
         this.canResurrectAfterDeath = loader.GetValue<ResurrecterOption, bool>(
             ResurrecterOption.CanResurrectAfterDeath);
@@ -427,7 +392,6 @@ public sealed class Resurrecter :
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;
         this.isResurrected = false;
-        this.activateResurrectTimer = false;
 
         if (this.awakeTaskGage <= 0.0f)
         {
@@ -443,25 +407,17 @@ public sealed class Resurrecter :
 
     private bool infoBlock()
     {
-        // ・詳細
-        // 復活を使用後に死亡 => 常に見える
-        // 非復活可能状態でキル、死亡後復活出来ない => 常に見える
-        // 非復活可能状態でキル、死亡後復活出来る => 復活できるまで見えない
-        // 非復活可能状態で追放、死亡後復活できる => 見えない
-        // 非復活可能状態で追放、死亡後復活出来ない => 常に見える
-        // 復活可能状態で死亡か追放 => 見えない
-
         if (this.isResurrected)
         {
             return false;
         }
         else if (!this.canResurrect || this.isExild)
         {
-            return this.canResurrectAfterDeath || this.activateResurrectTimer;
+            return this.canResurrectAfterDeath || playerReviver.IsReviving;
         }
         else
         {
-            return this.activateResurrectTimer;
+            return playerReviver.IsReviving;
         }
     }
 
@@ -492,10 +448,6 @@ public sealed class Resurrecter :
         UseResurrect(this);
 
         HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
-        if (this.resurrectText != null)
-        {
-            this.resurrectText.gameObject.SetActive(false);
-        }
     }
 
     private void replaceTask(PlayerControl rolePlayer)
