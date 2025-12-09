@@ -1477,7 +1477,7 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
 　起こしたC.E.O自身を選択することは出来ない</value>
   </data>
   <data name="CEOShortDescription" xml:space="preserve">
-    <value>私を吊ろうとする会議は</value>
+    <value>私を吊ろうとする会議は無意味だ</value>
   </data>
   <data name="CEOIntroDescription" xml:space="preserve">
     <value>私が、私こそが、C.E.Oだ</value>
