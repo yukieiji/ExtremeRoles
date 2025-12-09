@@ -83,7 +83,7 @@ public sealed class CEO : SingleRoleBase,
 	public CEO() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.CEO,
-			ColorPalette.CaptainLightKonjou),
+			ColorPalette.CEOTzuShuiChing),
 		false, true, false, false)
 	{
 
