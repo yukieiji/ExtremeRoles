@@ -37,14 +37,13 @@ public static class Update
 		{
 			foreach (var value in System.Enum.GetValues<InfoOverlayModel.Type>())
 			{
-				switch (value)
+				if (value is 
+					InfoOverlayModel.Type.AllRolePanel or
+					InfoOverlayModel.Type.AllGhostRolePanel or
+					InfoOverlayModel.Type.GlobalSettingPanel or
+					InfoOverlayModel.Type.Liberal)
 				{
-					case InfoOverlayModel.Type.AllRolePanel:
-					case InfoOverlayModel.Type.AllGhostRolePanel:
-					case InfoOverlayModel.Type.GlobalSettingPanel:
-						continue;
-					default:
-						break;
+					continue;
 				}
 				model.PanelModel.Remove(value);
 			}
