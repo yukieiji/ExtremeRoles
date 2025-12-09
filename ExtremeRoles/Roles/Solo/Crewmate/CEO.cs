@@ -292,7 +292,7 @@ public sealed class CEO : SingleRoleBase,
 			if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting) && 
 				(playerReviver?.IsReviving ?? false))
 			{
-                playerReviver.Start(rolePlayer);
+                playerReviver?.Reset();
 			}
 			return;
 		}

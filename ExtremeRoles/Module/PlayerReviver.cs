@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 namespace ExtremeRoles.Module;
 
@@ -19,8 +20,11 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? on
 
     public void Start(PlayerControl rolePlayer)
     {
-		// チャットは消しておく
-		HudManager.Instance.Chat.gameObject.SetActive(false);
+		// 特殊会議以外はチャットは消しておく
+		if (!OnemanMeetingSystemManager.IsActive)
+		{
+			HudManager.Instance.Chat.gameObject.SetActive(false);
+		}
 
 		if (this.resurrectText == null)
         {
@@ -60,7 +64,11 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? on
 
         public void Update()
         {
-			HudManager.Instance.Chat.gameObject.SetActive(false);
+			// 特殊会議以外はチャットは消しておく
+			if (!OnemanMeetingSystemManager.IsActive)
+			{
+				HudManager.Instance.Chat.gameObject.SetActive(false);
+			}
 
 			if (this.resurrectTimer > 0.0f)
 			{
@@ -81,7 +89,11 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? on
 
         public void Reset()
         {
-			HudManager.Instance.Chat.gameObject.SetActive(false);
+			// 特殊会議以外はチャットは消しておく
+			if (!OnemanMeetingSystemManager.IsActive)
+			{
+				HudManager.Instance.Chat.gameObject.SetActive(false);
+			}
 			this.resurrectTimer = this.maxTime;
 
 			if (resurrectText != null)
