@@ -6,12 +6,13 @@ using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
@@ -128,7 +129,8 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
         factory.CreateFloatOption(
             BountyHunterOption.ArrowUpdateCycle,
             10f, 1.0f, 120f, 0.5f,
-            arrowOption, format: OptionUnit.Second);
+            new ParentActive(arrowOption),
+			format: OptionUnit.Second);
 
     }
 

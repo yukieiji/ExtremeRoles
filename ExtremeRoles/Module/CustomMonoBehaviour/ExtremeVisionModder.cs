@@ -1,10 +1,10 @@
+using System;
+
 using AmongUs.GameOptions;
 using UnityEngine;
 
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.GhostRoles.Impostor;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Compat;
@@ -13,9 +13,12 @@ using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
 
-namespace ExtremeRoles.Module;
+#nullable enable
 
-public class VisionComputer
+namespace ExtremeRoles.Module.CustomMonoBehaviour;
+
+[Il2CppRegister]
+public sealed class ExtremeVisionModder(IntPtr ptr) : MonoBehaviour(ptr)
 {
 	public enum Modifier
 	{
@@ -25,8 +28,17 @@ public class VisionComputer
 		IgniterLightOff,
 	}
 
-	public static VisionComputer Instance => instance;
-	private static VisionComputer instance = new VisionComputer();
+	public static ExtremeVisionModder Instance
+	{
+		get
+		{
+			if (field == null)
+			{
+				field = ShipStatus.Instance.gameObject.AddComponent<ExtremeVisionModder>();
+			}
+			return field;
+		}
+	}
 
 	public static float CrewmateLightVision => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
 		FloatOptionNames.CrewLightMod);
@@ -39,6 +51,13 @@ public class VisionComputer
 	public Modifier CurrentModifier => modifier;
 	private Modifier modifier = Modifier.None;
 
+	private const float liberalVison = 5.0f;
+
+	public void Awake()
+	{
+		this.modifier = Modifier.None;
+	}
+
 	public void SetModifier(Modifier newVision)
 	{
 		this.modifier = newVision;
@@ -47,6 +66,7 @@ public class VisionComputer
 	{
 		this.modifier = Modifier.None;
 	}
+
 	public bool IsModifierResetted() => this.modifier == Modifier.None;
 
 	public bool IsVanillaVisionAndGetVision(
@@ -86,15 +106,14 @@ public class VisionComputer
 			CompatModManager.Instance.TryGetModMap(out var modMap) &&
 			modMap.IsCustomCalculateLightRadius;
 
-		if (!GameProgressSystem.IsGameNow)
+		if (!(
+				GameProgressSystem.IsGameNow &&
+				ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var role)
+			))
 		{
-			return checkNormalOrCustomCalculateLightRadius(
-				modMap, isRequireCustomVision, playerInfo, ref vision);
+			return tryCheckNormalOrCustomCalculateLightRadius(
+				modMap!, isRequireCustomVision, playerInfo, ref vision);
 		}
-
-		var allRole = ExtremeRoleManager.GameRole;
-
-		SingleRoleBase role = allRole[playerInfo.PlayerId];
 
 		if (isRequireCustomVision)
 		{
@@ -104,6 +123,10 @@ public class VisionComputer
 			if (role.TryGetVisionMod(out visionMulti, out bool isApplyEnvironmentVision))
 			{
 				applayVisionEffects = isApplyEnvironmentVision;
+			}
+			else if (role.IsLiberal())
+			{
+				visionMulti = liberalVison;
 			}
 			else if (playerInfo.Role.IsImpostor)
 			{
@@ -143,6 +166,10 @@ public class VisionComputer
 			}
 			vision = baseVision * visionMulti;
 		}
+		else if (role.IsLiberal())
+		{
+			vision = baseVision * liberalVison;
+		}
 		else if (playerInfo.Role.IsImpostor)
 		{
 			vision = baseVision * ImpostorLightVision;
@@ -154,11 +181,14 @@ public class VisionComputer
 		return false;
 	}
 
-	private static bool checkNormalOrCustomCalculateLightRadius(
+	private static bool tryCheckNormalOrCustomCalculateLightRadius(
 		IMapMod modMap,
 		bool isRequireCustomVision, NetworkedPlayerInfo player, ref float result)
 	{
-		if (!isRequireCustomVision) { return true; }
+		if (!isRequireCustomVision)
+		{
+			return true;
+		}
 
 		result = modMap.CalculateLightRadius(player, false, player.Role.IsImpostor);
 		return false;

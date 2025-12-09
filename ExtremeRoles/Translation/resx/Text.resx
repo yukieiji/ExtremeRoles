@@ -1250,4 +1250,168 @@ ExR等を最低限の機能のみで起動しています</value>
     <value>設定済みの役職のみを
 表示する</value>
   </data>
+  <data name="RoleSpawnCategoryMinLiberal" xml:space="preserve">
+    <value>リベラルのロール数　最少</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxLiberal" xml:space="preserve">
+    <value>リベラルのロール数　最大</value>
+  </data>
+  <data name="LiberalSettingWinMoney" xml:space="preserve">
+    <value>勝利に必要な資金</value>
+  </data>
+  <data name="LiberalSettingTaskCompletedMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;ドーヴ&lt;/color&gt;
+資金ボーナス/1タスク完了あたり</value>
+  </data>
+  <data name="LiberalSettingKillMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;ミリタント&lt;/color&gt;
+資金ボーナス/キル1回あたり</value>
+  </data>
+  <data name="LiberalSettingLiberalVison" xml:space="preserve">
+    <value>視界</value>
+  </data>
+  <data name="LiberalSettingUseVent" xml:space="preserve">
+    <value>全体のベント</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherVisonSize" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;リーダー&lt;/color&gt;
+別の視界設定を持つか</value>
+  </data>
+  <data name="LiberalSettingLeaderVison" xml:space="preserve">
+    <value>視界</value>
+  </data>
+  <data name="LiberalSettingCanHasTaskLeader" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;リーダー&lt;/color&gt;
+タスクを持つか</value>
+  </data>
+  <data name="LiberalSettingLeaderTaskBoost" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;リーダー&lt;/color&gt;
+資金増加率上昇値/1タスク完了あたり</value>
+  </data>
+  <data name="LiberalSettingLeaderTaskCompletedMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;リーダー&lt;/color&gt;
+資金ボーナス/1タスク完了あたり</value>
+  </data>
+  <data name="LiberalSettingCanKillLeader" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;リーダー&lt;/color&gt;
+キルを持つか</value>
+  </data>
+  <data name="LiberalSettingLeaderKillBoost" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;リーダー&lt;/color&gt;
+資金増加率上昇値/1キルあたり</value>
+  </data>
+  <data name="LiberalSettingLeaderKillMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;リーダー&lt;/color&gt;
+資金ボーナス/1キルあたり</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherKillCool" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;リーダー&lt;/color&gt;
+別のキルクールを持つか</value>
+  </data>
+  <data name="LiberalSettingLeaderKillCool" xml:space="preserve">
+    <value>キルクール</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherKillRange" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;リーダー&lt;/color&gt;
+別のキルレンジを持つか</value>
+  </data>
+  <data name="LiberalSettingLeaderKillRange" xml:space="preserve">
+    <value>キルレンジ</value>
+  </data>
+  <data name="LiberalSettingCanKilledLeader" xml:space="preserve">
+    <value>リーダーへのキル許可</value>
+  </data>
+  <data name="LiberalSettingLeaderKilledBoost" xml:space="preserve">
+    <value>資金増加率上昇値
+(リーダーがキルされる度)</value>
+  </data>
+  <data name="LiberalSettingCanKilledWhenLeaderSolo" xml:space="preserve">
+    <value>リベラル陣営がリーダー
+単独時のキル許可</value>
+  </data>
+  <data name="LiberalSettingIsAutoRevive" xml:space="preserve">
+    <value>リーダーの自動復活</value>
+  </data>
+  <data name="LiberalSettingIsAutoExitWhenLeaderSolo" xml:space="preserve">
+    <value>リベラル陣営がリーダー
+単独時の自動排除</value>
+  </data>
+  <data name="LiberalSettingLiberalMilitantMini" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;ミリタント&lt;/color&gt;
+ロール数　最小</value>
+  </data>
+  <data name="LiberalSettingLiberalMilitantMax" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;ミリタント&lt;/color&gt;
+ロール数　最大</value>
+  </data>
+  <data name="LiberalSettingMilitantHasOtherKillCool" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;ミリタント&lt;/color&gt;
+別のキルクールを持つか</value>
+  </data>
+  <data name="LiberalSettingMilitantKillCool" xml:space="preserve">
+    <value>キルクール</value>
+  </data>
+  <data name="LiberalSettingMilitantHasOtherKillRange" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;ミリタント&lt;/color&gt;
+別のキルレンジを持つか</value>
+  </data>
+  <data name="LiberalSettingMilitantKillRange" xml:space="preserve">
+    <value>キルレンジ</value>
+  </data>
+  <data name="Liberal" xml:space="preserve">
+    <value>リベラル</value>
+  </data>
+  <data name="Leader" xml:space="preserve">
+    <value>リーダー</value>
+  </data>
+  <data name="Dove" xml:space="preserve">
+    <value>ドーヴ</value>
+  </data>
+  <data name="Militant" xml:space="preserve">
+    <value>ミリタント</value>
+  </data>
+  <data name="LiberalSetting" xml:space="preserve">
+    <value>リベラルの共通設定</value>
+  </data>
+  <data name="liberalIntro0" xml:space="preserve">
+    <value>束縛を否定し、"自由"の名の下に集う者たち</value>
+  </data>
+  <data name="liberalIntro1" xml:space="preserve">
+    <value>停滞を切り拓く、革新の刃となれ</value>
+  </data>
+  <data name="liberalIntro2" xml:space="preserve">
+    <value>我々の武器は理性、議論で真の変革を呼べ</value>
+  </data>
+  <data name="liberalGlobalInfo" xml:space="preserve">
+    <value>&lt;size=135%&gt;リベラルの説明&lt;/size&gt;
+特殊役職「リーダー」を中心とし、ドーヴとミリタントで構成される陣営
+
+- 勝利条件: 
+　1. 資金を設定値以上貯めること
+    2. 生存者全てがリベラルになること(過半数勝利はない)
+
+- 特殊役職「リーダー」
+　リベラルが割り当てられるときに必ず割り当てられる役職
+　基本的に無敵である
+　この役職のプレイヤーの名前の横に資金の状況が表示される
+　詳細はリーダーの役職情報を参照
+
+- ドーヴ
+　タスクを持つリベラル役職を指し、「タイプ: ドーヴ」や「ドーヴ」と表記される
+　「タイプ: ドーヴ」のデフォルト役職名も「ドーヴ」である
+
+- ミリタント
+　キルボタンを持つリベラル役職を指し、「タイプ: ミリタント」や「ミリタント」
+　と表記される
+　「タイプ: ミリタント」のデフォルト役職名も「ミリタント」である</value>
+  </data>
+  <data name="liberalMoneySummaryInfo" xml:space="preserve">
+    <value>リベラルの資金収支</value>
+  </data>
+  <data name="AddOnTask" xml:space="preserve">
+    <value>タスク</value>
+  </data>
+  <data name="AddOnKill" xml:space="preserve">
+    <value>キル</value>
+  </data>
 </root>

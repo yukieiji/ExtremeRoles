@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 
@@ -47,7 +49,7 @@ public static class OptionCreator
 
 		PresetOption.Create(CommonOption.PresetOption.ToString());
 
-		using (var commonOptionFactory = OptionManager.CreateOptionCategory(
+		using (var commonOptionFactory = OptionCategoryAssembler.CreateOptionCategory(
 			CommonOption.RandomOption, color: DefaultOptionColor))
 		{
 			var strongGen = commonOptionFactory.CreateBoolOption(
@@ -61,8 +63,7 @@ public static class OptionCreator
 					"Xorshiro512StarStar",
 					"RomuMono", "RomuTrio", "RomuQuad",
 					"Seiran128", "Shioi128", "JFT32",
-				],
-				strongGen, invert: true);
+				], new InvertActive(strongGen));
 		}
 
         IRoleSelector.CreateRoleGlobalOption();

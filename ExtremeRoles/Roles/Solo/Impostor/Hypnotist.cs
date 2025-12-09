@@ -26,11 +26,9 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -1065,7 +1063,7 @@ public sealed class Doll :
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
     {
         switch (reason)
         {

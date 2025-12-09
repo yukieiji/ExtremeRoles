@@ -171,6 +171,12 @@
   <data name="RoleSpawnCategoryMaxImpostor" xml:space="preserve">
     <value>最大內鬼職業數量</value>
   </data>
+  <data name="RoleSpawnCategoryMinLiberal" xml:space="preserve">
+    <value>最小自由人職業數量</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxLiberal" xml:space="preserve">
+    <value>最大自由人職業數量</value>
+  </data>
   <data name="GhostRoleSpawnCategoryMinCrewmate" xml:space="preserve">
     <value>最小幽靈船員職業數量</value>
   </data>
@@ -596,6 +602,9 @@
   </data>
   <data name="neutralShotCall" xml:space="preserve">
     <value>野心家</value>
+  </data>
+  <data name="Liberal" xml:space="preserve">
+    <value>自由人</value>
   </data>
   <data name="impostorShotCall" xml:space="preserve">
     <value>殺人魔</value>

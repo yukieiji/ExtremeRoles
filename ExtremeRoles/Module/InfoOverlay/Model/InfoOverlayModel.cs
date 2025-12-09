@@ -13,7 +13,8 @@ public sealed class InfoOverlayModel
 		YourGhostRolePanel,
 		AllRolePanel,
 		AllGhostRolePanel,
-		GlobalSettingPanel
+		GlobalSettingPanel,
+		Liberal
 	}
 
 	public bool IsDuty { get; set; }

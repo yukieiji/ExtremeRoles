@@ -8,12 +8,12 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 #nullable enable
@@ -55,9 +55,9 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 			ExtremeRoleId.Hijacker);
 		string name = Tr.GetString("hijackerHijack");
 
-		BehaviorBase beha = this.Loader.TryGetValueOption<Option, bool>(
-			Option.IsRandomPlayer, out var opt) &&
-			opt.Value ?
+		BehaviorBase beha = this.Loader.TryGetValue(
+			Option.IsRandomPlayer, out bool isRandom) &&
+			isRandom ?
 				new ReclickCountBehavior(
 					name, img,
 					IsAbilityUse,

@@ -60,6 +60,8 @@ public static class ColorPalette
 	public readonly static Color JailerSapin = new Color32(58, 103, 79, byte.MaxValue);
 	public readonly static Color YardbirdYenHown = new Color32(255, 161, 3, byte.MaxValue);
 	public readonly static Color LonerMidnightblue = new Color32(25, 25, 112, byte.MaxValue);
+	public readonly static Color CEOTzuShuiChing = new Color32(203, 175, 214, byte.MaxValue);
+	public readonly static Color EchoDarkAliceblue = new Color32(220, 228, 255, byte.MaxValue);
 
 	public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
 	public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
@@ -88,6 +90,7 @@ public static class ColorPalette
 	public readonly static Color ForasSeeSyuTin = new Color32(203, 174, 214, byte.MaxValue);
 
 	public readonly static Color NeutralColor = Color.gray;
+	public readonly static Color LiberalColor = new Color32(249, 240, 111, byte.MaxValue);
 
 	public readonly static Color XionBlue = new Color32(109, 129, 255, byte.MaxValue);
 }

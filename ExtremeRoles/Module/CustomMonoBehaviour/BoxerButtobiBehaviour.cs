@@ -3,11 +3,11 @@ using System;
 using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.SystemType;
 
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
-
 
 
 #nullable enable
@@ -94,12 +94,12 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 		var rigidBody = pc.rigidbody2D;
 		Vector2 curPos = pc.transform.position;
 
-		if (this.PrevForce != Vector2.zero &&
+		if (this.PrevForce.IsNotCloseTo(Vector2.zero, 0.1f) &&
 			(
 				PhysicsHelpers.AnythingBetween(
 					curPos, curPos + (this.PrevForce.normalized * offset),
 					Constants.ShipAndObjectsMask, false) ||
-				(curPos - this.prevPos).normalized == Vector2.zero
+				(curPos - this.prevPos).normalized.IsCloseTo(Vector2.zero, 0.1f)
 			))
 		{
 			forceVector = -forceVector * this.e;

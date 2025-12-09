@@ -39,6 +39,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			{ ExtremeRoleType.Crewmate, new Dictionary<int, SingleRoleSpawnData>() },
 			{ ExtremeRoleType.Impostor, new Dictionary<int, SingleRoleSpawnData>() },
 			{ ExtremeRoleType.Neutral , new Dictionary<int, SingleRoleSpawnData>() },
+			{ ExtremeRoleType.Liberal , new Dictionary<int, SingleRoleSpawnData>() },
 		};
 
 		var opt = OptionManager.Instance;
@@ -48,6 +49,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			{ ExtremeRoleType.Crewmate, 0 },
 			{ ExtremeRoleType.Impostor, 0 },
 			{ ExtremeRoleType.Neutral , 0 },
+			{ ExtremeRoleType.Liberal, 0 },
 		};
 
 		log.LogInfo("---- RoleSpawnDataManager - Phase1 : instance variable initialize - END ----");

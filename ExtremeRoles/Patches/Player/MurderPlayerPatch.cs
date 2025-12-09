@@ -5,7 +5,6 @@ using AmongUs.GameOptions;
 using Assets.CoreScripts;
 
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Patches.Manager;
 using ExtremeRoles.Roles;
@@ -94,8 +93,10 @@ public static class PlayerControlMurderPlayerPatch
 
 		PlayerControl player = PlayerControl.LocalPlayer;
 
-		if (!target.Data.IsDead ||
-			player == null) { return; }
+		if (!target.Data.IsDead || player == null)
+		{
+			return;
+		}
 
 		byte targetPlayerId = target.PlayerId;
 		byte localPlayerId = player.PlayerId;

@@ -13,6 +13,7 @@ using ExtremeRoles.Test.Helper;
 
 using UnityResource = UnityEngine.Resources;
 using Microsoft.Extensions.DependencyInjection;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Test.InGame.GameLoop;
 
@@ -71,6 +72,11 @@ public class GameLoopTestStep(GameLoopTestCaseFactory factory) : TestStepBase
 				yield return new WaitForSeconds(10.0f);
 			}
 
+			if (!GameProgressSystem.IsRoleSetUpEnd)
+			{
+				yield return new WaitForSeconds(1.0f);
+			}
+
 			if (testCase.PreTestCase is not null)
 			{
 				yield return new WaitForSeconds(2.5f);
@@ -82,11 +88,12 @@ public class GameLoopTestStep(GameLoopTestCaseFactory factory) : TestStepBase
 				var player = PlayerCache.AllPlayerControl.OrderBy(x => RandomGenerator.Instance.Next()).First();
 				if (!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
 					player.Data.IsDead ||
-					role.Core.Id is ExtremeRoleId.Assassin)
+					role.Core.Id is ExtremeRoleId.Assassin or ExtremeRoleId.Leader)
 				{
 					continue;
 				}
 
+				this.Log.LogInfo($"Killed : {player.PlayerId}");
 				Player.RpcUncheckMurderPlayer(player.PlayerId, player.PlayerId, byte.MinValue);
 				yield return new WaitForSeconds(1.0f);
 			}

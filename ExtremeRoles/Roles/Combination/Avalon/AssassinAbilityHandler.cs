@@ -1,33 +1,46 @@
 using ExtremeRoles.Roles.API.Interface.Ability;
-using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Combination.Avalon;
 
-public class AssassinAbilityHandler : IAbility, IKilledFrom
+public class AssassinAbilityHandler(AssassinStatusModel status) : IAbility, IInvincible
 {
-    private AssassinStatusModel status;
+	private AssassinStatusModel status = status;
 
-    public AssassinAbilityHandler(AssassinStatusModel status)
-    {
-        this.status = status;
-    }
+	// アサシンは能力の対象にはなるけど、キルの対象と絶対的なキルを防げる
+	public bool IsBlockKillFrom(byte? fromPlayer)
+	{
+		if (this.status.IsBlockKill)
+		{
+			return true;
+		}
+		if (!fromPlayer.HasValue)
+		{
+			return false;
+		}
 
-    public bool TryKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
-    {
-        if (!(status.CanKilled && ExtremeRoleManager.TryGetRole(fromPlayer.PlayerId, out var fromPlayerRole)))
-        {
-            return false;
-        }
+		if (!ExtremeRoleManager.TryGetRole(fromPlayer.Value, out var fromPlayerRole))
+		{
+			return true;
+		}
 
-        if (fromPlayerRole.IsNeutral())
-        {
-            return status.CanKilledFromNeutral;
-        }
-        else if (fromPlayerRole.IsCrewmate())
-        {
-            return status.CanKilledFromCrew;
-        }
+		if (fromPlayerRole.IsNeutral())
+		{
+			return this.status.IsBlockKillFromNeutral;
+		}
+		else if (fromPlayerRole.IsCrewmate())
+		{
+			return this.status.IsBlockKillFromCrew;
+		}
+		else if (fromPlayerRole.IsLiberal())
+		{
+			return this.status.IsBlockKillFromLiberal;
+		}
+		return true;
+	}
 
-        return false;
-    }
+	public bool IsValidKillFromSource(byte target)
+		=> !IsBlockKillFrom(target);
+
+	public bool IsValidAbilitySource(byte target)
+		=> true;
 }

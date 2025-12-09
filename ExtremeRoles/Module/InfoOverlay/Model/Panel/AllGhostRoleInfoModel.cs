@@ -31,7 +31,7 @@ public sealed class AllGhostRoleInfoModel : RolePagePanelModelBase
 				roleFullDesc = Tr.GetString($"{role.Id}FullDescription");
 				roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
-				AddPage(new RoleInfo(colorRoleName, roleFullDesc, option));
+				AddPage(new RoleInfo(colorRoleName, roleFullDesc, new DefaultOptionToString(option)));
 			}
 		}
 
@@ -44,7 +44,7 @@ public sealed class AllGhostRoleInfoModel : RolePagePanelModelBase
 			roleFullDesc = Tr.GetString($"{role.Id}FullDescription");
 			roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
-			AddPage(new RoleInfo(colorRoleName, roleFullDesc, option));
+			AddPage(new RoleInfo(colorRoleName, roleFullDesc, new DefaultOptionToString(option)));
 		}
 	}
 }

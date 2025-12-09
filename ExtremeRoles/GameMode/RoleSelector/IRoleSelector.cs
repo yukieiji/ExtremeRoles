@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -6,10 +6,12 @@ using UnityEngine;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles;
 
-
-using ExtremeRoles.Module.CustomOption.Factory;
+#nullable enable
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -21,18 +23,22 @@ public enum RoleSpawnOption : int
     MaxNeutral,
     MinImpostor,
     MaxImpostor,
+    MinLiberal,
+    MaxLiberal,
 }
 
 public enum SpawnOptionCategory : int
 {
 	RoleSpawnCategory = 5,
 	GhostRoleSpawnCategory,
+	LiberalSetting,
 }
 
 public enum XionOption : int
 {
 	UseXion,
 }
+
 
 public interface IRoleSelector
 {
@@ -68,20 +74,23 @@ public interface IRoleSelector
 
     public static void CreateRoleGlobalOption()
     {
-		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
+		IOption maxLiberalSetting;
+		using (var roleOptionFactory = OptionCategoryAssembler.CreateOptionCategory(
 			SpawnOptionCategory.RoleSpawnCategory,
 			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
+			maxLiberalSetting = createMinMaxSpawnOption(roleOptionFactory, RoleSpawnOption.MinLiberal, RoleSpawnOption.MaxLiberal, (GameSystem.VanillaMaxPlayerNum - 1) * 2);
 		}
 
-		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
+		using (var roleOptionFactory = OptionCategoryAssembler.CreateOptionCategory(
 			SpawnOptionCategory.GhostRoleSpawnCategory,
 			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
-		using (var xionCategory = OptionManager.CreateOptionCategory(
+
+		using (var xionCategory = OptionCategoryAssembler.CreateOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 			ExtremeRoleId.Xion.ToString(),
 			color: ColorPalette.XionBlue))
@@ -89,29 +98,37 @@ public interface IRoleSelector
 			xionCategory.CreateBoolOption(
 				XionOption.UseXion, false);
 		}
+
+		using (var factory = OptionCategoryAssembler.CreateOptionCategory(
+			SpawnOptionCategory.LiberalSetting,
+			color: defaultOptionColor))
+		{
+			LiberalOption.Create(factory, maxLiberalSetting);
+		}
 	}
 
     private static void createExtremeRoleRoleSpawnOption(OptionCategoryFactory factory)
     {
-		factory.CreateIntOption(
-			RoleSpawnOption.MinCrewmate,
-			0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1);
-		factory.CreateIntOption(
-			RoleSpawnOption.MaxCrewmate,
-			0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1);
+		int maxNum = GameSystem.VanillaMaxPlayerNum;
+		createMinMaxSpawnOption(factory, RoleSpawnOption.MinCrewmate, RoleSpawnOption.MaxCrewmate, (maxNum - 1) * 2);
+		createMinMaxSpawnOption(factory, RoleSpawnOption.MinNeutral, RoleSpawnOption.MaxNeutral, (maxNum - 2) * 2);
+		createMinMaxSpawnOption(factory, RoleSpawnOption.MinImpostor, RoleSpawnOption.MaxImpostor, GameSystem.MaxImposterNum * 2);
+	}
 
-		factory.CreateIntOption(
-			RoleSpawnOption.MinNeutral,
-			0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
-		factory.CreateIntOption(
-			RoleSpawnOption.MaxNeutral,
-			0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
+	private static IOption createMinMaxSpawnOption(OptionCategoryFactory factory, RoleSpawnOption miniOptionEnum, RoleSpawnOption maxOptionEnum, int maxNum)
+	{
+		var miniOption = factory.CreateIntOption(
+			miniOptionEnum,
+			0, 0, maxNum, 1);
 
-		factory.CreateIntOption(
-			RoleSpawnOption.MinImpostor,
-			0, 0, GameSystem.MaxImposterNum * 2, 1);
-		factory.CreateIntOption(
-			RoleSpawnOption.MaxImpostor,
-			0, 0, GameSystem.MaxImposterNum * 2, 1);
-    }
+		var intRange = ValueHolderAssembler.CreateIntValue(0, 0, maxNum, 1);
+
+		var maxOption = factory.CreateOption(maxOptionEnum, intRange);
+
+		miniOption.OnValueChanged += () => {
+			int newMini = miniOption.Value<int>();
+			intRange.InnerRange = OptionRange<int>.Create(newMini, maxNum, 1);
+		};
+		return maxOption;
+	}
 }

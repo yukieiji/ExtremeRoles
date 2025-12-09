@@ -4,10 +4,10 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -97,7 +97,7 @@ public sealed class MadmateRole :
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
     {
         switch (reason)
         {
@@ -170,18 +170,20 @@ public sealed class MadmateRole :
         var taskOpt = factory.CreateBoolOption(
             MadmateOption.HasTask,
             false);
-        factory.CreateIntOption(
+		var taskOptActive = new ParentActive(taskOpt);
+
+		factory.CreateIntOption(
             MadmateOption.SeeImpostorTaskGage,
             70, 0, 100, 10,
-            taskOpt,
+			taskOptActive,
             format: OptionUnit.Percentage);
         var impFromSeeOpt = factory.CreateBoolOption(
             MadmateOption.CanSeeFromImpostor,
-            false, taskOpt);
+            false, taskOptActive);
         factory.CreateIntOption(
             MadmateOption.CanSeeFromImpostorTaskGage,
             70, 0, 100, 10,
-            impFromSeeOpt,
+            new ParentActive(impFromSeeOpt),
             format: OptionUnit.Percentage);
 
         IRoleAbility.CreateCommonAbilityOption(factory);

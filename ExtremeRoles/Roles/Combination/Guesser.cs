@@ -10,6 +10,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -17,6 +18,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
+using Microsoft.Extensions.DependencyInjection;
+using ExtremeRoles.GameMode.RoleSelector;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -95,12 +98,25 @@ public sealed class Guesser :
 				{ExtremeRoleType.Crewmate, new List<ExtremeRoleId>() },
 				{ExtremeRoleType.Impostor, new List<ExtremeRoleId>() },
 				{ExtremeRoleType.Neutral , new List<ExtremeRoleId>() },
+				{ExtremeRoleType.Liberal , new List<ExtremeRoleId>() },
 			};
 
-			addVanillaRole(includeNoneRole);
+			var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptipnLoader>();
+			bool liberalOn = liberalOption.Get(LiberalGlobalSetting.WinMoney).IsViewActive;
+			bool militantOn = liberalOption.Get(LiberalGlobalSetting.LiberalMilitantMini).IsViewActive;
+
+			addVanillaRole(includeNoneRole, liberalOn, militantOn);
 
 			this.separetedRoleId[ExtremeRoleType.Crewmate].Add((ExtremeRoleId)RoleTypes.Crewmate);
 			this.separetedRoleId[ExtremeRoleType.Impostor].Add((ExtremeRoleId)RoleTypes.Impostor);
+			if (liberalOn)
+			{
+				this.separetedRoleId[ExtremeRoleType.Liberal].Add(ExtremeRoleId.Dove);
+				if (militantOn)
+				{
+					this.separetedRoleId[ExtremeRoleType.Liberal].Add(ExtremeRoleId.Militant);
+				}
+			}
 
 			addAmongUsRole();
 			addExRNormalRole(out NormalExRAssignState assignState);
@@ -313,10 +329,9 @@ public sealed class Guesser :
 
                     if (multiAssign)
                     {
-                        if (loader.TryGetValueOption<CombinationRoleCommonOption, bool>(
+                        if (loader.TryGetValue(
 								CombinationRoleCommonOption.IsAssignImposter,
-                                out var option) &&
-                            option.Value)
+                                out bool isImp) && isImp)
                         {
                             listAddTargetTeam(
                                 baseRoleId,
@@ -376,14 +391,26 @@ public sealed class Guesser :
 			=> checkId == (byte)CombinationRoleType.InvestigatorOffice;
 
 
-		private void addVanillaRole(bool includeNoneRole)
+		private void addVanillaRole(bool includeNoneRole, bool liberalOn, bool militantOn)
         {
-            if (includeNoneRole)
+            if (!includeNoneRole)
             {
-                add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
-                add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
+				return;
             }
-        }
+
+			add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
+			add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
+			if (!liberalOn)
+			{
+				return;
+			}
+
+			add(ExtremeRoleId.Dove, ExtremeRoleType.Liberal);
+			if (militantOn)
+			{
+				add(ExtremeRoleId.Militant, ExtremeRoleType.Liberal);
+			}
+		}
 
         private void listAdd(ExtremeRoleId baseId, ExtremeRoleType team, List<ExtremeRoleId> list)
         {
@@ -595,7 +622,7 @@ public sealed class Guesser :
         AutoParentSetOptionCategoryFactory factory)
     {
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
+		CreateKillerOption(factory, new ParentActive(imposterSetting));
 
 		factory.CreateBoolOption(
             GuesserOption.CanCallMeeting,
@@ -612,7 +639,7 @@ public sealed class Guesser :
             GuesserOption.CanGuessNoneRole,
             false);
         factory.CreateSelectionOption<GuesserOption, GuessMode>(
-            GuesserOption.GuessNoneRoleMode, noneGuessRoleOpt);
+            GuesserOption.GuessNoneRoleMode, new ParentActive(noneGuessRoleOpt));
     }
 
     protected override void RoleSpecificInit()

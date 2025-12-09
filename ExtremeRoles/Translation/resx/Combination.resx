@@ -1156,4 +1156,7 @@
   <data name="BarterRandomCastlingLabel" xml:space="preserve">
     <value>ランダムキャスリング</value>
   </data>
+  <data name="MarlinCanSeeLiberal" xml:space="preserve">
+    <value>「マーリン」が「リベラル」を見れるか</value>
+  </data>
 </root>

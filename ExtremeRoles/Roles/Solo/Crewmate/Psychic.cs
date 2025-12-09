@@ -7,20 +7,18 @@ using AmongUs.GameOptions;
 
 using Hazel;
 
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -116,7 +114,8 @@ public sealed class Psychic :
 			this.teamCount = new Dictionary<ExtremeRoleType, TeamCounter>()
 			{
 				{ ExtremeRoleType.Neutral, new TeamCounter() },
-				{ ExtremeRoleType.Impostor, new TeamCounter() }
+				{ ExtremeRoleType.Impostor, new TeamCounter() },
+				{ ExtremeRoleType.Liberal, new TeamCounter() }
 			};
 
 			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
@@ -261,7 +260,8 @@ public sealed class Psychic :
 	}
 
 	public bool CheckAbility()
-		=> this.startPos == PlayerControl.LocalPlayer.GetTruePosition() &&
+		=> this.startPos.HasValue &&
+		this.startPos.Value.IsCloseTo(PlayerControl.LocalPlayer.GetTruePosition(), 0.1f) &&
 		IRoleAbility.IsCommonUse();
 
 	public bool UseAbility()
@@ -419,14 +419,16 @@ public sealed class Psychic :
 		var isUpgradeOpt = factory.CreateBoolOption(
 			PsychicOption.IsUpgradeAbility,
 			false);
+		var isUpgradeOptActive = new ParentActive(isUpgradeOpt);
+
 		factory.CreateIntOption(
 			PsychicOption.UpgradeTaskGage,
 			70, 0, 100, 10,
-			isUpgradeOpt,
+			isUpgradeOptActive,
 			format: OptionUnit.Percentage);
 		factory.CreateIntOption(
 		   PsychicOption.UpgradeDeadPlayerNum,
-		   5, 0, 15, 1, isUpgradeOpt);
+		   5, 0, 15, 1, isUpgradeOptActive);
 	}
 
 	protected override void RoleSpecificInit()

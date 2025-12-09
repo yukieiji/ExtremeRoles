@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface.Ability;
@@ -24,6 +24,7 @@ public static class MeetingHudConfirmPatch
 		{
 			return false;
 		}
+
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{
 			PlayerVoteArea playerVoteArea = __instance.playerStates[i];

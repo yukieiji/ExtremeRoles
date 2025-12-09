@@ -1,7 +1,9 @@
-﻿
+
 using AmongUs.GameOptions;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
@@ -42,17 +44,14 @@ public readonly struct VentConsoleOption(
 	{
 		var ventOption = factory.CreateBoolOption(VentOption.Disable, false);
 
-		factory.CreateBoolOption(VentOption.CanKillInPlayer, false, ventOption, invert: true);
+		var invertVentOption = new InvertActive(ventOption);
+
+		factory.CreateBoolOption(VentOption.CanKillInPlayer, false, invertVentOption);
 		factory.CreateBoolOption(
 			VentOption.EngineerUseImpostor,
-			false, ventOption, invert: true,
-			hook: () =>
-			{
-				var currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
-				return
-					currentGameOptions.IsTryCast<NormalGameOption>(out var normal) &&
-					normal.RoleOptions.GetChancePerGame(RoleTypes.Engineer) > 0;
-			});
-		factory.CreateSelectionOption<VentOption, VentAnimationMode>(VentOption.AnimationModeInVison, parent: ventOption, invert: true);
+			false, new MultiActive(
+				invertVentOption,
+				new VanillaRoleActive(RoleTypes.Engineer)));
+		factory.CreateSelectionOption<VentOption, VentAnimationMode>(VentOption.AnimationModeInVison, invertVentOption);
 	}
 }

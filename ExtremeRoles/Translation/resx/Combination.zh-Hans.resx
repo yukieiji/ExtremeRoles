@@ -455,19 +455,19 @@
     <value>龙套体质</value>
   </data>
   <data name="InvestigatorOffice" xml:space="preserve">
-    <value>&lt;color=#9E5C46&gt;大&lt;/color&gt;调查员&lt;color=#008A99&gt;探&lt;/color&gt;</value>
+    <value>&lt;color=#9E5C46&gt;大&lt;/color&gt;警&lt;color=#008A99&gt;探&lt;/color&gt;</value>
   </data>
   <data name="Investigator" xml:space="preserve">
-    <value>调查员</value>
+    <value>警探</value>
   </data>
   <data name="Assistant" xml:space="preserve">
     <value>助手</value>
   </data>
   <data name="InvestigatorApprentice" xml:space="preserve">
-    <value>见习调查员</value>
+    <value>见习警探</value>
   </data>
   <data name="InvestigatorHasOtherVision" xml:space="preserve">
-    <value>调查员拥有独立视野</value>
+    <value>警探拥有独立视野</value>
   </data>
   <data name="InvestigatorVision" xml:space="preserve">
     <value>视野范围</value>
@@ -476,13 +476,13 @@
     <value>受到照明破坏影响</value>
   </data>
   <data name="InvestigatorSearchRange" xml:space="preserve">
-    <value>调查员调查时与案发现场的最大距离</value>
+    <value>警探调查时与案发现场的最大距离</value>
   </data>
   <data name="InvestigatorSearchTime" xml:space="preserve">
     <value>调查所需时间</value>
   </data>
   <data name="InvestigatorSearchAssistantTime" xml:space="preserve">
-    <value>调查员在助手支持下对案发现场进行1次调查所需的时间</value>
+    <value>警探在助手支持下对案发现场进行1次调查所需的时间</value>
   </data>
   <data name="InvestigatorTextShowTime" xml:space="preserve">
     <value>调查结果显示时间</value>
@@ -497,7 +497,7 @@
     <value>受到照明破坏影响</value>
   </data>
   <data name="InvestigatorApprenticeHasOtherVision" xml:space="preserve">
-    <value>见习调查员拥有独立视野</value>
+    <value>见习警探拥有独立视野</value>
   </data>
   <data name="InvestigatorApprenticeVision" xml:space="preserve">
     <value>视野范围</value>
@@ -506,16 +506,16 @@
     <value>受到照明破坏影响</value>
   </data>
   <data name="InvestigatorApprenticeAbilityCount" xml:space="preserve">
-    <value>见习调查员紧急召集技能使用次数</value>
+    <value>见习警探紧急召集技能使用次数</value>
   </data>
   <data name="InvestigatorApprenticeAbilityCoolTime" xml:space="preserve">
     <value>紧急召集的冷却时间</value>
   </data>
   <data name="InvestigatorApprenticeAbilityActiveTime" xml:space="preserve">
-    <value>见习调查员“紧急召集”按下紧急会议按钮的时间</value>
+    <value>见习警探“紧急召集”按下紧急会议按钮的时间</value>
   </data>
   <data name="InvestigatorApprenticeHasOtherButton" xml:space="preserve">
-    <value>见习调查员紧急召集的会议不计入紧急会议次数限制</value>
+    <value>见习警探紧急召集的会议不计入紧急会议次数限制</value>
   </data>
   <data name="InvestigatorApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>不计入次数限制的次数</value>
@@ -527,37 +527,37 @@
     <value>调查案发现场留下的蛛丝马迹</value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
-    <value>调查员的最佳搭档</value>
+    <value>警探的最佳搭档</value>
   </data>
   <data name="AssistantShortDescription" xml:space="preserve">
-    <value>辅助调查员的行动</value>
+    <value>辅助警探的行动</value>
   </data>
   <data name="AssistantFullDescription" xml:space="preserve">
     <value>助手属于船员阵营。
-可以暗中帮助调查员。
+可以暗中帮助警探。
 
 ·被动技能“尸检报告”
 自己报告尸体的会议阶段开始时，助手可以在聊天框内确认尸体的死亡时间。
 
 ·被动技能“传承”
-助手死亡时，调查员的职业变为见习调查员。</value>
+助手死亡时，警探的职业变为见习警探。</value>
   </data>
   <data name="InvestigatorApprenticeShortDescription" xml:space="preserve">
     <value>接过逝去的搭档的衣钵</value>
   </data>
   <data name="InvestigatorApprenticeFullDescription" xml:space="preserve">
-    <value>见习调查员属于船员阵营。
-见习调查员是由调查员或助手转变而来的。
+    <value>见习警探属于船员阵营。
+见习警探是由警探或助手转变而来的。
 
 ·主动技能“尸检报告”
-自己报告尸体的会议阶段开始时，见习调查员可以在聊天框内确认尸体的死亡时间。
+自己报告尸体的会议阶段开始时，见习警探可以在聊天框内确认尸体的死亡时间。
 
 ·主动技能“紧急召集”:
 可以打开紧急会议界面，远程召开紧急会议。
 紧急会议界面不能持续开启。
-如果紧急会议次数用完，即使见习调查员打开界面也不能召开紧急会议。
-根据设置，该技能见习调查员可能共享紧急会议次数。
-不过，在紧急会议次数耗尽的情况下，见习调查员仍然不能发动紧急会议。</value>
+如果紧急会议次数用完，即使见习警探打开界面也不能召开紧急会议。
+根据设置，该技能见习警探可能共享紧急会议次数。
+不过，在紧急会议次数耗尽的情况下，见习警探仍然不能发动紧急会议。</value>
   </data>
   <data name="FindKillTime" xml:space="preserve">
     <value>死者好像是在{0} (UTC±0)被杀害的!</value>
@@ -1167,5 +1167,28 @@
   <data name="BarterRandomCastlingLabel" xml:space="preserve">
     <value>随机交换
 使用次数</value>
+  </data>
+  <data name="InvestigatorFullDescription" xml:space="preserve">
+    <value>警探属于船员阵营
+能在报告尸体的位置获取信息
+
+·地图位置“犯罪现场”
+报告的尸体被杀害的位置会变为“犯罪现场”
+当报告尸体后将会出现
+警探显示指向“犯罪现场”的箭头
+在“犯罪现场”停留一段时间即可“调查”
+
+·被动技能“调查”
+在“犯罪现场”停留一段时间进行“调查”
+每次调查需要时间，调查完成后会将信息显示在右下角
+每次调查都可以获得信息：
+1次：被杀时间
+2次：被杀时间到下次会议时间
+3次：凶手阵营
+4次：凶手职业
+5次（根据设置）：凶手
+如果是“助手”报告的尸体的“犯罪现场”，“调查”所需时间将减少
+如果关闭了“能否继续调查犯罪现场”，则离开犯罪现场时将重置调查次数
+如果“警探”死亡，“助手”将变为见习警探</value>
   </data>
 </root>

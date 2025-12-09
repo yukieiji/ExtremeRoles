@@ -1,10 +1,10 @@
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Helper;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
+using System;
+using static ExtremeRoles.Roles.Solo.Impostor.TimeBreaker;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -102,11 +102,11 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		var cate = this.Loader;
 		bool isMultiAssign = cate.GetValue<CombinationRoleCommonOption, bool>(
 			CombinationRoleCommonOption.IsMultiAssign);
-		bool isImposterAssign = cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
+		bool isImposterAssign = cate.TryGetValue(
 			CombinationRoleCommonOption.IsAssignImposter,
-			out var impOpt);
-		bool isRatioAssign = cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
-			CombinationRoleCommonOption.IsRatioTeamAssign, out var ratioOpt) && ratioOpt.Value;
+			out bool isEvil);
+		bool isRatioAssign = cate.TryGetValue(
+			CombinationRoleCommonOption.IsRatioTeamAssign, out bool isRatioOn) && isRatioOn;
 
 		foreach (var role in this.Roles)
         {
@@ -116,8 +116,6 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 				role.Initialize();
 				continue;
 			}
-
-            bool isEvil = impOpt.Value;
 
             int spawnOption = cate.GetValue<CombinationRoleCommonOption, int>(
                 CombinationRoleCommonOption.ImposterSelectedRate);
@@ -156,7 +154,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
     protected override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
-		var factory = OptionManager.CreateAutoParentSetOptionCategory(
+		var factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
 			this.RoleName,
 			OptionTab.CombinationTab,
@@ -179,19 +177,36 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		int roleAssignNum = this.BaseRole.IsImpostor() ?
 			GameSystem.MaxImposterNum :
 			GameSystem.VanillaMaxPlayerNum - 1;
-		var roleAssignNumOption = factory.CreateIntOption(
-			CombinationRoleCommonOption.AssignsNum,
+		
+		var roleAssinNumRange = ValueHolderAssembler.CreateIntValue(
 			this.minimumRoleNum, this.minimumRoleNum,
-			roleAssignNum, 1,
+			roleAssignNum, 1);
+		var numSetting = factory.CreateOption(
+			CombinationRoleCommonOption.AssignsNum,
+			roleAssinNumRange,
 			isHidden: isHideMultiAssign,
 			ignorePrefix: true);
+
+		roleSetNumOption.OnValueChanged += () =>
+		{
+			if (isHideMultiAssign)
+			{
+				return;
+			}
+			
+			int roleSetNum = roleSetNumOption.Value<int>();
+			int newMaxValue = Math.Max(this.minimumRoleNum, roleAssignNum / roleSetNum);
+			roleAssinNumRange.InnerRange = OptionRange<int>.Create(
+				this.minimumRoleNum, newMaxValue, 1);
+
+			// Selectionを再設定
+			numSetting.Selection = roleAssinNumRange.Selection;
+		};
 
 		factory.CreateBoolOption(
 			CombinationRoleCommonOption.IsMultiAssign, false,
 			ignorePrefix: true,
 			isHidden: this.RoleType is CombinationRoleType.Traitor);
-
-		roleAssignNumOption.AddWithUpdate(roleSetNumOption);
 
 		factory.CreateIntOption(RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1, ignorePrefix: true);
@@ -201,21 +216,22 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			var assignRatioOption = factory.CreateBoolOption(
 				CombinationRoleCommonOption.IsRatioTeamAssign,
 				false, ignorePrefix: true);
+
 			var isImposterAssignOps = factory.CreateBoolOption(
 				CombinationRoleCommonOption.IsAssignImposter,
-				false, assignRatioOption,
-				ignorePrefix: true,
-				invert: true);
+				false, new InvertActive(assignRatioOption),
+				ignorePrefix: true);
+
 			factory.CreateIntOption(
 				CombinationRoleCommonOption.ImposterSelectedRate,
 				10, 10, SingleRoleSpawnData.MaxSpawnRate, 10,
-				isImposterAssignOps,
+				new ParentActive(isImposterAssignOps),
 				format: OptionUnit.Percentage,
 				ignorePrefix: true);
 
 			factory.CreateSelectionOption<CombinationRoleCommonOption, ImpostorRatio.Ratio>(
 				CombinationRoleCommonOption.AssignRatio,
-				assignRatioOption,
+				new ParentActive(assignRatioOption),
 				ignorePrefix: true);
         }
         return factory;
@@ -233,23 +249,19 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     protected override void CommonInit()
     {
         this.Roles.Clear();
-        int roleAssignNum = 1;
 
 		var cate = this.Loader;
 
         this.BaseRole.CanHasAnotherRole = cate.GetValue<CombinationRoleCommonOption, bool>(
 			CombinationRoleCommonOption.IsMultiAssign);
 
-		if (cate.TryGetValueOption<CombinationRoleCommonOption, int>(
-				CombinationRoleCommonOption.AssignsNum,
-                out var opt))
+		if (!cate.TryGetValue(CombinationRoleCommonOption.AssignsNum, out int roleAssignNum))
         {
-            roleAssignNum = opt.Value;
-        }
+			roleAssignNum = 1;
+		}
 
-		if (cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
-				CombinationRoleCommonOption.IsRatioTeamAssign, out var enableRatioOpt) &&
-			enableRatioOpt.Value)
+		if (cate.TryGetValue(CombinationRoleCommonOption.IsRatioTeamAssign, out bool enableRatio) &&
+			enableRatio)
 		{
 			int selection = cate.GetValue<CombinationRoleCommonOption, int>(
 				CombinationRoleCommonOption.AssignRatio);

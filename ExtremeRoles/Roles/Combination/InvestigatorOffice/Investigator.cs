@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using AmongUs.GameOptions;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 using UnityEngine;
 
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 #nullable enable
@@ -324,13 +325,13 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 		PlayerControl rolePlayer)
 	{
 		var curPos = rolePlayer.GetTruePosition();
-		if (this.prevPlayerPos == defaultPos)
+		if (this.prevPlayerPos.IsCloseTo(defaultPos))
 		{
 			this.prevPlayerPos = curPos;
 		}
 
 		// 調査開始
-		if (this.prevPlayerPos == curPos &&
+		if (this.prevPlayerPos.IsCloseTo(curPos) &&
 			searchInfo.AllTarget.TryGetNearCrime(curPos, this.range, out var info))
 		{
 			searchInfo.AllTarget.HideArrow();
@@ -353,7 +354,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 
 		var targetInfo = searchInfo.ProgressUpdater.Info;
 		var curPos = rolePlayer.GetTruePosition();
-		if (prevPlayerPos != curPos ||
+		if (prevPlayerPos.IsNotCloseTo(curPos) ||
 			!searchInfo.AllTarget.TryGetNearCrime(curPos, this.range, out var info) ||
 			info.Crime != targetInfo.Crime)
 		{

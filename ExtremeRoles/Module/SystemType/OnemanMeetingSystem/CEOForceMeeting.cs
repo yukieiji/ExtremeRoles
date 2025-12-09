@@ -1,0 +1,83 @@
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.Solo.Crewmate;
+using System.Collections.Generic;
+
+namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+
+public sealed class CEOForceMeeting : IOnemanMeeting, IVoterValidtor
+{
+	public bool SkipButtonActive => true;
+
+	public byte VoteTarget { get; set; }
+
+	public IEnumerable<byte> ValidPlayer 
+	{
+		get
+		{
+			foreach (var player in GameData.Instance.AllPlayers)
+			{
+				// 死んだ人だけ除外する
+				if (!(
+					player == null ||
+					player.IsDead ||
+					player.Disconnected
+				))
+				{
+					yield return player.PlayerId;
+				}
+			}
+		}
+	}
+
+	public IOnemanMeeting.ExiledInfo CreateExiledInfo(byte _)
+	{
+		var player = GameData.Instance.GetPlayerById(this.VoteTarget);
+		return
+			player == null ?
+			new IOnemanMeeting.ExiledInfo(false, Tr.GetString("CEOMeetingSkip")) :
+			new IOnemanMeeting.ExiledInfo(true, Tr.GetString("CEOMeetingSelect", player.PlayerName));
+	}
+
+	public IOnemanMeeting.VoteResult CreateVoteResult(MeetingHud meeting, byte voteTarget)
+	{
+		var target = GameData.Instance.GetPlayerById(voteTarget);
+
+		return new IOnemanMeeting.VoteResult(voteTarget, target);
+	}
+
+	public string GetTitle(byte caller)
+		=> Tr.GetString(caller == PlayerControl.LocalPlayer.PlayerId ? "CEOMeetingCEO" : "CEOMeetingOther");
+
+	public VoteAreaState GetVoteAreaState(NetworkedPlayerInfo player)
+		=> VoteAreaState.None;
+
+	public bool CanChatPlayer(PlayerControl target)
+		=> target != null && target.Data != null && !target.Data.IsDead && !target.Data.Disconnected;
+
+	public bool IsDefaultForegroundForDead(MeetingHud _, byte caller)
+		=> PlayerControl.LocalPlayer.PlayerId != caller;
+
+	public bool IsValidShowChatPlayer(PlayerControl chatSourcePlayer)
+		=> chatSourcePlayer != null && chatSourcePlayer.Data != null && !chatSourcePlayer.Data.IsDead && !chatSourcePlayer.Data.Disconnected;
+
+	public bool TryGetGameEndReason(out RoleGameOverReason reason)
+	{
+		reason = RoleGameOverReason.UnKnown;
+		return false;
+	}
+
+	public bool TryStartMeeting(byte target)
+	{
+		if (!ExtremeRoleManager.TryGetSafeCastedRole<CEO>(target, out var ceo))
+		{
+			return false;
+		}
+		var player = Helper.Player.GetPlayerControlById(target);
+		if (player == null)
+		{
+			return false;
+		}
+		ceo.ExiledAction(player);
+		return true;
+	}
+}

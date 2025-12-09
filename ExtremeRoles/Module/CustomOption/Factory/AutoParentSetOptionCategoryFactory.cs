@@ -1,20 +1,26 @@
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+
 using System;
 
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Module.RoleAssign;
-using System.Collections.Generic;
 
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomOption.Factory;
 
-public sealed class AutoParentSetOptionCategoryFactory(
-	in OptionCategoryFactory factory,
-	in IOption? parent = null) : IDisposable
+public sealed class AutoParentSetOptionCategoryFactory : IDisposable
 {
-	private IOption? parent = parent;
-	private readonly OptionCategoryFactory internalFactory = factory;
+	private readonly AutoActivatorSetFactory internalFactory;
+
+	public IOptionActivator? Activator => this.internalFactory.Activator;
+
+	public AutoParentSetOptionCategoryFactory(
+		in OptionCategoryFactory factory,
+		in IOption? parent = null)
+	{
+		this.internalFactory = new AutoActivatorSetFactory(factory);
+		this.internalFactory.Activator = parent is null ? null : new ParentActive(parent);
+	}
 
 	public int IdOffset
 	{
@@ -33,268 +39,214 @@ public sealed class AutoParentSetOptionCategoryFactory(
 
 	public IOption Get(int id)
 		=> this.internalFactory.Get(id);
-	public IValueOption<T> Get<T>(int id)
-		where T :
-			struct, IComparable, IConvertible,
-			IComparable<T>, IEquatable<T>
-		=> this.internalFactory.Get<T>(id);
 
-	public BoolCustomOption CreateBoolOption<T>(
+	public IOption CreateBoolOption<T>(
 		T option,
 		bool defaultValue,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		BoolCustomOption newOption = this.internalFactory.CreateBoolOption(
+		var newOption = this.internalFactory.CreateBoolOption(
 			option,
 			defaultValue,
-			parent is null ? this.parent : parent,
+			activator,
 			isHidden,
 			format,
-			invert,
 			ignorePrefix);
 
-		if (this.parent is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.parent = newOption;
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
 
-	public FloatCustomOption CreateBoolOption<T>(
+	public IOption CreateFloatOption<T>(
 		T option,
 		float defaultValue,
 		float min, float max, float step,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		FloatCustomOption newOption = this.internalFactory.CreateFloatOption(
+		var newOption = this.internalFactory.CreateFloatOption(
 			option,
 			defaultValue,
 			min, max, step,
-			parent is null ? this.parent : parent,
+			activator,
 			isHidden,
 			format,
-			invert,
 			ignorePrefix);
 
-		if (this.parent is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.parent = newOption;
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
 
-	public FloatCustomOption CreateFloatOption<T>(
-		T option,
-		float defaultValue,
-		float min, float max, float step,
-		IOption? parent = null,
-		bool isHidden = false,
-		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		bool ignorePrefix = false) where T : struct, IConvertible
-	{
-		FloatCustomOption newOption = this.internalFactory.CreateFloatOption(
-			option,
-			defaultValue,
-			min, max, step,
-			parent is null ? this.parent : parent,
-			isHidden,
-			format,
-			invert,
-			ignorePrefix);
-
-		if (this.parent is null)
-		{
-			this.parent = newOption;
-		}
-		return newOption;
-	}
-
-	public FloatDynamicCustomOption CreateFloatDynamicOption<T>(
+	public IOption CreateFloatDynamicMaxOption<T>(
 		T option,
 		float defaultValue,
 		float min, float step,
-		IOption? parent = null,
+		IOption checkValueOption,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		FloatDynamicCustomOption newOption = this.internalFactory.CreateFloatDynamicOption(
+		var newOption = this.internalFactory.CreateFloatDynamicMaxOption(
 			option,
 			defaultValue,
 			min, step,
-			parent is null ? this.parent : parent,
+			checkValueOption,
+			activator,
 			isHidden,
 			format,
-			invert,
 			tempMaxValue,
 			ignorePrefix);
 
-		if (this.parent is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.parent = newOption;
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
 
-	public IntCustomOption CreateIntOption<T>(
+	public IOption CreateIntOption<T>(
 		T option,
 		int defaultValue,
 		int min, int max, int step,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		IntCustomOption newOption = this.internalFactory.CreateIntOption(
+		var newOption = this.internalFactory.CreateIntOption(
 			option,
 			defaultValue,
 			min, max, step,
-			parent is null ? this.parent : parent,
+			activator,
 			isHidden,
 			format,
-			invert,
 			ignorePrefix);
 
-		if (this.parent is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.parent = newOption;
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
 
-	public IntDynamicCustomOption CreateIntDynamicOption<T>(
+	public IOption CreateIntDynamicMaxOption<T>(
 		T option,
 		int defaultValue,
 		int min, int step,
-		IOption? parent = null,
+		IOption checkValueOption,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		int tempMaxValue = 0,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		IntDynamicCustomOption newOption = this.internalFactory.CreateIntDynamicOption(
+		var newOption = this.internalFactory.CreateIntDynamicMaxOption(
 			option,
 			defaultValue,
 			min, step,
-			parent is null ? this.parent : parent,
+			checkValueOption,
+			activator,
 			isHidden,
 			format,
-			invert,
 			tempMaxValue,
 			ignorePrefix);
 
-		if (this.parent is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.parent = newOption;
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
 
-	public SelectionCustomOption CreateSelectionOption<T>(
+	public IOption CreateSelectionOption<T>(
 		T option,
 		string[] selections,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		SelectionCustomOption newOption = this.internalFactory.CreateSelectionOption(
+		var newOption = this.internalFactory.CreateSelectionOption(
 			option,
 			selections,
-			parent is null ? this.parent : parent,
+			activator,
 			isHidden,
 			format,
-			invert,
 			ignorePrefix);
 
-		if (this.parent is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.parent = newOption;
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
 
-	public SelectionCustomOption CreateSelectionOption<T, W>(
+	public IOption CreateSelectionOption<T, W>(
 		T option,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false)
 		where T : struct, IConvertible
 		where W : struct, Enum
 	{
-		SelectionCustomOption newOption = this.internalFactory.CreateSelectionOption<T, W>(
+		var newOption = this.internalFactory.CreateSelectionOption<T, W>(
 			option,
-			parent is null ? this.parent : parent,
+			activator,
 			isHidden,
 			format,
-			invert,
 			ignorePrefix);
-
-		if (this.parent is null)
+		if (this.internalFactory.Activator is null)
 		{
-			this.parent = newOption;
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
 
-	public SelectionMultiEnableCustomOption CreateSelectionOption<T, W>(
+	public IOption CreateOption<T>(
 		T option,
-		IReadOnlyList<W> anotherDefault,
-		IOption? parent = null,
+		IValueHolder holder,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
-		bool invert = false,
 		bool ignorePrefix = false)
 		where T : struct, IConvertible
-		where W : struct, Enum
 	{
-		SelectionMultiEnableCustomOption newOption = this.internalFactory.CreateSelectionOption<T, W>(
-			option,
-			anotherDefault,
-			parent is null ? this.parent : parent,
-			isHidden,
-			format,
-			invert,
-			ignorePrefix);
-
-		if (this.parent is null)
+		var newOption = this.internalFactory.CreateOption(option, holder, activator, isHidden, format, ignorePrefix);
+		if (this.internalFactory.Activator is null)
 		{
-			this.parent = newOption;
+			this.internalFactory.Activator = new ParentActive(newOption);
 		}
 		return newOption;
 	}
 
-	public IntCustomOption Create0To100Percentage10StepOption<T>(
+	public IOption Create0To100Percentage10StepOption<T>(
 		T option,
-		IOption? parent = null,
+		IOptionActivator? activator = null,
 		bool isHidden = false,
-		bool invert = false,
 		bool ignorePrefix = false,
 		int defaultGage = 0) where T : struct, IConvertible
-		=> CreateIntOption(
-			option,
-			defaultGage, 0, SingleRoleSpawnData.MaxSpawnRate, 10,
-			parent,
-			isHidden,
-			OptionUnit.Percentage,
-			invert,
-			ignorePrefix);
+	{
+		var newOption = this.internalFactory.Create0To100Percentage10StepOption(option, activator, isHidden, ignorePrefix, defaultGage);
+		if (this.internalFactory.Activator is null)
+		{
+			this.internalFactory.Activator = new ParentActive(newOption);
+		}
+		return newOption;
+	}
 
 	public void Dispose()
 	{

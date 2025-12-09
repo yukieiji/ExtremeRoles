@@ -5,7 +5,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-
+using ExtremeRoles.Roles.API.Interface.Visual;
+using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -142,6 +143,7 @@ public sealed class OtherPlayerMeetingVisualUpdateEvent(
 {
 	private readonly MeetingStatus status = status;
 	private readonly NetworkedPlayerInfo target = target;
+	private readonly StringBuilder builder = new StringBuilder();
 
 	public bool Invoke()
 	{
@@ -324,14 +326,14 @@ public sealed class OtherPlayerMeetingVisualUpdateEvent(
 		SingleRoleBase localRole,
 		SingleRoleBase targetRole)
 	{
-		string tag = localRole.GetRolePlayerNameTag(
-			targetRole, this.target.PlayerId);
-		if (tag == string.Empty)
+		this.builder.Clear();
+		this.builder.Append(text.text);
+		this.builder.Append(localRole.GetRolePlayerNameTag(targetRole, this.target.PlayerId));
+		if (targetRole.Visual is ILookedTag looked)
 		{
-			return;
+			this.builder.Append(looked.GetLookedToThisTag(this.target.PlayerId));
 		}
-
-		text.text += tag;
+		text.text = this.builder.ToString();
 	}
 
 	private bool isBlockCondition(

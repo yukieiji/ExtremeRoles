@@ -9,8 +9,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 

@@ -1,8 +1,7 @@
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
-
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -10,7 +9,7 @@ public abstract partial class SingleRoleBase
 {
     protected sealed override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
-		var factory = OptionManager.CreateAutoParentSetOptionCategory(
+		var factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(this.Core.Id),
 			this.Core.Name, this.Tab, this.Core.Color);
 
@@ -41,14 +40,16 @@ public abstract partial class SingleRoleBase
             RoleCommonOption.HasOtherVision,
             false,
 			ignorePrefix: ignorePrefix);
+		var visonOptActive = new ParentActive(visionOption);
+
 		factory.CreateFloatOption(RoleCommonOption.Vision,
             2f, 0.25f, 5.0f, 0.25f,
-            visionOption, format: OptionUnit.Multiplier,
+			visonOptActive, format: OptionUnit.Multiplier,
 			ignorePrefix: ignorePrefix);
 
 		factory.CreateBoolOption(
             RoleCommonOption.ApplyEnvironmentVisionEffect,
-            this.IsCrewmate(), visionOption,
+            this.IsCrewmate(), visonOptActive,
 			ignorePrefix: ignorePrefix);
     }
 }

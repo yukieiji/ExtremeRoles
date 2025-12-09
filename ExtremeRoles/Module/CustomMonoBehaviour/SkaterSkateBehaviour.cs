@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Il2CppInterop.Runtime.Attributes;
 
-using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Vector;
 
 #nullable enable
 
@@ -82,7 +82,7 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 		}
 
 		Vector2 forceVector =
-			directionVector == Vector2.zero ?
+			directionVector.IsCloseTo(Vector2.zero) ?
 			this.PrevForce * this.frictionMulti :
 			this.PrevForce + (directionVector * this.speed);
 
@@ -90,12 +90,12 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 		Vector2 curPos = pc.transform.position;
 
 		if (this.e.HasValue &&
-			this.PrevForce != Vector2.zero &&
+			this.PrevForce.IsNotCloseTo(Vector2.zero, 0.01f) &&
 			(
 				PhysicsHelpers.AnythingBetween(
 					curPos, curPos + (this.PrevForce.normalized * offset),
 					Constants.ShipAndObjectsMask, false) ||
-				(curPos - this.prevPos).normalized == Vector2.zero
+				(curPos - this.prevPos).normalized.IsCloseTo(Vector2.zero, 0.1f)
 			))
 		{
 			forceVector = -forceVector * this.e.Value;

@@ -12,10 +12,10 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module.Ability;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 
@@ -47,15 +47,17 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 				InvestigatorApprenticeOption.HasOtherVision,
 				false);
 
+			var visonOptActive = new ParentActive(visionOpt);
+
 			factory.CreateFloatOption(
 				InvestigatorApprenticeOption.Vision,
 				2f, 0.25f, 5f, 0.25f,
-				visionOpt,
+				visonOptActive,
 				format: OptionUnit.Multiplier);
 
 			factory.CreateBoolOption(
 				InvestigatorApprenticeOption.ApplyEnvironmentVisionEffect,
-				false, visionOpt);
+				false, visonOptActive);
 
 			IRoleAbility.CreateAbilityCountOption(
 				factory, 1, 10, 3.0f);
@@ -65,7 +67,7 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 				false);
 			factory.CreateIntOption(
 				InvestigatorApprenticeOption.HasOtherButtonNum,
-				1, 1, 10, 1, buttonOpt,
+				1, 1, 10, 1, new ParentActive(buttonOpt),
 				format: OptionUnit.Shot);
 		}
 

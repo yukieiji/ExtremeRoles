@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -7,14 +6,17 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
+
+#nullable enable
 
 public sealed class Resurrecter :
     SingleRoleBase,
@@ -71,16 +73,13 @@ public sealed class Resurrecter :
     private int meetingCounter;
     private int maxMeetingCount;
 
-    private bool activateResurrectTimer;
-    private float resurrectTimer;
-
     private bool isMeetingCoolResetOnResurrect;
     private float meetingCoolDown;
 
     private float resetTaskGage;
-    private TMPro.TextMeshPro resurrectText;
 
 	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.ResurrecterBlue);
+    private PlayerReviver? playerReviver;
 
     public Resurrecter() : base(
 		RoleCore.BuildCrewmate(
@@ -88,7 +87,7 @@ public sealed class Resurrecter :
 			ColorPalette.ResurrecterBlue),
         false, true, false, false)
     {
-	}
+    }
 
     public static void RpcAbility(ref MessageReader reader)
     {
@@ -118,7 +117,6 @@ public sealed class Resurrecter :
     {
         resurrecter.isResurrected = true;
         resurrecter.isActiveMeetingCount = true;
-        resurrecter.activateResurrectTimer = false;
     }
 
     public void ResetOnMeetingStart()
@@ -128,10 +126,7 @@ public sealed class Resurrecter :
             ++this.meetingCounter;
         }
 
-        if (this.resurrectText != null)
-        {
-            this.resurrectText.gameObject.SetActive(false);
-        }
+        playerReviver?.Reset();
 
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.ResurrecterRpc))
@@ -174,7 +169,6 @@ public sealed class Resurrecter :
 
     public void Update(PlayerControl rolePlayer)
     {
-
         if (rolePlayer.Data.IsDead && this.infoBlock())
         {
             HudManager.Instance.Chat.gameObject.SetActive(false);
@@ -203,7 +197,10 @@ public sealed class Resurrecter :
                 if (this.canResurrectAfterDeath &&
                     rolePlayer.Data.IsDead)
                 {
-                    revive(rolePlayer);
+					// 即復活を行うため、かなり短い時間で作ってReviveさせる
+					var reviver = new PlayerReviver(0.0f, revive);
+					reviver.Start(rolePlayer);
+					reviver.Update();
                 }
                 else
                 {
@@ -213,37 +210,13 @@ public sealed class Resurrecter :
             }
         }
 
-        if (this.isResurrected)
-		{ 
+		if (this.isResurrected)
+		{
 			return;
 		}
 
-        if (rolePlayer.Data.IsDead &&
-            this.activateResurrectTimer &&
-            this.canResurrect)
-        {
-            if (this.resurrectText == null)
-            {
-                this.resurrectText = Object.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText,
-                    Camera.main.transform, false);
-                this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-                this.resurrectText.enableWordWrapping = false;
-            }
-
-            this.resurrectText.gameObject.SetActive(true);
-            this.resurrectTimer -= Time.deltaTime;
-            this.resurrectText.text = Tr.GetString(
-				"resurrectText",
-                Mathf.CeilToInt(this.resurrectTimer));
-
-            if (this.resurrectTimer <= 0.0f)
-            {
-                this.activateResurrectTimer = false;
-                revive(rolePlayer);
-            }
-        }
-    }
+		playerReviver?.Update();
+	}
 
     public override string GetColoredRoleName(bool isTruthColor = false)
     {
@@ -315,17 +288,23 @@ public sealed class Resurrecter :
     public override void ExiledAction(
         PlayerControl rolePlayer)
     {
-
-        if (this.isResurrected) { return; }
+        if (this.isResurrected)
+		{
+			return;
+		}
 
         this.isExild = true;
 
         // 追放でオフ時は以下の処理を行わない
-        if (!this.canResurrectOnExil) { return; }
+        if (!this.canResurrectOnExil)
+		{
+			return;
+		}
 
-        if (this.canResurrect)
+        if (this.canResurrect && 
+			rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
-            this.activateResurrectTimer = true;
+            playerReviver?.Start(rolePlayer);
         }
         else if (!this.canResurrectAfterDeath)
         {
@@ -337,14 +316,18 @@ public sealed class Resurrecter :
         PlayerControl rolePlayer,
         PlayerControl killerPlayer)
     {
-        if (this.isResurrected) { return; }
+        if (this.isResurrected)
+		{
+			return;
+		}
 
         this.isExild = false;
 
-        if (this.canResurrect)
+        if (this.canResurrect &&
+			rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
-            this.activateResurrectTimer = true;
-        }
+			playerReviver?.Start(rolePlayer);
+		}
         else if (!this.canResurrectAfterDeath)
         {
             this.isResurrected = true;
@@ -380,9 +363,8 @@ public sealed class Resurrecter :
         factory.CreateFloatOption(
             ResurrecterOption.ResurrectMeetingCooltime,
             20.0f, 5.0f, 60.0f, 0.25f,
-            meetingResetOpt,
-            format: OptionUnit.Second,
-            invert: true);
+            new InvertActive(meetingResetOpt),
+            format: OptionUnit.Second);
 
         factory.CreateIntOption(
             ResurrecterOption.ResurrectTaskResetMeetingNum,
@@ -411,8 +393,8 @@ public sealed class Resurrecter :
         this.resetTaskGage = loader.GetValue<ResurrecterOption, int>(
             ResurrecterOption.ResurrectTaskResetGage) / 100.0f;
 
-        this.resurrectTimer = loader.GetValue<ResurrecterOption, float>(
-            ResurrecterOption.ResurrectDelayTime);
+        this.playerReviver = new PlayerReviver(loader.GetValue<ResurrecterOption, float>(
+            ResurrecterOption.ResurrectDelayTime), revive);
         this.canResurrectAfterDeath = loader.GetValue<ResurrecterOption, bool>(
             ResurrecterOption.CanResurrectAfterDeath);
         this.canResurrectOnExil = loader.GetValue<ResurrecterOption, bool>(
@@ -427,7 +409,6 @@ public sealed class Resurrecter :
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;
         this.isResurrected = false;
-        this.activateResurrectTimer = false;
 
         if (this.awakeTaskGage <= 0.0f)
         {
@@ -457,45 +438,23 @@ public sealed class Resurrecter :
         }
         else if (!this.canResurrect || this.isExild)
         {
-            return this.canResurrectAfterDeath || this.activateResurrectTimer;
+            return this.canResurrectAfterDeath || (playerReviver?.IsReviving ?? false);
         }
         else
         {
-            return this.activateResurrectTimer;
+            return playerReviver?.IsReviving ?? false;
         }
     }
 
     private void revive(PlayerControl rolePlayer)
     {
-        if (rolePlayer == null) { return; }
-
-        byte playerId = rolePlayer.PlayerId;
-
-        Player.RpcUncheckRevive(playerId);
-
-        if (rolePlayer.Data == null ||
-            rolePlayer.Data.IsDead ||
-            rolePlayer.Data.Disconnected) { return; }
-
-        List<Vector2> randomPos = new List<Vector2>();
-		Map.AddSpawnPoint(randomPos, playerId);
-
-		Player.RpcUncheckSnap(playerId, randomPos[
-            RandomGenerator.Instance.Next(randomPos.Count)]);
-
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.ResurrecterRpc))
         {
             caller.WriteByte((byte)ResurrecterRpcOps.UseResurrect);
-            caller.WriteByte(playerId);
+            caller.WriteByte(rolePlayer.PlayerId);
         }
         UseResurrect(this);
-
-        HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
-        if (this.resurrectText != null)
-        {
-            this.resurrectText.gameObject.SetActive(false);
-        }
     }
 
     private void replaceTask(PlayerControl rolePlayer)
@@ -511,39 +470,45 @@ public sealed class Resurrecter :
 
         foreach (int i in shuffleTaskIndex)
         {
-            if (replaceTaskNum >= maxReplaceTaskNum) { break; }
+            if (replaceTaskNum >= maxReplaceTaskNum)
+			{
+				break;
+			}
 
-            if (playerInfo.Tasks[i].Complete)
+			var task = playerInfo.Tasks[i];
+
+            if (!task.Complete)
             {
-
-                int taskIndex;
-                int replaceTaskId = playerInfo.Tasks[i].TypeId;
-
-                if (ShipStatus.Instance.CommonTasks.Any(
-                    (NormalPlayerTask t) => t.Index == replaceTaskId))
-                {
-                    taskIndex = GameSystem.GetRandomCommonTaskId();
-                }
-                else if (ShipStatus.Instance.LongTasks.Any(
-                    (NormalPlayerTask t) => t.Index == replaceTaskId))
-                {
-                    taskIndex = GameSystem.GetRandomLongTask();
-                }
-                else if (ShipStatus.Instance.ShortTasks.Any(
-                    (NormalPlayerTask t) => t.Index == replaceTaskId))
-                {
-                    taskIndex = GameSystem.GetRandomShortTaskId();
-                }
-                else
-                {
-                    continue;
-                }
-
-                GameSystem.RpcReplaceNewTask(
-                    rolePlayer.PlayerId, i, taskIndex);
-
-                ++replaceTaskNum;
+				continue;
             }
-        }
+
+			int taskIndex;
+			int replaceTaskId = task.TypeId;
+
+			if (ShipStatus.Instance.CommonTasks.Any(
+				(NormalPlayerTask t) => t.Index == replaceTaskId))
+			{
+				taskIndex = GameSystem.GetRandomCommonTaskId();
+			}
+			else if (ShipStatus.Instance.LongTasks.Any(
+				(NormalPlayerTask t) => t.Index == replaceTaskId))
+			{
+				taskIndex = GameSystem.GetRandomLongTask();
+			}
+			else if (ShipStatus.Instance.ShortTasks.Any(
+				(NormalPlayerTask t) => t.Index == replaceTaskId))
+			{
+				taskIndex = GameSystem.GetRandomShortTaskId();
+			}
+			else
+			{
+				continue;
+			}
+
+			GameSystem.RpcReplaceNewTask(
+				rolePlayer.PlayerId, i, taskIndex);
+
+			++replaceTaskNum;
+		}
     }
 }

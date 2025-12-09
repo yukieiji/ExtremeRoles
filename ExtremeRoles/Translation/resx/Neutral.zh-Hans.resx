@@ -1524,4 +1524,7 @@
   <data name="HereticUseVent" xml:space="preserve">
     <value>能否使用通风管</value>
   </data>
+  <data name="HereticMeetingButtonTaskGage" xml:space="preserve">
+    <value>完成多少任务才可开启“紧急会议”</value>
+  </data>
 </root>

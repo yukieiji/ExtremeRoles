@@ -7,12 +7,14 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -210,19 +212,15 @@ public abstract class GhostRoleBase
             loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
         if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
-			loader.TryGetValueOption<RoleAbilityCommonOption, float>(
-                RoleAbilityCommonOption.AbilityActiveTime,
-				out var activeTimeOtion))
+			loader.TryGetValue(RoleAbilityCommonOption.AbilityActiveTime, out float activeTime))
         {
-			activatingBehavior.ActiveTime = activeTimeOtion.Value;
+			activatingBehavior.ActiveTime = activeTime;
         }
 
         if (this.Button.Behavior is ICountBehavior behavior &&
-			loader.TryGetValueOption<RoleAbilityCommonOption, int>(
-                RoleAbilityCommonOption.AbilityCount,
-                out var countOption))
+			loader.TryGetValue(RoleAbilityCommonOption.AbilityCount, out int count))
         {
-            behavior.SetAbilityCount(countOption.Value);
+            behavior.SetAbilityCount(count);
         }
         this.Button.OnMeetingEnd();
     }
@@ -231,7 +229,7 @@ public abstract class GhostRoleBase
 
     private OptionFactory createOptionFactory()
     {
-		var factory = OptionManager.CreateAutoParentSetOptionCategory(
+		var factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
 			ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
 			this.Name, this.Tab, this.Color);
 		factory.Create0To100Percentage10StepOption(

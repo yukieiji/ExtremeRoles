@@ -1,5 +1,9 @@
+using System.Text;
+
+using Microsoft.Extensions.DependencyInjection;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
@@ -29,7 +33,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 			return (
 				$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}",
-				$"<size=115%>・{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionString}"
+				$"<size=115%>{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionString}"
 			);
 		}
 	}
@@ -59,20 +63,49 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 		{
 			return (
 				$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}",
-				$"<size=115%>・{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionString}"
+				$"<size=115%>{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionString}"
 			);
 		}
 	}
 
 	private static (string, string, string) getRoleInfoAndOption(SingleRoleBase role)
 	{
-		string roleOptionString = "";
+		var id = role.Core.Id;
+		var builder = new StringBuilder();
 
-		if (!role.IsVanillaRole())
+		// リベラル役職には全部グローバル設定を見やすいように追加しておく
+		if (role.IsLiberal())
+		{
+			var liberalSetting = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptipnLoader>();
+			foreach (var target in liberalSetting.GlobalOption)
+			{
+				IInfoOverlayPanelModel.AddHudStringWithChildren(builder, target, 0);
+			}
+		}
+		if (id is
+				ExtremeRoleId.Leader or
+				ExtremeRoleId.Dove or
+				ExtremeRoleId.Militant)
+		{
+			var liberalSetting = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptipnLoader>();
+			var targets = id switch
+			{ 
+				ExtremeRoleId.Leader => liberalSetting.LeaderOption,
+				ExtremeRoleId.Militant => liberalSetting.MilitantOption,
+				_ => []
+			};
+			foreach (var target in targets)
+			{
+				IInfoOverlayPanelModel.AddHudStringWithChildren(builder, target, 0);
+			}
+		}
+		else if (!role.IsVanillaRole())
 		{
 			var option = role.Loader.Get(RoleCommonOption.SpawnRate);
-			roleOptionString = IInfoOverlayPanelModel.ToHudStringWithChildren(option);
+			IInfoOverlayPanelModel.AddHudStringWithChildren(builder, option);
 		}
+
+		string roleOptionString = builder.ToString();
 		string colorRoleName = role.GetColoredRoleName();
 		string roleFullDesc = role.GetFullDescription();
 

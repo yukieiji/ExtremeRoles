@@ -33,18 +33,17 @@ public static class Update
 		{
 			initializeModel(model);
 		}
-		else if (model.PanelModel.Count >= 4)
+		else if (model.PanelModel.Count >= 5)
 		{
 			foreach (var value in System.Enum.GetValues<InfoOverlayModel.Type>())
 			{
-				switch (value)
+				if (value is 
+					InfoOverlayModel.Type.AllRolePanel or
+					InfoOverlayModel.Type.AllGhostRolePanel or
+					InfoOverlayModel.Type.GlobalSettingPanel or
+					InfoOverlayModel.Type.Liberal)
 				{
-					case InfoOverlayModel.Type.AllRolePanel:
-					case InfoOverlayModel.Type.AllGhostRolePanel:
-					case InfoOverlayModel.Type.GlobalSettingPanel:
-						continue;
-					default:
-						break;
+					continue;
 				}
 				model.PanelModel.Remove(value);
 			}
@@ -108,6 +107,10 @@ public static class Update
 			{
 				InfoOverlayModel.Type.GlobalSettingPanel,
 				new GlobalSettingInfoModel()
+			},
+			{
+				InfoOverlayModel.Type.Liberal,
+				new LiberalInfoModel()
 			}
 		};
 	}
