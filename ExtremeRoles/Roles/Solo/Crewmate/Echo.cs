@@ -82,12 +82,10 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	}
 	private ObjectPoolBehavior? innerPool;
 
-	private static Color emitColor = Palette.CrewmateRoleBlue;
-
 	public Echo() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Echo,
-			ColorPalette.AgencyYellowGreen),
+			ColorPalette.EchoDarkAliceblue),
 		false, true, false, false)
 	{
 
@@ -327,7 +325,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 			ping.image.sortingOrder = 88659;
 			if (!info.IsDeadbody)
 			{
-				ping.image.color = emitColor;
+				ping.image.color = (ColorPalette.EchoDarkAliceblue - Palette.ImpostorRed);
 			}
 		}
 		ping.SetImageEnabled(true);
