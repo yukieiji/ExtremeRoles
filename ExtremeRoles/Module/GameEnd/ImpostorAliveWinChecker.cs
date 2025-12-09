@@ -17,6 +17,6 @@ public sealed class ImpostorAliveWinChecker(PlayerStatistics statistics) : IGame
 		return
 			this.statistics.SeparatedNeutralAlive.Count <= 0 &&
 			this.statistics.LiberalMilitantAlive <= 0 &&
-			this.statistics.TeamImpostorAlive >= this.statistics.TotalAlive;
+			this.statistics.TeamImpostorAlive >= (this.statistics.TotalAlive - this.statistics.TeamImpostorAlive);
 	}
 }

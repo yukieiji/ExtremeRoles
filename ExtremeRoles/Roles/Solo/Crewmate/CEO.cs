@@ -78,15 +78,16 @@ public sealed class CEO : SingleRoleBase,
 
 	private bool isMonikaMeeting = false;
 	private bool isMeExiled = false;
-	private float exiledTimer = 0.0f;
-	private TMPro.TextMeshPro? resurrectText;
+    private PlayerReviver? playerReviver;
 
 	public CEO() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.CEO,
 			ColorPalette.CaptainLightKonjou),
 		false, true, false, false)
-	{ }
+	{
+
+	}
 
 	public string GetFakeOptionString() => "";
 
@@ -142,7 +143,10 @@ public sealed class CEO : SingleRoleBase,
 			return;
 		}
 
-		this.exiledTimer = 5.0f;
+		if (rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+		{
+			playerReviver?.Start(rolePlayer);
+		}
 		
 		if (OnemanMeetingSystemManager.IsActive ||
 			!this.useCEOMeeting ||
@@ -275,10 +279,7 @@ public sealed class CEO : SingleRoleBase,
 			OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
 			system.TryGetOnemanMeeting<MonikaLoveTargetMeeting>(out _);
 
-		if (this.resurrectText != null)
-		{
-			this.resurrectText.gameObject.SetActive(false);
-		}
+        playerReviver?.Reset();
 	}
 
 	public void ResetModifier()
@@ -288,40 +289,20 @@ public sealed class CEO : SingleRoleBase,
 
 	public void Update(PlayerControl rolePlayer)
 	{
+
 		if (!GameProgressSystem.IsTaskPhase)
 		{
 			if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting) && 
-				this.exiledTimer > 0.0f)
+				(playerReviver?.IsReviving ?? false))
 			{
-				this.exiledTimer = 5.0f;
+                playerReviver?.Reset();
 			}
 			return;
 		}
 
 		if (this.IsAwake)
 		{
-			if (this.exiledTimer > 0.0f)
-			{
-				if (this.resurrectText == null)
-				{
-					this.resurrectText = Object.Instantiate(
-						HudManager.Instance.KillButton.cooldownTimerText,
-						Camera.main.transform, false);
-					this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-					this.resurrectText.enableWordWrapping = false;
-				}
-
-				this.resurrectText.gameObject.SetActive(true);
-				this.exiledTimer -= Time.deltaTime;
-				this.resurrectText.text = Tr.GetString(
-					"resurrectText",
-					Mathf.CeilToInt(this.exiledTimer));
-
-				if (this.exiledTimer <= 0.0f)
-				{
-					revive(rolePlayer);
-				}
-			}
+			playerReviver?.Update();
 			return;
 		}
 
@@ -342,9 +323,9 @@ public sealed class CEO : SingleRoleBase,
 	}
 
 	public override bool IsBlockShowMeetingRoleInfo()
-		=> this.exiledTimer > 0.0f;
+		=> playerReviver?.IsReviving ?? false;
 	public override bool IsBlockShowPlayingRoleInfo()
-		=> this.exiledTimer > 0.0f;
+		=> playerReviver?.IsReviving ?? false;
 
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -360,6 +341,8 @@ public sealed class CEO : SingleRoleBase,
 
 		this.status = new CEOStatus();
 		this.AbilityClass = new CEOAbilityHandler(this.status);
+
+		this.playerReviver = new PlayerReviver(5.0f);
 
 
 		this.isShowRolePlayerVote = this.Loader.GetValue<Option, bool>(Option.IsShowRolePlayerVote);
@@ -377,37 +360,6 @@ public sealed class CEO : SingleRoleBase,
 		{
 			this.IsAwake = false;
 			this.HasOtherVision = false;
-		}
-	}
-
-	private void revive(PlayerControl rolePlayer)
-	{
-		if (rolePlayer == null)
-		{
-			return;
-		}
-
-		byte playerId = rolePlayer.PlayerId;
-
-		Player.RpcUncheckRevive(playerId);
-
-		if (rolePlayer.Data == null ||
-			rolePlayer.Data.IsDead ||
-			rolePlayer.Data.Disconnected)
-		{
-			return;
-		}
-
-		List<Vector2> randomPos = new List<Vector2>();
-		Map.AddSpawnPoint(randomPos, playerId);
-
-		Player.RpcUncheckSnap(playerId, randomPos[
-			RandomGenerator.Instance.Next(randomPos.Count)]);
-
-		HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
-		if (this.resurrectText != null)
-		{
-			this.resurrectText.gameObject.SetActive(false);
 		}
 	}
 }

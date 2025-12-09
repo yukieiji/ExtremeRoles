@@ -71,25 +71,26 @@ public sealed class LeaderVisual(LiberalMoneyBankSystem system) : IVisual, ILook
 
 public sealed class LeaderStatus : IStatusModel
 {
-	public int OtherLiberal { get; private set; }
-
-	public void Update()
+	public int OtherLiberal
 	{
-		OtherLiberal = 0;
-		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+		get
 		{
-			if (player == null ||
-				player.IsDead ||
-				player.Disconnected ||
-				!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
-				!role.IsLiberal() ||
-				role.Core.Id is ExtremeRoleId.Leader)
+			int result = 0;
+			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
-				continue;
+				if (player == null ||
+					player.IsDead ||
+					player.Disconnected ||
+					!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
+					!role.IsLiberal() ||
+					role.Core.Id is ExtremeRoleId.Leader)
+				{
+					continue;
+				}
+				++result;
 			}
-			++OtherLiberal;
+			return result;
 		}
-
 	}
 }
 
@@ -130,6 +131,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	private readonly ReviveSetting revive;
 
 	private readonly record struct ReviveSetting(bool IsAutoExit, bool IsAutoRevive);
+	private readonly PlayerReviver reviver;
 
 	private readonly KillSetting killSetting;
 	// リベラルがキルしたロジックはリーダーが全部引き受けるため
@@ -153,6 +155,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		this.abilityHandler = new LeaderAbilityHandler(leaderCoreOption, status);
 		this.revive = new ReviveSetting(leaderCoreOption.IsAutoExit, leaderCoreOption.IsAutoRevive);
 		this.killSetting = new KillSetting(leaderCoreOption.KillMoney, leaderCoreOption.LeaderKillMoney, leaderCoreOption.LeaderKillBoostDelta);
+		this.reviver = new PlayerReviver(3.0f);
 		this.AbilityClass = this.abilityHandler;
 
 		LiberalSettingOverrider.OverrideDefault(this, option);
@@ -232,6 +235,16 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		}
 	}
 
+	public override void ExiledAction(PlayerControl rolePlayer)
+	{
+		reviveIfValid(rolePlayer);
+	}
+
+	public override void RolePlayerKilledAction(PlayerControl rolePlayer, PlayerControl killerPlayer)
+	{
+		reviveIfValid(rolePlayer);
+	}
+
 	public void ResetModifier()
 	{
 
@@ -241,11 +254,11 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	{
 		if (!GameProgressSystem.IsGameNow)
 		{
+			this.reviver.Reset();
 			return;
 		}
 
 		this.doveHandler?.Update(rolePlayer);
-		this.status.Update();
 
 		if (this.revive.IsAutoExit && this.status.OtherLiberal <= 0)
 		{
@@ -267,7 +280,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		{
 			return;
 		}
-		// 復活処理をここに書く
+		this.reviver.Update();
 	}
 
 	public void HookMuderPlayer(PlayerControl source, PlayerControl target)
@@ -287,5 +300,15 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		float delta = isLeader ? this.killSetting.LeadeKillBoostDelta : 0.0f;
 
 		LiberalMoneyBankSystem.RpcUpdateSystem(source.PlayerId, LiberalMoneyHistory.Reason.AddOnKill, money, delta);
+	}
+
+	private void reviveIfValid(PlayerControl rolePlayer)
+	{
+		if (rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId &&
+			this.revive.IsAutoRevive &&
+			(!this.revive.IsAutoExit || this.status.OtherLiberal > 0))
+		{
+			this.reviver.Start(rolePlayer);
+		}
 	}
 }
