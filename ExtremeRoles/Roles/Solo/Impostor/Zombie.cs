@@ -73,15 +73,13 @@ public sealed class Zombie :
     private bool canResurrectOnExil;
     private bool isResurrected;
 
-    private bool activateResurrectTimer;
-    private float resurrectTimer;
     private float showMagicCircleTime;
 
     private Vector3 curPos;
 
-    private TMPro.TextMeshPro resurrectText;
     private Dictionary<SystemTypes, Arrow> setRooms;
     private SystemTypes targetRoom;
+    private PlayerReviver playerReviver;
 
     private Collider2D cachedColider = null;
 
@@ -217,10 +215,7 @@ public sealed class Zombie :
 
     public void ResetOnMeetingStart()
     {
-        if (this.resurrectText != null)
-        {
-            this.resurrectText.gameObject.SetActive(false);
-        }
+        playerReviver.Stop();
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
@@ -267,31 +262,7 @@ public sealed class Zombie :
 
         if (this.isResurrected) { return; }
 
-        if (rolePlayer.Data.IsDead &&
-            this.activateResurrectTimer &&
-            this.canResurrect)
-        {
-            if (this.resurrectText == null)
-            {
-                this.resurrectText = Object.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText,
-                    Camera.main.transform, false);
-                this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-                this.resurrectText.enableWordWrapping = false;
-            }
-
-            this.resurrectText.gameObject.SetActive(true);
-            this.resurrectTimer -= Time.deltaTime;
-            this.resurrectText.text = string.Format(
-                Tr.GetString("resurrectText"),
-                Mathf.CeilToInt(this.resurrectTimer));
-
-            if (this.resurrectTimer <= 0.0f)
-            {
-                this.activateResurrectTimer = false;
-                revive(rolePlayer);
-            }
-        }
+        playerReviver.Update(rolePlayer);
     }
 
     public bool TryRolePlayerKillTo(
@@ -401,7 +372,7 @@ public sealed class Zombie :
 
         if (this.canResurrect)
         {
-            this.activateResurrectTimer = true;
+            playerReviver.Start();
         }
     }
 
@@ -413,7 +384,7 @@ public sealed class Zombie :
 
         if (this.canResurrect)
         {
-            this.activateResurrectTimer = true;
+            playerReviver.Start();
         }
     }
 
@@ -464,15 +435,24 @@ public sealed class Zombie :
 
         this.showMagicCircleTime = cate.GetValue<ZombieOption, float>(
             ZombieOption.ShowMagicCircleTime);
-        this.resurrectTimer = cate.GetValue<ZombieOption, float>(
-            ZombieOption.ResurrectDelayTime);
         this.canResurrectOnExil = cate.GetValue<ZombieOption, bool>(
             ZombieOption.CanResurrectOnExil);
+
+        this.playerReviver = new PlayerReviver(
+            cate.GetValue<ZombieOption, float>(ZombieOption.ResurrectDelayTime),
+            () =>
+            {
+                using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ZombieRpc))
+                {
+                    caller.WriteByte((byte)ZombieRpcOps.UseResurrect);
+                    caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+                }
+                UseResurrect(this);
+            });
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;
         this.isResurrected = false;
-        this.activateResurrectTimer = false;
 
         this.cachedColider = null;
 
@@ -504,41 +484,7 @@ public sealed class Zombie :
         }
         else
         {
-            return this.activateResurrectTimer;
-        }
-    }
-
-    private void revive(PlayerControl rolePlayer)
-    {
-        if (rolePlayer == null) { return; }
-
-        byte playerId = rolePlayer.PlayerId;
-
-        Player.RpcUncheckRevive(playerId);
-
-        if (rolePlayer.Data == null ||
-            rolePlayer.Data.IsDead ||
-            rolePlayer.Data.Disconnected) { return; }
-
-		List<Vector2> randomPos = new List<Vector2>();
-
-		Map.AddSpawnPoint(randomPos, playerId);
-
-        Player.RpcUncheckSnap(playerId, randomPos[
-            RandomGenerator.Instance.Next(randomPos.Count)]);
-
-        using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.ZombieRpc))
-        {
-            caller.WriteByte((byte)ZombieRpcOps.UseResurrect);
-            caller.WriteByte(playerId);
-        }
-        UseResurrect(this);
-
-        HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
-        if (this.resurrectText != null)
-        {
-            this.resurrectText.gameObject.SetActive(false);
+            return this.canResurrect;
         }
     }
 

@@ -72,16 +72,13 @@ public sealed class Resurrecter :
     private int meetingCounter;
     private int maxMeetingCount;
 
-    private bool activateResurrectTimer;
-    private float resurrectTimer;
-
     private bool isMeetingCoolResetOnResurrect;
     private float meetingCoolDown;
 
     private float resetTaskGage;
-    private TMPro.TextMeshPro resurrectText;
 
 	private readonly FullScreenFlasher flasher = new FullScreenFlasher(ColorPalette.ResurrecterBlue);
+    private PlayerReviver playerReviver;
 
     public Resurrecter() : base(
 		RoleCore.BuildCrewmate(
@@ -129,10 +126,7 @@ public sealed class Resurrecter :
             ++this.meetingCounter;
         }
 
-        if (this.resurrectText != null)
-        {
-            this.resurrectText.gameObject.SetActive(false);
-        }
+        playerReviver.Stop();
 
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.ResurrecterRpc))
@@ -204,7 +198,7 @@ public sealed class Resurrecter :
                 if (this.canResurrectAfterDeath &&
                     rolePlayer.Data.IsDead)
                 {
-                    revive(rolePlayer);
+                    playerReviver.Revive(rolePlayer);
                 }
                 else
                 {
@@ -219,31 +213,7 @@ public sealed class Resurrecter :
 			return;
 		}
 
-        if (rolePlayer.Data.IsDead &&
-            this.activateResurrectTimer &&
-            this.canResurrect)
-        {
-            if (this.resurrectText == null)
-            {
-                this.resurrectText = Object.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText,
-                    Camera.main.transform, false);
-                this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-                this.resurrectText.enableWordWrapping = false;
-            }
-
-            this.resurrectText.gameObject.SetActive(true);
-            this.resurrectTimer -= Time.deltaTime;
-            this.resurrectText.text = Tr.GetString(
-				"resurrectText",
-                Mathf.CeilToInt(this.resurrectTimer));
-
-            if (this.resurrectTimer <= 0.0f)
-            {
-                this.activateResurrectTimer = false;
-                revive(rolePlayer);
-            }
-        }
+        playerReviver.Update(rolePlayer);
     }
 
     public override string GetColoredRoleName(bool isTruthColor = false)
@@ -326,7 +296,7 @@ public sealed class Resurrecter :
 
         if (this.canResurrect)
         {
-            this.activateResurrectTimer = true;
+            playerReviver.Start();
         }
         else if (!this.canResurrectAfterDeath)
         {
@@ -344,7 +314,7 @@ public sealed class Resurrecter :
 
         if (this.canResurrect)
         {
-            this.activateResurrectTimer = true;
+            playerReviver.Start();
         }
         else if (!this.canResurrectAfterDeath)
         {
@@ -411,8 +381,6 @@ public sealed class Resurrecter :
         this.resetTaskGage = loader.GetValue<ResurrecterOption, int>(
             ResurrecterOption.ResurrectTaskResetGage) / 100.0f;
 
-        this.resurrectTimer = loader.GetValue<ResurrecterOption, float>(
-            ResurrecterOption.ResurrectDelayTime);
         this.canResurrectAfterDeath = loader.GetValue<ResurrecterOption, bool>(
             ResurrecterOption.CanResurrectAfterDeath);
         this.canResurrectOnExil = loader.GetValue<ResurrecterOption, bool>(
@@ -424,10 +392,21 @@ public sealed class Resurrecter :
         this.meetingCoolDown = loader.GetValue<ResurrecterOption, float>(
             ResurrecterOption.ResurrectMeetingCooltime);
 
+        this.playerReviver = new PlayerReviver(
+            loader.GetValue<ResurrecterOption, float>(ResurrecterOption.ResurrectDelayTime),
+            () =>
+            {
+                using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ResurrecterRpc))
+                {
+                    caller.WriteByte((byte)ResurrecterRpcOps.UseResurrect);
+                    caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+                }
+                UseResurrect(this);
+            });
+
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;
         this.isResurrected = false;
-        this.activateResurrectTimer = false;
 
         if (this.awakeTaskGage <= 0.0f)
         {
@@ -457,44 +436,11 @@ public sealed class Resurrecter :
         }
         else if (!this.canResurrect || this.isExild)
         {
-            return this.canResurrectAfterDeath || this.activateResurrectTimer;
+            return this.canResurrectAfterDeath || this.canResurrect;
         }
         else
         {
-            return this.activateResurrectTimer;
-        }
-    }
-
-    private void revive(PlayerControl rolePlayer)
-    {
-        if (rolePlayer == null) { return; }
-
-        byte playerId = rolePlayer.PlayerId;
-
-        Player.RpcUncheckRevive(playerId);
-
-        if (rolePlayer.Data == null ||
-            rolePlayer.Data.IsDead ||
-            rolePlayer.Data.Disconnected) { return; }
-
-        List<Vector2> randomPos = new List<Vector2>();
-		Map.AddSpawnPoint(randomPos, playerId);
-
-		Player.RpcUncheckSnap(playerId, randomPos[
-            RandomGenerator.Instance.Next(randomPos.Count)]);
-
-        using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.ResurrecterRpc))
-        {
-            caller.WriteByte((byte)ResurrecterRpcOps.UseResurrect);
-            caller.WriteByte(playerId);
-        }
-        UseResurrect(this);
-
-        HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
-        if (this.resurrectText != null)
-        {
-            this.resurrectText.gameObject.SetActive(false);
+            return this.canResurrect;
         }
     }
 
