@@ -1,26 +1,27 @@
+using System.Collections.Immutable;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using System.Collections.Immutable;
 
 namespace ExtremeRoles.Analyzers;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class VectorComparisonAnalyzer : DiagnosticAnalyzer
 {
-    private const string Category = "Usage";
+    private const string category = "Usage";
 
-    private static readonly DiagnosticDescriptor RuleERA003 = new DiagnosticDescriptor(
+    private static readonly DiagnosticDescriptor ruleERA003 = new DiagnosticDescriptor(
         "ERA003",
         "UnityのVector型を == や != で比較することはできません",
 		"UnityのVector型を == や != で比較することはできません。代わりにVector.IsCloseToかVector.IsNotCloseToを使用してください",
-        Category,
+        category,
         DiagnosticSeverity.Error,
         isEnabledByDefault: true,
         "UnityのVector型は浮動小数点数のため、== や != での比較は想定しない結果を生む可能性があります.");
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [RuleERA003];
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [ruleERA003];
 
     public override void Initialize(AnalysisContext context)
     {
@@ -44,7 +45,7 @@ public sealed class VectorComparisonAnalyzer : DiagnosticAnalyzer
 
         if (isVectorType(leftTypeInfo) || isVectorType(rightTypeInfo))
         {
-            var diagnostic = Diagnostic.Create(RuleERA003, binaryExpression.GetLocation());
+            var diagnostic = Diagnostic.Create(ruleERA003, binaryExpression.GetLocation());
             context.ReportDiagnostic(diagnostic);
         }
     }
