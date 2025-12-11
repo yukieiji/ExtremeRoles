@@ -1,15 +1,17 @@
 using UnityEngine;
+using System.Text;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -21,7 +23,8 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
         ShootNum,
         CanShootAssassin,
         CanShootNeutral,
-        EnableTaskRelated,
+		CanShootLiberal,
+		EnableTaskRelated,
         ReduceCurKillCool,
         IsPerm,
         IsSyncTaskAndShootNum,
@@ -31,6 +34,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
     private int shootNum;
     private int maxShootNum;
     private bool canShootNeutral;
+	private bool canShootLiberal;
     private bool canShootAssassin;
 
     private bool enableTaskRelatedSetting;
@@ -40,7 +44,8 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
     private bool isPerm;
     private bool isSyncTaskShootNum;
 
-    private TMPro.TextMeshPro killCountText = null;
+    private TMPro.TextMeshPro? killCountText = null;
+	private StringBuilder? builder;
 
     public Sheriff() : base(
 		RoleCore.BuildCrewmate(
@@ -56,8 +61,9 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
             targetPlayer.PlayerId];
 
 
-        if ((targetPlayerRole.IsImpostor()) ||
-            (targetPlayerRole.IsNeutral() && this.canShootNeutral))
+        if (targetPlayerRole.IsImpostor() ||
+            (targetPlayerRole.IsNeutral() && this.canShootNeutral) ||
+			(targetPlayerRole.IsLiberal() && this.canShootLiberal))
         {
 			var id = targetPlayerRole.Core.Id;
             if ((!this.canShootAssassin && id is ExtremeRoleId.Assassin) ||
@@ -87,31 +93,49 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
 
     public override string GetImportantText(bool isContainFakeTask = true)
     {
-        string shotText = Design.ColoredString(
-            Palette.ImpostorRed,
-            Tr.GetString("impostorShotCall"));
+		if (this.builder == null)
+		{
+			return "";
+		}
+
+		this.builder.Clear();
+		this.builder.Append(this.GetColoredRoleName());
+		this.builder.Append(": ");
+		this.builder.Append(
+			Design.ColoredString(
+			Palette.ImpostorRed,
+			Tr.GetString("impostorShotCall")));
 
         if (this.canShootNeutral)
         {
-            shotText = string.Concat(
-                shotText,
-                Design.ColoredString(
-                    this.Core.Color,
-                    Tr.GetString("andFirst")),
-                Design.ColoredString(
-                    ColorPalette.NeutralColor,
-                    Tr.GetString("neutralShotCall")));
+			string andKey = this.canShootLiberal ? "、" : Tr.GetString("andFirst");
+			this.builder.Append(
+				Design.ColoredString(
+					this.Core.Color,
+					andKey));
+			this.builder.Append(
+				Design.ColoredString(
+					ColorPalette.NeutralColor,
+					Tr.GetString("neutralShotCall")));
         }
 
-        string baseString = string.Format("{0}: {1}{2}",
-            this.GetColoredRoleName(),
-            shotText,
-            Design.ColoredString(
-                this.Core.Color,
-                Tr.GetString(
-                    $"{this.Core.Id}ShortDescription")));
+		if (this.canShootLiberal)
+		{
+			this.builder.Append(
+				Design.ColoredString(
+					this.Core.Color,
+					Tr.GetString("andFirst")));
+			this.builder.Append(
+				Design.ColoredString(
+					ColorPalette.LiberalColor,
+					Tr.GetString("liberalShotCall")));
+		}
+		this.builder.Append(
+			 Design.ColoredString(
+				this.Core.Color,
+				Tr.GetString($"{this.Core.Id}ShortDescription")));
 
-        return baseString;
+        return this.builder.ToString();
 
     }
 
@@ -121,47 +145,50 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
         {
             createText();
         }
-        if (this.enableTaskRelatedSetting)
+        if (!this.enableTaskRelatedSetting)
         {
-
-            float gage = Player.GetPlayerTaskGage(rolePlayer);
-
-            if (gage >= (this.prevGage + this.syncShootTaskGage))
-            {
-                if (this.CanKill)
-                {
-                    rolePlayer.killTimer = Mathf.Clamp(
-                        rolePlayer.killTimer - this.reduceKillCool,
-                        0.01f, this.KillCoolTime);
-                }
-
-                if (this.isPerm)
-                {
-                    if (!this.HasOtherKillCool)
-                    {
-                        this.HasOtherKillCool = true;
-                        this.KillCoolTime = Player.DefaultKillCoolTime;
-                    }
-                    this.KillCoolTime = Mathf.Clamp(
-                        this.KillCoolTime - this.reduceKillCool,
-                        0.01f, this.KillCoolTime);
-                }
-
-                if (this.isSyncTaskShootNum)
-                {
-                    this.shootNum = System.Math.Clamp(
-                        this.shootNum + 1, this.shootNum, this.maxShootNum);
-                    this.CanKill = true;
-                    updateKillCountText();
-                    if (this.shootNum > 0)
-                    {
-                        this.killCountText.gameObject.SetActive(true);
-                    }
-                }
-                this.prevGage = gage;
-            }
+			return;
         }
-    }
+		float gage = Player.GetPlayerTaskGage(rolePlayer);
+
+		if (gage < (this.prevGage + this.syncShootTaskGage))
+		{
+			return;
+		}
+
+		if (this.CanKill)
+		{
+			rolePlayer.killTimer = Mathf.Clamp(
+				rolePlayer.killTimer - this.reduceKillCool,
+				0.01f, this.KillCoolTime);
+		}
+
+		if (this.isPerm)
+		{
+			if (!this.HasOtherKillCool)
+			{
+				this.HasOtherKillCool = true;
+				this.KillCoolTime = Player.DefaultKillCoolTime;
+			}
+			this.KillCoolTime = Mathf.Clamp(
+				this.KillCoolTime - this.reduceKillCool,
+				0.01f, this.KillCoolTime);
+		}
+
+		if (this.isSyncTaskShootNum)
+		{
+			this.shootNum = System.Math.Clamp(
+				this.shootNum + 1, this.shootNum, this.maxShootNum);
+			this.CanKill = true;
+			updateKillCountText();
+			if (this.shootNum > 0 &&
+				this.killCountText != null)
+			{
+				this.killCountText.gameObject.SetActive(true);
+			}
+		}
+		this.prevGage = gage;
+	}
 
     private void createText()
     {
@@ -180,11 +207,10 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
             SheriffOption.CanShootAssassin,
             false);
 
-        factory.CreateBoolOption(
-            SheriffOption.CanShootNeutral,
-            true);
+        factory.CreateBoolOption(SheriffOption.CanShootNeutral, true);
+		factory.CreateBoolOption(SheriffOption.CanShootLiberal, false);
 
-        factory.CreateIntOption(
+		factory.CreateIntOption(
             SheriffOption.ShootNum,
             1, 1, GameSystem.VanillaMaxPlayerNum - 1, 1,
             format: OptionUnit.Shot);
@@ -216,14 +242,19 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
 
     protected override void RoleSpecificInit()
     {
+		this.builder = new StringBuilder();
 
         var loader = this.Loader;
 
         this.shootNum = loader.GetValue<SheriffOption, int>(
             SheriffOption.ShootNum);
+		
 		this.canShootNeutral = loader.GetValue<SheriffOption, bool>(
 			SheriffOption.CanShootNeutral);
-        this.canShootAssassin = loader.GetValue<SheriffOption, bool>(
+		this.canShootLiberal = loader.GetValue<SheriffOption, bool>(
+			SheriffOption.CanShootLiberal);
+
+		this.canShootAssassin = loader.GetValue<SheriffOption, bool>(
             SheriffOption.CanShootAssassin);
         this.killCountText = null;
 
@@ -271,7 +302,8 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
         this.shootNum = System.Math.Clamp(
             this.shootNum - 1, 0, this.maxShootNum);
 
-        if (this.shootNum == 0)
+        if (this.shootNum == 0 &&
+			this.killCountText != null)
         {
             this.killCountText.gameObject.SetActive(false);
             HudManager.Instance.KillButton.SetDisabled();
@@ -281,12 +313,15 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
     }
     private void updateKillCountText()
     {
-        this.killCountText.text = Tr.GetString(
-            ICountBehavior.DefaultButtonCountText,
-			this.shootNum);
+		if (this.killCountText != null)
+		{
+			this.killCountText.text = Tr.GetString(
+				ICountBehavior.DefaultButtonCountText,
+				this.shootNum);
+		}
     }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         if (this.killCountText != null)
         {

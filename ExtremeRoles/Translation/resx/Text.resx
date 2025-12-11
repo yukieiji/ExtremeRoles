@@ -1414,4 +1414,7 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="AddOnKill" xml:space="preserve">
     <value>キル</value>
   </data>
+  <data name="liberalShotCall" xml:space="preserve">
+    <value>革命野郎</value>
+  </data>
 </root>

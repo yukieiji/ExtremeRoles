@@ -1559,4 +1559,7 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="EmitNotCrewmate" xml:space="preserve">
     <value>クルーメイト以外に通知</value>
   </data>
+  <data name="SheriffCanShootLiberal" xml:space="preserve">
+    <value>「リベラル」をキルできるか</value>
+  </data>
 </root>
