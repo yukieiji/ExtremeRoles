@@ -108,11 +108,10 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
 
         if (this.canShootNeutral)
         {
-			string andKey = this.canShootLiberal ? "、" : Tr.GetString("andFirst");
 			this.builder.Append(
 				Design.ColoredString(
 					this.Core.Color,
-					andKey));
+					Tr.GetString("andFirst")));
 			this.builder.Append(
 				Design.ColoredString(
 					ColorPalette.NeutralColor,
@@ -124,7 +123,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
 			this.builder.Append(
 				Design.ColoredString(
 					this.Core.Color,
-					Tr.GetString("andFirst")));
+					Tr.GetString(this.canShootNeutral ? "and" : "andFirst")));
 			this.builder.Append(
 				Design.ColoredString(
 					ColorPalette.LiberalColor,
