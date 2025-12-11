@@ -124,7 +124,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		this.CreateAbilityCountButton(
 			"echoLocation",
-			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton));
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Boxer));
 		this.Button?.SetLabelToCrewmate();
 	}
 
