@@ -1,14 +1,18 @@
+using System;
+using System.Linq;
+
+using Microsoft.Extensions.DependencyInjection;
+using UnityEngine;
+
 using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Test.Helper;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
-using UnityEngine;
+
 using UnityResource = UnityEngine.Resources;
 
 namespace ExtremeRoles.Test.InGame.InfinityTaskLoop;
