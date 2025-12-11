@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Roles;
 
@@ -15,14 +15,14 @@ public class GameLoopTestCaseFactory
 		=>
 #if DEBUG
 		[
-			new("Random", 128),
-			new("IRoleAbilityRole", 2,
+			new("Random", 512),
+			new("IRoleAbilityRole", 20,
 			[
 				ExtremeRoleId.Carpenter,
 				ExtremeRoleId.BodyGuard,
 				ExtremeRoleId.SandWorm,
 			]),
-			new("IRoleAutoBuildAbilityRole", 2,
+			new("IRoleAutoBuildAbilityRole", 20,
 			[
 				ExtremeRoleId.Hatter,
 				ExtremeRoleId.Eater,
@@ -34,13 +34,13 @@ public class GameLoopTestCaseFactory
 				ExtremeRoleId.Psychic,
 				ExtremeRoleId.Mover,
 			]),
-			new("NeutralRemove", 2,
+			new("NeutralRemove", 20,
 			[
 				ExtremeRoleId.Jester, ExtremeRoleId.TaskMaster,
 				ExtremeRoleId.Neet, ExtremeRoleId.Umbrer,
 				ExtremeRoleId.Madmate
 			]),
-			new("YokoWin", 2, [ ExtremeRoleId.Yoko ],
+			new("YokoWin", 10, [ ExtremeRoleId.Yoko ],
 			() =>
 			{
 				GameUtility.UpdateExROption(
@@ -48,7 +48,7 @@ public class GameLoopTestCaseFactory
 					(int)ShipGlobalOptionCategory.NeutralWinOption,
 					new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
 			}),
-			new("NeutralWin", 10,
+			new("NeutralWin", 50,
 			[
 				ExtremeRoleId.Alice, ExtremeRoleId.Jackal,
 				ExtremeRoleId.Missionary, ExtremeRoleId.Miner,
@@ -64,7 +64,7 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 0));
 			}),
-			new("QueenWin", 10, [ ExtremeRoleId.Queen ],
+			new("QueenWin", 20, [ ExtremeRoleId.Queen ],
 			() =>
 			{
 				GameUtility.UpdateExROption(
@@ -75,7 +75,7 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 3));
 			}),
-			new("QueenWithPawn", 2, [ ExtremeRoleId.Queen, ExtremeRoleId.Pawn ],
+			new("QueenWithPawn", 20, [ ExtremeRoleId.Queen, ExtremeRoleId.Pawn ],
 			() =>
 			{
 				GameUtility.UpdateExROption(
@@ -86,7 +86,7 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 3));
 			}),
-			new("QueenWithKnight", 2, [ ExtremeRoleId.Queen, ExtremeRoleId.Knight ],
+			new("QueenWithKnight", 20, [ ExtremeRoleId.Queen, ExtremeRoleId.Knight ],
 			() =>
 			{
 				GameUtility.UpdateExROption(
@@ -97,7 +97,7 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 3));
 			}),
-			new("QueenWithKnightAndPawn", 2, [ ExtremeRoleId.Queen, ExtremeRoleId.Knight, ExtremeRoleId.Pawn ],
+			new("QueenWithKnightAndPawn", 20, [ ExtremeRoleId.Queen, ExtremeRoleId.Knight, ExtremeRoleId.Pawn ],
 			() =>
 			{
 				GameUtility.UpdateExROption(
@@ -108,7 +108,7 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 3));
 			}),
-			new("YandereWin", 10, [ ExtremeRoleId.Yandere ], () =>
+			new("YandereWin", 20, [ ExtremeRoleId.Yandere ], () =>
 			{
 				GameUtility.UpdateExROption(
 					OptionTab.GeneralTab,
@@ -118,7 +118,7 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 3));
 			}),
-			new("YandereWinWithIntimate", 2, [ ExtremeRoleId.Yandere, ExtremeRoleId.Intimate ], () =>
+			new("YandereWinWithIntimate", 20, [ ExtremeRoleId.Yandere, ExtremeRoleId.Intimate ], () =>
 			{
 				GameUtility.UpdateExROption(
 					OptionTab.GeneralTab,
@@ -128,7 +128,7 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 3));
 			}),
-			new("YandereWinWithSurrogator", 2, [ ExtremeRoleId.Yandere, ExtremeRoleId.Surrogator ], () =>
+			new("YandereWinWithSurrogator", 20, [ ExtremeRoleId.Yandere, ExtremeRoleId.Surrogator ], () =>
 			{
 				GameUtility.UpdateExROption(
 					OptionTab.GeneralTab,
@@ -138,7 +138,7 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 3));
 			}),
-			new("YandereWinWithSurrogatorAndIntimate", 2, [ ExtremeRoleId.Yandere, ExtremeRoleId.Intimate, ExtremeRoleId.Surrogator ], () =>
+			new("YandereWinWithSurrogatorAndIntimate", 20, [ ExtremeRoleId.Yandere, ExtremeRoleId.Intimate, ExtremeRoleId.Surrogator ], () =>
 			{
 				GameUtility.UpdateExROption(
 					OptionTab.GeneralTab,
@@ -148,7 +148,7 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 3));
 			}),
-			new("JackalWinWithFurry", 2, [ ExtremeRoleId.Jackal, ExtremeRoleId.Furry ], () =>
+			new("JackalWinWithFurry", 20, [ ExtremeRoleId.Jackal, ExtremeRoleId.Furry ], () =>
 			{
 				GameUtility.UpdateExROption(
 					OptionTab.GeneralTab,
@@ -158,7 +158,7 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 3));
 			}),
-			new("JackalWinWithShepherd", 2, [ExtremeRoleId.Jackal, ExtremeRoleId.Shepherd ], () =>
+			new("JackalWinWithShepherd", 20, [ExtremeRoleId.Jackal, ExtremeRoleId.Shepherd ], () =>
 			{
 				GameUtility.UpdateExROption(
 					OptionTab.GeneralTab,
@@ -168,7 +168,7 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 3));
 			}),
-			new("JackalWinWithFurryAndShepherd", 2, [ExtremeRoleId.Jackal, ExtremeRoleId.Furry, ExtremeRoleId.Shepherd ], () =>
+			new("JackalWinWithFurryAndShepherd", 20, [ExtremeRoleId.Jackal, ExtremeRoleId.Furry, ExtremeRoleId.Shepherd ], () =>
 			{
 				GameUtility.UpdateExROption(
 					OptionTab.GeneralTab,

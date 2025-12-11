@@ -113,6 +113,11 @@ public static class GameUtility
 			}
 		}
 
+		if (RandomGenerator.Instance.Next(2) == 0)
+		{
+			disableLiberal();
+		}
+
 		disableXion();
 		disableSomeRole();
 
@@ -165,7 +170,7 @@ public static class GameUtility
 			}
 		}
 
-		if (RandomGenerator.Instance.Next(101) > 50)
+		if (RandomGenerator.Instance.Next(2) == 0)
 		{
 			disableLiberal();
 		}
