@@ -29,6 +29,7 @@ public sealed class LiberalInfoModel : IInfoOverlayPanelModel
 		this.printOption.Clear();
 		var liberalSetting = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptipnLoader>();
 
+		this.printOption.AppendLine(liberalSetting.RoleSpawnSetting);
 
 		this.printOption.AppendLine();
 		addHudString(this.printOption, liberalSetting.GlobalOption);

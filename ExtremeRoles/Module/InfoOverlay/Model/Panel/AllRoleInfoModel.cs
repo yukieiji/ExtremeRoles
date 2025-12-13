@@ -1,15 +1,14 @@
-using ExtremeRoles.Helper;
-
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.Interface;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
@@ -17,16 +16,18 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 public sealed class AllRoleInfoModel : RolePagePanelModelBase
 {
-	public class LiberalOptionToString(IEnumerable<IOption> global, IEnumerable<IOption> specificOption) : IOptionToStringHelper
+	public class LiberalOptionToString(System.Func<string> getRoleSpawnStr, IEnumerable<IOption> global, IEnumerable<IOption> specificOption) : IOptionToStringHelper
 	{
 		private readonly IEnumerable<IOption> allOption = global.Concat(specificOption);
 		private readonly IOption first = specificOption.FirstOrDefault() ?? global.First();
+		private readonly System.Func<string> roleSpawnStrGetter = getRoleSpawnStr;
 
 		public bool IsActive => first.IsViewActive;
 
 		public override string ToString()
 		{
 			var builder = new StringBuilder();
+			builder.AppendLine(roleSpawnStrGetter.Invoke());
 			foreach (var opt in allOption)
 			{
 				IInfoOverlayPanelModel.AddHudStringWithChildren(builder, opt, 0);
@@ -58,7 +59,7 @@ public sealed class AllRoleInfoModel : RolePagePanelModelBase
 
 			AddPage(new RoleInfo(
 				$"<color=#F9F06F>{Tr.GetString(id.ToString())}</color>",
-				roleFullDesc, new LiberalOptionToString(defaultOpt, additional)));
+				roleFullDesc, new LiberalOptionToString(() => liberalOption.RoleSpawnSetting, defaultOpt, additional)));
 		}
 
 

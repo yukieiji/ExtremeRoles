@@ -59,6 +59,24 @@ public sealed class LiberalDefaultOptipnLoader : IOptionLoader
 
 	private readonly OptionCategory category;
 
+	public string RoleSpawnSetting
+	{
+		get
+		{
+			if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate))
+			{
+				return "";
+			}
+
+			string optionName = Tr.GetString("liberalRoles");
+			int min = cate.GetValue<RoleSpawnOption, int>(RoleSpawnOption.MinLiberal);
+			int max = cate.GetValue<RoleSpawnOption, int>(RoleSpawnOption.MaxLiberal);
+			string optionValueStr = (min >= max) ? $"{max}" : $"{min} - {max}";
+
+			return $"{optionName}: {optionValueStr}";
+		}
+	}
+
 	public LiberalDefaultOptipnLoader()
 	{
 		if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.LiberalSetting, out var category))

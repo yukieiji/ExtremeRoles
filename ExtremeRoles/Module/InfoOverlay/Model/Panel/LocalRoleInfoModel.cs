@@ -79,6 +79,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 		if (role.IsLiberal())
 		{
 			var liberalSetting = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptipnLoader>();
+			this.builder.AppendLine(liberalSetting.RoleSpawnSetting);
 			foreach (var target in liberalSetting.GlobalOption)
 			{
 				IInfoOverlayPanelModel.AddHudStringWithChildren(this.builder, target, 0);
