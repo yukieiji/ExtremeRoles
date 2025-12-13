@@ -41,6 +41,11 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 			this.printOption);
 
+		addHudString(
+			container,
+			(int)SpawnOptionCategory.LiberalSetting,
+			this.printOption);
+
 		foreach (var key in Enum.GetValues<ShipGlobalOptionCategory>())
 		{
 			addHudString(container, (int)key, this.printOption);

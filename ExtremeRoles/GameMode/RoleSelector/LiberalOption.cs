@@ -1,12 +1,10 @@
-using ExtremeRoles.GameMode.Option.ShipGlobal;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
@@ -131,7 +129,7 @@ public sealed class LiberalSettingCheck(IOption maxLiberalOption, int num) : IOp
 	public bool IsActive => liberalMaxOption.Value<int>() >= num;
 }
 
-public sealed class LiberalOption
+public static class LiberalOption
 {
 	public static void Create(OptionCategoryFactory globalFactory, IOption liberalMaxNumSetting)
 	{
