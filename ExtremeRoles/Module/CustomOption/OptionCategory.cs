@@ -79,20 +79,6 @@ public sealed class OptionCategory(
 
 	private readonly IReadOnlyDictionary<int, IOption> allOpt = option.AllOptions;
 
-	public void AddHudString(in StringBuilder builder)
-	{
-		builder.AppendLine($"・{Tr.GetString("OptionCategory")}: {this.TransedName}");
-
-		foreach (var option in this.allOpt.Values)
-		{
-			if (!option.IsViewActive)
-			{
-				continue;
-			}
-
-			builder.AppendLine($"{option.TransedTitle}: {option.TransedValue}");
-		}
-	}
 	public IOption Get<T>(T id) where T : Enum
 		=> this.Get(id.FastInt());
 
