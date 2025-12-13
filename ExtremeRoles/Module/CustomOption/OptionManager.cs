@@ -26,10 +26,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
 	private readonly Dictionary<string, List<IOption>> children = new ();
 
-	public string ConfigPreset
-	{
-		get => $"Preset:{selectedPreset}";
-	}
+	public string ConfigPreset => $"Preset:{selectedPreset}";
 	private int selectedPreset = 0;
 	private const int skipStep = 10;
 
