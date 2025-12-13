@@ -1,4 +1,3 @@
-
 using System;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -45,6 +44,8 @@ public sealed class PresetOption : IOption
 	public bool IsActive => true;
 	public bool IsViewActive => true;
 
+	public IOptionActivator Activator { get; init; }
+
 	private readonly IValueHolder holder;
 
 	public event Action? OnValueChanged;
@@ -64,6 +65,7 @@ public sealed class PresetOption : IOption
 		this.holder = new IntOptionValue(1, 1, maxPresetNum, 1);
 
 		this.Selection = 0;
+		this.Activator = new AlwaysActive();
 
 		this.OnValueChanged += () =>
 		{

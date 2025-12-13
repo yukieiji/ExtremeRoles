@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Diagnostics.CodeAnalysis;
 
 using BepInEx;
@@ -12,7 +11,6 @@ using Hazel;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat.Initializer;
-using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.CustomOption.Factory;
 
 
@@ -147,18 +145,12 @@ public sealed class CompatModManager
 		this.endOptionId = startId + this.loadedMod.Count - 1;
 	}
 
-	internal string GetIntegrateOptionHudString()
+	internal IEnumerable<int> GetIntegrateOptionCategoryId()
 	{
-		StringBuilder builder = new StringBuilder();
 		for (int id = this.startOptionId; id <= this.endOptionId; ++id)
 		{
-			if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, id, out var cate))
-			{
-				continue;
-			}
-			cate.AddHudString(builder);
+			yield return id;
 		}
-		return builder.ToString().Trim('\r', '\n');
 	}
 
 	internal bool IsIntegrateOption(int optionId)

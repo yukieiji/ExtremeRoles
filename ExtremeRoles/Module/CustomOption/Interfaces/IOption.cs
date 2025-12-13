@@ -1,5 +1,6 @@
 using System;
 
+#nullable enable
 
 namespace ExtremeRoles.Module.CustomOption.Interfaces;
 
@@ -19,6 +20,8 @@ public interface IOption
 
 	public bool IsViewActive { get; }
 	public bool IsActive { get; }
+
+	public IOptionActivator Activator { get; }
 
 	public void SwitchPreset();
 

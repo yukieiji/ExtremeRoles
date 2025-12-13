@@ -1417,4 +1417,7 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="liberalShotCall" xml:space="preserve">
     <value>革命野郎</value>
   </data>
+  <data name="liberalRoles" xml:space="preserve">
+    <value>「リベラル」のロール</value>
+  </data>
 </root>

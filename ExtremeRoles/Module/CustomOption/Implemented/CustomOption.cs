@@ -51,9 +51,9 @@ public sealed class CustomOption : IOption
 
 	public bool IsViewActive => !this.Info.IsHidden && this.IsActive;
 
-	public bool IsActive => this.activator.IsActive;
+	public bool IsActive => this.Activator.IsActive;
 
-	private readonly IOptionActivator activator;
+	public IOptionActivator Activator { get; init; }
 
 	private readonly ConfigBinder config;
 	private readonly IValueHolder holder;
@@ -90,7 +90,7 @@ public sealed class CustomOption : IOption
 			"holder must implement IValue<T>");
 #endif
 
-		this.activator = activator ?? new AlwaysActive();
+		this.Activator = activator ?? new AlwaysActive();
 
 		int defaultIndex = value.DefaultIndex;
 		config = new ConfigBinder(Info.CodeRemovedName, defaultIndex);
