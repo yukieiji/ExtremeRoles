@@ -135,13 +135,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	public void Update(in OptionCategory category, in IOption option, int newIndex)
 	{
 		option.Selection = newIndex;
-
-		int id = option.Info.Id;
-		if (PresetOption.IsPreset(category.Id, id))
-		{
-			this.selectedPreset = newIndex;
-		}
-		else
+		if (!PresetOption.IsPreset(category.Id, option.Info.Id))
 		{
 			shareOptionCategory(category);
 			category.IsDirty = true;
@@ -149,8 +143,9 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		EventManager.Instance.Invoke(ModEvent.OptionUpdate);
 	}
 
-	public void SwitchPreset()
+	public void SwitchPreset(int targetPreset)
 	{
+		this.selectedPreset = targetPreset;
 		foreach (var tab in this.options.Values)
 		{
 			foreach (var category in tab.Category)

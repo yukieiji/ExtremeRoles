@@ -62,14 +62,16 @@ public sealed class PresetOption : IOption
 	public PresetOption(string name)
 	{
 		Info = new PresetOptionInfo(categoryId, $"{name}{OptionKey.Selection}");
+		
 		this.holder = new IntOptionValue(1, 1, maxPresetNum, 1);
+		this.holder.Selection = 0;
 
-		this.Selection = 0;
 		this.Activator = new AlwaysActive();
 
 		this.OnValueChanged += () =>
 		{
-			OptionManager.Instance.SwitchPreset();
+			int target = this.Selection;
+			OptionManager.Instance.SwitchPreset(target);
 		};
 
 		ExtremeRolesPlugin.Logger.LogInfo($"---- Create new Option ----\n{this}\n--------");
