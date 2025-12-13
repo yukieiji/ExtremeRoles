@@ -39,7 +39,8 @@
   <data name="DoveFullDescription" xml:space="preserve">
     <value>タイプ : ドーヴ
 
-タスクをすることで資金を得ることができる</value>
+タスクをすることで資金を得ることができる
+タスクは無限に追加される</value>
   </data>
   <data name="DoveShortDescription" xml:space="preserve">
     <value>タスクで革命を成せ</value>
