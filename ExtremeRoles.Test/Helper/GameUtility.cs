@@ -253,7 +253,7 @@ public static class GameUtility
 		}
 
 		disableCategory(OptionTab.GeneralTab, (int)ShipGlobalOptionCategory.RandomMapOption);
-		if (RandomGenerator.Instance.Next(101) > 50)
+		if (RandomGenerator.Instance.Next(2) == 0)
 		{
 			disableLiberal();
 		}
