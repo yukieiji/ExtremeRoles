@@ -224,15 +224,19 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				playerInfo.Object != null &&
 				(!playerInfo.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer) &&
                 ExtremeRoleManager.TryGetRole(playerId, out var role) &&
+				// インポスターではない、または自分自身である
+				(	!role.IsImpostor() || 
+					playerId == rolePlayer.PlayerId
+				) &&
+				// 無敵ではない
 				(
-					!role.IsImpostor() ||
-					playerId == rolePlayer.PlayerId ||
-					
-					role.AbilityClass is not IInvincible invincible ||
-					!invincible.IsBlockKillFrom(sourcePlayerId) ||
-					
+					role.AbilityClass is not IInvincible invincible || 
+					!invincible.IsBlockKillFrom(sourcePlayerId)
+				) &&
+				// 複数役職の場合、もう片方の役職も無敵ではない
+				(
 					role is not MultiAssignRoleBase multiAssignRoleBase ||
-					multiAssignRoleBase is not IInvincible invincible2 ||
+					multiAssignRoleBase.AnotherRole?.AbilityClass is not IInvincible invincible2 ||
 					!invincible2.IsBlockKillFrom(sourcePlayerId)
 				))
             {
