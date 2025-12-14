@@ -42,7 +42,7 @@ public sealed class AllRoleInfoModel : RolePagePanelModelBase
 		string colorRoleName;
 		string roleFullDesc;
 
-		var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptipnLoader>();
+		var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
 		foreach (ExtremeRoleId id in new ExtremeRoleId[] { ExtremeRoleId.Leader, ExtremeRoleId.Dove, ExtremeRoleId.Militant })
 		{
 

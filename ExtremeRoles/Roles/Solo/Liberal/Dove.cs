@@ -14,7 +14,7 @@ public sealed class Dove : SingleRoleBase, IRoleUpdate
 
 	public Dove(
 		DoveCommonAbilityHandler abilityHandler,
-		LiberalDefaultOptipnLoader option) : base(
+		LiberalDefaultOptionLoader option) : base(
 		RoleCore.BuildLiberal(
 			ExtremeRoleId.Dove,
 			ColorPalette.LiberalColor),

@@ -12,7 +12,7 @@ namespace ExtremeRoles.Roles.Solo.Liberal;
 
 public sealed class Militant : SingleRoleBase
 {
-	public Militant(LiberalDefaultOptipnLoader option) : base(
+	public Militant(LiberalDefaultOptionLoader option) : base(
 		RoleCore.BuildLiberal(
 			ExtremeRoleId.Militant,
 			ColorPalette.LiberalColor),

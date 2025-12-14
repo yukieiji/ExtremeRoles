@@ -27,7 +27,7 @@ public sealed class LiberalInfoModel : IInfoOverlayPanelModel
 	public (string, string) GetInfoText()
 	{
 		this.printOption.Clear();
-		var liberalSetting = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptipnLoader>();
+		var liberalSetting = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
 
 		this.printOption.AppendLine(liberalSetting.RoleSpawnSetting);
 

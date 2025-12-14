@@ -20,7 +20,7 @@ public sealed class DoveCommonAbilityHandler
 	private readonly int normalTask;
 	private readonly int allTaskNum;
 
-	public DoveCommonAbilityHandler(LiberalDefaultOptipnLoader option) : this(
+	public DoveCommonAbilityHandler(LiberalDefaultOptionLoader option) : this(
 		option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.TaskCompletedMoney),
 		0.0f)
 	{
@@ -89,7 +89,7 @@ public sealed class DoveCommonAbilityHandler
 
 public static class LiberalSettingOverrider
 {
-	public static void OverrideDefault(SingleRoleBase role, LiberalDefaultOptipnLoader option)
+	public static void OverrideDefault(SingleRoleBase role, LiberalDefaultOptionLoader option)
 	{
 		role.IsApplyEnvironmentVision = false;
 		role.UseVent = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.UseVent);

@@ -78,7 +78,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 		// リベラル役職には全部グローバル設定を見やすいように追加しておく
 		if (role.IsLiberal())
 		{
-			var liberalSetting = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptipnLoader>();
+			var liberalSetting = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
 			this.builder.AppendLine(liberalSetting.RoleSpawnSetting);
 			foreach (var target in liberalSetting.GlobalOption)
 			{
@@ -90,7 +90,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 				ExtremeRoleId.Dove or
 				ExtremeRoleId.Militant)
 		{
-			var liberalSetting = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptipnLoader>();
+			var liberalSetting = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
 			var targets = id switch
 			{ 
 				ExtremeRoleId.Leader => liberalSetting.LeaderOption,

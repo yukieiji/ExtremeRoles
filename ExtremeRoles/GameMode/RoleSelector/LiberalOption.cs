@@ -51,7 +51,7 @@ public enum LiberalGlobalSetting
 	MilitantKillRange,
 }
 
-public sealed class LiberalDefaultOptipnLoader : IOptionLoader
+public sealed class LiberalDefaultOptionLoader : IOptionLoader
 {
 	public IReadOnlyList<IOption> GlobalOption { get; }
 	public IReadOnlyList<IOption> LeaderOption { get; }
@@ -77,7 +77,7 @@ public sealed class LiberalDefaultOptipnLoader : IOptionLoader
 		}
 	}
 
-	public LiberalDefaultOptipnLoader()
+	public LiberalDefaultOptionLoader()
 	{
 		if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.LiberalSetting, out var category))
 		{

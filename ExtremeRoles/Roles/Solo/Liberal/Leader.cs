@@ -24,7 +24,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Roles.Solo.Liberal;
 
-public sealed class LeaderCoreOption(LiberalDefaultOptipnLoader option)
+public sealed class LeaderCoreOption(LiberalDefaultOptionLoader option)
 {
 	public bool IsAutoExit { get; } = option.TryGet(LiberalGlobalSetting.IsAutoExitWhenLeaderSolo, out var autoExitSetting) &&
 		autoExitSetting.IsViewActive && autoExitSetting.Value<bool>();
@@ -140,7 +140,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	public Leader(
 		LeaderVisual visual,
 		LeaderCoreOption leaderCoreOption,
-		LiberalDefaultOptipnLoader option,
+		LiberalDefaultOptionLoader option,
 		LeaderStatus status) : base(
 		RoleCore.BuildLiberal(
 			ExtremeRoleId.Leader,

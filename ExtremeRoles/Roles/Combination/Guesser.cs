@@ -101,7 +101,7 @@ public sealed class Guesser :
 				{ExtremeRoleType.Liberal , new List<ExtremeRoleId>() },
 			};
 
-			var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptipnLoader>();
+			var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
 			bool liberalOn = liberalOption.Get(LiberalGlobalSetting.WinMoney).IsViewActive;
 			bool militantOn = liberalOption.Get(LiberalGlobalSetting.LiberalMilitantMini).IsViewActive;
 
