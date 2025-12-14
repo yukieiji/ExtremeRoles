@@ -7,7 +7,7 @@ public sealed class EchoAssetLoadRunner
 {
 	public override IEnumerator Run()
 	{
-		Log.LogInfo($"----- Unit:EchAssetLoad Test -----");
+		Log.LogInfo($"----- Unit:EchoAssetLoad Test -----");
 
 		LoadFromExR(ExtremeRoleId.Echo);
 		yield break;
