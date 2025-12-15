@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -12,8 +12,9 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Migrator;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 
 #nullable enable
@@ -96,8 +97,8 @@ public static class CustomOptionCsvProcessor
 						csv.WriteLine(
 							string.Format("{1}{0}{2}{0}{3}{0}{4}",
 								comma,
-								cleaner.Clean(option.Title),
-								cleaner.Clean(option.ValueString),
+								cleaner.Clean(option.TransedTitle),
+								cleaner.Clean(option.TransedValue),
 								cleaner.Clean(info.Name),
 								option.Selection));
 					}

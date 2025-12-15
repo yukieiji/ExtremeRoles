@@ -45,12 +45,16 @@ public sealed class TagPainter(string[] tags)
 
 public sealed class SummaryTextBuilder
 {
+	public bool IsTabEmpty => this.builder.Length <= this.initSize;
+
 	private readonly StringBuilder builder = new StringBuilder();
+	private readonly int initSize;
 	public SummaryTextBuilder(string headerKey)
 	{
 		this.builder.AppendLine(
 			Tr.GetString("summaryText"));
 		this.builder.AppendLine(Tr.GetString(headerKey));
+		this.initSize = this.builder.Length;
 	}
 
 	public override string ToString()
@@ -81,6 +85,7 @@ public sealed class FinalSummary : MonoBehaviour
 	{
 		Role,
 		RoleHistory,
+		LiberalMoneyHistory,
 		GhostRole
 	}
 
@@ -202,12 +207,22 @@ public sealed class FinalSummary : MonoBehaviour
 			using var historyBuilder = RoleHistoryContainer.CreateBuiler(roleHistorySummary);
 			historyBuilder.Build(sorted);
 		}
+		if (finalSummary.TryGetValue(SummaryType.LiberalMoneyHistory, out var liberalHistory) &&
+			liberalHistory is not null)
+		{
+			using var liberalBuilder = LiberalMoneyHistory.CreateBuiler(liberalHistory);
+			liberalBuilder.Build(sorted);
+		}
 
 		int allSummary = finalSummary.Count;
 		int page = 0;
 
 		foreach (var builder in finalSummary.Values)
 		{
+			if (builder.IsTabEmpty)
+			{
+				continue;
+			}
 			++page;
 			builder.AppendFooter(page, allSummary);
 			this.summaryText.Add(builder.ToString());
@@ -263,6 +278,7 @@ public sealed class FinalSummary : MonoBehaviour
 		{
 			{ SummaryType.Role, new SummaryTextBuilder("roleSummaryInfo") },
 			{ SummaryType.RoleHistory, new SummaryTextBuilder("roleHistorySummary") },
+			{ SummaryType.LiberalMoneyHistory, new SummaryTextBuilder("liberalMoneySummaryInfo") },
 			{ SummaryType.GhostRole, new SummaryTextBuilder("ghostRoleSummaryInfo") },
 		};
 

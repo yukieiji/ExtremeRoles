@@ -3,17 +3,16 @@ using System;
 using UnityEngine;
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Helper;
+using TMPro;
 
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Roles.Solo.Liberal;
 using ExtremeRoles.Performance.Il2Cpp;
-
-using TMPro;
-
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -89,13 +88,18 @@ public sealed class Shooter :
     {
         byte target = instance.TargetPlayerId;
 
-        return
-            this.curShootNum <= 0 ||
-            !(
-                this.shootCounter < this.maxMeetingShootNum &&
-                this.canShootThisMeeting
-            ) ||
-            ExtremeRoleManager.GameRole[target].Core.Id == ExtremeRoleId.Assassin;
+		return
+			this.curShootNum <= 0 ||
+			!(
+				this.shootCounter < this.maxMeetingShootNum &&
+				this.canShootThisMeeting
+			) ||
+			(
+				ExtremeRoleManager.TryGetRole(target, out var role) && (
+					role.Core.Id is ExtremeRoleId.Assassin || 
+					(role.AbilityClass is LeaderAbilityHandler leaderAbility && leaderAbility.IsBlockKill)
+				)
+			);
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
@@ -383,24 +387,25 @@ public sealed class Shooter :
 
         factory.CreateBoolOption(
             ShooterOption.CanShootSelfCallMeeting,
-            true, meetingOps,
-            invert: true);
+            true, new InvertActive(meetingOps));
 
         var maxShootOps = factory.CreateIntOption(
            ShooterOption.MaxShootNum,
            1, 1, 14, 1,
            format: OptionUnit.Shot);
 
-        var initShootOps = factory.CreateIntDynamicOption(
+        var initShootOps = factory.CreateIntDynamicMaxOption(
             ShooterOption.InitShootNum,
             0, 0, 1,
-            format: OptionUnit.Shot,
+			maxShootOps,
+			format: OptionUnit.Shot,
             tempMaxValue: 14);
 
-        var maxMeetingShootOps = factory.CreateIntDynamicOption(
+        var maxMeetingShootOps = factory.CreateIntDynamicMaxOption(
             ShooterOption.MaxMeetingShootNum,
             1, 1, 1,
-            format: OptionUnit.Shot,
+			maxShootOps,
+			format: OptionUnit.Shot,
             tempMaxValue: 14);
 
         factory.CreateFloatOption(
@@ -411,10 +416,6 @@ public sealed class Shooter :
             ShooterOption.ShootKillNum,
             1, 0, 5, 1,
             format: OptionUnit.Shot);
-
-        maxShootOps.AddWithUpdate(initShootOps);
-        maxShootOps.AddWithUpdate(maxMeetingShootOps);
-
     }
 
     protected override void RoleSpecificInit()

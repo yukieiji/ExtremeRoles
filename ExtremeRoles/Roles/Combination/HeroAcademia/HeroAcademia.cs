@@ -17,8 +17,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Roles.Combination.Avalon;
 
 
 
@@ -614,13 +614,13 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 
     public bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
-        Assassin? assassin = ExtremeRoleManager.GameRole[targetPlayer.PlayerId] as Assassin;
+		byte rolePlayerId = rolePlayer.PlayerId;
 
-        if (assassin != null && 
-			assassin.Status is AssassinStatusModel status &&
-			!status.CanKilledFromCrew)
-        {
-            Player.RpcUncheckMurderPlayer(
+		if (ExtremeRoleManager.TryGetRole(rolePlayerId, out var role) &&
+			role.AbilityClass is IInvincible invincible &&
+			invincible.IsBlockKillFrom(rolePlayerId))
+		{
+			Player.RpcUncheckMurderPlayer(
                 rolePlayer.PlayerId,
                 rolePlayer.PlayerId,
                 byte.MaxValue);
@@ -918,7 +918,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
     {
         switch (this.Condition)
         {

@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Host;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 

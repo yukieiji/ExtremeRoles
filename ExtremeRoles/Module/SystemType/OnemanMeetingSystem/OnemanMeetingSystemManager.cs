@@ -37,6 +37,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 	public static bool IsActive
 		=> ExtremeSystemTypeManager.Instance.TryGet<OnemanMeetingSystemManager>(systemType, out var system) &&
 		system.meeting is not null;
+	public bool IsSkipButtonActive => this.meeting is not null && this.meeting.SkipButtonActive;
 
 	private const ExtremeSystemType systemType = ExtremeSystemType.OnemanMeetingSystem;
 
@@ -48,7 +49,8 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 	public enum Type
 	{
 		Assassin,
-		Monika
+		Monika,
+		CEO
 	}
 
 	public static OnemanMeetingSystemManager CreateOrGet()
@@ -341,6 +343,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		{
 			Type.Assassin => new AssassinAssassinateTargetMeeting(),
 			Type.Monika => new MonikaLoveTargetMeeting(),
+			Type.CEO => new CEOForceMeeting(),
 			_ => null,
 		};
 

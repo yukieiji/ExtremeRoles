@@ -7,13 +7,11 @@ using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.GameMode;
+
+using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.GameMode;
-using ExtremeRoles.Extension;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Event;
 
 
 #nullable enable
@@ -26,11 +24,9 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	public readonly static OptionManager Instance = new ();
 
 	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
+	private readonly Dictionary<string, List<IOption>> children = new ();
 
-	public string ConfigPreset
-	{
-		get => $"Preset:{selectedPreset}";
-	}
+	public string ConfigPreset => $"Preset:{selectedPreset}";
 	private int selectedPreset = 0;
 	private const int skipStep = 10;
 
@@ -96,50 +92,16 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		return this.TryGetTab(tab, out var container) && container.TryGetCategory(categoryId, out category) && category is not null;
 	}
 
-	public static OptionCategoryFactory CreateOptionCategory(
-		int id,
-		string name,
-		in OptionTab tab = OptionTab.GeneralTab,
-		Color? color = null)
-		=> new OptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
-
-	public static OptionCategoryFactory CreateOptionCategory<T>(
-		T option,
-		in OptionTab tab = OptionTab.GeneralTab,
-		Color? color = null) where T : Enum
-		=> CreateOptionCategory(
-			option.FastInt(),
-			option.ToString(), tab, color);
-
-	public static SequentialOptionCategoryFactory CreateSequentialOptionCategory(
-		int id,
-		string name,
-		in OptionTab tab = OptionTab.GeneralTab,
-		Color? color = null)
-		=> new SequentialOptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
-
-	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
-		int id,
-		string name,
-		in OptionTab tab,
-		Color? color = null,
-		in IOption? parent = null)
+	public bool TryGetChild(IOption option, [NotNullWhen(true)] out IReadOnlyList<IOption>? child)
 	{
-		var internalFactory = CreateOptionCategory(id, name, tab, color);
-		var factory = new AutoParentSetOptionCategoryFactory(internalFactory, parent);
-
-		return factory;
+		if (!this.children.TryGetValue(option.Info.CodeRemovedName, out var c))
+		{
+			child = null;
+			return false;
+		}
+		child = c;
+		return true;
 	}
-
-	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
-		T option,
-		in OptionTab tab = OptionTab.GeneralTab,
-		Color? color = null,
-		in IOption? parent = null) where T : Enum
-		=> CreateAutoParentSetOptionCategory(
-			option.FastInt(),
-			option.ToString(),
-			tab, color, parent);
 
 	public void UpdateToStep(in OptionCategory category, in int id, int step)
 	{
@@ -170,22 +132,29 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	public void Update(in OptionCategory category, in IOption option, int newIndex)
 	{
 		option.Selection = newIndex;
-
-		int id = option.Info.Id;
-		if (PresetOption.IsPreset(category.Id, id))
-		{
-			this.selectedPreset = newIndex;
-
-			// プリセット切り替え
-			switchPreset();
-			ShereAllOption();
-		}
-		else
+		if (!PresetOption.IsPreset(category.Id, option.Info.Id))
 		{
 			shareOptionCategory(category);
 			category.IsDirty = true;
 		}
 		EventManager.Instance.Invoke(ModEvent.OptionUpdate);
+	}
+
+	public void SwitchPreset(int targetPreset)
+	{
+		this.selectedPreset = targetPreset;
+		foreach (var tab in this.options.Values)
+		{
+			foreach (var category in tab.Category)
+			{
+				foreach (var option in category.Options)
+				{
+					option.SwitchPreset();
+				}
+				category.IsDirty = true;
+			}
+		}
+		ShereAllOption();
 	}
 
 	public void ShereAllOption()
@@ -199,13 +168,25 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		}
 	}
 
-	private void registerOptionGroup(OptionTab tab, OptionCategory group)
+	public void RegisterOptionGroup(OptionTab tab, OptionCategory group)
 	{
 		if (!this.options.TryGetValue(tab, out var container))
 		{
 			throw new ArgumentException($"Tab {tab} is not registered.");
 		}
 		container.AddGroup(group);
+	}
+
+	public void RegisterChild(IOption parent, IOption child)
+	{
+		string key = parent.Info.CodeRemovedName;
+		if (!this.children.TryGetValue(key, out var allChild) ||
+			allChild is null)
+		{
+			allChild = [];
+			this.children[key] = allChild;
+		}
+		allChild.Add(child);
 	}
 
 	private static void shareOptionCategory(
@@ -269,20 +250,22 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			{
 				int id = reader.ReadPackedInt32();
 				int selection = reader.ReadPackedInt32();
-				if (!category.TryGet(id, out var option))
+				if (!category.TryGet(id, out var option) ||
+					option.Selection == selection)
 				{
 					continue;
 				}
+
 				int curSelection = option.Selection;
 				option.Selection = selection;
 
 				// 値が変更されたのでポップアップ通知
-				if (isShow && curSelection != option.Selection)
+				if (isShow)
 				{
 					string showStr = Tr.GetString(
 						"OptionSettingChange",
 						tabName, category.TransedName,
-						option.Title, option.ValueString);
+						option.TransedTitle, option.TransedValue);
 
 					HudManager.Instance.Notifier.SettingsChangeMessageLogic(
 						key, string.Format(OptionChangeFontPlace, showStr),
@@ -291,21 +274,6 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 				}
 			}
 			category.IsDirty = true;
-		}
-	}
-
-	private void switchPreset()
-	{
-		foreach (var tab in this.options.Values)
-		{
-			foreach (var category in tab.Category)
-			{
-				foreach (var option in category.Options)
-				{
-					option.SwitchPreset();
-				}
-				category.IsDirty = true;
-			}
 		}
 	}
 }

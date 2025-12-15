@@ -1,13 +1,14 @@
-using UnityEngine;
-
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using UnityEngine;
+
 
 #nullable enable
 
@@ -42,7 +43,7 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 	public void ModifiedWinPlayer(
 		NetworkedPlayerInfo rolePlayerInfo,
 		GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
 	{
 		switch (reason)
 		{
@@ -118,12 +119,14 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 			Option.UseVent, false);
 		var taskOpt = factory.CreateBoolOption(
 			Option.HasTask, false);
+		var taskOptActive = new ParentActive(taskOpt);
+
 		factory.CreateIntOption(
 			Option.SeeQueenTaskRate, 50, 0, 100, 10,
-			taskOpt, format: OptionUnit.Percentage);
+			taskOptActive, format: OptionUnit.Percentage);
 
-		factory.CreateBoolOption(Option.CanKillQueen, true, taskOpt);
-		factory.CreateBoolOption(Option.CanKillServant, true, taskOpt);
+		factory.CreateBoolOption(Option.CanKillQueen, true, taskOptActive);
+		factory.CreateBoolOption(Option.CanKillServant, true, taskOptActive);
 	}
 
 	protected override void RoleSpecificInit()

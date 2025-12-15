@@ -1,10 +1,9 @@
 using HarmonyLib;
 
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -18,7 +17,8 @@ public static class PlayerControlExiledPatch
 	{
 		if (!(
 				GameProgressSystem.IsGameNow &&
-				 ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var exiledPlayerRole)
+				 ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var exiledPlayerRole) &&
+				 __instance.Data.IsDead
 			))
 		{
 			return;

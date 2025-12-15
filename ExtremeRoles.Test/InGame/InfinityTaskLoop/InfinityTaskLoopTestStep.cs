@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
 
-using AmongUs.GameOptions;
-
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
@@ -81,6 +81,11 @@ public sealed class InfinityTaskLoopTestStep() : TestStepBase
 					yield return new WaitForSeconds(10.0f);
 				}
 
+				if (!GameProgressSystem.IsRoleSetUpEnd)
+				{
+					yield return new WaitForSeconds(1.0f);
+				}
+
 				noTask = !(ExtremeRoleManager.TryGetRole(PlayerControl.LocalPlayer.PlayerId, out var role) && role.IsCrewmate());
 
 				if (noTask)
@@ -106,7 +111,7 @@ public sealed class InfinityTaskLoopTestStep() : TestStepBase
 			var player = PlayerCache.AllPlayerControl.OrderBy(x => RandomGenerator.Instance.Next()).First();
 			if (!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
 				player.Data.IsDead ||
-				role.Core.Id is ExtremeRoleId.Assassin)
+				role.Core.Id is ExtremeRoleId.Assassin or ExtremeRoleId.Leader)
 			{
 				continue;
 			}

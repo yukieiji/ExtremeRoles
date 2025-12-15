@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+using AmongUs.GameOptions;
 using UnityEngine;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface.Ability;
+using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Roles.Solo.Host;
-using ExtremeRoles.Module.SystemType.Roles;
-using AmongUs.GameOptions;
 
 
 namespace ExtremeRoles.Helper;
@@ -487,7 +487,7 @@ public static class Player
 			!targetPlayer.Object.onLadder &&
 			ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
             !role.IsSameTeam(targetRole) &&
-			!MonikaTrashSystem.InvalidTarget(targetRole, sourcePlayerId)
+			(targetRole.AbilityClass is not IInvincible invincible || invincible.IsValidAbilitySource(sourcePlayerId))
         );
     }
 }

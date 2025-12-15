@@ -1,3 +1,4 @@
+using System.Text;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -9,8 +10,6 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
@@ -42,6 +41,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         private HashSet<byte> bytedBuddy = new HashSet<byte>();
 
         public HashSet<NetworkedPlayerInfo> PlayerInfo => this.buddy;
+		private readonly StringBuilder builder = new StringBuilder();
 
         public BuddyContainer()
         {
@@ -51,7 +51,8 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
 
         public string GetAllPlayerName()
         {
-            List<string> playerName = new List<string>();
+			this.builder.Clear();
+			int count = 0;
 
             foreach (NetworkedPlayerInfo player in this.PlayerInfo)
             {
@@ -59,20 +60,19 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
                 {
                     continue;
                 }
-
-                int count = playerName.Count;
                 if (count > 1)
                 {
-                    playerName.Add(Tr.GetString("andFirst"));
+					this.builder.Append(Tr.GetString("and"));
                 }
                 else if (count == 1)
                 {
-                    playerName.Add(Tr.GetString("and"));
-                }
-                playerName.Add(player.PlayerName);
+					this.builder.Append(Tr.GetString("andFirst"));
+				}
+				this.builder.Append(player.PlayerName);
+				count++;
             }
-            return string.Concat(playerName);
-        }
+            return this.builder.ToString();
+		}
 
         public bool Contains(NetworkedPlayerInfo player) => this.buddy.Contains(player);
 

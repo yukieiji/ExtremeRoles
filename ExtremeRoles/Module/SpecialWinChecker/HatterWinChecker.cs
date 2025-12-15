@@ -1,4 +1,5 @@
-﻿using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.GameEnd;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -25,6 +26,7 @@ internal sealed class HatterWinChecker : IWinChecker
 		{
 			killerPlayer += num;
 		}
+		killerPlayer += statistics.LiberalMilitantAlive;
 
 		int otherPlayerNum = statistics.TotalAlive - killerPlayer - this.hatterAliveNum;
 

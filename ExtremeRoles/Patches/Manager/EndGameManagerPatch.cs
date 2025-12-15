@@ -7,18 +7,18 @@ using AmongUs.GameOptions;
 
 using HarmonyLib;
 
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.GameMode;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 
 using Il2CppArray = Il2CppSystem.Array;
 using Il2CppObject = Il2CppSystem.Object;
-using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -301,7 +301,7 @@ public static class EndGameManagerSetUpPatch
             (RoleGameOverReason)GameOverReason.CrewmatesByTask or
             (RoleGameOverReason)GameOverReason.CrewmatesByVote or
             (RoleGameOverReason)GameOverReason.HideAndSeek_CrewmatesByTimer =>
-                WinTextInfo.Create(RoleTypes.Crewmate, Palette.White, false),
+                new(RoleTypes.Crewmate, Palette.White, false),
 
             (RoleGameOverReason)GameOverReason.ImpostorsByKill or
             (RoleGameOverReason)GameOverReason.ImpostorsByVote or
@@ -309,96 +309,94 @@ public static class EndGameManagerSetUpPatch
             (RoleGameOverReason)GameOverReason.HideAndSeek_ImpostorsByKills or
             RoleGameOverReason.AssassinationMarin or
 			RoleGameOverReason.TeroristoTeroWithShip =>
-                WinTextInfo.Create(RoleTypes.Impostor, Palette.ImpostorRed, false),
+                new(RoleTypes.Impostor, Palette.ImpostorRed, false),
 
             RoleGameOverReason.AliceKilledByImposter or
             RoleGameOverReason.AliceKillAllOther =>
-                WinTextInfo.Create(ExtremeRoleId.Alice, ColorPalette.AliceGold),
+                new(ExtremeRoleId.Alice, ColorPalette.AliceGold),
 
             RoleGameOverReason.JackalKillAllOther =>
-                WinTextInfo.Create(ExtremeRoleId.Jackal, ColorPalette.JackalBlue),
+                new(ExtremeRoleId.Jackal, ColorPalette.JackalBlue),
 
             RoleGameOverReason.TaskMasterGoHome =>
-                WinTextInfo.Create(ExtremeRoleId.TaskMaster, ColorPalette.NeutralColor),
+                new(ExtremeRoleId.TaskMaster, ColorPalette.NeutralColor),
 
             RoleGameOverReason.MissionaryAllAgainstGod =>
-                WinTextInfo.Create(ExtremeRoleId.Missionary, ColorPalette.MissionaryBlue),
+                new(ExtremeRoleId.Missionary, ColorPalette.MissionaryBlue),
 
             RoleGameOverReason.JesterMeetingFavorite =>
-                WinTextInfo.Create(ExtremeRoleId.Jester, ColorPalette.JesterPink),
+                new(ExtremeRoleId.Jester, ColorPalette.JesterPink),
 
             RoleGameOverReason.LoverKillAllOther or
             RoleGameOverReason.ShipFallInLove =>
-                WinTextInfo.Create(ExtremeRoleId.Lover, ColorPalette.LoverPink),
+                new(ExtremeRoleId.Lover, ColorPalette.LoverPink),
 
             RoleGameOverReason.YandereKillAllOther =>
-                WinTextInfo.Create(
-                    ExtremeRoleId.Yandere, ColorPalette.YandereVioletRed),
+                new(ExtremeRoleId.Yandere, ColorPalette.YandereVioletRed),
             RoleGameOverReason.YandereShipJustForTwo =>
-                WinTextInfo.Create(
-                    RoleGameOverReason.YandereShipJustForTwo, ColorPalette.YandereVioletRed),
+                new(RoleGameOverReason.YandereShipJustForTwo, ColorPalette.YandereVioletRed),
 
             RoleGameOverReason.VigilanteKillAllOther or
             RoleGameOverReason.VigilanteNewIdealWorld =>
-                WinTextInfo.Create(ExtremeRoleId.Vigilante, ColorPalette.VigilanteFujiIro),
+                new(ExtremeRoleId.Vigilante, ColorPalette.VigilanteFujiIro),
 
             RoleGameOverReason.YokoAllDeceive =>
-                WinTextInfo.Create(ExtremeRoleId.Yoko, ColorPalette.YokoShion),
+                new(ExtremeRoleId.Yoko, ColorPalette.YokoShion),
 
             RoleGameOverReason.MinerExplodeEverything =>
-                WinTextInfo.Create(ExtremeRoleId.Miner, ColorPalette.MinerIvyGreen),
+                new(ExtremeRoleId.Miner, ColorPalette.MinerIvyGreen),
 
             RoleGameOverReason.EaterAllEatInTheShip or
             RoleGameOverReason.EaterAliveAlone =>
-                WinTextInfo.Create(ExtremeRoleId.Eater, ColorPalette.EaterMaroon),
-
+                new(ExtremeRoleId.Eater, ColorPalette.EaterMaroon),
+				
             RoleGameOverReason.TraitorKillAllOther =>
-                WinTextInfo.Create(ExtremeRoleId.Traitor, ColorPalette.TraitorLightShikon),
+                new(ExtremeRoleId.Traitor, ColorPalette.TraitorLightShikon),
 
             RoleGameOverReason.QueenKillAllOther =>
-                WinTextInfo.Create(ExtremeRoleId.Queen, ColorPalette.QueenWhite),
+                new(ExtremeRoleId.Queen, ColorPalette.QueenWhite),
 
             RoleGameOverReason.UmbrerBiohazard =>
-                WinTextInfo.Create(ExtremeRoleId.Umbrer, ColorPalette.UmbrerRed),
+                new(ExtremeRoleId.Umbrer, ColorPalette.UmbrerRed),
 
             RoleGameOverReason.KidsTooBigHomeAlone or
             RoleGameOverReason.KidsAliveAlone =>
-                WinTextInfo.Create(ExtremeRoleId.Delinquent, ColorPalette.KidsYellowGreen),
+                new(ExtremeRoleId.Delinquent, ColorPalette.KidsYellowGreen),
 
 			RoleGameOverReason.HatterEndlessTeaTime or
 			RoleGameOverReason.HatterTeaPartyTime =>
-				WinTextInfo.Create(ExtremeRoleId.Hatter, ColorPalette.HatterYanagizome),
+				new(ExtremeRoleId.Hatter, ColorPalette.HatterYanagizome),
 
 			RoleGameOverReason.ArtistShipToArt =>
-				WinTextInfo.Create(ExtremeRoleId.Artist, ColorPalette.ArtistChenChuWhowan),
+				new(ExtremeRoleId.Artist, ColorPalette.ArtistChenChuWhowan),
 
 			RoleGameOverReason.TuckerShipIsExperimentStation =>
-				WinTextInfo.Create(ExtremeRoleId.Tucker, ColorPalette.TuckerMerdedoie),
+				new(ExtremeRoleId.Tucker, ColorPalette.TuckerMerdedoie),
 
 			RoleGameOverReason.MonikaIamTheOnlyOne or
 				RoleGameOverReason.MonikaThisGameIsMine =>
-				WinTextInfo.Create(ExtremeRoleId.Monika, ColorPalette.MonikaRoseSaumon),
+				new(ExtremeRoleId.Monika, ColorPalette.MonikaRoseSaumon),
 
 			RoleGameOverReason.AllJackalWin =>
-				WinTextInfo.Create(
-					RoleGameOverReason.AllJackalWin, ColorPalette.JackalBlue),
+				new(RoleGameOverReason.AllJackalWin, ColorPalette.JackalBlue),
 			RoleGameOverReason.AllYandereWin =>
-				WinTextInfo.Create(
-					RoleGameOverReason.AllYandereWin, ColorPalette.YandereVioletRed),
+				new(RoleGameOverReason.AllYandereWin, ColorPalette.YandereVioletRed),
 			RoleGameOverReason.AllQueenWin =>
-				WinTextInfo.Create(
-					RoleGameOverReason.AllQueenWin, ColorPalette.QueenWhite),
+				new(RoleGameOverReason.AllQueenWin, ColorPalette.QueenWhite),
 
-			_ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
+
+			RoleGameOverReason.LiberalRevolution =>
+				new(ExtremeRoleType.Liberal, ColorPalette.LiberalColor),
+
+			_ => new(RoleGameOverReason.UnKnown, Color.black)
         };
 
-    private readonly record struct WinTextInfo(string Text, Color Color, bool IsChangeBk)
-    {
-        internal static WinTextInfo Create(
-            in System.Enum textEnum, Color color,
-			in bool isChangeBk = true)
-			=> new WinTextInfo(
-				Tr.GetString(textEnum.ToString()),
-				color, isChangeBk);
+	private readonly record struct WinTextInfo(string Text, Color Color, bool IsChangeBk)
+	{
+		public WinTextInfo(
+			System.Enum textEnum, Color color, bool isChangeBk = true) :
+			this(Tr.GetString(textEnum.ToString()), color, isChangeBk)
+		{
+		}
 	}
 }

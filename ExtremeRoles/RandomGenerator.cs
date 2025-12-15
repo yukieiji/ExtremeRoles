@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Security.Cryptography;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.PRNG;
 
 

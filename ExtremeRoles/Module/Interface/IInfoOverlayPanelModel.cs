@@ -1,5 +1,4 @@
 using System.Text;
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.Interface;
@@ -9,15 +8,19 @@ public interface IInfoOverlayPanelModel
 	public void UpdateVisual();
 	public (string, string) GetInfoText();
 
-	protected static string ToHudStringWithChildren(IOption option, int indent = 0)
+	protected static void AddHudStringWithChildren(StringBuilder builder, IOption option, int indent = -1)
 	{
-		var builder = new StringBuilder();
-		if (!option.Info.IsHidden && option.IsActiveAndEnable)
+		if (option.IsViewActive)
 		{
 			builder.AppendLine(toHudString(option));
 		}
-
 		addChildrenOptionHudString(builder, option, indent + 1);
+	}
+
+	protected static string ToHudStringWithChildren(IOption option, int indent = 0)
+	{
+		var builder = new StringBuilder();
+		AddHudStringWithChildren(builder, option, indent);
 		return builder.ToString();
 	}
 
@@ -26,18 +29,28 @@ public interface IInfoOverlayPanelModel
 		IOption parentOption,
 		int prefixIndentCount)
 	{
-		foreach (var child in parentOption.Relation.Children)
+		if (!OptionManager.Instance.TryGetChild(parentOption, out var child))
 		{
-			if (!child.Info.IsHidden && child.IsActiveAndEnable)
+			return;
+		}
+		string indent = new string(' ', prefixIndentCount * 4);
+		foreach (var option in child)
+		{
+			if (option.IsViewActive)
 			{
-				builder.Append(' ', prefixIndentCount * 4);
-				builder.AppendLine(toHudString(child));
+				builder.Append(indent);
+
+				string text = toHudString(option)
+					.TrimEnd('\r', '\n')
+					.Replace("\r\n", "\n")
+					.Replace("\n", $"\n{indent}");
+				builder.AppendLine(text);
 			}
 
-			addChildrenOptionHudString(in builder, child, prefixIndentCount + 1);
+			addChildrenOptionHudString(in builder, option, prefixIndentCount + 1);
 		}
 	}
 
 	private static string toHudString(in IOption option)
-		=> $"{option.Title}: {option.ValueString}";
+		=> $"・{option.TransedTitle}: {option.TransedValue}";
 }

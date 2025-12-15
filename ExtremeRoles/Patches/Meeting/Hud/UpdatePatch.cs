@@ -17,7 +17,7 @@ public static class MeetingHudUpdatePatch
 {
 	public static void Prefix(MeetingHud __instance)
 	{
-		// 探偵の能力をアサマリ会議中非表示に設定
+		// 探偵の能力をアサマリ会議中等に設定
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var _) &&
 			__instance.MeetingAbilityButton != null)
 		{
@@ -130,9 +130,13 @@ public static class MeetingHudUpdatePatch
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
 			system.TryGetMeetingTitle(out string title))
 		{
-			hud.TitleText.text = title;
-			hud.SkipVoteButton.gameObject.SetActive(false);
+
 			var localPlayer = PlayerControl.LocalPlayer;
+			hud.TitleText.text = title;
+			hud.SkipVoteButton.gameObject.SetActive(
+				system.IsSkipButtonActive && 
+				system.Caller == localPlayer.PlayerId &&
+				hud.state == MeetingHud.VoteStates.NotVoted);
 
 			HudManager.Instance.Chat.gameObject.SetActive(
 				(

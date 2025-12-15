@@ -26,7 +26,7 @@ public static class PlayerControlSetKillTimernPatch
 		}
 
 		float killCool = PlayerHelper.DefaultKillCoolTime;
-		if (killCool <= 0f || !role.CanKill())
+		if (killCool <= 0f)
 		{
 			return false;
 		}

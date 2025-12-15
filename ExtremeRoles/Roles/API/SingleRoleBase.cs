@@ -6,6 +6,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -97,6 +98,9 @@ public abstract partial class SingleRoleBase : RoleOptionBase
                     break;
                 case ExtremeRoleType.Neutral:
                     this.Tab = OptionTab.NeutralTab;
+                    break;
+                case ExtremeRoleType.Liberal:
+                    // this.Tab = OptionTab.LiberalTab;
                     break;
                 default:
                     this.Tab = OptionTab.GeneralTab;

@@ -157,7 +157,10 @@ public static class GameSystem
 				player.Tasks == null ||
 				player.Object == null ||
 				(
-					player.IsDead && !GameManager.Instance.LogicOptions.GetGhostsDoTasks()
+					player.IsDead && 
+					GameManager.Instance != null && 
+					GameManager.Instance.LogicOptions != null && 
+					!GameManager.Instance.LogicOptions.GetGhostsDoTasks()
 				) ||
 				player.Role == null ||
 				!player.Role.TasksCountTowardProgress ||

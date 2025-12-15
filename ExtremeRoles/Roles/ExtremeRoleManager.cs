@@ -4,9 +4,12 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
 using AmongUs.GameOptions;
+using Microsoft.Extensions.DependencyInjection;
+
 
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -32,6 +35,7 @@ using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using ExtremeRoles.Roles.Solo.Neutral.Yoko;
+
 
 namespace ExtremeRoles.Roles;
 
@@ -91,6 +95,8 @@ public enum ExtremeRoleId : int
 	Summoner,
 	Exorcist,
 	Loner,
+	CEO,
+	Echo,
 
 	SpecialImpostor,
     Evolver,
@@ -156,6 +162,10 @@ public enum ExtremeRoleId : int
 	Surrogator,
 	Knight,
 	Pawn,
+
+	Leader,
+	Dove,
+	Militant,
 
 	Xion,
 }
@@ -237,6 +247,8 @@ public enum RoleGameOverReason
 	AllYandereWin,
 	AllQueenWin,
 
+	LiberalRevolution,
+
 	UnKnown = 100,
 }
 
@@ -313,6 +325,8 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Summoner    , new Summoner()},
 			{(int)ExtremeRoleId.Exorcist    , new ExorcistRole()},
 			{(int)ExtremeRoleId.Loner       , new LonerRole()},
+			{(int)ExtremeRoleId.CEO         , new CEO()},
+			{(int)ExtremeRoleId.Echo        , new Echo()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -372,7 +386,6 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Surrogator, new SurrogatorRole()},
 			{(int)ExtremeRoleId.Knight    , new KnightRole()},
 			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
-
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
@@ -419,6 +432,8 @@ public static class ExtremeRoleManager
 		RemoveChimera,
 		RebornJackal,
 	}
+
+	private static IRoleProvider? provider;
 
 	public static int GetRoleGroupId(ExtremeRoleId roleId)
 		=> RoleCategoryIdOffset + (int)roleId;
@@ -535,15 +550,22 @@ public static class ExtremeRoleManager
 
         if (!Enum.IsDefined(typeof(RoleTypes), Convert.ToUInt16(roleId)))
         {
-            SingleRoleBase role;
-            if (roleId != (int)ExtremeRoleId.Xion)
+            if (!NormalRole.TryGetValue(roleId, out var role) ||
+				role is null)
             {
-                role = NormalRole[roleId];
-            }
-            else
-            {
-                role = new Xion(playerId);
-            }
+				if (
+					roleId == (int)ExtremeRoleId.Leader ||
+					roleId == (int)ExtremeRoleId.Dove ||
+					roleId == (int)ExtremeRoleId.Militant)
+				{
+					setPlyerIdToSingleRoleFromProvidoer(playerId, roleId, controlId);
+					return;
+				}
+				else
+				{
+					role = new Xion(playerId);
+				}
+			}
 
             setPlyerIdToSingleRole(playerId, role, controlId);
         }
@@ -640,11 +662,46 @@ public static class ExtremeRoleManager
 
     public static void SetNewAnothorRole(byte playerId, SingleRoleBase newRole)
     {
-        ((MultiAssignRoleBase)GameRole[playerId]).SetAnotherRole(newRole);
-        ExtremeRolesPlugin.ShipState.AddGlobalActionRole(newRole);
-    }
+		lock (GameRole)
+		{
+			((MultiAssignRoleBase)GameRole[playerId]).SetAnotherRole(newRole);
+			ExtremeRolesPlugin.ShipState.AddGlobalActionRole(newRole);
+		}
+		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
+	}
 
-    private static void setPlyerIdToSingleRole(
+	private static void setPlyerIdToSingleRoleFromProvidoer(
+		byte playerId, int roleId, int controlId)
+	{
+		if (provider is null)
+		{
+			provider = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleProvider>();
+		}
+		var role = provider.Get((ExtremeRoleId)roleId);
+
+		role.SetControlId(controlId);
+
+		if (!GameRole.ContainsKey(playerId))
+		{
+			SetNewRole(playerId, role);
+		}
+		else
+		{
+			SetNewAnothorRole(playerId, role);
+
+			if (TryGetRole(playerId, out var existRole) &&
+				existRole is IRoleAbility multiAssignAbilityRole &&
+				PlayerControl.LocalPlayer.PlayerId == playerId &&
+				multiAssignAbilityRole.Button != null)
+			{
+				multiAssignAbilityRole.Button.HotKey = UnityEngine.KeyCode.C;
+			}
+		}
+		Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{role.RoleName}");
+	}
+
+
+	private static void setPlyerIdToSingleRole(
         byte playerId, SingleRoleBase role, int controlId)
     {
 

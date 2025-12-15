@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="LeaderFullDescription" xml:space="preserve">
+    <value>タイプ : ドーヴ/ミリタント(設定による)
+タスクを持つ場合はドーヴ
+キルボタンを持つ場合はミリタントとしも扱われる
+
+
+名前の横に現在の資金の状況が表示される
+この役職はリベラルが割り当てられる時、必ず存在する
+この役職はどんな状況下でも「能力の対象」にならない
+この役職は「リーダーへのキル許可」がオフの場合、
+リーダーに対する全てのキルが無効化される
+以下の設定などを行うと挙動が変化する
+    - 「リベラル陣営がリーダー単独時のキル許可」がオンの時、
+　リベラル陣営が「リーダー」一人になったときにリーダーを
+　キルすることが可能になる
+　- 「リベラル陣営がリーダー単独時の自動排除」がオンの時、
+　リベラル陣営が「リーダー」一人になったときに自動的に
+　死亡する。この時、自動復活は行われない
+
+「資金増加率上昇値」とある設定値はリーダーが
+特定の状況になった場合にリベラル陣営全員の資金が
+増加するときの倍率が永続増加する
+　例:　「ミリタント　資金増加率上昇値/1キルあたり」: 5
+　　　「リーダー　資金増加率上昇値/1キルあたり」: 10
+　　　「リーダー　資金ボーナス/1キルあたり」 : 10％
+ 　　　　1. リーダーがキル始めて資金増加率が10％増加し、
+　　　　資金が11(10 * 1.1)増加する。
+　　　　2. その後、リベラルのミリタントがキルすると
+ 　　　　資金が5.5(5×1.1)増加する</value>
+  </data>
+  <data name="LeaderShortDescription" xml:space="preserve">
+    <value>革命の象徴</value>
+  </data>
+  <data name="LeaderIntroDescription" xml:space="preserve">
+    <value>リーダーとしてリベラル陣営を引率せよ</value>
+  </data>
+  <data name="DoveFullDescription" xml:space="preserve">
+    <value>タイプ : ドーヴ
+
+タスクをすることで資金を得ることができる
+タスクは無限に追加される</value>
+  </data>
+  <data name="DoveShortDescription" xml:space="preserve">
+    <value>タスクで革命を成せ</value>
+  </data>
+  <data name="DoveIntroDescription" xml:space="preserve">
+    <value>革命に必要なものは"対話"だ</value>
+  </data>
+  <data name="MilitantFullDescription" xml:space="preserve">
+    <value>タイプ : ミリタント
+
+キルをすることで活動資金を得ることができる</value>
+  </data>
+  <data name="MilitantShortDescription" xml:space="preserve">
+    <value>キルで革命を成せ</value>
+  </data>
+  <data name="MilitantIntroDescription" xml:space="preserve">
+    <value>革命に必要なものは"圧倒的な力"だ</value>
+  </data>
+</root>

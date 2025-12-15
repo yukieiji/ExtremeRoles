@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 using Hazel;
 using TMPro;
 using UnityEngine;
 
 using ExtremeRoles.Extension.Controller;
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
@@ -16,6 +16,8 @@ using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -29,6 +31,19 @@ using UnityObject = UnityEngine.Object;
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
+
+public sealed class ScavengerMapWepenSetIsActive(
+	IOption parent,
+	IOption isRandomInitOpt,
+	IOption isInitWeponOpt) : IOptionActivator
+{
+	public IOption Parent { get; } = parent;
+
+	private readonly IOption isRandomInitOpt = isRandomInitOpt;
+	private readonly IOption isInitWeponOpt = isInitWeponOpt;
+
+	public bool IsActive => Parent.IsActive && (isRandomInitOpt.IsChangeDefault || isInitWeponOpt.IsChangeDefault);
+}
 
 
 public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
@@ -212,7 +227,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				this.prevPlayerPos = rolePlayer.GetTruePosition();
 			}
 
-			if (this.prevPlayerPos.Value != curPos ||
+			if (this.prevPlayerPos.Value.IsNotCloseTo(curPos, 0.1f) ||
 				!Key.IsAltDown())
 			{
 				hideAbilityInfo(curPos);
@@ -676,7 +691,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return false;
 			}
 			var curPos = PlayerControl.LocalPlayer.GetTruePosition();
-			return curPos == this.chargePos;
+			return curPos.IsCloseTo(this.chargePos);
 		}
 
 		private bool isIaiOk(bool isCharge, float chargeGauge)
@@ -696,7 +711,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			}
 
 			var curPos = PlayerControl.LocalPlayer.GetTruePosition();
-			if (curPos != this.chargePos)
+			if (curPos.IsNotCloseTo(this.chargePos))
 			{
 				return false;
 			}
@@ -905,7 +920,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private bool ability()
 		{
-			if (this.playerDirection == Vector2.zero)
+			if (this.playerDirection.IsCloseTo(Vector2.zero))
 			{
 				this.playerDirection.x = this.playerDirection.x +
 					(PlayerControl.LocalPlayer.cosmetics.FlipX ? -1 : 1);
@@ -1205,13 +1220,17 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				var loader = this.Loader;
 
-				ScavengerAbilitySystem.RandomOption? randOpt = loader.GetValue<Option, bool>(Option.IsRandomInitAbility) ?
+				bool isRandomInit = loader.GetValue<Option, bool>(Option.IsRandomInitAbility);
+
+				ScavengerAbilitySystem.RandomOption? randOpt = isRandomInit ?
 					new(loader.GetValue<Option, bool>(Option.AllowDupe),
 						loader.GetValue<Option, bool>(Option.AllowAdvancedWeapon)) : null;
 
+				var ability = (Ability)loader.GetValue<Option, int>(Option.InitAbility);
+
 				return new ScavengerAbilitySystem(
-					(Ability)loader.GetValue<Option, int>(Option.InitAbility),
-					loader.GetValue<Option, bool>(Option.IsSetWeapon),
+					ability,
+					loader.GetValue<Option, bool>(Option.IsSetWeapon) || ability is Ability.ScavengerNull || !isRandomInit,
 					loader.GetValue<Option, bool>(Option.SyncWeapon),
 					randOpt);
 			});
@@ -1360,29 +1379,29 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		var randomWepon = factory.CreateBoolOption(
 			Option.IsRandomInitAbility,
 			false);
+		var randomWeponActive = new ParentActive(randomWepon);
 
 		factory.CreateBoolOption(
 			Option.AllowDupe,
-			false, randomWepon);
+			false, randomWeponActive);
 		factory.CreateBoolOption(
 			Option.AllowAdvancedWeapon,
-			false, randomWepon);
+			false, randomWeponActive);
 
-		factory.CreateSelectionOption(
+		var initAbirityOpt = factory.CreateSelectionOption<Option, Ability>(
 			Option.InitAbility,
-			Enum.GetValues<Ability>()
-				.Select(x => x.ToString())
-				.ToArray(),
-			randomWepon,
-			invert: true);
+			new InvertActive(randomWepon));
 
 		var mapSetOps = factory.CreateBoolOption(
-			Option.IsSetWeapon, true);
+			Option.IsSetWeapon, true,
+			new ScavengerMapWepenSetIsActive(
+				factory.Activator!.Parent!,
+				randomWepon, initAbirityOpt));
+
 
 		factory.CreateBoolOption(
 			Option.SyncWeapon,
-			true, mapSetOps,
-			invert: true);
+			true, new InvertActive(mapSetOps));
 
 		factory.CreateIntOption(
 			Option.HandGunCount,
@@ -1459,10 +1478,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			3.5f, 0.1f, 7.5f, 0.1f);
 
 		/*
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.AguniCount,
 			1, 0, 10, 1);
-		factory.CreateIntOption(
+		factory.CreateNewIntOption(
 			Option.AguniChargeTime,
 			5, 1, 60, 1,
 			format: OptionUnit.Second);

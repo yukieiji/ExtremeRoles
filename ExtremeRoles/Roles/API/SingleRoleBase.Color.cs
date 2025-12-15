@@ -1,6 +1,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module;
 
 #nullable enable
 
@@ -34,7 +35,13 @@ public abstract partial class SingleRoleBase
             return Palette.ImpostorRed;
         }
 
-        if (targetRole is MultiAssignRoleBase multiAssignRole &&
+		if (targetRole.Core.Id is ExtremeRoleId.Leader ||
+			(targetRole.IsLiberal() && this.IsLiberal()))
+		{
+			return ColorPalette.LiberalColor;
+		}
+
+		if (targetRole is MultiAssignRoleBase multiAssignRole &&
 			multiAssignRole.AnotherRole != null)
         {
 			return this.GetTargetRoleSeeColor(

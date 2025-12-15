@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+
 
 #nullable enable
 
@@ -54,23 +54,22 @@ public sealed class Igniter : GhostRoleBase
         }
         else if (role.IsImpostor())
         {
-            vison = VisionComputer.ImpostorLightVision * minVison;
+            vison = ExtremeVisionModder.ImpostorLightVision * minVison;
             return true;
         }
         else
         {
-            vison = VisionComputer.CrewmateLightVision * minVison;
+            vison = ExtremeVisionModder.CrewmateLightVision * minVison;
             return true;
         }
     }
 
     public static void SetVison(bool isLightOff)
     {
-        var mod = isLightOff ?
-            VisionComputer.Modifier.IgniterLightOff :
-            VisionComputer.Modifier.None;
-
-        VisionComputer.Instance.SetModifier(mod);
+		ExtremeVisionModder.Instance.SetModifier(
+			isLightOff ?
+				ExtremeVisionModder.Modifier.IgniterLightOff :
+				ExtremeVisionModder.Modifier.None);
     }
 
     public override void CreateAbility()
@@ -124,12 +123,12 @@ public sealed class Igniter : GhostRoleBase
 
     private bool isAbilityUse() =>
         IsCommonUse() &&
-        VisionComputer.Instance.IsModifierResetted();
+		ExtremeVisionModder.Instance.IsModifierResetted();
 
     private void abilityCall()
     {
-        VisionComputer.Instance.SetModifier(
-            VisionComputer.Modifier.IgniterLightOff);
+		ExtremeVisionModder.Instance.SetModifier(
+			ExtremeVisionModder.Modifier.IgniterLightOff);
     }
 
     private void cleanUp()

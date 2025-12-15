@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using UnityEngine;
 
 
@@ -19,6 +19,11 @@ public static class MeetingHudUpdateButtonsPatch
 		{
 			monikaTrashUpdate(__instance);
 			return true;
+		}
+
+		if (!system.IsActiveMeeting<MonikaLoveTargetMeeting>())
+		{
+			monikaTrashUpdate(__instance);
 		}
 
 		var meeting = HudManager.Instance.MeetingPrefab;

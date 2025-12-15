@@ -1,17 +1,12 @@
 using System;
 using System.Text;
 
-using ExtremeRoles.Helper;
-
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Compat;
-using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
-
-
+using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
-
-
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
@@ -34,61 +29,64 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 			container = tab;
 		}
 
-		foreach (var key in Enum.GetValues<OptionCreator.CommonOption>())
-		{
-			tryAddHudString(container, (int)key, this.printOption);
-		}
+		this.printOption.AppendLine($"<size=135%>{Tr.GetString("gameOption")}</size>");
+		addHudString(container, (int)OptionCreator.CommonOption.RandomOption, this.printOption);
 
-		this.printOption.AppendLine();
-
-		this.printOption.AppendLine($"・{Tr.GetString("RoleSpawnCategory")}");
+		this.printOption.AppendLine($"{Tr.GetString("OptionCategory")}: {Tr.GetString("RoleSpawnCategory")}");
 		addRoleSpawnNumOptionHudString(container, this.printOption);
-
 		this.printOption.AppendLine();
 
-		tryAddHudString(
+		addHudString(
 			container,
 			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 			this.printOption);
 
-		this.printOption.AppendLine();
+		addHudString(
+			container,
+			(int)SpawnOptionCategory.LiberalSetting,
+			this.printOption);
 
 		foreach (var key in Enum.GetValues<ShipGlobalOptionCategory>())
 		{
-			tryAddHudString(container, (int)key, this.printOption);
+			addHudString(container, (int)key, this.printOption);
 		}
 
-		this.printOption.AppendLine();
-
-		string integrateOption = CompatModManager.Instance.GetIntegrateOptionHudString();
-		if (!string.IsNullOrEmpty(integrateOption))
+		foreach (int id in CompatModManager.Instance.GetIntegrateOptionCategoryId())
 		{
-			this.printOption.Append(integrateOption);
+			addHudString(container, id, this.printOption);
 		}
-
-		this.printOption.AppendLine();
 
 		return (
 			$"<size=135%>{Tr.GetString("vanilaOptions")}</size>\n\n{
 				GameOptionsManager.Instance.currentGameOptions.ToHudString(
 					PlayerControl.AllPlayerControls.Count)}",
-			$"<size=135%>{Tr.GetString("gameOption")}</size>\n\n{this.printOption}"
+			this.printOption.ToString()
 		);
 	}
 
-	private static void tryAddHudString(OptionTabContainer tab, int categoryId, in StringBuilder builder)
+	private static void addHudString(OptionTabContainer tab, int categoryId, in StringBuilder builder)
 	{
 		if (!tab.TryGetCategory(categoryId, out var category))
 		{
 			return;
 		}
-		category.AddHudString(builder);
+
+		builder.AppendLine($"{Tr.GetString("OptionCategory")}: {category.TransedName}");
+	
+		foreach (var opt in category.Options)
+		{
+			if (opt.Activator.Parent is null)
+			{
+				IInfoOverlayPanelModel.AddHudStringWithChildren(builder, opt);
+			}
+		}
+		builder.AppendLine();
 	}
 
 	private static void addRoleSpawnNumOptionHudString(OptionTabContainer tab, in StringBuilder builder)
 	{
 		// 生存役職周り
-		addSpawnNumOptionHudString(tab, SpawnOptionCategory.RoleSpawnCategory, builder, "Roles");
+		addSpawnNumOptionHudString(tab, SpawnOptionCategory.RoleSpawnCategory, builder, "Roles", true);
 		// 幽霊役職周り
 		addSpawnNumOptionHudString(tab, SpawnOptionCategory.GhostRoleSpawnCategory, builder, "GhostRoles");
 	}
@@ -97,31 +95,50 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		OptionTabContainer tab,
 		SpawnOptionCategory categoryId,
 		in StringBuilder builder,
-		string transKey)
+		string transKey,
+		bool includeLiberal = false)
 	{
 		if (!tab.TryGetCategory((int)categoryId, out var category))
 		{
 			return;
 		}
 
+		builder.Append('・');
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				category,
 				$"crewmate{transKey}",
 				RoleSpawnOption.MinCrewmate,
 				RoleSpawnOption.MaxCrewmate));
+
+		builder.Append('・');
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				category,
 				$"neutral{transKey}",
 				RoleSpawnOption.MinNeutral,
 				RoleSpawnOption.MaxNeutral));
+		
+		builder.Append('・');
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				category,
 				$"impostor{transKey}",
 				RoleSpawnOption.MinImpostor,
 				RoleSpawnOption.MaxImpostor));
+
+		if (!includeLiberal)
+		{
+			return;
+		}
+
+		builder.Append('・');
+		builder.AppendLine(
+			createRoleSpawnNumOptionHudStringLine(
+				category,
+				$"liberal{transKey}",
+				RoleSpawnOption.MinLiberal,
+				RoleSpawnOption.MaxLiberal));
 	}
 
 	private static string createRoleSpawnNumOptionHudStringLine(

@@ -257,7 +257,9 @@ def get_team_name_from_path(file_path: str) -> str:
         else:
             # 例: Roles/Solo/Crewmate/Role.cs -> Crewmate
             if check_path == "Solo":
-                return path_parts[base_index + 2]
+                team = path_parts[base_index + 2]
+                if team in ("Crewmate", "Impostor", "Neutral", "Liberal"):
+                    return team
 
     except (ValueError, IndexError):
         # 予期しないパス構造の場合に返されます

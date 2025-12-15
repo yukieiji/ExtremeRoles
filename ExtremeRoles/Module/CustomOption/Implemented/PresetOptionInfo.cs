@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.CustomOption.Implemented;
 

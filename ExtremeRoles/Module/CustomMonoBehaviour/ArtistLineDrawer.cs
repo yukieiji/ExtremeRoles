@@ -2,6 +2,9 @@ using System;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.Vector;
+using ExtremeRoles.Module.SystemType;
+
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
@@ -58,15 +61,18 @@ public sealed class ArtistLineDrawer :  MonoBehaviour
 		if (this.artistPlayer == null ||
 			this.artistPlayer.Data == null ||
 			this.prevPos == null ||
-			MeetingHud.Instance != null ||
-			ExileController.Instance != null)
+			!GameProgressSystem.IsTaskPhase)
 		{
 			return;
 		}
 
 		var curPos = this.artistPlayer.transform.position;
 
-		if (curPos == this.prevPos) { return; }
+		if (!this.prevPos.HasValue ||
+			curPos.IsCloseTo(this.prevPos.Value))
+		{
+			return;
+		}
 
 		if (PlayerControl.LocalPlayer.PlayerId == this.artistPlayer.PlayerId)
 		{

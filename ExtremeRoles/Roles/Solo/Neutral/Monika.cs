@@ -1,20 +1,40 @@
 using ExtremeRoles.Helper;
-
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Module.CustomOption.Factory;
-
 using ExtremeRoles.Resources;
-
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Ability;
 
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
+
+public sealed class MonikaAbilityHandler(MonikaTrashSystem trashSystem) : IAbility, IInvincible
+{
+	private readonly MonikaTrashSystem trashSystem = trashSystem;
+
+	// モニカはゴミ箱プレイヤーからの干渉を受けない
+	public bool IsBlockKillFrom(byte? fromTarget)
+	{
+		if (!fromTarget.HasValue)
+		{
+			return false;
+		}
+		
+		return this.trashSystem.InvalidPlayer(fromTarget.Value);
+	}
+
+	public bool IsValidAbilitySource(byte source)
+		=> !this.trashSystem.InvalidPlayer(source);
+
+	public bool IsValidKillFromSource(byte source)
+		=> !this.trashSystem.InvalidPlayer(source);
+}
 
 public sealed class Monika :
 	SingleRoleBase,
@@ -125,6 +145,7 @@ public sealed class Monika :
 		this.trashSystem = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.MonikaTrashSystem,
 			() => new MonikaTrashSystem(loader.GetValue<Ops, bool>(Ops.CanSeeTrash)));
+		this.AbilityClass = new MonikaAbilityHandler(this.trashSystem);
 
 		this.UseVent = loader.GetValue<Ops, bool>(Ops.CanUseVent);
 		this.UseSabotage = loader.GetValue<Ops, bool>(Ops.CanUseSabotage);

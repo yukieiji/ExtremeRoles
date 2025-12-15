@@ -25,8 +25,10 @@ public static class KillButtonDoClickPatch
 		BlockedToSystem,
 		BlockedToKillerSingleRoleCondition,
 		BlockedToTargetSingleRoleCondition,
+		BlockedToTargetSingleRoleInvincible,
 		BlockedToKillerOtherRoleCondition,
 		BlockedToTargetOtherRoleCondition,
+		BlockedToTargetOtherRoleInvincible,
 		BlockedToBodyguard,
 		BlockedToSurrogator,
 		FinalConditionFail,
@@ -96,6 +98,10 @@ public static class KillButtonDoClickPatch
 		{
 			return KillResult.BlockedToTargetSingleRoleCondition;
 		}
+		else if (isPreventKillFromInvincible(targetRole, killer))
+		{
+			return KillResult.BlockedToTargetSingleRoleCondition;
+		}
 		else if (
 			killerRole is MultiAssignRoleBase killerMultiAssignRole &&
 			isPreventKillTo(killerMultiAssignRole.AnotherRole, killer, target))
@@ -106,6 +112,12 @@ public static class KillButtonDoClickPatch
 			isPreventKillFrom(targetMultiAssignRole.AnotherRole, killer, target))
 		{
 			return KillResult.BlockedToTargetOtherRoleCondition;
+		}
+		else if (
+			targetRole is MultiAssignRoleBase targetMultiAssignRole2 &&
+			isPreventKillFromInvincible(targetMultiAssignRole2.AnotherRole, killer))
+		{
+			return KillResult.BlockedToTargetSingleRoleCondition;
 		}
 		else if (BodyGuard.TryRpcKillGuardedBodyGuard(killer.PlayerId, target.PlayerId))
 		{
@@ -188,6 +200,11 @@ public static class KillButtonDoClickPatch
             isAnime ? byte.MaxValue : byte.MinValue);
         instance.SetTarget(null);
     }
+
+	private static bool isPreventKillFromInvincible(SingleRoleBase? role, PlayerControl killer)
+		=>
+			role?.AbilityClass is IInvincible targetKillFromInvincibleCheckRole &&
+			targetKillFromInvincibleCheckRole.IsBlockKillFrom(killer.PlayerId);
 
 	private static bool isPreventKillFrom(SingleRoleBase? role, PlayerControl killer, PlayerControl target)
 		=>

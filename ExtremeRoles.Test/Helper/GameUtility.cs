@@ -7,6 +7,7 @@ using AmongUs.GameOptions;
 using BepInEx.Logging;
 
 using ExtremeRoles.GameMode.Option.ShipGlobal;
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
@@ -112,6 +113,11 @@ public static class GameUtility
 			}
 		}
 
+		if (RandomGenerator.Instance.Next(2) == 0)
+		{
+			disableLiberal();
+		}
+
 		disableXion();
 		disableSomeRole();
 
@@ -162,6 +168,11 @@ public static class GameUtility
 					mng.Update(cate, opt, newIndex);
 				}
 			}
+		}
+
+		if (RandomGenerator.Instance.Next(2) == 0)
+		{
+			disableLiberal();
 		}
 
 		disableXion();
@@ -242,6 +253,10 @@ public static class GameUtility
 		}
 
 		disableCategory(OptionTab.GeneralTab, (int)ShipGlobalOptionCategory.RandomMapOption);
+		if (RandomGenerator.Instance.Next(2) == 0)
+		{
+			disableLiberal();
+		}
 		disableXion();
 		disableSomeRole();
 
@@ -282,6 +297,18 @@ public static class GameUtility
 	public static void UpdateAmongUsOption(in RequireOption<FloatOptionNames, float> option)
 	{
 		GameOptionsManager.Instance.currentGameOptions.SetFloat(option.OptionId, option.Velue);
+	}
+
+	private static void disableLiberal()
+	{
+		if (OptionManager.Instance.TryGetCategory(
+				OptionTab.GeneralTab,
+				(int)SpawnOptionCategory.RoleSpawnCategory,
+				out var category))
+		{
+			OptionManager.Instance.Update(category, (int)RoleSpawnOption.MinLiberal, 0);
+			OptionManager.Instance.Update(category, (int)RoleSpawnOption.MaxLiberal, 0);
+		}
 	}
 
 

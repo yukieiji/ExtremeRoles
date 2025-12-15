@@ -13,7 +13,6 @@ using ExtremeRoles.Module.SystemType.Roles;
 
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.Ability;
-
 using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable

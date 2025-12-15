@@ -1,4 +1,11 @@
+using System;
+using System.Collections.Generic;
+
+using Hazel;
+using InnerNet;
+
 using AmongUs.GameOptions;
+
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Player;
@@ -11,11 +18,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Neutral.Madmate;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
-using Hazel;
-using InnerNet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 
 
@@ -76,6 +78,8 @@ public static class RPCOperator
 		BaitAwakeRole,
 		SummonerOps,
 		ExorcistOps,
+		CEOOps,
+		EchoOps,
 
 		// インポスター
 		CarrierAbility,
@@ -242,7 +246,6 @@ public static class RPCOperator
 
         // 各種表示系リセット
         Patches.Manager.HudManagerUpdatePatch.Reset();
-        Module.VisionComputer.Instance.ResetModifier();
 
         // ミーティング能力リセット
         Patches.Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
@@ -374,18 +377,18 @@ public static class RPCOperator
     public static void UncheckedMurderPlayer(
         byte sourceId, byte targetId, byte useAnimation)
     {
-		if (Helper.GameSystem.IsLobby) { return; }
+		if (Helper.GameSystem.IsLobby)
+		{
+			return;
+		}
 
 		PlayerControl source = Helper.Player.GetPlayerControlById(sourceId);
         PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
 
         if (source != null && target != null)
         {
-            if (useAnimation == 0)
-            {
-                Patches.KillAnimationCoPerformKillMoveNextPatch.HideNextAnimation = true;
-            }
-            source.MurderPlayer(target);
+			Patches.KillAnimationCoPerformKillMoveNextPatch.HideNextAnimation = useAnimation == 0;
+			source.MurderPlayer(target);
         }
 
 		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
@@ -612,6 +615,16 @@ public static class RPCOperator
 	public static void ExorcistRpcOps(in MessageReader reader)
 	{
 		Roles.Solo.Crewmate.Exorcist.ExorcistRole.RpcOps(reader);
+	}
+
+	public static void CEORpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Crewmate.CEO.RpcOps(reader);
+	}
+
+	public static void EchoRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Crewmate.Echo.Rpc(reader);
 	}
 
 	public static void CarrierAbility(

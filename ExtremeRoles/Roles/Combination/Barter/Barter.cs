@@ -1,23 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using TMPro;
-using UnityEngine;
-
 using AmongUs.GameOptions;
-
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
+
 
 
 #nullable enable
@@ -261,19 +260,20 @@ public sealed class BarterRole :
 		AutoParentSetOptionCategoryFactory factory)
 	{
 		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
-		CreateKillerOption(factory, imposterSetting);
+		var impstorActive = new ParentActive(imposterSetting);
+		CreateKillerOption(factory, impstorActive);
 
 		factory.CreateIntOption(
 			Option.AwakeTaskRate,
 			70, 0, 100, 10,
 			format: OptionUnit.Percentage);
-
 		factory.CreateIntOption(
 			Option.AwakeDeadPlayerNum,
 			7, 0, 12, 1);
+
 		factory.CreateIntOption(
 			Option.AwakeKillNum,
-			2, 0, 5, 1);
+			2, 0, 5, 1, impstorActive);
 
 		factory.CreateBoolOption(
 			Option.CanCallMeeting,
@@ -290,7 +290,7 @@ public sealed class BarterRole :
 		var randOpt = factory.CreateBoolOption(Option.RandomCastling, false);
 		factory.CreateIntOption(
 			Option.OneCastlingNum, 1, 1, 25, 1,
-			randOpt,
+			new ParentActive(randOpt),
 			format: OptionUnit.Shot);
 		factory.CreateBoolOption(Option.ShowCastlingOther, false);
 	}

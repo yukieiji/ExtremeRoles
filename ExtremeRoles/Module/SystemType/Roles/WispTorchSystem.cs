@@ -5,17 +5,18 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.Combination;
-using ExtremeRoles.Compat;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Module.GameEnd;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
@@ -202,8 +203,8 @@ public sealed class WispTorchSystem : IDirtableSystemType
 		if (removeNum > 0 && !islocalPlayerHasTorch)
 		{
 			this.blackOutTimer = this.blackOutTime;
-			VisionComputer.Instance.SetModifier(
-				VisionComputer.Modifier.WispLightOff);
+			ExtremeVisionModder.Instance.SetModifier(
+				ExtremeVisionModder.Modifier.WispLightOff);
 		}
 	}
 
@@ -214,7 +215,7 @@ public sealed class WispTorchSystem : IDirtableSystemType
 			this.blackOutTimer -= deltaTime;
 			if (this.blackOutTimer <= 0.0f)
 			{
-				VisionComputer.Instance.ResetModifier();
+				ExtremeVisionModder.Instance.ResetModifier();
 			}
 		}
 
@@ -273,7 +274,7 @@ public sealed class WispTorchSystem : IDirtableSystemType
 				group.Remove();
 			}
 			this.torchGroups.Clear();
-			VisionComputer.Instance.ResetModifier();
+			ExtremeVisionModder.Instance.ResetModifier();
 		}
 	}
 
@@ -296,8 +297,8 @@ public sealed class WispTorchSystem : IDirtableSystemType
 		if (removeNum > 0 && !this.hasTorchHostPlayer)
 		{
 			this.blackOutTimer = this.blackOutTime;
-			VisionComputer.Instance.SetModifier(
-				VisionComputer.Modifier.WispLightOff);
+			ExtremeVisionModder.Instance.SetModifier(
+				ExtremeVisionModder.Modifier.WispLightOff);
 		}
 		this.hasTorchHostPlayer = false;
 		this.IsDirty = initialState;

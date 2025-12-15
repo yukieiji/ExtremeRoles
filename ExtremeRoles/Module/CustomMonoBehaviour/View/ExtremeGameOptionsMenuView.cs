@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,6 +18,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 
 using CategoryView = ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ExtremeRoles.Module.CustomMonoBehaviour.View.ExtremeOptionView>;
+using ExtremeRoles.Module.CustomOption.OLDS;
 
 #nullable enable
 
@@ -355,7 +356,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 			categoObj.ReplaceExRText(catego.TransedName, 20);
 			categoObj.gameObject.SetActive(true);
 
-			yPos -= 0.63f;
+			yPos -= 0.65f;
 
 			foreach (var (option, optionObj) in catego.Options.Zip(groupViewObj.View))
 			{
@@ -364,7 +365,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 					continue;
 				}
 
-				bool isActive = option.IsActiveAndEnable;
+				bool isActive = option.IsViewActive;
 
 				optionObj.gameObject.SetActive(isActive);
 				if (!isActive)
@@ -374,7 +375,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 
 				optionObj.transform.localPosition = new Vector3(1.25f, yPos, -2f);
 				optionObj.Refresh();
-				yPos -= 0.45f;
+				yPos -= 0.475f;
 			}
 		}
 		this.scroller.SetYBoundsMax(-yPos - 1.65f);

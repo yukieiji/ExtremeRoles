@@ -1,13 +1,13 @@
 using UnityEngine;
 
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 #nullable enable
@@ -159,12 +159,12 @@ public sealed class Whisper :
 			}
 		}
 
-        if (this.prevPlayerPos == defaultPos)
+        if (this.prevPlayerPos.IsCloseTo(defaultPos, 0.1f))
         {
             this.prevPlayerPos = rolePlayer.GetTruePosition();
         }
 
-        if (this.prevPlayerPos != rolePlayer.GetTruePosition())
+        if (this.prevPlayerPos.IsNotCloseTo(rolePlayer.GetTruePosition(), 0.1f))
         {
             resetAbility(rolePlayer);
             return;
@@ -220,7 +220,7 @@ public sealed class Whisper :
 		factory.CreateIntOption(
 			WhisperOption.AbilityTaskGage,
 			70, 0, 100, 10,
-			awakeOpt,
+			new ParentActive(awakeOpt),
 			format: OptionUnit.Percentage);
 	}
 

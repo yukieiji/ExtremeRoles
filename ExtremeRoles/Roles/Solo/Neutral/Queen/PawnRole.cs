@@ -1,12 +1,13 @@
-using UnityEngine;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using UnityEngine;
+
 
 #nullable enable
 
@@ -35,7 +36,7 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 	public void ModifiedWinPlayer(
 		NetworkedPlayerInfo rolePlayerInfo,
 		GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
 	{
 		switch (reason)
 		{
@@ -72,7 +73,7 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 			Option.HasTask, false);
 		factory.CreateIntOption(
 			Option.SeeQueenTaskRate, 50, 0, 100, 10,
-			taskOpt, format: OptionUnit.Percentage);
+			new ParentActive(taskOpt), format: OptionUnit.Percentage);
 	}
 
 	protected override void RoleSpecificInit()

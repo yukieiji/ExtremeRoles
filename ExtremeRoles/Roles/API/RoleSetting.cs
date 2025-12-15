@@ -1,7 +1,6 @@
 using System;
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -13,7 +12,8 @@ public enum ExtremeRoleType : int
     Null = -2,
     Neutral = -1,
     Crewmate = 0,
-    Impostor = 1
+    Impostor = 1,
+    Liberal = 2
 }
 public enum RoleCommonOption
 {
@@ -80,30 +80,28 @@ public abstract class RoleOptionBase
 
 	protected static void CreateKillerOption(
 		AutoParentSetOptionCategoryFactory factory,
-		IOption parent = null,
-		bool ignorePrefix = true,
-		bool invert = false)
+		IOptionActivator activator=null,
+		bool ignorePrefix = true)
 	{
 		var killCoolOption = factory.CreateBoolOption(
 			KillerCommonOption.HasOtherKillCool,
-			false, parent,
-			ignorePrefix: ignorePrefix,
-			invert: invert);
+			false, activator,
+			ignorePrefix: ignorePrefix);
 		factory.CreateFloatOption(
 			KillerCommonOption.KillCoolDown,
 			30f, 1.0f, 120f, 0.5f,
-			killCoolOption, format: OptionUnit.Second,
+			new ParentActive(killCoolOption),
+			format: OptionUnit.Second,
 			ignorePrefix: ignorePrefix);
 
 		var killRangeOption = factory.CreateBoolOption(
 			KillerCommonOption.HasOtherKillRange,
-			false, parent,
-			ignorePrefix: ignorePrefix,
-			invert: invert);
+			false, activator,
+			ignorePrefix: ignorePrefix);
 		factory.CreateSelectionOption(
 			KillerCommonOption.KillRange,
 			OptionCreator.Range,
-			killRangeOption,
+			new ParentActive(killRangeOption),
 			ignorePrefix: ignorePrefix);
 	}
 

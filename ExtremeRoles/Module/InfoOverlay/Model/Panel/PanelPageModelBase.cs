@@ -1,15 +1,31 @@
 using System;
 using System.Collections.Generic;
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
-
 namespace ExtremeRoles.Module.Interface;
+
+public interface IOptionToStringHelper
+{
+	public bool IsActive { get; }
+
+	public string ToString();
+}
 
 #nullable enable
 
 public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 {
+	public sealed class DefaultOptionToString(IOption option) : IOptionToStringHelper
+	{
+		private readonly IOption option = option;
+
+		public bool IsActive => !option.Info.IsHidden && option.IsChangeDefault;
+
+		public override string ToString()
+			=> IInfoOverlayPanelModel.ToHudStringWithChildren(option, -1);
+	}
+
+
 	public bool ShowActiveOnly
 	{
 		set
@@ -18,7 +34,7 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 			this.showActiveOnly = value;
 		}
 	}
-	protected readonly record struct RoleInfo(string RoleName, string FullDec, IOption Option);
+	protected readonly record struct RoleInfo(string RoleName, string FullDec, IOptionToStringHelper Option);
 
 	public int PageNum => this.curTarget.Count;
 
@@ -84,11 +100,11 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 		var info = this.curTarget[this.CurPage];
 
 		string colorRoleName = info.RoleName;
-		string roleOptionStr = IInfoOverlayPanelModel.ToHudStringWithChildren(info.Option);
+		string roleOptionStr = info.Option.ToString();
 
 		return (
 			$"<size=150%>・{colorRoleName}</size>\n{info.FullDec}",
-			$"<size=115%>・{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionStr}"
+			$"<size=115%>{colorRoleName}{Tr.GetString("roleOption")}</size>\n{roleOptionStr}"
 		);
 	}
 
@@ -105,8 +121,7 @@ public abstract class RolePagePanelModelBase : IInfoOverlayPanelModel
 		this.curSettedRole.Capacity = this.allPage.Count;
 		foreach (var info in this.allPage)
 		{
-			var opt = info.Option;
-			if (opt.IsEnable && !opt.Info.IsHidden)
+			if (info.Option.IsActive)
 			{
 				this.curSettedRole.Add(info);
 			}

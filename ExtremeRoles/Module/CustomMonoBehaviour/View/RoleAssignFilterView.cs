@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using TMPro;
 
@@ -106,7 +106,16 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		this.Model.GhostRole.Clear();
 
 		var roleSelector = ExtremeGameModeManager.Instance.RoleSelector;
-		int id = 0;
+
+		// リベラルのデフォルト役職
+		this.Model.Id.Add(0);
+		this.Model.NormalRole.Add(0, ExtremeRoleId.Leader);
+		this.Model.Id.Add(1);
+		this.Model.NormalRole.Add(1, ExtremeRoleId.Dove);
+		this.Model.Id.Add(2);
+		this.Model.NormalRole.Add(2, ExtremeRoleId.Militant);
+
+		int id = 3;
 		foreach (var roleId in roleSelector.UseNormalRoleId)
 		{
 			this.Model.Id.Add(id);

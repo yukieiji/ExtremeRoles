@@ -9,10 +9,8 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -70,7 +68,7 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		in WinnerTempData winner)
+		in WinnerContainer winner)
     {
 
         if (!rolePlayerInfo.IsDead || this.isDeadWin) { return; }
