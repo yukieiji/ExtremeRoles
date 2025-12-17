@@ -88,14 +88,9 @@ public sealed class DoveCommonAbilityHandler
 
 	public void ClearTask(PlayerControl player)
 	{
-		if (this.cachePlayer == null)
+		if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
 		{
-			this.cachePlayer = GameData.Instance.GetPlayerById(player.PlayerId);
-		}
-
-		if (this.cachePlayer?.Tasks != null)
-		{
-			this.cachePlayer.Tasks.Clear();
+			player.ClearTasks();
 		}
 	}
 }
