@@ -85,6 +85,14 @@ public sealed class DoveCommonAbilityHandler
 			break;
 		}
 	}
+
+	public void ClearTask(PlayerControl player)
+	{
+		if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+		{
+			player.ClearTasks();
+		}
+	}
 }
 
 public static class LiberalSettingOverrider

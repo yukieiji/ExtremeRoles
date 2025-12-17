@@ -30,6 +30,16 @@ public sealed class Dove : SingleRoleBase, IRoleUpdate
 		this.handler.Update(rolePlayer);
 	}
 
+	public override void ExiledAction(PlayerControl rolePlayer)
+	{
+		this.handler.ClearTask(rolePlayer);
+	}
+
+	public override void RolePlayerKilledAction(PlayerControl rolePlayer, PlayerControl killerPlayer)
+	{
+		this.handler.ClearTask(rolePlayer);
+	}
+
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 

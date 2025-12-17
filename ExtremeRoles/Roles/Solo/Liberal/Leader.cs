@@ -310,5 +310,9 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		{
 			this.reviver.Start(rolePlayer);
 		}
+		else
+		{
+			this.doveHandler?.ClearTask(rolePlayer);
+		}
 	}
 }
