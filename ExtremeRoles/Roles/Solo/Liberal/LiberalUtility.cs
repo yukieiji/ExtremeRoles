@@ -48,16 +48,16 @@ public sealed class DoveCommonAbilityHandler
 			return;
 		}
 
-		if (player.Data.IsDead || player.Data.Disconnected)
-		{
-			return;
-		}
-
 		if (cachePlayer == null)
 		{
 			cachePlayer = GameData.Instance.GetPlayerById(player.PlayerId);
 		}
-		if (cachePlayer == null || cachePlayer.Tasks.Count == 0)
+		if (cachePlayer == null)
+		{
+			return;
+		}
+
+		if (cachePlayer.IsDead || cachePlayer.Disconnected || cachePlayer.Tasks.Count == 0)
 		{
 			return;
 		}
