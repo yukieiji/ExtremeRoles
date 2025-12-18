@@ -1,12 +1,10 @@
+using System.Collections.Generic;
+
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
-using System.Collections.Generic;
-using static ExtremeRoles.Module.GameResult.LiberalMoneyHistory;
-
-
 
 #nullable enable
 
