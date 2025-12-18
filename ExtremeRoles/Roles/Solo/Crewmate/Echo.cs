@@ -124,7 +124,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		this.CreateAbilityCountButton(
 			"echoLocation",
-			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Boxer));
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Echo));
 		this.Button?.SetLabelToCrewmate();
 	}
 
@@ -325,7 +325,9 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 			ping.image.sortingOrder = 88659;
 			if (!info.IsDeadbody)
 			{
-				ping.image.color = (ColorPalette.EchoDarkAliceblue - Palette.ImpostorRed);
+				var targetColor = ColorPalette.EchoDarkAliceblue - Palette.ImpostorRed;
+				targetColor.a = byte.MaxValue;
+				ping.image.color = targetColor;
 			}
 		}
 		ping.SetImageEnabled(true);
