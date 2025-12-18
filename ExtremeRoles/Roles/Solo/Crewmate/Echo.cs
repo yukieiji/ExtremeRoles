@@ -326,7 +326,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 			if (!info.IsDeadbody)
 			{
 				var targetColor = ColorPalette.EchoDarkAliceblue - Palette.ImpostorRed;
-				targetColor.a = byte.MaxValue;
+				targetColor.a = 1.0f;
 				ping.image.color = targetColor;
 			}
 		}
