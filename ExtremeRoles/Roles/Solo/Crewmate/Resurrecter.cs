@@ -137,7 +137,7 @@ public sealed class Resurrecter :
 		this.flasher.Hide();
 	}
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         if (this.isActiveMeetingCount &&
             this.meetingCounter >= this.maxMeetingCount)

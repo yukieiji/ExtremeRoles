@@ -6,20 +6,23 @@ using UnityEngine.Video;
 using Hazel;
 using AmongUs.GameOptions;
 
+
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 
 using Il2CppObject = Il2CppSystem.Object;
 using SystemArray = System.Array;
-using ExtremeRoles.Extension.Vector;
-using ExtremeRoles.Module.CustomOption.Factory;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -45,7 +48,7 @@ public sealed class Zombie :
 
     public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
 
-    public ExtremeAbilityButton Button { get; set; }
+    public ExtremeAbilityButton? Button { get; set; }
 
     public enum ZombieOption
     {
@@ -77,10 +80,10 @@ public sealed class Zombie :
 
     private Vector3 curPos;
 
-    private Dictionary<SystemTypes, Arrow> setRooms;
+    private Dictionary<SystemTypes, Arrow>? setRooms;
     private SystemTypes targetRoom;
 
-    private Collider2D cachedColider = null;
+    private Collider2D? cachedColider = null;
     private PlayerReviver? playerReviver;
 
     public Zombie() : base(
@@ -97,10 +100,11 @@ public sealed class Zombie :
         switch (ops)
         {
             case ZombieRpcOps.UseResurrect:
-                Zombie zombie = ExtremeRoleManager.GetSafeCastedRole<Zombie>(
-                    zombiePlayerId);
-                if (zombie == null) { return; }
-                UseResurrect(zombie);
+                if (ExtremeRoleManager.TryGetSafeCastedRole<Zombie>(zombiePlayerId, out var zombie))
+				{
+					UseResurrect(zombie);
+					return;
+				}
                 break;
             case ZombieRpcOps.SetMagicCircle:
                 float x = reader.ReadSingle();
@@ -179,7 +183,11 @@ public sealed class Zombie :
 
         if (!tryGetPlayerInRoom(out SystemTypes? room) ||
 			!room.HasValue ||
-            !this.setRooms.ContainsKey(room.Value)) { return false; }
+			this.setRooms == null ||
+            !this.setRooms.ContainsKey(room.Value))
+		{
+			return false;
+		}
 
         this.targetRoom = room.Value;
         return true;
@@ -189,11 +197,16 @@ public sealed class Zombie :
 		=> IRoleAbility.IsCommonUse() &&
 			tryGetPlayerInRoom(out SystemTypes? room) &&
 			room.HasValue &&
+			this.setRooms != null &&
 			this.setRooms.ContainsKey(room.Value);
 
     public void SetMagicCircle()
     {
-        var arrow = this.setRooms[this.targetRoom];
+		if (this.setRooms == null ||
+			!this.setRooms.TryGetValue(this.targetRoom, out var arrow))
+		{
+			return;
+		}
 
         Vector2 pos = arrow.Target;
 
@@ -218,7 +231,7 @@ public sealed class Zombie :
         playerReviver?.Reset();
     }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -231,6 +244,11 @@ public sealed class Zombie :
 
     public void Update(PlayerControl rolePlayer)
     {
+		if (this.setRooms == null)
+		{
+			return;
+		}
+
         bool isDead = rolePlayer.Data.IsDead;
 		bool isNotTaskPhase = !GameProgressSystem.IsTaskPhase;
         bool isNotAwake = !this.IsAwake;
@@ -478,7 +496,8 @@ public sealed class Zombie :
 
     private void updateReviveState(bool isReduceAfter)
     {
-        if (this.killCount >= this.resurrectKillCount &&
+        if (this.Button != null &&
+			this.killCount >= this.resurrectKillCount &&
             this.Button.Behavior is ICountBehavior behavior &&
             behavior.AbilityCount <= (isReduceAfter ? 1 : 0) &&
             !this.canResurrect)

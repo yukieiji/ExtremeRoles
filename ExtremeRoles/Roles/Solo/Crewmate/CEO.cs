@@ -289,14 +289,17 @@ public sealed class CEO : SingleRoleBase,
 
 	public void Update(PlayerControl rolePlayer)
 	{
+		if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting))
+		{
+			if (playerReviver?.IsReviving ?? false)
+			{
+				playerReviver?.Reset();
+			}
+			return;
+		}
 
 		if (!GameProgressSystem.IsTaskPhase)
 		{
-			if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting) && 
-				(playerReviver?.IsReviving ?? false))
-			{
-                playerReviver?.Reset();
-			}
 			return;
 		}
 

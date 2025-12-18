@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
 
 #nullable enable
@@ -17,7 +18,6 @@ public sealed class ExtremeGameEndChecker
 	public ExtremeGameEndChecker()
 	{
 		List<IGameEndChecker> checkers = [
-			new OnemanMeetingEndChecker(),
 			new SabotageEndChecker(),
 			new TaskEndChecker(),
 		];
@@ -49,6 +49,17 @@ public sealed class ExtremeGameEndChecker
 
 	public void Check()
 	{
+		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
+		{
+			if (MeetingHud.Instance == null &&
+				ExileController.Instance == null &&
+				system.TryGetGameEndReason(out var reason))
+			{
+				gameIsEnd((GameOverReason)reason);
+			}
+			return;
+		}
+
 		this.statistics.Update();
 
 		foreach (var check in this.checkers)
