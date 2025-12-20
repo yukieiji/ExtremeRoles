@@ -311,15 +311,17 @@ public sealed class PlayerStatistics()
 				case ExtremeRoleType.Liberal:
 					++this.TeamLiberalAlive;
 
+					bool isThisRoleLeaderAndBlockKill = false;
 					// リーダーは一人だけなのでここが更新されるのは生存中かつこのメソッドが呼ばれて一回のみ
 					// なので生存していない場合falseになるんですねぇ
 					if (role.AbilityClass is LeaderAbilityHandler leaderAbility)
 					{
 						this.LeaderIsBlockKill = leaderAbility.IsBlockKill;
+						isThisRoleLeaderAndBlockKill = this.LeaderIsBlockKill;
 					}
 
 					// ミリタントを数えるが、リーダーがミリタントのときは無敵設定されてるとカウントしないように
-					if (role.CanKill() && !this.LeaderIsBlockKill)
+					if (role.CanKill() && !isThisRoleLeaderAndBlockKill)
 					{
 						++this.LiberalMilitantAlive;
 					}

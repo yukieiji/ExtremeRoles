@@ -36,8 +36,6 @@ public sealed class CustomOption : IOption
 		{
 			this.holder.Selection = value;
 
-			this.onValueChanged?.Invoke();
-
 			var amongUs = AmongUsClient.Instance;
 			if (LobbyBehaviour.Instance != null &&
 				amongUs != null && amongUs.AmHost)
@@ -58,19 +56,17 @@ public sealed class CustomOption : IOption
 	private readonly ConfigBinder config;
 	private readonly IValueHolder holder;
 
-	public event Action? OnValueChanged
+	public event Action OnValueChanged
 	{
 		add
 		{
-			onValueChanged += value;
-			onValueChanged?.Invoke();
+			this.holder.OnValueChanged += value;
 		}
 		remove
 		{
-			onValueChanged -= value;
+			this.holder.OnValueChanged -= value;
 		}
 	}
-	private Action? onValueChanged;
 
 	public CustomOption(
 		IOptionInfo info,

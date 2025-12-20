@@ -15,6 +15,8 @@ public interface IOptionRange<T>
 
 	public int Selection { get; set; }
 
+	public event Action OnValueChanged;
+
 	public int GetIndex(T value);
 
 	public string ToString();

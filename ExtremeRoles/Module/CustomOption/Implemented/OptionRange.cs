@@ -32,6 +32,19 @@ public class DynamismOptionRange<T>(IOptionRange<T> range)
 			InnerRange.Selection = value;
 		}
 	}
+
+	public event Action OnValueChanged
+	{
+		add
+		{
+			this.InnerRange.OnValueChanged += value;
+		}
+		remove
+		{
+			this.InnerRange.OnValueChanged -= value;
+		}
+	}
+
 	public int GetIndex(T value)
 		=> InnerRange.GetIndex(value);
 
@@ -61,13 +74,34 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 				0, length - 1);
 
 			selection = clampedNewValue;
+			this.onValueChanged?.Invoke();
 		}
 	}
 	private readonly T[] option = option;
 	private int selection = 0;
 
+	public event Action OnValueChanged
+	{
+		add
+		{
+			this.onValueChanged += value;
+			value.Invoke();
+		}
+		remove
+		{
+			this.onValueChanged -= value;
+		}
+	}
+	private Action? onValueChanged;
+
 	public OptionRange(IEnumerable<T> range) : this(range.ToArray())
 	{ }
+
+	public void TransferNewRange(OptionRange<T> @new)
+	{
+		@new.onValueChanged = this.onValueChanged;
+		this.onValueChanged = null;
+	}
 
 	public int GetIndex(T value)
 	{

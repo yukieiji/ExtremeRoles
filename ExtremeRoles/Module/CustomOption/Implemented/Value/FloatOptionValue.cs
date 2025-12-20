@@ -16,7 +16,9 @@ public sealed class FloatOptionValue(
 		set
 		{
 			float prevValue = this.Value;
-			innerRange = value;
+
+			this.innerRange.TransferNewRange(value);
+			this.innerRange = value;
 			this.Selection = innerRange.GetIndex(prevValue);
 		}
 	}
@@ -24,6 +26,18 @@ public sealed class FloatOptionValue(
 		OptionRange<float>.GetFloatRange(min, max, step));
 
 	private readonly float @default = @default;
+
+	public event System.Action OnValueChanged
+	{
+		add
+		{
+			this.innerRange.OnValueChanged += value;
+		}
+		remove
+		{
+			this.innerRange.OnValueChanged -= value;
+		}
+	}
 
 	public int DefaultIndex => this.InnerRange.GetIndex(@default);
 	public float Value => this.InnerRange.RangedValue;

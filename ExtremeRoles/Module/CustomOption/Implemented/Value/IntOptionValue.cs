@@ -14,12 +14,26 @@ public sealed class IntOptionValue(int @default, int min, int max, int step) :
 		set
 		{
 			int prevValue = this.Value;
-			innerRange = value;
+
+			this.innerRange.TransferNewRange(value);
+			this.innerRange = value;
 			this.Selection = innerRange.GetIndex(prevValue);
 		}
 	}
 	private OptionRange<int> innerRange = new OptionRange<int>(
 		OptionRange<int>.GetIntRange(min, max, step));
+
+	public event System.Action OnValueChanged
+	{
+		add
+		{
+			this.innerRange.OnValueChanged += value;
+		}
+		remove
+		{
+			this.innerRange.OnValueChanged -= value;
+		}
+	}
 
 	public int DefaultIndex => this.InnerRange.GetIndex(@default);
 	public int Value => this.InnerRange.RangedValue;
