@@ -1,3 +1,5 @@
+using System;
+
 namespace ExtremeRoles.Module.CustomOption.Interfaces;
 
 public interface IValueHolder
@@ -6,4 +8,6 @@ public interface IValueHolder
 	public string StrValue { get; }
 	public int Selection { get; set; }
 	public int Range { get; }
+
+	public event Action OnValueChanged;
 }

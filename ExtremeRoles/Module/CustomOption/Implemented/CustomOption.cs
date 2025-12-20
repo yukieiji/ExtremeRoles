@@ -36,8 +36,6 @@ public sealed class CustomOption : IOption
 		{
 			this.holder.Selection = value;
 
-			this.onValueChanged?.Invoke();
-
 			var amongUs = AmongUsClient.Instance;
 			if (LobbyBehaviour.Instance != null &&
 				amongUs != null && amongUs.AmHost)
@@ -62,15 +60,13 @@ public sealed class CustomOption : IOption
 	{
 		add
 		{
-			onValueChanged += value;
-			onValueChanged?.Invoke();
+			this.holder.OnValueChanged += value;
 		}
 		remove
 		{
-			onValueChanged -= value;
+			this.holder.OnValueChanged -= value;
 		}
 	}
-	private Action? onValueChanged;
 
 	public CustomOption(
 		IOptionInfo info,

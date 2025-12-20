@@ -25,6 +25,18 @@ public sealed class FloatOptionValue(
 
 	private readonly float @default = @default;
 
+	public event System.Action OnValueChanged
+	{
+		add
+		{
+			this.innerRange.OnValueChanged += value;
+		}
+		remove
+		{
+			this.innerRange.OnValueChanged -= value;
+		}
+	}
+
 	public int DefaultIndex => this.InnerRange.GetIndex(@default);
 	public float Value => this.InnerRange.RangedValue;
 	public string StrValue => this.Value.ToString();
