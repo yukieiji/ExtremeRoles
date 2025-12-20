@@ -128,7 +128,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		UnityObjectLoader.LoadCommonAsset();
 
 		ExtremeSystemTypeManager.ModInitialize();
-		VersionChecker.RegisterAssembly(assm, 0, true);
+		VersionChecker.RegisterAssembly(assm, 0);
 		TranslatorManager.Register<Translator>();
 	}
 }

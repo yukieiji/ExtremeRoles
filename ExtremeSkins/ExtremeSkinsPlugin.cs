@@ -1,4 +1,4 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
@@ -88,7 +88,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
 		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
 		if (assembly is null) { return; }
-		VersionChecker.RegisterAssembly(assembly, 1, true);
+		VersionChecker.RegisterAssembly(assembly, 1);
 		Il2CppRegisterAttribute.Registration(assembly);
     }
 }
