@@ -97,6 +97,12 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 	public OptionRange(IEnumerable<T> range) : this(range.ToArray())
 	{ }
 
+	public void TransferNewRange(OptionRange<T> @new)
+	{
+		@new.onValueChanged = this.onValueChanged;
+		this.onValueChanged = null;
+	}
+
 	public int GetIndex(T value)
 	{
 		int index = Array.IndexOf(option, value);

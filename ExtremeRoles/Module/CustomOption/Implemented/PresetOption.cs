@@ -34,8 +34,6 @@ public sealed class PresetOption : IOption
 		set
 		{
 			this.holder.Selection = value;
-
-			this.OnValueChanged?.Invoke();
 		}
 	}
 
@@ -48,7 +46,17 @@ public sealed class PresetOption : IOption
 
 	private readonly IValueHolder holder;
 
-	public event Action? OnValueChanged;
+	public event Action OnValueChanged
+	{
+		add
+		{
+			this.holder.OnValueChanged += value;
+		}
+		remove
+		{
+			this.holder.OnValueChanged -= value;
+		}
+	}
 
 	private const int maxPresetNum = 20;
 	private const int optionId = 0;

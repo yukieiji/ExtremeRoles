@@ -16,7 +16,9 @@ public sealed class FloatOptionValue(
 		set
 		{
 			float prevValue = this.Value;
-			innerRange = value;
+
+			this.innerRange.TransferNewRange(value);
+			this.innerRange = value;
 			this.Selection = innerRange.GetIndex(prevValue);
 		}
 	}

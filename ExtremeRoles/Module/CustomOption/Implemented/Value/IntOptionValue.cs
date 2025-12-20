@@ -14,7 +14,9 @@ public sealed class IntOptionValue(int @default, int min, int max, int step) :
 		set
 		{
 			int prevValue = this.Value;
-			innerRange = value;
+
+			this.innerRange.TransferNewRange(value);
+			this.innerRange = value;
 			this.Selection = innerRange.GetIndex(prevValue);
 		}
 	}

@@ -56,7 +56,7 @@ public sealed class CustomOption : IOption
 	private readonly ConfigBinder config;
 	private readonly IValueHolder holder;
 
-	public event Action? OnValueChanged
+	public event Action OnValueChanged
 	{
 		add
 		{
