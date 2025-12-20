@@ -155,7 +155,7 @@ public sealed class VersionChecker : MonoBehaviour
 		var version = name.Version;
 		version = new Version(version.Major, version.Minor, version.Build, 0);
 
-        allModVersion.Add(id, new PlayerVersion(name.Version, modName));
+        allModVersion.Add(id, new PlayerVersion(version, modName));
     }
 
     public void Awake()
