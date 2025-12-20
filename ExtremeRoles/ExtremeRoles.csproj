@@ -4,8 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
-		<!--<Version>2025.9.27.1</Version>-->
-		<VersionPrefix>2025.12.19</VersionPrefix>
+		<Version>2025.12.19.1</Version>
+    <!--<VersionPrefix>2025.12.19.1</VersionPrefix>-->
     <VersionSuffix>4thAnniversary</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
