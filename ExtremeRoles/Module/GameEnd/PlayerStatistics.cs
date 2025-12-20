@@ -321,7 +321,7 @@ public sealed class PlayerStatistics()
 					}
 
 					// ミリタントを数えるが、リーダーがミリタントのときは無敵設定されてるとカウントしないように
-					if (role.CanKill() && !this.LeaderIsBlockKill)
+					if (role.CanKill() && !isThisRoleLeaderAndBlockKill)
 					{
 						++this.LiberalMilitantAlive;
 					}
