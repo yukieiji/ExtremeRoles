@@ -5,11 +5,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
+using TMPro;
 using UnityEngine;
 
 using ExtremeRoles.Performance.Il2Cpp;
-using TMPro;
-using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -34,9 +33,8 @@ public sealed class VersionChecker : MonoBehaviour
             int major = reader.ReadPackedInt32();
             int minor = reader.ReadPackedInt32();
             int build = reader.ReadPackedInt32();
-            int revision = reader.ReadPackedInt32();
 
-            this.version[id] = new Version(major, minor, build, revision);
+            this.version[id] = new Version(major, minor, build);
         }
 
         public void Deserialize(RPCOperator.RpcCaller writer)
@@ -46,7 +44,6 @@ public sealed class VersionChecker : MonoBehaviour
             writer.WritePackedInt(this.localVersion.Major);
             writer.WritePackedInt(this.localVersion.Minor);
             writer.WritePackedInt(this.localVersion.Build);
-            writer.WritePackedInt(this.localVersion.Revision);
 
 			this.version[id] = this.localVersion;
         }
@@ -152,10 +149,7 @@ public sealed class VersionChecker : MonoBehaviour
         {
             return;
         }
-		var version = name.Version;
-		version = new Version(version.Major, version.Minor, version.Build, 0);
-
-        allModVersion.Add(id, new PlayerVersion(version, modName));
+        allModVersion.Add(id, new PlayerVersion(name.Version, modName));
     }
 
     public void Awake()
