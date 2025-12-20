@@ -85,7 +85,7 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 		add
 		{
 			this.onValueChanged += value;
-			this.onValueChanged?.Invoke();
+			value.Invoke();
 		}
 		remove
 		{
