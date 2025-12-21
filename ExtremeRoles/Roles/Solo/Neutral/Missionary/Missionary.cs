@@ -20,6 +20,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Extension.Player;
 
 
 #nullable enable
@@ -196,12 +197,7 @@ public sealed class MissionaryRole :
 			return;
 		}
 
-		this.lamb.RemoveAll(
-			x =>
-				x == null ||
-				x.Data == null ||
-				x.Data.IsDead ||
-				x.Data.Disconnected);
+		this.lamb.RemoveAll(x => x.IsInValid());
 		// 削除しきって誰もいなかったらタイマー自体をリセットする、じゃないとタイマーが短い状態で次の人が追加される
 		if (this.lamb.Count == 0)
 		{
@@ -216,9 +212,10 @@ public sealed class MissionaryRole :
 
 		PlayerControl targetPlayer = this.lamb[0];
 
-        if (targetPlayer == null ||
-			targetPlayer.Data.IsDead ||
-			targetPlayer.Data.Disconnected) { return; }
+        if (targetPlayer.IsInValid())
+		{
+			return;
+		}
 
         Player.RpcUncheckMurderPlayer(
             targetPlayer.PlayerId,

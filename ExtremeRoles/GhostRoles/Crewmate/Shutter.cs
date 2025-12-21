@@ -5,13 +5,13 @@ using System.Text;
 using UnityEngine;
 using Hazel;
 
-using ExtremeRoles.Helper;
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 
@@ -19,7 +19,6 @@ using ExtremeRoles.Performance.Il2Cpp;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
-using ExtremeRoles.Module.Ability.Factory;
 
 
 #nullable enable
@@ -53,10 +52,10 @@ public sealed class Shutter : GhostRoleBase
 
             foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (player == null ||
-                    player.IsDead ||
-                    player.Disconnected ||
-                    player.Object == null) { continue; }
+                if (player.IsInValid())
+				{
+					continue;
+				}
 
                 Vector3 position = player.Object.transform.position;
                 if (range >= Vector2.Distance(photoCenter, position))

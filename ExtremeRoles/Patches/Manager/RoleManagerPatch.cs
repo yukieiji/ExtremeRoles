@@ -7,6 +7,7 @@ using Il2CppSystem.Collections.Generic;
 using Il2CppSystem.Linq;
 using InnerNet;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign;
@@ -48,11 +49,7 @@ public static class RoleManagerAssignSelectRolesPatch
 			.Where(
 				c => 
 					!(
-						c == null ||
-						c.Character == null ||
-						c.Character.Data == null ||
-						c.Character.Data.Disconnected ||
-						c.Character.Data.IsDead
+						c == null || c.Character.IsInValid()
 					))
 			.OrderBy(c => c.Id)
 			.Select(c => c.Character.Data)

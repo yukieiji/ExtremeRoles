@@ -1,6 +1,7 @@
 using HarmonyLib;
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.SystemType;
@@ -171,10 +172,7 @@ public static class MeetingHudUpdatePatch
 	{
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
-		if (localPlayer == null ||
-			localPlayer.Data == null ||
-			localPlayer.Data.IsDead ||
-			localPlayer.Data.Disconnected ||
+		if (localPlayer.IsInValid() ||
 			!ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
 				ExtremeSystemType.RaiseHandSystem, out var raiseHand))
 		{

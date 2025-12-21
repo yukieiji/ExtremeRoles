@@ -3,10 +3,12 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
@@ -14,7 +16,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using ButtonGraphic = ExtremeRoles.Module.Ability.Behavior.ButtonGraphic;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -52,8 +53,10 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
             foreach (NetworkedPlayerInfo player in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (player == null || player.Object == null ||
-					player.IsDead || player.Disconnected) { continue; }
+                if (player.IsInValid())
+				{
+					continue;
+				}
 
                 if (!this.firstStage.Contains(player.PlayerId))
                 {
@@ -377,11 +380,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         foreach (NetworkedPlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
         {
-            if (playerInfo == null) { continue; }
-
-            if (!playerInfo.Disconnected &&
-                !playerInfo.IsDead &&
-                playerInfo.Object != null &&
+            if (playerInfo.IsValid() &&
                 !playerInfo.Object.inVent &&
                 (playerInfo.PlayerId != sourcePlayerId || playerInfo.PlayerId != rolePlayerId))
             {
