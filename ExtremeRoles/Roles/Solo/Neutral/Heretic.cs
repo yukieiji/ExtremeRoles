@@ -228,9 +228,7 @@ public sealed class Heretic :
 		}
 
 		this.Button?.SetButtonShow(
-			rolePlayer.Data != null &&
-			!rolePlayer.Data.IsDead &&
-			!rolePlayer.Data.Disconnected &&
+			rolePlayer.IsValid() &&
 			(this.killMode is KillMode.AbilityOnTaskPhase or KillMode.AbilityOnTaskPhaseTarget));
 
 		if (!this.HasTask ||

@@ -4,18 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using AmongUs.GameOptions;
+
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
-
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Roles.API.Interface;
 
 public sealed class YandereRole :
     SingleRoleBase,
@@ -517,8 +518,7 @@ public sealed class YandereRole :
 				continue;
 			}
 
-            if (!playerInfo.Disconnected &&
-                !playerInfo.IsDead &&
+            if (playerInfo.IsValid() &&
                 rolePlayer.PlayerId != playerId &&
                 OneSidedLover.PlayerId != playerId &&
                 !playerInfo.Object.inVent)

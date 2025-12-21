@@ -8,13 +8,15 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 using UnityEngine;
 
 using ExtremeRoles.Extension.Vector;
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 
 #nullable enable
@@ -296,10 +298,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 	public void Update(PlayerControl rolePlayer)
 	{
 		if (this.searchInfo is null ||
-			rolePlayer == null ||
-			rolePlayer.Data == null ||
-			rolePlayer.Data.IsDead ||
-			rolePlayer.Data.Disconnected ||
+			rolePlayer.IsInValid() ||
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null)
 		{
@@ -397,10 +396,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 	{
 		yield return new WaitForSeconds(1.0f);
 		if (MeetingHud.Instance == null &&
-			rolePlayer != null &&
-			rolePlayer.Data != null &&
-			!rolePlayer.Data.IsDead &&
-			!rolePlayer.Data.Disconnected)
+			rolePlayer.IsValid())
 		{
 			rolePlayer.CmdReportDeadBody(null);
 		}

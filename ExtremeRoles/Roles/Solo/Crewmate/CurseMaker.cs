@@ -149,12 +149,17 @@ public sealed class CurseMaker :
         byte rolePlayerId, byte targetPlayerId)
     {
 
-        if (PlayerControl.LocalPlayer.PlayerId != targetPlayerId) { return; }
+        if (PlayerControl.LocalPlayer.PlayerId != targetPlayerId)
+		{
+			return;
+		}
 
         PlayerControl player = Player.GetPlayerControlById(targetPlayerId);
 
-        if (player == null) { return; }
-        if (player.Data.IsDead || player.Data.Disconnected) { return; }
+        if (player.IsInValid())
+		{
+			return;
+		}
 
         var curseMaker = ExtremeRoleManager.GetSafeCastedRole<CurseMaker>(
             rolePlayerId);

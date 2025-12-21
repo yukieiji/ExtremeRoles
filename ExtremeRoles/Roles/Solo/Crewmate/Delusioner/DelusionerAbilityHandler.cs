@@ -1,3 +1,4 @@
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
@@ -107,12 +108,9 @@ public sealed class DelusionerAbilityHandler(
 
         foreach (var player in allPlayer.GetFastEnumerator())
         {
-            if (player == null ||
-                player.Disconnected ||
+            if (player.IsInValid() ||
                 player.PlayerId == rolePlayer.PlayerId ||
                 player.PlayerId == teloportTarget ||
-                player.IsDead ||
-                player.Object == null ||
                 player.Object.onLadder || // はしご中？
                 player.Object.inVent || // ベント入ってる？
                 player.Object.inMovingPlat || // なんか乗ってる状態
