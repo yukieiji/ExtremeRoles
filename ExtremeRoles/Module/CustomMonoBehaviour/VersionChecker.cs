@@ -82,15 +82,12 @@ public sealed class VersionChecker : MonoBehaviour
                 }
 				else
 				{
-					int diff = localVersion.CompareTo(clientVer);
-					if (diff > 0)
+					key = localVersion.CompareTo(clientVer) switch
 					{
-						key = "errorOldInstalled";
-					}
-					else if (diff < 0)
-					{
-						key = "errorNewInstalled";
-					}
+						> 0 => "errorOldInstalled",
+						< 0 => "errorNewInstalled",
+						_ => string.Empty
+					};
 				}
 				if (string.IsNullOrEmpty(key))
 				{
