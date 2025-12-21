@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using TMPro;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.SystemType;
@@ -228,7 +229,10 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
 
         foreach (var player in sortedAllPlayer)
         {
-            if (player.Data.IsDead || player.Data.Disconnected) { continue; }
+            if (player.IsInValid()) 
+			{
+				continue;
+			}
 
             SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];
 

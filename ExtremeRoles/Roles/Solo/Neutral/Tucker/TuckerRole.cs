@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
@@ -166,8 +167,7 @@ public sealed class TuckerRole :
 			foreach (byte playerId in chimera)
 			{
 				if (!Player.TryGetPlayerControl(playerId, out var player) ||
-					player.Data.IsDead ||
-					player.Data.Disconnected ||
+					player.IsInValid() ||
 					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
 						playerId, out _))
 				{
@@ -187,8 +187,7 @@ public sealed class TuckerRole :
 			foreach (byte playerId in chimera)
 			{
 				if (!Player.TryGetPlayerControl(playerId, out var player) ||
-					player.Data.IsDead ||
-					player.Data.Disconnected ||
+					player.IsInValid() ||
 					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
 						playerId, out _))
 				{

@@ -14,6 +14,7 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.Solo.Crewmate;
 
 using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.PlayerStatus;
+using ExtremeRoles.Extension.Player;
 
 
 #nullable enable
@@ -120,10 +121,7 @@ public sealed class RaiderBomb : MonoBehaviour
 		foreach (NetworkedPlayerInfo playerInfo in
 			GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			if (playerInfo == null ||
-				playerInfo.IsDead ||
-				playerInfo.Disconnected ||
-				playerInfo.Object == null)
+			if (playerInfo.IsInValid())
 			{
 				continue;
 			}

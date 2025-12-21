@@ -1,5 +1,6 @@
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.GameResult;
@@ -52,7 +53,7 @@ public sealed class DoveCommonAbilityHandler
 		{
 			cachePlayer = GameData.Instance.GetPlayerById(player.PlayerId);
 		}
-		if (cachePlayer == null || cachePlayer.IsDead || cachePlayer.Disconnected || cachePlayer.Tasks.Count == 0)
+		if (cachePlayer.IsInValid() || cachePlayer.Tasks.Count == 0)
 		{
 			return;
 		}

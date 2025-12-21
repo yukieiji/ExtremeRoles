@@ -12,23 +12,22 @@ using Newtonsoft.Json.Linq;
 using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Extension.Json;
+using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Compat.Interface;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Patches;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
-
-using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.GameMode;
-using ExtremeRoles.Patches;
-using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -441,9 +440,12 @@ public sealed class Hypnotist :
 				continue;
 			}
 
-            RPCOperator.UncheckedMurderPlayer(
-                playerId, playerId,
-                byte.MaxValue);
+            if (player.IsValid())
+			{
+				RPCOperator.UncheckedMurderPlayer(
+					playerId, playerId,
+					byte.MaxValue);
+			}
         }
     }
 
@@ -535,13 +537,11 @@ public sealed class Hypnotist :
     {
         foreach (byte playerId in this.doll)
         {
-            if (!Player.TryGetPlayerControl(playerId, out var player) ||
-				player.Data.IsDead || player.Data.Disconnected)
+            if (Player.TryGetPlayerControl(playerId, out var player) &&
+				player.IsValid())
 			{
-				continue;
+				player.Exiled();
 			}
-
-            player.Exiled();
         }
     }
 
@@ -550,16 +550,13 @@ public sealed class Hypnotist :
     {
         foreach (byte playerId in this.doll)
         {
-            if (!Player.TryGetPlayerControl(playerId, out var player) ||
-				player.Data.IsDead ||
-                player.Data.Disconnected)
+            if (Player.TryGetPlayerControl(playerId, out var player) &&
+				player.IsValid())
 			{
-				continue;
+				RPCOperator.UncheckedMurderPlayer(
+					playerId, playerId,
+					byte.MaxValue);
 			}
-
-            RPCOperator.UncheckedMurderPlayer(
-                playerId, playerId,
-                byte.MaxValue);
         }
     }
 

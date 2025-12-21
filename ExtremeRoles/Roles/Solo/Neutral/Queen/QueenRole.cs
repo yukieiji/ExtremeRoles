@@ -6,6 +6,7 @@ using AmongUs.GameOptions;
 using UnityEngine;
 
 using ExtremeRoles.Extension.Manager;
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -303,10 +304,11 @@ public sealed class QueenRole :
         {
             var player = Player.GetPlayerControlById(playerId);
 
-            if (player == null ||
-				player.Data.IsDead ||
-                player.Data.Disconnected ||
-				isNotSucideServant(playerId)) { continue; }
+            if (player.IsInValid() ||
+				isNotSucideServant(playerId))
+			{
+				continue;
+			}
 
             RPCOperator.UncheckedMurderPlayer(
                 playerId, playerId,
@@ -354,10 +356,11 @@ public sealed class QueenRole :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player == null ||
-				player.Data.IsDead ||
-				player.Data.Disconnected ||
-				isNotSucideServant(playerId)) { continue; }
+            if (player.IsInValid() ||
+				isNotSucideServant(playerId))
+			{
+				continue;
+			}
 
             player.Exiled();
         }
@@ -400,10 +403,11 @@ public sealed class QueenRole :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player == null ||
-				player.Data.IsDead ||
-                player.Data.Disconnected ||
-				isNotSucideServant(playerId)) { continue; }
+            if (player.IsInValid() ||
+				isNotSucideServant(playerId))
+			{
+				continue;
+			}
 
             RPCOperator.UncheckedMurderPlayer(
                 playerId, playerId,

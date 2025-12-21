@@ -143,7 +143,7 @@ public sealed class ServantRole :
 		var queenPlayer = GameData.Instance.GetPlayerById(this.status.Parent);
 
 		if (AnotherRole is Resurrecter resurrecter &&
-			(queenPlayer == null || queenPlayer.IsDead || queenPlayer.Disconnected))
+			queenPlayer.IsValid())
 		{
 			Resurrecter.UseResurrect(resurrecter);
 		}
@@ -224,8 +224,8 @@ public sealed class ServantRole :
 		throw new Exception("Don't call this class method!!");
 	}
 
-	// ここの処理は後で考える必要あり
-	//　今後役職を分解してMOD自体をセパレートした時に問題が発生するため
+	// �����̏����͌�ōl����K�v����
+	//�@�����E�𕪉����MOD���̂�Z�p���[�g�������ɖ�肪�������邽��
 	public static bool IsMeServantAndQueenDead(PlayerControl rolePlayer)
 	{
 		if (ExtremeRoleManager.TryGetSafeCastedRole<ServantRole>(rolePlayer.PlayerId, out var role) &&

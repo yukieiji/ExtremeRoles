@@ -1,15 +1,15 @@
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.GameResult;
-
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
 
 #nullable enable
 
@@ -69,10 +69,7 @@ public sealed class FurryRole : SingleRoleBase,
 		// SKを残したままJackal昇格している可能性を確認 == 同じコントロールIDでJackalがいる
 		foreach (var player in PlayerCache.AllPlayerControl)
 		{
-			if (player == null ||
-				player.Data == null ||
-				player.Data.IsDead ||
-				player.Data.Disconnected ||
+			if (player.IsInValid() ||
 				player.PlayerId == target.PlayerId ||
 				player.PlayerId == local.PlayerId ||
 				!ExtremeRoleManager.TryGetSafeCastedRole<JackalRole>(player.PlayerId, out var checkJk) ||
