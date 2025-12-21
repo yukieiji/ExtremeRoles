@@ -20,7 +20,7 @@ public sealed class VersionChecker : MonoBehaviour
     private sealed class PlayerVersion(Version version, string name)
     {
         private readonly Dictionary<int, Version> version = new Dictionary<int, Version>();
-        private readonly Version localVersion = version;
+        private readonly Version localVersion = new Version(version.Major, version.Minor, version.Build);
         private readonly string modName = name;
         private readonly StringBuilder builder = new StringBuilder();
 
