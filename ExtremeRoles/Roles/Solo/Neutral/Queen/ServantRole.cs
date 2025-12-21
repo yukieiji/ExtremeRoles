@@ -2,19 +2,20 @@ using System;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Ability.Factory;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.Solo.Crewmate;
-using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Roles.Solo.Crewmate;
+
 
 #nullable enable
 
@@ -224,5 +225,18 @@ public sealed class ServantRole :
 	protected override void RoleSpecificInit()
 	{
 		throw new Exception("Don't call this class method!!");
+	}
+
+	// ここの処理は後で考える必要あり
+	//　今後役職を分解してMOD自体をセパレートした時に問題が発生するため
+	public static bool IsMeServantAndQueenDead(PlayerControl rolePlayer)
+	{
+		if (ExtremeRoleManager.TryGetSafeCastedRole<ServantRole>(rolePlayer.PlayerId, out var role) &&
+			role.Status is IParentChainStatus parent)
+		{
+			var queen = Player.GetPlayerControlById(parent.Parent);
+			return !queen.IsValid();
+		}
+		return false;
 	}
 }

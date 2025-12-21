@@ -42,7 +42,7 @@ public sealed class ScavengerMapWepenSetIsActive(
 	private readonly IOption isRandomInitOpt = isRandomInitOpt;
 	private readonly IOption isInitWeponOpt = isInitWeponOpt;
 
-	public bool IsActive => Parent.IsActive && (isRandomInitOpt.IsChangeDefault || isInitWeponOpt.IsChangeDefault);
+	public bool IsActive => Parent.IsChangeDefault && (isRandomInitOpt.IsChangeDefault || isInitWeponOpt.IsChangeDefault);
 }
 
 

@@ -15,6 +15,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Roles.Solo.Neutral.Queen;
+using ExtremeRoles.Extension.Player;
 
 
 #nullable enable
@@ -137,7 +139,7 @@ public sealed class CEO : SingleRoleBase,
 
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
-		if (!this.IsAwake || this.isMonikaMeeting)
+		if (!this.IsAwake || this.isMonikaMeeting || ServantRole.IsMeServantAndQueenDead(rolePlayer))
 		{
 			this.isMonikaMeeting = false;
 			return;

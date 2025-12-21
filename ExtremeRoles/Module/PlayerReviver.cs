@@ -49,6 +49,11 @@ public sealed class PlayerReviver(float resurrectTime, Action<PlayerControl>? on
 		this.token?.Reset();
     }
 
+	public void Release()
+	{
+		this.token = null;
+	}
+
 	private static void hideChatWhenMeeting()
 	{
 		// 特殊会議以外はチャットは消しておく

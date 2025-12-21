@@ -1,10 +1,9 @@
-using Hazel;
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
+using Hazel;
 using TMPro;
 using UnityEngine;
 
@@ -20,7 +19,7 @@ public sealed class VersionChecker : MonoBehaviour
     private sealed class PlayerVersion(Version version, string name)
     {
         private readonly Dictionary<int, Version> version = new Dictionary<int, Version>();
-        private readonly Version localVersion = version;
+        private readonly Version localVersion = new Version(version.Major, version.Minor, version.Build);
         private readonly string modName = name;
         private readonly StringBuilder builder = new StringBuilder();
 
@@ -52,54 +51,58 @@ public sealed class VersionChecker : MonoBehaviour
         {
             this.builder.Clear();
 
-            foreach (InnerNet.ClientData client in
+            foreach (var client in
                 AmongUsClient.Instance.allClients.GetFastEnumerator())
             {
-                if (client.Character == null ||
+				var character = client.Character;
+                if (character == null ||
                     (
-                        client.Character.TryGetComponent<DummyBehaviour>(out var dummyComponent) &&
+						character.TryGetComponent<DummyBehaviour>(out var dummyComponent) &&
                         dummyComponent.enabled
                     ) ||
-					client.Character.Data == null)
+					character.Data == null)
                 {
                     continue;
                 }
 
-				string name = client.Character.Data.PlayerName;
+				string name = character.Data.PlayerName;
 				if (string.IsNullOrEmpty(name))
 				{
 					continue;
 				}
+
+				string key = string.Empty;
 
 				if (!(
                         this.version.TryGetValue(client.Id, out var clientVer) &&
                         clientVer is not null
                     ))
                 {
-                    this.builder.AppendLine($"{name}:  {Tr.GetString("errorNotInstalled", modName)}");
+					key = "errorNotInstalled";
                 }
-                else
-                {
-                    int diff = localVersion.CompareTo(clientVer);
-                    if (diff > 0)
-                    {
-                        this.builder.AppendLine($"{name}:  {Tr.GetString("errorOldInstalled", modName)}");
-                    }
-                    else if (diff < 0)
-                    {
-                        this.builder.AppendLine(
-                            $"{name}:  {Tr.GetString("errorNewInstalled", modName)}");
-                    }
-                }
-            }
+				else
+				{
+					key = localVersion.CompareTo(clientVer) switch
+					{
+						> 0 => "errorOldInstalled",
+						< 0 => "errorNewInstalled",
+						_ => string.Empty
+					};
+				}
+				if (string.IsNullOrEmpty(key))
+				{
+					continue;
+				}
+				this.builder.AppendLine($"{name}:  {Tr.GetString(key, modName)}");
+			}
             return this.builder.ToString();
         }
 
         private string getLocalPlayerMessage()
         {
-            if (version.TryGetValue(AmongUsClient.Instance.HostId, out var hostVer) &&
+            if (this.version.TryGetValue(AmongUsClient.Instance.HostId, out var hostVer) &&
                 hostVer is not null &&
-                hostVer.CompareTo(localVersion) == 0)
+                hostVer.CompareTo(this.localVersion) == 0)
             {
                 return string.Empty;
             }
@@ -107,7 +110,7 @@ public sealed class VersionChecker : MonoBehaviour
         }
     }
 
-    public bool IsError
+    public static bool IsCheckMiss
     {
         get
         {
@@ -210,18 +213,11 @@ public sealed class VersionChecker : MonoBehaviour
             this.isSend = true;
         }
         this.builder.Clear();
-        bool isHost = AmongUsClient.Instance.AmHost;
-        if (isHost)
-        {
-            this.builder
-                .AppendLine(Tr.GetString("errorCannotGameStart"));
-        }
-        else
-        {
-            this.builder
-                .AppendLine(Tr.GetString("autoDisconnectTo"));
-        }
+        
+		bool isHost = AmongUsClient.Instance.AmHost;
 
+		string errorKey = isHost ? "errorCannotGameStart" : "autoDisconnectTo";
+		this.builder.AppendLine(Tr.GetString(errorKey));
         int curLength = this.builder.Length;
 
         foreach (var version in allModVersion.Values)
@@ -264,7 +260,8 @@ public sealed class VersionChecker : MonoBehaviour
                     SceneChanger.ChangeScene("MainMenu");
                 }
                 this.text.text = string.Format(
-                    this.builder.ToString(), Mathf.CeilToInt(kickTime - this.timer));
+                    this.builder.ToString(),
+					Mathf.CeilToInt(kickTime - this.timer));
             }
         }
         else

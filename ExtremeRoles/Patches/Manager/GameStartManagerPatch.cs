@@ -40,16 +40,12 @@ public static class GameStartManagerPatch
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.BeginGame))]
     public static bool BeginGamePrefix(GameStartManager __instance)
     {
-        if (!(
-                AmongUsClient.Instance.AmHost &&
-                __instance.TryGetComponent<VersionChecker>(out var version)
-            ))
+        if (!AmongUsClient.Instance.AmHost)
         {
             return true;
         }
 
-        bool isError = version.IsError;
-        if (isError)
+        if (VersionChecker.IsCheckMiss)
         {
             return false;
         }
