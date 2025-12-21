@@ -1,6 +1,8 @@
+using System.Collections.Generic;
+
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Crewmate;
-using System.Collections.Generic;
 
 namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
@@ -52,13 +54,13 @@ public sealed class CEOForceMeeting : IOnemanMeeting, IVoterValidtor
 		=> VoteAreaState.None;
 
 	public bool CanChatPlayer(PlayerControl target)
-		=> target != null && target.Data != null && !target.Data.IsDead && !target.Data.Disconnected;
+		=> target.IsValid();
 
 	public bool IsDefaultForegroundForDead(MeetingHud _, byte caller)
 		=> PlayerControl.LocalPlayer.PlayerId != caller;
 
 	public bool IsValidShowChatPlayer(PlayerControl chatSourcePlayer)
-		=> chatSourcePlayer != null && chatSourcePlayer.Data != null && !chatSourcePlayer.Data.IsDead && !chatSourcePlayer.Data.Disconnected;
+		=> chatSourcePlayer.IsValid();
 
 	public bool TryGetGameEndReason(out RoleGameOverReason reason)
 	{

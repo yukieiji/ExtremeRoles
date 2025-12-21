@@ -15,6 +15,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
@@ -174,10 +175,7 @@ public sealed class IronMateRole :
 
 	public void HookMuderPlayer(PlayerControl source, PlayerControl target)
 	{
-		if (PlayerControl.LocalPlayer == null ||
-			PlayerControl.LocalPlayer.Data == null ||
-			PlayerControl.LocalPlayer.Data.IsDead ||
-			PlayerControl.LocalPlayer.Data.Disconnected ||
+		if (PlayerControl.LocalPlayer.IsInValid() ||
 			target == null ||
 			target.Data == null ||
 			!target.Data.IsDead ||

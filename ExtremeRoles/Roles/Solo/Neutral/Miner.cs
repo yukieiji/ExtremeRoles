@@ -4,6 +4,7 @@ using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Compat;
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
@@ -266,9 +267,7 @@ public sealed class Miner :
 					continue;
 				}
 
-                if (!playerInfo.Disconnected &&
-                    !playerInfo.IsDead &&
-                    playerInfo.Object != null &&
+                if (playerInfo.IsValid() &&
                     !playerInfo.Object.inVent)
                 {
 					Vector2 vector = playerInfo.Object.GetTruePosition() - pos;

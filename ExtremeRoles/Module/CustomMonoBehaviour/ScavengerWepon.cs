@@ -6,6 +6,7 @@ using Il2CppInterop.Runtime.Attributes;
 using ExtremeRoles.Resources;
 
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
@@ -28,11 +29,7 @@ public static class  ScavengerWeaponHitHelper
 
 	public static bool IsHitPlayer(Collider2D other, out PlayerControl pc)
 		=> other.TryGetComponent(out pc) &&
-			pc != null &&
-			pc.Data != null &&
-			!pc.Data.IsDead &&
-			!pc.Data.Disconnected &&
-			!pc.inVent;
+			pc.IsValid() && !pc.inVent;
 
 	public static bool IsHitWall(Collider2D other)
 		=> collisionLayer == (collisionLayer | (1 << other.gameObject.layer));
@@ -635,9 +632,7 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 	{
 		if (this.frame is null ||
 			this.Info is null ||
-			this.Info.IgnorePlayer == null ||
-			this.Info.IgnorePlayer.Data == null ||
-			this.Info.IgnorePlayer.Data.IsDead ||
+			this.Info.IgnorePlayer.IsInValid() ||
 			!ScavengerWeaponHitHelper.IsHitPlayer(other, out var pc) ||
 			pc.PlayerId == this.Info.IgnorePlayer.PlayerId ||
 			PhysicsHelpers.AnythingBetween(
@@ -768,10 +763,7 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 
 	public void Increse(float addTime)
 	{
-		if (this.TargetPlayer == null ||
-			this.TargetPlayer.Data == null ||
-			this.TargetPlayer.Data.IsDead ||
-			this.TargetPlayer.Data.Disconnected)
+		if (this.TargetPlayer.IsInValid())
 		{
 			disable();
 			return;

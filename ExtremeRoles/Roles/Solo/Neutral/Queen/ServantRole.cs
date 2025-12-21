@@ -15,6 +15,7 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
@@ -145,7 +146,7 @@ public sealed class ServantRole :
 		var queenPlayer = GameData.Instance.GetPlayerById(this.status.Parent);
 
 		if (AnotherRole is Resurrecter resurrecter &&
-			(queenPlayer == null || queenPlayer.IsDead || queenPlayer.Disconnected))
+			queenPlayer.IsValid())
 		{
 			Resurrecter.UseResurrect(resurrecter);
 		}
