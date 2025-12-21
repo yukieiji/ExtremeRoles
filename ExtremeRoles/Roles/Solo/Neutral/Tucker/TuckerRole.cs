@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
@@ -169,11 +170,12 @@ public sealed class TuckerRole :
 			{
 				PlayerControl player = Player.GetPlayerControlById(playerId);
 
-				if (player == null ||
-					player.Data.IsDead ||
-					player.Data.Disconnected ||
+				if (player.IsInValid() ||
 					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
-						playerId, out _)) { continue; }
+						playerId, out _))
+				{
+					continue;
+				}
 
 				player.Exiled();
 			}
@@ -189,11 +191,12 @@ public sealed class TuckerRole :
 			{
 				PlayerControl player = Player.GetPlayerControlById(playerId);
 
-				if (player == null ||
-					player.Data.IsDead ||
-					player.Data.Disconnected ||
+				if (player.IsInValid() ||
 					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
-						playerId, out _)) { continue; }
+						playerId, out _))
+				{
+					continue;
+				}
 
 				RPCOperator.UncheckedMurderPlayer(
 					playerId, playerId,

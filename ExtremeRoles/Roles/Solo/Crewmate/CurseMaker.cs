@@ -4,18 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
-using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -153,12 +152,17 @@ public sealed class CurseMaker :
         byte rolePlayerId, byte targetPlayerId)
     {
 
-        if (PlayerControl.LocalPlayer.PlayerId != targetPlayerId) { return; }
+        if (PlayerControl.LocalPlayer.PlayerId != targetPlayerId)
+		{
+			return;
+		}
 
         PlayerControl player = Player.GetPlayerControlById(targetPlayerId);
 
-        if (player == null) { return; }
-        if (player.Data.IsDead || player.Data.Disconnected) { return; }
+        if (player.IsInValid())
+		{
+			return;
+		}
 
         var curseMaker = ExtremeRoleManager.GetSafeCastedRole<CurseMaker>(
             rolePlayerId);

@@ -1,6 +1,7 @@
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -51,13 +52,17 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility, ITryKillT
         int deadImpNum = maxImpNum;
         foreach (var (playerId, checkRole) in ExtremeRoleManager.GameRole)
         {
-            if (!checkRole.IsImpostor()) { continue; }
+            if (!checkRole.IsImpostor())
+			{
+				continue;
+			}
 
             var player = GameData.Instance.GetPlayerById(playerId);
 
-            if (player == null || player.IsDead || player.Disconnected) { continue; }
-
-            --deadImpNum;
+            if (player.IsValid())
+			{
+				--deadImpNum;
+			}
         }
 
         deadImpNum = Mathf.Clamp(deadImpNum, 0, maxImpNum);

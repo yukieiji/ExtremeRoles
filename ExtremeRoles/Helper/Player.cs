@@ -5,6 +5,7 @@ using AmongUs.GameOptions;
 using UnityEngine;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -479,9 +480,7 @@ public static class Player
 
         return (
 			targetPlayerId != sourcePlayerId &&
-			!targetPlayer.Disconnected &&
-            !targetPlayer.IsDead &&
-            targetPlayer.Object != null &&
+			targetPlayer.IsInValid() &&
             !targetPlayer.Object.inVent &&
 			!targetPlayer.Object.inMovingPlat &&
 			!targetPlayer.Object.onLadder &&

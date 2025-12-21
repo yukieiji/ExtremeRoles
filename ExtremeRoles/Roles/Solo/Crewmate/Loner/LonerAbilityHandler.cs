@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.SystemType;
@@ -89,9 +90,7 @@ public sealed class ArrowController(int arrowNum, bool isShowOnVentPlayer)
 
 		return (
 			targetPlayer.PlayerId != sourcePlayer.PlayerId &&
-			!targetPlayer.Disconnected &&
-			!targetPlayer.IsDead &&
-			targetPlayer.Object != null &&
+			targetPlayer.IsInValid() &&
 			(this.isShowOnVentPlayer || !targetPlayer.Object.inVent)
 		);
 	}
@@ -115,10 +114,7 @@ public sealed class LonerAbilityHandler(
 
 		this.status.Update(rolePlayer, Time.deltaTime);
 
-		if (rolePlayer == null ||
-			rolePlayer.Data == null ||
-			rolePlayer.Data.IsDead ||
-			rolePlayer.Data.Disconnected)
+		if (rolePlayer.IsInValid())
 		{
 			this.arrow.Hide();
 			return;

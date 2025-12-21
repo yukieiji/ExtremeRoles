@@ -29,6 +29,7 @@ using ExtremeRoles.Patches;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Extension.Player;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -435,14 +436,12 @@ public sealed class Hypnotist :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player == null) { continue; }
-
-            if (player.Data.IsDead ||
-                player.Data.Disconnected) { continue; }
-
-            RPCOperator.UncheckedMurderPlayer(
-                playerId, playerId,
-                byte.MaxValue);
+            if (player.IsValid())
+			{
+				RPCOperator.UncheckedMurderPlayer(
+					playerId, playerId,
+					byte.MaxValue);
+			}
         }
     }
 
@@ -536,10 +535,10 @@ public sealed class Hypnotist :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player == null) { continue; }
-            if (player.Data.IsDead || player.Data.Disconnected) { continue; }
-
-            player.Exiled();
+            if (player.IsValid())
+			{
+				player.Exiled();
+			}
         }
     }
 
@@ -550,14 +549,12 @@ public sealed class Hypnotist :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player == null) { continue; }
-
-            if (player.Data.IsDead ||
-                player.Data.Disconnected) { continue; }
-
-            RPCOperator.UncheckedMurderPlayer(
-                playerId, playerId,
-                byte.MaxValue);
+            if (player.IsValid())
+			{
+				RPCOperator.UncheckedMurderPlayer(
+					playerId, playerId,
+					byte.MaxValue);
+			}
         }
     }
 

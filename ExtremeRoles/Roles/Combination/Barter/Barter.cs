@@ -1,4 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+
+using UnityEngine;
 using AmongUs.GameOptions;
+
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -10,14 +18,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
-using UnityEngine;
+
 using UnityObject = UnityEngine.Object;
-
-
 
 #nullable enable
 
@@ -108,9 +110,7 @@ public sealed class BarterRole :
 		}
 
 
-		if (rolePlayer.Data != null &&
-			!rolePlayer.Data.IsDead &&
-			!rolePlayer.Data.Disconnected &&
+		if (rolePlayer.IsValid() &&
 			meeting != null &&
 			this.status is not null)
 		{
