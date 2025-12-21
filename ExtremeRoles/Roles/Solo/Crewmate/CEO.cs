@@ -139,7 +139,7 @@ public sealed class CEO : SingleRoleBase,
 
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
-		if (!this.IsAwake || this.isMonikaMeeting || isQueenDead(rolePlayer))
+		if (!this.IsAwake || this.isMonikaMeeting || ServantRole.IsMeServantAndQueenDead(rolePlayer))
 		{
 			this.isMonikaMeeting = false;
 			return;
@@ -305,14 +305,6 @@ public sealed class CEO : SingleRoleBase,
 			return;
 		}
 
-		// 自身がサーヴァントでクイーンが死んでて復活処理が入っているときに消す
-		if (isQueenDead(rolePlayer) &&
-			(playerReviver?.IsReviving ?? false))
-		{
-			this.playerReviver?.Release();
-			return;
-		}
-
 		if (this.IsAwake)
 		{
 			playerReviver?.Update();
@@ -374,16 +366,5 @@ public sealed class CEO : SingleRoleBase,
 			this.IsAwake = false;
 			this.HasOtherVision = false;
 		}
-	}
-
-	private bool isQueenDead(PlayerControl rolePlayer)
-	{
-		if (ExtremeRoleManager.TryGetSafeCastedRole<ServantRole>(rolePlayer.PlayerId, out var role) &&
-			role.Status is IParentChainStatus parent)
-		{
-			var queen = Player.GetPlayerControlById(parent.Parent);
-			return !queen.IsValid();
-		}
-		return false;
 	}
 }
