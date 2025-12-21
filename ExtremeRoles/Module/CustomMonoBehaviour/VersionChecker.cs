@@ -83,7 +83,18 @@ public sealed class VersionChecker : MonoBehaviour
 				else
 				{
 					int diff = localVersion.CompareTo(clientVer);
-					key = diff > 0 ? "errorOldInstalled" : "errorNewInstalled";
+					if (diff > 0)
+					{
+						key = "errorOldInstalled";
+					}
+					else if (diff < 0)
+					{
+						key = "errorNewInstalled";
+					}
+				}
+				if (string.IsNullOrEmpty(key))
+				{
+					continue;
 				}
 				this.builder.AppendLine($"{name}:  {Tr.GetString(key, modName)}");
 			}
