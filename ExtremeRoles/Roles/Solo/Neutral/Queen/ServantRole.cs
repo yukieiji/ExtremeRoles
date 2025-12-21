@@ -1,3 +1,7 @@
+using System;
+
+using UnityEngine;
+
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -6,14 +10,11 @@ using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.Solo.Crewmate;
-using System;
-using UnityEngine;
 
 
 #nullable enable
