@@ -15,6 +15,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Roles.Solo.Neutral.Queen;
+using ExtremeRoles.Extension.Player;
 
 
 #nullable enable
@@ -137,7 +139,7 @@ public sealed class CEO : SingleRoleBase,
 
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
-		if (!this.IsAwake || this.isMonikaMeeting)
+		if (!this.IsAwake || this.isMonikaMeeting || isQueenDead(rolePlayer))
 		{
 			this.isMonikaMeeting = false;
 			return;
@@ -303,6 +305,14 @@ public sealed class CEO : SingleRoleBase,
 			return;
 		}
 
+		// 自身がサーヴァントでクイーンが死んでて復活処理が入っているときに消す
+		if (isQueenDead(rolePlayer) &&
+			(playerReviver?.IsReviving ?? false))
+		{
+			this.playerReviver?.Release();
+			return;
+		}
+
 		if (this.IsAwake)
 		{
 			playerReviver?.Update();
@@ -364,5 +374,16 @@ public sealed class CEO : SingleRoleBase,
 			this.IsAwake = false;
 			this.HasOtherVision = false;
 		}
+	}
+
+	private bool isQueenDead(PlayerControl rolePlayer)
+	{
+		if (ExtremeRoleManager.TryGetSafeCastedRole<ServantRole>(rolePlayer.PlayerId, out var role) &&
+			role.Status is IParentChainStatus parent)
+		{
+			var queen = Player.GetPlayerControlById(parent.Parent);
+			return !queen.IsValid();
+		}
+		return false;
 	}
 }
