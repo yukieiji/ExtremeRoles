@@ -54,18 +54,18 @@ public sealed class VersionChecker : MonoBehaviour
             foreach (var client in
                 AmongUsClient.Instance.allClients.GetFastEnumerator())
             {
-				var charactor = client.Character;
-                if (charactor == null ||
+				var character = client.Character;
+                if (character == null ||
                     (
-						charactor.TryGetComponent<DummyBehaviour>(out var dummyComponent) &&
+						character.TryGetComponent<DummyBehaviour>(out var dummyComponent) &&
                         dummyComponent.enabled
                     ) ||
-					charactor.Data == null)
+					character.Data == null)
                 {
                     continue;
                 }
 
-				string name = charactor.Data.PlayerName;
+				string name = character.Data.PlayerName;
 				if (string.IsNullOrEmpty(name))
 				{
 					continue;
