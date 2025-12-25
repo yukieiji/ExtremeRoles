@@ -176,7 +176,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 
 		var param = new BaitKillCoolReducer.InitializeParameter(
 			this.timer, this.killCoolReduceMulti,
-			new BaitKillCoolReducer.ContineChecker(this.delayUntilForceReport == 0.0f, killerPlayer));
+			new BaitKillCoolReducer.ContinueChecker(this.delayUntilForceReport == 0.0f, killerPlayer));
 		var reducer = localPlayer.gameObject.TryAddComponent<BaitKillCoolReducer>();
 		reducer.Parameter = param;
 	}

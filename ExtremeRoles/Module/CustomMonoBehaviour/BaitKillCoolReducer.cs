@@ -12,7 +12,7 @@ public sealed class BaitKillCoolReducer : MonoBehaviour
 	private float timer  = 0.0f;
 	private float reduceMulti = 1.0f;
 
-	public sealed class ContineChecker(bool isCheck, PlayerControl reporter)
+	public sealed class ContinueChecker(bool isCheck, PlayerControl reporter)
 	{
 		public bool IsCheck { get; set; } = isCheck;
 		// レポーターが死んでいると何もしない
@@ -31,9 +31,9 @@ public sealed class BaitKillCoolReducer : MonoBehaviour
 		}
 	}
 
-	private ContineChecker? checker;
+	private ContinueChecker? checker;
 
-	public readonly record struct InitializeParameter(float Timer, float ReduceMulti, ContineChecker Checker);
+	public readonly record struct InitializeParameter(float Timer, float ReduceMulti, ContinueChecker Checker);
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	private PlayerControl localPlayer;
