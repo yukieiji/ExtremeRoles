@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
+
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
@@ -7,8 +9,31 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class BaitKillCoolReducer : MonoBehaviour
 {
-	public float Timer { private get; set; } = 0.0f;
-	public float ReduceMulti { private get; set; } = 1.0f;
+	private float timer  = 0.0f;
+	private float reduceMulti = 1.0f;
+
+	public sealed class ContinueChecker(bool isCheck, PlayerControl reporter)
+	{
+		public bool IsCheck { get; set; } = isCheck;
+		// レポーターが死んでいると何もしない
+		public bool IsReduce => this.reporter.IsValid();
+
+		private readonly PlayerControl reporter = reporter;
+	}
+
+	public InitializeParameter Parameter
+	{
+		set
+		{
+			this.timer = value.Timer;
+			this.reduceMulti = value.ReduceMulti;
+			this.checker = value.Checker;
+		}
+	}
+
+	private ContinueChecker? checker;
+
+	public readonly record struct InitializeParameter(float Timer, float ReduceMulti, ContinueChecker Checker);
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	private PlayerControl localPlayer;
@@ -22,15 +47,36 @@ public sealed class BaitKillCoolReducer : MonoBehaviour
 
 	public void FixedUpdate()
 	{
+		if (this.checker is null)
+		{
+			return;
+		}
+
+		if (this.checker.IsCheck)
+		{
+			// 一回会議が入ったのでずっとOK
+			if (MeetingHud.Instance != null)
+			{
+				this.checker.IsCheck = false;
+				return;
+			}
+			
+			if (!this.checker.IsReduce)
+			{
+				Destroy(this);
+				return;
+			}
+		}
+
 		if (MeetingHud.Instance != null ||
 			ExileController.Instance != null ||
-			this.Timer <= 0.0f)
+			this.timer <= 0.0f)
 		{
 			return;
 		}
 
 		float deltaTime = Time.fixedDeltaTime;
-		this.Timer -= deltaTime;
+		this.timer -= deltaTime;
 
 		if (this.localPlayer == null ||
 			this.localPlayer.Data == null ||
@@ -42,8 +88,8 @@ public sealed class BaitKillCoolReducer : MonoBehaviour
 		}
 
 		this.localPlayer.SetKillTimer(
-			this.localPlayer.killTimer - (deltaTime * this.ReduceMulti));
-		if (this.Timer <= 0.0f)
+			this.localPlayer.killTimer - (deltaTime * this.reduceMulti));
+		if (this.timer <= 0.0f)
 		{
 			Destroy(this);
 		}
