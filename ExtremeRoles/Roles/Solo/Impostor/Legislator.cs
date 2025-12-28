@@ -64,7 +64,7 @@ public sealed class Legislator :
 				legislator.SetTargetVote(targetPlayerId);
                 break;
             case AbilityType.ChargeVote:
-				int chargeVoteNum = reader.ReadByte();
+				int chargeVoteNum = reader.ReadInt32();
 				legislator.ChargeVote(chargeVoteNum);
                 break;
             default:
@@ -119,7 +119,7 @@ public sealed class Legislator :
         {
             int removeVote = (int)Math.Floor(this.curChargedVote);
 
-            if (voteResult.TryGetValue(this.removeTarget, out int curVoteNum))
+            if (!voteResult.TryGetValue(this.removeTarget, out int curVoteNum))
             {
 				return;
             }
@@ -263,7 +263,7 @@ public sealed class Legislator :
 
         this.curChargedVote = this.defaultVote;
 
-        this.removeTarget = byte.MaxValue;
+        this.removeTarget = PlayerVoteArea.HasNotVoted;
         this.voteCheckMark = new Dictionary<byte, SpriteRenderer>();
     }
     private bool isNotUseSpecialVote() => this.curChargedVote < 1.0f;
