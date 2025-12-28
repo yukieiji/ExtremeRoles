@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +17,7 @@ public sealed class VoteInfoCollector()
 				group => new VoteInfo(
 					group.Key.VoterId,
 					group.Key.TargetId,
-					group.Sum(vote => vote.Count) // グループ内のContを合計
+					Math.Max(group.Sum(vote => vote.Count), 0) // グループ内のContを合計して０にならないように
 				)
 			);
 
@@ -44,9 +45,11 @@ public interface IRoleVoteModifier
     public enum ModOrder : int
     {
         CaptainSpecialVote = 0,
-        GamblerAddVote,
+		GamblerAddVote,
 
-        DelusionerCheckVote = 88659,
+		LegislatorSpecialVote,
+
+		DelusionerCheckVote = 88659,
 		CEOOverrideVote,
 	}
 
