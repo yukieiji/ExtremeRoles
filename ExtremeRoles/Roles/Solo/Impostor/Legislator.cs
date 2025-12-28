@@ -9,6 +9,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
 
+#nullable enable
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Legislator :
@@ -39,8 +41,8 @@ public sealed class Legislator :
     private byte removeTarget;
 	private bool includeSkip;
 
-    private TMPro.TextMeshPro meetingVoteText = null;
-    private Dictionary<byte, SpriteRenderer> voteCheckMark;
+    private TMPro.TextMeshPro? meetingVoteText = null;
+    private Dictionary<byte, SpriteRenderer>? voteCheckMark;
 
     public Legislator() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Legislator),
@@ -64,8 +66,8 @@ public sealed class Legislator :
 				legislator.SetTargetVote(targetPlayerId);
                 break;
             case AbilityType.ChargeVote:
-				int chargeVoteNum = reader.ReadInt32();
-				legislator.ChargeVote(chargeVoteNum);
+				int multi = reader.ReadInt32();
+				legislator.ChargeVote(multi);
                 break;
             default:
                 break;
@@ -96,7 +98,7 @@ public sealed class Legislator :
 			int allVoteExistLegislator = voteResult.Sum(x =>
 			{
 				byte target = x.Key;
-				if (target == rolePlayerId &&
+				if (target == rolePlayerId ||
 					!(this.includeSkip && isInvalidVote(target)))
 				{
 					return 0;
@@ -105,7 +107,6 @@ public sealed class Legislator :
 				return x.Value;
 			});
 
-			// スキップ => チャージ
 			using (var caller = RPCOperator.CreateCaller(
 				   RPCOperator.Command.LegislatorAbility))
 			{
@@ -157,7 +158,7 @@ public sealed class Legislator :
             this.curChargedVote = this.defaultVote;
         }
         this.removeTarget = PlayerVoteArea.HasNotVoted;
-        this.voteCheckMark.Clear();
+        this.voteCheckMark?.Clear();
     }
 
     public void ButtonMod(
@@ -168,6 +169,11 @@ public sealed class Legislator :
     {
         void setTarget()
         {
+			if (this.voteCheckMark is null)
+			{
+				return;
+			}
+
             using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.LegislatorAbility))
             {
@@ -178,7 +184,7 @@ public sealed class Legislator :
             this.SetTargetVote(
                 instance.TargetPlayerId);
 
-            foreach (SpriteRenderer vote in this.voteCheckMark.Values)
+            foreach (var vote in this.voteCheckMark.Values)
             {
                 if (vote != null)
                 {
@@ -188,7 +194,7 @@ public sealed class Legislator :
 
             if (!this.voteCheckMark.TryGetValue(
                     instance.TargetPlayerId,
-                    out SpriteRenderer checkMark) ||
+                    out SpriteRenderer? checkMark) ||
                 checkMark == null)
             {
                 checkMark = UnityEngine.Object.Instantiate(
