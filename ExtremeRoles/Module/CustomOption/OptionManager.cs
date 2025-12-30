@@ -168,10 +168,10 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 				category.IsDirty = true;
 			}
 		}
-		ShereAllOption();
+		ShareAllOption();
 	}
 
-	public void ShereAllOption()
+	public void ShareAllOption()
 	{
 		if (isInvalidOptionUpdate())
 		{
