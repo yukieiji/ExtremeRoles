@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
@@ -23,14 +22,67 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 {
 	public readonly static OptionManager Instance = new ();
 
+	private sealed class OptionCategorySharer(OptionCategory category, bool isShow)
+	{
+		private readonly OptionCategory category = category;
+		private readonly byte isShowByte = isShow ? byte.MinValue : byte.MaxValue;
+
+		private const int chunkSize = 50;
+
+		public void Share()
+		{
+			int size = category.Count;
+
+			if (size <= chunkSize)
+			{
+				shareOptionCategoryWithSize(size, 0);
+			}
+			else
+			{
+				int mod = size;
+				int offset = 0;
+				do
+				{
+					shareOptionCategoryWithSize(chunkSize, offset);
+					offset++;
+					mod -= chunkSize;
+				} while (mod > chunkSize);
+
+				shareOptionCategoryWithSize(mod, offset);
+			}
+		}
+
+		private void shareOptionCategoryWithSize(int size, int offset)
+		{
+			int indexOffset = offset * chunkSize;
+
+			using (var caller = RPCOperator.CreateCaller(
+				RPCOperator.Command.ShareOption))
+			{
+				caller.WriteByte(this.isShowByte);
+				caller.WriteByte((byte)category.Tab);
+				caller.WritePackedInt(category.Id);
+				caller.WriteByte((byte)size);
+				foreach (var option in category.Options)
+				{
+					if (indexOffset > 0)
+					{
+						indexOffset--;
+						continue;
+					}
+					caller.WritePackedInt(option.Info.Id);
+					caller.WritePackedInt(option.Selection);
+				}
+			}
+		}
+	}
+
 	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
 	private readonly Dictionary<string, List<IOption>> children = new ();
 
 	public string ConfigPreset => $"Preset:{selectedPreset}";
 	private int selectedPreset = 0;
 	private const int skipStep = 10;
-
-	private const int chunkSize = 50;
 
 	private const string OptionChangeFontPlace = "<font=\"Barlow-Black SDF\" material=\"Barlow-Black Outline\">{0}</font>";
 
@@ -217,40 +269,8 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			return;
 		}
 
-		int size = category.Count;
-
-		if (size <= chunkSize)
-		{
-			shareOptionCategoryWithSize(category, size, isShow);
-		}
-		else
-		{
-			int mod = size;
-			do
-			{
-				shareOptionCategoryWithSize(category, chunkSize, isShow);
-				mod -= chunkSize;
-			} while (mod > chunkSize);
-			shareOptionCategoryWithSize(category, mod, isShow);
-		}
-	}
-
-	private static void shareOptionCategoryWithSize(
-		in OptionCategory category, int size, bool isShow=true)
-	{
-		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.ShareOption))
-		{
-			caller.WriteByte(isShow ? byte.MinValue : byte.MaxValue);
-			caller.WriteByte((byte)category.Tab);
-			caller.WritePackedInt(category.Id);
-			caller.WriteByte((byte)size);
-			foreach (var option in category.Options)
-			{
-				caller.WritePackedInt(option.Info.Id);
-				caller.WritePackedInt(option.Selection);
-			}
-		}
+		var sharer = new OptionCategorySharer(category, isShow);
+		sharer.Share();
 	}
 
 	private void syncOption(
@@ -269,7 +289,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			}
 
 			string tabName = Tr.GetString(tab.ToString());
-			int size = reader.ReadPackedInt32();
+			int size = reader.ReadByte();
 
 			for (int i = 0; i < size; i++)
 			{
