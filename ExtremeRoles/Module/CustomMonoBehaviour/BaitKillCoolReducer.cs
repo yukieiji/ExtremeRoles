@@ -9,7 +9,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class BaitKillCoolReducer : MonoBehaviour
 {
-	private float timer  = 0.0f;
+	private float timer = 0.0f;
 	private float reduceMulti = 1.0f;
 
 	public readonly record struct InitializeParameter(float Timer, float ReduceMulti, ContinueChecker Checker);
@@ -25,11 +25,17 @@ public sealed class BaitKillCoolReducer : MonoBehaviour
 
 	public sealed class ContinueChecker(bool isCheck, PlayerControl reporter)
 	{
-		public bool IsCheck { get; set; } = isCheck;
+		public bool IsCheck { get; private set; } = isCheck;
+		
 		// レポーターが死んでいると何もしない
 		public bool IsReduce => this.reporter.IsValid();
 
 		private readonly PlayerControl reporter = reporter;
+
+		public void DisableCheck()
+		{
+			this.IsCheck = false;
+		}
 	}
 	private ContinueChecker? checker;
 
@@ -55,7 +61,7 @@ public sealed class BaitKillCoolReducer : MonoBehaviour
 			// 一回会議が入ったのでずっとOK
 			if (MeetingHud.Instance != null)
 			{
-				this.checker.IsCheck = false;
+				this.checker.DisableCheck();
 				return;
 			}
 			
