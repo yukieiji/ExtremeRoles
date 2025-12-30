@@ -192,6 +192,11 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	private static void shareOptionCategory(
 		in OptionCategory category, bool isShow = true)
 	{
+		if (category.Id == PresetOption.CategoryId)
+		{
+			return;
+		}
+
 		int size = category.Count;
 
 		if (size <= chunkSize)

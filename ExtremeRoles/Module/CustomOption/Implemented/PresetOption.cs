@@ -60,7 +60,7 @@ public sealed class PresetOption : IOption
 
 	private const int maxPresetNum = 20;
 	private const int optionId = 0;
-	private const int categoryId = 0;
+	public const int CategoryId = 0;
 
 	public enum OptionKey : int
 	{
@@ -69,7 +69,7 @@ public sealed class PresetOption : IOption
 
 	public PresetOption(string name)
 	{
-		Info = new PresetOptionInfo(categoryId, $"{name}{OptionKey.Selection}");
+		Info = new PresetOptionInfo(CategoryId, $"{name}{OptionKey.Selection}");
 		
 		this.holder = new IntOptionValue(1, 1, maxPresetNum, 1);
 		this.holder.Selection = 0;
@@ -89,7 +89,7 @@ public sealed class PresetOption : IOption
 	{
 		
 		using (var commonOptionFactory = OptionCategoryAssembler.CreateOptionCategory(
-			categoryId, name, color: OptionCreator.DefaultOptionColor))
+			CategoryId, name, color: OptionCreator.DefaultOptionColor))
 		{
 			var presetOption = new PresetOption(name);
 			commonOptionFactory.AddOption(optionId, presetOption);
@@ -97,7 +97,7 @@ public sealed class PresetOption : IOption
 	}
 
 	public static bool IsPreset(int categoryId, int optionId)
-		=> categoryId == PresetOption.categoryId && optionId == PresetOption.optionId;
+		=> categoryId == CategoryId && optionId == PresetOption.optionId;
 
 	public override string ToString()
 	{
