@@ -17,7 +17,7 @@ public sealed class VoteInfoCollector()
 				group => new VoteInfo(
 					group.Key.VoterId,
 					group.Key.TargetId,
-					Math.Max(group.Sum(vote => vote.Count), 0) // グループ内のContを合計して０にならないように
+					Math.Max(group.Sum(vote => vote.Count), 0) // グループ内のCountを合計して０未満にならないように
 				)
 			);
 
