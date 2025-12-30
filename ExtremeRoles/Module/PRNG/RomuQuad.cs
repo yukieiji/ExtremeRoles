@@ -1,3 +1,4 @@
+using ExtremeRoles.Module.RNG;
 ﻿using System.Numerics;
 
 namespace ExtremeRoles.Module.PRNG;
@@ -38,15 +39,15 @@ public sealed class RomuQuad : RNG64Base
 		xState = initStete;
 		do
 		{
-			yState = RandomGenerator.CreateLongStrongSeed();
-			zState = RandomGenerator.CreateLongStrongSeed();
+			yState = SeedInfo.CreateLongStrongSeed();
+			zState = SeedInfo.CreateLongStrongSeed();
 		}
 		while ((yState | zState) == 0); // at least one value must be non-zero
 
 		while ((xState | wState) == 0)
 		{
-			xState = RandomGenerator.CreateLongStrongSeed();
-			wState = RandomGenerator.CreateLongStrongSeed();
+			xState = SeedInfo.CreateLongStrongSeed();
+			wState = SeedInfo.CreateLongStrongSeed();
 		}
 	}
 }

@@ -1,229 +1,57 @@
 using System;
-using System.Security.Cryptography;
 
-using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.PRNG;
-
-
-
+using ExtremeRoles.Module.RNG;
 
 namespace ExtremeRoles;
 
 public static class RandomGenerator
 {
+    private static RngSelector selector;
+
     public static RNGBase Instance
     {
         get
         {
-            if (instance == null)
+            if (selector == null)
             {
-                createGlobalRandomGenerator(
-					OptionManager.Instance.TryGetCategory(
-						OptionTab.GeneralTab,
-						randCategoryKey,
-						out var category) &&
-					category.GetValue<bool>(useStrongKey));
+                selector = new RngSelector();
             }
-            return instance;
+            return selector.Instance;
         }
     }
 
-	public static bool IsUsingStrongGenerator => OptionManager.Instance.TryGetCategory(
-			OptionTab.GeneralTab,
-			randCategoryKey,
-			out var category) &&
-		category.GetValue<bool>(useStrongKey);
-
-	private const int randCategoryKey = (int)OptionCreator.CommonOption.RandomOption;
-	private const int useStrongKey = (int)OptionCreator.RandomOptionKey.UseStrong;
-	private const int algorithmKey = (int)OptionCreator.RandomOptionKey.Algorithm;
-
-    private static bool prevValue = false;
-    private static int prevSelection = 0;
-
-    private static RNGBase instance;
+    public static bool IsUsingStrongGenerator => OptionManager.Instance.TryGetCategory(
+            OptionTab.GeneralTab,
+            (int)OptionCreator.CommonOption.RandomOption,
+            out var category) &&
+        category.GetValue<bool>((int)OptionCreator.RandomOptionKey.UseStrong);
 
     public static void Initialize()
     {
-		if (!OptionManager.Instance.TryGetCategory(
-				OptionTab.GeneralTab,
-				randCategoryKey,
-				out var category))
-		{
-			return;
-		}
-
-        bool useStrongGen = category.GetValue<bool>(useStrongKey);
-        if (instance != null)
+        if (selector == null)
         {
-            if (useStrongGen != prevValue)
-            {
-                createGlobalRandomGenerator(useStrongGen);
-            }
-            else
-            {
-                int selection = category.GetValue<int>(algorithmKey);
-                if (prevSelection != selection)
-                {
-                    instance = getAditionalPrng(selection);
-                    UnityEngine.Random.InitState(CreateStrongRandomSeed());
-                    prevSelection = selection;
-                }
-            }
+            selector = new RngSelector();
         }
-        else
-        {
-            createGlobalRandomGenerator(useStrongGen);
-        }
+        selector.Initialize();
 
-        int sample = Instance.Next();
+        var sample = Instance.Next();
 
         Logging.Debug($"UsePRNG:{Instance}");
         Logging.Debug($"Sample OutPut:{sample}");
-    }
-
-    private static void createGlobalRandomGenerator(bool isStrong)
-    {
-		Logging.Debug("Initialize RNG");
-		if (OptionManager.Instance.TryGetCategory(
-				OptionTab.GeneralTab,
-				randCategoryKey,
-				out var category) &&
-			isStrong)
-		{
-            int selection = category.GetValue<int>(algorithmKey);
-            instance = getAditionalPrng(selection);
-            UnityEngine.Random.InitState(CreateStrongRandomSeed());
-            prevSelection = selection;
-        }
-        else
-        {
-            instance = new SystemRandomWrapper(0, 0);
-            UnityEngine.Random.InitState(createNormalRandomSeed());
-            prevSelection = -1;
-        }
-        prevValue = isStrong;
     }
 
     public static Random GetTempGenerator()
     {
         if (IsUsingStrongGenerator)
         {
-            return new Random(CreateStrongRandomSeed());
+            return new Random(SeedInfo.CreateStrongRandomSeed());
         }
         else
         {
-            return new Random(createNormalRandomSeed());
-        }
-    }
-
-    public static int CreateStrongRandomSeed()
-    {
-        byte[] bs = new byte[4];
-        //Int32と同じサイズのバイト配列にランダムな値を設定する
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(bs);
-        }
-
-        Logging.Debug($"Int32 SeedValue:{string.Join("", bs)}");
-
-        //RNGCryptoServiceProviderで得たbit列をInt32型に変換してシード値とする。
-        return BitConverter.ToInt32(bs, 0);
-    }
-
-    public static uint CreateStrongSeed()
-    {
-        byte[] bs = new byte[4];
-        //Int32と同じサイズのバイト配列にランダムな値を設定する
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(bs);
-        }
-
-        Logging.Debug($"Int32 SeedValue:{string.Join("", bs)}");
-
-        //RNGCryptoServiceProviderで得たbit列をUInt32型に変換してシード値とする。
-        return BitConverter.ToUInt32(bs, 0);
-    }
-
-
-    public static ulong CreateLongStrongSeed()
-    {
-        byte[] bs = new byte[8];
-        //Int64と同じサイズのバイト配列にランダムな値を設定する
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(bs);
-        }
-
-        Logging.Debug($"UInt64 Seed:{string.Join("", bs)}");
-
-        //RNGCryptoServiceProviderで得たbit列をUInt64型に変換してシード値とする。
-        return BitConverter.ToUInt64(bs, 0);
-    }
-
-    private static int createNormalRandomSeed()
-    {
-        return ((int)DateTime.Now.Ticks & 0x0000FFFF) + UnityEngine.SystemInfo.processorFrequency;
-    }
-
-    private static RNGBase getAditionalPrng(int selection)
-    {
-        switch (selection)
-        {
-            case 0:
-                return new Pcg32XshRr(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());
-            case 1:
-                return new Pcg64RxsMXs(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());
-            case 2:
-                return new Xorshift64(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());
-            case 3:
-                return new Xorshift128(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());
-            case 4:
-                return new Xorshiro256StarStar(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());
-            case 5:
-                return new Xorshiro512StarStar(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());
-            case 6:
-                return new RomuMono(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());
-            case 7:
-                return new RomuTrio(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());
-            case 8:
-                return new RomuQuad(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());
-            case 9:
-                return new Seiran128(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());
-            case 10:
-                return new Shioi128(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());;
-            case 11:
-                return new JFT32(
-                    CreateLongStrongSeed(),
-                    CreateLongStrongSeed());
-
-            default:
-                return new SystemRandomWrapper(0, 0);
+            return new Random(SeedInfo.CreateNormalRandomSeed());
         }
     }
 }

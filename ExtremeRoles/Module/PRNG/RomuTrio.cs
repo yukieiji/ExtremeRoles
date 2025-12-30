@@ -1,3 +1,4 @@
+using ExtremeRoles.Module.RNG;
 ﻿using System.Numerics;
 
 namespace ExtremeRoles.Module.PRNG;
@@ -36,14 +37,14 @@ public sealed class RomuTrio : RNG64Base
 		yState = initStete;
 		do
 		{
-			zState = RandomGenerator.CreateLongStrongSeed();
+			zState = SeedInfo.CreateLongStrongSeed();
 		}
 		while (zState == 0); // at least one value must be non-zero
 
 		while ((xState | yState) == 0)
 		{
-			xState = RandomGenerator.CreateLongStrongSeed();
-			yState = RandomGenerator.CreateLongStrongSeed();
+			xState = SeedInfo.CreateLongStrongSeed();
+			yState = SeedInfo.CreateLongStrongSeed();
 		}
 	}
 }

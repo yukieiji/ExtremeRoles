@@ -1,3 +1,4 @@
+using ExtremeRoles.Module.RNG;
 ﻿using System;
 
 namespace ExtremeRoles.Module.PRNG;
@@ -22,6 +23,6 @@ public sealed class SystemRandomWrapper : RNG32Base
 	protected override void Initialize(ulong seed, ulong initStete)
 	{
 		this.rand = new Random(
-			RandomGenerator.CreateStrongRandomSeed());
+			SeedInfo.CreateStrongRandomSeed());
 	}
 }

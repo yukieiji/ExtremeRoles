@@ -1,3 +1,4 @@
+using ExtremeRoles.Module.RNG;
 ﻿namespace ExtremeRoles.Module.PRNG;
 
 public sealed class Xorshift128 : RNG32Base
@@ -55,15 +56,15 @@ public sealed class Xorshift128 : RNG32Base
 		_s1 = (uint)(initStete >> 32);
 		do
 		{
-			_s2 = RandomGenerator.CreateStrongSeed();
-			_s3 = RandomGenerator.CreateStrongSeed();
+			_s2 = SeedInfo.CreateStrongSeed();
+			_s3 = SeedInfo.CreateStrongSeed();
 		}
 		while ((_s2 | _s3) == 0); // at least one value must be non-zero
 
 		while ((_s0 | _s1) == 0)
 		{
-			_s0 = RandomGenerator.CreateStrongSeed();
-			_s1 = RandomGenerator.CreateStrongSeed();
+			_s0 = SeedInfo.CreateStrongSeed();
+			_s1 = SeedInfo.CreateStrongSeed();
 		}
 	}
 }

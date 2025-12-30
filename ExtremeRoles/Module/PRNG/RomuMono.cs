@@ -1,3 +1,4 @@
+using ExtremeRoles.Module.RNG;
 ﻿using System.Numerics;
 
 namespace ExtremeRoles.Module.PRNG;
@@ -27,7 +28,7 @@ public sealed class RomuMono : RNG32Base
 		state = ((uint)(seed >> 32) & 0x1fffffffu) + 1156979152u;
 		while (state == 0)
 		{
-			state = RandomGenerator.CreateStrongSeed();
+			state = SeedInfo.CreateStrongSeed();
 		}
 	}
 }

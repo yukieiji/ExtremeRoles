@@ -1,3 +1,4 @@
+using ExtremeRoles.Module.RNG;
 ﻿using System.Numerics;
 
 namespace ExtremeRoles.Module.PRNG;
@@ -53,19 +54,19 @@ public sealed class Xorshiro512StarStar : RNG64Base
 		_s1 = initStete;
 		do
 		{
-			_s2 = RandomGenerator.CreateLongStrongSeed();
-			_s3 = RandomGenerator.CreateLongStrongSeed();
-			_s4 = RandomGenerator.CreateLongStrongSeed();
-			_s5 = RandomGenerator.CreateLongStrongSeed();
-			_s6 = RandomGenerator.CreateLongStrongSeed();
-			_s7 = RandomGenerator.CreateLongStrongSeed();
+			_s2 = SeedInfo.CreateLongStrongSeed();
+			_s3 = SeedInfo.CreateLongStrongSeed();
+			_s4 = SeedInfo.CreateLongStrongSeed();
+			_s5 = SeedInfo.CreateLongStrongSeed();
+			_s6 = SeedInfo.CreateLongStrongSeed();
+			_s7 = SeedInfo.CreateLongStrongSeed();
 		}
 		while ((_s2 | _s3 | _s4 | _s5 | _s6 | _s7) == 0); // at least one value must be non-zero
 
 		while ((_s0 | _s1) == 0)
 		{
-			_s0 = RandomGenerator.CreateStrongSeed();
-			_s1 = RandomGenerator.CreateStrongSeed();
+			_s0 = SeedInfo.CreateStrongSeed();
+			_s1 = SeedInfo.CreateStrongSeed();
 		}
 	}
 }

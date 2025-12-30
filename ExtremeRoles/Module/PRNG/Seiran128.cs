@@ -1,3 +1,4 @@
+using ExtremeRoles.Module.RNG;
 ﻿namespace ExtremeRoles.Module.PRNG;
 
 public sealed class Seiran128 : RNG64Base
@@ -30,8 +31,8 @@ public sealed class Seiran128 : RNG64Base
 		state1 = initStete;
 		while ((state0 | state1) == 0)
 		{
-			state0 = RandomGenerator.CreateLongStrongSeed();
-			state1 = RandomGenerator.CreateLongStrongSeed();
+			state0 = SeedInfo.CreateLongStrongSeed();
+			state1 = SeedInfo.CreateLongStrongSeed();
 		}
 		// at least one value must be non-zero
 	}

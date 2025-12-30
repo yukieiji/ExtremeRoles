@@ -1,3 +1,4 @@
+using ExtremeRoles.Module.RNG;
 ﻿namespace ExtremeRoles.Module.PRNG;
 
 public sealed class Xorshift64 : RNG64Base
@@ -32,7 +33,7 @@ public sealed class Xorshift64 : RNG64Base
 
 		while (x == 0)
 		{
-			x = RandomGenerator.CreateLongStrongSeed();
+			x = SeedInfo.CreateLongStrongSeed();
 		}// at least one value must be non-zero
 	}
 }
