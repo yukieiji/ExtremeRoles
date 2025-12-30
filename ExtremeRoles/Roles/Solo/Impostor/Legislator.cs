@@ -95,17 +95,9 @@ public sealed class Legislator :
 			voteTarget.TryGetValue(rolePlayerId, out byte voteFor) &&
 			!isInvalidVote(voteFor))
         {
-			int allVoteExistLegislator = voteResult.Sum(x =>
-			{
-				byte target = x.Key;
-				if (target == rolePlayerId ||
-					!(this.includeSkip && isInvalidVote(target)))
-				{
-					return 0;
-				}
-
-				return x.Value;
-			});
+			int allVoteExistLegislator = voteResult
+				.Where(x => x.Key != rolePlayerId && (this.includeSkip || !isInvalidVote(x.Key)))
+				.Sum(x => x.Value);
 
 			using (var caller = RPCOperator.CreateCaller(
 				   RPCOperator.Command.LegislatorAbility))
