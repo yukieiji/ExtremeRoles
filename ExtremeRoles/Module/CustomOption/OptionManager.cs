@@ -103,14 +103,13 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		return true;
 	}
 
-	public void UpdateToStep(in OptionCategory category, in int id, int step)
-	{
-		var option = category.Get(id);
-		UpdateToStep(category, option, step);
-	}
-
 	public void UpdateToStep(in OptionCategory category, in IOption option, int step)
 	{
+		if (isInvalidOptionUpdate())
+		{
+			return;
+		}
+
 		int newSelection = 0;
 		if (Key.IsControlDown())
 		{
@@ -125,12 +124,22 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 
 	public void Update(in OptionCategory category, in int id, int newIndex)
 	{
+		if (isInvalidOptionUpdate())
+		{
+			return;
+		}
+
 		var option = category.Get(id);
 		Update(category, option, newIndex);
 	}
 
 	public void Update(in OptionCategory category, in IOption option, int newIndex)
 	{
+		if (isInvalidOptionUpdate())
+		{
+			return;
+		}
+
 		option.Selection = newIndex;
 		if (!PresetOption.IsPreset(category.Id, option.Info.Id))
 		{
@@ -142,6 +151,11 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 
 	public void SwitchPreset(int targetPreset)
 	{
+		if (isInvalidOptionUpdate())
+		{
+			return;
+		}
+
 		this.selectedPreset = targetPreset;
 		foreach (var tab in this.options.Values)
 		{
@@ -159,6 +173,11 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 
 	public void ShereAllOption()
 	{
+		if (isInvalidOptionUpdate())
+		{
+			return;
+		}
+
 		foreach (var tabContainer in this.options.Values)
 		{
 			foreach (var category in tabContainer.Category)
@@ -192,7 +211,8 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	private static void shareOptionCategory(
 		in OptionCategory category, bool isShow = true)
 	{
-		if (category.Id == PresetOption.CategoryId)
+		if (isInvalidOptionUpdate() ||
+			category.Id == PresetOption.CategoryId)
 		{
 			return;
 		}
@@ -281,4 +301,8 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			category.IsDirty = true;
 		}
 	}
+	private static bool isInvalidOptionUpdate()
+		=> AmongUsClient.Instance == null ||
+			!AmongUsClient.Instance.AmHost ||
+			PlayerControl.LocalPlayer == null;
 }
