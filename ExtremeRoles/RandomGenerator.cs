@@ -1,9 +1,7 @@
 using System;
 
-using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.PRNG;
-using ExtremeRoles.Module.RNG;
 
 namespace ExtremeRoles;
 
@@ -37,7 +35,7 @@ public static class RandomGenerator
         }
         selector.Initialize();
 
-        var sample = Instance.Next();
+        int sample = Instance.Next();
 
         Logging.Debug($"UsePRNG:{Instance}");
         Logging.Debug($"Sample OutPut:{sample}");

@@ -496,7 +496,7 @@ public static class GameSystem
 		playerControl.isDummy = true;
 
 		var hatMng = HatManager.Instance;
-		var rng = RandomGenerator.GetTempGenerator();
+		var rng = RandomGenerator.Instance;
 
 		int hat = rng.Next(hatMng.allHats.Count);
 		int pet = rng.Next(hatMng.allPets.Count);

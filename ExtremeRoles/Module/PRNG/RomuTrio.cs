@@ -1,5 +1,4 @@
-using ExtremeRoles.Module.RNG;
-﻿using System.Numerics;
+using System.Numerics;
 
 namespace ExtremeRoles.Module.PRNG;
 

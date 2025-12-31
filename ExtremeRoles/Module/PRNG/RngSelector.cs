@@ -1,9 +1,6 @@
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Module.PRNG;
 
-namespace ExtremeRoles.Module.RNG;
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class RngSelector
 {

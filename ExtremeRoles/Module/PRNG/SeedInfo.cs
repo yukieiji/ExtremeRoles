@@ -1,11 +1,9 @@
 using System;
 using System.Security.Cryptography;
-
 using ExtremeRoles.Helper;
-
 using UnityEngine;
 
-namespace ExtremeRoles.Module.RNG;
+namespace ExtremeRoles.Module.PRNG;
 
 public static class SeedInfo
 {

@@ -1,5 +1,4 @@
-using ExtremeRoles.Module.RNG;
-﻿namespace ExtremeRoles.Module.PRNG;
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class Seiran128 : RNG64Base
 {

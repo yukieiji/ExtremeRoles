@@ -1,5 +1,4 @@
-using ExtremeRoles.Module.RNG;
-﻿namespace ExtremeRoles.Module.PRNG;
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class Xorshift64 : RNG64Base
 {
