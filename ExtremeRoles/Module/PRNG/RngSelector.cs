@@ -1,10 +1,12 @@
 using ExtremeRoles.Helper;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.PRNG;
 
 public sealed class RngSelector
 {
-    public RNGBase Instance { get; private set; }
+    public IRng Instance { get; private set; }
 
     private bool prevValue;
     private int prevSelection;
@@ -15,7 +17,9 @@ public sealed class RngSelector
 
     public RngSelector()
     {
+		using var seed = new SeedInfo();
         createGlobalRandomGenerator(
+			seed,
             OptionManager.Instance.TryGetCategory(
                 OptionTab.GeneralTab,
                 randCategoryKey,
@@ -33,31 +37,32 @@ public sealed class RngSelector
             return;
         }
 
-        bool useStrongGen = category.GetValue<bool>(useStrongKey);
+		bool useStrongGen = category.GetValue<bool>(useStrongKey);
         if (Instance != null)
         {
             if (useStrongGen != prevValue)
-            {
-                createGlobalRandomGenerator(useStrongGen);
+			{
+				using var seed = new SeedInfo();
+				createGlobalRandomGenerator(new SeedInfo(), useStrongGen);
             }
             else
             {
                 int selection = category.GetValue<int>(algorithmKey);
                 if (prevSelection != selection)
                 {
-                    Instance = getAditionalPrng(selection);
-                    UnityEngine.Random.InitState(SeedInfo.CreateStrongRandomSeed());
-                    prevSelection = selection;
+					using var seed = new SeedInfo();
+					createStrongRng(category, seed);
                 }
             }
         }
         else
         {
-            createGlobalRandomGenerator(useStrongGen);
+			using var seed = new SeedInfo();
+			createGlobalRandomGenerator(seed, useStrongGen);
         }
     }
 
-    private void createGlobalRandomGenerator(bool isStrong)
+    private void createGlobalRandomGenerator(SeedInfo seed, bool isStrong)
     {
         Logging.Debug("Initialize RNG");
         if (OptionManager.Instance.TryGetCategory(
@@ -66,74 +71,55 @@ public sealed class RngSelector
                 out var category) &&
             isStrong)
         {
-            int selection = category.GetValue<int>(algorithmKey);
-            Instance = getAditionalPrng(selection);
-            UnityEngine.Random.InitState(SeedInfo.CreateStrongRandomSeed());
-            prevSelection = selection;
+			createStrongRng(category, seed);
         }
         else
         {
-            Instance = new SystemRandomWrapper(0, 0);
-            UnityEngine.Random.InitState(SeedInfo.CreateNormalRandomSeed());
+            Instance = new SystemRandomWrapper(seed.CreateNormal());
+            UnityEngine.Random.InitState(seed.CreateNormal());
             prevSelection = -1;
         }
         prevValue = isStrong;
     }
 
-    private static RNGBase getAditionalPrng(int selection)
+	private void createStrongRng(OptionCategory category, SeedInfo seed)
+	{
+		int selection = category.GetValue<int>(algorithmKey);
+		Instance = getAditionalPrng(seed, selection);
+		UnityEngine.Random.InitState(seed.CreateInt());
+		prevSelection = selection;
+	}
+
+    private static IRng getAditionalPrng(SeedInfo seed, int selection)
     {
         switch (selection)
         {
             case 0:
-                return new Pcg32XshRr(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+                return new Pcg32XshRr(seed);
             case 1:
-                return new Pcg64RxsMXs(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+				return new Pcg64RxsMXs(seed);
             case 2:
-                return new Xorshift64(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+                return new Xorshift64(seed);
             case 3:
-                return new Xorshift128(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+                return new Xorshift128(seed);
             case 4:
-                return new Xorshiro256StarStar(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+                return new Xorshiro256StarStar(seed);
             case 5:
-                return new Xorshiro512StarStar(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+                return new Xorshiro512StarStar(seed);
             case 6:
-                return new RomuMono(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+                return new RomuMono(seed);
             case 7:
-                return new RomuTrio(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+                return new RomuTrio(seed);
             case 8:
-                return new RomuQuad(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+                return new RomuQuad(seed);
             case 9:
-                return new Seiran128(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+                return new Seiran128(seed);
             case 10:
-                return new Shioi128(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+                return new Shioi128(seed);
             case 11:
-                return new JFT32(
-                    SeedInfo.CreateLongStrongSeed(),
-                    SeedInfo.CreateLongStrongSeed());
+                return new JFT32(seed);
             default:
-                return new SystemRandomWrapper(0, 0);
+                return new SystemRandomWrapper(seed.CreateInt());
         }
     }
 }

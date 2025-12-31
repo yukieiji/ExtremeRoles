@@ -12,9 +12,22 @@ public sealed class Xorshiro512StarStar : RNG64Base
 
 	private ulong _s0, _s1, _s2, _s3, _s4, _s5, _s6, _s7;
 
-	public Xorshiro512StarStar(
-		ulong seed, ulong state) : base(seed, state)
-	{ }
+	public Xorshiro512StarStar(SeedInfo seed)
+	{
+
+		do
+		{
+			_s0 = seed.CreateULong();
+			_s1 = seed.CreateULong();
+			_s2 = seed.CreateULong();
+			_s3 = seed.CreateULong();
+			_s4 = seed.CreateULong();
+			_s5 = seed.CreateULong();
+			_s6 = seed.CreateULong();
+			_s7 = seed.CreateULong();
+		}
+		while ((_s0 | _s1 | _s2 | _s3 | _s4 | _s5 | _s6 | _s7) == 0); // at least one value must be non-zero
+	}
 
 	public override ulong NextUInt64()
 	{
@@ -45,27 +58,5 @@ public sealed class Xorshiro512StarStar : RNG64Base
 		_s7 = s7;
 
 		return result;
-	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		_s0 = seed;
-		_s1 = initStete;
-		do
-		{
-			_s2 = SeedInfo.CreateLongStrongSeed();
-			_s3 = SeedInfo.CreateLongStrongSeed();
-			_s4 = SeedInfo.CreateLongStrongSeed();
-			_s5 = SeedInfo.CreateLongStrongSeed();
-			_s6 = SeedInfo.CreateLongStrongSeed();
-			_s7 = SeedInfo.CreateLongStrongSeed();
-		}
-		while ((_s2 | _s3 | _s4 | _s5 | _s6 | _s7) == 0); // at least one value must be non-zero
-
-		while ((_s0 | _s1) == 0)
-		{
-			_s0 = SeedInfo.CreateStrongSeed();
-			_s1 = SeedInfo.CreateStrongSeed();
-		}
 	}
 }

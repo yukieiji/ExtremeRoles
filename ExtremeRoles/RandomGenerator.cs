@@ -9,11 +9,11 @@ public static class RandomGenerator
 {
     private static RngSelector selector;
 
-    public static RNGBase Instance
+    public static IRng Instance
     {
         get
         {
-            if (selector == null)
+            if (selector is null)
             {
                 selector = new RngSelector();
             }
@@ -29,7 +29,7 @@ public static class RandomGenerator
 
     public static void Initialize()
     {
-        if (selector == null)
+        if (selector is null)
         {
             selector = new RngSelector();
         }
@@ -39,17 +39,5 @@ public static class RandomGenerator
 
         Logging.Debug($"UsePRNG:{Instance}");
         Logging.Debug($"Sample OutPut:{sample}");
-    }
-
-    public static Random GetTempGenerator()
-    {
-        if (IsUsingStrongGenerator)
-        {
-            return new Random(SeedInfo.CreateStrongRandomSeed());
-        }
-        else
-        {
-            return new Random(SeedInfo.CreateNormalRandomSeed());
-        }
     }
 }

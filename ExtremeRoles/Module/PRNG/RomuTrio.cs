@@ -1,5 +1,7 @@
 using System.Numerics;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.PRNG;
 
 public sealed class RomuTrio : RNG64Base
@@ -12,8 +14,16 @@ public sealed class RomuTrio : RNG64Base
 	private const ulong a = 15241094284759029579ul;
 	private ulong xState, yState, zState;
 
-	public RomuTrio(ulong seed, ulong state) : base(seed, state)
-	{ }
+	public RomuTrio(SeedInfo seed)
+	{
+		do
+		{
+			xState = seed.CreateULong();
+			yState = seed.CreateULong();
+			zState = seed.CreateULong();
+		}
+		while ((xState | yState | zState) == 0);  // at least one value must be non-zero
+	}
 
 	public override ulong NextUInt64()
 	{
@@ -28,22 +38,5 @@ public sealed class RomuTrio : RNG64Base
 		zState = BitOperations.RotateLeft(zState, 44);
 
 		return xp;
-	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		xState = seed;
-		yState = initStete;
-		do
-		{
-			zState = SeedInfo.CreateLongStrongSeed();
-		}
-		while (zState == 0); // at least one value must be non-zero
-
-		while ((xState | yState) == 0)
-		{
-			xState = SeedInfo.CreateLongStrongSeed();
-			yState = SeedInfo.CreateLongStrongSeed();
-		}
 	}
 }

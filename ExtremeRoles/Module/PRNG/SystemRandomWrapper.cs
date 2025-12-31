@@ -2,26 +2,19 @@ using System;
 
 namespace ExtremeRoles.Module.PRNG;
 
-public sealed class SystemRandomWrapper : RNG32Base
+public sealed class SystemRandomWrapper : IRng
 {
 
 	private Random rand;
 
-	public SystemRandomWrapper(
-		ulong seed, ulong state) : base(seed, state)
-	{ }
-
-	public override int Next() => this.rand.Next();
-
-	public override int Next(int maxExclusive) => this.rand.Next(maxExclusive);
-
-	public override int Next(int minInclusive, int maxExclusive) => this.rand.Next(minInclusive, maxExclusive);
-
-	public override uint NextUInt() => 0;
-
-	protected override void Initialize(ulong seed, ulong initStete)
+	public SystemRandomWrapper(int seed)
 	{
-		this.rand = new Random(
-			SeedInfo.CreateStrongRandomSeed());
+		this.rand = new Random(seed);
 	}
+
+	public int Next() => this.rand.Next();
+
+	public int Next(int maxExclusive) => this.rand.Next(maxExclusive);
+
+	public int Next(int minInclusive, int maxExclusive) => this.rand.Next(minInclusive, maxExclusive);
 }

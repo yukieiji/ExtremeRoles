@@ -1,29 +1,21 @@
-﻿using System;
+#nullable enable
+
+using System;
 
 namespace ExtremeRoles.Module.PRNG
 {
-	public abstract class RNGBase
+	public interface IRng
 	{
-		public RNGBase(ulong seed, ulong state)
-		{
-			Initialize(seed, state);
-		}
+		public int Next();
 
-		public abstract int Next();
+		public int Next(int maxExclusive);
 
-		public abstract int Next(int maxExclusive);
-
-		public abstract int Next(int minInclusive, int maxExclusive);
-
-		protected abstract void Initialize(ulong seed, ulong initStete);
+		public int Next(int minInclusive, int maxExclusive);
 	}
 
-	public abstract class RNG32Base : RNGBase
+	public abstract class RNG32Base : IRng
 	{
-		public RNG32Base(ulong seed, ulong state) : base(seed, state)
-		{ }
-
-		public override int Next()
+		public int Next()
 		{
 			while (true)
 			{
@@ -38,7 +30,7 @@ namespace ExtremeRoles.Module.PRNG
 			}
 		}
 
-		public override int Next(int maxExclusive)
+		public int Next(int maxExclusive)
 		{
 			// Backport .Net6 Round logic
 			// from https://source.dot.net/#System.Private.CoreLib/Random.Xoshiro256StarStarImpl.cs,bb77e610694e64ca
@@ -64,7 +56,7 @@ namespace ExtremeRoles.Module.PRNG
 			}
 		}
 
-		public override int Next(int minInclusive, int maxExclusive)
+		public int Next(int minInclusive, int maxExclusive)
 		{
 
 			if (maxExclusive <= minInclusive)
@@ -78,12 +70,10 @@ namespace ExtremeRoles.Module.PRNG
 
 		public abstract uint NextUInt();
 	}
-	public abstract class RNG64Base : RNGBase
+	public abstract class RNG64Base : IRng
 	{
-		public RNG64Base(ulong seed, ulong state) : base(seed, state)
-		{ }
 
-		public override int Next()
+		public int Next()
 		{
 			while (true)
 			{
@@ -98,7 +88,7 @@ namespace ExtremeRoles.Module.PRNG
 			}
 		}
 
-		public override int Next(int maxExclusive)
+		public int Next(int maxExclusive)
 		{
 			// Backport .Net6 Round logic
 			// from https://source.dot.net/#System.Private.CoreLib/Random.Xoshiro256StarStarImpl.cs,bb77e610694e64ca
@@ -124,7 +114,7 @@ namespace ExtremeRoles.Module.PRNG
 			}
 		}
 
-		public override int Next(int minInclusive, int maxExclusive)
+		public int Next(int minInclusive, int maxExclusive)
 		{
 
 			if (maxExclusive <= minInclusive)

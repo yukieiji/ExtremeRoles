@@ -1,5 +1,7 @@
 using System.Numerics;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.PRNG;
 
 public sealed class Xorshiro256StarStar : RNG64Base
@@ -12,9 +14,17 @@ public sealed class Xorshiro256StarStar : RNG64Base
 
 	private ulong _s0, _s1, _s2, _s3;
 
-	public Xorshiro256StarStar(
-		ulong seed, ulong state) : base(seed, state)
-	{ }
+	public Xorshiro256StarStar(SeedInfo seed)
+	{
+		do
+		{
+			_s0 = seed.CreateULong();
+			_s1 = seed.CreateULong();
+			_s2 = seed.CreateULong();
+			_s3 = seed.CreateULong();
+		}
+		while ((_s0 | _s1 | _s2 | _s3) == 0); // at least one value must be non-zero
+	}
 
 	public override ulong NextUInt64()
 	{
@@ -37,23 +47,5 @@ public sealed class Xorshiro256StarStar : RNG64Base
 		_s3 = s3;
 
 		return result;
-	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		_s0 = seed;
-		_s1 = initStete;
-		do
-		{
-			_s2 = SeedInfo.CreateLongStrongSeed();
-			_s3 = SeedInfo.CreateLongStrongSeed();
-		}
-		while ((_s2 | _s3) == 0); // at least one value must be non-zero
-
-		while ((_s0 | _s1) == 0)
-		{
-			_s0 = SeedInfo.CreateStrongSeed();
-			_s1 = SeedInfo.CreateStrongSeed();
-		}
 	}
 }

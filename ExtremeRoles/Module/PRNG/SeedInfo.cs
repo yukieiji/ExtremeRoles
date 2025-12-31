@@ -3,18 +3,19 @@ using System.Security.Cryptography;
 using ExtremeRoles.Helper;
 using UnityEngine;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.PRNG;
 
-public static class SeedInfo
+public sealed class SeedInfo : IDisposable
 {
-    public static int CreateStrongRandomSeed()
+	private readonly RandomNumberGenerator rng = RandomNumberGenerator.Create();
+
+    public int CreateInt()
     {
         byte[] bs = new byte[4];
-        //Int32と同じサイズのバイト配列にランダムな値を設定する
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(bs);
-        }
+		//Int32と同じサイズのバイト配列にランダムな値を設定する
+		this.rng.GetBytes(bs);
 
         Logging.Debug($"Int32 SeedValue:{string.Join("", bs)}");
 
@@ -22,15 +23,11 @@ public static class SeedInfo
         return BitConverter.ToInt32(bs, 0);
     }
 
-    public static uint CreateStrongSeed()
+    public uint CreateUint()
     {
         byte[] bs = new byte[4];
-        //Int32と同じサイズのバイト配列にランダムな値を設定する
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(bs);
-        }
-
+		//Int32と同じサイズのバイト配列にランダムな値を設定する
+		this.rng.GetBytes(bs);
         Logging.Debug($"Int32 SeedValue:{string.Join("", bs)}");
 
         //RNGCryptoServiceProviderで得たbit列をUInt32型に変換してシード値とする。
@@ -38,14 +35,11 @@ public static class SeedInfo
     }
 
 
-    public static ulong CreateLongStrongSeed()
+    public ulong CreateULong()
     {
         byte[] bs = new byte[8];
-        //Int64と同じサイズのバイト配列にランダムな値を設定する
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(bs);
-        }
+		//Int64と同じサイズのバイト配列にランダムな値を設定する
+		this.rng.GetBytes(bs);
 
         Logging.Debug($"UInt64 Seed:{string.Join("", bs)}");
 
@@ -53,8 +47,13 @@ public static class SeedInfo
         return BitConverter.ToUInt64(bs, 0);
     }
 
-    public static int CreateNormalRandomSeed()
+    public int CreateNormal()
     {
         return ((int)DateTime.Now.Ticks & 0x0000FFFF) + SystemInfo.processorFrequency;
     }
+
+	public void Dispose()
+	{
+		this.rng.Dispose();
+	}
 }

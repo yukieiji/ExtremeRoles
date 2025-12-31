@@ -1,5 +1,7 @@
 using System.Numerics;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.PRNG;
 
 public sealed class JFT32 : RNG32Base
@@ -12,9 +14,17 @@ public sealed class JFT32 : RNG32Base
 
 	private uint _s0, _s1, _s2, _s3;
 
-	public JFT32(
-		ulong seed, ulong state) : base(seed, state)
-	{ }
+	public JFT32(SeedInfo seed)
+	{
+		do
+		{
+			_s0 = seed.CreateUint();
+			_s1 = seed.CreateUint();
+			_s2 = seed.CreateUint();
+			_s3 = seed.CreateUint();
+		}
+		while ((_s0 | _s1 | _s2 | _s3) == 0); // at least one value must be non-zero
+	}
 
 	public override uint NextUInt()
 	{
@@ -28,23 +38,5 @@ public sealed class JFT32 : RNG32Base
 		_s3 = t + s0;
 
 		return _s3;
-	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		_s0 = (uint)(seed >> 32);
-		_s1 = (uint)(initStete >> 32);
-		do
-		{
-			_s2 = SeedInfo.CreateStrongSeed();
-			_s3 = SeedInfo.CreateStrongSeed();
-		}
-		while ((_s2 | _s3) == 0); // at least one value must be non-zero
-
-		while ((_s0 | _s1) == 0)
-		{
-			_s0 = SeedInfo.CreateStrongSeed();
-			_s1 = SeedInfo.CreateStrongSeed();
-		}
 	}
 }
