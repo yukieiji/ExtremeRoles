@@ -1,95 +1,102 @@
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Module.PRNG;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.RNG;
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class RngSelector
 {
+
     public IRng Instance { get; private set; }
 
-    private bool prevValue;
-    private int prevSelection;
+    private OptionInfo prev;
 
     private const int randCategoryKey = (int)OptionCreator.CommonOption.RandomOption;
     private const int useStrongKey = (int)OptionCreator.RandomOptionKey.UseStrong;
     private const int algorithmKey = (int)OptionCreator.RandomOptionKey.Algorithm;
 
+	private readonly record struct OptionInfo(bool UseStrongGen, int Selection)
+	{
+		public OptionInfo(OptionCategory category) : this(
+			category.GetValue<bool>(useStrongKey),
+			category.GetValue<int>(algorithmKey))
+		{
+
+		}
+	}
+
     public RngSelector()
     {
         using var seed = new SeedInfo();
-        createGlobalRandomGenerator(
-            seed,
-            OptionManager.Instance.TryGetCategory(
-                OptionTab.GeneralTab,
-                randCategoryKey,
-                out var category) &&
-            category.GetValue<bool>(useStrongKey));
+
+		if (!OptionManager.Instance.TryGetCategory(
+				OptionTab.GeneralTab,
+				randCategoryKey,
+				out var category))
+		{
+			throw new System.InvalidOperationException();
+		}
+
+		this.prev = new OptionInfo(category);
+		Instance = createGlobalRandomGenerator(seed, this.prev);
     }
 
     public void Initialize()
     {
-        if (hasOptionChanged(out var category, out var useStrongGen, out var selection))
+        if (!hasOptionChanged(out var newInfo))
         {
-            using var seed = new SeedInfo();
-            if (Instance == null || useStrongGen != prevValue)
-            {
-                createGlobalRandomGenerator(seed, useStrongGen);
-            }
-            else if (prevSelection != selection)
-            {
-                createStrongRng(category, seed);
-            }
+			return;
         }
-    }
+		using var seed = new SeedInfo();
+		if (Instance == null || newInfo.UseStrongGen != this.prev.UseStrongGen)
+		{
+			Instance = createGlobalRandomGenerator(seed, newInfo);
+		}
+		else if (newInfo.Selection != this.prev.Selection)
+		{
+			Instance = createStrongRng(seed, newInfo.Selection);
+		}
+		this.prev = newInfo;
+	}
 
-    private bool hasOptionChanged(out OptionCategory category, out bool useStrongGen, out int selection)
+    private bool hasOptionChanged(out OptionInfo info)
     {
         if (!OptionManager.Instance.TryGetCategory(
                 OptionTab.GeneralTab,
                 randCategoryKey,
-                out category))
+                out var category) ||
+			category is null)
         {
-            useStrongGen = false;
-            selection = -1;
+			info = new OptionInfo();
             return false;
         }
 
-        useStrongGen = category.GetValue<bool>(useStrongKey);
-        selection = category.GetValue<int>(algorithmKey);
+		info = new OptionInfo(category);
 
-        return Instance == null || useStrongGen != prevValue || prevSelection != selection;
+        return Instance is null || info.UseStrongGen != prev.UseStrongGen || info.Selection != prev.Selection;
     }
 
-    private void createGlobalRandomGenerator(SeedInfo seed, bool isStrong)
+    private IRng createGlobalRandomGenerator(SeedInfo seed, in OptionInfo info)
     {
+		IRng rng;
         Logging.Debug("Initialize RNG");
-        if (OptionManager.Instance.TryGetCategory(
-                OptionTab.GeneralTab,
-                randCategoryKey,
-                out var category) &&
-            isStrong)
+        if (info.UseStrongGen)
         {
-            createStrongRng(category, seed);
+            rng = createStrongRng(seed, info.Selection);
         }
         else
         {
-            Instance = new SystemRandomWrapper(seed.CreateNormal());
+            rng = new SystemRandomWrapper(seed.CreateNormal());
             UnityEngine.Random.InitState(seed.CreateNormal());
-            prevSelection = -1;
         }
-        prevValue = isStrong;
+		return rng;
     }
 
-    private void createStrongRng(OptionCategory category, SeedInfo seed)
+    private IRng createStrongRng(SeedInfo seed, int selection)
     {
-        int selection = category.GetValue<int>(algorithmKey);
-        Instance = getAditionalPrng(seed, selection);
+		IRng rng = getAditionalPrng(seed, selection);
         UnityEngine.Random.InitState(seed.CreateInt());
-        prevSelection = selection;
+		return rng;
     }
 
     private static IRng getAditionalPrng(SeedInfo seed, int selection)
