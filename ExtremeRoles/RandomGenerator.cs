@@ -21,11 +21,7 @@ public static class RandomGenerator
         }
     }
 
-    public static bool IsUsingStrongGenerator => OptionManager.Instance.TryGetCategory(
-            OptionTab.GeneralTab,
-            (int)OptionCreator.CommonOption.RandomOption,
-            out var category) &&
-        category.GetValue<bool>((int)OptionCreator.RandomOptionKey.UseStrong);
+	public static bool IsUsingStrongGenerator => selector is not null && selector.IsStrong;
 
     public static void Initialize()
     {

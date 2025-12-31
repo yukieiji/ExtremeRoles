@@ -8,6 +8,7 @@ public sealed class RngSelector
 {
 
     public IRng Instance { get; private set; }
+	public bool IsStrong => this.prev.UseStrongGen;
 
     private OptionInfo prev;
 
