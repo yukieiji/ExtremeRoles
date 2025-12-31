@@ -12,31 +12,31 @@ public sealed class JFT32 : RNG32Base
         
     */
 
-	private uint _s0, _s1, _s2, _s3;
+	private uint state0, state1, state2, state3;
 
 	public JFT32(SeedInfo seed)
 	{
 		do
 		{
-			_s0 = seed.CreateUint();
-			_s1 = seed.CreateUint();
-			_s2 = seed.CreateUint();
-			_s3 = seed.CreateUint();
+			state0 = seed.CreateUint();
+			state1 = seed.CreateUint();
+			state2 = seed.CreateUint();
+			state3 = seed.CreateUint();
 		}
-		while ((_s0 | _s1 | _s2 | _s3) == 0); // at least one value must be non-zero
+		while ((state0 | state1 | state2 | state3) == 0); // at least one value must be non-zero
 	}
 
 	public override uint NextUInt()
 	{
-		uint s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;
+		uint s0 = state0, s1 = state1, s2 = state2, s3 = state3;
 
 		uint t = s0 - BitOperations.RotateLeft(s1, 27);
 
-		_s0 = s1 ^ BitOperations.RotateLeft(s2, 17);
-		_s1 = s2 + s3;
-		_s2 = s3 + t;
-		_s3 = t + s0;
+		state0 = s1 ^ BitOperations.RotateLeft(s2, 17);
+		state1 = s2 + s3;
+		state2 = s3 + t;
+		state3 = t + s0;
 
-		return _s3;
+		return state3;
 	}
 }
