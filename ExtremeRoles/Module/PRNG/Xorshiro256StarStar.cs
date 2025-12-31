@@ -12,23 +12,23 @@ public sealed class Xorshiro256StarStar : RNG64Base
         
     */
 
-	private ulong _s0, _s1, _s2, _s3;
+	private ulong state0, state1, state2, state3;
 
 	public Xorshiro256StarStar(SeedInfo seed)
 	{
 		do
 		{
-			_s0 = seed.CreateULong();
-			_s1 = seed.CreateULong();
-			_s2 = seed.CreateULong();
-			_s3 = seed.CreateULong();
+			state0 = seed.CreateULong();
+			state1 = seed.CreateULong();
+			state2 = seed.CreateULong();
+			state3 = seed.CreateULong();
 		}
-		while ((_s0 | _s1 | _s2 | _s3) == 0); // at least one value must be non-zero
+		while ((state0 | state1 | state2 | state3) == 0); // at least one value must be non-zero
 	}
 
 	public override ulong NextUInt64()
 	{
-		ulong s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;
+		ulong s0 = state0, s1 = state1, s2 = state2, s3 = state3;
 
 		ulong result = BitOperations.RotateLeft(s1 * 5, 7) * 9;
 		ulong t = s1 << 17;
@@ -41,10 +41,10 @@ public sealed class Xorshiro256StarStar : RNG64Base
 		s2 ^= t;
 		s3 = BitOperations.RotateLeft(s3, 45);
 
-		_s0 = s0;
-		_s1 = s1;
-		_s2 = s2;
-		_s3 = s3;
+		state0 = s0;
+		state1 = s1;
+		state2 = s2;
+		state3 = s3;
 
 		return result;
 	}

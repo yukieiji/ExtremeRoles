@@ -1,5 +1,7 @@
 using System.Numerics;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.PRNG;
 
 public sealed class Xorshiro512StarStar : RNG64Base
@@ -10,28 +12,28 @@ public sealed class Xorshiro512StarStar : RNG64Base
         
     */
 
-	private ulong _s0, _s1, _s2, _s3, _s4, _s5, _s6, _s7;
+	private ulong state0, state1, state2, state3, state4, state5, state6, state7;
 
 	public Xorshiro512StarStar(SeedInfo seed)
 	{
 
 		do
 		{
-			_s0 = seed.CreateULong();
-			_s1 = seed.CreateULong();
-			_s2 = seed.CreateULong();
-			_s3 = seed.CreateULong();
-			_s4 = seed.CreateULong();
-			_s5 = seed.CreateULong();
-			_s6 = seed.CreateULong();
-			_s7 = seed.CreateULong();
+			state0 = seed.CreateULong();
+			state1 = seed.CreateULong();
+			state2 = seed.CreateULong();
+			state3 = seed.CreateULong();
+			state4 = seed.CreateULong();
+			state5 = seed.CreateULong();
+			state6 = seed.CreateULong();
+			state7 = seed.CreateULong();
 		}
-		while ((_s0 | _s1 | _s2 | _s3 | _s4 | _s5 | _s6 | _s7) == 0); // at least one value must be non-zero
+		while ((state0 | state1 | state2 | state3 | state4 | state5 | state6 | state7) == 0); // at least one value must be non-zero
 	}
 
 	public override ulong NextUInt64()
 	{
-		ulong s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3, s4 = _s4, s5 = _s5, s6 = _s6, s7 = _s7;
+		ulong s0 = state0, s1 = state1, s2 = state2, s3 = state3, s4 = state4, s5 = state5, s6 = state6, s7 = state7;
 
 		ulong result = BitOperations.RotateLeft(s1 * 5, 7) * 9;
 		ulong t = s1 << 11;
@@ -48,14 +50,14 @@ public sealed class Xorshiro512StarStar : RNG64Base
 
 		s7 = BitOperations.RotateLeft(s7, 21);
 
-		_s0 = s0;
-		_s1 = s1;
-		_s2 = s2;
-		_s3 = s3;
-		_s4 = s4;
-		_s5 = s5;
-		_s6 = s6;
-		_s7 = s7;
+		state0 = s0;
+		state1 = s1;
+		state2 = s2;
+		state3 = s3;
+		state4 = s4;
+		state5 = s5;
+		state6 = s6;
+		state7 = s7;
 
 		return result;
 	}

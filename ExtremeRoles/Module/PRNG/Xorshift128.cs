@@ -10,19 +10,19 @@ public sealed class Xorshift128 : RNG32Base
         
     */
 
-	private uint _s0, _s1, _s2, _s3;
+	private uint state0, state1, state2, state3;
 
 	public Xorshift128(SeedInfo seed)
 	{
 		// at least one value must be non-zero
 		do
 		{
-			_s0 = seed.CreateUint();
-			_s1 = seed.CreateUint();
-			_s2 = seed.CreateUint();
-			_s3 = seed.CreateUint();
+			state0 = seed.CreateUint();
+			state1 = seed.CreateUint();
+			state2 = seed.CreateUint();
+			state3 = seed.CreateUint();
 		}
-		while ((_s0 | _s1 | _s2 | _s3) == 0);
+		while ((state0 | state1 | state2 | state3) == 0);
 	}
 
 	public override uint NextUInt()
@@ -44,19 +44,19 @@ public sealed class Xorshift128 : RNG32Base
         }
          */
 
-		uint s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;
+		uint s0 = state0, s1 = state1, s2 = state2, s3 = state3;
 
 		uint t = s3;
 
-		_s3 = s2;
-		_s2 = s1;
-		_s1 = s0;
+		state3 = s2;
+		state2 = s1;
+		state1 = s0;
 
 		t ^= t << 11;
 		t ^= t >> 8;
 
-		_s0 = t ^ s0 ^ (s0 >> 19);
+		state0 = t ^ s0 ^ (s0 >> 19);
 
-		return _s0;
+		return state0;
 	}
 }

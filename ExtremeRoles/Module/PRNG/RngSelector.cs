@@ -94,12 +94,12 @@ public sealed class RngSelector
 
     private IRng createStrongRng(SeedInfo seed, int selection)
     {
-		IRng rng = getAditionalPrng(seed, selection);
+		IRng rng = getAdditionalPrng(seed, selection);
         UnityEngine.Random.InitState(seed.CreateInt());
 		return rng;
     }
 
-    private static IRng getAditionalPrng(SeedInfo seed, int selection)
+    private static IRng getAdditionalPrng(SeedInfo seed, int selection)
     {
         switch (selection)
         {
