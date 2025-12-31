@@ -1,8 +1,11 @@
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Module.PRNG;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.PRNG;
+namespace ExtremeRoles.Module.RNG;
 
 public sealed class RngSelector
 {
@@ -17,9 +20,9 @@ public sealed class RngSelector
 
     public RngSelector()
     {
-		using var seed = new SeedInfo();
+        using var seed = new SeedInfo();
         createGlobalRandomGenerator(
-			seed,
+            seed,
             OptionManager.Instance.TryGetCategory(
                 OptionTab.GeneralTab,
                 randCategoryKey,
@@ -29,37 +32,36 @@ public sealed class RngSelector
 
     public void Initialize()
     {
+        if (hasOptionChanged(out var category, out var useStrongGen, out var selection))
+        {
+            using var seed = new SeedInfo();
+            if (Instance == null || useStrongGen != prevValue)
+            {
+                createGlobalRandomGenerator(seed, useStrongGen);
+            }
+            else if (prevSelection != selection)
+            {
+                createStrongRng(category, seed);
+            }
+        }
+    }
+
+    private bool hasOptionChanged(out OptionCategory category, out bool useStrongGen, out int selection)
+    {
         if (!OptionManager.Instance.TryGetCategory(
                 OptionTab.GeneralTab,
                 randCategoryKey,
-                out var category))
+                out category))
         {
-            return;
+            useStrongGen = false;
+            selection = -1;
+            return false;
         }
 
-		bool useStrongGen = category.GetValue<bool>(useStrongKey);
-        if (Instance != null)
-        {
-            if (useStrongGen != prevValue)
-			{
-				using var seed = new SeedInfo();
-				createGlobalRandomGenerator(new SeedInfo(), useStrongGen);
-            }
-            else
-            {
-                int selection = category.GetValue<int>(algorithmKey);
-                if (prevSelection != selection)
-                {
-					using var seed = new SeedInfo();
-					createStrongRng(category, seed);
-                }
-            }
-        }
-        else
-        {
-			using var seed = new SeedInfo();
-			createGlobalRandomGenerator(seed, useStrongGen);
-        }
+        useStrongGen = category.GetValue<bool>(useStrongKey);
+        selection = category.GetValue<int>(algorithmKey);
+
+        return Instance == null || useStrongGen != prevValue || prevSelection != selection;
     }
 
     private void createGlobalRandomGenerator(SeedInfo seed, bool isStrong)
@@ -71,7 +73,7 @@ public sealed class RngSelector
                 out var category) &&
             isStrong)
         {
-			createStrongRng(category, seed);
+            createStrongRng(category, seed);
         }
         else
         {
@@ -82,13 +84,13 @@ public sealed class RngSelector
         prevValue = isStrong;
     }
 
-	private void createStrongRng(OptionCategory category, SeedInfo seed)
-	{
-		int selection = category.GetValue<int>(algorithmKey);
-		Instance = getAditionalPrng(seed, selection);
-		UnityEngine.Random.InitState(seed.CreateInt());
-		prevSelection = selection;
-	}
+    private void createStrongRng(OptionCategory category, SeedInfo seed)
+    {
+        int selection = category.GetValue<int>(algorithmKey);
+        Instance = getAditionalPrng(seed, selection);
+        UnityEngine.Random.InitState(seed.CreateInt());
+        prevSelection = selection;
+    }
 
     private static IRng getAditionalPrng(SeedInfo seed, int selection)
     {
@@ -97,7 +99,7 @@ public sealed class RngSelector
             case 0:
                 return new Pcg32XshRr(seed);
             case 1:
-				return new Pcg64RxsMXs(seed);
+                return new Pcg64RxsMXs(seed);
             case 2:
                 return new Xorshift64(seed);
             case 3:
