@@ -1,13 +1,13 @@
-using System;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.PRNG;
+
+#nullable enable
 
 namespace ExtremeRoles;
 
 public static class RandomGenerator
 {
-    private static RngSelector selector;
+    private static RngSelector? selector;
 
     public static IRng Instance
     {
