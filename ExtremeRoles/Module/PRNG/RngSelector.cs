@@ -65,8 +65,7 @@ public sealed class RngSelector
         if (!OptionManager.Instance.TryGetCategory(
                 OptionTab.GeneralTab,
                 randCategoryKey,
-                out var category) ||
-			category is null)
+                out var category))
         {
 			info = new OptionInfo();
             return false;
