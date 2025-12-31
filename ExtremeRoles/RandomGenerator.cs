@@ -13,11 +13,8 @@ public static class RandomGenerator
     {
         get
         {
-            if (selector is null)
-            {
-                selector = new RngSelector();
-            }
-            return selector.Instance;
+			selector ??= new RngSelector();
+			return selector.Instance;
         }
     }
 
@@ -25,11 +22,8 @@ public static class RandomGenerator
 
     public static void Initialize()
     {
-        if (selector is null)
-        {
-            selector = new RngSelector();
-        }
-        selector.Initialize();
+		selector ??= new RngSelector();
+		selector.Initialize();
 
         int sample = Instance.Next();
 
