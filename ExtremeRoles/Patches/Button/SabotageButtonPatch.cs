@@ -1,6 +1,7 @@
 using HarmonyLib;
 
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 
@@ -19,9 +20,7 @@ public static class SabotageButtonDoClickPatch
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
         // The sabotage button behaves just fine if it's a regular impostor
-        if ((PlayerControl.LocalPlayer.Data.Role.TeamType == RoleTeamTypes.Impostor) ||
-            role.IsImpostor() ||
-			!role.CanUseSabotage()) 
+        if (!role.CanUseSabotage()) 
 		{
 			return true;
 		}
@@ -32,7 +31,10 @@ public static class SabotageButtonDoClickPatch
                 Mode = MapOptions.Modes.Sabotage,
                 AllowMovementWhileMapOpen = true,
             });
-        return false;
+		
+		InspectorInspectSystem.InspectSabotage();
+
+		return false;
     }
 }
 
