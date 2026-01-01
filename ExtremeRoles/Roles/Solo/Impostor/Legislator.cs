@@ -211,28 +211,30 @@ public sealed class Legislator :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (MeetingHud.Instance != null)
+        if (MeetingHud.Instance == null)
         {
-            if (meetingVoteText == null)
-            {
-                meetingVoteText = UnityEngine.Object.Instantiate(
-                    HudManager.Instance.TaskPanel.taskText,
-                    MeetingHud.Instance.transform);
-                meetingVoteText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
-                meetingVoteText.transform.position = Vector3.zero;
-                meetingVoteText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
-                meetingVoteText.transform.localScale *= 0.9f;
-                meetingVoteText.color = Palette.White;
-                meetingVoteText.gameObject.SetActive(false);
-            }
-
-            meetingVoteText.text = Tr.GetString(
-				"legislatorVoteStatus",
-				isNotUseSpecialVote() ? Tr.GetString("cannotDo") : Tr.GetString("canDo"),
-				this.curChargedVote);
-            meetingVoteText.gameObject.SetActive(true);
+			return;
         }
-    }
+
+		if (meetingVoteText == null)
+		{
+			meetingVoteText = UnityEngine.Object.Instantiate(
+				HudManager.Instance.TaskPanel.taskText,
+				MeetingHud.Instance.transform);
+			meetingVoteText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+			meetingVoteText.transform.position = Vector3.zero;
+			meetingVoteText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
+			meetingVoteText.transform.localScale *= 0.9f;
+			meetingVoteText.color = Palette.White;
+			meetingVoteText.gameObject.SetActive(false);
+		}
+
+		meetingVoteText.text = Tr.GetString(
+			"legislatorVoteStatus",
+			isNotUseSpecialVote() ? Tr.GetString("cannotDo") : Tr.GetString("canDo"),
+			this.curChargedVote);
+		meetingVoteText.gameObject.SetActive(true);
+	}
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
