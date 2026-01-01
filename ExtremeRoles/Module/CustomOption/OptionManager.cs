@@ -72,6 +72,11 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 					}
 					caller.WritePackedInt(option.Info.Id);
 					caller.WritePackedInt(option.Selection);
+					size--;
+					if (size <= 0)
+					{
+						break;
+					}
 				}
 			}
 		}
