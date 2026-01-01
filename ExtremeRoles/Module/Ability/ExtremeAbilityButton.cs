@@ -8,6 +8,7 @@ using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 
 using ArgException = System.ArgumentException;
 
@@ -326,6 +327,9 @@ public class ExtremeAbilityButton
 
 		ExtremeRolesPlugin.Logger.LogInfo(
 			$"ExtremeAbilityButton : Clicking {this.Behavior.Graphic.Text}");
+		
+		InspectorInspectSystem.InspectAbility();
+
 		if (newState == AbilityState.CoolDown)
 		{
 			Behavior.AbilityOff();
