@@ -130,7 +130,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 		{
 			if (this.text != null)
 			{
-				this.text.gameObject.SetActive(true);
+				this.text.gameObject.SetActive(false);
 			}
 			return;
 		}
@@ -142,8 +142,8 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 				Camera.main.transform, false);
 			this.text.transform.localPosition = new Vector3(0.0f, -0.25f, -250.0f);
 			this.text.enableWordWrapping = false;
-			this.text.gameObject.SetActive(true);
 		}
+		this.text.gameObject.SetActive(true);
 
 		// 役職本人の矢印表示処理
 		if (this.allTarget.TryGetValue(local.PlayerId, out var rolePlayerShowTarget))
