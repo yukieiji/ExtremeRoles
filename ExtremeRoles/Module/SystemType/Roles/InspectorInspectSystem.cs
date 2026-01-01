@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using Hazel;
@@ -5,7 +6,6 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
-using System;
 
 #nullable enable
 
@@ -29,7 +29,13 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 		EndInspect,
 	}
 
-	private sealed class TaargetPlayerContainer
+	private readonly InspectMode mode = mode;
+	private readonly Dictionary<byte, TargetPlayerContainer> allTarget = [];
+
+	public bool IsDirty => false;
+	public const ExtremeSystemType Type = ExtremeSystemType.InspectorInspect;
+
+	private sealed class TargetPlayerContainer
 	{
 		public PlayerControl Target
 		{
@@ -73,12 +79,6 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 			this.targetPlayer.Clear();
 		}
 	}
-
-	private readonly InspectMode mode = mode;
-	private readonly Dictionary<byte, TaargetPlayerContainer> allTarget = [];
-
-	public bool IsDirty => false;
-	public const ExtremeSystemType Type = ExtremeSystemType.InspectorInspect;
 
 	public static void InspectAbility()
 	{
@@ -200,7 +200,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 			{
 				return;
 			}
-			this.allTarget[start] = new TaargetPlayerContainer();
+			this.allTarget[start] = new TargetPlayerContainer();
 		}
 	}
 
@@ -215,7 +215,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 			}
 			target.Clear();
 			this.allTarget.Remove(remove);
-		};
+		}
 	}
 	private void clear()
 	{
