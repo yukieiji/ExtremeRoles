@@ -51,8 +51,8 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 
 			}
 		}
-		private Dictionary<byte, PlayerControl> targetPlayer = [];
-		private Dictionary<byte, Arrow> targetArrow = [];
+		private readonly Dictionary<byte, PlayerControl> targetPlayer = [];
+		private readonly Dictionary<byte, Arrow> targetArrow = [];
 
 		public bool Contain(PlayerControl target)
 			=> target != null && this.targetPlayer.ContainsKey(target.PlayerId);
