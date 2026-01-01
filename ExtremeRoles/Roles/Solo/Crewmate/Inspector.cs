@@ -2,7 +2,6 @@ using ExtremeRoles.Module;
 
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Resources;
@@ -17,6 +16,9 @@ public sealed class Inspector : SingleRoleBase, IRoleAutoBuildAbility
 
 	public enum Option
     {
+		InspectSabotage,
+		InspectVent,
+		InspectAbility,
     }
 
     public Inspector() : base(
@@ -30,15 +32,31 @@ public sealed class Inspector : SingleRoleBase, IRoleAutoBuildAbility
         AutoParentSetOptionCategoryFactory factory)
     {
 		IRoleAbility.CreateAbilityCountOption(factory, 3, 10, 5);
-    }
+
+		factory.CreateBoolOption(Option.InspectSabotage, true);
+		factory.CreateBoolOption(Option.InspectVent, true);
+		factory.CreateBoolOption(Option.InspectAbility, false);
+	}
 
     protected override void RoleSpecificInit()
     {
 		var loader = this.Loader;
 
-		ExtremeSystemTypeManager.Instance.TryAdd(
-			ExtremeSystemType.InspectorInspect,
-			new InspectorInspectSystem(InspectorInspectSystem.InspectMode.Ability));
+		var mode = InspectorInspectSystem.InspectMode.None;
+		if (loader.GetValue<Option, bool>(Option.InspectSabotage))
+		{
+			mode |= InspectorInspectSystem.InspectMode.Sabotage;
+		}
+		if (loader.GetValue<Option, bool>(Option.InspectVent))
+		{
+			mode |= InspectorInspectSystem.InspectMode.Vent;
+		}
+		if (loader.GetValue<Option, bool>(Option.InspectAbility))
+		{
+			mode |= InspectorInspectSystem.InspectMode.Ability;
+		}
+
+		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.InspectorInspect, new InspectorInspectSystem(mode));
 	}
 
 	public bool UseAbility()
@@ -54,7 +72,7 @@ public sealed class Inspector : SingleRoleBase, IRoleAutoBuildAbility
 	public void CreateAbility()
 	{
 		this.CreateActivatingAbilityCountButton(
-			"curse",
+			"inspect",
 			UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.CurseMakerCurse),
 			abilityOff: CleanUp,

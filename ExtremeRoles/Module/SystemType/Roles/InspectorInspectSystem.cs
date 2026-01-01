@@ -16,9 +16,10 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 	[Flags]
 	public enum InspectMode
 	{
-		Ability = 1 << 0,
+		None = 0,
+		Sabotage = 1 << 0,
 		Vent = 1 << 1,
-		Sabotage = 1 << 2,
+		Ability = 1 << 2,
 	}
 
 	public enum Ops
