@@ -22,72 +22,13 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 {
 	public readonly static OptionManager Instance = new ();
 
-	private sealed class OptionCategorySharer(OptionCategory category, bool isShow)
-	{
-		private readonly OptionCategory category = category;
-		private readonly byte isShowByte = isShow ? byte.MinValue : byte.MaxValue;
-
-		private const int chunkSize = 50;
-
-		public void Share()
-		{
-			int size = category.Count;
-
-			if (size <= chunkSize)
-			{
-				shareOptionCategoryWithSize(size, 0);
-			}
-			else
-			{
-				int mod = size;
-				int offset = 0;
-				do
-				{
-					shareOptionCategoryWithSize(chunkSize, offset);
-					offset++;
-					mod -= chunkSize;
-				} while (mod > chunkSize);
-
-				shareOptionCategoryWithSize(mod, offset);
-			}
-		}
-
-		private void shareOptionCategoryWithSize(int size, int offset)
-		{
-			int indexOffset = offset * chunkSize;
-
-			using (var caller = RPCOperator.CreateCaller(
-				RPCOperator.Command.ShareOption))
-			{
-				caller.WriteByte(this.isShowByte);
-				caller.WriteByte((byte)category.Tab);
-				caller.WritePackedInt(category.Id);
-				caller.WriteByte((byte)size);
-				foreach (var option in category.Options)
-				{
-					if (indexOffset > 0)
-					{
-						indexOffset--;
-						continue;
-					}
-					caller.WritePackedInt(option.Info.Id);
-					caller.WritePackedInt(option.Selection);
-					size--;
-					if (size <= 0)
-					{
-						break;
-					}
-				}
-			}
-		}
-	}
-
 	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
 	private readonly Dictionary<string, List<IOption>> children = new ();
 
 	public string ConfigPreset => $"Preset:{selectedPreset}";
 	private int selectedPreset = 0;
 	private const int skipStep = 10;
+	private const int chunkSize = 50;
 
 	private const string OptionChangeFontPlace = "<font=\"Barlow-Black SDF\" material=\"Barlow-Black Outline\">{0}</font>";
 
@@ -274,8 +215,37 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			return;
 		}
 
-		var sharer = new OptionCategorySharer(category, isShow);
-		sharer.Share();
+		int totalSize = category.Count;
+		byte isShowByte = isShow ? byte.MinValue : byte.MaxValue;
+
+		using var enumerator = category.Options.GetEnumerator();
+
+		for (int i = 0; i < totalSize; i += chunkSize)
+		{
+			// このパケットで送る個数
+			int currentChunkSize = Math.Min(chunkSize, totalSize - i);
+
+			// パケット作成
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ShareOption))
+			{
+				caller.WriteByte(isShowByte);
+				caller.WriteByte((byte)category.Tab);
+				caller.WritePackedInt(category.Id);
+				caller.WriteByte((byte)currentChunkSize);
+
+				// イテレータを必要な数だけ進める
+				for (int j = 0; j < currentChunkSize; j++)
+				{
+					if (!enumerator.MoveNext())
+					{
+						break; // 安全策
+					}
+					var option = enumerator.Current;
+					caller.WritePackedInt(option.Info.Id);
+					caller.WritePackedInt(option.Selection);
+				}
+			}
+		}
 	}
 
 	private void syncOption(
