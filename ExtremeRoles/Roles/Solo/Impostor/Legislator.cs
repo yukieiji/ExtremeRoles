@@ -20,12 +20,12 @@ public sealed class Legislator :
 {
     public enum Option
     {
-        ChargeVotePerOtherVote,
+		ChargeVotePerOtherVote,
 		IncludeSkipVote,
-        AwakedDefaultVoteNum,
-    }
+		DefaultVoteNum,
+	}
 
-    public enum AbilityType : byte
+	public enum AbilityType : byte
     {
         SetVoteTarget,
         ChargeVote,
@@ -242,7 +242,7 @@ public sealed class Legislator :
             format: OptionUnit.VoteNum);
 		factory.CreateBoolOption(Option.IncludeSkipVote, false);
         factory.CreateFloatOption(
-            Option.AwakedDefaultVoteNum,
+            Option.DefaultVoteNum,
             0.0f, 0.0f, 100.0f, 0.1f,
             format: OptionUnit.VoteNum);
     }
@@ -255,7 +255,7 @@ public sealed class Legislator :
         this.chargeVoteNum = loader.GetValue<Option, float>(
            Option.ChargeVotePerOtherVote);
         this.defaultVote = loader.GetValue<Option, float>(
-           Option.AwakedDefaultVoteNum);
+           Option.DefaultVoteNum);
 		this.includeSkip = loader.GetValue<Option, bool>(
 			Option.IncludeSkipVote);
 
