@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 
 using Hazel;
+using TMPro;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
+
+using UnityObject = UnityEngine.Object;
 
 #nullable enable
 
@@ -31,6 +34,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 
 	private readonly InspectMode mode = mode;
 	private readonly Dictionary<byte, TargetPlayerContainer> allTarget = [];
+	private TextMeshPro? text;
 
 	public bool IsDirty => false;
 	public const ExtremeSystemType Type = ExtremeSystemType.InspectorInspect;
@@ -124,8 +128,21 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 		if (local == null ||
 			this.allTarget.Count == 0)
 		{
-			// テキスト非表示処理
+			if (this.text != null)
+			{
+				this.text.gameObject.SetActive(true);
+			}
 			return;
+		}
+
+		if (this.text == null)
+		{
+			this.text = UnityObject.Instantiate(
+				Prefab.Text,
+				Camera.main.transform, false);
+			this.text.transform.localPosition = new Vector3(0.0f, -0.25f, -250.0f);
+			this.text.enableWordWrapping = false;
+			this.text.gameObject.SetActive(true);
 		}
 
 		// 役職本人の矢印表示処理
@@ -139,10 +156,12 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 		{
 			if (target.Contain(local))
 			{
-				// 「位置がバレた的なテキストを表示させる」
+				this.text.text = "「インスペクター」に自分の位置がバレた";
 				return;
 			}
 		}
+		// TODO: 能力発動時のテキストを整備する
+		this.text.text = "〇〇が監視されている・・・・";
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
