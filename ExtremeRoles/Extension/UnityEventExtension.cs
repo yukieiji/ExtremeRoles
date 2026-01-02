@@ -14,7 +14,7 @@ public static class UnityEventBaseExtension
     }
 }
 
-public static class AddListenerExtention
+public static class AddListenerExtension
 {
 	public static void AddListener(this Button.ButtonClickedEvent events, Delegate delegateFunc)
 	{
@@ -27,7 +27,7 @@ public static class AddListenerExtention
 	}
 }
 
-public static class RemoveListenerExtention
+public static class RemoveListenerExtension
 {
 	public static void RemoveListener(this Button.ButtonClickedEvent events, Delegate delegateFunc)
 	{
