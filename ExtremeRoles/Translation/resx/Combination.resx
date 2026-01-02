@@ -1159,4 +1159,7 @@
   <data name="MarlinCanSeeLiberal" xml:space="preserve">
     <value>「マーリン」が「リベラル」を見れるか</value>
   </data>
+  <data name="AssassinCanKilledFromLiberal" xml:space="preserve">
+    <value>「ミリタント」が「アサシン」をキルできるか</value>
+  </data>
 </root>
