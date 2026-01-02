@@ -31,8 +31,6 @@ public static class SabotageButtonDoClickPatch
                 Mode = MapOptions.Modes.Sabotage,
                 AllowMovementWhileMapOpen = true,
             });
-		
-		InspectorInspectSystem.InspectSabotage();
 
 		return false;
     }

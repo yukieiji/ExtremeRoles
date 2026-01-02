@@ -1,23 +1,22 @@
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using TMPro;
-using HarmonyLib;
-
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.InGameVisualUpdater;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.CheckPoint;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Patches.MapOverlay;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Solo.Host;
-
+using HarmonyLib;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using TMPro;
 using PlayerHelper = ExtremeRoles.Helper.Player;
+
 
 #nullable enable
 
@@ -98,11 +97,19 @@ public static class HudManagerToggleMapVisibletPatch
 {
 	public static void Prefix([HarmonyArgument(0)] ref MapOptions options)
 	{
-		if (options.Mode != MapOptions.Modes.CountOverlay ||
+		var mode = options.Mode;
+		if (mode is MapOptions.Modes.Sabotage)
+		{
+			InspectorInspectSystem.InspectSabotage();
+		}
+
+		if (mode is not MapOptions.Modes.CountOverlay ||
 		   ExtremeRoleManager.GameRole.Count == 0 ||
 		   ExtremeRoleManager.GetLocalPlayerRole().CanUseAdmin() ||
-		   MapCountOverlayUpdatePatch.IsAbilityUse()) { return; }
-
+		   MapCountOverlayUpdatePatch.IsAbilityUse())
+		{
+			return;
+		}
 		options.Mode = MapOptions.Modes.Normal;
 	}
 }
