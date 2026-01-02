@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -24,5 +24,18 @@ public static class AddListenerExtention
 	public static void AddListener(this UnityEvent events, Delegate delegateFunc)
 	{
 		events.AddListener((Action)delegateFunc);
+	}
+}
+
+public static class RemoveListenerExtention
+{
+	public static void RemoveListener(this Button.ButtonClickedEvent events, Delegate delegateFunc)
+	{
+		events.RemoveListener((Action)delegateFunc);
+	}
+
+	public static void AddListener(this UnityEvent events, Delegate delegateFunc)
+	{
+		events.RemoveListener((Action)delegateFunc);
 	}
 }
