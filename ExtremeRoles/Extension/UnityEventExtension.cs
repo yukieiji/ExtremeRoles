@@ -34,7 +34,7 @@ public static class RemoveListenerExtention
 		events.RemoveListener((Action)delegateFunc);
 	}
 
-	public static void AddListener(this UnityEvent events, Delegate delegateFunc)
+	public static void RemoveListener(this UnityEvent events, Delegate delegateFunc)
 	{
 		events.RemoveListener((Action)delegateFunc);
 	}
