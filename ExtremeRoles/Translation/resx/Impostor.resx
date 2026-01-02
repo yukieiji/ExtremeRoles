@@ -1669,4 +1669,37 @@ Lv2能力「ビームセーバー」
   <data name="BoxerAbility" xml:space="preserve">
     <value>ストレート</value>
   </data>
+  <data name="Legislator" xml:space="preserve">
+    <value>レジスレイター</value>
+  </data>
+  <data name="LegislatorFullDescription" xml:space="preserve">
+    <value>他者の票を蓄積し、狙った相手の得票を打ち消せる
+インポスター
+
+会議能力: 「反対票」
+　- 会議中のプレイヤーを選択して発動
+　- そのプレイヤーの得票を「反対票」の数分打ち消す
+　- 反対票は「この役職のプレイヤーが投票した相手以外」への
+　投票を元に増加
+　　増加量:（自分以外への総得票数）× 設定された変換レート</value>
+  </data>
+  <data name="LegislatorShortDescription" xml:space="preserve">
+    <value>反対票を集めて、票をかき消せ</value>
+  </data>
+  <data name="LegislatorIntroDescription" xml:space="preserve">
+    <value>多数決は愚の骨頂、真の決定は私が下す</value>
+  </data>
+  <data name="LegislatorIncludeSkipVote" xml:space="preserve">
+    <value>スキップ票も反対票としてカウント</value>
+  </data>
+  <data name="LegislatorDefaultVoteNum" xml:space="preserve">
+    <value>反対票のデフォルト数</value>
+  </data>
+  <data name="LegislatorChargeVotePerOtherVote" xml:space="preserve">
+    <value>1票辺りの反対票のチャージ数</value>
+  </data>
+  <data name="legislatorVoteStatus" xml:space="preserve">
+    <value>能力の発動: {0}
+現在の反対票数: {1}</value>
+  </data>
 </root>

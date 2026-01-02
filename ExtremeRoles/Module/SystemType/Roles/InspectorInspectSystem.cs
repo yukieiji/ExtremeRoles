@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Hazel;
 using TMPro;
@@ -34,6 +35,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 
 	private readonly InspectMode mode = mode;
 	private readonly Dictionary<byte, TargetPlayerContainer> allTarget = [];
+	private readonly StringBuilder builder = new StringBuilder();
 	private TextMeshPro? text;
 
 	public bool IsDirty => false;
@@ -156,12 +158,12 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 		{
 			if (target.Contain(local))
 			{
-				this.text.text = "「インスペクター」に自分の位置がバレた";
+				this.text.text = Tr.GetString("inspectArrowWarning");
 				return;
 			}
 		}
-		// TODO: 能力発動時のテキストを整備する
-		this.text.text = "〇〇が監視されている・・・・";
+
+		this.text.text = this.createText();
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
@@ -255,5 +257,39 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{
+	}
+
+	private string createText()
+	{
+
+		this.builder.Clear();
+		this.builder.Append('「');
+
+		int count = 0;
+		if (this.mode.HasFlag(InspectMode.Sabotage))
+		{
+			this.builder.Append(Tr.GetString("sabotageKey"));
+			count++;
+		}
+		if (this.mode.HasFlag(InspectMode.Vent))
+		{
+			if (count > 1)
+			{
+				this.builder.Append(',');
+			}
+			this.builder.Append(Tr.GetString("ventKey"));
+		}
+		if (this.mode.HasFlag(InspectMode.Ability))
+		{
+			if (count > 1)
+			{
+				this.builder.Append(',');
+			}
+			this.builder.Append(Tr.GetString("buttonAbility"));
+		}
+		this.builder.Append('」');
+		this.builder.Append(Tr.GetString("inspectSystem"));
+
+		return this.builder.ToString();
 	}
 }
