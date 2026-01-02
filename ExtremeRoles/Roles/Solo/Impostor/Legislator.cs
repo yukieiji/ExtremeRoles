@@ -15,6 +15,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Legislator :
     SingleRoleBase,
+	IRoleUpdate,
     IRoleMeetingButtonAbility,
     IRoleVoteModifier
 {
@@ -137,9 +138,28 @@ public sealed class Legislator :
         }
 
 		int removeVoteNum = (int)Math.Floor(this.curChargedVote);
-		if (removeVoteNum > 0)
+		foreach (var info in collector.Vote.OrderBy(x => RandomGenerator.Instance.Next()))
 		{
-			yield return new VoteInfo(rolePlayer.PlayerId, this.removeTarget, -removeVoteNum);
+			if (removeVoteNum <= 0)
+			{
+				yield break;
+			}
+
+			if (info.TargetId != this.removeTarget)
+			{
+				continue;
+			}
+			int delta = removeVoteNum - info.Count;
+			if (delta >= 0)
+			{
+				yield return new VoteInfo(info.VoterId, info.TargetId, -info.Count);
+				removeVoteNum = delta;
+			}
+			else
+			{
+				yield return new VoteInfo(info.VoterId, info.TargetId, -removeVoteNum);
+				removeVoteNum = 0;
+			}
 		}
 	}
 
