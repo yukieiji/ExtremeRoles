@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using Hazel;
@@ -10,7 +11,6 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 
 using UnityObject = UnityEngine.Object;
-using System.Linq;
 
 #nullable enable
 
