@@ -55,7 +55,10 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 					return;
 				}
 				this.targetPlayer[playerId] = value;
-				this.targetArrow[playerId] = new Arrow(Color.white);
+				
+				var arrow = new Arrow(Color.white);
+				arrow.SetActive(false);
+				this.targetArrow[playerId] = arrow;
 
 			}
 		}
@@ -72,6 +75,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 				if (this.targetArrow.TryGetValue(id, out var arrow) &&
 					arrow is not null)
 				{
+					arrow.SetActive(true);
 					arrow.UpdateTarget(player.GetTruePosition());
 				}
 			}
