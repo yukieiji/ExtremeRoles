@@ -271,7 +271,8 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 				int id = reader.ReadPackedInt32();
 				int selection = reader.ReadPackedInt32();
 				if (!category.TryGet(id, out var option) ||
-					option.Selection == selection)
+					option.Selection == selection ||
+					PresetOption.IsPreset(categoryId, id))
 				{
 					continue;
 				}
