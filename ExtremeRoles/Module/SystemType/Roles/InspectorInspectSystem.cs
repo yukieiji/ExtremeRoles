@@ -10,6 +10,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 
 using UnityObject = UnityEngine.Object;
+using System.Linq;
 
 #nullable enable
 
@@ -34,6 +35,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 	}
 
 	private readonly InspectMode mode = mode;
+	private readonly IReadOnlyList<string> modeKey = createModeKey(mode);
 	private readonly Dictionary<byte, TargetPlayerContainer> allTarget = [];
 	private readonly StringBuilder builder = new StringBuilder();
 	private TextMeshPro? text;
@@ -261,35 +263,30 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 
 	private string createText()
 	{
-
 		this.builder.Clear();
 		this.builder.Append('「');
-
-		int count = 0;
-		if (this.mode.HasFlag(InspectMode.Sabotage))
-		{
-			this.builder.Append(Tr.GetString("sabotageKey"));
-			count++;
-		}
-		if (this.mode.HasFlag(InspectMode.Vent))
-		{
-			if (count > 1)
-			{
-				this.builder.Append(',');
-			}
-			this.builder.Append(Tr.GetString("ventKey"));
-		}
-		if (this.mode.HasFlag(InspectMode.Ability))
-		{
-			if (count > 1)
-			{
-				this.builder.Append(',');
-			}
-			this.builder.Append(Tr.GetString("buttonAbility"));
-		}
+		this.builder.Append(string.Join(",", this,modeKey.Select(x => Tr.GetString)));
 		this.builder.Append('」');
 		this.builder.Append(Tr.GetString("inspectSystem"));
 
 		return this.builder.ToString();
+	}
+
+	private static IReadOnlyList<string> createModeKey(InspectMode mode)
+	{
+		var parts = new List<string>();
+		if (mode.HasFlag(InspectMode.Sabotage))
+		{
+			parts.Add("sabotageKey");
+		}
+		if (mode.HasFlag(InspectMode.Vent))
+		{
+			parts.Add("ventKey");
+		}
+		if (mode.HasFlag(InspectMode.Ability))
+		{
+			parts.Add("buttonAbility");
+		}
+		return parts;
 	}
 }
