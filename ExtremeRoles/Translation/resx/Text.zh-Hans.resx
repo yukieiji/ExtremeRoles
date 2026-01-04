@@ -1418,4 +1418,19 @@ ExR 和其他设备仅以最低限度的功能启动</value>
   <data name="AddOnKill" xml:space="preserve">
     <value>击杀</value>
   </data>
+  <data name="liberalShotCall" xml:space="preserve">
+    <value>革命分子</value>
+  </data>
+  <data name="liberalRoles" xml:space="preserve">
+    <value>革命党的职业</value>
+  </data>
+  <data name="ventKey" xml:space="preserve">
+    <value>通风管</value>
+  </data>
+  <data name="sabotageKey" xml:space="preserve">
+    <value>破坏</value>
+  </data>
+  <data name="buttonAbility" xml:space="preserve">
+    <value>技能</value>
+  </data>
 </root>
