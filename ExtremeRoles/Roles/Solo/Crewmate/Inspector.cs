@@ -87,7 +87,7 @@ public sealed class Inspector : SingleRoleBase, IRoleAutoBuildAbility
 			ExtremeSystemType.InspectorInspect, x => x.Write((byte)InspectorInspectSystem.Ops.EndInspect));
 	}
 
-	public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
 
 	}
