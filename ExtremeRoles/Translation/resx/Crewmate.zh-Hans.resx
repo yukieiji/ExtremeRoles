@@ -1537,4 +1537,49 @@ C.E.O不能票出自己</value>
   <data name="EmitNotCrewmate" xml:space="preserve">
     <value>仅非船员知晓蝙蝠使用“回声”</value>
   </data>
+  <data name="SheriffCanShootLiberal" xml:space="preserve">
+    <value>能否击杀革命党</value>
+  </data>
+  <data name="Inspector" xml:space="preserve">
+    <value>主持人</value>
+  </data>
+  <data name="InspectorFullDescription" xml:space="preserve">
+    <value>主持人属于船员阵营
+主持人可以知晓在做某件事的是哪些人
+·主动技能“不要做挑战”
+使用技能时，检测是否有在做某件事情的玩家（如使用通风管），如有则出现指向该玩家的箭头，箭头将在技能结束后消失</value>
+  </data>
+  <data name="InspectorShortDescription" xml:space="preserve">
+    <value>知晓“玩家”们在做什么</value>
+  </data>
+  <data name="InspectorIntroDescription" xml:space="preserve">
+    <value>注意不要触犯规则哦</value>
+  </data>
+  <data name="InspectorInspectVent" xml:space="preserve">
+    <value>不使用“通风管”挑战</value>
+  </data>
+  <data name="InspectorInspectSabotage" xml:space="preserve">
+    <value>不进行“破坏”挑战</value>
+  </data>
+  <data name="InspectorInspectAbility" xml:space="preserve">
+    <value>不用“技能”挑战</value>
+  </data>
+  <data name="InspectorAbilityCoolTime" xml:space="preserve">
+    <value>发动各项挑战冷却时间</value>
+  </data>
+  <data name="InspectorAbilityActiveTime" xml:space="preserve">
+    <value>各项挑战持续时间</value>
+  </data>
+  <data name="InspectorAbilityCount" xml:space="preserve">
+    <value>可进行的挑战次数</value>
+  </data>
+  <data name="inspect" xml:space="preserve">
+    <value>不要做挑战</value>
+  </data>
+  <data name="inspectArrowWarning" xml:space="preserve">
+    <value>啊哦！你触犯了主持人的规则！！</value>
+  </data>
+  <data name="inspectSystem" xml:space="preserve">
+    <value>正在进行中・・・</value>
+  </data>
 </root>

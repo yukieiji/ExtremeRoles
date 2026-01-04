@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
@@ -29,7 +28,6 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	public string ConfigPreset => $"Preset:{selectedPreset}";
 	private int selectedPreset = 0;
 	private const int skipStep = 10;
-
 	private const int chunkSize = 50;
 
 	private const string OptionChangeFontPlace = "<font=\"Barlow-Black SDF\" material=\"Barlow-Black Outline\">{0}</font>";
@@ -103,14 +101,13 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		return true;
 	}
 
-	public void UpdateToStep(in OptionCategory category, in int id, int step)
-	{
-		var option = category.Get(id);
-		UpdateToStep(category, option, step);
-	}
-
 	public void UpdateToStep(in OptionCategory category, in IOption option, int step)
 	{
+		if (isInvalidOptionUpdate())
+		{
+			return;
+		}
+
 		int newSelection = 0;
 		if (Key.IsControlDown())
 		{
@@ -125,12 +122,22 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 
 	public void Update(in OptionCategory category, in int id, int newIndex)
 	{
+		if (isInvalidOptionUpdate())
+		{
+			return;
+		}
+
 		var option = category.Get(id);
 		Update(category, option, newIndex);
 	}
 
 	public void Update(in OptionCategory category, in IOption option, int newIndex)
 	{
+		if (isInvalidOptionUpdate())
+		{
+			return;
+		}
+
 		option.Selection = newIndex;
 		if (!PresetOption.IsPreset(category.Id, option.Info.Id))
 		{
@@ -142,6 +149,11 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 
 	public void SwitchPreset(int targetPreset)
 	{
+		if (isInvalidOptionUpdate())
+		{
+			return;
+		}
+
 		this.selectedPreset = targetPreset;
 		foreach (var tab in this.options.Values)
 		{
@@ -154,11 +166,16 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 				category.IsDirty = true;
 			}
 		}
-		ShereAllOption();
+		ShareAllOption();
 	}
 
-	public void ShereAllOption()
+	public void ShareAllOption()
 	{
+		if (isInvalidOptionUpdate())
+		{
+			return;
+		}
+
 		foreach (var tabContainer in this.options.Values)
 		{
 			foreach (var category in tabContainer.Category)
@@ -192,38 +209,41 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	private static void shareOptionCategory(
 		in OptionCategory category, bool isShow = true)
 	{
-		int size = category.Count;
-
-		if (size <= chunkSize)
+		if (isInvalidOptionUpdate() ||
+			category.Id == PresetOption.CategoryId)
 		{
-			shareOptionCategoryWithSize(category, size, isShow);
+			return;
 		}
-		else
-		{
-			int mod = size;
-			do
-			{
-				shareOptionCategoryWithSize(category, chunkSize, isShow);
-				mod -= chunkSize;
-			} while (mod > chunkSize);
-			shareOptionCategoryWithSize(category, mod, isShow);
-		}
-	}
 
-	private static void shareOptionCategoryWithSize(
-		in OptionCategory category, int size, bool isShow=true)
-	{
-		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.ShareOption))
+		int totalSize = category.Count;
+		byte isShowByte = isShow ? byte.MinValue : byte.MaxValue;
+
+		using var enumerator = category.Options.GetEnumerator();
+
+		for (int i = 0; i < totalSize; i += chunkSize)
 		{
-			caller.WriteByte(isShow ? byte.MinValue : byte.MaxValue);
-			caller.WriteByte((byte)category.Tab);
-			caller.WritePackedInt(category.Id);
-			caller.WriteByte((byte)size);
-			foreach (var option in category.Options)
+			// このパケットで送る個数
+			int currentChunkSize = Math.Min(chunkSize, totalSize - i);
+
+			// パケット作成
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ShareOption))
 			{
-				caller.WritePackedInt(option.Info.Id);
-				caller.WritePackedInt(option.Selection);
+				caller.WriteByte(isShowByte);
+				caller.WriteByte((byte)category.Tab);
+				caller.WritePackedInt(category.Id);
+				caller.WriteByte((byte)currentChunkSize);
+
+				// イテレータを必要な数だけ進める
+				for (int j = 0; j < currentChunkSize; j++)
+				{
+					if (!enumerator.MoveNext())
+					{
+						break; // 安全策
+					}
+					var option = enumerator.Current;
+					caller.WritePackedInt(option.Info.Id);
+					caller.WritePackedInt(option.Selection);
+				}
 			}
 		}
 	}
@@ -244,14 +264,15 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			}
 
 			string tabName = Tr.GetString(tab.ToString());
-			int size = reader.ReadPackedInt32();
+			int size = reader.ReadByte();
 
 			for (int i = 0; i < size; i++)
 			{
 				int id = reader.ReadPackedInt32();
 				int selection = reader.ReadPackedInt32();
 				if (!category.TryGet(id, out var option) ||
-					option.Selection == selection)
+					option.Selection == selection ||
+					PresetOption.IsPreset(categoryId, id))
 				{
 					continue;
 				}
@@ -276,4 +297,8 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			category.IsDirty = true;
 		}
 	}
+	private static bool isInvalidOptionUpdate()
+		=> AmongUsClient.Instance == null ||
+			!AmongUsClient.Instance.AmHost ||
+			PlayerControl.LocalPlayer == null;
 }

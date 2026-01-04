@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Module.PRNG;
+#nullable enable
+
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class Pcg32XshRr : RNG32Base
 {
@@ -9,9 +11,12 @@ public sealed class Pcg32XshRr : RNG32Base
 	private const ulong ShiftedIncrement = 721347520444481703ul;
 	private const ulong Multiplier = 6364136223846793005ul;
 
-	public Pcg32XshRr(
-		ulong seed, ulong state = ShiftedIncrement) : base(seed, state)
-	{ }
+	public Pcg32XshRr(SeedInfo seed)
+	{
+		ulong init = seed.CreateULong();
+		this.state = (seed.CreateULong() + init) * Multiplier + init;
+		this.increment = init | 1;
+	}
 
 	public override uint NextUInt()
 	{
@@ -21,11 +26,5 @@ public sealed class Pcg32XshRr : RNG32Base
 		uint rot = (uint)(oldState >> 59);
 		uint result = (xorShifted >> (int)rot) | (xorShifted << (int)((-rot) & 31));
 		return result;
-	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		this.state = (seed + initStete) * Multiplier + initStete;
-		this.increment = initStete | 1;
 	}
 }

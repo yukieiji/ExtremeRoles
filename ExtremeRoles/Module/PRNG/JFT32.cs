@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+using System.Numerics;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.PRNG;
 
@@ -10,41 +12,31 @@ public sealed class JFT32 : RNG32Base
         
     */
 
-	private uint _s0, _s1, _s2, _s3;
+	private uint state0, state1, state2, state3;
 
-	public JFT32(
-		ulong seed, ulong state) : base(seed, state)
-	{ }
+	public JFT32(SeedInfo seed)
+	{
+		do
+		{
+			state0 = seed.CreateUint();
+			state1 = seed.CreateUint();
+			state2 = seed.CreateUint();
+			state3 = seed.CreateUint();
+		}
+		while ((state0 | state1 | state2 | state3) == 0); // at least one value must be non-zero
+	}
 
 	public override uint NextUInt()
 	{
-		uint s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;
+		uint s0 = state0, s1 = state1, s2 = state2, s3 = state3;
 
 		uint t = s0 - BitOperations.RotateLeft(s1, 27);
 
-		_s0 = s1 ^ BitOperations.RotateLeft(s2, 17);
-		_s1 = s2 + s3;
-		_s2 = s3 + t;
-		_s3 = t + s0;
+		state0 = s1 ^ BitOperations.RotateLeft(s2, 17);
+		state1 = s2 + s3;
+		state2 = s3 + t;
+		state3 = t + s0;
 
-		return _s3;
-	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		_s0 = (uint)(seed >> 32);
-		_s1 = (uint)(initStete >> 32);
-		do
-		{
-			_s2 = RandomGenerator.CreateStrongSeed();
-			_s3 = RandomGenerator.CreateStrongSeed();
-		}
-		while ((_s2 | _s3) == 0); // at least one value must be non-zero
-
-		while ((_s0 | _s1) == 0)
-		{
-			_s0 = RandomGenerator.CreateStrongSeed();
-			_s1 = RandomGenerator.CreateStrongSeed();
-		}
+		return state3;
 	}
 }

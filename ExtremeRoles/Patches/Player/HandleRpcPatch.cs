@@ -325,6 +325,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.BoxerRpcOps:
 				RPCOperator.BoxerRpcOps(reader);
 				break;
+			case RPCOperator.Command.LegislatorAbility:
+				RPCOperator.LegislatorTargetVote(ref reader);
+				break;
 			case RPCOperator.Command.AliceShipBroken:
 				byte alicePlayerId = reader.ReadByte();
 				byte newTaskSetPlayerId = reader.ReadByte();

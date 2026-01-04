@@ -97,6 +97,7 @@ public enum ExtremeRoleId : int
 	Loner,
 	CEO,
 	Echo,
+	Inspector,
 
 	SpecialImpostor,
     Evolver,
@@ -130,6 +131,7 @@ public enum ExtremeRoleId : int
 	TimeBreaker,
 	Scavenger,
 	Boxer,
+	Legislator,
 
 	Alice,
     Jackal,
@@ -327,6 +329,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Loner       , new LonerRole()},
 			{(int)ExtremeRoleId.CEO         , new CEO()},
 			{(int)ExtremeRoleId.Echo        , new Echo()},
+			{(int)ExtremeRoleId.Inspector   , new Inspector()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -360,6 +363,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.TimeBreaker    , new TimeBreaker()},
 			{(int)ExtremeRoleId.Scavenger      , new Scavenger()},
 			{(int)ExtremeRoleId.Boxer          , new Boxer()},
+			{(int)ExtremeRoleId.Legislator     , new Legislator()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new JackalRole()},

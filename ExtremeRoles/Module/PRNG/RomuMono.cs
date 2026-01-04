@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+using System.Numerics;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.PRNG;
 
@@ -11,8 +13,14 @@ public sealed class RomuMono : RNG32Base
     */
 	private uint state;
 
-	public RomuMono(ulong seed, ulong state) : base(seed, state)
-	{ }
+	public RomuMono(SeedInfo seed)
+	{
+		do
+		{
+			state = (seed.CreateUint() & 0x1fffffffu) + 1156979152u;
+		}
+		while (state == 0);
+	}
 
 	public override uint NextUInt()
 	{
@@ -20,14 +28,5 @@ public sealed class RomuMono : RNG32Base
 		state *= 3611795771u;
 		state = BitOperations.RotateLeft(state, 12);
 		return result;
-	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		state = ((uint)(seed >> 32) & 0x1fffffffu) + 1156979152u;
-		while (state == 0)
-		{
-			state = RandomGenerator.CreateStrongSeed();
-		}
 	}
 }

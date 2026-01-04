@@ -1,15 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
+
+using TMPro;
 using UnityEngine;
 
 using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
-using TMPro;
-
 
 
 #nullable enable

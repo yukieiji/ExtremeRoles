@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+using System.Numerics;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.PRNG;
 
@@ -12,8 +14,19 @@ public sealed class RomuQuad : RNG64Base
 	private const ulong a = 15241094284759029579ul;
 	private ulong wState, xState, yState, zState;
 
-	public RomuQuad(ulong seed, ulong state) : base(seed, state)
-	{ }
+	public RomuQuad(SeedInfo seed)
+	{
+		do
+		{
+
+			wState = seed.CreateULong();
+			xState = seed.CreateULong();
+
+			yState = seed.CreateULong();
+			zState = seed.CreateULong();
+		}
+		while ((xState | yState | zState | wState) == 0); // at least one value must be non-zero
+	}
 
 	public override ulong NextUInt64()
 	{
@@ -30,23 +43,5 @@ public sealed class RomuQuad : RNG64Base
 		zState = BitOperations.RotateLeft(zState, 19); // f-rotl
 
 		return xp;
-	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		wState = seed;
-		xState = initStete;
-		do
-		{
-			yState = RandomGenerator.CreateLongStrongSeed();
-			zState = RandomGenerator.CreateLongStrongSeed();
-		}
-		while ((yState | zState) == 0); // at least one value must be non-zero
-
-		while ((xState | wState) == 0)
-		{
-			xState = RandomGenerator.CreateLongStrongSeed();
-			wState = RandomGenerator.CreateLongStrongSeed();
-		}
 	}
 }

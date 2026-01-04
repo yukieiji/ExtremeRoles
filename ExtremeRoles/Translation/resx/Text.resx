@@ -1422,4 +1422,13 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="liberalRoles" xml:space="preserve">
     <value>「リベラル」のロール</value>
   </data>
+  <data name="ventKey" xml:space="preserve">
+    <value>ベント</value>
+  </data>
+  <data name="sabotageKey" xml:space="preserve">
+    <value>サボタージ</value>
+  </data>
+  <data name="buttonAbility" xml:space="preserve">
+    <value>ボタン能力</value>
+  </data>
 </root>

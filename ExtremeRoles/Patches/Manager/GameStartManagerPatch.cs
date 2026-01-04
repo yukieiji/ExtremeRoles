@@ -56,16 +56,13 @@ public static class GameStartManagerPatch
 
         if (ExtremeGameModeManager.Instance.ShipOption.IsRandomMap)
         {
-            // 0 = Skeld
-            // 1 = Mira HQ
-            // 2 = Polus
-            // 3 = Dleks - deactivated
-            // 4 = Airship
+			// 0 = Skeld
+			// 1 = Mira HQ
+			// 2 = Polus
+			// 3 = Dleks - deactivated
+			// 4 = Airship
 			// 5 = Fungle
-
-            var rng = RandomGenerator.GetTempGenerator();
-
-            List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4, 5 };
+            List<byte> possibleMaps = [ 0, 1, 2, 4, 5 ];
 
 			foreach (var mod in CompatModManager.Instance.LoadedMod.Values)
 			{
@@ -76,7 +73,7 @@ public static class GameStartManagerPatch
 			}
 
             byte mapId = possibleMaps[
-                rng.Next(possibleMaps.Count)];
+				RandomGenerator.Instance.Next(possibleMaps.Count)];
 
             using (var caller = RPCOperator.CreateCaller(
                 RPCOperator.Command.ShareMapId))

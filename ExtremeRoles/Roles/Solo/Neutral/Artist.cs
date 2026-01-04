@@ -70,9 +70,9 @@ public sealed class Artist :
     {
 		this.CreatePassiveAbilityButton(
 			"ArtistArtOn", "ArtistArtOff",
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			UnityObjectLoader.LoadSpriteFromResources(
 			   ObjectPath.ArtistArtOn),
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			UnityObjectLoader.LoadSpriteFromResources(
 			   ObjectPath.ArtistArtOff),
 			this.CleanUp,
 			() =>
@@ -128,7 +128,10 @@ public sealed class Artist :
 
 		Artist? artist = ExtremeRoleManager.GetSafeCastedRole<Artist>(playerId);
 		PlayerControl artistPlayer = Player.GetPlayerControlById(playerId);
-		if (artist is null || artistPlayer == null) { return; }
+		if (artist is null || artistPlayer == null)
+		{
+			return;
+		}
 
 		switch (ops)
 		{
@@ -170,7 +173,10 @@ public sealed class Artist :
 
     public void ResetOnMeetingStart()
     {
-		if (this.drawer == null) { return; }
+		if (this.drawer == null)
+		{
+			return;
+		}
 		drawOps(PlayerControl.LocalPlayer);
     }
 
@@ -201,7 +207,10 @@ public sealed class Artist :
 
 	private static void startLine(Artist artist, PlayerControl artistPlayer)
 	{
-		if (artist.drawer != null) { return; }
+		if (artist.drawer != null)
+		{
+			return;
+		}
 		GameObject obj = new GameObject("Artist_Line");
 		artist.drawer = obj.AddComponent<ArtistLineDrawer>();
 		artist.drawer.ArtistPlayer = artistPlayer;
@@ -209,7 +218,10 @@ public sealed class Artist :
 
 	private static void endLine(Artist artist)
 	{
-		if (artist.drawer == null) { return; }
+		if (artist.drawer == null)
+		{
+			return;
+		}
 		artist.area += artist.drawer.Area;
 		artist.IsWin = artist.area >= artist.winArea;
 		Object.Destroy(artist.drawer);

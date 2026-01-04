@@ -4,7 +4,6 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.CustomOption.Factory;
 
 

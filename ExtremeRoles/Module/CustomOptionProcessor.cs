@@ -299,12 +299,8 @@ public static class CustomOptionCsvProcessor
 					}
 				}
 			}
-			if (AmongUsClient.Instance != null &&
-				AmongUsClient.Instance.AmHost &&
-				PlayerControl.LocalPlayer != null)
-			{
-				optionMng.ShereAllOption();// Share all selections
-			}
+
+			optionMng.ShareAllOption();// Share all selections
 
 			ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Complete ----------");
 

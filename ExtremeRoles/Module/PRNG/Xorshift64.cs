@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Module.PRNG;
+namespace ExtremeRoles.Module.PRNG;
+
+#nullable enable
 
 public sealed class Xorshift64 : RNG64Base
 {
@@ -10,9 +12,13 @@ public sealed class Xorshift64 : RNG64Base
 
 	private ulong x;
 
-	public Xorshift64(
-		ulong seed, ulong state) : base(seed, state)
-	{ }
+	public Xorshift64(SeedInfo seed)
+	{
+		do
+		{
+			this.x = seed.CreateULong();
+		} while (this.x == 0);
+	}
 
 	public override ulong NextUInt64()
 	{
@@ -24,15 +30,5 @@ public sealed class Xorshift64 : RNG64Base
 		x = x0;
 
 		return x;
-	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		x = seed;
-
-		while (x == 0)
-		{
-			x = RandomGenerator.CreateLongStrongSeed();
-		}// at least one value must be non-zero
 	}
 }

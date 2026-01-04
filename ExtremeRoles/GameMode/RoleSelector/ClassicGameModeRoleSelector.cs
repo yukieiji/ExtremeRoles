@@ -101,6 +101,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Loner,
 			ExtremeRoleId.CEO,
 			ExtremeRoleId.Echo,
+			ExtremeRoleId.Inspector,
 
 			ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,
@@ -134,6 +135,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.TimeBreaker,
 			ExtremeRoleId.Scavenger,
 			ExtremeRoleId.Boxer,
+			ExtremeRoleId.Legislator,
 
 			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,

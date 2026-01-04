@@ -1,6 +1,7 @@
 using HarmonyLib;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface.Status;
 
@@ -23,8 +24,8 @@ public static class VentButtonDoClickPatch
 			return false;
         }
 
-		Helper.Logging.Debug($"VentButtonClicked");
 		__instance.currentTarget.Use();
+		InspectorInspectSystem.InspectVent();
 
 		return false;
     }

@@ -153,6 +153,12 @@ public static class MeetingHudPopulateResultsPatch
 		// .Voteで重複は削除されている
 		foreach (var vote in voteInfo.Vote)
 		{
+			// カウントが０以下なら何もしない
+			if (vote.Count <= 0)
+			{
+				continue;
+			}
+
 			byte target = vote.TargetId;
 			int curTargetCount = finalVoteCount.GetValueOrDefault(target, 0);
 			animateVote(__instance, vote, curTargetCount, playerAreaMap, playerRoleInfo.Player);

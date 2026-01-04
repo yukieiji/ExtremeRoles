@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Module.PRNG;
+#nullable enable
+
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class Pcg64RxsMXs : RNG64Base
 {
@@ -12,9 +14,12 @@ public sealed class Pcg64RxsMXs : RNG64Base
 	private const ulong ShiftedIncrement = 721347520444481703ul;
 	private const ulong Multiplier = 6364136223846793005ul;
 
-	public Pcg64RxsMXs(
-		ulong seed, ulong state = ShiftedIncrement) : base(seed, state)
-	{ }
+	public Pcg64RxsMXs(SeedInfo seed)
+	{
+		ulong initState = seed.CreateULong();
+		this.state = (seed.CreateULong() + initState) * Multiplier + initState;
+		this.increment = initState | 1;
+	}
 
 	public override ulong NextUInt64()
 	{
@@ -22,11 +27,5 @@ public sealed class Pcg64RxsMXs : RNG64Base
 		this.state = unchecked((oldSeed * Multiplier) + this.increment);
 		ulong word = ((oldSeed >> ((int)(oldSeed >> 59) + 5)) ^ oldSeed) * 12605985483714917081;
 		return (word >> 43) ^ word;
-	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		this.state = (seed + initStete) * Multiplier + initStete;
-		this.increment = initStete | 1;
 	}
 }

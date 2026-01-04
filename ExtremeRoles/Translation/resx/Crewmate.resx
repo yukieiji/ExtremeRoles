@@ -1562,4 +1562,51 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="SheriffCanShootLiberal" xml:space="preserve">
     <value>「リベラル」をキルできるか</value>
   </data>
+  <data name="Inspector" xml:space="preserve">
+    <value>インスペクター</value>
+  </data>
+  <data name="InspectorFullDescription" xml:space="preserve">
+    <value>設定された行動を検知するクルーメイト
+
+ボタン能力: 「インスペクト」
+　- ボタンを押して発動
+　- 発動時間中に特定の行動を
+　行ったプレイヤーを検知する
+　- そのプレイヤーへの矢印を
+　この役職のプレイヤーに表示する
+　- 矢印は能力発動中のみ表示される</value>
+  </data>
+  <data name="InspectorShortDescription" xml:space="preserve">
+    <value>『特定の行動』をした人を暴き出せ</value>
+  </data>
+  <data name="InspectorIntroDescription" xml:space="preserve">
+    <value>行動はすべて筒抜けだ、その瞬間の真実を指し示せ</value>
+  </data>
+  <data name="InspectorInspectVent" xml:space="preserve">
+    <value>ベント検知</value>
+  </data>
+  <data name="InspectorInspectSabotage" xml:space="preserve">
+    <value>サボタージ検知</value>
+  </data>
+  <data name="InspectorInspectAbility" xml:space="preserve">
+    <value>ボタン能力発動検知</value>
+  </data>
+  <data name="InspectorAbilityCoolTime" xml:space="preserve">
+    <value>「インスペクト」のクールタイム</value>
+  </data>
+  <data name="InspectorAbilityActiveTime" xml:space="preserve">
+    <value>「インスペクト」の発動時間</value>
+  </data>
+  <data name="InspectorAbilityCount" xml:space="preserve">
+    <value>「インスペクト」の発動可能回数</value>
+  </data>
+  <data name="inspect" xml:space="preserve">
+    <value>インスペクト</value>
+  </data>
+  <data name="inspectArrowWarning" xml:space="preserve">
+    <value>「インスペクター」に自分の位置がバレた!!</value>
+  </data>
+  <data name="inspectSystem" xml:space="preserve">
+    <value>の発動が監視されている・・・</value>
+  </data>
 </root>
