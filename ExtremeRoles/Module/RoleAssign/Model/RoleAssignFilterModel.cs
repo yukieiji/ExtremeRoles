@@ -48,7 +48,7 @@ public sealed class RoleAssignFilterModel(ConfigEntry<string> config)
 		{
 			serializeStr = serializeStr.Remove(serializeStr.Length - 1);
 		}
-		return $"{version}|{serializeStr}";
+		return $"{version}{splitChar}{serializeStr}";
 	}
 
 	public void DeserializeFromString(string serializedStr)
@@ -61,6 +61,11 @@ public sealed class RoleAssignFilterModel(ConfigEntry<string> config)
 
 		foreach (string encodingFilter in splitedSerializedStr[startIndex..])
 		{
+			if (string.IsNullOrEmpty(encodingFilter))
+			{
+				continue;
+			}
+
 			byte[] deserializedBytes = Convert.FromBase64String(encodingFilter);
 
 			object? obj;
