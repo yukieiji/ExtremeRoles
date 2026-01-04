@@ -265,7 +265,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 	{
 		this.builder.Clear();
 		this.builder.Append('「');
-		this.builder.Append(string.Join(",", this,modeKey.Select(x => Tr.GetString)));
+		this.builder.Append(string.Join(",", this,modeKey.Select(x => Tr.GetString(x))));
 		this.builder.Append('」');
 		this.builder.Append(Tr.GetString("inspectSystem"));
 
