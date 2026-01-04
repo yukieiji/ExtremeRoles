@@ -7,6 +7,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
+#nullable enable
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Inspector : SingleRoleBase, IRoleAutoBuildAbility
