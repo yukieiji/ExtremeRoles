@@ -1,7 +1,6 @@
 using HarmonyLib;
 
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 
