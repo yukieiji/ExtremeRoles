@@ -1191,4 +1191,10 @@
 如果关闭了“能否继续调查犯罪现场”，则离开犯罪现场时将重置调查次数
 如果“警探”死亡，“助手”将变为见习警探</value>
   </data>
+  <data name="MarlinCanSeeLiberal" xml:space="preserve">
+    <value>梅林能否发现革命党</value>
+  </data>
+  <data name="AssassinCanKilledFromLiberal" xml:space="preserve">
+    <value>激进派能否击杀刺客</value>
+  </data>
 </root>
