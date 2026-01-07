@@ -56,7 +56,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 				}
 				this.targetPlayer[playerId] = value;
 				
-				var arrow = new Arrow(Color.white);
+				var arrow = new Arrow(ColorPalette.InspectorAmberYellow);
 				arrow.SetActive(false);
 				this.targetArrow[playerId] = arrow;
 

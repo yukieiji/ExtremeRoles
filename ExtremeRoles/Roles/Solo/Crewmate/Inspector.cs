@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Inspector : SingleRoleBase, IRoleAutoBuildAbility
 {
-	public ExtremeAbilityButton Button { get; set; }
+	public ExtremeAbilityButton? Button { get; set; }
 
 	public enum Option
     {
@@ -25,7 +25,7 @@ public sealed class Inspector : SingleRoleBase, IRoleAutoBuildAbility
     public Inspector() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Inspector,
-			ColorPalette.BakaryWheatColor),
+			ColorPalette.InspectorAmberYellow),
         false, true, false, false)
     { }
 
