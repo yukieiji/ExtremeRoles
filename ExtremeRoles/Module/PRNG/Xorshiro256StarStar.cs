@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+using System.Numerics;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.PRNG;
 
@@ -10,15 +12,23 @@ public sealed class Xorshiro256StarStar : RNG64Base
         
     */
 
-	private ulong _s0, _s1, _s2, _s3;
+	private ulong state0, state1, state2, state3;
 
-	public Xorshiro256StarStar(
-		ulong seed, ulong state) : base(seed, state)
-	{ }
+	public Xorshiro256StarStar(SeedInfo seed)
+	{
+		do
+		{
+			state0 = seed.CreateULong();
+			state1 = seed.CreateULong();
+			state2 = seed.CreateULong();
+			state3 = seed.CreateULong();
+		}
+		while ((state0 | state1 | state2 | state3) == 0); // at least one value must be non-zero
+	}
 
 	public override ulong NextUInt64()
 	{
-		ulong s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;
+		ulong s0 = state0, s1 = state1, s2 = state2, s3 = state3;
 
 		ulong result = BitOperations.RotateLeft(s1 * 5, 7) * 9;
 		ulong t = s1 << 17;
@@ -31,29 +41,11 @@ public sealed class Xorshiro256StarStar : RNG64Base
 		s2 ^= t;
 		s3 = BitOperations.RotateLeft(s3, 45);
 
-		_s0 = s0;
-		_s1 = s1;
-		_s2 = s2;
-		_s3 = s3;
+		state0 = s0;
+		state1 = s1;
+		state2 = s2;
+		state3 = s3;
 
 		return result;
-	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		_s0 = seed;
-		_s1 = initStete;
-		do
-		{
-			_s2 = RandomGenerator.CreateLongStrongSeed();
-			_s3 = RandomGenerator.CreateLongStrongSeed();
-		}
-		while ((_s2 | _s3) == 0); // at least one value must be non-zero
-
-		while ((_s0 | _s1) == 0)
-		{
-			_s0 = RandomGenerator.CreateStrongSeed();
-			_s1 = RandomGenerator.CreateStrongSeed();
-		}
 	}
 }

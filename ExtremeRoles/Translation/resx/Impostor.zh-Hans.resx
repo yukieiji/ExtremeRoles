@@ -1663,4 +1663,35 @@ Lv2武器“光剑”
   <data name="BoxerAbility" xml:space="preserve">
     <value>直拳</value>
   </data>
+  <data name="Legislator" xml:space="preserve">
+    <value>计票员</value>
+  </data>
+  <data name="LegislatorFullDescription" xml:space="preserve">
+    <value>计票员属于内鬼阵营，可以投出反对票的内鬼
+
+·会议能力"反对票"
+在会议中选择一名玩家发动能力，抵消其对于反对票数量的票数
+(例：目标有5票，计票员有三张反对票，那对目标使用技能后目标只会有2票)
+反对票是由计票员投票玩家以外的所有票数X每票可转化为的反对票
+(例：计票员A投了B那么其他C,D,E所获得的票数X每票可转化为的反对票就是获得的反对票数)</value>
+  </data>
+  <data name="LegislatorShortDescription" xml:space="preserve">
+    <value>收集反对票，保护同伴</value>
+  </data>
+  <data name="LegislatorIntroDescription" xml:space="preserve">
+    <value>未来永远掌握在少数人手中</value>
+  </data>
+  <data name="LegislatorIncludeSkipVote" xml:space="preserve">
+    <value>弃票也算作反对票</value>
+  </data>
+  <data name="LegislatorDefaultVoteNum" xml:space="preserve">
+    <value>开局反对票数量</value>
+  </data>
+  <data name="LegislatorChargeVotePerOtherVote" xml:space="preserve">
+    <value>每票可转化为的反对票</value>
+  </data>
+  <data name="legislatorVoteStatus" xml:space="preserve">
+    <value>发动能力: {0}
+当前拥有{1}张反对票</value>
+  </data>
 </root>

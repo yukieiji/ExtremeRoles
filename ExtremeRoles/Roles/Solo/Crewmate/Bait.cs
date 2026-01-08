@@ -169,11 +169,16 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		}
 
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
-		if (!this.enableBaitBenefit || !role.CanKill()) { return; }
+		if (!this.enableBaitBenefit || !role.CanKill())
+		{
+			return;
+		}
 
+		var param = new BaitKillCoolReducer.InitializeParameter(
+			this.timer, this.killCoolReduceMulti,
+			new BaitKillCoolReducer.ContinueChecker(this.delayUntilForceReport == 0.0f, killerPlayer));
 		var reducer = localPlayer.gameObject.TryAddComponent<BaitKillCoolReducer>();
-		reducer.Timer = this.timer;
-		reducer.ReduceMulti = this.killCoolReduceMulti;
+		reducer.Parameter = param;
 	}
 
 	protected override void CreateSpecificOption(

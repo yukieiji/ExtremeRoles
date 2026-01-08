@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Module.PRNG;
+#nullable enable
+
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class Seiran128 : RNG64Base
 {
@@ -10,8 +12,15 @@ public sealed class Seiran128 : RNG64Base
     */
 	private ulong state0, state1;
 
-	public Seiran128(ulong seed, ulong state) : base(seed, state)
-	{ }
+	public Seiran128(SeedInfo seed)
+	{
+		do
+		{
+			state0 = seed.CreateULong();
+			state1 = seed.CreateULong();
+		}
+		while ((state0 | state1) == 0);	// at least one value must be non-zero
+	}
 
 	public override ulong NextUInt64()
 	{
@@ -23,17 +32,5 @@ public sealed class Seiran128 : RNG64Base
 
 		return result;
 	}
-
-	protected override void Initialize(ulong seed, ulong initStete)
-	{
-		state0 = seed;
-		state1 = initStete;
-		while ((state0 | state1) == 0)
-		{
-			state0 = RandomGenerator.CreateLongStrongSeed();
-			state1 = RandomGenerator.CreateLongStrongSeed();
-		}
-		// at least one value must be non-zero
-	}
-	private ulong rotl(ulong x, int k) => (x << k) | (x >> (-k & 63));
+	private static ulong rotl(ulong x, int k) => (x << k) | (x >> (-k & 63));
 }
