@@ -74,11 +74,10 @@ public sealed class Inspector : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		this.CreateActivatingAbilityCountButton(
 			"inspect",
-			UnityObjectLoader.LoadSpriteFromResources(
-				ObjectPath.CurseMakerCurse),
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Inspector),
 			abilityOff: CleanUp,
 			forceAbilityOff: CleanUp);
-		this.Button.SetLabelToCrewmate();
+		this.Button?.SetLabelToCrewmate();
 	}
 
 	public void CleanUp()
