@@ -7,7 +7,7 @@ using ExtremeRoles.Roles.API.Interface;
 namespace ExtremeRoles.Roles.API;
 
 [Flags]
-public enum RoleProp
+public enum RoleProp : uint
 {
 	None = 0,
 	CanKill = 1 << 0,
