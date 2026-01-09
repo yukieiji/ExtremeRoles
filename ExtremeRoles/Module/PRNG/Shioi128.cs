@@ -12,6 +12,8 @@ public sealed class Shioi128 : RNG64Base
     */
 	private ulong state0, state1;
 
+	public override string InitState { get; }
+
 	public Shioi128(SeedInfo seed)
 	{
 		do
@@ -21,6 +23,8 @@ public sealed class Shioi128 : RNG64Base
 		}
 		while ((state0 | state1) == 0);
 		// at least one value must be non-zero
+
+		InitState = $"s0:{state0}, s1:{state1}";
 	}
 
 	public override ulong NextUInt64()

@@ -13,6 +13,7 @@ public sealed class ExtremeRolePluginBehavior : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F8))
         {
+			ExtremeRolesPlugin.Logger.LogInfo($"CurRNG:{RandomGenerator.Instance.GetType().Name}\n{RandomGenerator.Instance.InitState}");
             Logging.Dump();
         }
 #if DEBUG
