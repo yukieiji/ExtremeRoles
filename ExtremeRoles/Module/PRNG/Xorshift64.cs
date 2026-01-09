@@ -23,7 +23,7 @@ public sealed class Xorshift64 : RNG64Base
 		InitState = $"x: {this.x}";
 	}
 
-	public override string InitState { get; };
+	public override string InitState { get; }
 
 	public override ulong NextUInt64()
 	{
