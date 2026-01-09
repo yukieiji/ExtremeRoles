@@ -47,7 +47,7 @@ public sealed class Legislator :
 
     public Legislator() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Legislator),
-        false, true, false, false)
+        true, false, true, true)
     { }
 
     public static void UseAbility(ref Hazel.MessageReader reader)
