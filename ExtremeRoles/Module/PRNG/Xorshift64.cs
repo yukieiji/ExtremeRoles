@@ -18,7 +18,12 @@ public sealed class Xorshift64 : RNG64Base
 		{
 			this.x = seed.CreateULong();
 		} while (this.x == 0);
+
+
+		InitState = $"x: {this.x}";
 	}
+
+	public override string InitState { get; };
 
 	public override ulong NextUInt64()
 	{

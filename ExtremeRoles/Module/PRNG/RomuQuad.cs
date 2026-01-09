@@ -14,6 +14,8 @@ public sealed class RomuQuad : RNG64Base
 	private const ulong a = 15241094284759029579ul;
 	private ulong wState, xState, yState, zState;
 
+	public override string InitState { get; }
+
 	public RomuQuad(SeedInfo seed)
 	{
 		do
@@ -26,6 +28,8 @@ public sealed class RomuQuad : RNG64Base
 			zState = seed.CreateULong();
 		}
 		while ((xState | yState | zState | wState) == 0); // at least one value must be non-zero
+
+		InitState = $"x:{xState}, y:{yState}, z:{zState}, w:{wState}";
 	}
 
 	public override ulong NextUInt64()

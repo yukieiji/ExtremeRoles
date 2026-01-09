@@ -14,6 +14,8 @@ public sealed class RomuTrio : RNG64Base
 	private const ulong a = 15241094284759029579ul;
 	private ulong xState, yState, zState;
 
+	public override string InitState { get; }
+
 	public RomuTrio(SeedInfo seed)
 	{
 		do
@@ -23,6 +25,8 @@ public sealed class RomuTrio : RNG64Base
 			zState = seed.CreateULong();
 		}
 		while ((xState | yState | zState) == 0);  // at least one value must be non-zero
+
+		InitState = $"x:{xState}, y:{yState}, z:{zState}";
 	}
 
 	public override ulong NextUInt64()

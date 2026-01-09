@@ -7,9 +7,13 @@ public sealed class SystemRandomWrapper : IRng
 
 	private Random rand;
 
+	public string InitState { get; }
+
 	public SystemRandomWrapper(int seed)
 	{
 		this.rand = new Random(seed);
+
+		InitState = $"seed: {seed}";
 	}
 
 	public int Next() => this.rand.Next();

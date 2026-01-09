@@ -13,6 +13,8 @@ public sealed class RomuMono : RNG32Base
     */
 	private uint state;
 
+	public override string InitState { get; }
+
 	public RomuMono(SeedInfo seed)
 	{
 		do
@@ -20,6 +22,8 @@ public sealed class RomuMono : RNG32Base
 			state = (seed.CreateUint() & 0x1fffffffu) + 1156979152u;
 		}
 		while (state == 0);
+
+		InitState = $"state:{state}";
 	}
 
 	public override uint NextUInt()

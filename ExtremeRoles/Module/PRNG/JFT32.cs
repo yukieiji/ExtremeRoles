@@ -24,7 +24,11 @@ public sealed class JFT32 : RNG32Base
 			state3 = seed.CreateUint();
 		}
 		while ((state0 | state1 | state2 | state3) == 0); // at least one value must be non-zero
+
+		InitState = $"s0:{state0}, s1:{state1}, s2: {state2}, s3: {state3}";
 	}
+
+	public override string InitState { get; }
 
 	public override uint NextUInt()
 	{

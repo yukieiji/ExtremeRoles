@@ -14,11 +14,15 @@ public sealed class Pcg64RxsMXs : RNG64Base
 	private const ulong ShiftedIncrement = 721347520444481703ul;
 	private const ulong Multiplier = 6364136223846793005ul;
 
+	public override string InitState { get; }
+
 	public Pcg64RxsMXs(SeedInfo seed)
 	{
 		ulong initState = seed.CreateULong();
 		this.state = (seed.CreateULong() + initState) * Multiplier + initState;
 		this.increment = initState | 1;
+
+		InitState = $"state:{this.state}, increment: {this.increment}";
 	}
 
 	public override ulong NextUInt64()

@@ -11,11 +11,15 @@ public sealed class Pcg32XshRr : RNG32Base
 	private const ulong ShiftedIncrement = 721347520444481703ul;
 	private const ulong Multiplier = 6364136223846793005ul;
 
+	public override string InitState { get; }
+
 	public Pcg32XshRr(SeedInfo seed)
 	{
 		ulong init = seed.CreateULong();
 		this.state = (seed.CreateULong() + init) * Multiplier + init;
 		this.increment = init | 1;
+
+		InitState = $"state:{this.state}, increment: {this.increment}";
 	}
 
 	public override uint NextUInt()
