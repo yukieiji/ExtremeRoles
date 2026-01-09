@@ -6,6 +6,42 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.API;
 
+[Flags]
+public enum RoleProp
+{
+	None = 0,
+	CanKill = 1 << 0,
+	HasTask = 1 << 1,
+	UseVent = 1 << 2,
+	UseSabotage = 1 << 3,
+	CanCallMeeting = 1 << 4,
+	CanRepairSabotage = 1 << 5,
+	CanUseAdmin = 1 << 6,
+	CanUseSecurity = 1 << 7,
+	CanUseVital = 1 << 8,
+}
+
+public static class RolePropPresets
+{
+	public const RoleProp CrewmateDefault =
+		RoleProp.HasTask |
+		OptionalDefault;
+
+	public const RoleProp ImpostorDefault =
+		RoleProp.CanKill |
+		RoleProp.UseVent |
+		RoleProp.UseSabotage |
+		OptionalDefault;
+
+	public const RoleProp OptionalDefault =
+		RoleProp.CanCallMeeting |
+		RoleProp.CanRepairSabotage |
+		RoleProp.CanUseAdmin |
+		RoleProp.CanUseSecurity |
+		RoleProp.CanUseVital;
+}
+
+
 
 public enum ExtremeRoleType : int
 {
