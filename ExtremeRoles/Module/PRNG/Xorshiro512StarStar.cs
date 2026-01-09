@@ -14,6 +14,8 @@ public sealed class Xorshiro512StarStar : RNG64Base
 
 	private ulong state0, state1, state2, state3, state4, state5, state6, state7;
 
+	public override string InitState { get; }
+
 	public Xorshiro512StarStar(SeedInfo seed)
 	{
 
@@ -29,6 +31,8 @@ public sealed class Xorshiro512StarStar : RNG64Base
 			state7 = seed.CreateULong();
 		}
 		while ((state0 | state1 | state2 | state3 | state4 | state5 | state6 | state7) == 0); // at least one value must be non-zero
+
+		InitState = $"s0:{state0}, s1:{state1}, s2:{state2}, s3:{state3}, s4:{state0}, s5:{state1}, s6:{state6}, s7:{state7}";
 	}
 
 	public override ulong NextUInt64()

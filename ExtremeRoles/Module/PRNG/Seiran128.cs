@@ -12,6 +12,8 @@ public sealed class Seiran128 : RNG64Base
     */
 	private ulong state0, state1;
 
+	public override string InitState { get; }
+
 	public Seiran128(SeedInfo seed)
 	{
 		do
@@ -19,7 +21,9 @@ public sealed class Seiran128 : RNG64Base
 			state0 = seed.CreateULong();
 			state1 = seed.CreateULong();
 		}
-		while ((state0 | state1) == 0);	// at least one value must be non-zero
+		while ((state0 | state1) == 0); // at least one value must be non-zero
+
+		InitState = $"s0:{state0}, s1:{state1}";
 	}
 
 	public override ulong NextUInt64()
