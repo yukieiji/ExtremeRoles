@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.JsonData;
+using ExtremeRoles.Core.Model;
 using Newtonsoft.Json.Linq;
 
 using SemanticVersioning;

@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-
+using ExtremeRoles.Core.Model;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.JsonData;
 using Newtonsoft.Json.Linq;
 
 namespace ExtremeRoles.Compat.Operator;

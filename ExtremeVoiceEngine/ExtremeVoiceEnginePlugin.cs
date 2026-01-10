@@ -6,6 +6,7 @@ using HarmonyLib;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Core;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeVoiceEngine;
 

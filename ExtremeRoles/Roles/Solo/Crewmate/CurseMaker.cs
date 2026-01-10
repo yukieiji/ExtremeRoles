@@ -16,6 +16,7 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.Core.Service.CustomOption.Factory;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

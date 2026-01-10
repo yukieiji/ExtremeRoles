@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
 
-namespace ExtremeRoles.Module;
+namespace ExtremeRoles.Core.Service;
 
 public static class Prefab
 {

@@ -13,6 +13,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
+using ExtremeRoles.Core.Service;
 using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.Core.Service.CustomOption.Factory;
 using ExtremeRoles.Core.Service.SystemType;

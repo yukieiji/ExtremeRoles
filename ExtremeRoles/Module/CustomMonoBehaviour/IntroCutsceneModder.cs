@@ -18,6 +18,7 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 using PlayerIl2CppList = Il2CppSystem.Collections.Generic.List<PlayerControl>;
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 

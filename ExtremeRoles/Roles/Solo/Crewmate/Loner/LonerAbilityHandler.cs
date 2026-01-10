@@ -7,6 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Loner;
 

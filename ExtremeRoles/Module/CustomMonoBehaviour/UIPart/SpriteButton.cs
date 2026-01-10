@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 
 using ExtremeRoles.Core;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 

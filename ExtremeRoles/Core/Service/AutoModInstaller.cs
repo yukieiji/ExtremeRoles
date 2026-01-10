@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.IO;
@@ -11,9 +11,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.JsonData;
+using ExtremeRoles.Module;
+using ExtremeRoles.Core.Model;
 
-namespace ExtremeRoles.Module;
+namespace ExtremeRoles.Core.Service;
 
 #nullable enable
 

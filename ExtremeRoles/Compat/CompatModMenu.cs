@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -14,6 +14,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using UnityObject = UnityEngine.Object;
 using UnityHelper = ExtremeRoles.Helper.Unity;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeRoles.Compat;
 
@@ -113,12 +114,12 @@ internal sealed class CompatModMenu
 		}
 
 		TextMeshPro modText = UnityObject.Instantiate(
-			Module.Prefab.Text, this.menuBody.transform);
+			Prefab.Text, this.menuBody.transform);
 		modText.name = name;
 
 		modText.transform.localPosition = new Vector3(0.25f, 1.9f - (posIndex * 0.5f), 0f);
 		modText.fontSizeMin = modText.fontSizeMax = 2.0f;
-		modText.font = UnityObject.Instantiate(Module.Prefab.Text.font);
+		modText.font = UnityObject.Instantiate(Prefab.Text.font);
 		modText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
 		modText.text = $"{Tr.GetString(name)}";
 		modText.alignment = TextAlignmentOptions.Left;
@@ -209,7 +210,7 @@ internal sealed class CompatModMenu
 
 		this.downgradeButton.transform.localPosition = new Vector3(2.0f, -2.35f, 0f);
 		this.downgradeButton.ClickedEvent.AddListener(
-			Module.AutoModInstaller.Instance.Downgrade);
+			AutoModInstaller.Instance.Downgrade);
 	}
 
 	private void initMenu(SimpleButton template)
@@ -220,7 +221,7 @@ internal sealed class CompatModMenu
 		}
 
 		TextMeshPro title = UnityObject.Instantiate(
-			Module.Prefab.Text, this.menuBody.transform);
+			Prefab.Text, this.menuBody.transform);
 		var rect = title.GetComponent<RectTransform>();
 		rect.sizeDelta = new Vector2(5.4f, 2.0f);
 		title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;

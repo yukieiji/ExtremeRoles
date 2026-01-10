@@ -3,7 +3,7 @@ using UnityEngine;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 
-namespace ExtremeRoles.Module;
+namespace ExtremeRoles.Core.Service;
 
 #nullable enable
 

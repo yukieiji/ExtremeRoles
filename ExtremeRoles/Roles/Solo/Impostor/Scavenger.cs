@@ -26,6 +26,7 @@ using ExtremeRoles.Core.Abstract.CustomOption;
 using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.Core.Service.CustomOption.Factory;
+using ExtremeRoles.Core.Service;
 
 
 #nullable enable
@@ -268,7 +269,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	private static TextMeshPro createInfoText(Vector3 pos)
 	{
 		var infoText = UnityObject.Instantiate(
-			Module.Prefab.Text,
+			Prefab.Text,
 			Camera.main.transform, false);
 		infoText.transform.localPosition = pos;
 		infoText.enableWordWrapping = false;

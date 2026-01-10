@@ -28,6 +28,7 @@ using ExtremeRoles.Resources;
 
 using Il2CppObject = Il2CppSystem.Object;
 using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service;
 
 
 

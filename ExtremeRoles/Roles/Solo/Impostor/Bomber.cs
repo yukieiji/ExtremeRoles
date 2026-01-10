@@ -7,7 +7,6 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
@@ -18,6 +17,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.Core.Service.CustomOption.Factory;
 using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

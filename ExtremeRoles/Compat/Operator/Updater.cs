@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using BepInEx.Unity.IL2CPP;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.JsonData;
+using ExtremeRoles.Core.Model;
 
 namespace ExtremeRoles.Compat.Operator;
 

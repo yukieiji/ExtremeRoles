@@ -1,3 +1,4 @@
+using ExtremeRoles.Core.Service;
 using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.Core.Service.CustomOption.Factory;
 using ExtremeRoles.Core.Service.SystemType;

@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Core.Service;
 
 
 namespace ExtremeRoles.Helper;
@@ -43,7 +44,7 @@ public static class Player
 		foreach (PlayerControl player in PlayerCache.AllPlayerControl)
 		{
 			PoolablePlayer poolPlayer = Object.Instantiate(
-				Module.Prefab.PlayerPrefab, parent);
+				Prefab.PlayerPrefab, parent);
 
 			poolPlayer.gameObject.SetActive(true);
 

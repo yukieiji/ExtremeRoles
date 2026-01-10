@@ -1,4 +1,4 @@
-﻿namespace ExtremeRoles.Module.JsonData;
+namespace ExtremeRoles.Core.Model;
 
 public readonly record struct GitHubAsset(
 	string content_type,

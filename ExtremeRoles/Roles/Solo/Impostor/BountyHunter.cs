@@ -5,7 +5,6 @@ using UnityEngine;
 using TMPro;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -13,6 +12,7 @@ using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.Core.Service.CustomOption.Factory;
 using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

@@ -6,6 +6,7 @@ using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Core;
 using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 

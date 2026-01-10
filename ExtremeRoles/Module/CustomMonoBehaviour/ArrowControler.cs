@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 
 using ExtremeRoles.Core;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 

@@ -21,6 +21,7 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.Core.Service.CustomOption.Factory;
+using ExtremeRoles.Core.Service;
 
 
 #nullable enable

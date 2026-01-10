@@ -10,6 +10,7 @@ using static ExtremeRoles.Roles.Solo.Impostor.Hypnotist;
 
 using Il2CppInterop.Runtime.Attributes;
 using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Core.Service;
 
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;

@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-
+using ExtremeRoles.Core.Model;
+using ExtremeRoles.Core.Service;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.JsonData;
 
 namespace ExtremeRoles.Compat.Operator;
 
@@ -43,7 +43,7 @@ internal sealed class Installer : OperatorBase
 		{
 			if (this.popup == null)
 			{
-				this.popup = Module.Prefab.CreateConfirmMenu(
+				this.popup = Prefab.CreateConfirmMenu(
 					excuteInstall);
 			}
 			this.popup.Show(
