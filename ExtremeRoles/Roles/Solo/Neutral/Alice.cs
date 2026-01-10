@@ -42,10 +42,11 @@ public sealed class Alice :
 	private float winTaskRate;
 
     public Alice(): base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Alice,
-			ColorPalette.AliceGold),
-        true, false, true, true)
+			ColorPalette.AliceGold,
+            RoleProp.UseVent | RoleProp.UseSabotage | RoleProp.CanKill | 
+			RolePropPresets.OptionalDefault))
     { }
 
     public void CreateAbility()
