@@ -161,6 +161,7 @@ class TestRefactorConstructorCalls(unittest.TestCase):
         self.assertEqual(refactor_constructor_calls(source), source)
 
 from hypothesis import given, strategies as st, settings
+import re
 
 # Hypothesis strategies
 # C#の識別子として有効な文字列を生成
@@ -254,3 +255,105 @@ class TestRefactoringProperties(unittest.TestCase):
         # prefixとsuffixが変更されていないことを確認
         self.assertTrue(refactored_code.startswith(prefix))
         self.assertTrue(refactored_code.endswith(suffix))
+
+# --- New Hypothesis Strategies for Named Arguments ---
+
+BOOL_ARG_NAMES = [
+    'canKill', 'hasTask', 'useVent', 'useSabotage',
+    'canCallMeeting', 'canRepairSabotage', 'canUseAdmin',
+    'canUseSecurity', 'canUseVital'
+]
+
+@st.composite
+def named_args_strategy(draw):
+    """
+    Generates a dictionary of named arguments and a corresponding
+    C# argument string for the base() call. This version ensures
+    consistency between the dictionary and the string.
+    """
+    args_to_generate = {}
+
+    # 1. Decide how many positional args to make (0-3)
+    num_positional = draw(st.integers(min_value=0, max_value=3))
+    for i in range(num_positional):
+        args_to_generate[BOOL_ARG_NAMES[i]] = draw(bool_str_strategy)
+
+    # 2. Decide which named args to make from the remainder
+    available_for_named = BOOL_ARG_NAMES[num_positional:]
+    names_for_named_args = draw(st.sets(st.sampled_from(available_for_named)))
+    for name in names_for_named_args:
+        args_to_generate[name] = draw(bool_str_strategy)
+
+    # 3. Construct the argument string from our source of truth
+    arg_strings = []
+    # Add positional args to the string list
+    for i in range(num_positional):
+        arg_strings.append(args_to_generate[BOOL_ARG_NAMES[i]])
+
+    # Add named args to the string list (in a shuffled order)
+    shuffled_named_names = draw(st.permutations(list(names_for_named_args)))
+    for name in shuffled_named_names:
+        arg_strings.append(f"{name}: {args_to_generate[name]}")
+
+    # The final string for the C# code
+    final_args_str = "roleCore"
+    if arg_strings:
+        final_args_str += ", " + ", ".join(arg_strings)
+
+    # Return the dictionary (our source of truth) and the C# string
+    return args_to_generate, final_args_str
+
+class TestRefactoringPropertiesWithNamedArgs(unittest.TestCase):
+    @settings(deadline=1000, max_examples=200) # Increase examples for better coverage
+    @given(generated_args=named_args_strategy())
+    def test_correctness_with_named_args(self, generated_args):
+        """
+        Tests that the refactoring correctly expands arguments
+        based on a mix of positional and named boolean arguments.
+        """
+        from hypothesis import assume
+        args_dict, args_str = generated_args
+
+        # The script skips refactoring if 9 or more bool args are provided.
+        # This test should only validate cases where refactoring *should* happen.
+        assume(len(args_dict) < 9)
+
+        source_code = f"""
+public class MyTestRole : SingleRoleBase
+{{
+    public MyTestRole(RoleCore roleCore)
+        : base({args_str})
+    {{
+    }}
+}}
+"""
+
+        # --- 1. Calculate Expected Boolean Values ---
+        expected_bools = {
+            'canKill': 'false', 'hasTask': 'false', 'useVent': 'false', 'useSabotage': 'false',
+            'canCallMeeting': 'true', 'canRepairSabotage': 'true', 'canUseAdmin': 'true',
+            'canUseSecurity': 'true', 'canUseVital': 'true'
+        }
+
+        # Override defaults with the generated arguments.
+        # This is correct because our new strategy ensures args_dict IS the source of truth.
+        for key, value in args_dict.items():
+            expected_bools[key] = value
+
+        expected_bool_list = [expected_bools[name] for name in BOOL_ARG_NAMES]
+
+        # --- 2. Run Refactoring ---
+        refactored_code = refactor_constructor_calls(source_code)
+
+        # --- 3. Extract Actual Boolean Values from refactored code ---
+        match = re.search(r"base\s*\(\s*roleCore,(.*)\)", refactored_code, re.DOTALL)
+        self.assertIsNotNone(match, f"Could not find the argument block in the refactored code for input: base({args_str})")
+
+        arg_block_str = match.group(1)
+
+        # Extract all occurrences of 'true' or 'false'
+        actual_bools = re.findall(r'\b(true|false)\b', arg_block_str)
+
+        # --- 4. Assert Correctness ---
+        self.assertEqual(len(actual_bools), 9, f"Expected 9 boolean arguments, but found {len(actual_bools)} in '{arg_block_str}'")
+        self.assertEqual(actual_bools, expected_bool_list, f"Boolean argument mismatch for input: base({args_str})")
