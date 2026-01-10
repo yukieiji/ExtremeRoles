@@ -239,11 +239,10 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 	private bool forceMeetingOnSearchEnd;
 
 	public Investigator() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Investigator,
 			ColorPalette.InvestigatorKokikou),
-		false, true, false, false,
-		tab: OptionTab.CombinationTab)
+		OptionTab.CombinationTab)
 	{ }
 
 	public void AllReset(PlayerControl rolePlayer)
