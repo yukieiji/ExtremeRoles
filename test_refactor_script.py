@@ -1,5 +1,6 @@
 import unittest
-from refactor_constructors import refactor_constructor
+from refactor_constructors import refactor_constructor, PROPS
+from hypothesis import given, strategies as st, settings
 
 class TestRefactorConstructors(unittest.TestCase):
 
@@ -28,10 +29,7 @@ public Teleporter() : base(
             RoleProp.CanUseVital))
 { }
         """
-        # The refactor function returns a tuple (new_content, count)
         result_content, _ = refactor_constructor(content)
-
-        # Normalize whitespace for comparison
         self.assertEqual(
             " ".join(result_content.split()),
             " ".join(expected.split())
@@ -93,9 +91,6 @@ public Teleporter() : base(
  {
  }
         """
-        # Based on the logic, the first 4 booleans are canKill, hasTask, useVent, useSabotage
-        # true, false, true, true -> CanKill, UseVent, UseSabotage
-        # The script assumes the other 5 are added by default.
         expected = """
  public Assassin() : base(
     RoleArgs.BuildImpostor(ExtremeRoleId.Assassin,
@@ -112,14 +107,47 @@ public Teleporter() : base(
  }
         """
         result_content, _ = refactor_constructor(content)
-        # We need a more robust regex in the main script to handle the tab argument correctly.
-        # Let's assume the script is updated.
-        # For now, let's just check if it contains the key parts.
-        self.assertIn("RoleArgs.BuildImpostor", result_content)
-        self.assertIn("RoleProp.CanKill", result_content)
-        self.assertIn("RoleProp.UseVent", result_content)
-        self.assertIn("RoleProp.UseSabotage", result_content)
-        self.assertNotIn("RoleProp.HasTask", result_content)
+        self.assertEqual(
+            " ".join(result_content.split()),
+            " ".join(expected.split())
+        )
+
+    @given(st.lists(st.booleans(), min_size=2, max_size=9), st.sampled_from(["RoleArgs", "RoleCore"]), st.booleans())
+    @settings(max_examples=50, deadline=None) # Keep the test run time reasonable, remove deadline for CI
+    def test_property_based_refactoring(self, bools, builder_type, has_tab):
+        # Dynamically build the input C# code string
+        bool_str = ", ".join(str(b).lower() for b in bools)
+        tab_str = ", tab: OptionTab.CombinationTab" if has_tab else ""
+
+        input_code = f"""
+        public MyRole() : base(
+            {builder_type}.BuildCrewmate(ExtremeRoleId.MyRole),
+            {bool_str}{tab_str})
+        {{ }}
+        """
+
+        result_content, changes = refactor_constructor(input_code)
+
+        self.assertEqual(changes, 1)
+        self.assertIn("RoleArgs.BuildCrewmate", result_content)
+
+        # Verify that the correct props are present
+        for i, prop in enumerate(PROPS):
+            # The prop should be present if its corresponding boolean was true
+            is_prop_present = prop in result_content
+
+            if i < len(bools):
+                # This prop was explicitly specified
+                self.assertEqual(is_prop_present, bools[i])
+            else:
+                # Props not specified in a partial list are defaulted to true
+                self.assertTrue(is_prop_present)
+
+        if has_tab:
+            self.assertIn("tab: OptionTab.CombinationTab", result_content)
+        else:
+            self.assertNotIn("tab: OptionTab.CombinationTab", result_content)
+
 
 if __name__ == '__main__':
     unittest.main()
