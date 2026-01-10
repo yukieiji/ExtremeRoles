@@ -1,4 +1,6 @@
 import re
+import os # Added import
+import sys # Added import
 import textwrap
 
 # Define the sets of flags for each preset.
@@ -76,86 +78,49 @@ def apply_role_prop_presets(csharp_code):
     )
 
     modified_code = crewmate_pattern.sub(_crewmate_replacer, csharp_code)
+    modified_code = crewmate_pattern.sub(_optional_default_replacer, csharp_code)
     modified_code = impostor_pattern.sub(_impostor_replacer, modified_code)
+    modified_code = impostor_pattern.sub(_optional_default_replacer, modified_code)
     modified_code = neutral_pattern.sub(_optional_default_replacer, modified_code)
     modified_code = liberal_pattern.sub(_optional_default_replacer, modified_code)
 
     return modified_code
 
+def process_files_in_directory(directory_path): # 関数名を変更し、引数をディレクトリパスに
+    modified_count = 0
+    for root, _, files in os.walk(directory_path):
+        for file_name in files:
+            if not file_name.endswith(".cs"):
+                continue
+
+            file_path = os.path.join(root, file_name)
+            print(f"Processing: {file_path}")
+
+            with open(file_path, 'r', encoding='utf-8') as f:
+                original_content = f.read()
+
+            new_content = apply_role_prop_presets(original_content)
+
+            if new_content != original_content:
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(new_content)
+                modified_count += 1
+                print(f"  Modified: {file_path}")
+            else:
+                print(f"  No changes to: {file_path}")
+    return modified_count
+
+
 if __name__ == '__main__':
-    # Example Usage
-    sample_code = textwrap.dedent("""
-        // SingleRoleBase
-        public Teleporter() : base(
-            RoleArgs.BuildCrewmate(
-                ExtremeRoleId.Teleporter,
-                ColorPalette.TeleporterCherry,
-                    RoleProp.HasTask |
-                    RoleProp.CanCallMeeting |
-                    RoleProp.CanRepairSabotage |
-                    RoleProp.CanUseAdmin |
-                    RoleProp.CanUseSecurity |
-                    RoleProp.CanUseVital))
-        { }
+    if len(sys.argv) < 2:
+        print("Usage: python replace_to_presets_4th.py <target_directory>", file=sys.stderr)
+        sys.exit(1)
 
-        // MultiAssignRoleBase
-        public Assassin() : base(
-                RoleArgs.BuildImpostor(ExtremeRoleId.Assassin,
-                    RoleProp.CanKill |
-                    RoleProp.UseVent |
-                    RoleProp.UseSabotage |
-                    RoleProp.CanCallMeeting |
-                    RoleProp.CanRepairSabotage |
-                    RoleProp.CanUseAdmin |
-                    RoleProp.CanUseSecurity |
-                    RoleProp.CanUseVital),
-                 tab: OptionTab.CombinationTab)
-         {
-         }
+    target_directory = sys.argv[1]
+    if not os.path.isdir(target_directory):
+        print(f"Error: '{target_directory}' is not a valid directory.", file=sys.stderr)
+        sys.exit(1)
 
-        // Mismatched Crewmate
-        public Mismatched() : base(
-            RoleArgs.BuildCrewmate(
-                ExtremeRoleId.Mismatched,
-                ColorPalette.Red,
-                RoleProp.HasTask | RoleProp.CanKill
-            )
-        ) { }
-    """)
-
-    print("--- Original Code ---")
-    print(sample_code)
-
-    refactored_code = apply_role_prop_presets(sample_code)
-
-    print("\\n--- Refactored Code ---")
-    print(refactored_code)
-
-    expected_output = textwrap.dedent("""
-        // SingleRoleBase
-        public Teleporter() : base(
-            RoleArgs.BuildCrewmate(
-                ExtremeRoleId.Teleporter,
-                ColorPalette.TeleporterCherry,
-                    RolePropPresets.CrewmateDefault))
-        { }
-
-        // MultiAssignRoleBase
-        public Assassin() : base(
-                RoleArgs.BuildImpostor(ExtremeRoleId.Assassin,
-                    RolePropPresets.ImpostorDefault),
-                 tab: OptionTab.CombinationTab)
-         {
-         }
-
-        // Mismatched Crewmate
-        public Mismatched() : base(
-            RoleArgs.BuildCrewmate(
-                ExtremeRoleId.Mismatched,
-                ColorPalette.Red,
-                RoleProp.HasTask | RoleProp.CanKill
-            )
-        ) { }
-    """)
-    assert refactored_code.strip() == expected_output.strip()
-    print("\\nAssertion Passed!")
+    print(f"Starting RoleProp Presets refactoring in {target_directory}...")
+    changes = process_files_in_directory(target_directory)
+    print(f"RoleProp Presets refactoring finished. {changes} files modified.")

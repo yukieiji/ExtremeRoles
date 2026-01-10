@@ -95,7 +95,16 @@ def process_files(directory):
                 f.write(new_content)
 
 if __name__ == "__main__":
-    # The user requested not to run the script, so this part is for manual execution if needed.
-    # target_directory = "ExtremeRoles/Roles"
-    # process_files(target_directory)
-    print("Refactoring script is ready. Run the main block to process files.")
+    import sys
+    if len(sys.argv) < 2:
+        print("Usage: python replace_bool_to_roleprop_3rd.py <target_directory>", file=sys.stderr)
+        sys.exit(1)
+
+    target_directory = sys.argv[1]
+    if not os.path.isdir(target_directory):
+        print(f"Error: '{target_directory}' is not a valid directory.", file=sys.stderr)
+        sys.exit(1)
+
+    print("Starting refactoring for boolean RoleProp replacement...")
+    process_files(target_directory)
+    print("Boolean RoleProp replacement finished.")
