@@ -27,8 +27,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 
 #pragma warning disable CS8618
 	public Crewshroom() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Crewshroom),
-		true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Crewshroom))
 	{ }
 #pragma warning restore CS8618
 

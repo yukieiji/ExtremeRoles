@@ -53,8 +53,7 @@ public sealed class PsychoKiller :
 	}
 
     public PsychoKiller() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.PsychoKiller),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.PsychoKiller))
     {}
 
 	public void Update(PlayerControl rolePlayer)

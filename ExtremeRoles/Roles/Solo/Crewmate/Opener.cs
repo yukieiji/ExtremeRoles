@@ -39,10 +39,9 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	private float abilityCoolTime;
 
     public Opener() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Opener,
-			ColorPalette.OpenerSpringGreen),
-        false, true, false, false)
+			ColorPalette.OpenerSpringGreen))
     { }
 
     public void CreateAbility()

@@ -49,10 +49,9 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
     private bool isNoWinSurvivorAssignGhostRole;
 
     public Survivor() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Survivor,
-			ColorPalette.SurvivorYellow),
-        false, true, false, false)
+			ColorPalette.SurvivorYellow))
     { }
 
     public static void DeadWin(byte rolePlayerId)

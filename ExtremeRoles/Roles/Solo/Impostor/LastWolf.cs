@@ -61,8 +61,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
     private bool isAwakedHasOtherKillRange;
 
     public LastWolf() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.LastWolf),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.LastWolf))
     { }
 
     public static void SwitchLight(bool lightOn)

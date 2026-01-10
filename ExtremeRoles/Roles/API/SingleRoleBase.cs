@@ -62,32 +62,23 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     { }
 
     public SingleRoleBase(
-        RoleCore core,
-        bool canKill,
-        bool hasTask,
-        bool useVent,
-        bool useSabotage,
-        bool canCallMeeting = true,
-        bool canRepairSabotage = true,
-        bool canUseAdmin = true,
-        bool canUseSecurity = true,
-        bool canUseVital = true,
+        RoleArgs arg,
         OptionTab tab = OptionTab.GeneralTab)
     {
-        this.Core = core;
-        this.CanKill = canKill;
-        this.HasTask = hasTask;
-        this.UseVent = useVent;
-        this.UseSabotage = useSabotage;
+        this.Core = arg.Core;
 
-        this.CanCallMeeting = canCallMeeting;
-        this.CanRepairSabotage = canRepairSabotage;
+		var prop = arg.Prop;
+		this.CanKill = prop.HasFlag(RoleProp.CanKill);
+		this.HasTask = prop.HasFlag(RoleProp.HasTask);
+		this.UseVent = prop.HasFlag(RoleProp.UseVent);
+		this.UseSabotage = prop.HasFlag(RoleProp.UseSabotage);
+		this.CanCallMeeting = prop.HasFlag(RoleProp.CanCallMeeting);
+		this.CanRepairSabotage = prop.HasFlag(RoleProp.CanRepairSabotage);
+		this.CanUseAdmin = prop.HasFlag(RoleProp.CanUseAdmin);
+		this.CanUseSecurity = prop.HasFlag(RoleProp.CanUseSecurity);
+		this.CanUseVital = prop.HasFlag(RoleProp.CanUseVital);
 
-        this.CanUseAdmin = canUseAdmin;
-        this.CanUseSecurity = canUseSecurity;
-        this.CanUseVital = canUseVital;
-
-        if (tab == OptionTab.GeneralTab)
+		if (tab == OptionTab.GeneralTab)
         {
             switch (this.Core.Team)
             {

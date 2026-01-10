@@ -319,10 +319,9 @@ public sealed class Photographer :
 	public ExtremeAbilityButton Button { get; set; }
 	private PhotoCamera photoCreater;
 	public Photographer() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Photographer,
-			ColorPalette.PhotographerVerdeSiena),
-        false, true, false, false)
+			ColorPalette.PhotographerVerdeSiena))
     { }
 #pragma warning restore CS8618
 

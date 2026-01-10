@@ -7,10 +7,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 public sealed class SpecialCrew : SingleRoleBase
 {
     public SpecialCrew(): base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.SpecialCrew,
-			Palette.CrewmateBlue),
-        false, true, false, false)
+			Palette.CrewmateBlue))
     { }
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)

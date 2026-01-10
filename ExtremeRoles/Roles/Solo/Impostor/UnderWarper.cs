@@ -92,8 +92,7 @@ public sealed class UnderWarper :
     private bool isAwakedHasOtherKillRange;
 
     public UnderWarper() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.UnderWarper),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.UnderWarper))
     { }
 
     public static void UseVentWithNoAnimation(

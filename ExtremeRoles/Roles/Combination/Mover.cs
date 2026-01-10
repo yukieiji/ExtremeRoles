@@ -90,11 +90,10 @@ public sealed class Mover :
     private string roleNamePrefix = string.Empty;
 
     public Mover() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Mover,
 			ColorPalette.MoverSafeColor),
-        false, true, false, false,
-        tab: OptionTab.CombinationTab)
+		OptionTab.CombinationTab)
     { }
 
     public static void Ability(ref MessageReader reader)

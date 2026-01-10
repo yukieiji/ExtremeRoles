@@ -49,10 +49,11 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
 	private StringBuilder? builder;
 
     public Sheriff() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Sheriff,
-			ColorPalette.SheriffOrange),
-        true, true, false, false)
+			ColorPalette.SheriffOrange,
+			// キルが出来るクルー
+            RoleProp.CanKill | RolePropPresets.CrewmateDefault))
     { }
 
     public bool TryRolePlayerKillTo(

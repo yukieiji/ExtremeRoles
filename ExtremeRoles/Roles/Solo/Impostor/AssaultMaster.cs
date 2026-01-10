@@ -53,8 +53,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
     private float defaultKillCool;
 
     public AssaultMaster() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.AssaultMaster),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.AssaultMaster))
     { }
 
     public void CreateAbility()

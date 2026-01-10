@@ -130,8 +130,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility, ITryKillTo
     private PlayerControl targetPlayer = null;
 
     public SandWorm() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.SandWorm),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.SandWorm))
     { }
 
     public bool TryRolePlayerKillTo(

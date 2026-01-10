@@ -62,10 +62,10 @@ public sealed class QueenRole :
 	private bool servantSucideWithQueenWhenHasKill;
 
 	public QueenRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Queen,
-			ColorPalette.QueenWhite),
-        true, false, false, false)
+			ColorPalette.QueenWhite,
+            RoleProp.CanKill | RolePropPresets.OptionalDefault))
     { }
 
     public static void TargetToServant(

@@ -84,10 +84,9 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	private ObjectPoolBehavior? innerPool;
 
 	public Echo() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Echo,
-			ColorPalette.EchoDarkAliceblue),
-		false, true, false, false)
+			ColorPalette.EchoDarkAliceblue))
 	{
 
 	}

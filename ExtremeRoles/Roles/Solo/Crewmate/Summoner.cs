@@ -50,10 +50,9 @@ public sealed class Summoner :
     private float range;
 
     public Summoner() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Summoner,
-			ColorPalette.SummonerToukoushoku),
-        false, true, false, false)
+			ColorPalette.SummonerToukoushoku))
     { }
 
 	public static void RpcOps(byte rolePlayerId, byte targetPlayerId, float x, float y, bool isDead)

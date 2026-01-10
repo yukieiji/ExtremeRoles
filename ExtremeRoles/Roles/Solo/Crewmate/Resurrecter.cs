@@ -83,10 +83,9 @@ public sealed class Resurrecter :
     private PlayerReviver? playerReviver;
 
     public Resurrecter() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Resurrecter,
-			ColorPalette.ResurrecterBlue),
-        false, true, false, false)
+			ColorPalette.ResurrecterBlue))
     {
     }
 

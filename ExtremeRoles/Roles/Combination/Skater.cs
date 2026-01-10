@@ -65,9 +65,8 @@ public sealed class Skater :
 
     public Skater(
         ) : base(
-			RoleCore.BuildCrewmate(ExtremeRoleId.Skater, ColorPalette.SkaterMizuiro),
-            false, true, false, false,
-            tab: OptionTab.CombinationTab)
+			RoleArgs.BuildCrewmate(ExtremeRoleId.Skater, ColorPalette.SkaterMizuiro),
+			OptionTab.CombinationTab)
     {}
 
     protected override void CreateSpecificOption(

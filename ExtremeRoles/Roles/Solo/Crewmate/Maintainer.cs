@@ -25,10 +25,9 @@ public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
     private ExtremeAbilityButton maintenanceButton;
 
     public Maintainer() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Maintainer,
-			ColorPalette.MaintainerBlue),
-        false, true, false, false)
+			ColorPalette.MaintainerBlue))
     { }
 
     public void CreateAbility()

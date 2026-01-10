@@ -28,10 +28,10 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 	private PawnStatus? status;
 
 	public PawnRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Pawn,
-			ColorPalette.QueenWhite),
-		false, false, false, false)
+			ColorPalette.QueenWhite,
+            RolePropPresets.OptionalDefault))
 	{ }
 
 	public void ModifiedWinPlayer(

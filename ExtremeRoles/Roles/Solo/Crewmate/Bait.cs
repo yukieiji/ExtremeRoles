@@ -48,10 +48,9 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 	private bool awakeHasOtherVision;
 
 	public Bait() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Bait,
-			ColorPalette.BaitCyan),
-        false, true, false, false)
+			ColorPalette.BaitCyan))
     { }
 
 	public static void Awake(byte playerId)

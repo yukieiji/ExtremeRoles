@@ -89,11 +89,10 @@ public sealed class BarterRole :
 
 	public BarterRole(
 		) : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Barter,
 			ColorPalette.BarterUsusuou),
-		false, true, false, false,
-		tab: OptionTab.CombinationTab)
+		OptionTab.CombinationTab)
 	{ }
 
 	public void Update(PlayerControl rolePlayer)

@@ -46,10 +46,10 @@ public sealed class IronMateRole :
     public override IStatusModel? Status => status;
 
     public IronMateRole(): base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.IronMate,
-			ColorPalette.IronMateAluminium),
-        false, true, false, false)
+			ColorPalette.IronMateAluminium,
+            RolePropPresets.CrewmateDefault))
     {
     }
 

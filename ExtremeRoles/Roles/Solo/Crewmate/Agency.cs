@@ -48,10 +48,9 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     private ExtremeAbilityButton takeTaskButton;
 
     public Agency() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Agency,
-			ColorPalette.AgencyYellowGreen),
-        false, true, false, false)
+			ColorPalette.AgencyYellowGreen))
     { }
 
     public static void TakeTargetPlayerTask(

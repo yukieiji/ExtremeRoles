@@ -5,7 +5,6 @@ using ExtremeRoles.Module;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Core.CustomOption;
 using ExtremeRoles.Core.CustomOption.Factory;
 
@@ -15,11 +14,10 @@ public sealed class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 {
 	private Dictionary<byte, DateTime> deadBodyInfo;
 	public Assistant() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Assistant,
 			ColorPalette.AssistantBluCapri),
-		false, true, false, false,
-		tab: OptionTab.CombinationTab)
+		OptionTab.CombinationTab)
 	{ }
 
 	public void AllReset(PlayerControl rolePlayer)

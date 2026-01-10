@@ -56,8 +56,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 
     public Bomber() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Bomber),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Bomber))
     { }
 
     public void CreateAbility()

@@ -452,11 +452,10 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 	public ExtremeAbilityButton Button { get; set; }
 	public Hero(
         ) : base(
-			RoleCore.BuildCrewmate(
+			RoleArgs.BuildCrewmate(
 				ExtremeRoleId.Hero,
 				ColorPalette.HeroAmaIro),
-			false, true, false, false,
-            tab: OptionTab.CombinationTab)
+			OptionTab.CombinationTab)
     {
     }
 #pragma warning restore CS8618
@@ -702,9 +701,8 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 	public ExtremeAbilityButton Button { get; set; }
 	public Villain(
         ) : base(
-			RoleCore.BuildImpostor(ExtremeRoleId.Villain),
-            true, false, true, true,
-            tab: OptionTab.CombinationTab)
+			RoleArgs.BuildImpostor(ExtremeRoleId.Villain),
+			OptionTab.CombinationTab)
     {
     }
 #pragma warning restore CS8618
@@ -867,9 +865,11 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 	public ExtremeAbilityButton Button { get; set; }
 	public Vigilante(
         ) : base(
-			RoleCore.BuildNeutral(ExtremeRoleId.Vigilante, ColorPalette.VigilanteFujiIro),
-            false, false, false, false,
-            tab: OptionTab.CombinationTab)
+			RoleArgs.BuildNeutral(
+				ExtremeRoleId.Vigilante, ColorPalette.VigilanteFujiIro,
+				RolePropPresets.OptionalDefault
+			),
+			OptionTab.CombinationTab)
     {
     }
 #pragma warning restore CS8618

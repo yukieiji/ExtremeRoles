@@ -15,11 +15,7 @@ public sealed class Dove : SingleRoleBase, IRoleUpdate
 	public Dove(
 		DoveCommonAbilityHandler abilityHandler,
 		LiberalDefaultOptionLoader option) : base(
-		RoleCore.BuildLiberal(
-			ExtremeRoleId.Dove,
-			ColorPalette.LiberalColor),
-		false, true,
-		false, false)
+		RoleArgs.BuildLiberalDove(ExtremeRoleId.Dove))
 	{
 		this.handler = abilityHandler;
 		LiberalSettingOverrider.OverrideDefault(this, option);

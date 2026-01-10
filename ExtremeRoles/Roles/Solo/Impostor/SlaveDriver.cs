@@ -51,8 +51,7 @@ public sealed class SlaveDriver :
     }
 
     public SlaveDriver() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.SlaveDriver),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.SlaveDriver))
     { }
 
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)

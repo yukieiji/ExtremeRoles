@@ -41,22 +41,8 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 	}
 
 	public MultiAssignRoleBase(
-        RoleCore core,
-        bool canKill,
-        bool hasTask,
-        bool useVent,
-        bool useSabotage,
-        bool canCallMeeting = true,
-        bool canRepairSabotage = true,
-        bool canUseAdmin = true,
-        bool canUseSecurity = true,
-        bool canUseVital = true,
-        OptionTab tab = OptionTab.GeneralTab) : base(
-			core,
-            canKill, hasTask, useVent,
-            useSabotage, canCallMeeting,
-            canRepairSabotage, canUseAdmin,
-            canUseSecurity, canUseVital, tab)
+		RoleArgs arg,
+        OptionTab tab = OptionTab.GeneralTab) : base(arg, tab)
     { }
 
     public void SetRoleType(RoleTypes roleType)

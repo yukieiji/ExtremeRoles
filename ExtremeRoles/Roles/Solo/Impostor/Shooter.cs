@@ -78,8 +78,7 @@ public sealed class Shooter :
     private TextMeshPro meetingShootText = null;
 
     public Shooter(): base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Shooter),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Shooter))
     { }
 
     public string GetFakeOptionString() => "";

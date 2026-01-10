@@ -18,12 +18,10 @@ public sealed class Neet : SingleRoleBase
     }
 
     public Neet() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Neet,
-			ColorPalette.NeetSilver),
-        false, false, false,
-        false, false, false,
-        false, false, false)
+			ColorPalette.NeetSilver,
+            RoleProp.None))
     { }
 
     public override string GetFullDescription()

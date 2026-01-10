@@ -88,8 +88,7 @@ public sealed class Zombie :
     private PlayerReviver? playerReviver;
 
     public Zombie() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Zombie),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Zombie))
     {
     }
 

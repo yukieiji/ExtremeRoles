@@ -35,8 +35,7 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
 	public ExtremeAbilityButton? Button { get; set; }
 
     public Thief() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Thief),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Thief))
     { }
 
 	public static void AddEffect(byte deadBody)

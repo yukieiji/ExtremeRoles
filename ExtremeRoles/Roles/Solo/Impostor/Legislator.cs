@@ -47,8 +47,7 @@ public sealed class Legislator :
     private Dictionary<byte, SpriteRenderer>? voteCheckMark;
 
     public Legislator() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Legislator),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Legislator))
     { }
 
     public static void UseAbility(ref Hazel.MessageReader reader)

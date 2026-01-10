@@ -57,11 +57,13 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	private int abilityIncreaseNum;
 
 	public Hatter(): base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Hatter,
-			ColorPalette.HatterYanagizome),
-        false, true, false, false,
-		false, false)
+			ColorPalette.HatterYanagizome,
+            RoleProp.HasTask |
+            RoleProp.CanUseAdmin |
+            RoleProp.CanUseSecurity |
+            RoleProp.CanUseVital))
     { }
 
 	public void Update(PlayerControl rolePlayer)

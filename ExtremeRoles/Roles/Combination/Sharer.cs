@@ -82,10 +82,8 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
 
     public Sharer() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Sharer),
-        true, false,
-        true, true,
-        tab: OptionTab.CombinationTab)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Sharer),
+		OptionTab.CombinationTab)
     { }
 
     public void HookMuderPlayer(

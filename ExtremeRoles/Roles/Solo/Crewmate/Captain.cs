@@ -61,10 +61,9 @@ public sealed class Captain :
     private Dictionary<byte, SpriteRenderer> voteCheckMark;
 
     public Captain() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Captain,
-			ColorPalette.CaptainLightKonjou),
-        false, true, false, false)
+			ColorPalette.CaptainLightKonjou))
     { }
 
     public static void UseAbility(ref Hazel.MessageReader reader)

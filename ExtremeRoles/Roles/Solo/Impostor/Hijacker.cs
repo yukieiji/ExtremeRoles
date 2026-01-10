@@ -45,8 +45,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 	private bool isAbilityUse = false;
 
 	public Hijacker() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Hijacker),
-		true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Hijacker))
 	{ }
 
 	public void CreateAbility()

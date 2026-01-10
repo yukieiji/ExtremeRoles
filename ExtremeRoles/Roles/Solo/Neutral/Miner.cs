@@ -77,10 +77,10 @@ public sealed class Miner :
     private TextPopUpper killLogger;
 
     public Miner() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Miner,
-			ColorPalette.MinerIvyGreen),
-        false, false, true, false)
+			ColorPalette.MinerIvyGreen,
+            RoleProp.UseVent | RolePropPresets.OptionalDefault))
     { }
 #pragma warning restore CS8618
 	public static void RpcHandle(ref MessageReader reader)

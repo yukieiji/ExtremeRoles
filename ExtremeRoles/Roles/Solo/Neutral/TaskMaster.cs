@@ -27,10 +27,13 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
     private List<int> addTask;
 
     public TaskMaster() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.TaskMaster,
-			ColorPalette.NeutralColor),
-        false, true, true, true)
+			ColorPalette.NeutralColor,
+            RoleProp.UseVent | 
+			RoleProp.UseSabotage | 
+			RoleProp.HasTask | 
+			RolePropPresets.OptionalDefault))
     { }
 
     public void Update(PlayerControl rolePlayer)

@@ -31,10 +31,9 @@ public sealed class Gambler :
 	private int maxVoteNum;
 
     public Gambler() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Gambler,
-			ColorPalette.GamblerYellowGold),
-        false, true, false, false)
+			ColorPalette.GamblerYellowGold))
     { }
 
     public void ModifiedVote(

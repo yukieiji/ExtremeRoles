@@ -23,10 +23,9 @@ public sealed class Inspector : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     public Inspector() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Inspector,
-			ColorPalette.InspectorAmberYellow),
-        false, true, false, false)
+			ColorPalette.InspectorAmberYellow))
     { }
 
     protected override void CreateSpecificOption(

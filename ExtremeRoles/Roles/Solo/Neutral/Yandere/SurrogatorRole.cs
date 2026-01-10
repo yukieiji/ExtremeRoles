@@ -44,10 +44,10 @@ public sealed class SurrogatorRole :
 	private SurrogatorStatus? status;
 
 	public SurrogatorRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Surrogator,
-			ColorPalette.YandereVioletRed),
-		false, false, false, false)
+			ColorPalette.YandereVioletRed,
+            RolePropPresets.OptionalDefault))
 	{ }
 
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)

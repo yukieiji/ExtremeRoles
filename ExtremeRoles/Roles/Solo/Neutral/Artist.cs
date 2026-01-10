@@ -41,10 +41,10 @@ public sealed class Artist :
 	private float winArea = 0.0f;
 
     public Artist(): base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Artist,
-			ColorPalette.ArtistChenChuWhowan),
-        false, false, false, false)
+			ColorPalette.ArtistChenChuWhowan,
+            RolePropPresets.OptionalDefault))
     { }
 
 	public void Update(PlayerControl rolePlayer)

@@ -48,8 +48,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 	private SystemConsoleType console = SystemConsoleType.EmergencyButton;
 
 	public Glitch() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Glitch),
-		true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Glitch))
 	{ }
 
 	public void CreateAbility()

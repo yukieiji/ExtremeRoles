@@ -32,8 +32,7 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
     private float penaltyKillCool;
 
     public Smasher() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Smasher),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Smasher))
     { }
 
     public void CreateAbility()

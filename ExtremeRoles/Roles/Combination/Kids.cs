@@ -217,11 +217,11 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
     private bool canAssignWisp = true;
 
     public Delinquent() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Delinquent,
-			ColorPalette.KidsYellowGreen),
-        false, false, false, false,
-        tab: OptionTab.CombinationTab)
+			ColorPalette.KidsYellowGreen,
+            RolePropPresets.OptionalDefault),
+		OptionTab.CombinationTab)
     { }
 
     public static void Ability(ref MessageReader reader)

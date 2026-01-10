@@ -35,10 +35,10 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 	private bool canNotKillJackal;
 
 	public ShepherdRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Shepherd,
-			ColorPalette.JackalBlue),
-		false, false, false, false)
+			ColorPalette.JackalBlue,
+            RolePropPresets.OptionalDefault))
 	{ }
 
 	public void ModifiedWinPlayer(
