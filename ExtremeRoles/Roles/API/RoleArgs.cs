@@ -18,5 +18,5 @@ public readonly record struct RoleArgs(RoleCore Core, RoleProp Prop)
 		=> new RoleArgs(RoleCore.BuildLiberal(id), prop);
 
 	public static RoleArgs BuildNeutral(ExtremeRoleId id, Color color, RoleProp prop)
-		=> new RoleArgs(RoleCore.BuildCrewmate(id, color), prop);
+		=> new RoleArgs(RoleCore.BuildNeutral(id, color), prop);
 }
