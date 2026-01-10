@@ -3,6 +3,8 @@ using System;
 using AmongUs.GameOptions;
 using UnityEngine;
 
+using ExtremeRoles.Core;
+
 using ExtremeRoles.GhostRoles.Impostor;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -10,8 +12,8 @@ using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Core.Service.SystemType;
 
 #nullable enable
 

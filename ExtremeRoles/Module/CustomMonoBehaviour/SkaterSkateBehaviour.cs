@@ -4,6 +4,7 @@ using UnityEngine;
 
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Extension.Vector;
 
 #nullable enable

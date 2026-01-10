@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Hazel;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.SecurityDummySystem;
 using ExtremeRoles.Performance;
 using System.Linq;
@@ -12,6 +11,8 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Extension.Linq;
 using System;
 using System.Buffers;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 #nullable enable
 

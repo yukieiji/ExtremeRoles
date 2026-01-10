@@ -1,0 +1,213 @@
+using UnityEngine;
+
+using ExtremeRoles.Core.Infrastructure;
+using ExtremeRoles.Core.Infrastructure.Event;
+using ExtremeRoles.Core.Service.InfoOverlay.Model;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomMonoBehaviour.View;
+using ExtremeRoles.Module.Event;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Module;
+
+using UpdateFunc = ExtremeRoles.Core.Service.InfoOverlay.Update;
+
+
+#nullable enable
+
+namespace ExtremeRoles.Core.Service.InfoOverlay;
+
+
+public sealed class Controller : NullableSingleton<Controller>
+{
+	public bool IsBlock
+	{
+		get => this.isBlock;
+		set
+		{
+			if (value)
+			{
+				this.Hide();
+			}
+			this.isBlock = value;
+		}
+
+	}
+	private bool isBlock = false;
+	private InfoOverlayView? view;
+	private InfoOverlayModel model;
+	private HelpButton button;
+
+	public Controller()
+	{
+		this.model = new InfoOverlayModel();
+		this.button = new HelpButton();
+		EventManager.Instance.Register(new EventUpdator(), ModEvent.OptionUpdate);
+	}
+
+	public void Hide()
+	{
+		if (this.view != null)
+		{
+			this.view.gameObject.SetActive(false);
+		}
+	}
+
+	public void InitializeToLobby()
+	{
+		if (!this.button.IsInitialized)
+		{
+			this.button.CreateInfoButton(toggleView);
+		}
+		UpdateFunc.InitializeLobby(this.model);
+	}
+
+	public void InitializeToGame()
+	{
+		if (!GameSystem.IsFreePlay)
+		{
+			UpdateFunc.InitializeGame(this.model);
+		}
+		else
+		{
+			UpdateFunc.InitializeLobby(this.model);
+		}
+	}
+
+	public void UpdateOnEvent()
+	{
+		UpdateFunc.UpdatePanel(this.model);
+		this.model.IsDuty = true;
+	}
+
+	public void Update()
+	{
+		keyUpdate();
+
+		if (this.model.IsDuty &&
+			this.view != null)
+		{
+			this.model.IsDuty = false;
+			this.view.UpdateFromModel(this.model);
+		}
+	}
+
+	private void keyUpdate()
+	{
+		var hud = HudManager.Instance;
+
+		if (hud == null ||
+			hud.Chat.IsOpenOrOpening ||
+			Minigame.Instance != null)
+		{
+			if (this.view != null && this.view.isActiveAndEnabled)
+			{
+				Hide();
+			}
+			return;
+		}
+
+		if (GameSystem.IsLobby)
+		{
+			if (Input.GetKeyDown(KeyCode.H))
+			{
+				toggleView(InfoOverlayModel.Type.AllRolePanel);
+			}
+			if (Input.GetKeyDown(KeyCode.G))
+			{
+				toggleView(InfoOverlayModel.Type.AllGhostRolePanel);
+			}
+		}
+		else
+		{
+			if (Input.GetKeyDown(KeyCode.H))
+			{
+				toggleView(InfoOverlayModel.Type.YourRolePanel);
+			}
+			if (Input.GetKeyDown(KeyCode.G))
+			{
+				toggleView(InfoOverlayModel.Type.YourGhostRolePanel);
+			}
+			if (Input.GetKeyDown(KeyCode.I))
+			{
+				toggleView(InfoOverlayModel.Type.AllRolePanel);
+			}
+			if (Input.GetKeyDown(KeyCode.U))
+			{
+				toggleView(InfoOverlayModel.Type.AllGhostRolePanel);
+			}
+		}
+		if (Input.GetKeyDown(KeyCode.O))
+		{
+			toggleView(InfoOverlayModel.Type.GlobalSettingPanel);
+		}
+
+		if (this.view != null &&
+			this.view.isActiveAndEnabled)
+		{
+			if (Input.GetKeyDown(KeyCode.PageDown))
+			{
+				UpdateFunc.IncreasePage(this.model);
+			}
+			if (Input.GetKeyDown(KeyCode.PageUp))
+			{
+				UpdateFunc.DecreasePage(this.model);
+			}
+		}
+	}
+
+	private void setView()
+	{
+		GameObject obj = Object.Instantiate(
+			UnityObjectLoader.LoadFromResources<GameObject>(
+				ObjectPath.CommonPrefabAsset,
+				string.Format(ObjectPath.CommonPrefabPath, "InfoOverlay")));
+		this.view = obj.GetComponent<InfoOverlayView>();
+		this.view.Awake();
+	}
+
+	private void show(InfoOverlayModel.Type showTyep)
+	{
+		var hudManager = HudManager.Instance;
+
+		if (hudManager == null || this.IsBlock) { return; }
+		if (MeetingHud.Instance == null)
+		{
+			hudManager.SetHudActive(true);
+		}
+
+		UpdateFunc.SwithTo(this.model, showTyep);
+
+		if (this.view == null)
+		{
+			this.setView();
+		}
+		if (this.view != null)
+		{
+			Transform parent = MeetingHud.Instance == null ?
+			hudManager.transform : MeetingHud.Instance.transform;
+
+			this.view.transform.localPosition = new Vector3(0f, 0f, -900f);
+			this.view.transform.SetParent(parent);
+			this.view.gameObject.SetActive(true);
+		}
+	}
+
+	private void toggleView()
+	{
+		toggleView(this.model.CurShow);
+	}
+
+	private void toggleView(InfoOverlayModel.Type showTyep)
+	{
+		if (this.view == null ||
+			!this.view.isActiveAndEnabled ||
+			this.model.CurShow != showTyep)
+		{
+			show(showTyep);
+		}
+		else
+		{
+			Hide();
+		}
+	}
+}

@@ -7,9 +7,8 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Core.CustomOption;
-using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 
 namespace ExtremeRoles.Roles.API;

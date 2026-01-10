@@ -18,7 +18,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
 using UnityObject = UnityEngine.Object;
-using ExtremeRoles.Core;
+using ExtremeRoles.Core.Service;
 
 #nullable enable
 

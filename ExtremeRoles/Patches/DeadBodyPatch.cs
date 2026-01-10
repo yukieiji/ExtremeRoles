@@ -5,6 +5,7 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches;
 

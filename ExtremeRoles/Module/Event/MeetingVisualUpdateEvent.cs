@@ -1,9 +1,9 @@
 using AmongUs.GameOptions;
-using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Visual;

@@ -1,16 +1,16 @@
 using System;
 using UnityEngine;
 
-
+using ExtremeRoles.Core;
 using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
 using static ExtremeRoles.Roles.Solo.Impostor.Hypnotist;
 
 using Il2CppInterop.Runtime.Attributes;
-using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Core.Abstract;
+
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 

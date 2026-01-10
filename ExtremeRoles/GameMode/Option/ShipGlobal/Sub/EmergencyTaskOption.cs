@@ -1,9 +1,8 @@
 using Il2CppSystem;
 
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Core.CustomOption;
-using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 

@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 #nullable enable

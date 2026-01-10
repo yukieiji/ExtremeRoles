@@ -3,13 +3,10 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils;
-
-
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.GameResult;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
@@ -18,9 +15,9 @@ using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Core.CustomOption;
-using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 #nullable enable
 

@@ -3,10 +3,12 @@ using System;
 using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 
+
+using ExtremeRoles.Core;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Core.Service.SystemType;
 
 #nullable enable
 

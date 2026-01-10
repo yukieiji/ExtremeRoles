@@ -4,10 +4,11 @@ using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 #nullable enable
 

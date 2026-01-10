@@ -6,9 +6,9 @@ using UnityEngine;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Core.Service.SystemType;
 
 #nullable enable
 

@@ -1,8 +1,9 @@
-﻿using Hazel;
+using Hazel;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
 using System.Diagnostics.CodeAnalysis;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 #nullable enable
 

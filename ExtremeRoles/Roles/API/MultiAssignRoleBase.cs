@@ -7,9 +7,8 @@ using ExtremeRoles.Helper;
 
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Core.CustomOption;
-using ExtremeRoles.Core.CustomOption.Interfaces;
+using ExtremeRoles.Core.Abstract.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
 
 #nullable enable
 

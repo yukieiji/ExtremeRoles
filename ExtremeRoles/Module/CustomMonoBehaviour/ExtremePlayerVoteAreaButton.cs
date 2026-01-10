@@ -4,6 +4,7 @@ using UnityEngine;
 
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;

@@ -12,8 +12,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
 
 using RoleEffectAction = Il2CppSystem.Action<RoleEffectAnimation>;
-using ExtremeRoles.Core.CustomOption;
-using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 #nullable enable
 

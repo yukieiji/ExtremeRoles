@@ -1,9 +1,9 @@
 using HarmonyLib;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches.Button;
 

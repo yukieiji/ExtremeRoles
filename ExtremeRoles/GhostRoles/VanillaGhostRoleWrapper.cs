@@ -4,7 +4,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 namespace ExtremeRoles.GhostRoles;
 

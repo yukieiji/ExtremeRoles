@@ -3,11 +3,11 @@ using System.Linq;
 
 
 using Hazel;
-
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 #nullable enable
 

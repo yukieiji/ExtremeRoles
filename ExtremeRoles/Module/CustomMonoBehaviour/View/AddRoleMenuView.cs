@@ -14,6 +14,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 
+using ExtremeRoles.Core;
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;

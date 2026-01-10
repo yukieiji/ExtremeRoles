@@ -1,10 +1,10 @@
 using Hazel;
-
-using ExtremeRoles.Module.Interface;
 using System.Collections.Generic;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 

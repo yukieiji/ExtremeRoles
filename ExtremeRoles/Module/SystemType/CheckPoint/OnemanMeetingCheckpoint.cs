@@ -2,6 +2,7 @@ using Hazel;
 
 using ExtremeRoles.Performance;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Module.SystemType.CheckPoint;
 

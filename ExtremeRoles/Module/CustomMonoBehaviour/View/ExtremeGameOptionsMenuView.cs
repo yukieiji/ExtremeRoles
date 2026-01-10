@@ -11,15 +11,16 @@ using Il2CppInterop.Runtime.Attributes;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Extension.Option;
 
+
+using ExtremeRoles.Core;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 
-using CategoryView = ExtremeRoles.Core.CustomOption.View.OptionCategoryViewObject<ExtremeRoles.Module.CustomMonoBehaviour.View.ExtremeOptionView>;
-using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Core.CustomOption;
+using CategoryView = ExtremeRoles.Module.OptionCategoryViewObject<ExtremeRoles.Module.CustomMonoBehaviour.View.ExtremeOptionView>;
+using ExtremeRoles.Core.Service.CustomOption;
 
 #nullable enable
 

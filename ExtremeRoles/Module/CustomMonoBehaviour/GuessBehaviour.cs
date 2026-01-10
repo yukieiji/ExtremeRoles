@@ -5,6 +5,7 @@ using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;

@@ -5,10 +5,10 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Core.Service.SystemType;
 
 #nullable enable
 

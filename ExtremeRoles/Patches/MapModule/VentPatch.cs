@@ -1,11 +1,11 @@
 using AmongUs.GameOptions;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.VentModule;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;

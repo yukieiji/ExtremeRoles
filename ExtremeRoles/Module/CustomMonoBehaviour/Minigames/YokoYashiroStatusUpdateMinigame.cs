@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Text.Json;
 using System.Collections;
@@ -9,12 +9,13 @@ using TMPro;
 using BepInEx.Unity.IL2CPP.Utils;
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Extension.Task;
 using ExtremeRoles.Extension.Linq;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using ExtremeRoles.Core.Service.SystemType;
 
 #nullable enable
 

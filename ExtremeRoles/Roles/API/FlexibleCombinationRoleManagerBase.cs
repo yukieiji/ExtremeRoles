@@ -1,7 +1,7 @@
 using AmongUs.GameOptions;
-using ExtremeRoles.Core.CustomOption;
-using ExtremeRoles.Core.CustomOption.Factory;
-using ExtremeRoles.Core.CustomOption.Implemented;
+using ExtremeRoles.Core.Infrastructure.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
 using System;

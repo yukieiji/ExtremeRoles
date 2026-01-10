@@ -1,9 +1,9 @@
 using HarmonyLib;
 
 using ExtremeRoles.Compat;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches.MapModule;
 

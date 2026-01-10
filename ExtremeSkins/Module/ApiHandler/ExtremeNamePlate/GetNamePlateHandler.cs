@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
-
-using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Core.Abstract;
 using ExtremeSkins.Core.API;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;

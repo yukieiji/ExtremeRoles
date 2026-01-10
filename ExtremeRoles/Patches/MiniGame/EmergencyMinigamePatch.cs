@@ -1,10 +1,10 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using UnityEngine;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches.MiniGame
 {

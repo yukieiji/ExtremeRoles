@@ -1,7 +1,9 @@
-﻿using System;
+using System;
+
 using UnityEngine;
 
-using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Core;
+using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.Solo.Crewmate;

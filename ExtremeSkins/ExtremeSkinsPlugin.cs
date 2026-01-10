@@ -15,6 +15,7 @@ using ExtremeSkins.Module.ApiHandler.ExtremeVisor;
 using ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Core;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeSkins;
 

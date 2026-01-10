@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 using UnityEngine.Events;
 
 using TMPro;
 using Il2CppInterop.Runtime.Attributes;
+
+using ExtremeRoles.Core;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 

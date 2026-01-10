@@ -1,5 +1,5 @@
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using HarmonyLib;
 

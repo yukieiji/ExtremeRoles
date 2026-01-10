@@ -1,8 +1,7 @@
 using System;
-using ExtremeRoles.Core.CustomOption;
-using ExtremeRoles.Core.CustomOption.Factory;
-using ExtremeRoles.Core.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Core.Abstract.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.API;

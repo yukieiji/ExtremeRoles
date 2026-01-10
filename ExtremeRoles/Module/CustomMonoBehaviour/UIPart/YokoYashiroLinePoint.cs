@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 
 using TMPro;
 using UnityEngine;
+
+using ExtremeRoles.Core;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 

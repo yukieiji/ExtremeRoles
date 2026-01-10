@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExtremeRoles.Compat;
-using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.Extension.Manager;
 
 namespace ExtremeRoles.Module;

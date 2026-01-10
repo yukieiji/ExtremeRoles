@@ -10,8 +10,8 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Core.CustomOption.Factory;
-using ExtremeRoles.Core.CustomOption.Interfaces;
+using ExtremeRoles.Core.Abstract.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Jackal;

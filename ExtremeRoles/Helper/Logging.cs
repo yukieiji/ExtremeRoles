@@ -1,4 +1,4 @@
-using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
 using System;
 using System.IO;
 using System.IO.Compression;

@@ -2,11 +2,11 @@ using HarmonyLib;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using AmongUs.GameOptions;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches.Role;
 

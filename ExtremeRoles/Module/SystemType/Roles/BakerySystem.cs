@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 

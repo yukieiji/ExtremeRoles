@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using Microsoft.Extensions.DependencyInjection;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Module.GameEnd;
 
 #nullable enable

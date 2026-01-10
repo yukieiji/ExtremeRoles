@@ -7,13 +7,13 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Test.Helper;
 
 using UnityResource = UnityEngine.Resources;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Test.InGame.InfinityTaskLoop;
 

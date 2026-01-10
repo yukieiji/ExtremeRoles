@@ -4,7 +4,7 @@ using ExtremeRoles.Roles;
 
 using ExtremeRoles.Test.Helper;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
-using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
 
 namespace ExtremeRoles.Test.InGame.GameLoop;
 

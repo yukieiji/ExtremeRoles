@@ -5,6 +5,8 @@ using UnityEngine;
 
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Core;
+
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;

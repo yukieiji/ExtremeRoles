@@ -9,7 +9,6 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Performance;
@@ -17,6 +16,8 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityObject = UnityEngine.Object;
 using ExtremeRoles.Module.GameEnd;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 

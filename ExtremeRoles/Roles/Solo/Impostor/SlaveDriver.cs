@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Interface;
 using Hazel;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

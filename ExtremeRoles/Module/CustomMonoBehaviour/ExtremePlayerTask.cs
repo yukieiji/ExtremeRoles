@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Performance;
 
 using Il2CppStringBuilder = Il2CppSystem.Text.StringBuilder;
 

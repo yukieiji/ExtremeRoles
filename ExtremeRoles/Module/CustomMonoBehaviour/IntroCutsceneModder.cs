@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.IntroRunner;
 using ExtremeRoles.Helper;

@@ -2,8 +2,10 @@ using System;
 
 using UnityEngine;
 
+using ExtremeRoles.Core;
+
 using ExtremeRoles.Extension.Vector;
-using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Core.Service.SystemType;
 
 #nullable enable
 

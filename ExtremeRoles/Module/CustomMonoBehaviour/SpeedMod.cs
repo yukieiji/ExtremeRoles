@@ -1,7 +1,8 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using UnityEngine;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 

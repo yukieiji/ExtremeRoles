@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+using ExtremeRoles.Core;
+
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 [Il2CppRegister]

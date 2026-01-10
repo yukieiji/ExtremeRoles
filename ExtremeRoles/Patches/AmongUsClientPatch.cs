@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using HarmonyLib;
 
 namespace ExtremeRoles.Patches;

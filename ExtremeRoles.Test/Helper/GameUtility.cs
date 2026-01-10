@@ -11,7 +11,7 @@ using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
 
 namespace ExtremeRoles.Test.Helper;
 

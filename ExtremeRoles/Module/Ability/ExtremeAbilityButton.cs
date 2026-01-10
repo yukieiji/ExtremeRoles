@@ -11,7 +11,7 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 
 using ArgException = System.ArgumentException;
-using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
 
 namespace ExtremeRoles.Module.Ability;
 

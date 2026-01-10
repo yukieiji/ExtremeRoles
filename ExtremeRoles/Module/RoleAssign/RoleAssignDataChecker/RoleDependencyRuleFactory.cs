@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExtremeRoles.Core.CustomOption;
-using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;

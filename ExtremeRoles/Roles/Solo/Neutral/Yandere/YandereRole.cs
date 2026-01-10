@@ -6,7 +6,6 @@ using UnityEngine;
 using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API;
@@ -14,8 +13,9 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
-using ExtremeRoles.Core.CustomOption;
-using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.Roles.API.Interface;
 
 public sealed class YandereRole :

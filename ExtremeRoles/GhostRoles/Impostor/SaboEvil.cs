@@ -7,7 +7,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
-using OptionFactory = ExtremeRoles.Core.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Core.Service.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Extension.Il2Cpp;
 
 #nullable enable

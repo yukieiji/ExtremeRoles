@@ -1,7 +1,7 @@
 using Hazel;
-
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 namespace ExtremeRoles.Module.SystemType;
 

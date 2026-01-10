@@ -7,6 +7,7 @@ using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 using TMPro;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;

@@ -7,8 +7,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
 
 
 #nullable enable

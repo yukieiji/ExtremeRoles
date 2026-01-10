@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -8,12 +8,13 @@ using TMPro;
 
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Core;
+
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Core.Service.SystemType;
 
-using ExtremeRoles.Module.Interface;
 
 #nullable enable
 

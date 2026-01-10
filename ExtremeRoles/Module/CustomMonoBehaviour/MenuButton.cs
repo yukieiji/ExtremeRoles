@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using TMPro;
 using UnityEngine;
@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 
 using Il2CppInterop.Runtime.Attributes;
+
+using ExtremeRoles.Core;
 
 #nullable enable
 

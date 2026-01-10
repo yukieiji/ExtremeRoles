@@ -10,22 +10,18 @@ using BepInEx;
 using UnityEngine;
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Helper;
-
-using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-
-
-using UnityObject = UnityEngine.Object;
-using OptionFactory = ExtremeRoles.Core.CustomOption.Factory.SequentialOptionCategoryFactory;
+using ExtremeRoles.Compat.Initializer;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
-using ExtremeRoles.Compat.Initializer;
-using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Core.CustomOption;
-using ExtremeRoles.Core.CustomOption.Interfaces;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Compat.Interface;
+using ExtremeRoles.Performance.Il2Cpp;
+
+using UnityObject = UnityEngine.Object;
+using OptionFactory = ExtremeRoles.Core.Service.CustomOption.Factory.SequentialOptionCategoryFactory;
+using ExtremeRoles.Core.Abstract.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
 
 #nullable enable
 

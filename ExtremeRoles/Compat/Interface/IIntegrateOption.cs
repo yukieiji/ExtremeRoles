@@ -1,4 +1,4 @@
-using OptionFactory = ExtremeRoles.Core.CustomOption.Factory.SequentialOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Core.Service.CustomOption.Factory.SequentialOptionCategoryFactory;
 
 namespace ExtremeRoles.Compat.Interface;
 

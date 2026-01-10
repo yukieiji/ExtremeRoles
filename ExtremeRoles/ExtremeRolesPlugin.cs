@@ -1,6 +1,6 @@
-global using ExtremeRoles.Core.CustomOption;
+global using ExtremeRoles.Core.Service.CustomOption;
 global using Tr = ExtremeRoles.Extension.Controller.TranslationControllerExtension;
-global using InfoOverlay = ExtremeRoles.Module.InfoOverlay.Controller;
+global using InfoOverlay = ExtremeRoles.Core.Service.InfoOverlay.Controller;
 global using ExRError = ExtremeRoles.Module.ErrorCode<ExtremeRoles.ErrorCode>;
 
 global using NormalGameOption = AmongUs.GameOptions.NormalGameOptionsV10;
@@ -20,12 +20,13 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.ScreenManagerHook;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.ApiHandler;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Translation;
-using ExtremeRoles.Core.CustomOption.Migrator;
 using ExtremeRoles.Core;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service.CustomOption.Migrator;
+using ExtremeRoles.Core.Service;
+using ExtremeRoles.Core.Infrastructure.ApiHandler;
 
 namespace ExtremeRoles;
 

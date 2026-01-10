@@ -6,14 +6,14 @@ using AmongUs.GameOptions;
 using TMPro;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Implemented;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Liberal;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Core.CustomOption;
-using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

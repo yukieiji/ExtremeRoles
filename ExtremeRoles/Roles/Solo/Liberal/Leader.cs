@@ -7,7 +7,6 @@ using UnityEngine;
 
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.Meeting;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -17,7 +16,8 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.API.Interface.Visual;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
+using ExtremeRoles.Core.Service.SystemType;
 
 
 #nullable enable

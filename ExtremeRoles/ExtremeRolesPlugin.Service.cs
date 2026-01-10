@@ -9,9 +9,11 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.Solo.Liberal;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Core.Infrastructure;
 
 
 namespace ExtremeRoles;
@@ -77,7 +79,7 @@ public partial class ExtremeRolesPlugin
 		collection.AddTransient<ExtremeGameEndChecker>();
 
 		// EventManager
-		collection.AddSingleton<IEventManager, Module.Event.EventManager>();
+		collection.AddSingleton<IEventManager, EventManager>();
 
 		return collection.BuildServiceProvider();
 	}

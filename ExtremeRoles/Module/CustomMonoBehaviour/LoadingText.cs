@@ -3,7 +3,7 @@ using UnityEngine;
 
 using TMPro;
 
-using ExtremeRoles.Performance;
+using ExtremeRoles.Core;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 

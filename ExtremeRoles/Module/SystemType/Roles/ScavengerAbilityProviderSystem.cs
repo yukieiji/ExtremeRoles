@@ -9,11 +9,12 @@ using Newtonsoft.Json.Linq;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 
 using UnityObject = UnityEngine.Object;
 using WeaponAbility = ExtremeRoles.Roles.Solo.Impostor.Scavenger.Ability;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 
 #nullable enable

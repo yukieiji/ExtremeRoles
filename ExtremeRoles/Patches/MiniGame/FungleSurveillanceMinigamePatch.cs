@@ -1,5 +1,5 @@
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.SecurityDummySystem;
 using ExtremeRoles.Roles.API.Extension.State;
 using HarmonyLib;

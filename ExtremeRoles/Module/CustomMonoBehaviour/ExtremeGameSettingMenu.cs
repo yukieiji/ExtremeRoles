@@ -6,6 +6,7 @@ using UnityEngine;
 
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
 

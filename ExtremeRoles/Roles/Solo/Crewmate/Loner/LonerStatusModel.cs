@@ -1,8 +1,7 @@
 using UnityEngine;
-
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Loner;
 

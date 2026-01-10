@@ -4,13 +4,13 @@ using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Core.CustomOption.Factory;
-using ExtremeRoles.Core.CustomOption.Interfaces;
+using ExtremeRoles.Core.Abstract.CustomOption;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Tucker;
 

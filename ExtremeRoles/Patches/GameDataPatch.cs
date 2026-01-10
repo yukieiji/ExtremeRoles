@@ -1,8 +1,8 @@
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Extension.State;
 using HarmonyLib;

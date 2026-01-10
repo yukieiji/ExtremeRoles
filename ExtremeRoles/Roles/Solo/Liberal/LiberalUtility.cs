@@ -1,9 +1,8 @@
 using AmongUs.GameOptions;
-
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.GameResult;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.API;
 

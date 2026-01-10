@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using HarmonyLib;
 

@@ -7,10 +7,11 @@ using UnityEngine;
 
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 #nullable enable
 

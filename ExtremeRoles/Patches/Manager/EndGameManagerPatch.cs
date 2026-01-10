@@ -19,7 +19,7 @@ using ExtremeRoles.Roles.API;
 
 using Il2CppArray = Il2CppSystem.Array;
 using Il2CppObject = Il2CppSystem.Object;
-using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
 
 namespace ExtremeRoles.Patches.Manager;
 

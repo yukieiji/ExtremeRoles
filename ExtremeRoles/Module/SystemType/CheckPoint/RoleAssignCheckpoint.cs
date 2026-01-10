@@ -1,3 +1,4 @@
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Module.SystemType.CheckPoint;

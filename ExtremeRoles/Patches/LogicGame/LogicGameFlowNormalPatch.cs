@@ -1,7 +1,6 @@
 using HarmonyLib;
-
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Core.Service.SystemType;
 
 
 #nullable enable

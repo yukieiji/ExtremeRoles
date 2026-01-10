@@ -3,6 +3,8 @@ using System;
 using UnityEngine;
 
 using Il2CppInterop.Runtime.Attributes;
+
+using ExtremeRoles.Core;
 using ExtremeRoles.Module.CustomMonoBehaviour.WithAction;
 
 #nullable enable

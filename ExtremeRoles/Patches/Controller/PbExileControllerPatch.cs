@@ -7,10 +7,10 @@ using UnityEngine;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches.Controller;
 

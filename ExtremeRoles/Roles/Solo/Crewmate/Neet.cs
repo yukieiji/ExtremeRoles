@@ -2,8 +2,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
