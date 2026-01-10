@@ -18,10 +18,9 @@ public sealed class Bakary : SingleRoleBase
     }
 
     public Bakary() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Bakary,
-			ColorPalette.BakaryWheatColor),
-        false, true, false, false)
+			ColorPalette.BakaryWheatColor))
     { }
 
     protected override void CreateSpecificOption(
