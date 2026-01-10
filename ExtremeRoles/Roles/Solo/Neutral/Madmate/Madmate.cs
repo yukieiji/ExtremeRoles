@@ -46,10 +46,10 @@ public sealed class MadmateRole :
 	private MadmateStatus? status;
 
     public MadmateRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Madmate,
-			Palette.ImpostorRed),
-        false, false, false, false)
+			Palette.ImpostorRed,
+            RolePropPresets.OptionalDefault))
     { }
 
     public static void ToFakeImpostor(byte playerId)

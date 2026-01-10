@@ -142,10 +142,10 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     private GraphicAndActiveTimeSwitcher<UmbrerMode> mode;
 
     public Umbrer() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Umbrer,
-			ColorPalette.UmbrerRed),
-        false, false, false, false)
+			ColorPalette.UmbrerRed,
+            RolePropPresets.OptionalDefault))
     { }
 
     public void CreateAbility()

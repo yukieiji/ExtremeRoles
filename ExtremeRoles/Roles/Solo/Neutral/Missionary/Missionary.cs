@@ -59,10 +59,10 @@ public sealed class MissionaryRole :
 	private MissionaryStatus? status;
 
 	public MissionaryRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Missionary,
-			ColorPalette.MissionaryBlue),
-		false, false, false, false)
+			ColorPalette.MissionaryBlue,
+            RolePropPresets.OptionalDefault))
 	{ }
 #pragma warning restore CS8618
 
