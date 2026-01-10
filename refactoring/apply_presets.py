@@ -17,9 +17,6 @@ IMPOSTOR_DEFAULT_FLAGS = OPTIONAL_DEFAULT_FLAGS | {
     "RoleProp.UseSabotage",
 }
 
-NEUTRAL_DEFAULT_FLAGS = OPTIONAL_DEFAULT_FLAGS
-LIBERAL_DEFAULT_FLAGS = OPTIONAL_DEFAULT_FLAGS
-
 def _normalize_flags(flag_string):
     """Splits a string of flags, strips whitespace, and returns a set."""
     return set(flag.strip() for flag in flag_string.split('|'))
@@ -49,18 +46,11 @@ def apply_role_prop_presets(csharp_code):
             return f"{leading}{whitespace}RolePropPresets.ImpostorDefault"
         return match.group(0) # Return original if no match
 
-    def neutral_replacer(match):
+    def optional_default_replacer(match):
         leading, whitespace, flags_str = match.groups()
         flags = _normalize_flags(flags_str)
-        if flags == NEUTRAL_DEFAULT_FLAGS:
-            return f"{leading}{whitespace}RolePropPresets.NeutralDefault"
-        return match.group(0)
-
-    def liberal_replacer(match):
-        leading, whitespace, flags_str = match.groups()
-        flags = _normalize_flags(flags_str)
-        if flags == LIBERAL_DEFAULT_FLAGS:
-            return f"{leading}{whitespace}RolePropPresets.LiberalDefault"
+        if flags == OPTIONAL_DEFAULT_FLAGS:
+            return f"{leading}{whitespace}RolePropPresets.OptionalDefault"
         return match.group(0)
 
     # Pattern for BuildCrewmate: captures up to the last comma, whitespace, and then the flags.
@@ -87,8 +77,8 @@ def apply_role_prop_presets(csharp_code):
 
     modified_code = crewmate_pattern.sub(crewmate_replacer, csharp_code)
     modified_code = impostor_pattern.sub(impostor_replacer, modified_code)
-    modified_code = neutral_pattern.sub(neutral_replacer, modified_code)
-    modified_code = liberal_pattern.sub(liberal_replacer, modified_code)
+    modified_code = neutral_pattern.sub(optional_default_replacer, modified_code)
+    modified_code = liberal_pattern.sub(optional_default_replacer, modified_code)
 
     return modified_code
 
