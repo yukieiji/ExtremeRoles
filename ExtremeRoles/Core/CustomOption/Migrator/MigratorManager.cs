@@ -1,7 +1,7 @@
-using BepInEx.Configuration;
-using ExtremeRoles.Module.CustomOption.Migrator;
 using System;
 using System.Collections.Generic;
+
+using BepInEx.Configuration;
 
 namespace ExtremeRoles.Core.CustomOption.Migrator;
 
