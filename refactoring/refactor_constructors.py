@@ -3,7 +3,8 @@ import re
 
 def refactor_content(content: str) -> str:
     """
-    Removes the default RolePropPresets arguments from RoleArgs constructor calls in C# code.
+    Removes default RolePropPresets arguments (any property ending in 'Default')
+    from C# method calls.
 
     Args:
         content: A string containing the C# code.
@@ -11,18 +12,11 @@ def refactor_content(content: str) -> str:
     Returns:
         The refactored C# code as a string.
     """
-    # Pattern to find and remove ", RolePropPresets.CrewmateDefault" when it's the last argument.
-    # It handles various whitespace and newlines before the closing parenthesis.
+    # This generalized regex looks for ", RolePropPresets." followed by any identifier
+    # ending in "Default", and removes it if it's right before a closing parenthesis.
+    # The identifier part `\w+` matches property names like `CrewmateDefault`, `ImpostorDefault`, etc.
     content = re.sub(
-        r',\s*RolePropPresets\.CrewmateDefault\s*\)',
-        ')',
-        content,
-        flags=re.DOTALL
-    )
-
-    # Pattern to find and remove ", RolePropPresets.ImpostorDefault" when it's the last argument.
-    content = re.sub(
-        r',\s*RolePropPresets\.ImpostorDefault\s*\)',
+        r',\s*RolePropPresets\.\w+Default\s*\)',
         ')',
         content,
         flags=re.DOTALL
