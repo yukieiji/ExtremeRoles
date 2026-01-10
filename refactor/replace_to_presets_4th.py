@@ -21,37 +21,37 @@ def _normalize_flags(flag_string):
     """Splits a string of flags, strips whitespace, and returns a set."""
     return set(flag.strip() for flag in flag_string.split('|'))
 
+def _crewmate_replacer(match):
+    # Group 1: Leading part of the call
+    # Group 2: Whitespace
+    # Group 3: The flags
+    leading, whitespace, flags_str = match.groups()
+    flags = _normalize_flags(flags_str)
+    if flags == CREWMATE_DEFAULT_FLAGS:
+        return f"{leading}{whitespace}RolePropPresets.CrewmateDefault"
+    return match.group(0)  # Return original if no match
+
+def _impostor_replacer(match):
+    # Group 1: Leading part of the call
+    # Group 2: Whitespace
+    # Group 3: The flags
+    leading, whitespace, flags_str = match.groups()
+    flags = _normalize_flags(flags_str)
+    if flags == IMPOSTOR_DEFAULT_FLAGS:
+        return f"{leading}{whitespace}RolePropPresets.ImpostorDefault"
+    return match.group(0) # Return original if no match
+
+def _optional_default_replacer(match):
+    leading, whitespace, flags_str = match.groups()
+    flags = _normalize_flags(flags_str)
+    if flags == OPTIONAL_DEFAULT_FLAGS:
+        return f"{leading}{whitespace}RolePropPresets.OptionalDefault"
+    return match.group(0)
+
 def apply_role_prop_presets(csharp_code):
     """
     Applies RolePropPresets to C# constructor calls in the given code string.
     """
-
-    def crewmate_replacer(match):
-        # Group 1: Leading part of the call
-        # Group 2: Whitespace
-        # Group 3: The flags
-        leading, whitespace, flags_str = match.groups()
-        flags = _normalize_flags(flags_str)
-        if flags == CREWMATE_DEFAULT_FLAGS:
-            return f"{leading}{whitespace}RolePropPresets.CrewmateDefault"
-        return match.group(0)  # Return original if no match
-
-    def impostor_replacer(match):
-        # Group 1: Leading part of the call
-        # Group 2: Whitespace
-        # Group 3: The flags
-        leading, whitespace, flags_str = match.groups()
-        flags = _normalize_flags(flags_str)
-        if flags == IMPOSTOR_DEFAULT_FLAGS:
-            return f"{leading}{whitespace}RolePropPresets.ImpostorDefault"
-        return match.group(0) # Return original if no match
-
-    def optional_default_replacer(match):
-        leading, whitespace, flags_str = match.groups()
-        flags = _normalize_flags(flags_str)
-        if flags == OPTIONAL_DEFAULT_FLAGS:
-            return f"{leading}{whitespace}RolePropPresets.OptionalDefault"
-        return match.group(0)
 
     # Pattern for BuildCrewmate: captures up to the last comma, whitespace, and then the flags.
     crewmate_pattern = re.compile(
@@ -75,10 +75,10 @@ def apply_role_prop_presets(csharp_code):
         re.DOTALL
     )
 
-    modified_code = crewmate_pattern.sub(crewmate_replacer, csharp_code)
-    modified_code = impostor_pattern.sub(impostor_replacer, modified_code)
-    modified_code = neutral_pattern.sub(optional_default_replacer, modified_code)
-    modified_code = liberal_pattern.sub(optional_default_replacer, modified_code)
+    modified_code = crewmate_pattern.sub(_crewmate_replacer, csharp_code)
+    modified_code = impostor_pattern.sub(_impostor_replacer, modified_code)
+    modified_code = neutral_pattern.sub(_optional_default_replacer, modified_code)
+    modified_code = liberal_pattern.sub(_optional_default_replacer, modified_code)
 
     return modified_code
 
