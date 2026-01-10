@@ -1,6 +1,12 @@
 import unittest
 import textwrap
-from apply_presets import apply_role_prop_presets, CREWMATE_DEFAULT_FLAGS, IMPOSTOR_DEFAULT_FLAGS
+from apply_presets import (
+    apply_role_prop_presets,
+    CREWMATE_DEFAULT_FLAGS,
+    IMPOSTOR_DEFAULT_FLAGS,
+    NEUTRAL_DEFAULT_FLAGS,
+    LIBERAL_DEFAULT_FLAGS,
+)
 from hypothesis import given, strategies as st
 
 # Helper to generate a set of RoleProp flags for hypothesis
@@ -159,6 +165,54 @@ class TestApplyRolePropPresets(unittest.TestCase):
 
         if set(flags) == IMPOSTOR_DEFAULT_FLAGS:
             self.assertIn("RolePropPresets.ImpostorDefault", result)
+        else:
+            self.assertEqual(source, result)
+
+    def test_neutral_singleline(self):
+        source = "base(RoleArgs.BuildNeutral(id, RoleProp.CanCallMeeting | RoleProp.CanRepairSabotage | RoleProp.CanUseAdmin | RoleProp.CanUseSecurity | RoleProp.CanUseVital))"
+        expected = "base(RoleArgs.BuildNeutral(id, RolePropPresets.NeutralDefault))"
+        self.assertEqual(apply_role_prop_presets(source), expected)
+
+    def test_liberal_singleline(self):
+        source = "base(RoleArgs.BuildLiberal(id, RoleProp.CanCallMeeting | RoleProp.CanRepairSabotage | RoleProp.CanUseAdmin | RoleProp.CanUseSecurity | RoleProp.CanUseVital))"
+        expected = "base(RoleArgs.BuildLiberal(id, RolePropPresets.LiberalDefault))"
+        self.assertEqual(apply_role_prop_presets(source), expected)
+
+    @given(flags=role_prop_flags_strategy())
+    def test_property_based_neutral(self, flags):
+        flags_str = " | ".join(flags)
+        if not flags_str:
+            flags_str = "RoleProp.None"
+
+        source = f"""
+        public MyRole() : base(
+            RoleArgs.BuildNeutral(RoleId, {flags_str}))
+        {{ }}
+        """
+
+        result = apply_role_prop_presets(source)
+
+        if set(flags) == NEUTRAL_DEFAULT_FLAGS:
+            self.assertIn("RolePropPresets.NeutralDefault", result)
+        else:
+            self.assertEqual(source, result)
+
+    @given(flags=role_prop_flags_strategy())
+    def test_property_based_liberal(self, flags):
+        flags_str = " | ".join(flags)
+        if not flags_str:
+            flags_str = "RoleProp.None"
+
+        source = f"""
+        public MyRole() : base(
+            RoleArgs.BuildLiberal(RoleId, {flags_str}))
+        {{ }}
+        """
+
+        result = apply_role_prop_presets(source)
+
+        if set(flags) == LIBERAL_DEFAULT_FLAGS:
+            self.assertIn("RolePropPresets.LiberalDefault", result)
         else:
             self.assertEqual(source, result)
 
