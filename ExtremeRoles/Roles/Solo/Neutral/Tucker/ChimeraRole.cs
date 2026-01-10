@@ -45,10 +45,10 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		IOptionLoader loader,
 		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
-			RoleCore.BuildNeutral(
+			RoleArgs.BuildNeutral(
 				ExtremeRoleId.Chimera,
-				ColorPalette.TuckerMerdedoie),
-			true, false, option.Vent, false)
+				ColorPalette.TuckerMerdedoie,
+				createChimeraProp(option.Vent)))
 	{
 		this.Loader = loader;
 		this.status = new ChimeraStatus(tuckerPlayer, this);
@@ -219,5 +219,16 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	{
 		var id = targetRole.Core.Id;
 		return id == Core.Id || id is ExtremeRoleId.Tucker;
+	}
+
+	private static RoleProp createChimeraProp(bool useVent)
+	{
+		var baseProp = RolePropPresets.OptionalDefault;
+		baseProp |= RoleProp.CanKill;
+		if (useVent)
+		{
+			baseProp |= RoleProp.UseVent;
+		}
+		return baseProp;
 	}
 }

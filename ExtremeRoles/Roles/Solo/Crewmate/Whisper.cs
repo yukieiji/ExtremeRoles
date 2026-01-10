@@ -48,10 +48,9 @@ public sealed class Whisper :
 	private TMPro.TextMeshPro abilityText;
 	private TextPopUpper textPopUp;
     public Whisper() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Whisper,
-			ColorPalette.WhisperMagenta),
-        false, true, false, false)
+			ColorPalette.WhisperMagenta))
     { }
 #pragma warning restore CS8618
 

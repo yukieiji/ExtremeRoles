@@ -14,9 +14,10 @@ public sealed partial class Xion : SingleRoleBase
     private float defaultCameraZoom;
 
     public Xion(byte xionPlayerId) : base(
-		new RoleCore(ExtremeRoleId.Xion, ExtremeRoleType.Null, ColorPalette.XionBlue),
-        false, false, false, true,
-        true, true, true, true, true)
+		new RoleArgs(
+			new RoleCore(ExtremeRoleId.Xion, ExtremeRoleType.Null, ColorPalette.XionBlue),
+			RolePropPresets.OptionalDefault | RoleProp.UseSabotage)
+		)
     {
         this.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
             AmongUs.GameOptions.FloatOptionNames.PlayerSpeedMod);

@@ -190,8 +190,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 	private const CustomVent.Type meryVentType = CustomVent.Type.Mery;
 
     public Mery() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Mery),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Mery))
     { }
 
     public static void Ability(ref MessageReader reader)

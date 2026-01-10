@@ -177,10 +177,10 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
     }
 
     public JackalRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Jackal,
-			ColorPalette.JackalBlue),
-        true, false, true, false)
+			ColorPalette.JackalBlue,
+            RoleProp.UseVent | RoleProp.CanKill | RolePropPresets.OptionalDefault))
     { }
 
     public override SingleRoleBase Clone()
