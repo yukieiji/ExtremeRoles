@@ -77,10 +77,10 @@ public sealed class TuckerRole :
 	private HashSet<byte> chimera = new HashSet<byte>();
 
 	public TuckerRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Tucker,
-			ColorPalette.TuckerMerdedoie),
-		false, false, false, false)
+			ColorPalette.TuckerMerdedoie,
+            RolePropPresets.OptionalDefault))
 	{ }
 
 	public static void TargetToChimera(byte rolePlayerId, byte targetPlayerId)
