@@ -140,10 +140,9 @@ public sealed class CurseMaker :
     private ExtremeAbilityButton curseButton;
 
     public CurseMaker() : base(
-        RoleCore.BuildCrewmate(
+        RoleArgs.BuildCrewmate(
 			ExtremeRoleId.CurseMaker,
-			ColorPalette.CurseMakerViolet),
-        false, true, false, false)
+			ColorPalette.CurseMakerViolet))
     { }
 
     public static void CurseKillCool(

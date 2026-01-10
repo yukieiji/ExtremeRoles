@@ -63,10 +63,9 @@ public sealed class ExorcistRole :
 	private readonly FullScreenFlasher flasher = new FullScreenFlasher(Palette.CrewmateBlue);
 
 	public ExorcistRole() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Exorcist,
-			Palette.ImpostorRed),
-		false, true, false, false)
+			Palette.ImpostorRed))
 	{
 
 	}

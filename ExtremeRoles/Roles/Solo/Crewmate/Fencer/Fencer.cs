@@ -47,10 +47,9 @@ public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	}
 
     public FencerRole() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Fencer,
-			ColorPalette.FencerPin),
-        false, true, false, false)
+			ColorPalette.FencerPin))
     {
     }
 

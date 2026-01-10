@@ -288,10 +288,9 @@ public sealed class BodyGuard :
 	private Sprite shildButtonImage;
 
 	public BodyGuard() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.BodyGuard,
-			ColorPalette.BodyGuardOrange),
-        false, true, false, false)
+			ColorPalette.BodyGuardOrange))
     { }
 #pragma warning restore CS8618
 
