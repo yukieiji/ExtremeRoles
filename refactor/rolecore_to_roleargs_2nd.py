@@ -16,30 +16,34 @@ def refactor_csharp_files(directory):
     modified_files = []
     for root, dirs, files in os.walk(directory):
         for file in files:
-            if file.endswith(".cs"):
-                filepath = os.path.join(root, file)
+            
+            if not file.endswith(".cs"):
+                continue
 
-                if file in ["RoleCore.cs", "RoleArgs.cs"]:
-                    print(f"Skipping file: {filepath}")
-                    continue
+            filepath = os.path.join(root, file)
 
-                try:
-                    with open(filepath, 'r', encoding='utf-8') as f:
-                        original_content = f.read()
-                except Exception as e:
-                    print(f"Error reading {filepath}: {e}", file=sys.stderr)
-                    continue
+            if file in ["RoleCore.cs", "RoleArgs.cs"]:
+                print(f"Skipping file: {filepath}")
+                continue
 
-                refactored_content = refactor_content(original_content)
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    original_content = f.read()
+            except Exception as e:
+                print(f"Error reading {filepath}: {e}", file=sys.stderr)
+                continue
 
-                if original_content != refactored_content:
-                    try:
-                        with open(filepath, 'w', encoding='utf-8') as f:
-                            f.write(refactored_content)
-                        print(f"Modified file: {filepath}")
-                        modified_files.append(filepath)
-                    except Exception as e:
-                        print(f"Error writing to {filepath}: {e}", file=sys.stderr)
+            refactored_content = refactor_content(original_content)
+
+            if original_content == refactored_content:
+                continue
+            try:
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    f.write(refactored_content)
+                print(f"Modified file: {filepath}")
+                modified_files.append(filepath)
+            except Exception as e:
+                print(f"Error writing to {filepath}: {e}", file=sys.stderr)
 
     return modified_files
 

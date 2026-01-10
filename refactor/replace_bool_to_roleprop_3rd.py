@@ -13,6 +13,50 @@ PROPS = [
     "RoleProp.CanUseVital",
 ]
 
+def _replacer(match):
+    # Extract parts from the match
+    base_start = match.group(1)
+    role_build_part = match.group(2)
+    remainder_comma = match.group('remainder_comma') or ""
+    remainder = match.group('remainder').strip()
+
+    # Process boolean arguments
+    bool_args_str = match.group(4)
+    bool_values = [s.strip() == 'true' for s in bool_args_str.split(',')]
+
+    # Map booleans to RoleProp enums
+    enabled_props = [PROPS[i] for i, value in enumerate(bool_values) if value]
+
+    # If there are fewer than 9 booleans, the desired "after" state implies
+    # the remaining optional props (CanCallMeeting, etc.) are true.
+    if len(bool_values) < len(PROPS):
+            enabled_props.extend(PROPS[len(bool_values):])
+            # Remove duplicates just in case, and preserve order
+            enabled_props = sorted(list(set(enabled_props)), key=PROPS.index)
+
+    if not enabled_props:
+        props_str = "RoleProp.None"
+    else:
+        # Format with indentation
+        props_str = " |\n            ".join(enabled_props)
+
+    # Rebuild the constructor call
+    # Ensure RoleCore is replaced with RoleArgs
+    # 多分いらないはず・・・
+    # new_role_build = role_build_part.replace("RoleCore.Build", "RoleArgs.Build")
+
+    # Insert the props string into the build call
+    new_role_build = role_build_part.rstrip(')') + f",\n            {props_str})"
+
+    # Handle the remainder (e.g., "tab: ...")
+    # Add the comma back only if there's a remainder.
+    if remainder:
+        remainder_str = ", " + remainder
+    else:
+        remainder_str = ""
+
+    return f"{base_start}{new_role_build}{remainder_str})"
+
 def refactor_constructor(content):
     # This regex is designed to find base constructor calls with a series of boolean arguments.
     # It now captures the optional comma before any remaining arguments.
@@ -28,69 +72,27 @@ def refactor_constructor(content):
         re.DOTALL
     )
 
-    def replacer(match):
-        # Extract parts from the match
-        base_start = match.group(1)
-        role_build_part = match.group(2)
-        remainder_comma = match.group('remainder_comma') or ""
-        remainder = match.group('remainder').strip()
-
-        # Process boolean arguments
-        bool_args_str = match.group(4)
-        bool_values = [s.strip() == 'true' for s in bool_args_str.split(',')]
-
-        # Map booleans to RoleProp enums
-        enabled_props = [PROPS[i] for i, value in enumerate(bool_values) if value]
-
-        # If there are fewer than 9 booleans, the desired "after" state implies
-        # the remaining optional props (CanCallMeeting, etc.) are true.
-        if len(bool_values) < len(PROPS):
-             enabled_props.extend(PROPS[len(bool_values):])
-             # Remove duplicates just in case, and preserve order
-             enabled_props = sorted(list(set(enabled_props)), key=PROPS.index)
-
-        if not enabled_props:
-            props_str = "RoleProp.None"
-        else:
-            # Format with indentation
-            props_str = " |\n            ".join(enabled_props)
-
-        # Rebuild the constructor call
-        # Ensure RoleCore is replaced with RoleArgs
-        # 多分いらないはず・・・
-        # new_role_build = role_build_part.replace("RoleCore.Build", "RoleArgs.Build")
-
-        # Insert the props string into the build call
-        new_role_build = role_build_part.rstrip(')') + f",\n            {props_str})"
-
-        # Handle the remainder (e.g., "tab: ...")
-        # Add the comma back only if there's a remainder.
-        if remainder:
-            remainder_str = ", " + remainder
-        else:
-            remainder_str = ""
-
-        return f"{base_start}{new_role_build}{remainder_str})"
-
-    content, count = pattern.subn(replacer, content)
+    content, count = pattern.subn(_replacer, content)
 
     return content, count
 
 def process_files(directory):
     for root, _, files in os.walk(directory):
         for file in files:
-            if file.endswith(".cs"):
-                filepath = os.path.join(root, file)
-                print(f"Checking: {filepath}")
-                with open(filepath, 'r', encoding='utf-8') as f:
-                    content = f.read()
+            if not file.endswith(".cs"):
+                continue
+            filepath = os.path.join(root, file)
+            print(f"Checking: {filepath}")
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
 
-                new_content, changes = refactor_constructor(content)
+            new_content, changes = refactor_constructor(content)
 
-                if changes > 0:
-                    print(f"Found and refactored {changes} constructor(s) in {filepath}")
-                    with open(filepath, 'w', encoding='utf-8') as f:
-                        f.write(new_content)
+            if changes <= 0:
+                continue
+            print(f"Found and refactored {changes} constructor(s) in {filepath}")
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(new_content)
 
 if __name__ == "__main__":
     # The user requested not to run the script, so this part is for manual execution if needed.
