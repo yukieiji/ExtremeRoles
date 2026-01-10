@@ -44,8 +44,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
     private ExtremeAbilityButton carryButton;
 
     public Carrier() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Carrier),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Carrier))
     {
         this.canReportOnCarry = false;
     }

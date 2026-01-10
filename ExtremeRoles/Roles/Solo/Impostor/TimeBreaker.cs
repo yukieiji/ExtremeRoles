@@ -23,8 +23,7 @@ public sealed class TimeBreaker : SingleRoleBase, IRoleAutoBuildAbility
 	public ExtremeAbilityButton Button { get; set; }
 
 	public TimeBreaker() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.TimeBreaker),
-		true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.TimeBreaker))
 	{ }
 
 	public void CreateAbility()

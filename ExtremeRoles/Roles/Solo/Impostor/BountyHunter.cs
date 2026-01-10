@@ -48,8 +48,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
     }
 
     public BountyHunter() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.BountyHunter),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.BountyHunter))
     { }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
