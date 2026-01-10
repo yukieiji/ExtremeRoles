@@ -12,10 +12,11 @@ using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 
-using IReadOnlyCategoryViews = System.Collections.Generic.IReadOnlyList<ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ViewSettingsInfoPanel>>;
-using CategoryViews = System.Collections.Generic.List<ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ViewSettingsInfoPanel>>;
-using ExtremeRoles.Module.CustomOption.View;
+using IReadOnlyCategoryViews = System.Collections.Generic.IReadOnlyList<ExtremeRoles.Core.CustomOption.View.OptionCategoryViewObject<ViewSettingsInfoPanel>>;
+using CategoryViews = System.Collections.Generic.List<ExtremeRoles.Core.CustomOption.View.OptionCategoryViewObject<ViewSettingsInfoPanel>>;
 using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.CustomOption.View;
 
 #nullable enable
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;

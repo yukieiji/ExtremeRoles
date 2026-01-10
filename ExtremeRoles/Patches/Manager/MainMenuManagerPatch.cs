@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 #if RELEASE
 using BepInEx;
@@ -18,6 +18,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Core;
 
 #nullable enable
 

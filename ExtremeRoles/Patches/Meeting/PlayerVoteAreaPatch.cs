@@ -8,6 +8,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Core.CustomOption;
 
 
 namespace ExtremeRoles.Patches.Meeting;

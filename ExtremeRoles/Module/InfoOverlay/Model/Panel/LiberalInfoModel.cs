@@ -12,7 +12,7 @@ using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Roles;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
-using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Core.CustomOption.Interfaces;
 
 
 

@@ -1,11 +1,12 @@
 using AmongUs.GameOptions;
+using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.CustomOption.Interfaces;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;

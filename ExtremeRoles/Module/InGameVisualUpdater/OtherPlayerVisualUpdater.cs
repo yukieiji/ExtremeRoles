@@ -11,6 +11,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Visual;
 
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
+using ExtremeRoles.Core.CustomOption;
 
 #nullable enable
 

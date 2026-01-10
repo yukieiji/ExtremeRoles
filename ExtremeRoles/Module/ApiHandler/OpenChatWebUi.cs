@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Text;
-
+using ExtremeRoles.Core;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;

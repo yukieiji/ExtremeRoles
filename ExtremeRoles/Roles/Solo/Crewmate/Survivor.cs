@@ -10,7 +10,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.GameResult;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

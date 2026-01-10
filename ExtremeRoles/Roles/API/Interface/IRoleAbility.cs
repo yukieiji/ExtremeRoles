@@ -8,8 +8,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.CustomOption.Interfaces;
 
 
 namespace ExtremeRoles.Roles.API.Interface;

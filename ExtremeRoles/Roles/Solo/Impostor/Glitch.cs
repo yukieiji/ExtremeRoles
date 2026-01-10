@@ -16,8 +16,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 
 using BepInEx.Unity.IL2CPP.Utils;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.CustomOption.Factory;
 
 
 #nullable enable

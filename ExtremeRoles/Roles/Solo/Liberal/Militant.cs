@@ -1,10 +1,10 @@
 using TMPro;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 
 using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Core.CustomOption.Factory;
 
 #nullable enable
 

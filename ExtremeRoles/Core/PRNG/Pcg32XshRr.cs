@@ -1,0 +1,36 @@
+#nullable enable
+
+using ExtremeRoles;
+
+namespace ExtremeRoles.Core.PRNG;
+
+public sealed class Pcg32XshRr : RNG32Base
+{
+	private ulong state;
+	private ulong increment = 1442695040888963407ul;
+
+	// This shifted to the left and or'ed with 1ul results in the default increment.
+	private const ulong ShiftedIncrement = 721347520444481703ul;
+	private const ulong Multiplier = 6364136223846793005ul;
+
+	public override string InitState { get; }
+
+	public Pcg32XshRr(SeedInfo seed)
+	{
+		ulong init = seed.CreateULong();
+		this.state = (seed.CreateULong() + init) * Multiplier + init;
+		this.increment = init | 1;
+
+		InitState = $"state:{this.state}, increment: {this.increment}";
+	}
+
+	public override uint NextUInt()
+	{
+		ulong oldState = this.state;
+		this.state = unchecked((oldState * Multiplier) + this.increment);
+		uint xorShifted = (uint)(((oldState >> 18) ^ oldState) >> 27);
+		uint rot = (uint)(oldState >> 59);
+		uint result = (xorShifted >> (int)rot) | (xorShifted << (int)((-rot) & 31));
+		return result;
+	}
+}

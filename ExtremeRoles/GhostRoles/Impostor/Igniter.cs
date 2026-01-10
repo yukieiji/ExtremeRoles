@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
@@ -7,7 +6,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Core.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 
 #nullable enable

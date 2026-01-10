@@ -16,7 +16,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.CustomOption.Factory;
 
 
 #nullable enable

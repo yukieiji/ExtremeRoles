@@ -1,4 +1,4 @@
-global using ExtremeRoles.Module.CustomOption;
+global using ExtremeRoles.Core.CustomOption;
 global using Tr = ExtremeRoles.Extension.Controller.TranslationControllerExtension;
 global using InfoOverlay = ExtremeRoles.Module.InfoOverlay.Controller;
 global using ExRError = ExtremeRoles.Module.ErrorCode<ExtremeRoles.ErrorCode>;
@@ -18,13 +18,14 @@ using HarmonyLib;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption.Migrator;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.ScreenManagerHook;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.ApiHandler;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Translation;
+using ExtremeRoles.Core.CustomOption.Migrator;
+using ExtremeRoles.Core;
 
 namespace ExtremeRoles;
 

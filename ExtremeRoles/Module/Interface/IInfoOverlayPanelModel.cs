@@ -1,5 +1,6 @@
 using System.Text;
-using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.Interface;
 

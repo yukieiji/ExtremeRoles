@@ -1,5 +1,5 @@
+using ExtremeRoles.Core.PRNG;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.PRNG;
 
 #nullable enable
 

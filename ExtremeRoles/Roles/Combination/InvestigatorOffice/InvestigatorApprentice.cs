@@ -12,10 +12,11 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.CustomOption.Factory;
+using ExtremeRoles.Core.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 

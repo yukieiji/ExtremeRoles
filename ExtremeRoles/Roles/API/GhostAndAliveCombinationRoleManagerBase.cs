@@ -5,7 +5,7 @@ using UnityEngine;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.API;
 

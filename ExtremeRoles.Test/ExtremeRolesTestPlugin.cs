@@ -1,10 +1,9 @@
-﻿global using System.Collections;
+global using System.Collections;
 
 using BepInEx.Unity.IL2CPP;
 using BepInEx;
 
 using HarmonyLib;
-using ExtremeRoles.Module;
 using ExtremeRoles.Test.Helper;
 using ExtremeRoles.Test.Lobby;
 using ExtremeRoles.Test.Performance;
@@ -12,6 +11,7 @@ using ExtremeRoles.Test.Performance;
 using Microsoft.Extensions.DependencyInjection;
 using ExtremeRoles.Test.InGame.GameLoop;
 using System;
+using ExtremeRoles.Core;
 
 namespace ExtremeRoles.Test;
 

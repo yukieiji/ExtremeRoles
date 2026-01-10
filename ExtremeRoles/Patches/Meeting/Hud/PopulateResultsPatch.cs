@@ -21,6 +21,7 @@ using ExtremeRoles.Roles.Combination.Avalon;
 
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Core.CustomOption;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 

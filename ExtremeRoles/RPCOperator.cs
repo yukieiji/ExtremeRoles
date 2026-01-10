@@ -18,6 +18,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Neutral.Madmate;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using ExtremeRoles.Core.CustomOption;
 
 
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using HarmonyLib;
 
@@ -6,6 +6,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Translation;
+using ExtremeRoles.Core;
 
 #nullable enable
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Net;
 using System.Text;
@@ -10,6 +10,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Core;
 
 #nullable enable
 

@@ -8,6 +8,7 @@ using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Core.CustomOption;
 
 #nullable enable
 

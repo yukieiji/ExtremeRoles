@@ -5,6 +5,7 @@ using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Core.CustomOption;
 
 #nullable enable
 

@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-
+using ExtremeRoles.Core.CustomOption;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Test.Helper;

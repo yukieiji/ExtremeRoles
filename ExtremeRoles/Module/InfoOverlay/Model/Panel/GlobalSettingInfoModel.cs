@@ -2,6 +2,7 @@ using System;
 using System.Text;
 
 using ExtremeRoles.Compat;
+using ExtremeRoles.Core.CustomOption;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExtremeRoles.Core.CustomOption;
 using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;

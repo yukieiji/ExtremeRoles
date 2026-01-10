@@ -17,8 +17,9 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 
-using CategoryView = ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ExtremeRoles.Module.CustomMonoBehaviour.View.ExtremeOptionView>;
+using CategoryView = ExtremeRoles.Core.CustomOption.View.OptionCategoryViewObject<ExtremeRoles.Module.CustomMonoBehaviour.View.ExtremeOptionView>;
 using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Core.CustomOption;
 
 #nullable enable
 

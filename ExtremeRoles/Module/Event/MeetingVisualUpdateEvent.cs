@@ -1,4 +1,5 @@
 using AmongUs.GameOptions;
+using ExtremeRoles.Core.CustomOption;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Helper;

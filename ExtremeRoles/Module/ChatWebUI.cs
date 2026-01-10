@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-
+using ExtremeRoles.Core;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.ApiHandler;
 

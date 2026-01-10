@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Core.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 

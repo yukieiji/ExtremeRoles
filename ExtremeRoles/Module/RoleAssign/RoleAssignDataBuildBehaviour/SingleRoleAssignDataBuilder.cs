@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using AmongUs.GameOptions;
-
+using ExtremeRoles.Core.CustomOption;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;

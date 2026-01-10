@@ -12,9 +12,10 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Migrator;
-using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.CustomOption.Implemented;
+using ExtremeRoles.Core.CustomOption.Migrator;
 
 
 #nullable enable

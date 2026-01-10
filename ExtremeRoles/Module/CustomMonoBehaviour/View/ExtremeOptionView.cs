@@ -5,8 +5,9 @@ using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Core.CustomOption;
+using ExtremeRoles.Core.CustomOption.Interfaces;
 
 #nullable enable
 

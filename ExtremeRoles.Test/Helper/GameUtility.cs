@@ -9,9 +9,9 @@ using BepInEx.Logging;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Core.CustomOption;
 
 namespace ExtremeRoles.Test.Helper;
 

@@ -14,9 +14,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Core.CustomOption.Factory;
 
 
 #nullable enable

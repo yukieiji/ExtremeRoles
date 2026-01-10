@@ -10,6 +10,7 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Core.CustomOption;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
