@@ -5,7 +5,6 @@ using ExtremeRoles.Module;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
@@ -16,7 +15,7 @@ public sealed class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 	public Assistant() : base(
 		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Assistant,
-			ColorPalette.AssistantBluCapri), 
+			ColorPalette.AssistantBluCapri),
 		OptionTab.CombinationTab)
 	{ }
 
