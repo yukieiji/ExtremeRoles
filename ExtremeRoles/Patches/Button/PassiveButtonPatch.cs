@@ -4,7 +4,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches.Button;
 

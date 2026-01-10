@@ -6,11 +6,11 @@ using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Core.Service;
+using ExtremeRoles.Core.Service.SystemType;
 
 
 #nullable enable

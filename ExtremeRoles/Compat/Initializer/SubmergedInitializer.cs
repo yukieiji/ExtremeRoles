@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 
 using BepInEx;
 using HarmonyLib;
 
 
 using ExtremeRoles.Compat.ModIntegrator;
+using ExtremeRoles.Core.Abstract;
 
 #nullable enable
 
@@ -42,7 +43,7 @@ public sealed class SubmergedInitializer(PluginInfo plugin) : InitializerBase<Su
 		var hubManagerUpdatePatchPostfixPatch =
 			SymbolExtensions.GetMethodInfo(() => Patches.HudManagerUpdatePatchPostfixPatch.Postfix(instance));
 
-		string deteriorateFunction = nameof(ExtremeRoles.Module.Interface.IAmongUs.ISystemType.Deteriorate);
+		string deteriorateFunction = nameof(IAmongUs.ISystemType.Deteriorate);
 
 		this.SubmarineOxygenSystem = GetClass("SubmarineOxygenSystem");
 		var submarineOxygenSystemDetoriorate = GetMethod(this.SubmarineOxygenSystem, deteriorateFunction);

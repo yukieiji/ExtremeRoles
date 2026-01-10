@@ -12,7 +12,8 @@ using ExtremeRoles.Roles.API.Interface.Status;
 
 
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 

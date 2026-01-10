@@ -1,8 +1,8 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.ApiHandler;
 using UnityEngine;
+using ExtremeRoles.Core.Infrastructure.ApiHandler;
 
 namespace ExtremeRoles.Patches;
 

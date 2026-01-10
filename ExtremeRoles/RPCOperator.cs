@@ -18,6 +18,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Neutral.Madmate;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Infrastructure;
 
 
 
@@ -519,7 +522,7 @@ public static class RPCOperator
 
 	public static void UpdateExtremeSystemType(ref MessageReader reader)
 	{
-		Module.SystemType.ExtremeSystemTypeManager.UpdateSystem(reader);
+		ExtremeSystemTypeManager.UpdateSystem(reader);
 	}
 
 	public static void HeroHeroAcademiaCommand(

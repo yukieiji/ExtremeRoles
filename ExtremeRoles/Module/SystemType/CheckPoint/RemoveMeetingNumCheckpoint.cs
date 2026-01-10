@@ -1,10 +1,11 @@
-﻿using Hazel;
+using Hazel;
 
 using ExtremeRoles.Performance;
 using System.Linq;
 using System.Collections.Generic;
 
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Module.SystemType.CheckPoint;
 

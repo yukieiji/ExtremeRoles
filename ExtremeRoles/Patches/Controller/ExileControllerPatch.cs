@@ -10,7 +10,6 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -20,6 +19,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 
 using Il2CppObject = Il2CppSystem.Object;
+using ExtremeRoles.Core.Service.SystemType;
 
 
 

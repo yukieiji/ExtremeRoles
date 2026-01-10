@@ -9,7 +9,8 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

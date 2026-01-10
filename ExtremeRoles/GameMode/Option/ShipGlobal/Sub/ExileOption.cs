@@ -1,6 +1,7 @@
+using ExtremeRoles.Core.Abstract.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 

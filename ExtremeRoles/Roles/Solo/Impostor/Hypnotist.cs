@@ -28,7 +28,8 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

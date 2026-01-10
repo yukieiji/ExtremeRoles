@@ -1,6 +1,5 @@
-﻿using HarmonyLib;
-
-using ExtremeRoles.Module.SystemType;
+using HarmonyLib;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches;
 

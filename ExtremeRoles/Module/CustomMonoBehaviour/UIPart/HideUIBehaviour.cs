@@ -1,5 +1,8 @@
-﻿using System;
+using System;
 using UnityEngine;
+
+
+using ExtremeRoles.Core;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart
 {

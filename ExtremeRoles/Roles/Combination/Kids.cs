@@ -14,7 +14,6 @@ using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -24,10 +23,11 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance.Il2Cpp;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
+using OptionFactory = ExtremeRoles.Core.Service.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Core.Abstract.CustomOption;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 
 #nullable enable

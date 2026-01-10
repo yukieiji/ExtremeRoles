@@ -5,8 +5,8 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Core.Abstract.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
 
 namespace ExtremeRoles.Roles.API;
 

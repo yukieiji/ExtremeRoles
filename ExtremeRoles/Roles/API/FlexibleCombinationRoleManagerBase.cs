@@ -1,7 +1,8 @@
 using AmongUs.GameOptions;
+using ExtremeRoles.Core.Infrastructure.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
 using System;
 using static ExtremeRoles.Roles.Solo.Impostor.TimeBreaker;

@@ -8,9 +8,11 @@ using TMPro;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Core.Service;
 
 #nullable enable
 

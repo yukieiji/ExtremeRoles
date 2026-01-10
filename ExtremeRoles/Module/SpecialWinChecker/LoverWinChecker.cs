@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-
-
+using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;

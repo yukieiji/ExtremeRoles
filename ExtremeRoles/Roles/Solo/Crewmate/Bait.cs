@@ -11,7 +11,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

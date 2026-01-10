@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using ExtremeRoles.Core.Service;
+using UnityEngine;
 
 
 #nullable enable
@@ -19,7 +20,7 @@ internal abstract class OperatorBase
 		this.ModFolderPath = System.IO.Path.GetDirectoryName(
 			Application.dataPath) + @"\BepInEx\plugins";
 
-		this.Popup = Object.Instantiate(Module.Prefab.Prop);
+		this.Popup = Object.Instantiate(Prefab.Prop);
 		this.Popup.TextAreaTMP.fontSize *= 0.7f;
 		this.Popup.TextAreaTMP.enableAutoSizing = false;
 	}

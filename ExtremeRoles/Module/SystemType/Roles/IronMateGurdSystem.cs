@@ -1,10 +1,11 @@
-﻿using Hazel;
+using Hazel;
 
 using System.Collections.Generic;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 

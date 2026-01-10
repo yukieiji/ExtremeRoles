@@ -7,9 +7,10 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Extension.Json;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 
 #nullable enable

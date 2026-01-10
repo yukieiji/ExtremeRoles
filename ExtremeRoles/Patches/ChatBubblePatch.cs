@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module;
+using ExtremeRoles.Core.Service;
 using HarmonyLib;
 
 namespace ExtremeRoles.Patches;

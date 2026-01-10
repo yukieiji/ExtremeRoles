@@ -9,12 +9,12 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
 using ExtremeRoles.Helper;
-
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 #nullable enable
 

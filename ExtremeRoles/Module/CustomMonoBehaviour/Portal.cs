@@ -1,11 +1,10 @@
 using System;
 using UnityEngine;
-
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Core;
+using ExtremeRoles.Core.Abstract;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 

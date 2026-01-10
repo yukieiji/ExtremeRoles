@@ -6,7 +6,7 @@ using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches.Player;
 

@@ -16,8 +16,8 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.ApiHandler;
-using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Infrastructure.ApiHandler;
 
 namespace ExtremeRoles.Patches.Manager;
 

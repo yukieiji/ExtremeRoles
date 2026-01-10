@@ -8,7 +8,6 @@ using TMPro;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.InGameVisualUpdater;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.CheckPoint;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Patches.MapOverlay;
@@ -18,6 +17,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Solo.Host;
 
 using PlayerHelper = ExtremeRoles.Helper.Player;
+using ExtremeRoles.Core.Service.SystemType;
 
 
 #nullable enable

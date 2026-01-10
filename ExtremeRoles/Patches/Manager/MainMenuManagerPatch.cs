@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 #if RELEASE
 using BepInEx;
@@ -11,13 +11,13 @@ using Twitch;
 using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Core.Service;
 
 #nullable enable
 

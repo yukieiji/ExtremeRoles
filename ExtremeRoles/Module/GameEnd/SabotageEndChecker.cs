@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 

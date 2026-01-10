@@ -8,7 +8,6 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -17,6 +16,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 
 using PlayerHeler = ExtremeRoles.Helper.Player;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches.Player;
 

@@ -1,4 +1,4 @@
-﻿using Il2CppSystem.Collections.Generic;
+using Il2CppSystem.Collections.Generic;
 
 using TMPro;
 using Twitch;
@@ -14,6 +14,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeRoles.Compat.SafeBoot;
 

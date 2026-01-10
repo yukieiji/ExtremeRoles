@@ -10,13 +10,13 @@ using InnerNet;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 
 using UnityHelper = ExtremeRoles.Helper.Unity;
+using ExtremeRoles.Core.Service.SystemType;
 
 #nullable enable
 

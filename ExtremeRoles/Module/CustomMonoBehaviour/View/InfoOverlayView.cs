@@ -8,13 +8,15 @@ using Il2CppInterop.Runtime.Attributes;
 
 using TMPro;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.InfoOverlay;
-using ExtremeRoles.Module.InfoOverlay.Model;
 
 using ToggleButton = ExtremeRoles.Module.CustomMonoBehaviour.UIPart.ToggleButtonBehaviour;
+using ExtremeRoles.Core.Service.InfoOverlay;
+using ExtremeRoles.Core.Service.InfoOverlay.Model;
+using ExtremeRoles.Core.Service.InfoOverlay.Model.Panel;
+using ExtremeRoles.Core.Abstract;
 
 
 #nullable enable

@@ -13,7 +13,7 @@ using ExtremeRoles.Test.Helper;
 
 using UnityResource = UnityEngine.Resources;
 using Microsoft.Extensions.DependencyInjection;
-using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Test.InGame.GameLoop;
 

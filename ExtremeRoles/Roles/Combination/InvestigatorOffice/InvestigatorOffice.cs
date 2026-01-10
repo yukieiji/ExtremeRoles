@@ -1,6 +1,6 @@
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination.InvestigatorOffice;
 

@@ -1,6 +1,7 @@
+using ExtremeRoles.Core.Abstract.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.OLDS;
+
 using ExtremeRoles.Roles.API;
 
 using System;

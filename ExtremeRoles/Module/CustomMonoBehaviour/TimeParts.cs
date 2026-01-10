@@ -1,11 +1,14 @@
-﻿using System;
+using System;
 using UnityEngine;
 
-using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Core;
+using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Core.Service.SystemType;
+
 using ExtremeRoles.Roles;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
+
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 

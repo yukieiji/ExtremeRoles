@@ -2,6 +2,7 @@ using System;
 
 using UnityEngine;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;

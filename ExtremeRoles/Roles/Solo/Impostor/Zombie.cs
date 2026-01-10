@@ -13,14 +13,16 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using Il2CppObject = Il2CppSystem.Object;
 using SystemArray = System.Array;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service;
 
 #nullable enable
 

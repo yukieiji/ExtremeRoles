@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Resources;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 
 using NullException = System.ArgumentNullException;
 using Scavenger = ExtremeRoles.Roles.Solo.Impostor.Scavenger;
 using Ptr = System.IntPtr;
+using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Core.Service.SystemType;
 
 
 #nullable enable

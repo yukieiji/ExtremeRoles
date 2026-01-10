@@ -10,7 +10,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 #nullable enable
 

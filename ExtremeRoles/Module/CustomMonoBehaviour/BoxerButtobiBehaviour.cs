@@ -3,6 +3,7 @@ using System;
 using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.SystemType;

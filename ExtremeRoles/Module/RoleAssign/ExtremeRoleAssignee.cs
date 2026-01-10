@@ -1,5 +1,5 @@
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.SystemType;
 using System.Collections;
 using System.Collections.Generic;
 

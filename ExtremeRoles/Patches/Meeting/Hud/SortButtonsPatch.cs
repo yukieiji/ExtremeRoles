@@ -9,10 +9,12 @@ using UnityEngine;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.Event;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Core.Infrastructure;
+using ExtremeRoles.Core.Service.SystemType;
 
 
 #nullable enable

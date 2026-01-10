@@ -1,7 +1,8 @@
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
 #nullable enable
 

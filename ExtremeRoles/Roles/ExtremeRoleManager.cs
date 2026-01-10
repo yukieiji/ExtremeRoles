@@ -35,6 +35,7 @@ using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using ExtremeRoles.Roles.Solo.Neutral.Yoko;
+using ExtremeRoles.Core.Infrastructure;
 
 
 namespace ExtremeRoles.Roles;

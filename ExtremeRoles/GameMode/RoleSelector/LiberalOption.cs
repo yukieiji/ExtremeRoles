@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ExtremeRoles.Core.Abstract.CustomOption;
+using ExtremeRoles.Core.Infrastructure.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
 
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 

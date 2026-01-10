@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 
 using Hazel;
-
-using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 #nullable enable
 

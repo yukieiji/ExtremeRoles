@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Core.Service.SystemType;
 using HarmonyLib;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;

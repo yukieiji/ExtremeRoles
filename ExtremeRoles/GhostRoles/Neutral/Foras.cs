@@ -9,13 +9,14 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Core.Service.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.GhostRoles.Neutal;
 

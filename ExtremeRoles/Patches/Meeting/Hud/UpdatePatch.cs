@@ -6,6 +6,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Core.Service.SystemType;
 
 
 namespace ExtremeRoles.Patches.Meeting.Hud;

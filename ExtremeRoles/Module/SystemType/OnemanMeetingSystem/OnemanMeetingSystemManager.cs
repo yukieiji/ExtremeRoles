@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 
 using Hazel;
-
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.CheckPoint;
 using ExtremeRoles.Roles;
 using System.Diagnostics.CodeAnalysis;
@@ -11,6 +9,8 @@ using System.Text;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using ExtremeRoles.Patches.Controller;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 
 #nullable enable

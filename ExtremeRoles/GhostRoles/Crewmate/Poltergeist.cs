@@ -6,11 +6,11 @@ using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Factory;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Core.Service.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.GhostRoles.Crewmate;
 

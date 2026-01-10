@@ -1,10 +1,9 @@
 using System;
 
 using HarmonyLib;
-
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.SecurityDummySystem;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches.MiniGame;
 

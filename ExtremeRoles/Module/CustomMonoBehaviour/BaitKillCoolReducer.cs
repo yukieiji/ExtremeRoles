@@ -1,5 +1,6 @@
 using UnityEngine;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Extension.Player;
 
 #nullable enable

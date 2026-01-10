@@ -4,9 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using Hazel;
 
 using UnityEngine;
-
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 

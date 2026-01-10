@@ -1,10 +1,12 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Core;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeVoiceEngine;
 

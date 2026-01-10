@@ -1,12 +1,13 @@
-﻿using Hazel;
+using Hazel;
 using System.Collections.Generic;
 
 using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 #nullable enable
 

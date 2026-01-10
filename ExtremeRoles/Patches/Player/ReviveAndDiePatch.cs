@@ -1,7 +1,7 @@
 using AmongUs.GameOptions;
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;

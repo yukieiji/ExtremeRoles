@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
+
+using ExtremeRoles.Core;
 
 using Il2CppInterop.Runtime.Attributes;
 

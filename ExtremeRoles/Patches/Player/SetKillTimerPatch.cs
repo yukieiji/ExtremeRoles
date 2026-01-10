@@ -1,11 +1,10 @@
 using HarmonyLib;
 using UnityEngine;
-
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 
 using PlayerHelper = ExtremeRoles.Helper.Player;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches.Player;
 

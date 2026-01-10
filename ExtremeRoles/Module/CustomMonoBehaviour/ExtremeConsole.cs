@@ -3,8 +3,8 @@ using System;
 using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Core;
+using ExtremeRoles.Core.Abstract;
 
 #nullable enable
 

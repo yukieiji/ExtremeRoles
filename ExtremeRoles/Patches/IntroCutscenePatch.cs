@@ -5,7 +5,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches;
 

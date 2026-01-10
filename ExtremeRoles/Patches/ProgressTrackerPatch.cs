@@ -4,11 +4,10 @@ using AmongUs.GameOptions;
 using HarmonyLib;
 
 using UnityEngine;
-
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches;
 

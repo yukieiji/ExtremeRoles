@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 
 using HarmonyLib;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Core.Service.SystemType;
 
 #nullable enable
 

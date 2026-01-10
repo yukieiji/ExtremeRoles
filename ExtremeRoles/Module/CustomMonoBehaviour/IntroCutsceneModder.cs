@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.IntroRunner;
 using ExtremeRoles.Helper;
@@ -17,6 +18,7 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 using PlayerIl2CppList = Il2CppSystem.Collections.Generic.List<PlayerControl>;
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Core.Service;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 

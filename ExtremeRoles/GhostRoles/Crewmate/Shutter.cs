@@ -16,10 +16,11 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using OptionFactory = ExtremeRoles.Core.Service.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
 using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Core.Service.CustomOption;
 
 
 #nullable enable

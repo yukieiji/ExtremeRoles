@@ -7,6 +7,7 @@ using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;

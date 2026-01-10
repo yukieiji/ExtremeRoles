@@ -4,10 +4,11 @@ using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
+using ExtremeRoles.Core.Service.SystemType;
+using ExtremeRoles.Core.Abstract;
 
 #nullable enable
 

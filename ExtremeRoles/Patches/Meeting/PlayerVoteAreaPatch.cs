@@ -6,8 +6,9 @@ using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.SystemType;
 
 
 namespace ExtremeRoles.Patches.Meeting;

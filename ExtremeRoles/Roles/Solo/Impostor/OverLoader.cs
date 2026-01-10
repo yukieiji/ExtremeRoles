@@ -11,7 +11,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Event;
-using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Core.Service.CustomOption;
+using ExtremeRoles.Core.Service.CustomOption.Factory;
+using ExtremeRoles.Core.Infrastructure;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

@@ -6,12 +6,12 @@ using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles.API.Extension.State;
 
 using Submerged = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator;
 using SpawnPoint = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator.SpawnSetting;
+using ExtremeRoles.Core.Service.SystemType;
 
 
 #nullable enable

@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using UnityEngine;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;

@@ -7,6 +7,7 @@ using Hazel;
 using TMPro;
 using UnityEngine;
 
+using ExtremeRoles.Core;
 using ExtremeRoles.Performance.Il2Cpp;
 
 #nullable enable

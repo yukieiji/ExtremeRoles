@@ -1,11 +1,10 @@
 
 using System.Collections.Generic;
 using System.Linq;
-
+using ExtremeRoles.Core.Service.CustomOption.Factory;
+using ExtremeRoles.Core.Service.SystemType;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;

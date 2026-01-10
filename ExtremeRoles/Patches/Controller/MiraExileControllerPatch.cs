@@ -6,9 +6,9 @@ using UnityEngine;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
-using ExtremeRoles.Module.SystemType;
 
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
+using ExtremeRoles.Core.Service.SystemType;
 
 namespace ExtremeRoles.Patches.Controller;
 
