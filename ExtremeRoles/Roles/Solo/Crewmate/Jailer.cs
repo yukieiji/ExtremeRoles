@@ -104,10 +104,11 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	}
 
 	public Jailer() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Jailer,
-			ColorPalette.JailerSapin),
-		false, true, false, false, false)
+			ColorPalette.JailerSapin,
+			// 会議を起こせないクルー
+            RolePropPresets.CrewmateDefault & ~RoleProp.CanCallMeeting))
 	{ }
 
 	public static void NotCrewmateToYardbird(byte rolePlayerId, byte targetPlayerId)
@@ -545,16 +546,12 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		in IOptionLoader loader,
 		byte targetPlayerId,
 		Option option) : base(
-			RoleCore.BuildCrewmate(
+			RoleArgs.BuildCrewmate(
 				ExtremeRoleId.Yardbird,
-				ColorPalette.YardbirdYenHown),
-			false, true,
-			option.Vent,
-			option.Sab,
-			false, true,
-			option.Admin,
-			option.Security,
-			option.Vital)
+				ColorPalette.YardbirdYenHown,
+				createYardbirdProp(option)
+			)
+		)
 	{
 		this.Loader = loader;
 		this.MoveSpeed = option.SpeedMod;
@@ -616,6 +613,31 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 			}
 		}
 	}
+	private static RoleProp createYardbirdProp(Option option)
+	{
+		var prop = RoleProp.HasTask | RoleProp.CanRepairSabotage;
+		if (option.Sab)
+		{
+			prop |= RoleProp.UseSabotage;
+		}
+		if (option.Vent)
+		{
+			prop |= RoleProp.UseVent;
+		}
+		if (option.Admin)
+		{
+			prop |= RoleProp.CanUseAdmin;
+		}
+		if (option.Security)
+		{
+			prop |= RoleProp.CanUseSecurity;
+		}
+		if (option.Vital)
+		{
+			prop |= RoleProp.CanUseVital;
+		}
+		return prop;
+	}
 }
 
 public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
@@ -634,10 +656,10 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 	public Lawbreaker(
 		IOptionLoader loader,
 		Option option) : base(
-			RoleCore.BuildNeutral(
+			RoleArgs.BuildNeutral(
 				ExtremeRoleId.Lawbreaker,
-				ColorPalette.LowbreakerNoir),
-			option.Kill, false, option.Vent, option.Sab)
+				ColorPalette.LowbreakerNoir,
+				createLawbreakerProp(option)))
 	{
 
 		this.Loader = loader;
@@ -677,5 +699,23 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 			return;
 		}
 		winner.AddWithPlus(rolePlayerInfo);
+	}
+
+	private static RoleProp createLawbreakerProp(Option option)
+	{
+		var prop = RolePropPresets.OptionalDefault;
+		if (option.Kill)
+		{
+			prop |= RoleProp.CanKill;
+		}
+		if (option.Vent)
+		{
+			prop |= RoleProp.UseVent;
+		}
+		if (option.Sab)
+		{
+			prop |= RoleProp.UseSabotage;
+		}
+		return prop;
 	}
 }

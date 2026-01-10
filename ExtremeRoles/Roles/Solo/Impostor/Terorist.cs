@@ -37,8 +37,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
 	private bool canActiveOtherSabotage;
 
     public Terorist() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Terorist),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Terorist))
     { }
 
     public void CreateAbility()

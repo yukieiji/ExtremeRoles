@@ -33,10 +33,10 @@ public sealed class FurryRole : SingleRoleBase,
 	private bool isUpdate;
 
 	public FurryRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Furry,
-			ColorPalette.JackalBlue),
-		false, false, false, false)
+			ColorPalette.JackalBlue,
+            RolePropPresets.OptionalDefault))
 	{ }
 
 	public void HookMuderPlayer(PlayerControl _, PlayerControl target)

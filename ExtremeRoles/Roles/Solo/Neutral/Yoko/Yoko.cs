@@ -67,11 +67,10 @@ public sealed class YokoRole :
 	public ExtremeAbilityButton? Button { get; set; }
 
 	public YokoRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Yoko,
-			ColorPalette.YokoShion),
-        false, false, false, false,
-        true, false, true, false, false)
+			ColorPalette.YokoShion,
+            RoleProp.CanCallMeeting | RoleProp.CanUseAdmin))
     {
     }
 

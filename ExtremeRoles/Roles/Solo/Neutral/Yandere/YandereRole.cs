@@ -162,10 +162,10 @@ public sealed class YandereRole :
     }
 
     public YandereRole(): base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Yandere,
-			ColorPalette.YandereVioletRed),
-        false, false, true, false)
+			ColorPalette.YandereVioletRed,
+            RoleProp.UseVent | RolePropPresets.OptionalDefault))
     { }
 
     public static void SetOneSidedLover(

@@ -36,8 +36,7 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 		bool IncludeSpawnPoint);
 
     public Magician() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Magician),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Magician))
     { }
 
     public void CreateAbility()

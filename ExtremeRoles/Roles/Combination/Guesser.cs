@@ -431,11 +431,10 @@ public sealed class Guesser :
 
 	public Guesser(
         ) : base(
-			RoleCore.BuildCrewmate(
+			RoleArgs.BuildCrewmate(
 				ExtremeRoleId.Guesser,
 				ColorPalette.GuesserRedYellow),
-            false, true, false, false,
-            tab: OptionTab.CombinationTab)
+			OptionTab.CombinationTab)
     { }
 
     private static void missGuess()

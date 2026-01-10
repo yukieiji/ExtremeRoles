@@ -35,8 +35,7 @@ public sealed class Slime :
 	private bool seeMorphMerlin = false;
 
     public Slime() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Slime),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Slime))
     { }
 
     public static void Ability(ref MessageReader reader)

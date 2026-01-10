@@ -128,8 +128,7 @@ public sealed class Hypnotist :
 		"ExtremeRoles.Resources.JsonData.HypnotistAbilityPartPosition.json";
 
 	public Hypnotist() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Hypnotist),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Hypnotist))
     { }
 #pragma warning restore CS8618
 
@@ -969,12 +968,10 @@ public sealed class Doll :
         byte dollPlayerId,
         byte hypnotistPlayerId,
         Hypnotist parent) : base(
-			RoleCore.BuildNeutral(
+			RoleArgs.BuildNeutral(
 				ExtremeRoleId.Doll,
-				Palette.ImpostorRed),
-			false, false, false,
-			false, false, false,
-			false, false, false)
+				Palette.ImpostorRed,
+            RoleProp.None))
     {
         this.dollPlayerId = dollPlayerId;
         this.hypnotistPlayerId = hypnotistPlayerId;
