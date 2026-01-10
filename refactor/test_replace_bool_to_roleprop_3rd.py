@@ -1,6 +1,8 @@
 import unittest
-from refactor_constructors import refactor_constructor, PROPS
+from refactor.replace_bool_to_roleprop_3rd import refactor_constructor, PROPS
 from hypothesis import given, strategies as st, settings
+
+
 
 class TestRefactorConstructors(unittest.TestCase):
 
