@@ -127,8 +127,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         if (this.Button == null ||
             this.modeFactory == null) { return false; }
 
-        this.tmpTarget = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this, this.range);
+        this.tmpTarget = Player.GetClosestPlayerInRange(this.range);
 
         this.targetDeadBody = Player.GetDeadBodyInfo(
             this.range);

@@ -311,8 +311,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
             AbilityType.Scribe =>
                 IRoleAbility.IsCommonUse(),
             AbilityType.SelfBomb =>
-                Player.GetClosestPlayerInRange(
-                    PlayerControl.LocalPlayer, this, this.range) != null,
+                Player.GetClosestPlayerInRange(this.range) != null,
             _ => true
         };
     }
