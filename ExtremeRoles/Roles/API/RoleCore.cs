@@ -1,3 +1,4 @@
+using ExtremeRoles.Module;
 using UnityEngine;
 
 namespace ExtremeRoles.Roles.API;
@@ -27,8 +28,8 @@ public sealed class RoleCore(ExtremeRoleId id, ExtremeRoleType team, Color color
 	public static RoleCore BuildCrewmate(ExtremeRoleId id, Color color)
 		=> new RoleCore(id, ExtremeRoleType.Crewmate, color);
 
-	public static RoleCore BuildLiberal(ExtremeRoleId id, Color color)
-		=> new RoleCore(id, ExtremeRoleType.Liberal, color);
+	public static RoleCore BuildLiberal(ExtremeRoleId id)
+		=> new RoleCore(id, ExtremeRoleType.Liberal, ColorPalette.LiberalColor);
 
 	public static RoleCore BuildNeutral(ExtremeRoleId id, Color color)
 		=> new RoleCore(id, ExtremeRoleType.Neutral, color);

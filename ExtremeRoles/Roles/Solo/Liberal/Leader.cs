@@ -142,12 +142,9 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		LeaderCoreOption leaderCoreOption,
 		LiberalDefaultOptionLoader option,
 		LeaderStatus status) : base(
-		RoleCore.BuildLiberal(
-			ExtremeRoleId.Leader,
-			ColorPalette.LiberalColor),
-		leaderCoreOption.CanKill,
-		leaderCoreOption.HasTask,
-		false, false)
+		new RoleArgs(
+			RoleCore.BuildLiberal(ExtremeRoleId.Leader),
+			createLeaderProp(leaderCoreOption)))
 	{
 		this.visual = visual;
 		this.status = status;
@@ -320,5 +317,19 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		{
 			this.doveHandler?.ClearTask(rolePlayer);
 		}
+	}
+
+	private static RoleProp createLeaderProp(LeaderCoreOption leaderCoreOption)
+	{
+		var leaderProp = RolePropPresets.OptionalDefault;
+		if (leaderCoreOption.CanKill)
+		{
+			leaderProp |= RoleProp.CanKill;
+		}
+		if (leaderCoreOption.HasTask)
+		{
+			leaderProp |= RoleProp.HasTask;
+		}
+		return leaderProp;
 	}
 }

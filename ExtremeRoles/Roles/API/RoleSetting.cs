@@ -33,6 +33,12 @@ public static class RolePropPresets
 		RoleProp.UseSabotage |
 		OptionalDefault;
 
+	public const RoleProp LiberalDoveDefault = 
+		RoleProp.HasTask | OptionalDefault;
+
+	public const RoleProp LiberalMilitantDefault =
+		RoleProp.CanKill | OptionalDefault;
+
 	public const RoleProp OptionalDefault =
 		RoleProp.CanCallMeeting |
 		RoleProp.CanRepairSabotage |
