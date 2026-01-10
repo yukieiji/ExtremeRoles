@@ -4,8 +4,7 @@ from apply_presets import (
     apply_role_prop_presets,
     CREWMATE_DEFAULT_FLAGS,
     IMPOSTOR_DEFAULT_FLAGS,
-    NEUTRAL_DEFAULT_FLAGS,
-    LIBERAL_DEFAULT_FLAGS,
+    OPTIONAL_DEFAULT_FLAGS,
 )
 from hypothesis import given, strategies as st
 
@@ -170,12 +169,12 @@ class TestApplyRolePropPresets(unittest.TestCase):
 
     def test_neutral_singleline(self):
         source = "base(RoleArgs.BuildNeutral(id, RoleProp.CanCallMeeting | RoleProp.CanRepairSabotage | RoleProp.CanUseAdmin | RoleProp.CanUseSecurity | RoleProp.CanUseVital))"
-        expected = "base(RoleArgs.BuildNeutral(id, RolePropPresets.NeutralDefault))"
+        expected = "base(RoleArgs.BuildNeutral(id, RolePropPresets.OptionalDefault))"
         self.assertEqual(apply_role_prop_presets(source), expected)
 
     def test_liberal_singleline(self):
         source = "base(RoleArgs.BuildLiberal(id, RoleProp.CanCallMeeting | RoleProp.CanRepairSabotage | RoleProp.CanUseAdmin | RoleProp.CanUseSecurity | RoleProp.CanUseVital))"
-        expected = "base(RoleArgs.BuildLiberal(id, RolePropPresets.LiberalDefault))"
+        expected = "base(RoleArgs.BuildLiberal(id, RolePropPresets.OptionalDefault))"
         self.assertEqual(apply_role_prop_presets(source), expected)
 
     @given(flags=role_prop_flags_strategy())
@@ -192,8 +191,8 @@ class TestApplyRolePropPresets(unittest.TestCase):
 
         result = apply_role_prop_presets(source)
 
-        if set(flags) == NEUTRAL_DEFAULT_FLAGS:
-            self.assertIn("RolePropPresets.NeutralDefault", result)
+        if set(flags) == OPTIONAL_DEFAULT_FLAGS:
+            self.assertIn("RolePropPresets.OptionalDefault", result)
         else:
             self.assertEqual(source, result)
 
@@ -211,8 +210,8 @@ class TestApplyRolePropPresets(unittest.TestCase):
 
         result = apply_role_prop_presets(source)
 
-        if set(flags) == LIBERAL_DEFAULT_FLAGS:
-            self.assertIn("RolePropPresets.LiberalDefault", result)
+        if set(flags) == OPTIONAL_DEFAULT_FLAGS:
+            self.assertIn("RolePropPresets.OptionalDefault", result)
         else:
             self.assertEqual(source, result)
 
