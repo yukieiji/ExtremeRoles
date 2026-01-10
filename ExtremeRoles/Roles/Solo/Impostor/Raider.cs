@@ -231,8 +231,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	}
 
     public Raider() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Raider),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Raider))
     { }
 
     public void CreateAbility()
