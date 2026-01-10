@@ -6,7 +6,7 @@ import sys
 # ロギングの設定
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
-def find_balanced_parens_content(text: str, start_pos: int) -> (str, int):
+def find_balanced_parens_content(text: str, start_pos: int) -> tuple[str, int]:
     """
     指定された開始位置（通常は'('の直後）から、対応する閉じ括弧までの内容を抽出します。
     """
