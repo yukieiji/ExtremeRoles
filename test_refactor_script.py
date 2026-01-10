@@ -1,98 +1,153 @@
 import unittest
-import os
-import tempfile
-import shutil
+from refactor_constructors import refactor_constructor, PROPS
+from hypothesis import given, strategies as st, settings
 
-# Assuming refactor_constructors.py is in the same directory
-from refactor_constructors import refactor_content, refactor_csharp_files
+class TestRefactorConstructors(unittest.TestCase):
 
-class TestRefactorScript(unittest.TestCase):
+    def test_single_role_base_refactoring(self):
+        content = """
+// SingleRoleBase
+public Teleporter() : base(
+    RoleArgs.BuildCrewmate(
+        ExtremeRoleId.Teleporter,
+        ColorPalette.TeleporterCherry),
+    false, true, false, false,
+    true, true, true, true, true)
+{ }
+        """
+        expected = """
+// SingleRoleBase
+public Teleporter() : base(
+    RoleArgs.BuildCrewmate(
+        ExtremeRoleId.Teleporter,
+        ColorPalette.TeleporterCherry,
+            RoleProp.HasTask |
+            RoleProp.CanCallMeeting |
+            RoleProp.CanRepairSabotage |
+            RoleProp.CanUseAdmin |
+            RoleProp.CanUseSecurity |
+            RoleProp.CanUseVital))
+{ }
+        """
+        result_content, _ = refactor_constructor(content)
+        self.assertEqual(
+            " ".join(result_content.split()),
+            " ".join(expected.split())
+        )
 
-    def test_refactor_content_single_occurrence(self):
-        """Tests that a single instance of RoleCore.Build is replaced."""
-        original = 'public Teleporter() : base(RoleCore.BuildCrewmate(...))'
-        expected = 'public Teleporter() : base(RoleArgs.BuildCrewmate(...))'
-        self.assertEqual(refactor_content(original), expected)
+    def test_multi_assign_role_base_refactoring(self):
+        content = """
+// MultiAssignRoleBase
+ public Assassin() : base(
+        RoleArgs.BuildImpostor(ExtremeRoleId.Assassin),
+         true, false, true, true,
+         true, true, true, true, true,
+         tab: OptionTab.CombinationTab)
+ {
+ }
+        """
+        expected = """
+// MultiAssignRoleBase
+ public Assassin() : base(
+    RoleArgs.BuildImpostor(ExtremeRoleId.Assassin,
+            RoleProp.CanKill |
+            RoleProp.UseVent |
+            RoleProp.UseSabotage |
+            RoleProp.CanCallMeeting |
+            RoleProp.CanRepairSabotage |
+            RoleProp.CanUseAdmin |
+            RoleProp.CanUseSecurity |
+            RoleProp.CanUseVital),
+         tab: OptionTab.CombinationTab)
+ {
+ }
+        """
+        result_content, _ = refactor_constructor(content)
+        self.assertEqual(
+            " ".join(result_content.split()),
+            " ".join(expected.split())
+        )
 
-    def test_refactor_content_no_occurrence(self):
-        """Tests that the content remains unchanged if the target string is not present."""
-        original = 'public class MyClass { }'
-        self.assertEqual(refactor_content(original), original)
+    def test_no_change_for_already_refactored(self):
+        content = """
+public Teleporter() : base(
+    RoleArgs.BuildCrewmate(
+        ExtremeRoleId.Teleporter,
+        ColorPalette.TeleporterCherry,
+            RoleProp.HasTask |
+            RoleProp.CanCallMeeting))
+{ }
+        """
+        result_content, changes = refactor_constructor(content)
+        self.assertEqual(content, result_content)
+        self.assertEqual(changes, 0)
 
-    def test_refactor_content_multiple_occurrences(self):
-        """Tests that all instances of RoleCore.Build are replaced."""
-        original = '''
-        var args1 = RoleCore.BuildImpostor(id);
-        // Some comments
-        var args2 = RoleCore.BuildCrewmate(id, color);
-        '''
-        expected = '''
-        var args1 = RoleArgs.BuildImpostor(id);
-        // Some comments
-        var args2 = RoleArgs.BuildCrewmate(id, color);
-        '''
-        self.assertEqual(refactor_content(original), expected)
+    def test_real_assassin_constructor(self):
+        content = """
+ public Assassin() : base(
+        RoleCore.BuildImpostor(ExtremeRoleId.Assassin),
+         true, false, true, true,
+         tab: OptionTab.CombinationTab)
+ {
+ }
+        """
+        expected = """
+ public Assassin() : base(
+    RoleArgs.BuildImpostor(ExtremeRoleId.Assassin,
+            RoleProp.CanKill |
+            RoleProp.UseVent |
+            RoleProp.UseSabotage |
+            RoleProp.CanCallMeeting |
+            RoleProp.CanRepairSabotage |
+            RoleProp.CanUseAdmin |
+            RoleProp.CanUseSecurity |
+            RoleProp.CanUseVital),
+         tab: OptionTab.CombinationTab)
+ {
+ }
+        """
+        result_content, _ = refactor_constructor(content)
+        self.assertEqual(
+            " ".join(result_content.split()),
+            " ".join(expected.split())
+        )
 
-    def test_refactor_content_empty_string(self):
-        """Tests that an empty string is handled correctly."""
-        self.assertEqual(refactor_content(""), "")
+    @given(st.lists(st.booleans(), min_size=2, max_size=9), st.sampled_from(["RoleArgs", "RoleCore"]), st.booleans())
+    @settings(max_examples=50, deadline=None) # Keep the test run time reasonable, remove deadline for CI
+    def test_property_based_refactoring(self, bools, builder_type, has_tab):
+        # Dynamically build the input C# code string
+        bool_str = ", ".join(str(b).lower() for b in bools)
+        tab_str = ", tab: OptionTab.CombinationTab" if has_tab else ""
 
-class TestRefactorFileSystem(unittest.TestCase):
+        input_code = f"""
+        public MyRole() : base(
+            {builder_type}.BuildCrewmate(ExtremeRoleId.MyRole),
+            {bool_str}{tab_str})
+        {{ }}
+        """
 
-    def setUp(self):
-        """Set up a temporary directory for file system tests."""
-        self.test_dir = tempfile.mkdtemp()
+        result_content, changes = refactor_constructor(input_code)
 
-    def tearDown(self):
-        """Clean up the temporary directory after tests."""
-        shutil.rmtree(self.test_dir)
+        self.assertEqual(changes, 1)
+        self.assertIn("RoleArgs.BuildCrewmate", result_content)
 
-    def _create_file(self, filename, content):
-        """Helper function to create a file in the temporary directory."""
-        filepath = os.path.join(self.test_dir, filename)
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(content)
-        return filepath
+        # Verify that the correct props are present
+        for i, prop in enumerate(PROPS):
+            # The prop should be present if its corresponding boolean was true
+            is_prop_present = prop in result_content
 
-    def test_modifies_correct_file(self):
-        """Tests that a file with the target string is modified."""
-        content = "base(RoleCore.BuildCrewmate())"
-        filepath = self._create_file("Target.cs", content)
+            if i < len(bools):
+                # This prop was explicitly specified
+                self.assertEqual(is_prop_present, bools[i])
+            else:
+                # Props not specified in a partial list are defaulted to true
+                self.assertTrue(is_prop_present)
 
-        refactor_csharp_files(self.test_dir)
+        if has_tab:
+            self.assertIn("tab: OptionTab.CombinationTab", result_content)
+        else:
+            self.assertNotIn("tab: OptionTab.CombinationTab", result_content)
 
-        with open(filepath, 'r', encoding='utf-8') as f:
-            new_content = f.read()
 
-        self.assertEqual(new_content, "base(RoleArgs.BuildCrewmate())")
-
-    def test_does_not_modify_unrelated_file(self):
-        """Tests that a file without the target string is not modified."""
-        content = "class Unrelated {}"
-        filepath = self._create_file("Unrelated.cs", content)
-
-        refactor_csharp_files(self.test_dir)
-
-        with open(filepath, 'r', encoding='utf-8') as f:
-            new_content = f.read()
-
-        self.assertEqual(new_content, content)
-
-    def test_skips_excluded_files(self):
-        """Tests that RoleCore.cs and RoleArgs.cs are skipped even if they contain the target."""
-        rolecore_content = "public static RoleCore BuildImpostor() => RoleCore.BuildImpostor();"
-        roleargs_content = "public static RoleArgs BuildImpostor() => new RoleArgs(RoleCore.BuildImpostor());"
-
-        rolecore_path = self._create_file("RoleCore.cs", rolecore_content)
-        roleargs_path = self._create_file("RoleArgs.cs", roleargs_content)
-
-        refactor_csharp_files(self.test_dir)
-
-        with open(rolecore_path, 'r', encoding='utf-8') as f:
-            self.assertEqual(f.read(), rolecore_content)
-
-        with open(roleargs_path, 'r', encoding='utf-8') as f:
-            self.assertEqual(f.read(), roleargs_content)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
