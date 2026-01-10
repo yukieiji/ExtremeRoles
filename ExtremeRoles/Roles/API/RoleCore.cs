@@ -1,5 +1,6 @@
-using ExtremeRoles.Module;
 using UnityEngine;
+
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles.API;
 
