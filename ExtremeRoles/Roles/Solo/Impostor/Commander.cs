@@ -36,8 +36,7 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility, ITryKillT
     private int killCount;
 
     public Commander() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Commander),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Commander))
     { }
 
     public static void AttackCommad(byte rolePlayerId)

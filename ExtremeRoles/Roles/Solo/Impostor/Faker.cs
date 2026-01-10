@@ -32,8 +32,7 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 	private string playerDummyStr;
 
 	public Faker() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Faker),
-		true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Faker))
 	{ }
 
 	public void CreateAbility()

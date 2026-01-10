@@ -46,8 +46,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
     private ExtremeAbilityButton evolveButton;
 
     public Evolver() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Evolver),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Evolver))
     {
         this.isEatingEndCleanBody = false;
     }
