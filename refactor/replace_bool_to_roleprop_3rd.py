@@ -57,10 +57,11 @@ def refactor_constructor(content):
 
         # Rebuild the constructor call
         # Ensure RoleCore is replaced with RoleArgs
-        new_role_build = role_build_part.replace("RoleCore.Build", "RoleArgs.Build")
+        # 多分いらないはず・・・
+        # new_role_build = role_build_part.replace("RoleCore.Build", "RoleArgs.Build")
 
         # Insert the props string into the build call
-        new_role_build = new_role_build.rstrip(')') + f",\n            {props_str})"
+        new_role_build = role_build_part.rstrip(')') + f",\n            {props_str})"
 
         # Handle the remainder (e.g., "tab: ...")
         # Add the comma back only if there's a remainder.
