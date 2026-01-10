@@ -14,11 +14,10 @@ public sealed class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 {
 	private Dictionary<byte, DateTime> deadBodyInfo;
 	public Assistant() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Assistant,
-			ColorPalette.AssistantBluCapri),
-		false, true, false, false,
-		tab: OptionTab.CombinationTab)
+			ColorPalette.AssistantBluCapri), 
+		OptionTab.CombinationTab)
 	{ }
 
 	public void AllReset(PlayerControl rolePlayer)
