@@ -1,4 +1,4 @@
-﻿name: AutoBuildAndTransCheck
+name: AutoBuildAndTransCheck
 
 
 on:
@@ -21,7 +21,7 @@ jobs:
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{github.event.pull_request.head.repo.full_name}}
