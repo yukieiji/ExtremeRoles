@@ -39,7 +39,7 @@ jobs:
       - name: InstallPythonLibrary
         run: pip install -r requirements.txt
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.x
       - name: AddMsBuildToPATH
