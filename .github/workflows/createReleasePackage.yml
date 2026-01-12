@@ -34,27 +34,27 @@ jobs:
         run: ./packing.ps1
 
       # ExtremeRoles.zip
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: "ExtremeRoles-v${{ github.event.inputs.versions }}"
           path: ./workspace/ExtremeRoles/
       # ExtremeRoles-v with skins.zip
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: "ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins"
           path: ./workspace/ExtremeRolesWithSkins/
       # STEAM_ONLY_ExtremeRoles.zip
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: "STEAM_ONLY_ExtremeRoles-v${{ github.event.inputs.versions }}"
           path: ./workspace/Steam_ExtremeRoles/
       # - STEAM_ExtremeRoles-v with skins.zip
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: "STEAM_ONLY_ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins"
           path: ./workspace/Steam_ExtremeRolesWithSkins/
       # Mod zip Only
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: ExtremeRolesModOnly
           path: ./workspace/dll/
