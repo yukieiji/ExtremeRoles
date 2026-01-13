@@ -32,7 +32,7 @@ public sealed class Xorshiro512StarStar : RNG64Base
 		}
 		while ((state0 | state1 | state2 | state3 | state4 | state5 | state6 | state7) == 0); // at least one value must be non-zero
 
-		InitState = $"s0:{state0}, s1:{state1}, s2:{state2}, s3:{state3}, s4:{state4}, s5:{state1}, s6:{state6}, s7:{state7}";
+		InitState = $"s0:{state0}, s1:{state1}, s2:{state2}, s3:{state3}, s4:{state4}, s5:{state5}, s6:{state6}, s7:{state7}";
 	}
 
 	public override ulong NextUInt64()
