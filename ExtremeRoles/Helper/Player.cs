@@ -78,7 +78,7 @@ public static class Player
         return null;
     }
 
-	public static bool TryGetlayerControl(byte id, [NotNullWhen(true)] out PlayerControl? result)
+	public static bool TryGetPlayerControl(byte id, [NotNullWhen(true)] out PlayerControl? result)
 	{
 		foreach (var player in PlayerCache.AllPlayerControl)
 		{
@@ -96,7 +96,7 @@ public static class Player
 
 	public static bool TryGetPlayerInfo(byte id, [NotNullWhen(true)] out NetworkedPlayerInfo? player)
 	{
-		if (GameData.Instance != null)
+		if (GameData.Instance == null)
 		{
 			player = null;
 			return false;
