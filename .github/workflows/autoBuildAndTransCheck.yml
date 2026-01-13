@@ -1,4 +1,4 @@
-﻿name: AutoBuildAndTransCheck
+name: AutoBuildAndTransCheck
 
 
 on:
@@ -21,7 +21,7 @@ jobs:
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{github.event.pull_request.head.repo.full_name}}
@@ -31,7 +31,7 @@ jobs:
       - name: RestoreNugetPackage
         run: nuget restore ExtremeRoles.sln
       - name: SetupPython
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           architecture: 'x64'
@@ -39,7 +39,7 @@ jobs:
       - name: InstallPythonLibrary
         run: pip install -r requirements.txt
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.x
       - name: AddMsBuildToPATH
