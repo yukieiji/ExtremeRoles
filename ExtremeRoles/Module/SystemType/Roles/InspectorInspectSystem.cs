@@ -109,7 +109,10 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 	private static void checkInspectToLocalPlayer(InspectMode mode)
 	{
 		var local = PlayerControl.LocalPlayer;
-		if (local == null)
+		if (local == null ||
+			local.Data == null ||
+			local.Data.IsDead ||
+			local.Data.Disconnected)
 		{
 			return;
 		}
@@ -201,7 +204,10 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 	private void addTarget(byte targetId)
 	{
 		var targetPc = Player.GetPlayerControlById(targetId);
-		if (targetPc == null)
+		if (targetPc == null ||
+			targetPc.Data == null ||
+			targetPc.Data.Disconnected ||
+			targetPc.Data.IsDead)
 		{
 			return;
 		}
