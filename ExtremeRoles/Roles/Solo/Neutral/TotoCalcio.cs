@@ -92,7 +92,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
 		}
 
 		return 
-			this.betPlayer != null && 
+			this.betPlayer == null || 
 			this.tmpTarget.Data.PlayerId != this.betPlayer.PlayerId;
     }
 
