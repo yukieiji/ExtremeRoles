@@ -78,6 +78,35 @@ public static class Player
         return null;
     }
 
+	public static bool TryGetlayerControl(byte id, [NotNullWhen(true)] out PlayerControl? result)
+	{
+		foreach (var player in PlayerCache.AllPlayerControl)
+		{
+			if (player != null &&
+				player.PlayerId == id)
+			{
+				result = player;
+				return true;
+			}
+		}
+
+		result = null;
+		return false;
+	}
+
+	public static bool TryGetPlayerInfo(byte id, [NotNullWhen(true)] out NetworkedPlayerInfo? player)
+	{
+		if (GameData.Instance != null)
+		{
+			player = null;
+			return false;
+		}
+
+		player = GameData.Instance.GetPlayerById(id);
+
+		return player != null;
+	}
+
     public static Console GetClosestConsole(PlayerControl player, float radius)
     {
         Console closestConsole = null;
