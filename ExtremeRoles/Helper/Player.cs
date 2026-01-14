@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using System.Linq;
 
 
 namespace ExtremeRoles.Helper;
@@ -80,18 +81,8 @@ public static class Player
 
 	public static bool TryGetPlayerControl(byte id, [NotNullWhen(true)] out PlayerControl? result)
 	{
-		foreach (var player in PlayerCache.AllPlayerControl)
-		{
-			if (player != null &&
-				player.PlayerId == id)
-			{
-				result = player;
-				return true;
-			}
-		}
-
-		result = null;
-		return false;
+		result = PlayerCache.AllPlayerControl.FirstOrDefault(x => x != null && x.PlayerId == id);
+		return result != null;
 	}
 
 	public static bool TryGetPlayerInfo(byte id, [NotNullWhen(true)] out NetworkedPlayerInfo? player)
