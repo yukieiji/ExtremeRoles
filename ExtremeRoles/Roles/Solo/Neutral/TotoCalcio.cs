@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Resources;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 
 #nullable enable
 
@@ -59,13 +58,11 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     public static void SetBetTarget(
         byte rolePlayerId, byte betTargetPlayerId)
     {
-        var totocalcio =  ExtremeRoleManager.GetSafeCastedRole<Totocalcio>(rolePlayerId);
-		var target = GameData.Instance.GetPlayerById(betTargetPlayerId);
-        if (totocalcio != null &&
-			target != null)
-        {
-            totocalcio.betPlayer = new BetPlayerInfo(target);
-        }
+		if (ExtremeRoleManager.TryGetSafeCastedRole<Totocalcio>(rolePlayerId, out var totocalcio) &&
+			Player.TryGetPlayerInfo(betTargetPlayerId, out var player))
+		{
+			totocalcio.betPlayer = new BetPlayerInfo(player);
+		}
     }
 
     public void CreateAbility()
@@ -78,24 +75,25 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
 
     public bool IsAbilityUse()
     {
-        this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
+        this.tmpTarget = Player.GetClosestPlayerInRange(
             PlayerControl.LocalPlayer, this,
             this.range);
 
         if (this.tmpTarget == null ||
-            this.tmpTarget.Data == null) { return false; }
+            this.tmpTarget.Data == null)
+		{
+			return false;
+		}
 
         bool commonUse = IRoleAbility.IsCommonUse();
+		if (!commonUse)
+		{
+			return false;
+		}
 
-        if (this.betPlayer != null)
-        {
-            return commonUse &&
-                this.tmpTarget.Data.PlayerId != this.betPlayer.PlayerId;
-        }
-        else
-        {
-            return commonUse;
-        }
+		return 
+			this.betPlayer == null || 
+			this.tmpTarget.Data.PlayerId != this.betPlayer.PlayerId;
     }
 
     public void ModifiedWinPlayer(
@@ -121,27 +119,42 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
 
     public void ResetOnMeetingStart()
     {
-        if (this.Button == null) { return; }
+        if (this.Button == null)
+		{
+			return;
+		}
 
         int deadNum = 0;
 
         foreach (var player in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
-            if (player.IsDead || player.Disconnected) { ++deadNum; }
+            if (player == null ||
+				player.IsDead || 
+				player.Disconnected)
+			{
+				++deadNum;
+			}
         }
 
-        if (deadNum == 0) { return; }
+        if (deadNum == 0)
+		{
+			return;
+		}
 
         this.Button.Behavior.SetCoolTime(
             this.defaultCoolTime + (
                 (this.finalCoolTime - this.defaultCoolTime) * ((float)deadNum / (float)GameData.Instance.PlayerCount)));
-        this.Button.OnMeetingEnd();
+        this.Button.OnMeetingEnd(); // クールタイムを強制リセット
+		this.Button.OnMeetingStart(); // もう一回非表示へ
     }
 
     public bool UseAbility()
     {
-        if (this.tmpTarget == null) { return false; }
+        if (this.tmpTarget == null)
+		{ 
+			return false;
+		}
 
         byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
@@ -169,12 +182,14 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     public override string GetRolePlayerNameTag(
         SingleRoleBase targetRole, byte targetPlayerId)
     {
-        if (this.betPlayer == null) { return ""; }
+        if (this.betPlayer == null)
+		{
+			return "";
+		}
 
         if (targetPlayerId == this.betPlayer.PlayerId)
         {
-            return Helper.Design.ColoredString(
-                this.Core.Color, $" ▲");
+            return Design.ColoredString(this.Core.Color, $" ▲");
         }
 
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);

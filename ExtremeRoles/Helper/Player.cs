@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using System.Linq;
 
 
 namespace ExtremeRoles.Helper;
@@ -77,6 +78,25 @@ public static class Player
         }
         return null;
     }
+
+	public static bool TryGetPlayerControl(byte id, [NotNullWhen(true)] out PlayerControl? result)
+	{
+		result = PlayerCache.AllPlayerControl.FirstOrDefault(x => x != null && x.PlayerId == id);
+		return result != null;
+	}
+
+	public static bool TryGetPlayerInfo(byte id, [NotNullWhen(true)] out NetworkedPlayerInfo? player)
+	{
+		if (GameData.Instance == null)
+		{
+			player = null;
+			return false;
+		}
+
+		player = GameData.Instance.GetPlayerById(id);
+
+		return player != null;
+	}
 
     public static Console GetClosestConsole(PlayerControl player, float radius)
     {
