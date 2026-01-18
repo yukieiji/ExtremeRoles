@@ -227,7 +227,8 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 			{
 				string roleName =
 					ExtremeRoleManager.NormalRole.TryGetValue((int)roleId, out var role) &&
-					role is not null ? role.GetColoredRoleName(true) : string.Empty;
+					role is not null ? role.GetColoredRoleName(true) : 
+					$"<color=#F9F06F>{Tr.GetString(roleId.ToString())}</color>";
 				createFilterItem(parent, roleName, filterId, id);
 			}
 			foreach (var (id, roleId) in filter.FilterCombinationId)
