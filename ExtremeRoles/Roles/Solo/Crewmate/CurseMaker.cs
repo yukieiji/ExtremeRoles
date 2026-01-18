@@ -320,7 +320,7 @@ public sealed class CurseMaker :
         var taskBoostOpt = factory.CreateBoolOption(
             CurseMakerOption.IsReduceSearchForTask,
             false, searchDeadBodyOptActive);
-		var taskBoostOptActive = new InvertActive(taskBoostOpt);
+		var taskBoostOptActive = new ParentActive(taskBoostOpt);
 
 		factory.CreateIntOption(
             CurseMakerOption.ReduceSearchTaskGage,
