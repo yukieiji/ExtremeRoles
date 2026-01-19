@@ -2,20 +2,16 @@ using System;
 using System.Collections.Generic;
 
 using UnityEngine;
-using AmongUs.GameOptions;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
-using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -320,7 +316,7 @@ public sealed class CurseMaker :
         var taskBoostOpt = factory.CreateBoolOption(
             CurseMakerOption.IsReduceSearchForTask,
             false, searchDeadBodyOptActive);
-		var taskBoostOptActive = new InvertActive(taskBoostOpt);
+		var taskBoostOptActive = new ParentActive(taskBoostOpt);
 
 		factory.CreateIntOption(
             CurseMakerOption.ReduceSearchTaskGage,

@@ -305,13 +305,15 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>会議中に「ガード」が使用できるタスク進捗率</value>
   </data>
   <data name="BodyGuardFeatMeetingReportTaskGage" xml:space="preserve">
-    <value>会議でボディーガードの「殉職」が報告されるタスク進捗率</value>
+    <value>会議でボディーガードの「殉職」が
+報告されるタスク進捗率</value>
   </data>
   <data name="BodyGuardIsReportPlayerName" xml:space="preserve">
-    <value>「殉職」が報告される際にプレイヤー名が表示されるか</value>
+    <value>「殉職」が会議に報告される際
+プレイヤー名が表示されるか</value>
   </data>
   <data name="BodyGuardReportPlayerMode" xml:space="preserve">
-    <value>報告されるプレイヤー名</value>
+    <value>会議中に報告されるプレイヤー名</value>
   </data>
   <data name="BodyGuardIsBlockMeetingKill" xml:space="preserve">
     <value>会議中のキルを防ぐ事ができるか</value>

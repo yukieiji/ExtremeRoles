@@ -8,9 +8,10 @@ using Hazel;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 
-using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.Event;
+using ExtremeRoles.Module.RoleAssign;
 
 
 #nullable enable
@@ -166,6 +167,9 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 				category.IsDirty = true;
 			}
 		}
+		
+		RoleAssignFilter.Instance.SwitchPreset();
+
 		ShareAllOption();
 	}
 
