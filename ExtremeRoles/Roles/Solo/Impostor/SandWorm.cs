@@ -164,9 +164,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility, ITryKillTo
 
     public bool IsAbilityUse()
     {
-        this.targetPlayer = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer,
-            this, this.range);
+        this.targetPlayer = Player.GetClosestPlayerInRange(this.range);
 
         return isVentIn() && this.targetPlayer != null;
     }

@@ -80,9 +80,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
 
     public bool IsAbilityUse()
     {
-        this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this,
-            this.outburstDistance);
+        this.tmpTarget = Helper.Player.GetClosestPlayerInRange(this.outburstDistance);
         return IRoleAbility.IsCommonUse() && this.tmpTarget != null;
     }
 

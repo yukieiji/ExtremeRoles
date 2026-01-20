@@ -188,10 +188,7 @@ public sealed class Foras : GhostRoleBase
     {
         if (!GameProgressSystem.IsTaskPhase) { return false; }
 
-        this.targetPlayer = Helper.Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer,
-            ExtremeRoleManager.GetLocalPlayerRole(),
-            this.range);
+        this.targetPlayer = Helper.Player.GetClosestPlayerInRange(this.range);
 
         return IsCommonUse() && this.targetPlayer != null;
     }
