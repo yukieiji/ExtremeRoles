@@ -250,6 +250,12 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 
 	}
 
+	public override bool IsBlockShowMeetingRoleInfo()
+		=> this.reviver.IsReviving;
+
+	public override bool IsBlockShowPlayingRoleInfo()
+		=> this.reviver.IsReviving;
+
 	public void Update(PlayerControl rolePlayer)
 	{
 		if (!GameProgressSystem.IsGameNow)
