@@ -1393,10 +1393,10 @@
   <data name="LonerIntroDescription" xml:space="preserve">
     <value>小心一触即爆！</value>
   </data>
-  <data name="GamblerMinVoteNum" xml:space="preserve">
+  <data name="GamblerMaxVoteNum" xml:space="preserve">
     <value>最多票数</value>
   </data>
-  <data name="GamblerMaxVoteNum" xml:space="preserve">
+  <data name="GamblerMinVoteNum" xml:space="preserve">
     <value>最少票数</value>
   </data>
   <data name="TeleporterInitAbilityNum" xml:space="preserve">
