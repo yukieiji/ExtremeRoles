@@ -400,7 +400,8 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 			1, 0, 15, 1);
 		factory.CreateFloatOption(
 			Option.YardbirdSpeedMod,
-			0.8f, 0.1f, 1.0f, 0.1f);
+			0.8f, 0.1f, 1.0f, 0.1f,
+			format: OptionUnit.Multiplier);
 
 		factory.CreateBoolOption(
 			Option.YardbirdUseAdmin, false);
