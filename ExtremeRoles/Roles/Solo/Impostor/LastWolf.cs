@@ -265,12 +265,12 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
 
         factory.CreateFloatOption(
             LastWolfOption.DeadPlayerNumBonus,
-            1.0f, 2.0f, 6.5f, 0.1f,
+            2.0f, 0.0f, 6.5f, 0.1f,
             format: OptionUnit.Percentage);
 
         factory.CreateFloatOption(
             LastWolfOption.KillPlayerNumBonus,
-            2.5f, 4.0f, 10.0f, 0.1f,
+            2.5f, 0.0f, 10.0f, 0.1f,
             format: OptionUnit.Percentage);
 
         IRoleAbility.CreateCommonAbilityOption(
