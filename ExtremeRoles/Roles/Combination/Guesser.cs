@@ -43,12 +43,28 @@ public sealed class Guesser :
         CanCallMeeting,
         GuessNum,
         MaxGuessNumWhenMeeting,
-        CanGuessNoneRole,
-        GuessNoneRoleMode,
-    }
+        GuessDefaultRoleMode,
 
-    public enum GuessMode
+		CanCrewmate,
+		CanImpostor,
+		// ニュートラルが追加された時に拡張する予定
+		CanDove,
+		CanMilitant,
+	}
+
+	[Flags]
+	public enum DefaultGuessRole
+	{
+		None = 0,
+		Crewmate = 1 << 0,
+		Impostor = 1 << 1,
+		Dove = 1 << 3,
+		Militant = 1 << 4,
+	}
+
+	public enum GuessMode
     {
+		None,
         BothGuesser,
         NiceGuesserOnly,
         EvilGuesserOnly,
@@ -58,8 +74,9 @@ public sealed class Guesser :
         string.Concat(this.roleNamePrefix, this.Core.Name);
 
     private bool canGuessNoneRole;
+	private DefaultGuessRole defaultGuessRole;
 
-    private int bulletNum;
+	private int bulletNum;
     private int maxGuessNum;
     private int curGuessNum;
 
@@ -91,21 +108,21 @@ public sealed class Guesser :
             public bool IsQueenOn { get; set; } = false;
         };
 
-		public GuesserRoleInfoCreater(bool includeNoneRole)
+		public GuesserRoleInfoCreater(bool includeNoneRole, DefaultGuessRole defaultRole)
 		{
 			this.separetedRoleId = new Dictionary<ExtremeRoleType, List<ExtremeRoleId>>()
 			{
-				{ExtremeRoleType.Crewmate, new List<ExtremeRoleId>() },
-				{ExtremeRoleType.Impostor, new List<ExtremeRoleId>() },
-				{ExtremeRoleType.Neutral , new List<ExtremeRoleId>() },
-				{ExtremeRoleType.Liberal , new List<ExtremeRoleId>() },
+				{ExtremeRoleType.Crewmate, [] },
+				{ExtremeRoleType.Impostor, [] },
+				{ExtremeRoleType.Neutral , [] },
+				{ExtremeRoleType.Liberal , [] },
 			};
 
 			var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
 			bool liberalOn = liberalOption.Get(LiberalGlobalSetting.WinMoney).IsViewActive;
 			bool militantOn = liberalOption.Get(LiberalGlobalSetting.LiberalMilitantMini).IsViewActive;
 
-			addVanillaRole(includeNoneRole, liberalOn, militantOn);
+			addVanillaRole(includeNoneRole, defaultRole, liberalOn, militantOn);
 
 			this.separetedRoleId[ExtremeRoleType.Crewmate].Add((ExtremeRoleId)RoleTypes.Crewmate);
 			this.separetedRoleId[ExtremeRoleType.Impostor].Add((ExtremeRoleId)RoleTypes.Impostor);
@@ -390,23 +407,32 @@ public sealed class Guesser :
 		private bool isInvestigatorOffice(byte checkId)
 			=> checkId == (byte)CombinationRoleType.InvestigatorOffice;
 
-
-		private void addVanillaRole(bool includeNoneRole, bool liberalOn, bool militantOn)
+		private void addVanillaRole(bool includeNoneRole, DefaultGuessRole defaultRole, bool liberalOn, bool militantOn)
         {
             if (!includeNoneRole)
             {
 				return;
             }
 
-			add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
-			add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
+			if (defaultRole.HasFlag(DefaultGuessRole.Crewmate))
+			{
+				add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
+			}
+			if (defaultRole.HasFlag(DefaultGuessRole.Impostor))
+			{
+				add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
+			}
+
 			if (!liberalOn)
 			{
 				return;
 			}
 
-			add(ExtremeRoleId.Dove, ExtremeRoleType.Liberal);
-			if (militantOn)
+			if (defaultRole.HasFlag(DefaultGuessRole.Dove))
+			{
+				add(ExtremeRoleId.Dove, ExtremeRoleType.Liberal);
+			}
+			if (militantOn && defaultRole.HasFlag(ExtremeRoleType.Liberal))
 			{
 				add(ExtremeRoleId.Militant, ExtremeRoleType.Liberal);
 			}
@@ -545,7 +571,7 @@ public sealed class Guesser :
                     this.uiPrefab, MeetingHud.Instance.transform);
                 this.guesserUi = obj.GetComponent<GuesserUi>();
 
-                GuesserRoleInfoCreater creator = new GuesserRoleInfoCreater(this.canGuessNoneRole);
+                var creator = new GuesserRoleInfoCreater(this.canGuessNoneRole, this.defaultGuessRole);
 
                 this.guesserUi.gameObject.SetActive(true);
                 this.guesserUi.InitButton(
@@ -635,12 +661,25 @@ public sealed class Guesser :
             GuesserOption.MaxGuessNumWhenMeeting,
             1, 1, GameSystem.MaxImposterNum, 1,
             format: OptionUnit.Shot);
-        var noneGuessRoleOpt = factory.CreateBoolOption(
-            GuesserOption.CanGuessNoneRole,
-            false);
-        factory.CreateSelectionOption<GuesserOption, GuessMode>(
-            GuesserOption.GuessNoneRoleMode, new ParentActive(noneGuessRoleOpt));
-    }
+
+        var defaultRoleMode = factory.CreateSelectionOption<GuesserOption, GuessMode>(
+            GuesserOption.GuessDefaultRoleMode);
+
+		var parentActive = new ParentActive(defaultRoleMode);
+
+		factory.CreateBoolOption(
+			GuesserOption.CanCrewmate,
+			true, parentActive);
+		factory.CreateBoolOption(
+			GuesserOption.CanImpostor,
+			true, parentActive);
+		factory.CreateBoolOption(
+			GuesserOption.CanDove,
+			true, parentActive);
+		factory.CreateBoolOption(
+			GuesserOption.CanMilitant,
+			true, parentActive);
+	}
 
     protected override void RoleSpecificInit()
     {
@@ -653,13 +692,11 @@ public sealed class Guesser :
         this.CanCallMeeting = loader.GetValue<GuesserOption, bool>(
             GuesserOption.CanCallMeeting);
 
-        bool canGuessNoneRole = loader.GetValue<GuesserOption, bool>(
-            GuesserOption.CanGuessNoneRole);
-        GuessMode guessMode = (GuessMode)loader.GetValue<GuesserOption, int>(
-            GuesserOption.GuessNoneRoleMode);
+        var guessMode = (GuessMode)loader.GetValue<GuesserOption, int>(
+            GuesserOption.GuessDefaultRoleMode);
 
-        this.canGuessNoneRole = canGuessNoneRole &&
-            ((
+        this.canGuessNoneRole = 
+            (
                 guessMode == GuessMode.BothGuesser
             )
             ||
@@ -669,9 +706,31 @@ public sealed class Guesser :
             ||
             (
                 guessMode == GuessMode.EvilGuesserOnly && this.IsImpostor()
-            ));
+            );
+		
+		this.defaultGuessRole = DefaultGuessRole.None;
+		if (loader.GetValue<GuesserOption, bool>(
+			GuesserOption.CanCrewmate))
+		{
+			this.defaultGuessRole |= DefaultGuessRole.Crewmate;
+		}
+		if (loader.GetValue<GuesserOption, bool>(
+			GuesserOption.CanImpostor))
+		{
+			this.defaultGuessRole |= DefaultGuessRole.Impostor;
+		}
+		if (loader.GetValue<GuesserOption, bool>(
+			GuesserOption.CanDove))
+		{
+			this.defaultGuessRole |= DefaultGuessRole.Dove;
+		}
+		if (loader.GetValue<GuesserOption, bool>(
+			GuesserOption.CanMilitant))
+		{
+			this.defaultGuessRole |= DefaultGuessRole.Militant;
+		}
 
-        this.bulletNum = loader.GetValue<GuesserOption, int>(
+		this.bulletNum = loader.GetValue<GuesserOption, int>(
             GuesserOption.GuessNum);
         this.maxGuessNum = loader.GetValue<GuesserOption, int>(
             GuesserOption.MaxGuessNumWhenMeeting);
