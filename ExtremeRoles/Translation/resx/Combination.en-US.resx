@@ -940,12 +940,6 @@ Jackal's "SIDEKICK")</value>
   <data name="GuesserMaxGuessNumWhenMeeting" xml:space="preserve">
     <value>"GUESS" : Ability Charges per meeting</value>
   </data>
-  <data name="GuesserCanGuessNoneRole" xml:space="preserve">
-    <value>"GUESS" : Can guess non-role Crews/Impostors</value>
-  </data>
-  <data name="GuesserGuessNoneRoleMode" xml:space="preserve">
-    <value>"GUESS" : Non-role Crews/Impostors guessing mode</value>
-  </data>
   <data name="BothGuesser" xml:space="preserve">
     <value>BOTH Nice and Evil</value>
   </data>

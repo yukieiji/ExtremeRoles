@@ -64,7 +64,7 @@ public sealed class Guesser :
 
 	public enum GuessMode
     {
-		None,
+		DisableKey,
         BothGuesser,
         NiceGuesserOnly,
         EvilGuesserOnly,
