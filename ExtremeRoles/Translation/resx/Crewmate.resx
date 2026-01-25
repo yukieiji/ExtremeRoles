@@ -1428,7 +1428,7 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>最大票数</value>
   </data>
   <data name="GamblerMinVoteNum" xml:space="preserve">
-    <value>最小標数</value>
+    <value>最小票数</value>
   </data>
   <data name="TeleporterInitAbilityNum" xml:space="preserve">
     <value>「セットポータル」の初期使用回数</value>
