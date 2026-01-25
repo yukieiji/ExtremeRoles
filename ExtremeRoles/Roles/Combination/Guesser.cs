@@ -58,6 +58,7 @@ public sealed class Guesser :
 		None = 0,
 		Crewmate = 1 << 0,
 		Impostor = 1 << 1,
+		// ニュートラルが追加された時に拡張する予定
 		Dove = 1 << 3,
 		Militant = 1 << 4,
 	}
@@ -432,7 +433,7 @@ public sealed class Guesser :
 			{
 				add(ExtremeRoleId.Dove, ExtremeRoleType.Liberal);
 			}
-			if (militantOn && defaultRole.HasFlag(ExtremeRoleType.Liberal))
+			if (militantOn && defaultRole.HasFlag(DefaultGuessRole.Militant))
 			{
 				add(ExtremeRoleId.Militant, ExtremeRoleType.Liberal);
 			}
