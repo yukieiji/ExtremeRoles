@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CrewmateFullDescription" xml:space="preserve">
+    <data name="CrewmateFullDescription" xml:space="preserve">
     <value>完成任務並放逐內鬼</value>
   </data>
   <data name="EngineerFullDescription" xml:space="preserve">
@@ -1291,5 +1291,293 @@
   </data>
   <data name="Summon" xml:space="preserve">
     <value>召喚</value>
+  </data>
+  <data name="Exorcist" xml:space="preserve">
+    <value>驅魔師</value>
+  </data>
+  <data name="ExorcistAwakeTaskGage" xml:space="preserve">
+    <value>驅魔師完成多少任務可在內鬼視角變為紅名</value>
+  </data>
+  <data name="ExorcistAbilityCoolTime" xml:space="preserve">
+    <value>驅魔冷卻時間</value>
+  </data>
+  <data name="ExorcistAbilityActiveTime" xml:space="preserve">
+    <value>驅魔所需時間</value>
+  </data>
+  <data name="ExorcistAbilityCount" xml:space="preserve">
+    <value>可驅魔次數</value>
+  </data>
+  <data name="ExorcistRange" xml:space="preserve">
+    <value>驅魔範圍</value>
+  </data>
+  <data name="ExorcistWithName" xml:space="preserve">
+    <value>驅魔信息中包含死者名字</value>
+  </data>
+  <data name="ExorcistCrewBlockSystemType" xml:space="preserve">
+    <value>驅魔發動時會對他人有影響</value>
+  </data>
+  <data name="ExorcistFullDescription" xml:space="preserve">
+    <value>驅魔師屬於船員陣營
+可以對屍體驅魔獲得信息
+
+完成設定數量的任務可在內鬼視野裡變為紅名，如設定是0%則開局就是紅名
+
+·主動技能“驅魔”
+對屍體進行驅魔，一段時間後屍體將被報告，並在聊天欄出現屍體信息
+如開啟了驅魔發動時對他人有影響，則所有船員陣營都會無法使用技能</value>
+  </data>
+  <data name="ExorcistShortDescription" xml:space="preserve">
+    <value>通過驅魔獲得有用的信息</value>
+  </data>
+  <data name="ExorcistIntroDescription" xml:space="preserve">
+    <value>神聖之劍，劈碎謊言！</value>
+  </data>
+  <data name="ExorcistAbility" xml:space="preserve">
+    <value>驅魔</value>
+  </data>
+  <data name="ExorcistReport" xml:space="preserve">
+    <value>“{0}”的死因是“{1}”，兇手目前的狀態是“{2}”</value>
+  </data>
+  <data name="ExorcistReportWithName" xml:space="preserve">
+    <value>“{1}”被“{0}”殺害了，原因是“{2}”</value>
+  </data>
+  <data name="Loner" xml:space="preserve">
+    <value>地雷系</value>
+  </data>
+  <data name="LonerStressMaxGage" xml:space="preserve">
+    <value>自殺所需壓力值</value>
+  </data>
+  <data name="LonerStressRange" xml:space="preserve">
+    <value>壓力值增長範圍</value>
+  </data>
+  <data name="LonerStressIgnoreTime" xml:space="preserve">
+    <value>會議後不會增長壓力值時間</value>
+  </data>
+  <data name="LonerStressProgressOnTask" xml:space="preserve">
+    <value>做任務時壓力值是否增長</value>
+  </data>
+  <data name="LonerStressProgressOnVentPlayer" xml:space="preserve">
+    <value>附近的管道內有人時
+壓力值是否會上升</value>
+  </data>
+  <data name="LonerStressProgressOnMovingPlatPlayer" xml:space="preserve">
+    <value>附近的梯子上有人時
+壓力值是否會上升</value>
+  </data>
+  <data name="LonerIsShowArrow" xml:space="preserve">
+    <value>是否知曉附近玩家的位置</value>
+  </data>
+  <data name="LonerArrowNum" xml:space="preserve">
+    <value>顯示數量</value>
+  </data>
+  <data name="LonerArrowShowVentPlayer" xml:space="preserve">
+    <value>知曉通風管中是否有人</value>
+  </data>
+  <data name="LonerFullDescription" xml:space="preserve">
+    <value>地雷系屬於船員職業
+當附近有人時地雷系的壓力值會上升，當壓力值超過一定值地雷系會自殺
+根據設置地雷系會可見指向附近玩家的箭頭
+
+壓力值：{0}/{1}
+
+·被動技能“壓力”
+一定範圍內有人時，壓力值會逐漸增加
+增加效率為1秒1點
+當範圍內沒人時，壓力會逐漸降低
+降低效率為1秒1點</value>
+  </data>
+  <data name="LonerShortDescription" xml:space="preserve">
+    <value>注意壓力值！</value>
+  </data>
+  <data name="LonerIntroDescription" xml:space="preserve">
+    <value>小心一觸即爆！</value>
+  </data>
+  <data name="GamblerMaxVoteNum" xml:space="preserve">
+    <value>最多票數</value>
+  </data>
+  <data name="GamblerMinVoteNum" xml:space="preserve">
+    <value>最少票數</value>
+  </data>
+  <data name="TeleporterInitAbilityNum" xml:space="preserve">
+    <value>傳送師初始可放置傳送門數</value>
+  </data>
+  <data name="BlockModeAbilityButton" xml:space="preserve">
+    <value>無法使用技能</value>
+  </data>
+  <data name="BlockModeReportButton" xml:space="preserve">
+    <value>無法報告</value>
+  </data>
+  <data name="BlockModeKillButton" xml:space="preserve">
+    <value>無法擊殺</value>
+  </data>
+  <data name="BlockModeAbilityAndReportButton" xml:space="preserve">
+    <value>無法使用
+技能和報告</value>
+  </data>
+  <data name="BlockModeAbilityAndKillButton" xml:space="preserve">
+    <value>無法使用
+技能和擊殺</value>
+  </data>
+  <data name="BlockModeKillAndReportButton" xml:space="preserve">
+    <value>無法使用
+技能和報告</value>
+  </data>
+  <data name="BlockModeAll" xml:space="preserve">
+    <value>無法使用
+技能、擊殺和報告</value>
+  </data>
+  <data name="BlockModeNone" xml:space="preserve">
+    <value>無</value>
+  </data>
+  <data name="GamblerChangeVoteChance" xml:space="preserve">
+    <value>投票變化概率</value>
+  </data>
+  <data name="GamblerFullDescription" xml:space="preserve">
+    <value>投機者屬於船員陣營
+
+·被動技能“投機取巧”
+投機者每次投票都會有幾率隨機在設置的最多和最少票數中間選一個數的票數投出
+顯示為1票但會有變化</value>
+  </data>
+  <data name="CEO" xml:space="preserve">
+    <value>C.E.O</value>
+  </data>
+  <data name="CEOFullDescription" xml:space="preserve">
+    <value>C.E.O屬於船員職業
+當C.E.O被票出時，C.E.O將會復活
+
+當C.E.O被票出時，5秒後將會復活。當“顯示投給C.E.O的票”關閉時，C.E.O被處決會顯示所有投給C.E.O的投票
+
+·特殊會議“全船大會”
+如設置C.E.O可開啟“全船大會”時，C.E.O被票出將觸發
+在“全船大會”上，C.E.O可以選擇”跳過會議“或”票出一人“
+其他人可以參加會議但沒有投票權
+C.E.O不能票出自己</value>
+  </data>
+  <data name="CEOShortDescription" xml:space="preserve">
+    <value>一場決定我生死的會議</value>
+  </data>
+  <data name="CEOIntroDescription" xml:space="preserve">
+    <value>我還不能離開！</value>
+  </data>
+  <data name="CEOAwakeTaskGage" xml:space="preserve">
+    <value>覺醒職業所需任務數</value>
+  </data>
+  <data name="CEOIsShowRolePlayerVote" xml:space="preserve">
+    <value>是否顯示投給C.E.O的票</value>
+  </data>
+  <data name="CEOIsUseCEOMeeting" xml:space="preserve">
+    <value>特殊會議“全船大會”</value>
+  </data>
+  <data name="CEOMeetingCEO" xml:space="preserve">
+    <value>全船大會
+（其他人的權力）</value>
+  </data>
+  <data name="CEOMeetingOther" xml:space="preserve">
+    <value>全船大會
+（給C.E.O提供建議）</value>
+  </data>
+  <data name="CEOMeetingSkip" xml:space="preserve">
+    <value>C.E.O選擇了跳過</value>
+  </data>
+  <data name="CEOMeetingSelect" xml:space="preserve">
+    <value>C.E.O選擇票出{0}</value>
+  </data>
+  <data name="CEOExiledOverride" xml:space="preserve">
+    <value>C.E.O結束了這次會議</value>
+  </data>
+  <data name="Echo" xml:space="preserve">
+    <value>蝙蝠</value>
+  </data>
+  <data name="EchoFullDescription" xml:space="preserve">
+    <value>蝙蝠屬於船員陣營
+蝙蝠可以使用回聲知曉他人位置
+
+·主動技能“回聲”
+使用技能1秒後發出回聲
+知曉附近玩家的位置，通過圖標可知位置
+根據設置也可以知曉屍體的位置
+根據設置檢測到屍體圖標會變紅</value>
+  </data>
+  <data name="EchoShortDescription" xml:space="preserve">
+    <value>通過“回聲”確定位置</value>
+  </data>
+  <data name="EchoIntroDescription" xml:space="preserve">
+    <value>你聽到什麼了嗎？</value>
+  </data>
+  <data name="EchoRange" xml:space="preserve">
+    <value>“回聲”範圍</value>
+  </data>
+  <data name="EchoShowTime" xml:space="preserve">
+    <value>“回聲”響應時間</value>
+  </data>
+  <data name="EchoCanSeparatePlayer" xml:space="preserve">
+    <value>玩家與屍體分開知曉位置</value>
+  </data>
+  <data name="EchoAttentionMode" xml:space="preserve">
+    <value>那些陣營會知曉蝙蝠使用“回聲”</value>
+  </data>
+  <data name="EchoIsDetectDeadBody" xml:space="preserve">
+    <value>“回聲”能知曉屍體位置</value>
+  </data>
+  <data name="echoLocation" xml:space="preserve">
+    <value>回聲</value>
+  </data>
+  <data name="EchoAbilityCoolTime" xml:space="preserve">
+    <value>“回聲”冷卻時間</value>
+  </data>
+  <data name="EchoAbilityCount" xml:space="preserve">
+    <value>“回聲”可使用次數</value>
+  </data>
+  <data name="EmitAll" xml:space="preserve">
+    <value>所有人都會知曉蝙蝠使用“回聲”</value>
+  </data>
+  <data name="EmitNotCrewmate" xml:space="preserve">
+    <value>僅非船員知曉蝙蝠使用“回聲”</value>
+  </data>
+  <data name="SheriffCanShootLiberal" xml:space="preserve">
+    <value>能否擊殺革命黨</value>
+  </data>
+  <data name="Inspector" xml:space="preserve">
+    <value>主持人</value>
+  </data>
+  <data name="InspectorFullDescription" xml:space="preserve">
+    <value>主持人屬於船員陣營
+主持人可以知曉在做某件事的是哪些人
+·主動技能“不要做挑戰”
+使用技能時，檢測是否有在做某件事情的玩家（如使用通風管），如有則出現指向該玩家的箭頭，箭頭將在技能結束後消失</value>
+  </data>
+  <data name="InspectorShortDescription" xml:space="preserve">
+    <value>知曉“玩家”們在做什麼</value>
+  </data>
+  <data name="InspectorIntroDescription" xml:space="preserve">
+    <value>注意不要觸犯規則哦</value>
+  </data>
+  <data name="InspectorInspectVent" xml:space="preserve">
+    <value>不使用“通風管”挑戰</value>
+  </data>
+  <data name="InspectorInspectSabotage" xml:space="preserve">
+    <value>不進行“破壞”挑戰</value>
+  </data>
+  <data name="InspectorInspectAbility" xml:space="preserve">
+    <value>不用“技能”挑戰</value>
+  </data>
+  <data name="InspectorAbilityCoolTime" xml:space="preserve">
+    <value>發動各項挑戰冷卻時間</value>
+  </data>
+  <data name="InspectorAbilityActiveTime" xml:space="preserve">
+    <value>各項挑戰持續時間</value>
+  </data>
+  <data name="InspectorAbilityCount" xml:space="preserve">
+    <value>可進行的挑戰次數</value>
+  </data>
+  <data name="inspect" xml:space="preserve">
+    <value>不要做挑戰</value>
+  </data>
+  <data name="inspectArrowWarning" xml:space="preserve">
+    <value>啊哦！你觸犯了主持人的規則！！</value>
+  </data>
+  <data name="inspectSystem" xml:space="preserve">
+    <value>正在進行中・・・</value>
   </data>
 </root>
