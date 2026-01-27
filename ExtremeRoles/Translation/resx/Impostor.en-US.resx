@@ -1601,4 +1601,76 @@ Button ability "TIME BREAK":
   <data name="timeBreakerTimeBreak" xml:space="preserve">
     <value>TIME BREAK</value>
   </data>
+  <data name="Boxer" xml:space="preserve">
+    <value>Boxer</value>
+  </data>
+  <data name="BoxerAbility" xml:space="preserve">
+    <value>STRAIGHT</value>
+  </data>
+  <data name="BoxerAbilityCoolTime" xml:space="preserve">
+    <value>"STRAIGHT" : Ability Cooldown</value>
+  </data>
+  <data name="BoxerAbilityCount" xml:space="preserve">
+    <value>"STRAIGHT" : Ability Charges</value>
+  </data>
+  <data name="BoxerFullDescription" xml:space="preserve">
+    <value>An Impostor who can kill Crewmates by launching them with "STRAIGHT".&#xA;&#xA;Button Ability "STRAIGHT":&#xA;- When activated, charging begins.&#xA;- If a player is nearby during charging, you can press it again.&#xA;- When pressed again, it launches that player.&#xA;- If the launched player hits a wall above a certain speed, they are killed.&#xA;- Launch speed varies depending on the charge rate.</value>
+  </data>
+  <data name="BoxerIntroDescription" xml:space="preserve">
+    <value>Deliver a lethal "STRAIGHT" punch</value>
+  </data>
+  <data name="BoxerShortDescription" xml:space="preserve">
+    <value>Launch Crewmates with "STRAIGHT" to kill them</value>
+  </data>
+  <data name="BoxerStraightAcceleration" xml:space="preserve">
+    <value>Launched Crewmate's acceleration</value>
+  </data>
+  <data name="BoxerStraightChargeTime" xml:space="preserve">
+    <value>"STRAIGHT" : Charging time</value>
+  </data>
+  <data name="BoxerStraightFirstSpeed" xml:space="preserve">
+    <value>Launched Crewmate's initial speed</value>
+  </data>
+  <data name="BoxerStraightKillSpeed" xml:space="preserve">
+    <value>Speed at which death occurs on wall impact</value>
+  </data>
+  <data name="BoxerStraightRange" xml:space="preserve">
+    <value>"STRAIGHT" : Ability Distance</value>
+  </data>
+  <data name="BoxerStraightReflectionE" xml:space="preserve">
+    <value>Coefficient of restitution on wall impact</value>
+  </data>
+  <data name="GetFirstWeapon" xml:space="preserve">
+    <value>Obtained "{0}"</value>
+  </data>
+  <data name="GetNextWeapon" xml:space="preserve">
+    <value>Obtained "{0}", can switch with mouse wheel</value>
+  </data>
+  <data name="Legislator" xml:space="preserve">
+    <value>Legislator</value>
+  </data>
+  <data name="LegislatorChargeVotePerOtherVote" xml:space="preserve">
+    <value>Negative votes charged per vote</value>
+  </data>
+  <data name="LegislatorDefaultVoteNum" xml:space="preserve">
+    <value>Default number of negative votes</value>
+  </data>
+  <data name="LegislatorFullDescription" xml:space="preserve">
+    <value>An Impostor who accumulates others' votes and can cancel out the target's votes.&#xA;&#xA;Meeting Ability: "Negative Vote"&#xA;- Activate by selecting a player during a meeting.&#xA;- Cancels out that player's votes by the number of "Negative Votes".&#xA;- Negative votes increase based on votes cast for anyone except the person this role voted for.&#xA;  Increase amount: (Total votes for others) x Set conversion rate</value>
+  </data>
+  <data name="LegislatorIncludeSkipVote" xml:space="preserve">
+    <value>Count skip votes as negative votes</value>
+  </data>
+  <data name="LegislatorIntroDescription" xml:space="preserve">
+    <value>Majority rule is the height of folly; I make the true decision.</value>
+  </data>
+  <data name="LegislatorShortDescription" xml:space="preserve">
+    <value>Accumulate negative votes and cancel out votes</value>
+  </data>
+  <data name="WeaponMixInfo" xml:space="preserve">
+    <value>Weapon synthesis possible with "Alt" key</value>
+  </data>
+  <data name="legislatorVoteStatus" xml:space="preserve">
+    <value>Ability active: {0}&#xA;Current negative votes: {1}</value>
+  </data>
 </root>
