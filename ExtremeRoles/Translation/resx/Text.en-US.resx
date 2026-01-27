@@ -1244,4 +1244,154 @@ Do you want to continue Installing?</value>
   <data name="Viper" xml:space="preserve">
     <value>Viper</value>
   </data>
+  <data name="AddOnKill" xml:space="preserve">
+    <value>Kill</value>
+  </data>
+  <data name="AddOnTask" xml:space="preserve">
+    <value>Task</value>
+  </data>
+  <data name="Clashed" xml:space="preserve">
+    <value>Clashed</value>
+  </data>
+  <data name="Despair" xml:space="preserve">
+    <value>Despair</value>
+  </data>
+  <data name="Dove" xml:space="preserve">
+    <value>Dove</value>
+  </data>
+  <data name="Leader" xml:space="preserve">
+    <value>Leader</value>
+  </data>
+  <data name="Liberal" xml:space="preserve">
+    <value>Liberal</value>
+  </data>
+  <data name="LiberalSetting" xml:space="preserve">
+    <value>Liberal Common Settings</value>
+  </data>
+  <data name="LiberalSettingCanHasTaskLeader" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;&#xA;Has tasks</value>
+  </data>
+  <data name="LiberalSettingCanKillLeader" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;&#xA;Has kill button</value>
+  </data>
+  <data name="LiberalSettingCanKilledLeader" xml:space="preserve">
+    <value>Allow Kills on Leader</value>
+  </data>
+  <data name="LiberalSettingCanKilledWhenLeaderSolo" xml:space="preserve">
+    <value>Allow Kills when Liberal faction is only the Leader</value>
+  </data>
+  <data name="LiberalSettingIsAutoExitWhenLeaderSolo" xml:space="preserve">
+    <value>Auto-Eliminate when Liberal faction is only the Leader</value>
+  </data>
+  <data name="LiberalSettingIsAutoRevive" xml:space="preserve">
+    <value>Leader's Auto-Revival</value>
+  </data>
+  <data name="LiberalSettingKillMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Militant&lt;/color&gt;&#xA;Fund Bonus per Kill</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherKillCool" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;&#xA;Has modified Kill Cooldown</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherKillRange" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;&#xA;Has modified Kill Distance</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherVisonSize" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;&#xA;Has special vision settings</value>
+  </data>
+  <data name="LiberalSettingLeaderKillBoost" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;&#xA;Fund Increase Rate Increase per Kill</value>
+  </data>
+  <data name="LiberalSettingLeaderKillCool" xml:space="preserve">
+    <value>Kill Cooldown</value>
+  </data>
+  <data name="LiberalSettingLeaderKillMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;&#xA;Fund Bonus per Kill</value>
+  </data>
+  <data name="LiberalSettingLeaderKillRange" xml:space="preserve">
+    <value>Kill Distance</value>
+  </data>
+  <data name="LiberalSettingLeaderKilledBoost" xml:space="preserve">
+    <value>Fund Increase Rate Increase&#xA;(When Leader is killed)</value>
+  </data>
+  <data name="LiberalSettingLeaderTaskBoost" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;&#xA;Fund Increase Rate Increase per Task completion</value>
+  </data>
+  <data name="LiberalSettingLeaderTaskCompletedMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;&#xA;Fund Bonus per Task completion</value>
+  </data>
+  <data name="LiberalSettingLeaderVison" xml:space="preserve">
+    <value>Vision</value>
+  </data>
+  <data name="LiberalSettingLiberalMilitantMax" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Militant&lt;/color&gt;&#xA;Maximum number of roles</value>
+  </data>
+  <data name="LiberalSettingLiberalMilitantMini" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Militant&lt;/color&gt;&#xA;Minimum number of roles</value>
+  </data>
+  <data name="LiberalSettingLiberalVison" xml:space="preserve">
+    <value>Vision</value>
+  </data>
+  <data name="LiberalSettingMilitantHasOtherKillCool" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Militant&lt;/color&gt;&#xA;Has modified Kill Cooldown</value>
+  </data>
+  <data name="LiberalSettingMilitantHasOtherKillRange" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Militant&lt;/color&gt;&#xA;Has modified Kill Distance</value>
+  </data>
+  <data name="LiberalSettingMilitantKillCool" xml:space="preserve">
+    <value>Kill Cooldown</value>
+  </data>
+  <data name="LiberalSettingMilitantKillRange" xml:space="preserve">
+    <value>Kill Distance</value>
+  </data>
+  <data name="LiberalSettingTaskCompletedMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Dove&lt;/color&gt;&#xA;Fund Bonus per Task completion</value>
+  </data>
+  <data name="LiberalSettingUseVent" xml:space="preserve">
+    <value>Global Vents</value>
+  </data>
+  <data name="LiberalSettingWinMoney" xml:space="preserve">
+    <value>Funds required for victory</value>
+  </data>
+  <data name="Militant" xml:space="preserve">
+    <value>Militant</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxLiberal" xml:space="preserve">
+    <value>Maximum number of Liberal roles</value>
+  </data>
+  <data name="RoleSpawnCategoryMinLiberal" xml:space="preserve">
+    <value>Minimum number of Liberal roles</value>
+  </data>
+  <data name="ShowOnlyActiveRoleInInfoOverlay" xml:space="preserve">
+    <value>Display only configured roles</value>
+  </data>
+  <data name="buttonAbility" xml:space="preserve">
+    <value>Button Ability</value>
+  </data>
+  <data name="liberalGlobalInfo" xml:space="preserve">
+    <value>&lt;size=135%&gt;Liberal Description&lt;/size&gt;&#xA;A faction centered around the special role "Leader", composed of Doves and Militants.&#xA;As a common setting for this faction, they are not affected by vision effects like blackouts.&#xA;&#xA;- Victory Conditions:&#xA;  1. Accumulate funds above the set value&#xA;  2. All survivors become Liberal (no majority victory)&#xA;&#xA;- Special Role "Leader"&#xA;  A role that is always assigned when the Liberal faction is assigned.&#xA;  Basically invincible.&#xA;  Fund status is displayed next to this player's name.&#xA;  See Leader's role information for details.&#xA;&#xA;- Dove&#xA;  Refers to Liberal roles that have tasks, noted as "Type: Dove" or "Dove".&#xA;  Tasks are added indefinitely.&#xA;  The default role name for "Type: Dove" is also "Dove".&#xA;&#xA;- Militant&#xA;  Refers to Liberal roles that have a kill button, noted as "Type: Militant" or "Militant".&#xA;  The default role name for "Type: Militant" is also "Militant".</value>
+  </data>
+  <data name="liberalIntro0" xml:space="preserve">
+    <value>Those who reject bondage and gather under the name of "Liberty"</value>
+  </data>
+  <data name="liberalIntro1" xml:space="preserve">
+    <value>Be the blade of innovation that cuts through stagnation</value>
+  </data>
+  <data name="liberalIntro2" xml:space="preserve">
+    <value>Our weapon is reason; bring true change through debate</value>
+  </data>
+  <data name="liberalMoneySummaryInfo" xml:space="preserve">
+    <value>Liberal Fund Balance</value>
+  </data>
+  <data name="liberalRoles" xml:space="preserve">
+    <value>"Liberal" Roles</value>
+  </data>
+  <data name="liberalShotCall" xml:space="preserve">
+    <value>Revolutionary</value>
+  </data>
+  <data name="sabotageKey" xml:space="preserve">
+    <value>Sabotage</value>
+  </data>
+  <data name="ventKey" xml:space="preserve">
+    <value>Vent</value>
+  </data>
 </root>

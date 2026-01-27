@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <data name="LeaderFullDescription" xml:space="preserve">
+    <value>Type: Dove/Militant (depending on settings)
+Considered a Dove if tasks are assigned, and a Militant if a kill button is assigned.
+
+Current funds are displayed next to the player's name.
+This role always exists when the Liberal faction is assigned.
+This role cannot be targeted by abilities under any circumstances.
+If "Allow Kills on Leader" is OFF, all kills against the Leader are invalidated.
+Behavior changes with the following settings:
+- If "Allow Kills when Liberal faction is only the Leader" is ON, the Leader can be killed when they are the last remaining member of the Liberal faction.
+- If "Auto-Eliminate when Liberal faction is only the Leader" is ON, the Leader automatically dies when they are the last remaining member of the Liberal faction. Auto-revival will not occur in this case.
+
+Settings labeled "Fund Increase Rate Increase" permanently increase the multiplier for funds gained by all Liberal faction members when the Leader enters specific situations.
+Example:
+"Militant - Fund Increase Rate Increase per Kill": 5
+"Leader - Fund Increase Rate Increase per Kill": 10
+"Leader - Fund Bonus per Kill": 10%
+1. When the Leader starts killing, the fund increase rate increases by 10%, and funds increase by 11 (10 * 1.1).
+2. Subsequently, when a Liberal Militant kills, funds increase by 5.5 (5 * 1.1).</value>
+  </data>
+  <data name="LeaderShortDescription" xml:space="preserve">
+    <value>Symbol of Revolution</value>
+  </data>
+  <data name="LeaderIntroDescription" xml:space="preserve">
+    <value>Lead the Liberal faction as the Leader</value>
+  </data>
+  <data name="DoveFullDescription" xml:space="preserve">
+    <value>Type: Dove
+
+Gains funds by completing tasks.
+Tasks are added indefinitely.</value>
+  </data>
+  <data name="DoveShortDescription" xml:space="preserve">
+    <value>Achieve revolution through tasks</value>
+  </data>
+  <data name="DoveIntroDescription" xml:space="preserve">
+    <value>What is needed for revolution is "dialogue"</value>
+  </data>
+  <data name="MilitantFullDescription" xml:space="preserve">
+    <value>Type: Militant
+
+Gains funds for activities by killing.</value>
+  </data>
+  <data name="MilitantShortDescription" xml:space="preserve">
+    <value>Achieve revolution through kills</value>
+  </data>
+  <data name="MilitantIntroDescription" xml:space="preserve">
+    <value>What is needed for revolution is "overwhelming power"</value>
+  </data>
+</root>
