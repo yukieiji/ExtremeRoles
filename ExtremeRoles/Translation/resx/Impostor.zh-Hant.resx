@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ImpostorFullDescription" xml:space="preserve">
+    <data name="ImpostorFullDescription" xml:space="preserve">
     <value>是一名普通內鬼。
 無特殊技能。
 通過擊殺、破壞與欺騙隱藏自己。</value>
@@ -1434,5 +1434,264 @@
   </data>
   <data name="TimeBreakerEffectMarlin" xml:space="preserve">
     <value>梅林會受到時間時停影響</value>
+  </data>
+  <data name="GlitchEffectOnMarlin" xml:space="preserve">
+    <value>梅林會受到駭客篡改影響</value>
+  </data>
+  <data name="SlimeSeeMorphMerlin" xml:space="preserve">
+    <value>梅林能識破史萊姆的變形</value>
+  </data>
+  <data name="FakerSeeDummyMerlin" xml:space="preserve">
+    <value>梅林能識別假人(玩家創造)</value>
+  </data>
+  <data name="Scavenger" xml:space="preserve">
+    <value>武器商</value>
+  </data>
+  <data name="ScavengerAbilityCoolTime" xml:space="preserve">
+    <value>各種武器的冷卻時間</value>
+  </data>
+  <data name="ScavengerIsRandomInitAbility" xml:space="preserve">
+    <value>開局獲得隨機初始武器</value>
+  </data>
+  <data name="ScavengerAllowDupe" xml:space="preserve">
+    <value>多個武器商會獲得不同的初始武器</value>
+  </data>
+  <data name="ScavengerAllowAdvancedWeapon" xml:space="preserve">
+    <value>Lv2也可能是初始武器</value>
+  </data>
+  <data name="ScavengerInitAbility" xml:space="preserve">
+    <value>初始武器</value>
+  </data>
+  <data name="ScavengerIsSetWeapon" xml:space="preserve">
+    <value>地圖上會生成武器</value>
+  </data>
+  <data name="ScavengerSyncWeapon" xml:space="preserve">
+    <value>獲得武器時所有人都會知曉</value>
+  </data>
+  <data name="ScavengerHandGunCount" xml:space="preserve">
+    <value>“手槍”可發射次數</value>
+  </data>
+  <data name="ScavengerHandGunSpeed" xml:space="preserve">
+    <value>“手槍子彈”彈速</value>
+  </data>
+  <data name="ScavengerHandGunRange" xml:space="preserve">
+    <value>“手槍子彈”射程範圍</value>
+  </data>
+  <data name="ScavengerFlameCount" xml:space="preserve">
+    <value>“火焰噴射”可噴射次數</value>
+  </data>
+  <data name="ScavengerFlameChargeTime" xml:space="preserve">
+    <value>“火焰噴射”充能時間</value>
+  </data>
+  <data name="ScavengerFlameActiveTime" xml:space="preserve">
+    <value>“火焰噴射”持續時間</value>
+  </data>
+  <data name="ScavengerFlameFireSecond" xml:space="preserve">
+    <value>“火焰噴射”點燃其他玩家所需時間</value>
+  </data>
+  <data name="ScavengerFlameDeadSecond" xml:space="preserve">
+    <value>其他玩家被“燒死”所需時間</value>
+  </data>
+  <data name="ScavengerSwordCount" xml:space="preserve">
+    <value>“劍”可揮砍次數</value>
+  </data>
+  <data name="ScavengerSwordChargeTime" xml:space="preserve">
+    <value>“劍”揮砍蓄力時間</value>
+  </data>
+  <data name="ScavengerSwordActiveTime" xml:space="preserve">
+    <value>“劍”揮砍持續時間</value>
+  </data>
+  <data name="ScavengerSwordR" xml:space="preserve">
+    <value>“劍”出現位置</value>
+  </data>
+  <data name="ScavengerSniperRifleCount" xml:space="preserve">
+    <value>“狙擊步槍”可發射次數</value>
+  </data>
+  <data name="ScavengerSniperRifleSpeed" xml:space="preserve">
+    <value>“狙擊步槍子彈”彈速</value>
+  </data>
+  <data name="ScavengerBeamRifleCount" xml:space="preserve">
+    <value>“激光步槍”可發射次數</value>
+  </data>
+  <data name="ScavengerBeamRifleSpeed" xml:space="preserve">
+    <value>“激光”彈速</value>
+  </data>
+  <data name="ScavengerBeamRifleRange" xml:space="preserve">
+    <value>“激光”射程範圍</value>
+  </data>
+  <data name="ScavengerBeamSaberCount" xml:space="preserve">
+    <value>“光劍”可揮砍次數</value>
+  </data>
+  <data name="ScavengerBeamSaberChargeTime" xml:space="preserve">
+    <value>“光劍”揮砍蓄力時間</value>
+  </data>
+  <data name="ScavengerBeamSaberRange" xml:space="preserve">
+    <value>“光劍”揮砍範圍</value>
+  </data>
+  <data name="ScavengerWeaponMixTime" xml:space="preserve">
+    <value>“武器合成”所需時間</value>
+  </data>
+  <data name="ScavengerNull" xml:space="preserve">
+    <value>無</value>
+  </data>
+  <data name="ScavengerHandGun" xml:space="preserve">
+    <value>手槍</value>
+  </data>
+  <data name="ScavengerFlame" xml:space="preserve">
+    <value>火焰噴射器</value>
+  </data>
+  <data name="ScavengerSword" xml:space="preserve">
+    <value>劍</value>
+  </data>
+  <data name="ScavengerSniperRifle" xml:space="preserve">
+    <value>狙擊步槍</value>
+  </data>
+  <data name="ScavengerBeamRifle" xml:space="preserve">
+    <value>激光步槍</value>
+  </data>
+  <data name="ScavengerBeamSaber" xml:space="preserve">
+    <value>光劍</value>
+  </data>
+  <data name="ScavengerIntroDescription" xml:space="preserve">
+    <value>武器的搜尋者</value>
+  </data>
+  <data name="ScavengerShortDescription" xml:space="preserve">
+    <value>撿起武器，化腐朽為神奇！</value>
+  </data>
+  <data name="ScavengerFullDescription" xml:space="preserve">
+    <value>武器商屬於內鬼陣營。他可以使用各種武器來完成不同的擊殺，通過鼠標滾輪來切換武器
+
+技能“武器合成”
+   -按住ALT鍵等待一段時間後使用能力
+   -將當前有的所有武器進行合成，提升武器等級
+   -所有可拾取的武器都為Lv1等級，通過合成才可以獲得Lv2或更高等級的武器
+
+Lv1武器“手槍”
+   -按下技能發射
+   -朝玩家面向的方向射出子彈
+   -子彈會飛行一段距離或觸碰牆壁後消失
+   -被子彈擊中的玩家死亡
+
+Lv1武器“火焰噴射器”
+   -按下技能後開始充能
+   -充能到100%後再次按下技能噴射
+   -朝玩家面朝的方向噴射火焰
+   -其他玩家被火焰灼燒一段時間後會被點燃
+   -點燃的玩家一段時間後會被燒死
+   -火焰在一段時間後會消失
+
+Lv1武器“劍”
+   -按下技能後開始蓄力
+   -蓄力到100%後再次按下技能揮砍
+   -在揮砍期間，接觸到劍的玩家會被砍死
+   -在使用劍時（包括蓄力和揮砍時），其他玩家對武器商按下“使用”按鈕可以奪劍並反殺武器商
+
+Lv2武器“狙擊步槍”
+   -由“手槍”和“劍”合成
+   -按下技能後發射
+   -朝玩家面向的方向射出子彈
+   -子彈觸碰牆壁後消失
+   -被子彈擊中的玩家死亡
+
+Lv2武器“激光步槍”
+   -由“手槍”和“火焰噴射器”合成
+   -朝玩家面向的方向發射激光
+   -激光在飛行一段距離後消失
+   -被激光命中的玩家死亡
+
+Lv2武器“光劍”
+   -由“劍”和“火焰噴射器”合成
+   -按下技能開始充能
+   -充能越接近100%，範圍會越大
+   -充能時即可按下技能，對範圍內的玩家進行遠程擊殺
+   -如開啟了“光劍會檢測周圍是否有玩家”則如周圍沒有玩家將無法使用光劍以免揮空</value>
+  </data>
+  <data name="WeaponMixTimeRemain" xml:space="preserve">
+    <value>正在合成 {0}....: 完成還需 {1} 秒</value>
+  </data>
+  <data name="WeaponMixInfo" xml:space="preserve">
+    <value>按下"Alt"可合成武器</value>
+  </data>
+  <data name="GetFirstWeapon" xml:space="preserve">
+    <value>獲得了“{0}”</value>
+  </data>
+  <data name="GetNextWeapon" xml:space="preserve">
+    <value>獲得了“{0}”，可以通過鼠標滾輪切換</value>
+  </data>
+  <data name="Boxer" xml:space="preserve">
+    <value>拳擊手</value>
+  </data>
+  <data name="BoxerAbilityCoolTime" xml:space="preserve">
+    <value>直拳冷卻時間</value>
+  </data>
+  <data name="BoxerAbilityCount" xml:space="preserve">
+    <value>可打出直拳次數</value>
+  </data>
+  <data name="BoxerStraightChargeTime" xml:space="preserve">
+    <value>直拳蓄力時間</value>
+  </data>
+  <data name="BoxerStraightRange" xml:space="preserve">
+    <value>直拳範圍</value>
+  </data>
+  <data name="BoxerStraightFirstSpeed" xml:space="preserve">
+    <value>被打飛船員的初始速度</value>
+  </data>
+  <data name="BoxerStraightAcceleration" xml:space="preserve">
+    <value>被打飛船員的加速度</value>
+  </data>
+  <data name="BoxerStraightKillSpeed" xml:space="preserve">
+    <value>撞擊牆壁死亡所需速度</value>
+  </data>
+  <data name="BoxerStraightReflectionE" xml:space="preserve">
+    <value>撞擊牆壁可反彈數</value>
+  </data>
+  <data name="BoxerFullDescription" xml:space="preserve">
+    <value>拳擊手屬於內鬼陣營
+可以使用直拳打飛並擊殺目標
+
+·主動技能“直拳”
+按下技能後開始蓄力，當有人靠近可以再次使用技能打飛目標
+當目標以一定速度撞到牆壁將直接死亡
+蓄力越久打飛時的速度越快</value>
+  </data>
+  <data name="BoxerShortDescription" xml:space="preserve">
+    <value>用"直拳"打飛船員！</value>
+  </data>
+  <data name="BoxerIntroDescription" xml:space="preserve">
+    <value>認真一拳！</value>
+  </data>
+  <data name="BoxerAbility" xml:space="preserve">
+    <value>直拳</value>
+  </data>
+  <data name="Legislator" xml:space="preserve">
+    <value>計票員</value>
+  </data>
+  <data name="LegislatorFullDescription" xml:space="preserve">
+    <value>計票員屬於內鬼陣營，可以投出反對票的內鬼
+
+·會議能力"反對票"
+在會議中選擇一名玩家發動能力，抵消其對於反對票數量的票數
+(例：目標有5票，計票員有三張反對票，那對目標使用技能後目標只會有2票)
+反對票是由計票員投票玩家以外的所有票數X每票可轉化為的反對票
+(例：計票員A投了B那麼其他C,D,E所獲得的票數X每票可轉化為的反對票就是獲得的反對票數)</value>
+  </data>
+  <data name="LegislatorShortDescription" xml:space="preserve">
+    <value>收集反對票，保護同伴</value>
+  </data>
+  <data name="LegislatorIntroDescription" xml:space="preserve">
+    <value>未來永遠掌握在少數人手中</value>
+  </data>
+  <data name="LegislatorIncludeSkipVote" xml:space="preserve">
+    <value>棄票也算作反對票</value>
+  </data>
+  <data name="LegislatorDefaultVoteNum" xml:space="preserve">
+    <value>開局反對票數量</value>
+  </data>
+  <data name="LegislatorChargeVotePerOtherVote" xml:space="preserve">
+    <value>每票可轉化為的反對票</value>
+  </data>
+  <data name="legislatorVoteStatus" xml:space="preserve">
+    <value>發動能力: {0}
+當前擁有{1}張反對票</value>
   </data>
 </root>
