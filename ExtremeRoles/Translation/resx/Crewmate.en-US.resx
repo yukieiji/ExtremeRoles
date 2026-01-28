@@ -1273,4 +1273,277 @@ Ability "Forced Report":
   <data name="forceReportUntil" xml:space="preserve">
     <value>{0} seconds until forced report</value>
   </data>
+  <data name="BlockModeAbilityAndKillButton" xml:space="preserve">
+    <value>All Buttons</value>
+  </data>
+  <data name="BlockModeAbilityAndReportButton" xml:space="preserve">
+    <value>Ability and Report Buttons</value>
+  </data>
+  <data name="BlockModeAbilityButton" xml:space="preserve">
+    <value>Ability Button only</value>
+  </data>
+  <data name="BlockModeAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="BlockModeKillAndReportButton" xml:space="preserve">
+    <value>Kill and Report Buttons</value>
+  </data>
+  <data name="BlockModeKillButton" xml:space="preserve">
+    <value>Kill Button only</value>
+  </data>
+  <data name="BlockModeNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="BlockModeReportButton" xml:space="preserve">
+    <value>Report Button only</value>
+  </data>
+  <data name="CEO" xml:space="preserve">
+    <value>CEO</value>
+  </data>
+  <data name="CEOAwakeTaskGage" xml:space="preserve">
+    <value>"AWAKE" : Task completion rate required</value>
+  </data>
+  <data name="CEOExiledOverride" xml:space="preserve">
+    <value>Override victory conditions on CEO's exile</value>
+  </data>
+  <data name="CEOFullDescription" xml:space="preserve">
+    <value>The Captain.
+"AWAKE" by completing tasks to dominate meetings.
+You can see who voted for whom during meetings.
+When exiled, you take the person who voted for you with you.</value>
+  </data>
+  <data name="CEOIntroDescription" xml:space="preserve">
+    <value>I will take responsibility for this ship.</value>
+  </data>
+  <data name="CEOIsShowRolePlayerVote" xml:space="preserve">
+    <value>Can see who voted for whom</value>
+  </data>
+  <data name="CEOIsUseCEOMeeting" xml:space="preserve">
+    <value>Enable special meetings</value>
+  </data>
+  <data name="CEOMeetingCEO" xml:space="preserve">
+    <value>You don't need to decide.&lt;br&gt;I will decide.</value>
+  </data>
+  <data name="CEOMeetingOther" xml:space="preserve">
+    <value>Watch the Captain's decision&lt;br&gt;in silence.</value>
+  </data>
+  <data name="CEOMeetingSelect" xml:space="preserve">
+    <value>Please choose who to exile</value>
+  </data>
+  <data name="CEOMeetingSkip" xml:space="preserve">
+    <value>Skip?</value>
+  </data>
+  <data name="CEOShortDescription" xml:space="preserve">
+    <value>Exile the Impostors and save the ship</value>
+  </data>
+  <data name="Echo" xml:space="preserve">
+    <value>Echo</value>
+  </data>
+  <data name="EchoAbilityCoolTime" xml:space="preserve">
+    <value>"ECHOLOCATION" : Ability Cooldown</value>
+  </data>
+  <data name="EchoAbilityCount" xml:space="preserve">
+    <value>"ECHOLOCATION" : Ability Charges</value>
+  </data>
+  <data name="EchoAttentionMode" xml:space="preserve">
+    <value>"ECHOLOCATION" : Notification mode</value>
+  </data>
+  <data name="EchoCanSeparatePlayer" xml:space="preserve">
+    <value>Notify individually when multiple players are detected</value>
+  </data>
+  <data name="EchoFullDescription" xml:space="preserve">
+    <value>A Crewmate who finds players by sound.
+
+Button Ability "ECHOLOCATION":
+- Detects players within a certain range.
+- Notifications vary depending on the distance to the nearest player.
+- Visualizes the position with an icon.
+- Can also detect corpses depending on settings.
+  - If notifications are separated, the icon for a detected corpse will be red.</value>
+  </data>
+  <data name="EchoIntroDescription" xml:space="preserve">
+    <value>Where is your sound from?</value>
+  </data>
+  <data name="EchoIsDetectDeadBody" xml:space="preserve">
+    <value>"ECHOLOCATION" : Can detect corpses</value>
+  </data>
+  <data name="EchoRange" xml:space="preserve">
+    <value>"ECHOLOCATION" : Ability Range</value>
+  </data>
+  <data name="EchoShortDescription" xml:space="preserve">
+    <value>Find players' positions with "ECHOLOCATION"</value>
+  </data>
+  <data name="EchoShowTime" xml:space="preserve">
+    <value>"ECHOLOCATION" : Notification duration</value>
+  </data>
+  <data name="EmitAll" xml:space="preserve">
+    <value>Notify all players</value>
+  </data>
+  <data name="EmitNotCrewmate" xml:space="preserve">
+    <value>Notify non-Crewmates</value>
+  </data>
+  <data name="Exorcist" xml:space="preserve">
+    <value>Exorcist</value>
+  </data>
+  <data name="ExorcistAbility" xml:space="preserve">
+    <value>Exorcism</value>
+  </data>
+  <data name="ExorcistAbilityActiveTime" xml:space="preserve">
+    <value>"EXORCISM" : Time required</value>
+  </data>
+  <data name="ExorcistAbilityCoolTime" xml:space="preserve">
+    <value>"EXORCISM" : Ability Cooldown</value>
+  </data>
+  <data name="ExorcistAbilityCount" xml:space="preserve">
+    <value>"EXORCISM" : Ability Charges</value>
+  </data>
+  <data name="ExorcistAwakeTaskGage" xml:space="preserve">
+    <value>Task completion rate to be misrecognized as an Impostor</value>
+  </data>
+  <data name="ExorcistCrewBlockSystemType" xml:space="preserve">
+    <value>Disadvantage during "EXORCISM"</value>
+  </data>
+  <data name="ExorcistFullDescription" xml:space="preserve">
+    <value>A Crewmate who is displayed as an Impostor to Impostors.
+However, must complete tasks above the "Task completion rate to be misrecognized as an Impostor".
+
+Cannot use the report button.
+
+Button Ability "EXORCISM":
+- Activate by targeting a nearby corpse.
+- After a set time, an automatic report occurs and corpse information is output to the chat.
+- While the ability is active, a "Disadvantage during EXORCISM" is applied to the entire Crewmate faction.</value>
+  </data>
+  <data name="ExorcistIntroDescription" xml:space="preserve">
+    <value>Defeat the Impostors with holy power</value>
+  </data>
+  <data name="ExorcistRange" xml:space="preserve">
+    <value>"EXORCISM" : Distance from corpse to activate</value>
+  </data>
+  <data name="ExorcistReport" xml:space="preserve">
+    <value>"{0}" seems to have died by "{1}", the culprit is "{2}"</value>
+  </data>
+  <data name="ExorcistReportWithName" xml:space="preserve">
+    <value>{1} was killed by "{0}", the cause is "{2}"</value>
+  </data>
+  <data name="ExorcistShortDescription" xml:space="preserve">
+    <value>Get advantageous information with "EXORCISM"</value>
+  </data>
+  <data name="ExorcistWithName" xml:space="preserve">
+    <value>Include killer's name in "EXORCISM" information</value>
+  </data>
+  <data name="GamblerChangeVoteChance" xml:space="preserve">
+    <value>Chance of vote count changing</value>
+  </data>
+  <data name="GamblerFullDescription" xml:space="preserve">
+    <value>A Crewmate role whose vote count randomly changes between 1 and a specified range.
+This change is not visible on screen, and the displayed vote count will always be 1 (internally it is calculated).
+If the chance hits, the vote count changes randomly between the maximum and minimum values.</value>
+  </data>
+  <data name="GamblerMaxVoteNum" xml:space="preserve">
+    <value>Maximum vote count</value>
+  </data>
+  <data name="GamblerMinVoteNum" xml:space="preserve">
+    <value>Minimum vote count</value>
+  </data>
+  <data name="Inspector" xml:space="preserve">
+    <value>Inspector</value>
+  </data>
+  <data name="InspectorAbilityActiveTime" xml:space="preserve">
+    <value>"INSPECT" : Ability Duration</value>
+  </data>
+  <data name="InspectorAbilityCoolTime" xml:space="preserve">
+    <value>"INSPECT" : Ability Cooldown</value>
+  </data>
+  <data name="InspectorAbilityCount" xml:space="preserve">
+    <value>"INSPECT" : Ability Charges</value>
+  </data>
+  <data name="InspectorFullDescription" xml:space="preserve">
+    <value>A Crewmate who detects specified actions.
+
+Button Ability: "INSPECT"
+- Activate by pressing the button.
+- Detects players who performed specific actions during the duration.
+- Displays an arrow to those players.
+- Arrows are only displayed while the ability is active.</value>
+  </data>
+  <data name="InspectorInspectAbility" xml:space="preserve">
+    <value>Detect ability usage</value>
+  </data>
+  <data name="InspectorInspectSabotage" xml:space="preserve">
+    <value>Detect Sabotage</value>
+  </data>
+  <data name="InspectorInspectVent" xml:space="preserve">
+    <value>Detect Vent usage</value>
+  </data>
+  <data name="InspectorIntroDescription" xml:space="preserve">
+    <value>All actions are exposed, point to the truth of the moment</value>
+  </data>
+  <data name="InspectorShortDescription" xml:space="preserve">
+    <value>Expose those who did "specific actions"</value>
+  </data>
+  <data name="Loner" xml:space="preserve">
+    <value>Loner</value>
+  </data>
+  <data name="LonerArrowNum" xml:space="preserve">
+    <value>Number of arrows to show</value>
+  </data>
+  <data name="LonerArrowShowVentPlayer" xml:space="preserve">
+    <value>Show arrows to players in vents</value>
+  </data>
+  <data name="LonerFullDescription" xml:space="preserve">
+    <value>A Crewmate whose "Stress Level" increases when players are nearby, and who suicides if it exceeds a certain value.
+
+Stress Level: {0}/{1}
+
+Passive Ability "Stress":
+- "Stress Level" increases when players are within range.
+- Increase rate is 1 stress/second/person.
+- "Stress Level" decreases by 1 per second when no players are in range.</value>
+  </data>
+  <data name="LonerIntroDescription" xml:space="preserve">
+    <value>A proud but somewhat lonely lone Crewmate</value>
+  </data>
+  <data name="LonerIsShowArrow" xml:space="preserve">
+    <value>Show arrows to nearby players</value>
+  </data>
+  <data name="LonerShortDescription" xml:space="preserve">
+    <value>Don't let your "Stress Level" get too high</value>
+  </data>
+  <data name="LonerStressIgnoreTime" xml:space="preserve">
+    <value>Time after spawning during which "Stress Level" does not increase</value>
+  </data>
+  <data name="LonerStressMaxGage" xml:space="preserve">
+    <value>"Stress Level" to suicide</value>
+  </data>
+  <data name="LonerStressProgressOnMovingPlatPlayer" xml:space="preserve">
+    <value>Increase "Stress Level" for players using ladders, etc.</value>
+  </data>
+  <data name="LonerStressProgressOnTask" xml:space="preserve">
+    <value>Increase "Stress Level" during tasks</value>
+  </data>
+  <data name="LonerStressProgressOnVentPlayer" xml:space="preserve">
+    <value>Increase "Stress Level" for players in vents</value>
+  </data>
+  <data name="LonerStressRange" xml:space="preserve">
+    <value>"Stress Level" increase range</value>
+  </data>
+  <data name="SheriffCanShootLiberal" xml:space="preserve">
+    <value>Can kill "LIBERAL"</value>
+  </data>
+  <data name="TeleporterInitAbilityNum" xml:space="preserve">
+    <value>"SET PORTAL" : Initial Charges</value>
+  </data>
+  <data name="echoLocation" xml:space="preserve">
+    <value>ECHOLOCATION</value>
+  </data>
+  <data name="inspect" xml:space="preserve">
+    <value>INSPECT</value>
+  </data>
+  <data name="inspectArrowWarning" xml:space="preserve">
+    <value>The "INSPECTOR" found your position!!</value>
+  </data>
+  <data name="inspectSystem" xml:space="preserve">
+    <value> usage is being monitored...</value>
+  </data>
 </root>

@@ -1478,4 +1478,28 @@ Victory Condition: Queen's victory (including special victories).</value>
   <data name="AllQueenWin" xml:space="preserve">
     <value>Thanks to Knight's efforts, all Queen team</value>
   </data>
+  <data name="HereticMeetingButtonTaskGage" xml:space="preserve">
+    <value>Task completion rate to enable "EMERGENCY MEETING" button</value>
+  </data>
+  <data name="HereticUseVent" xml:space="preserve">
+    <value>Can use Vents</value>
+  </data>
+  <data name="IntimateCanKillOneSideLover" xml:space="preserve">
+    <value>Can kill "SWEETIE" when "YANDERE" is visible</value>
+  </data>
+  <data name="IntimateCanKillYandere" xml:space="preserve">
+    <value>Can kill "YANDERE" when "YANDERE" is visible</value>
+  </data>
+  <data name="KnightCanKillQueen" xml:space="preserve">
+    <value>Can kill "QUEEN" when "QUEEN" is visible</value>
+  </data>
+  <data name="KnightCanKillServant" xml:space="preserve">
+    <value>Can kill "SERVANT" when "QUEEN" is visible</value>
+  </data>
+  <data name="ShepherdCanKillJackal" xml:space="preserve">
+    <value>Can kill "JACKAL" when "JACKAL" is visible</value>
+  </data>
+  <data name="ShepherdCanKillSidekick" xml:space="preserve">
+    <value>Can kill "SIDEKICK" when "JACKAL" is visible</value>
+  </data>
 </root>

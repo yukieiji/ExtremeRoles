@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AvalonsRoles" xml:space="preserve">
+    <data name="AvalonsRoles" xml:space="preserve">
     <value>&lt;color=#FF1919FF&gt;阿&lt;/color&gt;瓦&lt;color=#00ffff&gt;隆&lt;/color&gt;</value>
   </data>
   <data name="Assassin" xml:space="preserve">
@@ -919,12 +919,6 @@
   <data name="GuesserMaxGuessNumWhenMeeting" xml:space="preserve">
     <value>賭怪每輪會議最大猜測次數</value>
   </data>
-  <data name="GuesserCanGuessNoneRole" xml:space="preserve">
-    <value>賭怪可以不猜測職業進行賭殺</value>
-  </data>
-  <data name="GuesserGuessNoneRoleMode" xml:space="preserve">
-    <value>直接賭殺</value>
-  </data>
   <data name="BothGuesser" xml:space="preserve">
     <value>不論陣營都適用</value>
   </data>
@@ -1036,7 +1030,7 @@
 
 ·主動技能“加速帶”
 可以使玩家加速或減速。
-在加速帶上順着奔跑可以加速，如果逆着加速帶奔跑將減速。</value>
+在加速帶上順着奔跑可以加速，如果逆著加速帶奔跑將減速。</value>
   </data>
   <data name="AccelerateSet" xml:space="preserve">
     <value>加速帶</value>
@@ -1097,5 +1091,104 @@
   </data>
   <data name="SkaterSkateOff" xml:space="preserve">
     <value>剎車</value>
+  </data>
+  <data name="InvestigatorContinueSearch" xml:space="preserve">
+    <value>能否繼續調查犯罪現場</value>
+  </data>
+  <data name="InvestigatorSearchCanFindName" xml:space="preserve">
+    <value>能否通過犯罪現場調查出兇手</value>
+  </data>
+  <data name="InvestigatorForceMeetingOnSearchEnd" xml:space="preserve">
+    <value>調查完犯罪現場後強行開啟會議</value>
+  </data>
+  <data name="InvestigatorSearchCanContineMeetingNum" xml:space="preserve">
+    <value>剩餘的關於犯罪現場的會議數</value>
+  </data>
+  <data name="Barter" xml:space="preserve">
+    <value>奇蹟商人</value>
+  </data>
+  <data name="NiceBarter" xml:space="preserve">
+    <value>正義的奇蹟商人</value>
+  </data>
+  <data name="EvilBarter" xml:space="preserve">
+    <value>邪惡的奇蹟商人</value>
+  </data>
+  <data name="BarterAwakeTaskRate" xml:space="preserve">
+    <value>正義的奇蹟商人知曉職業所需任務數量(條件1)</value>
+  </data>
+  <data name="BarterAwakeDeadPlayerNum" xml:space="preserve">
+    <value>正義的奇蹟商人知曉職業所需死亡人數(條件2)</value>
+  </data>
+  <data name="BarterAwakeKillNum" xml:space="preserve">
+    <value>邪惡的奇蹟商人知曉職業所需擊殺數</value>
+  </data>
+  <data name="BarterCanCallMeeting" xml:space="preserve">
+    <value>奇蹟商人能否開啟會議</value>
+  </data>
+  <data name="BarterCastlingNum" xml:space="preserve">
+    <value>奇蹟商人每次會議可進行的交換數</value>
+  </data>
+  <data name="BarterMaxCastlingNumWhenMeeting" xml:space="preserve">
+    <value>奇蹟商人總共可進行的交換數</value>
+  </data>
+  <data name="BarterRandomCastling" xml:space="preserve">
+    <value>奇蹟商人的陣營隨機</value>
+  </data>
+  <data name="BarterOneCastlingNum" xml:space="preserve">
+    <value>隨機交換
+使用次數</value>
+  </data>
+  <data name="BarterShowCastlingOther" xml:space="preserve">
+    <value>他人是否會知曉誰被交換了</value>
+  </data>
+  <data name="BarterFullDescription" xml:space="preserve">
+    <value>可以交換兩人的票的職業
+
+會議能力“交換”
+   -選擇玩家發動
+   -可以交換兩人的票數</value>
+  </data>
+  <data name="BarterShortDescription" xml:space="preserve">
+    <value>用交換把會議搞得翻天覆地吧！</value>
+  </data>
+  <data name="BarterIntroDescription" xml:space="preserve">
+    <value>票的去向？看我的心情吧</value>
+  </data>
+  <data name="BarterCastlingInfo" xml:space="preserve">
+    <value>剩餘可交換次數：{0}次
+這次會議可交換{1}次</value>
+  </data>
+  <data name="BarterRandomCastlingLabel" xml:space="preserve">
+    <value>隨機交換
+使用次數</value>
+  </data>
+  <data name="InvestigatorFullDescription" xml:space="preserve">
+    <value>警探屬於船員陣營
+能在報告屍體的位置獲取信息
+
+·地圖位置“犯罪現場”
+報告的屍體被殺害的位置會變為“犯罪現場”
+當報告屍體後將會出現
+警探顯示指向“犯罪現場”的箭頭
+在“犯罪現場”停留一段時間即可“調查”
+
+·被動技能“調查”
+在“犯罪現場”停留一段時間進行“調查”
+每次調查需要時間，調查完成後會將信息顯示在右下角
+每次調查都可以獲得信息：
+1次：被殺時間
+2次：被殺時間到下次會議時間
+3次：兇手陣營
+4次：兇手職業
+5次（根據設置）：兇手
+如果是“助手”報告的屍體的“犯罪現場”，“調查”所需時間將減少
+如果關閉了“能否繼續調查犯罪現場”，則離開犯罪現場時將重置調查次數
+如果“警探”死亡，“助手”將變為見習警探</value>
+  </data>
+  <data name="MarlinCanSeeLiberal" xml:space="preserve">
+    <value>梅林能否發現革命黨</value>
+  </data>
+  <data name="AssassinCanKilledFromLiberal" xml:space="preserve">
+    <value>激進派能否擊殺刺客</value>
   </data>
 </root>

@@ -903,12 +903,6 @@
   <data name="GuesserMaxGuessNumWhenMeeting" xml:space="preserve">
     <value>1会議で「推殺」出来る回数</value>
   </data>
-  <data name="GuesserCanGuessNoneRole" xml:space="preserve">
-    <value>役職なしを「推殺」出来るか</value>
-  </data>
-  <data name="GuesserGuessNoneRoleMode" xml:space="preserve">
-    <value>役職なしの「推殺」</value>
-  </data>
   <data name="BothGuesser" xml:space="preserve">
     <value>ナイスとイビルゲッサー両方可</value>
   </data>
@@ -1161,5 +1155,20 @@
   </data>
   <data name="AssassinCanKilledFromLiberal" xml:space="preserve">
     <value>「ミリタント」が「アサシン」をキルできるか</value>
+  </data>
+  <data name="GuesserGuessDefaultRoleMode" xml:space="preserve">
+    <value>デフォルト役職の推殺</value>
+  </data>
+  <data name="GuesserCanCrewmate" xml:space="preserve">
+    <value>「クルー」の推殺</value>
+  </data>
+  <data name="GuesserCanImpostor" xml:space="preserve">
+    <value>「インポスター」の推殺</value>
+  </data>
+  <data name="GuesserCanDove" xml:space="preserve">
+    <value>「ドーヴ」の推殺</value>
+  </data>
+  <data name="GuesserCanMilitant" xml:space="preserve">
+    <value>「ミリタント」の推殺</value>
   </data>
 </root>

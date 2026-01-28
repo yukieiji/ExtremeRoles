@@ -940,12 +940,6 @@ Jackal's "SIDEKICK")</value>
   <data name="GuesserMaxGuessNumWhenMeeting" xml:space="preserve">
     <value>"GUESS" : Ability Charges per meeting</value>
   </data>
-  <data name="GuesserCanGuessNoneRole" xml:space="preserve">
-    <value>"GUESS" : Can guess non-role Crews/Impostors</value>
-  </data>
-  <data name="GuesserGuessNoneRoleMode" xml:space="preserve">
-    <value>"GUESS" : Non-role Crews/Impostors guessing mode</value>
-  </data>
   <data name="BothGuesser" xml:space="preserve">
     <value>BOTH Nice and Evil</value>
   </data>
@@ -1111,5 +1105,91 @@ Button ability "SKATE":
   </data>
   <data name="SkaterSkateOff" xml:space="preserve">
     <value>Cancel SKATE</value>
+  </data>
+  <data name="AssassinCanKilledFromLiberal" xml:space="preserve">
+    <value>Assasin: Can be Killed by LIBERALS</value>
+  </data>
+  <data name="Barter" xml:space="preserve">
+    <value>Barter</value>
+  </data>
+  <data name="BarterAwakeDeadPlayerNum" xml:space="preserve">
+    <value>"AWAKE" : Dead players required</value>
+  </data>
+  <data name="BarterAwakeKillNum" xml:space="preserve">
+    <value>"AWAKE" : Kills required</value>
+  </data>
+  <data name="BarterAwakeTaskRate" xml:space="preserve">
+    <value>"AWAKE" : Task completion rate required</value>
+  </data>
+  <data name="BarterCanCallMeeting" xml:space="preserve">
+    <value>Can call emergency meeting</value>
+  </data>
+  <data name="BarterCastlingInfo" xml:space="preserve">
+    <value>Show notification on Castling</value>
+  </data>
+  <data name="BarterCastlingNum" xml:space="preserve">
+    <value>"CASTLING" : Ability Charges</value>
+  </data>
+  <data name="BarterFullDescription" xml:space="preserve">
+    <value>A role with the ability to exchange positions with others.
+The target's actions except movement will be cancelled upon exchange.
+After awakening, the KILL button changes to "CASTLING" and can be used a specified number of times.</value>
+  </data>
+  <data name="BarterIntroDescription" xml:space="preserve">
+    <value>Equivalent exchange.</value>
+  </data>
+  <data name="BarterMaxCastlingNumWhenMeeting" xml:space="preserve">
+    <value>"CASTLING" : Max charges per meeting</value>
+  </data>
+  <data name="BarterOneCastlingNum" xml:space="preserve">
+    <value>"CASTLING" : Number of charges per use</value>
+  </data>
+  <data name="BarterRandomCastling" xml:space="preserve">
+    <value>Random Castling if no target is nearby</value>
+  </data>
+  <data name="BarterRandomCastlingLabel" xml:space="preserve">
+    <value>Not specified</value>
+  </data>
+  <data name="BarterShortDescription" xml:space="preserve">
+    <value>Exchange positions with others</value>
+  </data>
+  <data name="BarterShowCastlingOther" xml:space="preserve">
+    <value>Notify the target about the exchange</value>
+  </data>
+  <data name="EvilBarter" xml:space="preserve">
+    <value>Evil Barter</value>
+  </data>
+  <data name="GuesserCanCrewmate" xml:space="preserve">
+    <value>Can guess Crewmate roles</value>
+  </data>
+  <data name="GuesserCanDove" xml:space="preserve">
+    <value>Can guess Dove roles</value>
+  </data>
+  <data name="GuesserCanImpostor" xml:space="preserve">
+    <value>Can guess Impostor roles</value>
+  </data>
+  <data name="GuesserCanMilitant" xml:space="preserve">
+    <value>Can guess Militant roles</value>
+  </data>
+  <data name="GuesserGuessDefaultRoleMode" xml:space="preserve">
+    <value>Default role guessing method</value>
+  </data>
+  <data name="InvestigatorContinueSearch" xml:space="preserve">
+    <value>Continue "INVESTIGATE" after meeting</value>
+  </data>
+  <data name="InvestigatorForceMeetingOnSearchEnd" xml:space="preserve">
+    <value>Force meeting when "INVESTIGATE" completes</value>
+  </data>
+  <data name="InvestigatorSearchCanContineMeetingNum" xml:space="preserve">
+    <value>Max meetings to continue "INVESTIGATE"</value>
+  </data>
+  <data name="InvestigatorSearchCanFindName" xml:space="preserve">
+    <value>Include player name in cause of death when "INVESTIGATE" completes</value>
+  </data>
+  <data name="MarlinCanSeeLiberal" xml:space="preserve">
+    <value>Merlin: Can see the Liberal faction</value>
+  </data>
+  <data name="NiceBarter" xml:space="preserve">
+    <value>Nice Barter</value>
   </data>
 </root>

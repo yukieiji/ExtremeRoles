@@ -919,12 +919,6 @@
   <data name="GuesserMaxGuessNumWhenMeeting" xml:space="preserve">
     <value>赌怪每轮会议最大猜测次数</value>
   </data>
-  <data name="GuesserCanGuessNoneRole" xml:space="preserve">
-    <value>赌怪可以不猜测职业进行赌杀</value>
-  </data>
-  <data name="GuesserGuessNoneRoleMode" xml:space="preserve">
-    <value>直接赌杀</value>
-  </data>
   <data name="BothGuesser" xml:space="preserve">
     <value>不论阵营都适用</value>
   </data>

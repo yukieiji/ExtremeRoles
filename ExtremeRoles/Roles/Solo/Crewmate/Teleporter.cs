@@ -304,7 +304,8 @@ public sealed class Teleporter :
             factory, 1, 3);
 		factory.CreateIntOption(
 			TeleporterOption.InitAbilityNum,
-			0, 0, 10, 1);
+			0, 0, 10, 1,
+			format: OptionUnit.Shot);
     }
 
     protected override void RoleSpecificInit()
