@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MODNAME_TRANS" xml:space="preserve">
+    <data name="MODNAME_TRANS" xml:space="preserve">
     <value>極端職業</value>
   </data>
   <data name="GeneralTab" xml:space="preserve">
@@ -1214,5 +1214,223 @@ ExR 和其他設備僅以最低限度的功能啓動</value>
   </data>
   <data name="EmergencyTaskOptionFungleReactor" xml:space="preserve">
     <value>「Fungle」的「反應堆修理」</value>
+  </data>
+  <data name="GhostRoleGlobalOptionHauntMinigameMaxSpeed" xml:space="preserve">
+    <value>幽靈最快移動速度</value>
+  </data>
+  <data name="IsRatioTeamAssign" xml:space="preserve">
+    <value>陣營比例分配</value>
+  </data>
+  <data name="AssignRatio" xml:space="preserve">
+    <value>分配比例</value>
+  </data>
+  <data name="OneToOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="TwoToOne" xml:space="preserve">
+    <value>2:1</value>
+  </data>
+  <data name="OneToTwo" xml:space="preserve">
+    <value>1:2</value>
+  </data>
+  <data name="TwoToTwo" xml:space="preserve">
+    <value>2:2</value>
+  </data>
+  <data name="OneToThree" xml:space="preserve">
+    <value>1:3</value>
+  </data>
+  <data name="ThreeToOne" xml:space="preserve">
+    <value>3:1</value>
+  </data>
+  <data name="ThreeToTwo" xml:space="preserve">
+    <value>3:2</value>
+  </data>
+  <data name="TwoToThree" xml:space="preserve">
+    <value>2:3</value>
+  </data>
+  <data name="ThreeToThree" xml:space="preserve">
+    <value>3:3</value>
+  </data>
+  <data name="Detective" xml:space="preserve">
+    <value>偵探</value>
+  </data>
+  <data name="Viper" xml:space="preserve">
+    <value>毒蛇</value>
+  </data>
+  <data name="Despair" xml:space="preserve">
+    <value>壓力</value>
+  </data>
+  <data name="Clashed" xml:space="preserve">
+    <value>撞擊</value>
+  </data>
+  <data name="ShowOnlyActiveRoleInInfoOverlay" xml:space="preserve">
+    <value>只顯示已設置的職位</value>
+  </data>
+  <data name="LiberalSettingWinMoney" xml:space="preserve">
+    <value>革命勝利所需基金</value>
+  </data>
+  <data name="LiberalSettingTaskCompletedMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;溫和派&lt;/color&gt;
+每完成1個任務獲得的資金</value>
+  </data>
+  <data name="LiberalSettingKillMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;激進派&lt;/color&gt;
+每次擊殺獲得的資金</value>
+  </data>
+  <data name="LiberalSettingLiberalVison" xml:space="preserve">
+    <value>革命黨有獨特的視野</value>
+  </data>
+  <data name="LiberalSettingUseVent" xml:space="preserve">
+    <value>革命黨可使用通風管</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherVisonSize" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;領袖&lt;/color&gt;
+有獨特的視野</value>
+  </data>
+  <data name="LiberalSettingLeaderVison" xml:space="preserve">
+    <value>視野</value>
+  </data>
+  <data name="LiberalSettingCanHasTaskLeader" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;領袖&lt;/color&gt;
+是否有任務</value>
+  </data>
+  <data name="LiberalSettingLeaderTaskBoost" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;領袖&lt;/color&gt;
+每完成一個任務資金增長倍率</value>
+  </data>
+  <data name="LiberalSettingLeaderTaskCompletedMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;領袖&lt;/color&gt;
+每完成一個任務獲得的資金</value>
+  </data>
+  <data name="LiberalSettingCanKillLeader" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;領袖&lt;/color&gt;
+有擊殺能力</value>
+  </data>
+  <data name="LiberalSettingLeaderKillBoost" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;領袖&lt;/color&gt;
+每次擊殺資金增長倍率</value>
+  </data>
+  <data name="LiberalSettingLeaderKillMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;領袖&lt;/color&gt;
+每次擊殺獲得的資金</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherKillCool" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;領袖&lt;/color&gt;
+有獨特的擊殺冷卻</value>
+  </data>
+  <data name="LiberalSettingLeaderKillCool" xml:space="preserve">
+    <value>擊殺冷卻</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherKillRange" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;領袖&lt;/color&gt;
+有獨特的擊殺範圍</value>
+  </data>
+  <data name="LiberalSettingLeaderKillRange" xml:space="preserve">
+    <value>擊殺範圍</value>
+  </data>
+  <data name="LiberalSettingCanKilledLeader" xml:space="preserve">
+    <value>領袖可以被擊殺</value>
+  </data>
+  <data name="LiberalSettingLeaderKilledBoost" xml:space="preserve">
+    <value>資金增長倍率提升
+（領袖被擊殺時）</value>
+  </data>
+  <data name="LiberalSettingCanKilledWhenLeaderSolo" xml:space="preserve">
+    <value>革命黨只剩領袖時
+領袖能否被擊殺</value>
+  </data>
+  <data name="LiberalSettingIsAutoRevive" xml:space="preserve">
+    <value>領袖會復活</value>
+  </data>
+  <data name="LiberalSettingIsAutoExitWhenLeaderSolo" xml:space="preserve">
+    <value>革命黨只剩領袖時
+領袖死亡</value>
+  </data>
+  <data name="LiberalSettingLiberalMilitantMini" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;激進派&lt;/color&gt;
+最少人數</value>
+  </data>
+  <data name="LiberalSettingLiberalMilitantMax" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;激進派&lt;/color&gt;
+最多人數</value>
+  </data>
+  <data name="LiberalSettingMilitantHasOtherKillCool" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;激進派&lt;/color&gt;
+擁有獨特的擊殺冷卻</value>
+  </data>
+  <data name="LiberalSettingMilitantKillCool" xml:space="preserve">
+    <value>擊殺冷卻</value>
+  </data>
+  <data name="LiberalSettingMilitantHasOtherKillRange" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;激進派&lt;/color&gt;
+擁有獨特的擊殺範圍</value>
+  </data>
+  <data name="LiberalSettingMilitantKillRange" xml:space="preserve">
+    <value>擊殺範圍</value>
+  </data>
+  <data name="Leader" xml:space="preserve">
+    <value>領袖</value>
+  </data>
+  <data name="Dove" xml:space="preserve">
+    <value>溫和派</value>
+  </data>
+  <data name="Militant" xml:space="preserve">
+    <value>激進派</value>
+  </data>
+  <data name="LiberalSetting" xml:space="preserve">
+    <value>革命黨通用設置</value>
+  </data>
+  <data name="liberalIntro0" xml:space="preserve">
+    <value>星星之火可以燎原！</value>
+  </data>
+  <data name="liberalIntro1" xml:space="preserve">
+    <value>批判的武器，不如武器的批判！</value>
+  </data>
+  <data name="liberalIntro2" xml:space="preserve">
+    <value>理性前行，直到勝利！</value>
+  </data>
+  <data name="liberalGlobalInfo" xml:space="preserve">
+    <value>&lt;size=135%&gt;革命黨黨綱&lt;/size&gt;
+以領袖為核心，由溫和派和激進派聯合組成的陣營
+
+·革命勝利條件：
+1.獲得足夠的資金
+2.消滅所有人
+
+·領袖
+不會死去
+領袖名字旁會顯示現有資金數
+
+·溫和派
+用任務類技能獲得資金的革命黨黨員，標註為“類型：溫和派”或直接簡稱“溫和派”
+“類型：溫和派”的默認職業名稱同樣為“溫和派”
+
+·激進派
+擁有擊殺能力的革命黨黨員，標註為“類型：激進派”或直接簡稱“激進派”
+“類型：激進派”的默認職業名稱同樣為“激進派"</value>
+  </data>
+  <data name="liberalMoneySummaryInfo" xml:space="preserve">
+    <value>革命黨資金</value>
+  </data>
+  <data name="AddOnTask" xml:space="preserve">
+    <value>任務</value>
+  </data>
+  <data name="AddOnKill" xml:space="preserve">
+    <value>擊殺</value>
+  </data>
+  <data name="liberalShotCall" xml:space="preserve">
+    <value>革命分子</value>
+  </data>
+  <data name="liberalRoles" xml:space="preserve">
+    <value>革命黨的職業</value>
+  </data>
+  <data name="ventKey" xml:space="preserve">
+    <value>通風管</value>
+  </data>
+  <data name="sabotageKey" xml:space="preserve">
+    <value>破壞</value>
+  </data>
+  <data name="buttonAbility" xml:space="preserve">
+    <value>技能</value>
   </data>
 </root>

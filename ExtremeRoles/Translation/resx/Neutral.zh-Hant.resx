@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Alice" xml:space="preserve">
+    <data name="Alice" xml:space="preserve">
     <value>愛麗絲</value>
   </data>
   <data name="AliceCanUseSabotage" xml:space="preserve">
@@ -1198,5 +1198,332 @@
   </data>
   <data name="MonikaIsSoloTeam" xml:space="preserve">
     <value>莫妮卡獨自存在時，遊戲繼續</value>
+  </data>
+  <data name="MonikaCanSeeTrash" xml:space="preserve">
+    <value>莫妮卡能看見“回收站”層的人嗎？</value>
+  </data>
+  <data name="Heretic" xml:space="preserve">
+    <value>異端</value>
+  </data>
+  <data name="HereticHasTask" xml:space="preserve">
+    <value>異端可以做任務</value>
+  </data>
+  <data name="HereticSeeImpostorTaskGage" xml:space="preserve">
+    <value>完成多少任務可知曉“內鬼”</value>
+  </data>
+  <data name="HereticKillMode" xml:space="preserve">
+    <value>“詛咒擊殺”的模式</value>
+  </data>
+  <data name="HereticAbilityCoolTime" xml:space="preserve">
+    <value>“詛咒擊殺”冷卻時間</value>
+  </data>
+  <data name="HereticRange" xml:space="preserve">
+    <value>“詛咒擊殺”使用範圍</value>
+  </data>
+  <data name="HereticCanKillImpostor" xml:space="preserve">
+    <value>可以“詛咒擊殺”內鬼</value>
+  </data>
+  <data name="HereticIntroDescription" xml:space="preserve">
+    <value>內鬼大人…請你賜予祝福…</value>
+  </data>
+  <data name="HereticShortDescription" xml:space="preserve">
+    <value>冒犯者…願用生命抹除…</value>
+  </data>
+  <data name="HereticFullDescription" xml:space="preserve">
+    <value>異端屬於獨立陣營
+勝利條件：內鬼獲勝(或一些特殊獲勝)
+技能“詛咒擊殺”：
+   -以自己的生命為代價殺死目標
+   -根據“詛咒擊殺”的模式，來殺死目標，模式不同殺死目標的方式也會不同
+   模式“行動模式”
+      -選擇目標進行詛咒
+   模式“指定目標(行動模式)”
+      -選擇目標進行詛咒
+      -當異端被票出時，會連帶被詛咒玩家一起死亡
+   模式“會議模式”
+      -在會議時選擇目標進行詛咒
+   模式“指定目標(會議模式)”
+      -在會議時選擇目標進行詛咒
+      -當異端被票出時，會連帶被詛咒玩家一起死亡
+   模式“連帶模式”
+      -當異端被票出時，會連帶隨機一名玩家一起死亡</value>
+  </data>
+  <data name="HereticAbility" xml:space="preserve">
+    <value>詛咒擊殺</value>
+  </data>
+  <data name="Shepherd" xml:space="preserve">
+    <value>牧狼人</value>
+  </data>
+  <data name="ShepherdCanKill" xml:space="preserve">
+    <value>牧狼人有擊殺能力</value>
+  </data>
+  <data name="ShepherdIsSubTeam" xml:space="preserve">
+    <value>是否為豺狼副團隊</value>
+  </data>
+  <data name="ShepherdUseVent" xml:space="preserve">
+    <value>牧狼人可以使用通風管</value>
+  </data>
+  <data name="ShepherdHasTask" xml:space="preserve">
+    <value>牧狼人擁有任務</value>
+  </data>
+  <data name="ShepherdSeeJackalTaskRate" xml:space="preserve">
+    <value>完成多少任務可知曉“豺狼”</value>
+  </data>
+  <data name="ShepherdIntroDescription" xml:space="preserve">
+    <value>狼群不可一日無首</value>
+  </data>
+  <data name="ShepherdShortDescription" xml:space="preserve">
+    <value>領導狼群獲得勝利</value>
+  </data>
+  <data name="ShepherdFullDescription" xml:space="preserve">
+    <value>牧狼人屬於獨立陣營
+勝利條件：豺狼獲勝(包括特殊獲勝)
+
+   -牧狼人有擊殺能力，當處於副團隊時，牧狼人會成為豺狼陣營的副團隊角色
+當豺狼與跟班存活時：
+   -牧狼人不計入豺狼團隊
+   -（即使豺狼、跟班、牧狼人都還活着，豺狼陣營的生存勝利人數也只算2人）
+當豺狼與跟班死亡時：
+   -滿足以下條件可讓豺狼陣營獲勝
+   1.所有內鬼及擁有擊殺能力的中立職業均已死亡
+   2. 超過一半的存活者屬於同一陣營
+
+   -當豺狼沒有出現時，該職業也不會出現</value>
+  </data>
+  <data name="Furry" xml:space="preserve">
+    <value>領頭狼</value>
+  </data>
+  <data name="FurryUseVent" xml:space="preserve">
+    <value>領頭狼可以使用通風櫃</value>
+  </data>
+  <data name="FurryHasTask" xml:space="preserve">
+    <value>領頭狼擁有任務</value>
+  </data>
+  <data name="FurrySeeJackalTaskRate" xml:space="preserve">
+    <value>完成多少任務可知曉“豺狼”</value>
+  </data>
+  <data name="FurryIntroDescription" xml:space="preserve">
+    <value>流淌著豺狼之血（？）的船員</value>
+  </data>
+  <data name="FurryShortDescription" xml:space="preserve">
+    <value>你的渺小有目共睹，你的未來潛力無限</value>
+  </data>
+  <data name="FurryFullDescription" xml:space="preserve">
+    <value>領頭狼屬於獨立陣營
+   -如果豺狼沒有出現，該職業也不會出現
+勝利條件：豺狼獲勝(包括特殊勝利)
+
+當豺狼與跟班存活時：
+   -領頭狼不計入豺狼團隊
+   -（即使豺狼、跟班、領頭狼都還活著，豺狼陣營的生存勝利人數也只算2人）
+
+-被動能力：血之覺醒
+   -當跟班早於豺狼死亡，且豺狼死亡(無論怎麼死的)時，領頭狼會變為豺狼
+   -當變為豺狼時，無法招募新的跟班</value>
+  </data>
+  <data name="Intimate" xml:space="preserve">
+    <value>親密之人</value>
+  </data>
+  <data name="IntimateCanKill" xml:space="preserve">
+    <value>能否進行擊殺</value>
+  </data>
+  <data name="IntimateIsSubTeam" xml:space="preserve">
+    <value>是否為病嬌陣營副團隊</value>
+  </data>
+  <data name="IntimateUseVent" xml:space="preserve">
+    <value>親密之人可以使用通風管</value>
+  </data>
+  <data name="IntimateHasTask" xml:space="preserve">
+    <value>親密之人擁有任務</value>
+  </data>
+  <data name="IntimateSeeYandereTaskRate" xml:space="preserve">
+    <value>完成多少任務可知曉“病嬌”</value>
+  </data>
+  <data name="IntimateFullDescription" xml:space="preserve">
+    <value>親密之人為獨立陣營
+勝利條件：病嬌獲勝(包括特殊勝利)
+   -親密之人有擊殺能力，當處於副團隊時，親密之人會成為病嬌陣營的副團隊角色
+
+當病嬌還活著時：
+   -不計入病嬌陣營
+   -(即使病嬌活著，病嬌陣營的生存勝利人數也只算2人）
+
+當病嬌死亡時：
+   -滿足以下條件可讓病嬌陣營獲勝
+   1.所有內鬼及擁有擊殺能力的中立職業均已死亡
+   2. 超過一半的存活者屬於同一陣營
+
+   -當病嬌不出現，該職業也會出現</value>
+  </data>
+  <data name="IntimateShortDescription" xml:space="preserve">
+    <value>如果是為了病嬌醬…弄髒雙手我也願意！</value>
+  </data>
+  <data name="IntimateIntroDescription" xml:space="preserve">
+    <value>病嬌醬是我的最好最好最好…的朋友！</value>
+  </data>
+  <data name="Surrogator" xml:space="preserve">
+    <value>暗戀者</value>
+  </data>
+  <data name="SurrogatorUseVent" xml:space="preserve">
+    <value>暗戀者可以使用通風管</value>
+  </data>
+  <data name="SurrogatorHasTask" xml:space="preserve">
+    <value>暗戀者擁有任務</value>
+  </data>
+  <data name="SurrogatorSeeYandereTaskRate" xml:space="preserve">
+    <value>完成多少任務可知曉“病嬌”</value>
+  </data>
+  <data name="SurrogatorAbilityCoolTime" xml:space="preserve">
+    <value>“冤屍纏繞”冷卻時間</value>
+  </data>
+  <data name="SurrogatorAbilityActiveTime" xml:space="preserve">
+    <value>“冤屍纏繞”吸收所需時間</value>
+  </data>
+  <data name="SurrogatorAbilityCount" xml:space="preserve">
+    <value>“冤屍纏繞”可使用次數</value>
+  </data>
+  <data name="SurrogatorRange" xml:space="preserve">
+    <value>“冤屍纏繞”吸收距離</value>
+  </data>
+  <data name="SurrogatorPreventNum" xml:space="preserve">
+    <value>“無聲的庇佑”初始阻擋次數</value>
+  </data>
+  <data name="SurrogatorPreventKillTime" xml:space="preserve">
+    <value>“無聲的庇佑”防禦後返還擊殺冷卻</value>
+  </data>
+  <data name="SurrogatorAbility" xml:space="preserve">
+    <value>冤屍纏繞</value>
+  </data>
+  <data name="SurrogatorIntroDescription" xml:space="preserve">
+    <value>來自陰影中的幫助</value>
+  </data>
+  <data name="SurrogatorFullDescription" xml:space="preserve">
+    <value>暗戀者屬於獨立陣營
+   -如果病嬌不出現，該職業也不會出現
+勝利條件：病嬌獲勝(包括特殊勝利)
+
+被動能力“無聲的庇佑”
+   -阻止病嬌的“心上人”被普通擊殺一定次數
+   -通過“怨屍纏繞”可以增加次數
+主動能力“冤屍纏繞”
+   -通過技能可以吸收周圍屍體
+   -吸收一段時間後屍體會消失並增加“無聲的庇護”次數</value>
+  </data>
+  <data name="SurrogatorTask" xml:space="preserve">
+    <value>病嬌醬…我會為你而做出一切…</value>
+  </data>
+  <data name="Knight" xml:space="preserve">
+    <value>騎士</value>
+  </data>
+  <data name="KnightIsSubTeam" xml:space="preserve">
+    <value>是女王的副團隊角色</value>
+  </data>
+  <data name="KnightUseVent" xml:space="preserve">
+    <value>騎士能使用通風管</value>
+  </data>
+  <data name="KnightHasTask" xml:space="preserve">
+    <value>騎士擁有任務</value>
+  </data>
+  <data name="KnightSeeQueenTaskRate" xml:space="preserve">
+    <value>完成多少任務可知曉“女皇”</value>
+  </data>
+  <data name="KnightIntroDescription" xml:space="preserve">
+    <value>女皇親衛隊的隊長在此</value>
+  </data>
+  <data name="KnightFullDescription" xml:space="preserve">
+    <value>騎士屬於獨立陣營
+獲勝條件：女皇獲勝(包括特殊獲勝)
+   -騎士有擊殺能力，當處於副團隊時，騎士會成為女皇陣營的副團隊角色
+
+當女皇和僕從還存活時：
+   -不計入女皇陣營
+   -(即使女皇活著，女皇陣營的生存勝利人數也只算女皇+僕從）
+
+當女皇和僕從死亡時：
+   -滿足以下條件可讓女皇陣營獲勝：
+   1.所有內鬼及擁有擊殺能力的中立職業均已死亡
+   2. 超過一半的存活者屬於同一陣營
+
+   -當女皇不存在，該職業也不會出現</value>
+  </data>
+  <data name="KnightShortDescription" xml:space="preserve">
+    <value>作為女皇最鋒利的劍</value>
+  </data>
+  <data name="Pawn" xml:space="preserve">
+    <value>兵</value>
+  </data>
+  <data name="PawnUseVent" xml:space="preserve">
+    <value>兵能使用通風管</value>
+  </data>
+  <data name="PawnHasTask" xml:space="preserve">
+    <value>兵擁有任務</value>
+  </data>
+  <data name="PawnSeeQueenTaskRate" xml:space="preserve">
+    <value>完成多少任務可知曉“女皇”</value>
+  </data>
+  <data name="PawnIntroDescription" xml:space="preserve">
+    <value>女王的先遣隊</value>
+  </data>
+  <data name="PawnShortDescription" xml:space="preserve">
+    <value>協助女王取得勝利</value>
+  </data>
+  <data name="PawnFullDescription" xml:space="preserve">
+    <value>兵屬於獨立陣營
+獲勝條件：女皇獲勝(包括特殊獲勝)
+   -當女皇不存在，該職業也不會出現</value>
+  </data>
+  <data name="AbilityOnTaskPhase" xml:space="preserve">
+    <value>行動模式</value>
+  </data>
+  <data name="AbilityOnTaskPhaseTarget" xml:space="preserve">
+    <value>指定目標&lt;br&gt;行動模式</value>
+  </data>
+  <data name="AbilityOnMeeting" xml:space="preserve">
+    <value>會議模式</value>
+  </data>
+  <data name="AbilityOnMeetingTarget" xml:space="preserve">
+    <value>指定目標&lt;br&gt;會議模式</value>
+  </data>
+  <data name="AbilityOnExiled" xml:space="preserve">
+    <value>連帶模式</value>
+  </data>
+  <data name="AliceWinTaskRate" xml:space="preserve">
+    <value>取得勝利所需的任務完成進度</value>
+  </data>
+  <data name="AliceWinKillNum" xml:space="preserve">
+    <value>取得勝利所需的擊殺數</value>
+  </data>
+  <data name="AllJackalWin" xml:space="preserve">
+    <value>到最後還是得靠我嘛~&lt;br&gt;豺狼陣營</value>
+  </data>
+  <data name="AllYandereWin" xml:space="preserve">
+    <value>病嬌醬，我們贏啦~~&lt;br&gt;病嬌陣營</value>
+  </data>
+  <data name="AllQueenWin" xml:space="preserve">
+    <value>女皇殿下…我們成功了！&lt;br&gt;女皇陣營</value>
+  </data>
+  <data name="ShepherdCanKillJackal" xml:space="preserve">
+    <value>知曉豺狼時&lt;br&gt;能否擊殺豺狼</value>
+  </data>
+  <data name="ShepherdCanKillSidekick" xml:space="preserve">
+    <value>知曉豺狼時&lt;br&gt;能否擊殺跟班</value>
+  </data>
+  <data name="IntimateCanKillYandere" xml:space="preserve">
+    <value>知曉病嬌時&lt;br&gt;能否擊殺病嬌</value>
+  </data>
+  <data name="IntimateCanKillOneSideLover" xml:space="preserve">
+    <value>知曉病嬌時&lt;br&gt;能否擊殺所愛之人</value>
+  </data>
+  <data name="KnightCanKillQueen" xml:space="preserve">
+    <value>知曉女皇時&lt;br&gt;能否擊殺女皇</value>
+  </data>
+  <data name="KnightCanKillServant" xml:space="preserve">
+    <value>知曉女皇時&lt;br&gt;能否擊殺侍從</value>
+  </data>
+  <data name="HereticUseVent" xml:space="preserve">
+    <value>能否使用通風管</value>
+  </data>
+  <data name="HereticMeetingButtonTaskGage" xml:space="preserve">
+    <value>完成多少任務才可開啟“緊急會議”</value>
   </data>
 </root>
