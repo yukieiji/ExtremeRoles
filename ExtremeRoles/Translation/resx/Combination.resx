@@ -895,7 +895,7 @@
     <value>イビルゲッサー</value>
   </data>
   <data name="GuesserCanCallMeeting" xml:space="preserve">
-    <value>会議を起こすことが出来るが</value>
+    <value>会議を起こすことが出来るか</value>
   </data>
   <data name="GuesserGuessNum" xml:space="preserve">
     <value>「推殺」が出来る回数</value>
@@ -1157,18 +1157,18 @@
     <value>「ミリタント」が「アサシン」をキルできるか</value>
   </data>
   <data name="GuesserGuessDefaultRoleMode" xml:space="preserve">
-    <value>デフォルト役職の推殺</value>
+    <value>デフォルト役職の「推殺」</value>
   </data>
   <data name="GuesserCanCrewmate" xml:space="preserve">
-    <value>「クルー」の推殺</value>
+    <value>「クルー」の「推殺」</value>
   </data>
   <data name="GuesserCanImpostor" xml:space="preserve">
-    <value>「インポスター」の推殺</value>
+    <value>「インポスター」の「推殺」</value>
   </data>
   <data name="GuesserCanDove" xml:space="preserve">
-    <value>「ドーヴ」の推殺</value>
+    <value>「ドーヴ」の「推殺」</value>
   </data>
   <data name="GuesserCanMilitant" xml:space="preserve">
-    <value>「ミリタント」の推殺</value>
+    <value>「ミリタント」の「推殺」</value>
   </data>
 </root>

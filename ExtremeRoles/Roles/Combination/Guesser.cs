@@ -654,14 +654,14 @@ public sealed class Guesser :
 		factory.CreateBoolOption(
             GuesserOption.CanCallMeeting,
             false);
-        factory.CreateIntOption(
+        var maxGuessNum = factory.CreateIntOption(
             GuesserOption.GuessNum,
             1, 1, GameSystem.MaxImposterNum, 1,
             format: OptionUnit.Shot);
-        factory.CreateIntOption(
+        factory.CreateIntDynamicMaxOption(
             GuesserOption.MaxGuessNumWhenMeeting,
-            1, 1, GameSystem.MaxImposterNum, 1,
-            format: OptionUnit.Shot);
+            1, 1, 1, maxGuessNum,
+			format: OptionUnit.Shot);
 
         var defaultRoleMode = factory.CreateSelectionOption<GuesserOption, GuessMode>(
             GuesserOption.GuessDefaultRoleMode);
