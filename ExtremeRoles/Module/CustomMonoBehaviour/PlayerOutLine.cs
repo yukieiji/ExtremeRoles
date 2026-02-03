@@ -1,8 +1,11 @@
-using ExtremeRoles.Extension.Il2Cpp;
-using Il2CppInterop.Runtime.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
 using UnityEngine;
+using Il2CppInterop.Runtime.Attributes;
+
+using ExtremeRoles.Extension.Il2Cpp;
 
 #nullable enable
 
@@ -11,7 +14,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 {
-	public Material? OutLineMaterial { private get; set; }
+	public PlayerControl? Target { private get; set; }
 	private bool blocked = false;
 
 	private static Dictionary<byte, PlayerOutLine> cache = [];
@@ -25,10 +28,7 @@ public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 		PlayerControl? target,
 		Color color)
 	{
-		if (target == null ||
-			target.cosmetics == null ||
-			target.cosmetics.currentBodySprite == null ||
-			target.cosmetics.currentBodySprite.BodySprite == null)
+		if (target == null)
 		{
 			return;
 		}
@@ -36,6 +36,8 @@ public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 			outLine == null)
 		{
 			outLine = target.gameObject.TryAddComponent<PlayerOutLine>();
+			outLine.Target = target;
+			cache[target.PlayerId] = outLine;
 		}
 		outLine.SetOutlineColor(color);
 	}
@@ -43,26 +45,39 @@ public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 	[HideFromIl2Cpp]
 	public void SetOutlineColor(Color color)
 	{
-		if (this.OutLineMaterial == null)
+		if (!TryGetValidMaterial(out var material))
 		{
 			return;
 		}
 		this.blocked = true;
-		this.OutLineMaterial.SetFloat("_Outline", 1f);
-		this.OutLineMaterial.SetColor("_OutlineColor", color);
+		material.SetFloat("_Outline", 1f);
+		material.SetColor("_OutlineColor", color);
 	}
 
 	public void LateUpdate()
 	{
-		if (this.OutLineMaterial == null)
-		{
-			return;
-		}
-		if (this.blocked)
+		if (this.blocked ||
+			!TryGetValidMaterial(out var material))
 		{
 			this.blocked = false;
 			return;
 		}
-		this.OutLineMaterial.SetFloat("_Outline", 0f);
+		material.SetFloat("_Outline", 0f);
+	}
+
+	private bool TryGetValidMaterial(
+		[NotNullWhen(true)] out Material? outLineMaterial)
+	{
+		outLineMaterial = null;
+		if (this.Target == null ||
+			this.Target.cosmetics == null ||
+			this.Target.cosmetics.currentBodySprite == null ||
+			this.Target.cosmetics.currentBodySprite.BodySprite == null ||
+			this.Target.cosmetics.currentBodySprite.BodySprite.material == null)
+		{
+			return false;
+		}
+		outLineMaterial = this.Target.cosmetics.currentBodySprite.BodySprite.material;
+		return true;
 	}
 }
