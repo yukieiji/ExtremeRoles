@@ -45,7 +45,7 @@ public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 	[HideFromIl2Cpp]
 	public void SetOutlineColor(Color color)
 	{
-		if (!TryGetValidMaterial(out var material))
+		if (!tryGetValidMaterial(out var material))
 		{
 			return;
 		}
@@ -57,7 +57,7 @@ public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 	public void LateUpdate()
 	{
 		if (this.blocked ||
-			!TryGetValidMaterial(out var material))
+			!tryGetValidMaterial(out var material))
 		{
 			this.blocked = false;
 			return;
@@ -65,7 +65,7 @@ public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 		material.SetFloat("_Outline", 0f);
 	}
 
-	private bool TryGetValidMaterial(
+	private bool tryGetValidMaterial(
 		[NotNullWhen(true)] out Material? outLineMaterial)
 	{
 		if (this.Target == null ||
