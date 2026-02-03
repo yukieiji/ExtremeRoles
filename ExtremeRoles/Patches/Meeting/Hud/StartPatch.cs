@@ -87,10 +87,6 @@ public static class MeetingHudStartPatch
 		ExtremeSystemTypeManager.Instance.Reset(null, (byte)ResetTiming.MeetingStart);
 		logger.LogInfo("Resetting End: ShipStatus Systems");
 
-		logger.LogInfo("Resetting Start: PlayerControl");
-		PlayerHeler.ResetTarget();
-		logger.LogInfo("Resetting End: PlayerControl");
-
 		logger.LogInfo("Resetting Start: Modding MeetingHud system");
 		MeetingHudSelectPatch.SetSelectBlock(false);
 		logger.LogInfo("Resetting End: Modding MeetingHud system");

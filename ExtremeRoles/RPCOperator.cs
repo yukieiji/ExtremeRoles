@@ -232,7 +232,9 @@ public static class RPCOperator
 
     public static void Initialize()
     {
-        Helper.Player.ResetTarget();
+		// キャッシュクリア
+		Module.CustomMonoBehaviour.PlayerOutLine.ClearCache();
+
         ExtremeRolesPlugin.ShipState.Initialize();
 
 
