@@ -111,6 +111,11 @@ public class ExtremeAbilityButton
 
 	public void SetButtonShow(bool isShow)
 	{
+		// 表示から非表示に変わるときはターゲットをリセットする
+		if (this.isShow && !isShow)
+		{
+			Player.ResetTarget();
+		}
 		this.isShow = isShow;
 		setActive(isShow);
 	}
