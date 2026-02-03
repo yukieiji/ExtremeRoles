@@ -68,16 +68,19 @@ public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 	private bool TryGetValidMaterial(
 		[NotNullWhen(true)] out Material? outLineMaterial)
 	{
-		outLineMaterial = null;
 		if (this.Target == null ||
 			this.Target.cosmetics == null ||
 			this.Target.cosmetics.currentBodySprite == null ||
 			this.Target.cosmetics.currentBodySprite.BodySprite == null ||
 			this.Target.cosmetics.currentBodySprite.BodySprite.material == null)
 		{
+			outLineMaterial = null;
 			return false;
 		}
-		outLineMaterial = this.Target.cosmetics.currentBodySprite.BodySprite.material;
-		return true;
+		else
+		{
+			outLineMaterial = this.Target.cosmetics.currentBodySprite.BodySprite.material;
+			return true;
+		}
 	}
 }
