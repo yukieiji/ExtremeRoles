@@ -150,6 +150,24 @@ public static class Player
         return playersInAbilityRangeSorted[0];
     }
 
+	public static bool TryGetClosestPlayerInRange(
+		SingleRoleBase role,
+		float range,
+		[NotNullWhen(true)] out PlayerControl? targetPlayer)
+	{
+		targetPlayer = GetClosestPlayerInRange(PlayerControl.LocalPlayer, role, range);
+		return targetPlayer != null;
+	}
+
+	public static bool TryGetClosestPlayerInRange(
+		PlayerControl sourcePlayer,
+		SingleRoleBase role,
+		float range,
+		[NotNullWhen(true)] out PlayerControl? targetPlayer)
+	{
+		targetPlayer = GetClosestPlayerInRange(sourcePlayer, role, range);
+		return targetPlayer != null;
+	}
 
 	public static PlayerControl? GetClosestPlayerInRange(
         PlayerControl sourcePlayer,

@@ -85,9 +85,8 @@ public sealed class TuckerRole :
 
 	public static void TargetToChimera(byte rolePlayerId, byte targetPlayerId)
 	{
-		PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-		PlayerControl rolePlayer = Player.GetPlayerControlById(rolePlayerId);
-		if (rolePlayer == null ||
+		if (!Player.TryGetPlayerControl(rolePlayerId, out var rolePlayer) ||
+			!Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer) ||
 			targetPlayer == null ||
 			!ExtremeRoleManager.TryGetSafeCastedRole<TuckerRole>(rolePlayerId, out var tucker) ||
 			tucker.option is null)
@@ -167,13 +166,14 @@ public sealed class TuckerRole :
 		{
 			foreach (byte playerId in chimera)
 			{
-				PlayerControl player = Player.GetPlayerControlById(playerId);
-
-				if (player == null ||
+				if (!Player.TryGetPlayerControl(playerId, out var player) ||
 					player.Data.IsDead ||
 					player.Data.Disconnected ||
 					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
-						playerId, out _)) { continue; }
+						playerId, out _))
+				{
+					continue;
+				}
 
 				player.Exiled();
 			}
@@ -187,13 +187,14 @@ public sealed class TuckerRole :
 		{
 			foreach (byte playerId in chimera)
 			{
-				PlayerControl player = Player.GetPlayerControlById(playerId);
-
-				if (player == null ||
+				if (!Player.TryGetPlayerControl(playerId, out var player) ||
 					player.Data.IsDead ||
 					player.Data.Disconnected ||
 					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
-						playerId, out _)) { continue; }
+						playerId, out _))
+				{
+					continue;
+				}
 
 				RPCOperator.UncheckedMurderPlayer(
 					playerId, playerId,

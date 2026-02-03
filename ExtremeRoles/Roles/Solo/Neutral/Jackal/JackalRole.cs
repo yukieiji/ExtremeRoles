@@ -193,14 +193,18 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 
     public static void TargetToSideKick(byte callerId, byte targetId)
     {
-        PlayerControl targetPlayer = Player.GetPlayerControlById(targetId);
-        SingleRoleBase targetRole = ExtremeRoleManager.GameRole[targetId];
+        if (!(
+				Player.TryGetPlayerControl(targetId, out var targetPlayer) &&
+				ExtremeRoleManager.TryGetRole(targetId, out var targetRole) &&
+				ExtremeRoleManager.TryGetSafeCastedRole<JackalRole>(callerId, out var sourceJackal)
+			))
+		{
+			return;
+		}
+		
+		IRoleSpecialReset.ResetRole(targetId);
 
-        IRoleSpecialReset.ResetRole(targetId);
-
-        var sourceJackal = ExtremeRoleManager.GetSafeCastedRole<JackalRole>(callerId);
-        if (sourceJackal == null) { return; }
-        var newSidekick = new SidekickRole(
+		var newSidekick = new SidekickRole(
             sourceJackal,
             callerId,
             targetRole.IsImpostor(),
@@ -276,8 +280,12 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 
             foreach (byte playerId in SidekickPlayerId)
             {
-                string playerName = Player.GetPlayerControlById(playerId).Data.PlayerName;
-                baseDesc += $"{playerName},";
+				if (Player.TryGetPlayerControl(playerId, out var player) &&
+					player.Data != null)
+				{
+					string playerName = player.Data.PlayerName;
+					baseDesc += $"{playerName},";
+				}
             }
         }
 

@@ -62,15 +62,21 @@ public sealed class Foras : GhostRoleBase
 
     private static void showArrow(byte forasPlayerId, byte arrowTargetPlayerId)
     {
-        var forasPlayer = Helper.Player.GetPlayerControlById(forasPlayerId);
-        var arrowTargetPlayer = Helper.Player.GetPlayerControlById(arrowTargetPlayerId);
-
-        if (!forasPlayer || !arrowTargetPlayer) { return; }
+        if (!(
+				Helper.Player.TryGetPlayerControl(forasPlayerId, out var forasPlayer) &&
+				Helper.Player.TryGetPlayerControl(arrowTargetPlayerId, out var arrowTargetPlayer)
+			))
+		{
+			return;
+		}
         Foras foras = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Foras>(forasPlayerId);
         var (status, anotherStatus) = ExtremeRoleManager.GetRoleStatus<IParentChainStatus>(
             forasPlayerId);
 
-        if (foras is null || (status is null && anotherStatus is null)) { return; }
+        if (foras is null || (status is null && anotherStatus is null))
+		{
+			return;
+		}
 
         byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 

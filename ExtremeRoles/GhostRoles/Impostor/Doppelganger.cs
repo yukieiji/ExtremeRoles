@@ -41,8 +41,13 @@ public sealed class Doppelganger : GhostRoleBase
 
 	public static void Doppl(byte rolePlayer, byte targetPlayer)
 	{
-		var rolePc = Player.GetPlayerControlById(rolePlayer);
-		var targetPc = Player.GetPlayerControlById(targetPlayer);
+		if (!(
+				Player.TryGetPlayerControl(rolePlayer, out var rolePc) &&
+				Player.TryGetPlayerControl(targetPlayer, out var targetPc)
+			))
+		{
+			return;
+		}
 
 		var ghostRole = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Doppelganger>(rolePlayer);
 		if (ghostRole is null)

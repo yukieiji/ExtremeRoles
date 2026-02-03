@@ -35,7 +35,7 @@ public sealed class SurrogatorRole :
 	private NetworkedPlayerInfo? targetBody;
 	private SurrogatorGurdSystem? gurdSystem;
 
-	private NetworkedPlayerInfo DeadBody => Player.GetDeadBodyInfo(this.range);
+	private NetworkedPlayerInfo? DeadBody => Player.GetDeadBodyInfo(this.range);
 	private byte activateTarget;
 	private float range;
 

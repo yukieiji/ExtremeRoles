@@ -290,7 +290,10 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
     public bool IsAbilityCheck()
     {
-        if (this.targetDeadBody != null) { return true; }
+        if (this.targetDeadBody != null || this.targetPlayer == null)
+		{
+			return true;
+		}
 
         return Player.IsPlayerInRangeAndDrawOutLine(
             PlayerControl.LocalPlayer,

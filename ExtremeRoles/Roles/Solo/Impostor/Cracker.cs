@@ -100,9 +100,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
     public bool IsAbilityUse()
     {
         this.targetDeadBodyId = byte.MaxValue;
-        NetworkedPlayerInfo info = Player.GetDeadBodyInfo(
-            this.crackDistance);
-
+        var info = Player.GetDeadBodyInfo(this.crackDistance);
         if (info != null)
         {
             this.targetDeadBodyId = info.PlayerId;
