@@ -14,7 +14,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 {
-	public PlayerControl? Target { private get; set; }
+	private PlayerControl? target { get; set; }
 	private bool blocked = false;
 
 	private static Dictionary<byte, PlayerOutLine> cache = [];
@@ -36,7 +36,7 @@ public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 			outLine == null)
 		{
 			outLine = target.gameObject.TryAddComponent<PlayerOutLine>();
-			outLine.Target = target;
+			outLine.target = target;
 			cache[target.PlayerId] = outLine;
 		}
 		outLine.SetOutlineColor(color);
@@ -68,18 +68,18 @@ public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 	private bool tryGetValidMaterial(
 		[NotNullWhen(true)] out Material? outLineMaterial)
 	{
-		if (this.Target == null ||
-			this.Target.cosmetics == null ||
-			this.Target.cosmetics.currentBodySprite == null ||
-			this.Target.cosmetics.currentBodySprite.BodySprite == null ||
-			this.Target.cosmetics.currentBodySprite.BodySprite.material == null)
+		if (this.target == null ||
+			this.target.cosmetics == null ||
+			this.target.cosmetics.currentBodySprite == null ||
+			this.target.cosmetics.currentBodySprite.BodySprite == null ||
+			this.target.cosmetics.currentBodySprite.BodySprite.material == null)
 		{
 			outLineMaterial = null;
 			return false;
 		}
 		else
 		{
-			outLineMaterial = this.Target.cosmetics.currentBodySprite.BodySprite.material;
+			outLineMaterial = this.target.cosmetics.currentBodySprite.BodySprite.material;
 			return true;
 		}
 	}
