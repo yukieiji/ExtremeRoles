@@ -87,7 +87,6 @@ public sealed class TuckerRole :
 	{
 		if (!Player.TryGetPlayerControl(rolePlayerId, out var rolePlayer) ||
 			!Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer) ||
-			targetPlayer == null ||
 			!ExtremeRoleManager.TryGetSafeCastedRole<TuckerRole>(rolePlayerId, out var tucker) ||
 			tucker.option is null)
 		{
