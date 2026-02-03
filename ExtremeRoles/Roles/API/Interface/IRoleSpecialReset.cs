@@ -43,7 +43,6 @@ public interface IRoleSpecialReset
         // プレイヤーのリセット処理
         if (PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
         {
-            Player.ResetTarget();
             abilityReset(resetRole);
         }
 

@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using AmongUs.GameOptions;
 using UnityEngine;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -12,14 +14,13 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using System.Linq;
 
+#nullable enable
 
 namespace ExtremeRoles.Helper;
 
 public static class Player
 {
-    private static PlayerControl prevTarget;
 	public static float DefaultKillCoolTime => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown);
 
 	private static Il2CppReferenceArray<Collider2D> hitBuffer = new Il2CppReferenceArray<Collider2D>(20);
@@ -31,7 +32,7 @@ public static class Player
 	};
 
 	public static Dictionary<byte, PoolablePlayer> CreatePlayerIcon(
-		Transform parent = null, Vector3? scale = null)
+		Transform? parent = null, Vector3? scale = null)
 	{
 		if (parent == null)
 		{
@@ -70,7 +71,7 @@ public static class Player
 
 	}
 
-	public static PlayerControl GetPlayerControlById(byte id)
+	public static PlayerControl? GetPlayerControlById(byte id)
     {
         foreach (PlayerControl player in PlayerCache.AllPlayerControl)
         {
@@ -98,9 +99,9 @@ public static class Player
 		return player != null;
 	}
 
-    public static Console GetClosestConsole(PlayerControl player, float radius)
+    public static Console? GetClosestConsole(PlayerControl player, float radius)
     {
-        Console closestConsole = null;
+        Console? closestConsole = null;
         float closestConsoleDist = 9999;
         Vector2 pos = player.GetTruePosition();
 
@@ -125,7 +126,7 @@ public static class Player
         return closestConsole;
     }
 
-    public static PlayerControl GetClosestPlayerInKillRange()
+    public static PlayerControl? GetClosestPlayerInKillRange()
     {
         var playersInAbilityRangeSorted =
             PlayerControl.LocalPlayer.Data.Role.GetPlayersInAbilityRangeSorted(
@@ -137,7 +138,7 @@ public static class Player
         return playersInAbilityRangeSorted[0];
     }
 
-    public static PlayerControl GetClosestPlayerInKillRange(PlayerControl player)
+    public static PlayerControl? GetClosestPlayerInKillRange(PlayerControl player)
     {
         var playersInAbilityRangeSorted =
             player.Data.Role.GetPlayersInAbilityRangeSorted(
@@ -150,7 +151,7 @@ public static class Player
     }
 
 
-	public static PlayerControl GetClosestPlayerInRange(
+	public static PlayerControl? GetClosestPlayerInRange(
         PlayerControl sourcePlayer,
         SingleRoleBase role,
         float range)
@@ -159,13 +160,14 @@ public static class Player
         List<PlayerControl> allPlayer = GetAllPlayerInRange(
             sourcePlayer, role, range);
 
-        resetPlayerOutLine();
-
-        if (allPlayer.Count <= 0) { return null; }
+        if (allPlayer.Count <= 0)
+		{
+			return null;
+		}
 
         PlayerControl result = allPlayer[0];
 
-        SetPlayerOutLine(result, role.GetNameColor());
+		PlayerOutLine.SetOutline(result, role.GetNameColor());
 
         return result;
     }
@@ -180,17 +182,13 @@ public static class Player
 
         if (result)
         {
-            SetPlayerOutLine(targetPlayer, role.GetNameColor());
-        }
-        else
-        {
-            resetPlayerOutLine();
+			PlayerOutLine.SetOutline(targetPlayer, role.GetNameColor());
         }
         return result;
     }
 
     public static bool TryGetTaskType(
-        PlayerControl player, TaskTypes taskType, out NormalPlayerTask task)
+        PlayerControl player, TaskTypes taskType, [NotNullWhen(true)] out NormalPlayerTask? task)
     {
         task = null;
 
@@ -209,7 +207,7 @@ public static class Player
         if (!playerTask) { return false; }
         task = playerTask.TryCast<NormalPlayerTask>();
 
-        return task && !task.IsComplete;
+        return task != null && !task.IsComplete;
     }
 
     public static List<PlayerControl> GetAllPlayerInRange(
@@ -287,7 +285,7 @@ public static class Player
 
     }
 
-    public static NetworkedPlayerInfo GetDeadBodyInfo(float range)
+    public static NetworkedPlayerInfo? GetDeadBodyInfo(float range)
     {
         Vector2 playerPos = PlayerControl.LocalPlayer.GetTruePosition();
 
@@ -313,12 +311,6 @@ public static class Player
         }
         return null;
     }
-
-	public static void ResetTarget()
-	{
-		resetPlayerOutLine();
-		prevTarget = null;
-	}
 
 	public static void RpcUncheckSnap(byte targetPlayerId, Vector2 pos, bool isTeleportXion=false)
     {
@@ -387,15 +379,6 @@ public static class Player
         RPCOperator.CleanDeadBody(targetPlayerId);
     }
 
-	public static void SetPlayerOutLine(PlayerControl target, Color color)
-    {
-        if (target == null || target.cosmetics.currentBodySprite.BodySprite == null) { return; }
-
-        target.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 1f);
-        target.cosmetics.currentBodySprite.BodySprite.material.SetColor("_OutlineColor", color);
-        prevTarget = target;
-    }
-
 	public static bool TryGetPlayerRoom(PlayerControl player, [NotNullWhen(true)] out SystemTypes? roomeId)
 	{
 		roomeId = null;
@@ -459,15 +442,6 @@ public static class Player
                 truePosition, vector.normalized,
                 magnitude, Constants.ShipAndObjectsMask);
 
-    }
-
-    private static void resetPlayerOutLine()
-    {
-        if (prevTarget != null &&
-            prevTarget.cosmetics.currentBodySprite.BodySprite != null)
-        {
-            prevTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 0f);
-        }
     }
 
 	private static bool isHit(

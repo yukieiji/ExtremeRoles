@@ -89,7 +89,6 @@ public sealed class QueenRole :
 		var core = targetRole.Core;
         if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
-            Player.ResetTarget();
             servant.SelfKillAbility(queen.ServantSelfKillCool);
             if (core.Team != ExtremeRoleType.Neutral)
             {
