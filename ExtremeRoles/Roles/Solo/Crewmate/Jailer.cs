@@ -112,8 +112,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 	public static void NotCrewmateToYardbird(byte rolePlayerId, byte targetPlayerId)
 	{
-		PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-		if (targetPlayer == null ||
+		if (!Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer) ||
 			!ExtremeRoleManager.TryGetSafeCastedRole<Jailer>(rolePlayerId, out var jailer) ||
 			jailer.yardBirdOption == null)
 		{
@@ -130,9 +129,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 	public static void ToLawbreaker(byte rolePlayerId)
 	{
-		PlayerControl targetPlayer = Player.GetPlayerControlById(rolePlayerId);
-		if (targetPlayer == null ||
-			!ExtremeRoleManager.TryGetSafeCastedRole<Jailer>(rolePlayerId, out var jailer) ||
+		if (!ExtremeRoleManager.TryGetSafeCastedRole<Jailer>(rolePlayerId, out var jailer) ||
 			jailer.lawBreakerOption == null)
 		{
 			return;
@@ -156,11 +153,10 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	public bool IsAbilityUse()
 	{
 		this.targetPlayerId = byte.MaxValue;
-
-		PlayerControl target = Player.GetClosestPlayerInRange(
-			PlayerControl.LocalPlayer, this,
-			this.range);
-		if (target == null) { return false; }
+		if (!Player.TryGetClosestPlayerInRange(this, this.range, out var target))
+		{
+			return false;
+		}
 
 		this.targetPlayerId = target.PlayerId;
 

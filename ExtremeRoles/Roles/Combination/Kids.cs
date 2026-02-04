@@ -235,8 +235,10 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         switch (abilityType)
         {
             case AbilityType.Scribe:
-				PlayerControl rolePlayer = Player.GetPlayerControlById(playerId);
-				setScibe(rolePlayer, delinquent);
+				if (Player.TryGetPlayerControl(playerId, out var rolePlayer))
+				{
+					setScibe(rolePlayer, delinquent);
+				}
                 break;
             case AbilityType.SelfBomb:
                 setBomb(delinquent);

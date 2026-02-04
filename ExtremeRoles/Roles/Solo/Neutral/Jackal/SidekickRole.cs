@@ -174,7 +174,9 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (Player.GetPlayerControlById(this.Parent).Data.Disconnected)
+		if (Player.TryGetPlayerControl(this.Parent, out var player) &&
+			player.Data != null &&
+			player.Data.Disconnected)
 		{
 			this.status.ClearSidekick();
 			ExtremeRoleManager.RpcReplaceRole(

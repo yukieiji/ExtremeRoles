@@ -187,11 +187,8 @@ public sealed class Summoner :
 	private bool isUseMarking()
 	{
 		this.targetData = null;
-
-		PlayerControl target = Player.GetClosestPlayerInRange(
-			PlayerControl.LocalPlayer, this,
-			this.range);
-		if (target == null ||
+		if (!Player.TryGetClosestPlayerInRange(
+			this, this.range, out var target) ||
 			(
 				this.summonTarget != null &&
 				target.PlayerId == this.summonTarget.PlayerId

@@ -98,11 +98,14 @@ public sealed class UnderWarper :
     public static void UseVentWithNoAnimation(
         byte playerId, int ventId, bool isEnter)
     {
-        PlayerControl targetPlayer = Player.GetPlayerControlById(playerId);
-        Vent vent = ShipStatus.Instance.AllVents.First(
+        Vent? vent = ShipStatus.Instance.AllVents.FirstOrDefault(
             (Vent v) => v.Id == ventId);
 
-        if (targetPlayer == null || vent == null) { return; }
+        if (!Player.TryGetPlayerControl(playerId, out var targetPlayer) || 
+			vent == null)
+		{
+			return;
+		}
 
         if (isEnter)
         {

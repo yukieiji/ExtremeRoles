@@ -215,13 +215,14 @@ public sealed class Hypnotist :
         byte rolePlayerId,
         byte targetPlayerId)
     {
-		var role = ExtremeRoleManager.GetSafeCastedRole<Hypnotist>(rolePlayerId);
-		if (role is null)
+		if (!(
+				ExtremeRoleManager.TryGetSafeCastedRole<Hypnotist>(rolePlayerId, out var role) &&
+				Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer) &&
+				ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole)
+			))
 		{
 			return;
 		}
-		var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-        var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
         IRoleSpecialReset.ResetRole(targetPlayerId);
         var newDoll = new Doll(targetPlayerId, rolePlayerId, role);
@@ -434,12 +435,12 @@ public sealed class Hypnotist :
     {
         foreach (byte playerId in this.doll)
         {
-            PlayerControl player = Player.GetPlayerControlById(playerId);
-
-            if (player == null) { continue; }
-
-            if (player.Data.IsDead ||
-                player.Data.Disconnected) { continue; }
+            if (!Player.TryGetPlayerControl(playerId, out var player) ||
+				player.Data.IsDead ||
+                player.Data.Disconnected)
+			{
+				continue;
+			}
 
             RPCOperator.UncheckedMurderPlayer(
                 playerId, playerId,
@@ -535,10 +536,11 @@ public sealed class Hypnotist :
     {
         foreach (byte playerId in this.doll)
         {
-            PlayerControl player = Player.GetPlayerControlById(playerId);
-
-            if (player == null) { continue; }
-            if (player.Data.IsDead || player.Data.Disconnected) { continue; }
+            if (!Player.TryGetPlayerControl(playerId, out var player) ||
+				player.Data.IsDead || player.Data.Disconnected)
+			{
+				continue;
+			}
 
             player.Exiled();
         }
@@ -549,12 +551,12 @@ public sealed class Hypnotist :
     {
         foreach (byte playerId in this.doll)
         {
-            PlayerControl player = Player.GetPlayerControlById(playerId);
-
-            if (player == null) { continue; }
-
-            if (player.Data.IsDead ||
-                player.Data.Disconnected) { continue; }
+            if (!Player.TryGetPlayerControl(playerId, out var player) ||
+				player.Data.IsDead ||
+                player.Data.Disconnected)
+			{
+				continue;
+			}
 
             RPCOperator.UncheckedMurderPlayer(
                 playerId, playerId,
@@ -1230,9 +1232,11 @@ public sealed class Doll :
 
     public void Update(PlayerControl rolePlayer)
     {
-        PlayerControl hypnotistPlayer = Player.GetPlayerControlById(this.hypnotistPlayerId);
         if (!rolePlayer.Data.IsDead &&
-            (hypnotistPlayer == null || hypnotistPlayer.Data.IsDead))
+            (
+				!Player.TryGetPlayerControl(this.hypnotistPlayerId, out var hypnotistPlayer) || 
+				hypnotistPlayer.Data.IsDead
+			))
         {
             Player.RpcUncheckMurderPlayer(
                 rolePlayer.PlayerId,

@@ -355,10 +355,8 @@ public sealed class HeroAcademiaRole : ConstCombinationRoleManagerBase
     private static void emergencyCall(
         byte vigilantePlayerId, byte targetPlayerId)
     {
-        PlayerControl vigilantePlayer = Player.GetPlayerControlById(vigilantePlayerId);
-        PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-
-        if (vigilantePlayer != null && targetPlayer != null)
+        if (Player.TryGetPlayerControl(vigilantePlayerId, out var vigilantePlayer) &&
+			Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer))
         {
 
             var hero = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Hero>();
@@ -379,10 +377,8 @@ public sealed class HeroAcademiaRole : ConstCombinationRoleManagerBase
     private static void drawHeroAndVillan(
         byte heroPlayerId, byte villanPlayerId)
     {
-        PlayerControl heroPlayer = Player.GetPlayerControlById(heroPlayerId);
-        PlayerControl villanPlayer = Player.GetPlayerControlById(villanPlayerId);
-
-        if (heroPlayer != null && villanPlayer != null)
+        if (Player.TryGetPlayerControl(heroPlayerId, out var heroPlayer) &&
+			Player.TryGetPlayerControl(villanPlayerId, out var villanPlayer))
         {
 
             ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
@@ -901,10 +897,10 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     {
         target = byte.MaxValue;
 
-        PlayerControl player = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this, range);
-
-        if (player == null) { return false; }
+        if (!Player.TryGetClosestPlayerInRange(this, range, out var player))
+		{
+			return false;
+		}
         target = player.PlayerId;
 
 
