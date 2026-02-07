@@ -117,7 +117,8 @@ public static class PlayerControlFixedUpdatePatch
 				// Logging.Debug($"TargetAlive?:{target}");
 
 				hudManager.KillButton.SetTarget(target);
-				PlayerOutLine.SetOutline(target, role.GetNameColor());
+				var targetRoleColor = role.GetNameColor();
+				PlayerOutLine.SetOutline(target, targetRoleColor);
 				hudManager.KillButton.Show();
 				hudManager.KillButton.gameObject.SetActive(true);
 			}

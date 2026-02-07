@@ -24,6 +24,7 @@ public sealed class PlayerOutLine(IntPtr ptr) : MonoBehaviour(ptr)
 		cache.Clear();
 	}
 
+	[HideFromIl2Cpp]
 	public static void SetOutline(
 		PlayerControl? target,
 		Color color)
