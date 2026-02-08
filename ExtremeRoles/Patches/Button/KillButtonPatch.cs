@@ -80,7 +80,7 @@ public static class KillButtonDoClickPatch
 	{
 		if (killer == null ||
 			killer.Data == null ||
-			target.IsDead() ||
+			target.IsInvalid() ||
 			!ExtremeRoleManager.TryGetRole(target.PlayerId, out var targetRole))
 		{
 			return KillResult.PreConditionFail;
@@ -142,8 +142,8 @@ public static class KillButtonDoClickPatch
     {
         return
             AmongUsClient.Instance.IsGameOver ||
-            killer.IsDead() ||
-            target.IsDead() ||
+            killer.IsInvalid() ||
+            target.IsInvalid() ||
 			target.MyPhysics.Animations.IsPlayingAnyLadderAnimation() ||
             (
                 target.MyPhysics.Animations.IsPlayingEnterVentAnimation() &&

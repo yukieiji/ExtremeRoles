@@ -155,7 +155,7 @@ public sealed class ExtremeVisionModder(IntPtr ptr) : MonoBehaviour(ptr)
 
 		float baseVision = maxLightRadius;
 
-		if (playerInfo.IsDead()) // IsDead
+		if (playerInfo.IsInvalid())
 		{
 			vision = baseVision;
 		}

@@ -90,7 +90,7 @@ public sealed class ArrowController(int arrowNum, bool isShowOnVentPlayer)
 
 		return (
 			targetPlayer.PlayerId != sourcePlayer.PlayerId &&
-			targetPlayer.IsDead() &&
+			targetPlayer.IsAlive() &&
 			(this.isShowOnVentPlayer || !targetPlayer.Object.inVent)
 		);
 	}
@@ -114,7 +114,7 @@ public sealed class LonerAbilityHandler(
 
 		this.status.Update(rolePlayer, Time.deltaTime);
 
-		if (rolePlayer.IsDead())
+		if (rolePlayer.IsInvalid())
 		{
 			this.arrow.Hide();
 			return;

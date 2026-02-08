@@ -175,7 +175,7 @@ public sealed class IronMateRole :
 
 	public void HookMuderPlayer(PlayerControl source, PlayerControl target)
 	{
-		if (PlayerControl.LocalPlayer.IsDead() ||
+		if (PlayerControl.LocalPlayer.IsInvalid() ||
 			target == null ||
 			target.Data == null ||
 			!target.Data.IsDead ||

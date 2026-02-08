@@ -62,7 +62,7 @@ public static class RoleBehaviourIsValidTargetPatch
 
 
         __result =
-            target.IsDead() &&
+            target.IsAlive() &&
 			targetPlayerId != instancePlayerId &&
             target.Role != null &&
             (

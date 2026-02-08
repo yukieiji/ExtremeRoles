@@ -75,7 +75,7 @@ public sealed class StressProgress(float range, float waitTime, StressProgress.O
 
 		return (
 			targetPlayer.PlayerId != sourcePlayer.PlayerId &&
-			targetPlayer.IsDead() &&
+			targetPlayer.IsAlive() &&
 			(this.option.ProgressOnVentPlayer || !targetPlayer.Object.inVent) &&
 			(this.option.ProgressOnMovingPlatPlayer || !targetPlayer.Object.inMovingPlat) &&
 			(this.option.ProgressOnMovingPlatPlayer || !targetPlayer.Object.onLadder)

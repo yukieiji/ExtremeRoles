@@ -53,7 +53,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
             foreach (NetworkedPlayerInfo player in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (player.IsDead())
+                if (player.IsInvalid())
 				{
 					continue;
 				}

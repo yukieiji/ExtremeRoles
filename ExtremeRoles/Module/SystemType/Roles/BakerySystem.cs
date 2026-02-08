@@ -120,7 +120,7 @@ public sealed class BakerySystem : IDirtableSystemType
 			x =>
 			{
 				var player = Player.GetPlayerControlById(x);
-				return player.IsDead();
+				return player.IsInvalid();
 			});
 	}
 
