@@ -28,7 +28,7 @@ public sealed class BaitKillCoolReducer : MonoBehaviour
 		public bool IsCheck { get; private set; } = isCheck;
 		
 		// レポーターが死んでいると何もしない
-		public bool IsReduce => this.reporter.IsValid();
+		public bool IsReduce => this.reporter.IsAlive();
 
 		private readonly PlayerControl reporter = reporter;
 
@@ -82,7 +82,7 @@ public sealed class BaitKillCoolReducer : MonoBehaviour
 		float deltaTime = Time.fixedDeltaTime;
 		this.timer -= deltaTime;
 
-		if (this.localPlayer.IsInValid())
+		if (this.localPlayer.IsDead())
 		{
 			Destroy(this);
 			return;

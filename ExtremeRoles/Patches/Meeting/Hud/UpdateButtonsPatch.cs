@@ -68,7 +68,7 @@ public static class MeetingHudUpdateButtonsPatch
 		}
 
 		var localPc = PlayerControl.LocalPlayer;
-		if (localPc.IsValid() &&
+		if (localPc.IsAlive() &&
 			system.InvalidPlayer(localPc))
 		{
 			hud.Glass.sprite = system.MeetingBackground;

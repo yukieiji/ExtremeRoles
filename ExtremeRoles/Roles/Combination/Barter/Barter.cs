@@ -110,7 +110,7 @@ public sealed class BarterRole :
 		}
 
 
-		if (rolePlayer.IsValid() &&
+		if (rolePlayer.IsAlive() &&
 			meeting != null &&
 			this.status is not null)
 		{

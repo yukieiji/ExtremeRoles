@@ -172,7 +172,7 @@ public static class MeetingHudUpdatePatch
 	{
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
-		if (localPlayer.IsInValid() ||
+		if (localPlayer.IsDead() ||
 			!ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
 				ExtremeSystemType.RaiseHandSystem, out var raiseHand))
 		{

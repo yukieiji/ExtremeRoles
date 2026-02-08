@@ -186,7 +186,7 @@ public sealed class Heretic :
 		byte targetPlayerId = this.meetingTarget;
 
 		var player = Player.GetPlayerControlById(targetPlayerId);
-		if (!player.IsValid())
+		if (!player.IsAlive())
 		{
 			targetPlayerId = byte.MaxValue;
 		}
@@ -195,7 +195,7 @@ public sealed class Heretic :
 			// ランダムなプレイヤー選択
 			var target = PlayerCache.AllPlayerControl.Where(
 				player =>
-					player.IsValid() &&
+					player.IsAlive() &&
 					player.PlayerId != exiledPlayer.PlayerId &&
 					this.canKillImpostor ||
 					(
@@ -228,7 +228,7 @@ public sealed class Heretic :
 		}
 
 		this.Button?.SetButtonShow(
-			rolePlayer.IsValid() &&
+			rolePlayer.IsAlive() &&
 			(this.killMode is KillMode.AbilityOnTaskPhase or KillMode.AbilityOnTaskPhaseTarget));
 
 		if (!this.HasTask ||

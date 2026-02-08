@@ -49,7 +49,7 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 	{
 		PlayerControl pc = PlayerControl.LocalPlayer;
 
-		if (pc.IsInValid() ||
+		if (pc.IsDead() ||
 			!pc.CanMove ||
 			pc.inMovingPlat ||
 			pc.onLadder ||

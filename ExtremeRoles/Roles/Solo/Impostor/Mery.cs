@@ -74,7 +74,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
             foreach (NetworkedPlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (playerInfo.IsValid() &&
+                if (playerInfo.IsAlive() &&
                     ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var role) && 
 					!role.IsImpostor() &&
                     !playerInfo.Object.inVent)

@@ -64,7 +64,7 @@ public interface IRoleAbility : IRoleResetMeeting
 	{
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
-		return localPlayer.IsValid() && localPlayer.CanMove;
+		return localPlayer.IsAlive() && localPlayer.CanMove;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -74,7 +74,7 @@ public interface IRoleAbility : IRoleResetMeeting
 		var hud = HudManager.Instance;
 		return
 			!(
-				localPlayer.IsInValid() ||
+				localPlayer.IsDead() ||
 				localPlayer.inVent ||
 				localPlayer.MyPhysics.DoingCustomAnimation ||
 				localPlayer.shapeshifting ||

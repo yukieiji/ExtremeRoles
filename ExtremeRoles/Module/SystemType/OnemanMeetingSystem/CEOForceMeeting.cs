@@ -54,13 +54,13 @@ public sealed class CEOForceMeeting : IOnemanMeeting, IVoterValidtor
 		=> VoteAreaState.None;
 
 	public bool CanChatPlayer(PlayerControl target)
-		=> target.IsValid();
+		=> target.IsAlive();
 
 	public bool IsDefaultForegroundForDead(MeetingHud _, byte caller)
 		=> PlayerControl.LocalPlayer.PlayerId != caller;
 
 	public bool IsValidShowChatPlayer(PlayerControl chatSourcePlayer)
-		=> chatSourcePlayer.IsValid();
+		=> chatSourcePlayer.IsAlive();
 
 	public bool TryGetGameEndReason(out RoleGameOverReason reason)
 	{

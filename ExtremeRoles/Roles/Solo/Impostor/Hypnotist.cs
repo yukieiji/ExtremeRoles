@@ -440,7 +440,7 @@ public sealed class Hypnotist :
 				continue;
 			}
 
-            if (player.IsValid())
+            if (player.IsAlive())
 			{
 				RPCOperator.UncheckedMurderPlayer(
 					playerId, playerId,

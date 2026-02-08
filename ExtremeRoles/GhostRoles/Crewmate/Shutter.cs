@@ -52,7 +52,7 @@ public sealed class Shutter : GhostRoleBase
 
             foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (player.IsInValid())
+                if (player.IsDead())
 				{
 					continue;
 				}

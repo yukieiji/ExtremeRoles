@@ -53,7 +53,7 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
     public bool UseAbility()
     {
         PlayerControl killer = PlayerControl.LocalPlayer;
-        if (killer.IsInValid() || !killer.CanMove)
+        if (killer.IsDead() || !killer.CanMove)
 		{
 			return false;
 		}

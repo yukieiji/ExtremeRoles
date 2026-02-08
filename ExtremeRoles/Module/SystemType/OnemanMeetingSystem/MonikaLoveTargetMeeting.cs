@@ -199,7 +199,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IVoterShiftor, IVo
 	public bool CanChatPlayer(PlayerControl target)
 		=>
 		!(
-			target.IsInValid() ||
+			target.IsDead() ||
 			this.system.InvalidPlayer(target)
 		);
 

@@ -160,7 +160,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (rolePlayer.IsInValid() ||
+        if (rolePlayer.IsDead() ||
 			this.bombPlayerId.Count == 0 ||
 			!GameProgressSystem.IsTaskPhase)
 		{
@@ -177,7 +177,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         byte bombTargetPlayerId = this.bombPlayerId.Dequeue();
         PlayerControl bombPlayer = Player.GetPlayerControlById(bombTargetPlayerId);
 
-        if (bombPlayer.IsInValid())
+        if (bombPlayer.IsDead())
 		{
 			return;
 		}
@@ -216,7 +216,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         foreach (NetworkedPlayerInfo playerInfo in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
-            if (playerInfo.IsValid() &&
+            if (playerInfo.IsAlive() &&
                 (playerInfo.PlayerId != sourcePlayerId) &&
 				(!playerInfo.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer) &&
                 ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var role) &&

@@ -69,7 +69,7 @@ public sealed class FurryRole : SingleRoleBase,
 		// SKを残したままJackal昇格している可能性を確認 == 同じコントロールIDでJackalがいる
 		foreach (var player in PlayerCache.AllPlayerControl)
 		{
-			if (player.IsInValid() ||
+			if (player.IsDead() ||
 				player.PlayerId == target.PlayerId ||
 				player.PlayerId == local.PlayerId ||
 				!ExtremeRoleManager.TryGetSafeCastedRole<JackalRole>(player.PlayerId, out var checkJk) ||

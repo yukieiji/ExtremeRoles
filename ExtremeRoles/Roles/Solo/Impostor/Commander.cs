@@ -59,7 +59,7 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility, ITryKillT
 
             var player = GameData.Instance.GetPlayerById(playerId);
 
-            if (player.IsValid())
+            if (player.IsAlive())
 			{
 				--deadImpNum;
 			}
