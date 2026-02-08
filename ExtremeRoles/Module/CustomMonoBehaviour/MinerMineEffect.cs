@@ -152,7 +152,7 @@ public sealed class MinerMineEffect : MonoBehaviour
 
 	private void updateVolume(PlayerControl localPlayer)
 	{
-		if (localPlayer.IsInValid())
+		if (localPlayer.IsDead())
 		{
 			return;
 		}

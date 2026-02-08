@@ -298,7 +298,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 	public void Update(PlayerControl rolePlayer)
 	{
 		if (this.searchInfo is null ||
-			rolePlayer.IsInValid() ||
+			rolePlayer.IsDead() ||
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null)
 		{
@@ -396,7 +396,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 	{
 		yield return new WaitForSeconds(1.0f);
 		if (MeetingHud.Instance == null &&
-			rolePlayer.IsValid())
+			rolePlayer.IsAlive())
 		{
 			rolePlayer.CmdReportDeadBody(null);
 		}

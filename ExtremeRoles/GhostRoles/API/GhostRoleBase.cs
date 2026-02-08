@@ -267,7 +267,7 @@ public abstract class GhostRoleBase
 		var localPlayer = PlayerControl.LocalPlayer;
 
 		return
-			localPlayer.IsValid() &&
+			localPlayer.IsAlive() &&
 			localPlayer.CanMove;
 	}
 	protected static bool IsCommonUseWithMinigame()

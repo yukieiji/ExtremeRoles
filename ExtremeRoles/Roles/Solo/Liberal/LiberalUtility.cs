@@ -53,7 +53,7 @@ public sealed class DoveCommonAbilityHandler
 		{
 			cachePlayer = GameData.Instance.GetPlayerById(player.PlayerId);
 		}
-		if (cachePlayer.IsInValid() || cachePlayer.Tasks.Count == 0)
+		if (cachePlayer.IsDead() || cachePlayer.Tasks.Count == 0)
 		{
 			return;
 		}

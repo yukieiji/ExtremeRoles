@@ -10,7 +10,7 @@ public sealed class RoleButtonActivator : IButtonAutoActivator
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
 		return
-			localPlayer.IsValid() &&
+			localPlayer.IsAlive() &&
 			(
 				localPlayer.IsKillTimerEnabled ||
 				localPlayer.ForceKillTimerContinue ||

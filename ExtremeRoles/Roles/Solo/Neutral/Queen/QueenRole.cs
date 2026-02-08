@@ -304,7 +304,7 @@ public sealed class QueenRole :
         {
             var player = Player.GetPlayerControlById(playerId);
 
-            if (player.IsInValid() ||
+            if (player.IsDead() ||
 				isNotSucideServant(playerId))
 			{
 				continue;
@@ -356,7 +356,7 @@ public sealed class QueenRole :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player.IsInValid() ||
+            if (player.IsDead() ||
 				isNotSucideServant(playerId))
 			{
 				continue;
@@ -403,7 +403,7 @@ public sealed class QueenRole :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player.IsInValid() ||
+            if (player.IsDead() ||
 				isNotSucideServant(playerId))
 			{
 				continue;

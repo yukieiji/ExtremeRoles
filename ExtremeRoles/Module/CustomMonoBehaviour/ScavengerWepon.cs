@@ -29,7 +29,7 @@ public static class  ScavengerWeaponHitHelper
 
 	public static bool IsHitPlayer(Collider2D other, out PlayerControl pc)
 		=> other.TryGetComponent(out pc) &&
-			pc.IsValid() && !pc.inVent;
+			pc.IsAlive() && !pc.inVent;
 
 	public static bool IsHitWall(Collider2D other)
 		=> collisionLayer == (collisionLayer | (1 << other.gameObject.layer));
@@ -632,7 +632,7 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 	{
 		if (this.frame is null ||
 			this.Info is null ||
-			this.Info.IgnorePlayer.IsInValid() ||
+			this.Info.IgnorePlayer.IsDead() ||
 			!ScavengerWeaponHitHelper.IsHitPlayer(other, out var pc) ||
 			pc.PlayerId == this.Info.IgnorePlayer.PlayerId ||
 			PhysicsHelpers.AnythingBetween(
@@ -763,7 +763,7 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 
 	public void Increse(float addTime)
 	{
-		if (this.TargetPlayer.IsInValid())
+		if (this.TargetPlayer.IsDead())
 		{
 			disable();
 			return;

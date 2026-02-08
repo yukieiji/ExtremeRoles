@@ -518,7 +518,7 @@ public sealed class YandereRole :
 				continue;
 			}
 
-            if (playerInfo.IsValid() &&
+            if (playerInfo.IsAlive() &&
                 rolePlayer.PlayerId != playerId &&
                 OneSidedLover.PlayerId != playerId &&
                 !playerInfo.Object.inVent)
