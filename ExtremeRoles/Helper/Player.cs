@@ -480,7 +480,7 @@ public static class Player
 
         return (
 			targetPlayerId != sourcePlayerId &&
-			targetPlayer.IsDead() &&
+			targetPlayer.IsAlive() &&
             !targetPlayer.Object.inVent &&
 			!targetPlayer.Object.inMovingPlat &&
 			!targetPlayer.Object.onLadder &&

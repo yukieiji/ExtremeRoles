@@ -298,7 +298,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 	public void Update(PlayerControl rolePlayer)
 	{
 		if (this.searchInfo is null ||
-			rolePlayer.IsDead() ||
+			rolePlayer.IsInvalid() ||
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null)
 		{

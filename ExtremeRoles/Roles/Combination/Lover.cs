@@ -401,7 +401,7 @@ public sealed class Lover : MultiAssignRoleBase
 
         foreach (var playerControl in PlayerControl.AllPlayerControls)
         {
-			if (playerControl.IsDead() ||
+			if (playerControl.IsInvalid() ||
 				playerControl.PlayerId == ignorePlayerId ||
                 !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
 				!this.IsSameControlId(role))

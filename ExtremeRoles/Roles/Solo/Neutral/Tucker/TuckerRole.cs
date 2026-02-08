@@ -170,7 +170,7 @@ public sealed class TuckerRole :
 			{
 				PlayerControl player = Player.GetPlayerControlById(playerId);
 
-				if (player.IsDead() ||
+				if (player.IsInvalid() ||
 					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
 						playerId, out _))
 				{
@@ -191,7 +191,7 @@ public sealed class TuckerRole :
 			{
 				PlayerControl player = Player.GetPlayerControlById(playerId);
 
-				if (player.IsDead() ||
+				if (player.IsInvalid() ||
 					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
 						playerId, out _))
 				{

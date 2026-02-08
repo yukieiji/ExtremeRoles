@@ -105,8 +105,8 @@ public sealed class GuesserUi : MonoBehaviour
                 !meetingHud ||
 				meetingHud.state == MeetingHud.VoteStates.Results ||
 				Input.GetKeyDown(KeyCode.Escape) ||
-				this.targetPlayer.IsDead() ||
-				localPlayer.IsDead()
+				this.targetPlayer.IsInvalid() ||
+				localPlayer.IsInvalid()
 			))
         {
             base.gameObject.SetActive(false);

@@ -159,7 +159,7 @@ public sealed class CurseMaker :
 
         PlayerControl player = Player.GetPlayerControlById(targetPlayerId);
 
-        if (player.IsDead())
+        if (player.IsInvalid())
 		{
 			return;
 		}

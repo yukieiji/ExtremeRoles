@@ -288,7 +288,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		var sourcePos = source.GetTruePosition();
 		foreach (var player in PlayerCache.AllPlayerControl)
 		{
-			if (player.IsDead() ||
+			if (player.IsInvalid() ||
 				player.PlayerId == source.PlayerId)
 			{
 				continue;

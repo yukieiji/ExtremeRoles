@@ -112,7 +112,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 		if (!isTuckerDead)
 		{
-			isTuckerDead = tuckerPlayer.IsDead();
+			isTuckerDead = tuckerPlayer.IsInvalid();
 			if (isTuckerDead)
 			{
 				updateKillCoolTime(tuckerDeathKillCoolOffset);
@@ -122,7 +122,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		this.playerReviver.Update();
 
 		// 復活処理
-		if (tuckerPlayer.IsDead() ||
+		if (tuckerPlayer.IsInvalid() ||
 			!rolePlayer.Data.IsDead ||
 			this.playerReviver.IsReviving)
 		{
