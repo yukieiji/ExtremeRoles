@@ -267,7 +267,7 @@ public abstract class GhostRoleBase
 		var localPlayer = PlayerControl.LocalPlayer;
 
 		return
-			localPlayer.IsAlive() &&
+			localPlayer.IsDead() &&
 			localPlayer.CanMove;
 	}
 	protected static bool IsCommonUseWithMinigame()
@@ -275,10 +275,8 @@ public abstract class GhostRoleBase
 		var localPlayer = PlayerControl.LocalPlayer;
 		var hud = HudManager.Instance;
 		return
+			localPlayer.IsDead() &&
 			!(
-				localPlayer == null ||
-				localPlayer.Data == null ||
-				!localPlayer.Data.IsDead ||
 				localPlayer.inVent ||
 				localPlayer.MyPhysics.DoingCustomAnimation ||
 				localPlayer.shapeshifting ||

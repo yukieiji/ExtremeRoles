@@ -99,7 +99,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     public void CleanUp()
     {
         if (!(
-				this.outburstTarget.IsDead() &&
+				this.outburstTarget.IsAlive() &&
 				ExtremeRoleManager.TryGetRole(this.outburstTarget.PlayerId, out var role) &&
 				role.CanKill()
 			))
@@ -110,7 +110,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
         PlayerControl killTarget = Helper.Player.GetClosestPlayerInKillRange(
             this.outburstTarget);
 
-        if (killTarget.IsDead())
+        if (killTarget.IsInvalid())
 		{
 			return;
 		}

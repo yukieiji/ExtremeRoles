@@ -107,7 +107,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         if (!GameProgressSystem.IsTaskPhase ||
             this.Button == null ||
-			rolePlayer.IsDead() ||
+			rolePlayer.IsInvalid() ||
 			this.isUpgraded)
 		{
 			return;

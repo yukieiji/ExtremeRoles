@@ -74,7 +74,7 @@ public interface IRoleAbility : IRoleResetMeeting
 		var hud = HudManager.Instance;
 		return
 			!(
-				localPlayer.IsDead() ||
+				localPlayer.IsInvalid() ||
 				localPlayer.inVent ||
 				localPlayer.MyPhysics.DoingCustomAnimation ||
 				localPlayer.shapeshifting ||

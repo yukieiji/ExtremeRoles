@@ -223,7 +223,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
-		if (localPlayer.IsDead() ||
+		if (localPlayer.IsInvalid() ||
 			exiledPlayer != null ||
 			this.IsWin)
 		{

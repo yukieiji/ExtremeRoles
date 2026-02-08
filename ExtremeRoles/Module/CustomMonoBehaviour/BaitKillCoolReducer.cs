@@ -82,7 +82,7 @@ public sealed class BaitKillCoolReducer : MonoBehaviour
 		float deltaTime = Time.fixedDeltaTime;
 		this.timer -= deltaTime;
 
-		if (this.localPlayer.IsDead())
+		if (this.localPlayer.IsInvalid())
 		{
 			Destroy(this);
 			return;
