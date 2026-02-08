@@ -108,7 +108,7 @@ public sealed class DelusionerAbilityHandler(
 
         foreach (var player in allPlayer.GetFastEnumerator())
         {
-            if (player.IsInValid() ||
+            if (player.IsDead() ||
                 player.PlayerId == rolePlayer.PlayerId ||
                 player.PlayerId == teloportTarget ||
                 player.Object.onLadder || // はしご中？

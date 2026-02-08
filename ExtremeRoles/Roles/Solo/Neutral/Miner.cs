@@ -267,7 +267,7 @@ public sealed class Miner :
 					continue;
 				}
 
-                if (playerInfo.IsValid() &&
+                if (playerInfo.IsAlive() &&
                     !playerInfo.Object.inVent)
                 {
 					Vector2 vector = playerInfo.Object.GetTruePosition() - pos;

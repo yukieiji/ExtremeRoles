@@ -348,7 +348,7 @@ public sealed class BodyGuard :
         byte killerPlayerId, byte prevTargetPlayerId, byte targetBodyGuard)
     {
         PlayerControl bodyGuardPlayer = Player.GetPlayerControlById(targetBodyGuard);
-        if (bodyGuardPlayer.IsInValid())
+        if (bodyGuardPlayer.IsDead())
         {
             return false;
         }

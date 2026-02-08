@@ -228,7 +228,7 @@ public sealed class ExorcistRole :
 				killer.IsDead ? Tr.GetString(PlayerStatus.Dead.ToString()) : Tr.GetString(PlayerStatus.Alive.ToString())));
 
 		var localPlayer = PlayerControl.LocalPlayer;
-		if (localPlayer.IsValid())
+		if (localPlayer.IsAlive())
 		{
 			localPlayer.CmdReportDeadBody(this.target);
 		}

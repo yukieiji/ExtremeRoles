@@ -197,7 +197,7 @@ public sealed class MissionaryRole :
 			return;
 		}
 
-		this.lamb.RemoveAll(x => x.IsInValid());
+		this.lamb.RemoveAll(x => x.IsDead());
 		// 削除しきって誰もいなかったらタイマー自体をリセットする、じゃないとタイマーが短い状態で次の人が追加される
 		if (this.lamb.Count == 0)
 		{
@@ -212,7 +212,7 @@ public sealed class MissionaryRole :
 
 		PlayerControl targetPlayer = this.lamb[0];
 
-        if (targetPlayer.IsInValid())
+        if (targetPlayer.IsDead())
 		{
 			return;
 		}

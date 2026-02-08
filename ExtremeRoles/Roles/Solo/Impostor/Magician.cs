@@ -68,7 +68,7 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		// まずはテレポート先とかにも設定できるプレヤーを取得
 		var validPlayer = PlayerCache.AllPlayerControl.Where(x =>
-			x.IsValid() &&
+			x.IsAlive() &&
 			!x.inVent && // ベント入ってない
 			x.moveable &&  // 移動できる状態か
 			!x.inMovingPlat && // なんか乗ってないか

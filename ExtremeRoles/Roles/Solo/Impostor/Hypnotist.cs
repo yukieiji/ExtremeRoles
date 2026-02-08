@@ -436,7 +436,7 @@ public sealed class Hypnotist :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player.IsValid())
+            if (player.IsAlive())
 			{
 				RPCOperator.UncheckedMurderPlayer(
 					playerId, playerId,
@@ -535,7 +535,7 @@ public sealed class Hypnotist :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player.IsValid())
+            if (player.IsAlive())
 			{
 				player.Exiled();
 			}
@@ -549,7 +549,7 @@ public sealed class Hypnotist :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player.IsValid())
+            if (player.IsAlive())
 			{
 				RPCOperator.UncheckedMurderPlayer(
 					playerId, playerId,

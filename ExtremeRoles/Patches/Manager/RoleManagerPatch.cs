@@ -49,7 +49,7 @@ public static class RoleManagerAssignSelectRolesPatch
 			.Where(
 				c => 
 					!(
-						c == null || c.Character.IsInValid()
+						c == null || c.Character.IsDead()
 					))
 			.OrderBy(c => c.Id)
 			.Select(c => c.Character.Data)

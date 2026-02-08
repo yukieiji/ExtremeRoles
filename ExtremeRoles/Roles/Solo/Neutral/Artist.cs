@@ -49,7 +49,7 @@ public sealed class Artist :
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (rolePlayer.IsInValid() ||
+		if (rolePlayer.IsDead() ||
 			this.IsWin ||
 			this.drawer == null)
 		{
@@ -78,7 +78,7 @@ public sealed class Artist :
 
 				return
 					!(
-						pc.IsInValid() ||
+						pc.IsDead() ||
 						pc.inMovingPlat ||
 						pc.inVent ||
 						pc.onLadder

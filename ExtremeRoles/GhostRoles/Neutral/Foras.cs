@@ -171,7 +171,7 @@ public sealed class Foras : GhostRoleBase
                 .Where(x =>
                 {
                     return
-                        x.IsValid() &&
+                        x.IsAlive() &&
                         x.PlayerId != rolePlayerId &&
                         x.PlayerId != this.targetPlayer!.PlayerId;
                 })

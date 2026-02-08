@@ -57,7 +57,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 	{
 		var pc = PlayerControl.LocalPlayer;
 
-		if (pc.IsInValid() ||
+		if (pc.IsDead() ||
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null ||
 			this.PrevForce.sqrMagnitude <= 0.01f)

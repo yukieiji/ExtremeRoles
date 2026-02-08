@@ -105,7 +105,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 		if (this.target == null)
 		{
 			var alive = PlayerCache.AllPlayerControl.Where(
-				x => x.IsValid() && x.PlayerId != PlayerControl.LocalPlayer.PlayerId);
+				x => x.IsAlive() && x.PlayerId != PlayerControl.LocalPlayer.PlayerId);
 			this.target = alive.OrderBy(
 				x => RandomGenerator.Instance.Next()).First();
 		}

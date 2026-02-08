@@ -188,7 +188,7 @@ public sealed class DelusionerRole :
     {
 		if (Button == null ||
 			this.ability is null ||
-			rolePlayer.IsInValid())
+			rolePlayer.IsDead())
 		{
 			return;
 		}
