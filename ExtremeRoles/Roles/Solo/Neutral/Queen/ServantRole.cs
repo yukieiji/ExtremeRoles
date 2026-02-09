@@ -143,7 +143,7 @@ public sealed class ServantRole :
 		var queenPlayer = GameData.Instance.GetPlayerById(this.status.Parent);
 
 		if (AnotherRole is Resurrecter resurrecter &&
-			queenPlayer.IsAlive())
+			queenPlayer.IsInvalid())
 		{
 			Resurrecter.UseResurrect(resurrecter);
 		}
