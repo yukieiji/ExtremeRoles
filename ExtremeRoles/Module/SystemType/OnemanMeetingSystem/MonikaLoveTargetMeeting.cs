@@ -7,7 +7,7 @@ using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.GameResult.StatusOverrider;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
-
+using ExtremeRoles.Patches.Meeting.Hud;
 
 #nullable enable
 
@@ -223,39 +223,6 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IVoterShiftor, IVo
 	public bool TryStartMeeting(byte target)
 		=> false;
 
-	public void InitializeButon(Vector3 origin, Vector2 offset, PlayerVoteArea[] pvas)
-	{
-		int index = 0;
-
-		foreach (var pva in pvas)
-		{
-			var player = GameData.Instance.GetPlayerById(pva.TargetPlayerId);
-			bool meetingTargetPlayer = !(
-				player == null ||
-				player.IsDead ||
-				player.Disconnected ||
-				this.system.InvalidPlayer(player) ||
-				(
-					ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
-					role.Core.Id is ExtremeRoleId.Monika
-				) // モニカは投票権を持つが会議の投票先には表示さない
-			);
-
-			if (meetingTargetPlayer)
-			{
-				this.target.Add(player!);
-				pva.transform.position = new Vector3(
-					offset.x * (index == 0 ? 0.75f : -0.75f), 0.0f,
-					origin.z - 0.9f);
-				index += 1;
-			}
-			else
-			{
-				// 無茶苦茶遠くにおいておく
-				pva.transform.position = new Vector3(1000.0f, 1000.0f, 1000.0f);
-			}
-		}
-	}
 	private string getTitleKey(byte caller)
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
@@ -283,6 +250,13 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IVoterShiftor, IVo
 		int index = 0;
 		foreach (var pva in pvas)
 		{
+			if (!this.target.Contain(pva.TargetPlayerId) ||
+				index > 1) // 念のため2人以上になった場合は非表示にする
+			{
+				pva.transform.position = MeetingHudSortButtonsPatch.HideOffset;
+				continue;
+			}
+
 			pva.transform.position = new Vector3(
 				offset.x * (index == 0 ? xOffset : -xOffset), 0.0f,
 				origin.z - 0.9f);
