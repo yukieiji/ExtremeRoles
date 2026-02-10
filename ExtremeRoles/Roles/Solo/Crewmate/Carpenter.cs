@@ -578,7 +578,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 	}
 
     public bool IsAbilityCheck() =>
-        this.prevPos.IsCloseTo(PlayerControl.LocalPlayer.GetTruePosition(), 0.1f);
+        this.prevPos.IsCloseTo(PlayerControl.LocalPlayer.GetTruePosition(), 0.01f);
 
     public bool IsVentMode()
     {

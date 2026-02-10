@@ -92,7 +92,9 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 
 		var direction = this.target.GetTruePosition() - local.GetTruePosition();
 		direction = direction.normalized;
+#pragma warning disable ERA004 // 方向が計算できないとき困るので大きめの閾値にしています
 		if (direction.IsCloseTo(Vector2.zero, 0.1f) &&
+#pragma warning restore ERA004 // Vector.IsCloseToとVector.IsNotCloseToの第2引数が0.1以上です
 			local.cosmetics != null)
 		{
 			direction = local.cosmetics.FlipX ? Vector2.left : Vector2.right;
