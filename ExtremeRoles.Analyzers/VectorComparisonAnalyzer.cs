@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Operations;
 
 namespace ExtremeRoles.Analyzers;
 
@@ -45,12 +46,14 @@ public sealed class VectorComparisonAnalyzer : DiagnosticAnalyzer
         var invocation = (InvocationExpressionSyntax)context.Node;
 
         var semanticModel = context.SemanticModel;
-        var methodSymbol = semanticModel.GetSymbolInfo(invocation).Symbol as IMethodSymbol;
+        var operation = semanticModel.GetOperation(invocation) as IInvocationOperation;
 
-        if (methodSymbol == null)
+        if (operation == null)
         {
             return;
         }
+
+        var methodSymbol = operation.TargetMethod;
 
         if (methodSymbol.Name != "IsCloseTo" && methodSymbol.Name != "IsNotCloseTo")
         {
@@ -67,15 +70,14 @@ public sealed class VectorComparisonAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        int argumentIndex = methodSymbol.IsExtensionMethod ? 1 : 2;
+        var sqrEpsArgument = operation.Arguments.FirstOrDefault(a => a.Parameter?.Name == "sqrEps");
 
-        if (invocation.ArgumentList.Arguments.Count <= argumentIndex)
+        if (sqrEpsArgument == null || sqrEpsArgument.ArgumentKind == ArgumentKind.DefaultValue)
         {
             return;
         }
 
-        var argument = invocation.ArgumentList.Arguments[argumentIndex];
-        var constantValue = semanticModel.GetConstantValue(argument.Expression);
+        var constantValue = sqrEpsArgument.Value.ConstantValue;
 
         if (constantValue.HasValue)
         {
@@ -95,7 +97,7 @@ public sealed class VectorComparisonAnalyzer : DiagnosticAnalyzer
 
             if (floatValue >= 0.1f)
             {
-                var diagnostic = Diagnostic.Create(ruleERA004, argument.GetLocation());
+                var diagnostic = Diagnostic.Create(ruleERA004, sqrEpsArgument.Syntax.GetLocation());
                 context.ReportDiagnostic(diagnostic);
             }
         }
