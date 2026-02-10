@@ -81,19 +81,17 @@ public sealed class VectorComparisonAnalyzer : DiagnosticAnalyzer
 
         if (constantValue.HasValue)
         {
-            float floatValue = 0;
-            if (constantValue.Value is float f)
-            {
-                floatValue = f;
-            }
-            else if (constantValue.Value is double d)
-            {
-                floatValue = (float)d;
-            }
-            else
+            if (constantValue.Value is not (float or double))
             {
                 return;
             }
+
+            float floatValue = constantValue.Value switch
+            {
+                float f => f,
+                double d => (float)d,
+                _ => 0,
+            };
 
             if (floatValue >= 0.1f)
             {
