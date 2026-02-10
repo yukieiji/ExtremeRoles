@@ -95,7 +95,7 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 				PhysicsHelpers.AnythingBetween(
 					curPos, curPos + (this.PrevForce.normalized * offset),
 					Constants.ShipAndObjectsMask, false) ||
-				(curPos - this.prevPos).normalized.IsCloseTo(Vector2.zero, 0.1f)
+				(curPos - this.prevPos).normalized.IsCloseTo(Vector2.zero, 0.01f)
 			))
 		{
 			forceVector = -forceVector * this.e.Value;

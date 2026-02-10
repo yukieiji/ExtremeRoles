@@ -353,7 +353,7 @@ public sealed class YokoRole :
 	}
 
 	public bool IsAbilityActive() =>
-		prevPos.IsCloseTo(PlayerControl.LocalPlayer.GetTruePosition(), 0.1f);
+		prevPos.IsCloseTo(PlayerControl.LocalPlayer.GetTruePosition());
 
 	public void CreateAbility()
 	{

@@ -159,12 +159,14 @@ public sealed class Whisper :
 			}
 		}
 
-        if (this.prevPlayerPos.IsCloseTo(defaultPos, 0.1f))
+		var curPos = rolePlayer.GetTruePosition();
+
+		if (this.prevPlayerPos.IsCloseTo(defaultPos, 0.01f))
         {
-            this.prevPlayerPos = rolePlayer.GetTruePosition();
+            this.prevPlayerPos = curPos;
         }
 
-        if (this.prevPlayerPos.IsNotCloseTo(rolePlayer.GetTruePosition(), 0.1f))
+        if (this.prevPlayerPos.IsNotCloseTo(curPos))
         {
             resetAbility(rolePlayer);
             return;
