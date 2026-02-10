@@ -28,7 +28,7 @@ public sealed class VectorComparisonAnalyzer : DiagnosticAnalyzer
         category,
         DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        "IsCloseTo/IsNotCloseToの第2引数は2乗誤差（sqrEps）であり、0.1以上は誤差としては大きすぎます。");
+        "Vector.IsCloseToとVector.IsNotCloseToの第2引数は2乗誤差（sqrEps）であり、0.1以上は誤差としては大きすぎます.");
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [ruleERA003, ruleERA004];
 
