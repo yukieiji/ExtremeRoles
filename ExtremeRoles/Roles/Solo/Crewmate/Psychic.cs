@@ -261,7 +261,7 @@ public sealed class Psychic :
 
 	public bool CheckAbility()
 		=> this.startPos.HasValue &&
-		this.startPos.Value.IsCloseTo(PlayerControl.LocalPlayer.GetTruePosition(), 0.1f) &&
+		this.startPos.Value.IsCloseTo(PlayerControl.LocalPlayer.GetTruePosition(), 0.01f) &&
 		IRoleAbility.IsCommonUse();
 
 	public bool UseAbility()

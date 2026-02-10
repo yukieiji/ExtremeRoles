@@ -175,7 +175,7 @@ public sealed class Zombie :
     }
 
     public bool IsActivate()
-        => this.curPos.IsCloseTo(PlayerControl.LocalPlayer.transform.position, 0.1f);
+        => this.curPos.IsCloseTo(PlayerControl.LocalPlayer.transform.position, 0.01f);
 
     public bool UseAbility()
     {
