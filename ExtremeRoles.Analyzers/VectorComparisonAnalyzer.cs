@@ -15,19 +15,90 @@ public sealed class VectorComparisonAnalyzer : DiagnosticAnalyzer
     private static readonly DiagnosticDescriptor ruleERA003 = new DiagnosticDescriptor(
         "ERA003",
         "UnityのVector型を == や != で比較することはできません",
-		"UnityのVector型を == や != で比較することはできません。代わりにVector.IsCloseToかVector.IsNotCloseToを使用してください",
+        "UnityのVector型を == や != で比較することはできません。代わりにVector.IsCloseToかVector.IsNotCloseToを使用してください",
         category,
         DiagnosticSeverity.Error,
         isEnabledByDefault: true,
         "UnityのVector型は浮動小数点数のため、== や != での比較は想定しない結果を生む可能性があります.");
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [ruleERA003];
+    private static readonly DiagnosticDescriptor ruleERA004 = new DiagnosticDescriptor(
+        "ERA004",
+        "Vector.IsCloseToとVector.IsNotCloseToの第2引数が0.1以上です",
+        "Vector.IsCloseToとVector.IsNotCloseToの第2引数に0.1以上の値を指定することは推奨されません。より小さい値を指定してください",
+        category,
+        DiagnosticSeverity.Warning,
+        isEnabledByDefault: true,
+        "IsCloseTo/IsNotCloseToの第2引数は2乗誤差（sqrEps）であり、0.1以上は誤差としては大きすぎます。");
+
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [ruleERA003, ruleERA004];
 
     public override void Initialize(AnalysisContext context)
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
         context.RegisterSyntaxNodeAction(analyzeBinaryExpression, SyntaxKind.EqualsExpression, SyntaxKind.NotEqualsExpression);
+        context.RegisterSyntaxNodeAction(analyzeInvocationExpression, SyntaxKind.InvocationExpression);
+    }
+
+    private static void analyzeInvocationExpression(SyntaxNodeAnalysisContext context)
+    {
+        var invocation = (InvocationExpressionSyntax)context.Node;
+
+        var semanticModel = context.SemanticModel;
+        var methodSymbol = semanticModel.GetSymbolInfo(invocation).Symbol as IMethodSymbol;
+
+        if (methodSymbol == null)
+        {
+            return;
+        }
+
+        if (methodSymbol.Name != "IsCloseTo" && methodSymbol.Name != "IsNotCloseTo")
+        {
+            return;
+        }
+
+        if (methodSymbol.ContainingType?.Name != "VectorExtension")
+        {
+            return;
+        }
+
+        if (methodSymbol.ContainingNamespace?.ToString() != "ExtremeRoles.Extension.Vector")
+        {
+            return;
+        }
+
+        int argumentIndex = methodSymbol.IsExtensionMethod ? 1 : 2;
+
+        if (invocation.ArgumentList.Arguments.Count <= argumentIndex)
+        {
+            return;
+        }
+
+        var argument = invocation.ArgumentList.Arguments[argumentIndex];
+        var constantValue = semanticModel.GetConstantValue(argument.Expression);
+
+        if (constantValue.HasValue)
+        {
+            float floatValue = 0;
+            if (constantValue.Value is float f)
+            {
+                floatValue = f;
+            }
+            else if (constantValue.Value is double d)
+            {
+                floatValue = (float)d;
+            }
+            else
+            {
+                return;
+            }
+
+            if (floatValue >= 0.1f)
+            {
+                var diagnostic = Diagnostic.Create(ruleERA004, argument.GetLocation());
+                context.ReportDiagnostic(diagnostic);
+            }
+        }
     }
 
     private static void analyzeBinaryExpression(SyntaxNodeAnalysisContext context)
