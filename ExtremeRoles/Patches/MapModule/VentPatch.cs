@@ -180,7 +180,7 @@ public static class VentCanUsePatch
 
         bool inVent = player.inVent;
         bool hasCleanTask = Helper.Player.TryGetTaskType(
-            player, TaskTypes.VentCleaning, out NormalPlayerTask task);
+            player, TaskTypes.VentCleaning, out var task);
 
         couldUse = (
             !playerInfo.IsDead &&

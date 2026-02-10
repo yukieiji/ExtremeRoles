@@ -106,7 +106,10 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
     {
         if (MeetingHud.Instance ||
             source.PlayerId == PlayerControl.LocalPlayer.PlayerId ||
-            !this.isShowArrow) { return; }
+            !this.isShowArrow)
+		{ 
+			return;
+		}
 
         DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
         for (int i = 0; i < array.Length; ++i)
@@ -125,7 +128,10 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
     public bool IsAbilityUse()
     {
         if (this.Button == null ||
-            this.modeFactory == null) { return false; }
+            this.modeFactory == null)
+		{
+			return false;
+		}
 
         this.tmpTarget = Player.GetClosestPlayerInRange(
             PlayerControl.LocalPlayer, this, this.range);
@@ -240,7 +246,10 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         }
 
         if (this.Button?.Behavior is ICountBehavior behavior &&
-            behavior.AbilityCount > 0) { return; }
+            behavior.AbilityCount > 0)
+		{
+			return;
+		}
 
         ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
         this.IsWin = true;
@@ -290,7 +299,15 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
     public bool IsAbilityCheck()
     {
-        if (this.targetDeadBody != null) { return true; }
+        if (this.targetDeadBody != null)
+		{
+			return true;
+		}
+
+		if (this.targetPlayer == null)
+		{
+			return false;
+		}
 
         return Player.IsPlayerInRangeAndDrawOutLine(
             PlayerControl.LocalPlayer,

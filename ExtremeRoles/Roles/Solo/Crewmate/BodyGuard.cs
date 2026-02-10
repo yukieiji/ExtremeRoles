@@ -347,9 +347,8 @@ public sealed class BodyGuard :
     private static bool rpcTryKillBodyGuard(
         byte killerPlayerId, byte prevTargetPlayerId, byte targetBodyGuard)
     {
-        PlayerControl bodyGuardPlayer = Player.GetPlayerControlById(targetBodyGuard);
-        if (bodyGuardPlayer == null ||
-            bodyGuardPlayer.Data == null ||
+        if (!Player.TryGetPlayerControl(targetBodyGuard, out var bodyGuardPlayer) ||
+			bodyGuardPlayer.Data == null ||
             bodyGuardPlayer.Data.IsDead ||
             bodyGuardPlayer.Data.Disconnected)
         {
@@ -390,10 +389,8 @@ public sealed class BodyGuard :
         RPCOperator.UncheckedMurderPlayer(
             killerPlayerId, targetBodyGuard, byte.MinValue);
 
-        PlayerControl bodyGuardPlayer = Player.GetPlayerControlById(targetBodyGuard);
-
-        if (bodyGuardPlayer == null ||
-            bodyGuardPlayer.Data == null ||
+        if (!Player.TryGetPlayerControl(targetBodyGuard, out var bodyGuardPlayer) ||
+			bodyGuardPlayer.Data == null ||
             !bodyGuardPlayer.Data.IsDead || // 死んでないつまり守護天使に守られた
             bodyGuardPlayer.Data.Disconnected)
         {
@@ -407,9 +404,12 @@ public sealed class BodyGuard :
             targetBodyGuard);
 
         if (bodyGuard is null ||
-            !bodyGuard.awakeMeetingReport) { return; }
+            !bodyGuard.awakeMeetingReport ||
+			!Player.TryGetPlayerControl(prevTargetPlayerId, out var prevTargetPlayer))
+		{
+			return;
+		}
 
-        var prevTargetPlayer = Player.GetPlayerControlById(prevTargetPlayerId);
         string reportStr = getReportStrings(
             bodyGuard,
             bodyGuardPlayer.Data.DefaultOutfit.PlayerName,
@@ -573,12 +573,7 @@ public sealed class BodyGuard :
     public bool IsAbilityUse()
     {
         this.targetPlayer = byte.MaxValue;
-
-        PlayerControl target = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this,
-            this.shieldRange);
-
-		if (target != null)
+		if (Player.TryGetClosestPlayerInRange(this, this.shieldRange, out var target))
 		{
 			byte targetId = target.PlayerId;
 

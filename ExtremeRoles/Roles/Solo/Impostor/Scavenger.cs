@@ -227,7 +227,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				this.prevPlayerPos = rolePlayer.GetTruePosition();
 			}
 
-			if (this.prevPlayerPos.Value.IsNotCloseTo(curPos, 0.1f) ||
+			if (this.prevPlayerPos.Value.IsNotCloseTo(curPos) ||
 				!Key.IsAltDown())
 			{
 				hideAbilityInfo(curPos);

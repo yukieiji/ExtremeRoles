@@ -127,10 +127,10 @@ public sealed class DelusionerRole :
 
         targetPlayerId = byte.MaxValue;
 
-        PlayerControl target = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this,
-            this.status.Range);
-        if (target == null) { return false; }
+        if (!Player.TryGetClosestPlayerInRange(this, this.status.Range, out var target))
+		{
+			return false;
+		}
 
         targetPlayerId = target.PlayerId;
 

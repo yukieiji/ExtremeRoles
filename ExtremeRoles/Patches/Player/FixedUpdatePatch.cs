@@ -7,6 +7,7 @@ using UnityEngine;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -111,12 +112,13 @@ public static class PlayerControlFixedUpdatePatch
 					player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
 				}
 
-				PlayerControl target = PlayerHeler.GetClosestPlayerInKillRange();
+				PlayerControl? target = PlayerHeler.GetClosestPlayerInKillRange();
 
 				// Logging.Debug($"TargetAlive?:{target}");
 
 				hudManager.KillButton.SetTarget(target);
-				PlayerHeler.SetPlayerOutLine(target, role.GetNameColor());
+				var targetRoleColor = role.GetNameColor();
+				PlayerOutLine.SetOutline(target, targetRoleColor);
 				hudManager.KillButton.Show();
 				hudManager.KillButton.gameObject.SetActive(true);
 			}

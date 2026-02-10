@@ -95,7 +95,9 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 				PhysicsHelpers.AnythingBetween(
 					curPos, curPos + (this.PrevForce.normalized * offset),
 					Constants.ShipAndObjectsMask, false) ||
+#pragma warning disable ERA004 // 高速で移動しているベクトルの正規化がゼロベクトルに近いチェックで止まるように
 				(curPos - this.prevPos).normalized.IsCloseTo(Vector2.zero, 0.1f)
+#pragma warning restore ERA004 // Vector.IsCloseToとVector.IsNotCloseToの第2引数が0.1以上です
 			))
 		{
 			forceVector = -forceVector * this.e.Value;

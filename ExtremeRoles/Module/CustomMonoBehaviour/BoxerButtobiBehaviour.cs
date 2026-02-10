@@ -94,12 +94,14 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 		var rigidBody = pc.rigidbody2D;
 		Vector2 curPos = pc.transform.position;
 
-		if (this.PrevForce.IsNotCloseTo(Vector2.zero, 0.1f) &&
+		if (this.PrevForce.IsNotCloseTo(Vector2.zero, 0.01f) &&
 			(
 				PhysicsHelpers.AnythingBetween(
 					curPos, curPos + (this.PrevForce.normalized * offset),
 					Constants.ShipAndObjectsMask, false) ||
+#pragma warning disable ERA004 // 高速で移動しているベクトルの正規化がゼロベクトルに近いチェックで止まるように
 				(curPos - this.prevPos).normalized.IsCloseTo(Vector2.zero, 0.1f)
+#pragma warning restore ERA004 // Vector.IsCloseToとVector.IsNotCloseToの第2引数が0.1以上です
 			))
 		{
 			forceVector = -forceVector * this.e;
