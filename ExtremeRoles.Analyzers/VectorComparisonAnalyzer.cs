@@ -79,27 +79,28 @@ public sealed class VectorComparisonAnalyzer : DiagnosticAnalyzer
 
         var constantValue = sqrEpsArgument.Value.ConstantValue;
 
-        if (constantValue.HasValue)
+        if (!constantValue.HasValue)
         {
-            if (constantValue.Value is not (float or double))
-            {
-                return;
-            }
-
-            float floatValue = constantValue.Value switch
-            {
-                float f => f,
-                double d => (float)d,
-                _ => 0,
-            };
-
-            if (floatValue >= 0.1f)
-            {
-                var diagnostic = Diagnostic.Create(ruleERA004, sqrEpsArgument.Syntax.GetLocation());
-                context.ReportDiagnostic(diagnostic);
-            }
+			return;
         }
-    }
+		if (constantValue.Value is not (float or double))
+		{
+			return;
+		}
+
+		float floatValue = constantValue.Value switch
+		{
+			float f => f,
+			double d => (float)d,
+			_ => 0,
+		};
+
+		if (floatValue >= 0.1f)
+		{
+			var diagnostic = Diagnostic.Create(ruleERA004, sqrEpsArgument.Syntax.GetLocation());
+			context.ReportDiagnostic(diagnostic);
+		}
+	}
 
     private static void analyzeBinaryExpression(SyntaxNodeAnalysisContext context)
     {
