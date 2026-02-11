@@ -41,8 +41,12 @@ public sealed class Poltergeist : GhostRoleBase
         float x, float y, bool pickUp)
     {
 
-        if (!Player.TryGetPlayerControl(playerId, out var rolePlayer) ||
-            !ExtremeGhostRoleManager.TryGetSafeCastedGhostRole<Poltergeist>(playerId, out var role))
+        if (!Player.TryGetPlayerControl(playerId, out var rolePlayer))
+        {
+            return;
+        }
+        var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Poltergeist>(playerId);
+        if (role == null)
         {
             return;
         }

@@ -74,8 +74,16 @@ public static class Player
 
 	public static bool TryGetPlayerControl(byte id, [NotNullWhen(true)] out PlayerControl? result)
 	{
-		result = PlayerCache.AllPlayerControl.FirstOrDefault(x => x != null && x.PlayerId == id);
-		return result != null;
+		foreach (PlayerControl player in PlayerCache.AllPlayerControl)
+		{
+			if (player != null && player.PlayerId == id)
+			{
+				result = player;
+				return true;
+			}
+		}
+		result = null;
+		return false;
 	}
 
 	public static bool TryGetPlayerInfo(byte id, [NotNullWhen(true)] out NetworkedPlayerInfo? player)

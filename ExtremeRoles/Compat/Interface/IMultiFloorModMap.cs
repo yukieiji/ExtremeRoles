@@ -3,6 +3,8 @@
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 
+#nullable enable
+
 namespace ExtremeRoles.Compat.Interface
 {
 	public interface IMultiFloorModMap : IMapMod

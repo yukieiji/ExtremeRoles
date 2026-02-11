@@ -78,20 +78,20 @@ public sealed class YandereRole :
             if (Player.TryGetPlayerControl(playerId, out var player))
             {
                 targetPlayer.Add(playerId, player);
-            }
-            if (isUseArrow)
-            {
-                targetArrow.Add(
-                    playerId, new Arrow(
-                        new Color32(
-                            byte.MaxValue,
-                            byte.MaxValue,
-                            byte.MaxValue,
-                            byte.MaxValue)));
-            }
-            else
-            {
-                targetArrow.Add(playerId, null);
+                if (isUseArrow)
+                {
+                    targetArrow.Add(
+                        playerId, new Arrow(
+                            new Color32(
+                                byte.MaxValue,
+                                byte.MaxValue,
+                                byte.MaxValue,
+                                byte.MaxValue)));
+                }
+                else
+                {
+                    targetArrow.Add(playerId, null);
+                }
             }
         }
 

@@ -315,7 +315,8 @@ public static class RPCOperator
     public static void CustomVentUse(
         int ventId, byte playerId, byte isEnter)
     {
-        if (!Helper.Player.TryGetPlayerControl(playerId, out var player)) { return; }
+        PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
+        if (player == null) { return; }
 
         MessageReader reader = new MessageReader();
 
@@ -340,7 +341,8 @@ public static class RPCOperator
     public static void UncheckedSnapTo(
         byte teleporterId, UnityEngine.Vector2 pos)
     {
-        if (!Helper.Player.TryGetPlayerControl(teleporterId, out var teleportPlayer)) { return; }
+        PlayerControl teleportPlayer = Helper.Player.GetPlayerControlById(teleporterId);
+		if (teleportPlayer == null) { return; }
 
 		var prevPos = teleportPlayer.GetTruePosition();
 		teleportPlayer.NetTransform.SnapTo(pos);
@@ -361,11 +363,8 @@ public static class RPCOperator
     public static void UncheckedShapeShift(
         byte sourceId, byte targetId, byte useAnimation)
     {
-        if (!Helper.Player.TryGetPlayerControl(sourceId, out var source) ||
-            !Helper.Player.TryGetPlayerControl(targetId, out var target))
-        {
-            return;
-        }
+        PlayerControl source = Helper.Player.GetPlayerControlById(sourceId);
+        PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
 
         bool animate = true;
 
@@ -386,8 +385,10 @@ public static class RPCOperator
 			return;
 		}
 
-		if (Helper.Player.TryGetPlayerControl(sourceId, out var source) &&
-            Helper.Player.TryGetPlayerControl(targetId, out var target))
+		PlayerControl source = Helper.Player.GetPlayerControlById(sourceId);
+        PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
+
+        if (source != null && target != null)
         {
 			Patches.KillAnimationCoPerformKillMoveNextPatch.HideNextAnimation = useAnimation == 0;
 			source.MurderPlayer(target);
@@ -404,7 +405,8 @@ public static class RPCOperator
 			return;
 		}
 
-		if (!Helper.Player.TryGetPlayerControl(targetId, out var target))
+		PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
+		if (target == null)
 		{
 			return;
 		}
@@ -416,7 +418,9 @@ public static class RPCOperator
 
 	public static void UncheckedRevive(byte targetId)
     {
-        if (Helper.Player.TryGetPlayerControl(targetId, out var target))
+        PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
+
+        if (target != null)
         {
             target.Revive();
 

@@ -43,9 +43,9 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
         {
             foreach (byte playerId in sharerPlayerId)
             {
-                this.arrow.Add(playerId, new Arrow(Palette.ImpostorRed));
                 if (Player.TryGetPlayerControl(playerId, out var p))
                 {
+                    this.arrow.Add(playerId, new Arrow(Palette.ImpostorRed));
                     this.sharer.Add(playerId, p);
                 }
             }
