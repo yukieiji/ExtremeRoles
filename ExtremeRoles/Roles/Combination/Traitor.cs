@@ -345,9 +345,9 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
         }
 
         var resetRole = this.AnotherRole as IRoleSpecialReset;
-        if (resetRole != null)
+        if (resetRole != null && Player.TryGetPlayerControl(rolePlayerId, out var rolePlayer))
         {
-            resetRole.AllReset(Player.GetPlayerControlById(rolePlayerId));
+            resetRole.AllReset(rolePlayer);
         }
         this.AnotherRole = null;
     }

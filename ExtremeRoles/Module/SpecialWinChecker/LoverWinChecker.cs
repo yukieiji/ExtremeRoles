@@ -86,8 +86,7 @@ internal sealed class LoverWinChecker : IWinChecker
 				{
 					case ExtremeRoleId.Sidekick:
 						var sidekick = (SidekickRole)lover.AnotherRole;
-						var jackalPlayer = Helper.Player.GetPlayerControlById(sidekick.Parent);
-						if (jackalPlayer == null) { break; }
+						if (!Helper.Player.TryGetPlayerControl(sidekick.Parent, out var jackalPlayer)) { break; }
 						if (!jackalPlayer.Data.IsDead &&
 							!jackalPlayer.Data.Disconnected &&
 							statistics.TeamImpostorAlive <= 0 &&
@@ -119,8 +118,7 @@ internal sealed class LoverWinChecker : IWinChecker
 						{
 							return false;
 						}
-						var queenPlayer = Helper.Player.GetPlayerControlById(servantStatus.Parent);
-						if (queenPlayer == null) { break; }
+						if (!Helper.Player.TryGetPlayerControl(servantStatus.Parent, out var queenPlayer)) { break; }
 						if (!queenPlayer.Data.IsDead &&
 							!queenPlayer.Data.Disconnected &&
 							statistics.TeamImpostorAlive <= 0 &&
@@ -146,8 +144,8 @@ internal sealed class LoverWinChecker : IWinChecker
 
 		foreach (byte playerId in this.aliveLover)
 		{
-			var (compTask, totalTask) = Helper.GameSystem.GetTaskInfo(
-				Helper.Player.GetPlayerControlById(playerId).Data);
+			if (!Helper.Player.TryGetPlayerControl(playerId, out var p)) { continue; }
+			var (compTask, totalTask) = Helper.GameSystem.GetTaskInfo(p.Data);
 			allCompTask += compTask;
 			allTask += totalTask;
 		}

@@ -32,8 +32,7 @@ public sealed partial class Xion : SingleRoleBase
 
     public static void XionPlayerToGhostLayer()
     {
-        PlayerControl player = Helper.Player.GetPlayerControlById(PlayerId);
-        if (player != null)
+        if (Helper.Player.TryGetPlayerControl(PlayerId, out var player))
         {
             player.gameObject.layer = LayerMask.NameToLayer("Ghost");
         }

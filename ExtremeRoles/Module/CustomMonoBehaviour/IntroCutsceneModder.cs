@@ -119,9 +119,9 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 		ExtremeRoleType teamId)
 	{
 		if (role.Status is IRoleFakeIntro mainFake &&
-			mainFake.FakeTeam == teamId)
+			mainFake.FakeTeam == teamId &&
+			Player.TryGetPlayerControl(playerId, out var player))
 		{
-			var player = Player.GetPlayerControlById(playerId);
 			impTeam.Add(player);
 			Logging.Debug($"Add fake {teamId}: {playerId}");
 			return true;

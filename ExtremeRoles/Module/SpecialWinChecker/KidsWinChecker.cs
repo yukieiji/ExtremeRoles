@@ -48,8 +48,7 @@ internal sealed class KidsWinChecker : IWinChecker
 			return false;
 		}
 
-		var player = Player.GetPlayerControlById(checkPlayerId);
-		if (player == null)
+		if (!Player.TryGetPlayerControl(checkPlayerId, out var player))
 		{
 			return false;
 		}

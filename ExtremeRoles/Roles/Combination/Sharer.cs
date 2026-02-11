@@ -44,7 +44,10 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
             foreach (byte playerId in sharerPlayerId)
             {
                 this.arrow.Add(playerId, new Arrow(Palette.ImpostorRed));
-                this.sharer.Add(playerId, Player.GetPlayerControlById(playerId));
+                if (Player.TryGetPlayerControl(playerId, out var p))
+                {
+                    this.sharer.Add(playerId, p);
+                }
             }
         }
 
@@ -168,8 +171,11 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
         byte firstSharer = sharer[0];
         sharer.RemoveAt(0);
 
-        baseString += Player.GetPlayerControlById(
-            firstSharer).Data.PlayerName;
+        if (Player.TryGetPlayerControl(firstSharer, out var firstP))
+        {
+            baseString += firstP.Data.PlayerName;
+        }
+
         if (sharer.Count != 0)
         {
             for (int i = 0; i < sharer.Count; ++i)
@@ -183,8 +189,10 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
                 {
                     baseString += Tr.GetString("and");
                 }
-                baseString += Player.GetPlayerControlById(
-                    sharer[i]).Data.PlayerName;
+                if (Player.TryGetPlayerControl(sharer[i], out var sp))
+                {
+                    baseString += sp.Data.PlayerName;
+                }
 
             }
         }

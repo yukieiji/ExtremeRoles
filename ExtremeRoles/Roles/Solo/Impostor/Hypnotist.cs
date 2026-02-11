@@ -1287,10 +1287,9 @@ public sealed class Doll :
 
     public override string GetFullDescription()
     {
-        var hypno = Player.GetPlayerControlById(this.hypnotistPlayerId);
         string fullDesc = base.GetFullDescription();
 
-        if (hypno == null ||
+        if (!Player.TryGetPlayerControl(this.hypnotistPlayerId, out var hypno) ||
 			hypno.Data == null)
 		{
 			return fullDesc;

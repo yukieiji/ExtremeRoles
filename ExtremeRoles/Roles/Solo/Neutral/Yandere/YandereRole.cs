@@ -75,9 +75,10 @@ public sealed class YandereRole :
 
         public void Add(byte playerId)
         {
-            var player = Player.GetPlayerControlById(playerId);
-
-            targetPlayer.Add(playerId, player);
+            if (Player.TryGetPlayerControl(playerId, out var player))
+            {
+                targetPlayer.Add(playerId, player);
+            }
             if (isUseArrow)
             {
                 targetArrow.Add(
@@ -175,7 +176,8 @@ public sealed class YandereRole :
         var yandere = ExtremeRoleManager.GetSafeCastedRole<YandereRole>(rolePlayerId);
         if (yandere != null)
         {
-            yandere.OneSidedLover = Player.GetPlayerControlById(oneSidedLoverId);
+            Player.TryGetPlayerControl(oneSidedLoverId, out var oneSidedLover);
+            yandere.OneSidedLover = oneSidedLover;
         }
     }
 

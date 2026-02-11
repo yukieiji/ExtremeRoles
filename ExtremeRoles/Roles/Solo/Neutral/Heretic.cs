@@ -185,8 +185,7 @@ public sealed class Heretic :
 		this.called = true;
 		byte targetPlayerId = this.meetingTarget;
 
-		var player = Player.GetPlayerControlById(targetPlayerId);
-		if (!player.IsAlive())
+		if (!Player.TryGetPlayerControl(targetPlayerId, out var player) || !player.IsAlive())
 		{
 			targetPlayerId = byte.MaxValue;
 		}

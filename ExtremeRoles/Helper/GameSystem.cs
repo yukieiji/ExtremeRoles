@@ -278,10 +278,7 @@ public static class GameSystem
 
 	public static void ReplaceToNewTask(byte playerId, int index, int taskIndex)
 	{
-		var player = Player.GetPlayerControlById(
-			playerId);
-
-		if (player == null) { return; }
+		if (!Player.TryGetPlayerControl(playerId, out var player)) { return; }
 
 		byte taskId = (byte)taskIndex;
 		uint id = (uint)index;

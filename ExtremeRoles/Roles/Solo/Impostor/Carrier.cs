@@ -53,9 +53,11 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
         byte rolePlayerId, float x, float y,
         byte targetPlayerId, bool isCarry)
     {
-        var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
-        var role = ExtremeRoleManager.GetSafeCastedRole<Carrier>(rolePlayerId);
-        if (role == null || rolePlayer == null) { return; }
+        if (!Player.TryGetPlayerControl(rolePlayerId, out var rolePlayer) ||
+            !ExtremeRoleManager.TryGetSafeCastedRole<Carrier>(rolePlayerId, out var role))
+        {
+            return;
+        }
 
         rolePlayer.NetTransform.SnapTo(new Vector2(x, y));
 

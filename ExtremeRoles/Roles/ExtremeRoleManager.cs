@@ -603,9 +603,10 @@ public static class ExtremeRoleManager
         switch(ops)
         {
             case ReplaceOperation.ResetVanillaRole:
-                RoleManager.Instance.SetRole(
-                    Helper.Player.GetPlayerControlById(targetId),
-                    RoleTypes.Crewmate);
+                if (Helper.Player.TryGetPlayerControl(targetId, out var targetPc))
+                {
+                    RoleManager.Instance.SetRole(targetPc, RoleTypes.Crewmate);
+                }
                 break;
             case ReplaceOperation.ForceReplaceToSidekick:
 				JackalRole.TargetToSideKick(caller, targetId);

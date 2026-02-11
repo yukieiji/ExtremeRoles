@@ -203,8 +203,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 
 	private void addTarget(byte targetId)
 	{
-		var targetPc = Player.GetPlayerControlById(targetId);
-		if (targetPc == null ||
+		if (!Player.TryGetPlayerControl(targetId, out var targetPc) ||
 			targetPc.Data == null ||
 			targetPc.Data.Disconnected ||
 			targetPc.Data.IsDead)

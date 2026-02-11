@@ -57,9 +57,10 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     public static void TakeTargetPlayerTask(
         byte targetPlayerId, List<int> removeTaskId)
     {
-
-        PlayerControl targetPlayer = Player.GetPlayerControlById(
-            targetPlayerId);
+        if (!Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer))
+        {
+            return;
+        }
 
         foreach (PlayerTask task in targetPlayer.myTasks.GetFastEnumerator())
         {

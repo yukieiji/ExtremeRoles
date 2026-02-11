@@ -92,10 +92,9 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 
 	public override string GetFullDescription()
 	{
-		var jackal = Player.GetPlayerControlById(this.Parent);
 		string fullDesc = base.GetFullDescription();
 
-		if (jackal == null ||
+		if (!Player.TryGetPlayerControl(this.Parent, out var jackal) ||
 			jackal.Data == null)
 		{
 			return fullDesc;
