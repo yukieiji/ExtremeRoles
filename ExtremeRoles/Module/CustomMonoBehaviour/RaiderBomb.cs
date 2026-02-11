@@ -121,7 +121,7 @@ public sealed class RaiderBomb : MonoBehaviour
 		foreach (NetworkedPlayerInfo playerInfo in
 			GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			if (playerInfo.IsInvalid())
+			if (playerInfo.IsInValid())
 			{
 				continue;
 			}

@@ -166,7 +166,7 @@ public sealed class Photographer :
 
 			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
-				if (player.IsInvalid())
+				if (player.IsInValid())
 				{
 					continue;
 				}

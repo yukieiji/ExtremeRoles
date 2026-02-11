@@ -110,7 +110,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
         PlayerControl killTarget = Helper.Player.GetClosestPlayerInKillRange(
             this.outburstTarget);
 
-        if (killTarget.IsInvalid())
+        if (killTarget.IsInValid())
 		{
 			return;
 		}

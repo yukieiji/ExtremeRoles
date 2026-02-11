@@ -114,7 +114,7 @@ public sealed class LonerAbilityHandler(
 
 		this.status.Update(rolePlayer, Time.deltaTime);
 
-		if (rolePlayer.IsInvalid())
+		if (rolePlayer.IsInValid())
 		{
 			this.arrow.Hide();
 			return;

@@ -160,7 +160,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (rolePlayer.IsInvalid() ||
+        if (rolePlayer.IsInValid() ||
 			this.bombPlayerId.Count == 0 ||
 			!GameProgressSystem.IsTaskPhase)
 		{
@@ -177,7 +177,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         byte bombTargetPlayerId = this.bombPlayerId.Dequeue();
         PlayerControl bombPlayer = Player.GetPlayerControlById(bombTargetPlayerId);
 
-        if (bombPlayer.IsInvalid())
+        if (bombPlayer.IsInValid())
 		{
 			return;
 		}
