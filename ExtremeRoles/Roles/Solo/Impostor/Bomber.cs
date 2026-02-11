@@ -175,9 +175,8 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         resetTimer();
 
         byte bombTargetPlayerId = this.bombPlayerId.Dequeue();
-        PlayerControl bombPlayer = Player.GetPlayerControlById(bombTargetPlayerId);
-
-        if (bombPlayer.IsInValid())
+        if (!Player.TryGetPlayerControl(bombTargetPlayerId, out var bombPlayer) ||
+			bombPlayer.IsInValid())
 		{
 			return;
 		}

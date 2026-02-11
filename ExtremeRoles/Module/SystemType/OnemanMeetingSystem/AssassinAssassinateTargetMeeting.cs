@@ -114,8 +114,7 @@ public sealed class AssassinAssassinateTargetMeeting : IOnemanMeeting
 		{
 			return false;
 		}
-		var player = Helper.Player.GetPlayerControlById(target);
-		if (player == null)
+		if (!Helper.Player.TryGetPlayerControl(target, out var player))
 		{
 			return false;
 		}

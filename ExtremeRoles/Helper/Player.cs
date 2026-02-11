@@ -72,15 +72,6 @@ public static class Player
 
 	}
 
-	public static PlayerControl? GetPlayerControlById(byte id)
-    {
-        foreach (PlayerControl player in PlayerCache.AllPlayerControl)
-        {
-            if (player.PlayerId == id) { return player; }
-        }
-        return null;
-    }
-
 	public static bool TryGetPlayerControl(byte id, [NotNullWhen(true)] out PlayerControl? result)
 	{
 		result = PlayerCache.AllPlayerControl.FirstOrDefault(x => x != null && x.PlayerId == id);

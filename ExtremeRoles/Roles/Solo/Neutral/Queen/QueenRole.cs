@@ -76,7 +76,10 @@ public sealed class QueenRole :
 
         if (queen == null) { return; }
 
-        var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
+        if (!Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer))
+        {
+            return;
+        }
         var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
         IParentChainStatus.PurgeParent(targetPlayerId);
@@ -268,8 +271,7 @@ public sealed class QueenRole :
 
         foreach (byte playerId in servantPlayerId)
         {
-            var player = Player.GetPlayerControlById(playerId);
-            if (!player) { continue; }
+            if (!Player.TryGetPlayerControl(playerId, out var player)) { continue; }
 
             float gage = Player.GetPlayerTaskGage(player);
             if (!servantTaskGage.ContainsKey(playerId))
@@ -302,9 +304,8 @@ public sealed class QueenRole :
     {
         foreach (byte playerId in servantPlayerId)
         {
-            var player = Player.GetPlayerControlById(playerId);
-
-            if (player.IsInValid() ||
+            if (!Player.TryGetPlayerControl(playerId, out var player) ||
+                player.IsInValid() ||
 				isNotSucideServant(playerId))
 			{
 				continue;
@@ -354,9 +355,8 @@ public sealed class QueenRole :
     {
         foreach (byte playerId in servantPlayerId)
         {
-            PlayerControl player = Player.GetPlayerControlById(playerId);
-
-            if (player.IsInValid() ||
+            if (!Player.TryGetPlayerControl(playerId, out var player) ||
+                player.IsInValid() ||
 				isNotSucideServant(playerId))
 			{
 				continue;
@@ -401,9 +401,8 @@ public sealed class QueenRole :
     {
         foreach (byte playerId in servantPlayerId)
         {
-            PlayerControl player = Player.GetPlayerControlById(playerId);
-
-            if (player.IsInValid() ||
+            if (!Player.TryGetPlayerControl(playerId, out var player) ||
+                player.IsInValid() ||
 				isNotSucideServant(playerId))
 			{
 				continue;

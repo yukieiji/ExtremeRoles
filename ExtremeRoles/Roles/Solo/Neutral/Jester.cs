@@ -49,11 +49,9 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
 			return;
 		}
 
-        PlayerControl killer = Helper.Player.GetPlayerControlById(outburstTargetPlayerId);
-        PlayerControl target = Helper.Player.GetPlayerControlById(killTargetPlayerId);
-
         if (!(
-				killer != null &&
+				Helper.Player.TryGetPlayerControl(outburstTargetPlayerId, out var killer) &&
+				Helper.Player.TryGetPlayerControl(killTargetPlayerId, out var target) &&
 				ExtremeRoleManager.TryGetRole(killer.PlayerId, out var killerRole) &&
 				KillButtonDoClickPatch.CheckPreKillConditionWithBool(killerRole, killer, target)
 			))

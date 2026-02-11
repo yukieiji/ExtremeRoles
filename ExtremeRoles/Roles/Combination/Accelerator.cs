@@ -75,8 +75,7 @@ public sealed class AcceleratorRole :
 		AcceleratorRpc rpcId = (AcceleratorRpc)reader.ReadByte();
         byte rolePlayerId = reader.ReadByte();
 
-        var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
-        if (rolePlayer == null ||
+        if (!Player.TryGetPlayerControl(rolePlayerId, out var rolePlayer) ||
 			!ExtremeRoleManager.TryGetSafeCastedRole<AcceleratorRole>(rolePlayerId, out var role))
 		{
 			return;

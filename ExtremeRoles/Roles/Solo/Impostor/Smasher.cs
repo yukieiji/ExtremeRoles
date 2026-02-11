@@ -58,7 +58,11 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
 			return false;
 		}
 
-		var target = Player.GetPlayerControlById(this.targetPlayerId);
+		if (!Player.TryGetPlayerControl(this.targetPlayerId, out var target))
+		{
+			return false;
+		}
+
 		var killResult = KillButtonDoClickPatch.CheckPreKillCondition(
 			this, PlayerControl.LocalPlayer,
 			target);

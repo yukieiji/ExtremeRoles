@@ -320,10 +320,9 @@ public sealed class ScavengerAbilitySystem(
 		var ability = (WeaponAbility)msgReader.ReadByte();
 		float x = msgReader.ReadSingle();
 		float y = msgReader.ReadSingle();
-		var player = Player.GetPlayerControlById(playerId);
-		if (!ExtremeRoleManager.TryGetSafeCastedRole<ExtremeRoles.Roles.Solo.Impostor.Scavenger> (
-				playerId, out var scavenger) ||
-			player == null)
+		if (!Player.TryGetPlayerControl(playerId, out var player) ||
+			!ExtremeRoleManager.TryGetSafeCastedRole<ExtremeRoles.Roles.Solo.Impostor.Scavenger> (
+				playerId, out var scavenger))
 		{
 			return;
 		}

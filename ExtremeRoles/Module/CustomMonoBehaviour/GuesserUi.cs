@@ -174,7 +174,7 @@ public sealed class GuesserUi : MonoBehaviour
 
     public void SetTarget(byte targetPlayerId)
     {
-		this.targetPlayer = Helper.Player.GetPlayerControlById(targetPlayerId);
+		Helper.Player.TryGetPlayerControl(targetPlayerId, out this.targetPlayer);
         foreach (var info in this.infos)
         {
             info.SetTarget(targetPlayerId);

@@ -295,8 +295,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
             {
                 this.timer[playerId] = this.timer[playerId] - Time.deltaTime;
                 if (this.timer[playerId] <= 0.0f ||
-                    isInfectOtherPlayer(
-                        Helper.Player.GetPlayerControlById(playerId)))
+                    (Helper.Player.TryGetPlayerControl(playerId, out var pc) && isInfectOtherPlayer(pc)))
                 {
                     remove.Add(playerId);
                 }

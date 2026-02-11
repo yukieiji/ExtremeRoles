@@ -92,9 +92,7 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
 		this.supportTargetId = target.OrderBy(
 			item => RandomGenerator.Instance.Next()).First();
 
-        var targetPlayerControl = Player.GetPlayerControlById(this.supportTargetId);
-
-        if (targetPlayerControl != null &&
+        if (Player.TryGetPlayerControl(this.supportTargetId, out var targetPlayerControl) &&
 			ExtremeRoleManager.TryGetRole(this.supportTargetId, out var supportRole))
         {
             this.supportRoleName = supportRole.GetColoredRoleName();
