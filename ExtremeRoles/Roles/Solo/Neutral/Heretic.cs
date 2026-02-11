@@ -193,12 +193,12 @@ public sealed class Heretic :
 		{
 			// ランダムなプレイヤー選択
 			var target = PlayerCache.AllPlayerControl.Where(
-				p =>
-					p.IsAlive() &&
-					p.PlayerId != exiledPlayer.PlayerId &&
+				player =>
+					player.IsAlive() &&
+					player.PlayerId != exiledPlayer.PlayerId &&
 					this.canKillImpostor ||
 					(
-						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
+						ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
 						!role.IsImpostor()
 					))
 				.OrderBy(x => RandomGenerator.Instance.Next())
