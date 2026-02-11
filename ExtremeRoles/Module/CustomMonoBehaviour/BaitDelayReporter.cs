@@ -83,7 +83,7 @@ public sealed class BaitDelayReporter : MonoBehaviour
 	private void reportTarget(NetworkedPlayerInfo target)
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
-		if (localPlayer.IsInvalid())
+		if (localPlayer.IsInValid())
 		{
 			removeThis();
 			return;

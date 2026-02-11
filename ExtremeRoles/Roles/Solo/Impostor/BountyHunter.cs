@@ -229,7 +229,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
 
         foreach (var player in sortedAllPlayer)
         {
-            if (player.IsInvalid()) 
+            if (player.IsInValid()) 
 			{
 				continue;
 			}

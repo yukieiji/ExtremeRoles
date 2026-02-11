@@ -538,7 +538,7 @@ public sealed class Hypnotist :
         foreach (byte playerId in this.doll)
         {
             if (Player.TryGetPlayerControl(playerId, out var player) &&
-				player.IsValid())
+				player.IsAlive())
 			{
 				player.Exiled();
 			}
@@ -551,7 +551,7 @@ public sealed class Hypnotist :
         foreach (byte playerId in this.doll)
         {
             if (Player.TryGetPlayerControl(playerId, out var player) &&
-				player.IsValid())
+				player.IsAlive())
 			{
 				RPCOperator.UncheckedMurderPlayer(
 					playerId, playerId,

@@ -271,7 +271,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
         foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
-            if (playerControl.IsInvalid() ||
+            if (playerControl.IsInValid() ||
 				!ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
 				!this.IsSameControlId(role))
             {

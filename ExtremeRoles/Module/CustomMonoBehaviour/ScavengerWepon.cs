@@ -632,7 +632,7 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 	{
 		if (this.frame is null ||
 			this.Info is null ||
-			this.Info.IgnorePlayer.IsInvalid() ||
+			this.Info.IgnorePlayer.IsInValid() ||
 			!ScavengerWeaponHitHelper.IsHitPlayer(other, out var pc) ||
 			pc.PlayerId == this.Info.IgnorePlayer.PlayerId ||
 			PhysicsHelpers.AnythingBetween(
@@ -763,7 +763,7 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 
 	public void Increse(float addTime)
 	{
-		if (this.TargetPlayer.IsInvalid())
+		if (this.TargetPlayer.IsInValid())
 		{
 			disable();
 			return;
