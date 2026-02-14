@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   label:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: github.event.pull_request.draft == false
     steps:
       - name: Add ReadyToMerge label
