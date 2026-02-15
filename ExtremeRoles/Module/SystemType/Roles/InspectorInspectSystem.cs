@@ -133,15 +133,40 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 		});
 	}
 
+	public void EndInspect(byte remove)
+	{
+		lock (this.allTarget)
+		{
+			if (!this.allTarget.TryGetValue(remove, out var target) ||
+				target is null)
+			{
+				return;
+			}
+			target.Clear();
+			this.allTarget.Remove(remove);
+		}
+	}
+
 	public void Deteriorate(float deltaTime)
 	{
 		var local = PlayerControl.LocalPlayer;
 		if (local == null ||
+			local.Data == null ||
+			local.Data.IsDead ||
+			local.Data.Disconnected ||
 			this.allTarget.Count == 0)
 		{
 			if (this.text != null)
 			{
 				this.text.gameObject.SetActive(false);
+			}
+
+			// 役職本人の矢印を消す
+			if (local != null &&
+				this.allTarget.TryGetValue(local.PlayerId, out var removeTarget))
+			{
+				removeTarget.Clear();
+				this.allTarget.Remove(local.PlayerId);
 			}
 			return;
 		}
@@ -196,7 +221,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 				addTarget(target);
 				break;
 			case Ops.EndInspect:
-				endInspect(player.PlayerId);
+				EndInspect(player.PlayerId);
 				break;
 		}
 	}
@@ -237,19 +262,6 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 		}
 	}
 
-	private void endInspect(byte remove)
-	{
-		lock (this.allTarget)
-		{
-			if (!this.allTarget.TryGetValue(remove, out var target) ||
-				target is null)
-			{
-				return;
-			}
-			target.Clear();
-			this.allTarget.Remove(remove);
-		}
-	}
 	private void clear()
 	{
 		foreach (var target in this.allTarget.Values)
