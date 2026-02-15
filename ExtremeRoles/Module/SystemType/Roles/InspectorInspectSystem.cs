@@ -153,8 +153,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 		if (local == null ||
 			local.Data == null ||
 			local.Data.IsDead ||
-			local.Data.Disconnected ||
-			this.allTarget.Count == 0)
+			local.Data.Disconnected)
 		{
 			if (this.text != null)
 			{
@@ -163,10 +162,20 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 
 			// 役職本人の矢印を消す
 			if (local != null &&
-				this.allTarget.TryGetValue(local.PlayerId, out var removeTarget))
+				this.allTarget.TryGetValue(local.PlayerId, out var removeTarget) &&
+				removeTarget is not null)
 			{
 				removeTarget.Clear();
 				this.allTarget.Remove(local.PlayerId);
+			}
+			return;
+		}
+
+		if (this.allTarget.Count == 0)
+		{
+			if (this.text != null)
+			{
+				this.text.gameObject.SetActive(false);
 			}
 			return;
 		}
