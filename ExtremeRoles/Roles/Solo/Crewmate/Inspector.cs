@@ -29,6 +29,19 @@ public sealed class Inspector : SingleRoleBase, IRoleAutoBuildAbility
         false, true, false, false)
     { }
 
+	/// <summary>
+	/// インスペクターがキルされた時に、インスペクターのシステムから役職プレイヤー自体を削除する
+	/// </summary>
+	/// <param name="rolePlayer">役職プレイヤー</param>
+	/// <param name="killerPlayer">キラー</param>
+	public override void RolePlayerKilledAction(PlayerControl rolePlayer, PlayerControl killerPlayer)
+	{
+		if (ExtremeSystemTypeManager.Instance.TryGet<InspectorInspectSystem>(ExtremeSystemType.InspectorInspect, out var system))
+		{
+			system.EndInspect(rolePlayer.PlayerId);
+		}
+	}
+
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {

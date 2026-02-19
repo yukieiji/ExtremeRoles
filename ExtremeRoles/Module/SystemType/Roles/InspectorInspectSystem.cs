@@ -1,16 +1,15 @@
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
+using Hazel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using Hazel;
 using TMPro;
 using UnityEngine;
-
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
-
+using static Il2CppSystem.Globalization.HebrewNumber;
 using UnityObject = UnityEngine.Object;
+
 
 #nullable enable
 
@@ -133,15 +132,42 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 		});
 	}
 
+	public void EndInspect(byte remove)
+	{
+		lock (this.allTarget)
+		{
+			if (!this.allTarget.TryGetValue(remove, out var target) ||
+				target is null)
+			{
+				return;
+			}
+			target.Clear();
+			this.allTarget.Remove(remove);
+		}
+	}
+
 	public void Deteriorate(float deltaTime)
 	{
 		var local = PlayerControl.LocalPlayer;
 		if (local == null ||
 			this.allTarget.Count == 0)
 		{
-			if (this.text != null)
+			setTextActive(false);
+			return;
+		}
+
+		if (local.Data == null ||
+			local.Data.IsDead ||
+			local.Data.Disconnected)
+		{
+			setTextActive(false);
+
+			// 役職本人の矢印を消す
+			if (this.allTarget.TryGetValue(local.PlayerId, out var removeTarget) &&
+				removeTarget is not null)
 			{
-				this.text.gameObject.SetActive(false);
+				removeTarget.Clear();
+				this.allTarget.Remove(local.PlayerId);
 			}
 			return;
 		}
@@ -154,7 +180,8 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 			this.text.transform.localPosition = new Vector3(0.0f, -0.25f, -250.0f);
 			this.text.enableWordWrapping = false;
 		}
-		this.text.gameObject.SetActive(true);
+
+		setTextActive(true);
 
 		// 役職本人の矢印表示処理
 		if (this.allTarget.TryGetValue(local.PlayerId, out var rolePlayerShowTarget))
@@ -196,7 +223,7 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 				addTarget(target);
 				break;
 			case Ops.EndInspect:
-				endInspect(player.PlayerId);
+				EndInspect(player.PlayerId);
 				break;
 		}
 	}
@@ -237,19 +264,6 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 		}
 	}
 
-	private void endInspect(byte remove)
-	{
-		lock (this.allTarget)
-		{
-			if (!this.allTarget.TryGetValue(remove, out var target) ||
-				target is null)
-			{
-				return;
-			}
-			target.Clear();
-			this.allTarget.Remove(remove);
-		}
-	}
 	private void clear()
 	{
 		foreach (var target in this.allTarget.Values)
@@ -298,5 +312,13 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 			parts.Add("buttonAbility");
 		}
 		return parts;
+	}
+
+	private void setTextActive(bool active)
+	{
+		if (this.text != null)
+		{
+			this.text.gameObject.SetActive(active);
+		}
 	}
 }
