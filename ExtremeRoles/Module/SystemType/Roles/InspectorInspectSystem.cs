@@ -1,16 +1,15 @@
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
+using Hazel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using Hazel;
 using TMPro;
 using UnityEngine;
-
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Interface;
-
+using static Il2CppSystem.Globalization.HebrewNumber;
 using UnityObject = UnityEngine.Object;
+
 
 #nullable enable
 
@@ -151,31 +150,24 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 	{
 		var local = PlayerControl.LocalPlayer;
 		if (local == null ||
-			local.Data == null ||
+			this.allTarget.Count == 0)
+		{
+			setTextActive(false);
+			return;
+		}
+
+		if (local.Data == null ||
 			local.Data.IsDead ||
 			local.Data.Disconnected)
 		{
-			if (this.text != null)
-			{
-				this.text.gameObject.SetActive(false);
-			}
+			setTextActive(false);
 
 			// 役職本人の矢印を消す
-			if (local != null &&
-				this.allTarget.TryGetValue(local.PlayerId, out var removeTarget) &&
+			if (this.allTarget.TryGetValue(local.PlayerId, out var removeTarget) &&
 				removeTarget is not null)
 			{
 				removeTarget.Clear();
 				this.allTarget.Remove(local.PlayerId);
-			}
-			return;
-		}
-
-		if (this.allTarget.Count == 0)
-		{
-			if (this.text != null)
-			{
-				this.text.gameObject.SetActive(false);
 			}
 			return;
 		}
@@ -188,7 +180,8 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 			this.text.transform.localPosition = new Vector3(0.0f, -0.25f, -250.0f);
 			this.text.enableWordWrapping = false;
 		}
-		this.text.gameObject.SetActive(true);
+
+		setTextActive(true);
 
 		// 役職本人の矢印表示処理
 		if (this.allTarget.TryGetValue(local.PlayerId, out var rolePlayerShowTarget))
@@ -319,5 +312,13 @@ public sealed class InspectorInspectSystem(InspectorInspectSystem.InspectMode mo
 			parts.Add("buttonAbility");
 		}
 		return parts;
+	}
+
+	private void setTextActive(bool active)
+	{
+		if (this.text != null)
+		{
+			this.text.gameObject.SetActive(active);
+		}
 	}
 }
