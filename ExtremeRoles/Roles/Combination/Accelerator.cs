@@ -63,11 +63,10 @@ public sealed class AcceleratorRole :
 	public ExtremeAbilityButton Button { get; set; }
 
 	public AcceleratorRole() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Accelerator,
 			ColorPalette.AcceleratorBiancoPeria),
-        false, true, false, false,
-        tab: OptionTab.CombinationTab)
+		OptionTab.CombinationTab)
     { }
 #pragma warning restore CS8618
 

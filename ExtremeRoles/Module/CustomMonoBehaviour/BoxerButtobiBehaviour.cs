@@ -3,6 +3,7 @@ using System;
 using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.SystemType;
@@ -56,10 +57,7 @@ public sealed class BoxerButtobiBehaviour : MonoBehaviour
 	{
 		var pc = PlayerControl.LocalPlayer;
 
-		if (pc == null ||
-			pc.Data == null ||
-			pc.Data.Disconnected ||
-			pc.Data.IsDead ||
+		if (pc.IsInValid() ||
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null ||
 			this.PrevForce.sqrMagnitude <= 0.01f)

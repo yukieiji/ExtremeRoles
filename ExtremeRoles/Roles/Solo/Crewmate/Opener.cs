@@ -1,13 +1,14 @@
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -38,10 +39,9 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	private float abilityCoolTime;
 
     public Opener() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Opener,
-			ColorPalette.OpenerSpringGreen),
-        false, true, false, false)
+			ColorPalette.OpenerSpringGreen))
     { }
 
     public void CreateAbility()
@@ -107,8 +107,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         if (!GameProgressSystem.IsTaskPhase ||
             this.Button == null ||
-			rolePlayer.Data.IsDead || 
-			rolePlayer.Data.Disconnected || 
+			rolePlayer.IsInValid() ||
 			this.isUpgraded)
 		{
 			return;

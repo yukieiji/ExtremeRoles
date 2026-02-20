@@ -34,10 +34,10 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 	private bool canNotKillServant;
 
 	public KnightRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Knight,
-			ColorPalette.QueenWhite),
-		true, false, false, false)
+			ColorPalette.QueenWhite,
+            RoleProp.CanKill | RolePropPresets.OptionalDefault))
 	{ }
 
 	public void ModifiedWinPlayer(

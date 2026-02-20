@@ -92,12 +92,10 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
     private SingleRoleBase hiddeRole = null;
 
     public Buddy() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Buddy,
 			ColorPalette.BuddyOrange),
-        false, true,
-        false, false,
-        tab: OptionTab.CombinationTab)
+		OptionTab.CombinationTab)
     { }
 
     public string GetFakeOptionString() => "";

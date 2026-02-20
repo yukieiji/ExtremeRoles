@@ -83,10 +83,9 @@ public sealed class CEO : SingleRoleBase,
     private PlayerReviver? playerReviver;
 
 	public CEO() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.CEO,
-			ColorPalette.CEOTzuShuiChing),
-		false, true, false, false)
+			ColorPalette.CEOTzuShuiChing))
 	{
 
 	}

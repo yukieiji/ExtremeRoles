@@ -49,10 +49,9 @@ public sealed class Moderator :
 	private bool awakeHasOtherVision;
 
 	public Moderator() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Moderator,
-			ColorPalette.ModeratorByakuroku),
-		false, true, false, false)
+			ColorPalette.ModeratorByakuroku))
 	{ }
 
 	public override string GetColoredRoleName(bool isTruthColor = false)

@@ -7,6 +7,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
@@ -82,10 +83,7 @@ public sealed class BaitDelayReporter : MonoBehaviour
 	private void reportTarget(NetworkedPlayerInfo target)
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
-		if (localPlayer == null ||
-			localPlayer.Data == null ||
-			localPlayer.Data.IsDead ||
-			localPlayer.Data.Disconnected)
+		if (localPlayer.IsInValid())
 		{
 			removeThis();
 			return;

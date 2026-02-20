@@ -7,8 +7,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 public sealed class SpecialImpostor : SingleRoleBase
 {
     public SpecialImpostor(): base(
-		RoleCore.BuildImpostor(ExtremeRoleId.SpecialImpostor),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.SpecialImpostor))
     {}
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)

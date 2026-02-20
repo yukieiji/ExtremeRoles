@@ -12,23 +12,22 @@ using Newtonsoft.Json.Linq;
 using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Extension.Json;
+using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Compat.Interface;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Patches;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
-
-using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.GameMode;
-using ExtremeRoles.Patches;
-using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -128,8 +127,7 @@ public sealed class Hypnotist :
 		"ExtremeRoles.Resources.JsonData.HypnotistAbilityPartPosition.json";
 
 	public Hypnotist() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Hypnotist),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Hypnotist))
     { }
 #pragma warning restore CS8618
 
@@ -442,9 +440,12 @@ public sealed class Hypnotist :
 				continue;
 			}
 
-            RPCOperator.UncheckedMurderPlayer(
-                playerId, playerId,
-                byte.MaxValue);
+            if (player.IsAlive())
+			{
+				RPCOperator.UncheckedMurderPlayer(
+					playerId, playerId,
+					byte.MaxValue);
+			}
         }
     }
 
@@ -536,13 +537,11 @@ public sealed class Hypnotist :
     {
         foreach (byte playerId in this.doll)
         {
-            if (!Player.TryGetPlayerControl(playerId, out var player) ||
-				player.Data.IsDead || player.Data.Disconnected)
+            if (Player.TryGetPlayerControl(playerId, out var player) &&
+				player.IsAlive())
 			{
-				continue;
+				player.Exiled();
 			}
-
-            player.Exiled();
         }
     }
 
@@ -551,16 +550,13 @@ public sealed class Hypnotist :
     {
         foreach (byte playerId in this.doll)
         {
-            if (!Player.TryGetPlayerControl(playerId, out var player) ||
-				player.Data.IsDead ||
-                player.Data.Disconnected)
+            if (Player.TryGetPlayerControl(playerId, out var player) &&
+				player.IsAlive())
 			{
-				continue;
+				RPCOperator.UncheckedMurderPlayer(
+					playerId, playerId,
+					byte.MaxValue);
 			}
-
-            RPCOperator.UncheckedMurderPlayer(
-                playerId, playerId,
-                byte.MaxValue);
         }
     }
 
@@ -971,12 +967,10 @@ public sealed class Doll :
         byte dollPlayerId,
         byte hypnotistPlayerId,
         Hypnotist parent) : base(
-			RoleCore.BuildNeutral(
+			RoleArgs.BuildNeutral(
 				ExtremeRoleId.Doll,
-				Palette.ImpostorRed),
-			false, false, false,
-			false, false, false,
-			false, false, false)
+				Palette.ImpostorRed,
+            RoleProp.None))
     {
         this.dollPlayerId = dollPlayerId;
         this.hypnotistPlayerId = hypnotistPlayerId;

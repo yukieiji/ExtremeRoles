@@ -85,12 +85,10 @@ public sealed class Heretic :
 	private Sprite sprite => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
 
 	public Heretic() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Heretic,
-			Palette.ImpostorRed),
-		false, false, false, false,
-		canCallMeeting: false,
-		canRepairSabotage: false)
+			Palette.ImpostorRed,
+			RoleProp.CanUseAdmin | RoleProp.CanUseSecurity | RoleProp.CanUseVital))
 	{ }
 
 	public void ModifiedWinPlayer(
@@ -188,7 +186,7 @@ public sealed class Heretic :
 		byte targetPlayerId = this.meetingTarget;
 
 		var player = Player.GetPlayerControlById(targetPlayerId);
-		if (!player.IsValid())
+		if (!player.IsAlive())
 		{
 			targetPlayerId = byte.MaxValue;
 		}
@@ -197,7 +195,7 @@ public sealed class Heretic :
 			// ランダムなプレイヤー選択
 			var target = PlayerCache.AllPlayerControl.Where(
 				player =>
-					player.IsValid() &&
+					player.IsAlive() &&
 					player.PlayerId != exiledPlayer.PlayerId &&
 					this.canKillImpostor ||
 					(
@@ -230,9 +228,7 @@ public sealed class Heretic :
 		}
 
 		this.Button?.SetButtonShow(
-			rolePlayer.Data != null &&
-			!rolePlayer.Data.IsDead &&
-			!rolePlayer.Data.Disconnected &&
+			rolePlayer.IsAlive() &&
 			(this.killMode is KillMode.AbilityOnTaskPhase or KillMode.AbilityOnTaskPhaseTarget));
 
 		if (!this.HasTask ||

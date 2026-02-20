@@ -6,6 +6,7 @@ using AmongUs.GameOptions;
 using UnityEngine;
 
 using ExtremeRoles.Extension.Manager;
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -61,10 +62,10 @@ public sealed class QueenRole :
 	private bool servantSucideWithQueenWhenHasKill;
 
 	public QueenRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Queen,
-			ColorPalette.QueenWhite),
-        true, false, false, false)
+			ColorPalette.QueenWhite,
+            RoleProp.CanKill | RolePropPresets.OptionalDefault))
     { }
 
     public static void TargetToServant(
@@ -303,10 +304,11 @@ public sealed class QueenRole :
         {
             var player = Player.GetPlayerControlById(playerId);
 
-            if (player == null ||
-				player.Data.IsDead ||
-                player.Data.Disconnected ||
-				isNotSucideServant(playerId)) { continue; }
+            if (player.IsInValid() ||
+				isNotSucideServant(playerId))
+			{
+				continue;
+			}
 
             RPCOperator.UncheckedMurderPlayer(
                 playerId, playerId,
@@ -354,10 +356,11 @@ public sealed class QueenRole :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player == null ||
-				player.Data.IsDead ||
-				player.Data.Disconnected ||
-				isNotSucideServant(playerId)) { continue; }
+            if (player.IsInValid() ||
+				isNotSucideServant(playerId))
+			{
+				continue;
+			}
 
             player.Exiled();
         }
@@ -400,10 +403,11 @@ public sealed class QueenRole :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player == null ||
-				player.Data.IsDead ||
-                player.Data.Disconnected ||
-				isNotSucideServant(playerId)) { continue; }
+            if (player.IsInValid() ||
+				isNotSucideServant(playerId))
+			{
+				continue;
+			}
 
             RPCOperator.UncheckedMurderPlayer(
                 playerId, playerId,

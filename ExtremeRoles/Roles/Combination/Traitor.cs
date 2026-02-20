@@ -102,9 +102,9 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
     public Traitor(
         ) : base(
-			RoleCore.BuildCrewmate(ExtremeRoleId.Traitor, ColorPalette.TraitorLightShikon),
-            true, false, true, false,
-            tab: OptionTab.CombinationTab)
+			RoleArgs.BuildCrewmate(ExtremeRoleId.Traitor, ColorPalette.TraitorLightShikon,
+            RoleProp.CanKill | RoleProp.UseVent | RolePropPresets.OptionalDefault),
+			OptionTab.CombinationTab)
     {
         this.CanHasAnotherRole = true;
     }

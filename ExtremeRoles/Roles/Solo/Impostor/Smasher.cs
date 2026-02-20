@@ -1,12 +1,10 @@
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Patches.Button;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Patches.Button;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -32,8 +30,7 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
     private float penaltyKillCool;
 
     public Smasher() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Smasher),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Smasher))
     { }
 
     public void CreateAbility()
@@ -56,9 +53,7 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
     public bool UseAbility()
     {
         PlayerControl killer = PlayerControl.LocalPlayer;
-        if (killer == null ||
-			killer.Data.IsDead ||
-			!killer.CanMove)
+        if (killer.IsInValid() || !killer.CanMove)
 		{
 			return false;
 		}

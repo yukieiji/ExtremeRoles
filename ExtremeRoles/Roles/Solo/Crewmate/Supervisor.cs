@@ -47,10 +47,9 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
     private TMPro.TextMeshPro chargeTime;
 
     public Supervisor() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Supervisor,
-			ColorPalette.SupervisorLime),
-        false, true, false, false)
+			ColorPalette.SupervisorLime))
     { }
 
     public void CleanUp()

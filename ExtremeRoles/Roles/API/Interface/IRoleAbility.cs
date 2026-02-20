@@ -10,6 +10,7 @@ using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Extension.Player;
 
 
 namespace ExtremeRoles.Roles.API.Interface;
@@ -63,11 +64,7 @@ public interface IRoleAbility : IRoleResetMeeting
 	{
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
-		return
-			localPlayer != null &&
-			localPlayer.Data != null &&
-			!localPlayer.Data.IsDead &&
-			localPlayer.CanMove;
+		return localPlayer.IsAlive() && localPlayer.CanMove;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -77,9 +74,7 @@ public interface IRoleAbility : IRoleResetMeeting
 		var hud = HudManager.Instance;
 		return
 			!(
-				localPlayer == null ||
-				localPlayer.Data == null ||
-				localPlayer.Data.IsDead ||
+				localPlayer.IsInValid() ||
 				localPlayer.inVent ||
 				localPlayer.MyPhysics.DoingCustomAnimation ||
 				localPlayer.shapeshifting ||

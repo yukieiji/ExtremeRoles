@@ -4,6 +4,7 @@ using System.Linq;
 using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
@@ -176,9 +177,7 @@ public sealed class Foras : GhostRoleBase
                 .Where(x =>
                 {
                     return
-                        x != null &&
-                        !x.Data.IsDead &&
-                        !x.Data.Disconnected &&
+                        x.IsAlive() &&
                         x.PlayerId != rolePlayerId &&
                         x.PlayerId != this.targetPlayer!.PlayerId;
                 })

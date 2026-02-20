@@ -1,5 +1,6 @@
 using HarmonyLib;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
@@ -78,10 +79,8 @@ public static class KillButtonDoClickPatch
 		PlayerControl? target)
 	{
 		if (killer == null ||
-			target == null ||
 			killer.Data == null ||
-			target.Data == null ||
-			target.Data.IsDead ||
+			target.IsInValid() ||
 			!ExtremeRoleManager.TryGetRole(target.PlayerId, out var targetRole))
 		{
 			return KillResult.PreConditionFail;
@@ -143,15 +142,9 @@ public static class KillButtonDoClickPatch
     {
         return
             AmongUsClient.Instance.IsGameOver ||
-            killer == null ||
-            killer.Data == null ||
-            killer.Data.IsDead ||
-            killer.Data.Disconnected ||
-            target == null ||
-            target.Data == null ||
-            target.Data.IsDead ||
-            target.Data.Disconnected ||
-            target.MyPhysics.Animations.IsPlayingAnyLadderAnimation() ||
+            killer.IsInValid() ||
+            target.IsInValid() ||
+			target.MyPhysics.Animations.IsPlayingAnyLadderAnimation() ||
             (
                 target.MyPhysics.Animations.IsPlayingEnterVentAnimation() &&
                 ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer

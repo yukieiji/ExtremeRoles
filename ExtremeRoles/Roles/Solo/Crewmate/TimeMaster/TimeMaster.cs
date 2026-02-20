@@ -34,10 +34,9 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
 	private TimeMasterStatusModel? status;
 
     public TimeMasterRole() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.TimeMaster,
-			ColorPalette.TimeMasterBlue),
-        false, true, false, false)
+			ColorPalette.TimeMasterBlue))
     {
     }
 

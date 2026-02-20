@@ -34,11 +34,10 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 		byte jackalPlayerId,
 		bool isImpostor,
 		JackalRole.SidekickOptionHolder option) : base(
-			RoleCore.BuildNeutral(
+			RoleArgs.BuildNeutral(
 				ExtremeRoleId.Sidekick,
-				ColorPalette.JackalBlue),
-			option.CanKill, false,
-			option.UseVent, option.UseSabotage)
+				ColorPalette.JackalBlue,
+				createSkRoleProp(option)))
 	{
 
 		this.Loader = jackal.Loader;
@@ -189,5 +188,23 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 	{
 		var id = targetRole.Core.Id;
 		return id == Core.Id || id is ExtremeRoleId.Jackal;
+	}
+
+	private static RoleProp createSkRoleProp(JackalRole.SidekickOptionHolder option)
+	{
+		var prop = RolePropPresets.OptionalDefault;
+		if (option.CanKill)
+		{
+			prop |= RoleProp.CanKill;
+		}
+		if (option.UseVent)
+		{
+			prop |= RoleProp.UseVent;
+		}
+		if (option.UseSabotage)
+		{
+			prop |= RoleProp.UseSabotage;
+		}
+		return prop;
 	}
 }
