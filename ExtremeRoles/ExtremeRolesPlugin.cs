@@ -118,6 +118,8 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		ApiServer.Register(PostChat.Path, HttpMethod.Post, new PostChat());
 		ApiServer.Register(ChatWebUI.Path, HttpMethod.Get, new OpenChatWebUi());
 		ApiServer.Register(ConectGame.Path, HttpMethod.Get, new ConectGame());
+		ApiServer.Register("/option/", HttpMethod.Get, new GetOption());
+		ApiServer.Register("/option/", HttpMethod.Put, new PutOption());
 
 		ScreenManagerHookcs.RegisterLoad();
 
