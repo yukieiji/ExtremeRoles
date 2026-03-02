@@ -116,9 +116,6 @@ internal sealed class YandereWinChecker : IWinChecker
 			statistics.SeparatedNeutralAlive.Count - oneSidedLoverNeutralNum > 1 ||
 			statistics.LiberalMilitantAlive - oneSidedLoverLiberalMillitant > 1)
 		{
-			ExtremeRolesPlugin.Logger.LogInfo($"ImpCount: {statistics.TeamImpostorAlive}");
-			ExtremeRolesPlugin.Logger.LogInfo($"oneSideNeut: {oneSidedLoverNeutralNum}");
-			ExtremeRolesPlugin.Logger.LogInfo($"NeutralCount: {statistics.SeparatedNeutralAlive.Count}");
 			return false;
 		}
 
