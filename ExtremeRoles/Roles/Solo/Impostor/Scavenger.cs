@@ -1206,8 +1206,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	private float weaponMixTime;
 
 	public Scavenger() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Scavenger),
-		true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Scavenger))
 	{ }
 
 	// 全体の武器に関するシステムを構築させておく

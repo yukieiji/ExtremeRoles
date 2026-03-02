@@ -1,6 +1,7 @@
 using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
@@ -8,7 +9,6 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -41,18 +41,15 @@ public sealed class Artist :
 	private float winArea = 0.0f;
 
     public Artist(): base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Artist,
-			ColorPalette.ArtistChenChuWhowan),
-        false, false, false, false)
+			ColorPalette.ArtistChenChuWhowan,
+            RolePropPresets.OptionalDefault))
     { }
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (rolePlayer == null ||
-			rolePlayer.Data == null ||
-			rolePlayer.Data.IsDead ||
-			rolePlayer.Data.Disconnected ||
+		if (rolePlayer.IsInValid() ||
 			this.IsWin ||
 			this.drawer == null)
 		{
@@ -81,10 +78,7 @@ public sealed class Artist :
 
 				return
 					!(
-						pc == null ||
-						pc.Data == null ||
-						pc.Data.IsDead ||
-						pc.Data.Disconnected ||
+						pc.IsInValid() ||
 						pc.inMovingPlat ||
 						pc.inVent ||
 						pc.onLadder

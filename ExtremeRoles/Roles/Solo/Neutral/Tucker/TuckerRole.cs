@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
@@ -77,10 +78,10 @@ public sealed class TuckerRole :
 	private HashSet<byte> chimera = new HashSet<byte>();
 
 	public TuckerRole() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Tucker,
-			ColorPalette.TuckerMerdedoie),
-		false, false, false, false)
+			ColorPalette.TuckerMerdedoie,
+            RolePropPresets.OptionalDefault))
 	{ }
 
 	public static void TargetToChimera(byte rolePlayerId, byte targetPlayerId)
@@ -166,8 +167,7 @@ public sealed class TuckerRole :
 			foreach (byte playerId in chimera)
 			{
 				if (!Player.TryGetPlayerControl(playerId, out var player) ||
-					player.Data.IsDead ||
-					player.Data.Disconnected ||
+					player.IsInValid() ||
 					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
 						playerId, out _))
 				{
@@ -187,8 +187,7 @@ public sealed class TuckerRole :
 			foreach (byte playerId in chimera)
 			{
 				if (!Player.TryGetPlayerControl(playerId, out var player) ||
-					player.Data.IsDead ||
-					player.Data.Disconnected ||
+					player.IsInValid() ||
 					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
 						playerId, out _))
 				{

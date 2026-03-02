@@ -12,6 +12,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Extension.Player;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -140,37 +141,29 @@ public sealed class CurseMaker :
     private ExtremeAbilityButton curseButton;
 
     public CurseMaker() : base(
-        RoleCore.BuildCrewmate(
+        RoleArgs.BuildCrewmate(
 			ExtremeRoleId.CurseMaker,
-			ColorPalette.CurseMakerViolet),
-        false, true, false, false)
+			ColorPalette.CurseMakerViolet))
     { }
 
     public static void CurseKillCool(
         byte rolePlayerId, byte targetPlayerId)
     {
 
-        if (PlayerControl.LocalPlayer.PlayerId != targetPlayerId) { return; }
-
-        PlayerControl player = Player.GetPlayerControlById(targetPlayerId);
-
-        if (player == null) { return; }
-        if (player.Data.IsDead || player.Data.Disconnected) { return; }
-
-        var curseMaker = ExtremeRoleManager.GetSafeCastedRole<CurseMaker>(
-            rolePlayerId);
-        if (curseMaker == null) { return; }
+        if (PlayerControl.LocalPlayer.PlayerId != targetPlayerId ||
+			!Player.TryGetPlayerControl(targetPlayerId, out var player) ||
+			player.IsInValid() ||
+			!ExtremeRoleManager.TryGetSafeCastedRole<CurseMaker>(rolePlayerId, out var curseMaker))
+		{
+			return;
+		}
 
         var role = ExtremeRoleManager.GameRole[targetPlayerId];
         role.HasOtherKillCool = true;
 
-        var multiAssignRole = role as MultiAssignRoleBase;
-        if (multiAssignRole != null)
+        if (role is MultiAssignRoleBase multiAssignRole)
         {
-            if (multiAssignRole.AnotherRole != null)
-            {
-                multiAssignRole.AnotherRole.HasOtherKillCool = true;
-            }
+			multiAssignRole.AnotherRole?.HasOtherKillCool = true;
         }
 
         RoleState.AddKillCoolOffset(curseMaker.additionalKillCool);

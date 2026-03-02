@@ -1,12 +1,15 @@
+using System.Collections.Generic;
+
+using UnityEngine;
+
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using System.Collections.Generic;
-using UnityEngine;
+
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -81,10 +84,8 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
 
     public Sharer() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Sharer),
-        true, false,
-        true, true,
-        tab: OptionTab.CombinationTab)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Sharer),
+		OptionTab.CombinationTab)
     { }
 
     public void HookMuderPlayer(
@@ -270,10 +271,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
         foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
-            if (playerControl == null ||
-				playerControl.Data == null ||
-				playerControl.Data.IsDead ||
-				playerControl.Data.Disconnected ||
+            if (playerControl.IsInValid() ||
 				!ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
 				!this.IsSameControlId(role))
             {

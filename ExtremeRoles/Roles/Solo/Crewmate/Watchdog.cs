@@ -28,10 +28,9 @@ public sealed class Watchdog : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
     private TMPro.TextMeshPro chargeTime;
 
     public Watchdog() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Watchdog,
-			ColorPalette.WatchdogViolet),
-        false, true, false, false)
+			ColorPalette.WatchdogViolet))
     { }
 
     public void CleanUp()

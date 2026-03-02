@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
@@ -81,10 +82,9 @@ public sealed class DelusionerRole :
 
 
     public DelusionerRole() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Delusioner,
-			ColorPalette.DelusionerPink),
-        false, true, false, false)
+			ColorPalette.DelusionerPink))
     {
     }
 
@@ -188,10 +188,7 @@ public sealed class DelusionerRole :
     {
 		if (Button == null ||
 			this.ability is null ||
-			rolePlayer == null ||
-			rolePlayer.Data == null ||
-			rolePlayer.Data.IsDead ||
-			rolePlayer.Data.Disconnected)
+			rolePlayer.IsInValid())
 		{
 			return;
 		}

@@ -1,8 +1,10 @@
 using Hazel;
 using System.Collections.Generic;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -10,9 +12,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
-
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 
@@ -63,10 +63,9 @@ public sealed class ExorcistRole :
 	private readonly FullScreenFlasher flasher = new FullScreenFlasher(Palette.CrewmateBlue);
 
 	public ExorcistRole() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Exorcist,
-			Palette.ImpostorRed),
-		false, true, false, false)
+			Palette.ImpostorRed))
 	{
 
 	}
@@ -229,12 +228,7 @@ public sealed class ExorcistRole :
 				killer.IsDead ? Tr.GetString(PlayerStatus.Dead.ToString()) : Tr.GetString(PlayerStatus.Alive.ToString())));
 
 		var localPlayer = PlayerControl.LocalPlayer;
-		if (!(
-				localPlayer == null ||
-				localPlayer.Data == null ||
-				localPlayer.Data.IsDead ||
-				localPlayer.Data.Disconnected
-			))
+		if (localPlayer.IsAlive())
 		{
 			localPlayer.CmdReportDeadBody(this.target);
 		}

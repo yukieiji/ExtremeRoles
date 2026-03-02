@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
@@ -151,8 +152,10 @@ public sealed class MinerMineEffect : MonoBehaviour
 
 	private void updateVolume(PlayerControl localPlayer)
 	{
-		var data = localPlayer.Data;
-		if (data.IsDead || data.Disconnected) { return; }
+		if (localPlayer.IsInValid())
+		{
+			return;
+		}
 
 		this.audioSource.volume = 1.0f - calculateNormalizedDistance(
 			base.transform.position,

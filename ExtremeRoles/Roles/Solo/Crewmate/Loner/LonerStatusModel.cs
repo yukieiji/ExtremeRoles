@@ -1,5 +1,6 @@
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Status;
@@ -74,9 +75,7 @@ public sealed class StressProgress(float range, float waitTime, StressProgress.O
 
 		return (
 			targetPlayer.PlayerId != sourcePlayer.PlayerId &&
-			!targetPlayer.Disconnected &&
-			!targetPlayer.IsDead &&
-			targetPlayer.Object != null &&
+			targetPlayer.IsAlive() &&
 			(this.option.ProgressOnVentPlayer || !targetPlayer.Object.inVent) &&
 			(this.option.ProgressOnMovingPlatPlayer || !targetPlayer.Object.inMovingPlat) &&
 			(this.option.ProgressOnMovingPlatPlayer || !targetPlayer.Object.onLadder)

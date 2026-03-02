@@ -12,6 +12,7 @@ using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
@@ -154,7 +155,7 @@ public sealed class ExtremeVisionModder(IntPtr ptr) : MonoBehaviour(ptr)
 
 		float baseVision = maxLightRadius;
 
-		if (playerInfo == null || playerInfo.IsDead) // IsDead
+		if (playerInfo.IsInValid())
 		{
 			vision = baseVision;
 		}

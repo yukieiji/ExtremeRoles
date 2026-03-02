@@ -4,6 +4,7 @@ using UnityEngine;
 
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Extension.Vector;
 
 #nullable enable
@@ -48,10 +49,7 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 	{
 		PlayerControl pc = PlayerControl.LocalPlayer;
 
-		if (pc == null ||
-			pc.Data == null ||
-			pc.Data.Disconnected ||
-			pc.Data.IsDead ||
+		if (pc.IsInValid() ||
 			!pc.CanMove ||
 			pc.inMovingPlat ||
 			pc.onLadder ||

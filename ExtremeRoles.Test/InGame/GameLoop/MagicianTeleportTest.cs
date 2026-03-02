@@ -1,4 +1,4 @@
-﻿using BepInEx.Logging;
+using BepInEx.Logging;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Solo.Impostor;
@@ -14,7 +14,7 @@ public static class MagicianTeleportTest
 	public static IEnumerator Test(ManualLogSource logger)
 	{
 		RpcSnapHookCheck.Pos = PlayerCache.AllPlayerControl
-			.Where(x => x.IsValid())
+			.Where(x => x.IsAlive())
 			.Select(x => new Vector2(x.transform.position.x, x.transform.position.y))
 			.ToList();
 
@@ -32,7 +32,7 @@ public static class MagicianTeleportTest
 			x =>
 			{
 				var pos = new Vector2(x.transform.position.x, x.transform.position.y);
-				return x.IsValid() && !RpcSnapHookCheck.Pos.Any(x => (x - pos).magnitude < 1.5f );
+				return x.IsAlive() && !RpcSnapHookCheck.Pos.Any(x => (x - pos).magnitude < 1.5f );
 			});
 		logger.LogInfo($"param:{param}");
 		logger.LogWarning($"missing size:{missing.Count()}");

@@ -167,10 +167,9 @@ public sealed class Teleporter :
         "ExtremeRoles.Resources.JsonData.TeleporterTeleportPartPosition.json";
 
     public Teleporter() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Teleporter,
-			ColorPalette.TeleporterCherry),
-        false, true, false, false)
+			ColorPalette.TeleporterCherry))
     { }
 
     public static void SetPortal(byte teleporterPlayerId, Vector2 pos)

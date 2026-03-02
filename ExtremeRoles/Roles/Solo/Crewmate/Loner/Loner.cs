@@ -38,10 +38,9 @@ public sealed class LonerRole : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
 	private StressInfo info = new StressInfo();
 
     public LonerRole() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Loner,
-			ColorPalette.LonerMidnightblue),
-        false, true, false, false)
+			ColorPalette.LonerMidnightblue))
     {
     }
 

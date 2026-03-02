@@ -9,5 +9,6 @@ dependencies = [
     "lxml>=6.0.1",
     "pylightxl==1.61",
     "pytest>=8.4.1",
+    "pytest-cov>=7.0.0",
     "ruff>=0.12.11",
 ]

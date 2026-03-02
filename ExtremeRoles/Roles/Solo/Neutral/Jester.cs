@@ -1,14 +1,14 @@
 using ExtremeRoles.Module;
 
+using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Patches.Button;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -35,10 +35,10 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     private ExtremeAbilityButton outburstButton;
 
     public Jester(): base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Jester,
-			ColorPalette.JesterPink),
-        false, false, false, false)
+			ColorPalette.JesterPink,
+            RolePropPresets.OptionalDefault))
     { }
 
     public static void OutburstKill(
@@ -98,18 +98,22 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     }
     public void CleanUp()
     {
-        if (this.outburstTarget == null) { return; }
-        if (this.outburstTarget.Data.IsDead || this.outburstTarget.Data.Disconnected) { return; }
-        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-
-        var role = ExtremeRoleManager.GameRole[this.outburstTarget.PlayerId];
-        if (!role.CanKill()) { return; }
+        if (!(
+				this.outburstTarget.IsAlive() &&
+				ExtremeRoleManager.TryGetRole(this.outburstTarget.PlayerId, out var role) &&
+				role.CanKill()
+			))
+		{
+			return;
+		}
 
         PlayerControl killTarget = Helper.Player.GetClosestPlayerInKillRange(
             this.outburstTarget);
 
-        if (killTarget == null) { return; }
-        if (killTarget.Data.IsDead || killTarget.Data.Disconnected) { return; }
+        if (killTarget.IsInValid())
+		{
+			return;
+		}
         if (killTarget.PlayerId == PlayerControl.LocalPlayer.PlayerId) { return; }
 
         using (var caller = RPCOperator.CreateCaller(

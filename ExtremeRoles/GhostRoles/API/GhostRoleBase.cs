@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.OLDS;
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -267,9 +267,7 @@ public abstract class GhostRoleBase
 		var localPlayer = PlayerControl.LocalPlayer;
 
 		return
-			localPlayer != null &&
-			localPlayer.Data != null &&
-			localPlayer.Data.IsDead &&
+			localPlayer.IsDead() &&
 			localPlayer.CanMove;
 	}
 	protected static bool IsCommonUseWithMinigame()
@@ -277,10 +275,8 @@ public abstract class GhostRoleBase
 		var localPlayer = PlayerControl.LocalPlayer;
 		var hud = HudManager.Instance;
 		return
+			localPlayer.IsDead() &&
 			!(
-				localPlayer == null ||
-				localPlayer.Data == null ||
-				!localPlayer.Data.IsDead ||
 				localPlayer.inVent ||
 				localPlayer.MyPhysics.DoingCustomAnimation ||
 				localPlayer.shapeshifting ||

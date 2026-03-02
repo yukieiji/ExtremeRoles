@@ -7,6 +7,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using AmongUs.GameOptions;
+using ExtremeRoles.Extension.Player;
 
 namespace ExtremeRoles.Patches.Role;
 
@@ -61,12 +62,9 @@ public static class RoleBehaviourIsValidTargetPatch
 
 
         __result =
-            target != null &&
-            !target.Disconnected &&
-            !target.IsDead &&
+            target.IsAlive() &&
 			targetPlayerId != instancePlayerId &&
             target.Role != null &&
-            target.Object != null &&
             (
 				!target.Object.inVent ||
 				ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer

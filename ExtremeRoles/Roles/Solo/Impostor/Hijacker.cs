@@ -45,8 +45,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 	private bool isAbilityUse = false;
 
 	public Hijacker() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Hijacker),
-		true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Hijacker))
 	{ }
 
 	public void CreateAbility()
@@ -106,7 +105,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 		if (this.target == null)
 		{
 			var alive = PlayerCache.AllPlayerControl.Where(
-				x => x.IsValid() && x.PlayerId != PlayerControl.LocalPlayer.PlayerId);
+				x => x.IsAlive() && x.PlayerId != PlayerControl.LocalPlayer.PlayerId);
 			this.target = alive.OrderBy(
 				x => RandomGenerator.Instance.Next()).First();
 		}

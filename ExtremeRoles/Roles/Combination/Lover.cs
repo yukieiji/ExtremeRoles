@@ -48,12 +48,10 @@ public sealed class Lover : MultiAssignRoleBase
     private bool killerLoverCanUseVent = false;
 
     public Lover() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Lover,
 			ColorPalette.LoverPink),
-        false, true,
-        false, false,
-        tab: OptionTab.CombinationTab)
+		OptionTab.CombinationTab)
     { }
 
     public override string GetFullDescription()
@@ -403,10 +401,7 @@ public sealed class Lover : MultiAssignRoleBase
 
         foreach (var playerControl in PlayerControl.AllPlayerControls)
         {
-			if (playerControl == null ||
-				playerControl.Data == null ||
-				playerControl.Data.IsDead ||
-				playerControl.Data.Disconnected ||
+			if (playerControl.IsInValid() ||
 				playerControl.PlayerId == ignorePlayerId ||
                 !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
 				!this.IsSameControlId(role))
@@ -435,9 +430,7 @@ public sealed class Lover : MultiAssignRoleBase
 			else
 			{
 				var player = Player.GetPlayerControlById(playerId);
-				if (player != null &&
-					!player.Data.IsDead &&
-					!player.Data.Disconnected)
+				if (player.IsAlive())
 				{
 					anotherPlayerId.Invoke(player);
 				}

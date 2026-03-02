@@ -16,6 +16,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
@@ -56,11 +57,13 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	private int abilityIncreaseNum;
 
 	public Hatter(): base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Hatter,
-			ColorPalette.HatterYanagizome),
-        false, true, false, false,
-		false, false)
+			ColorPalette.HatterYanagizome,
+            RoleProp.HasTask |
+            RoleProp.CanUseAdmin |
+            RoleProp.CanUseSecurity |
+            RoleProp.CanUseVital))
     { }
 
 	public void Update(PlayerControl rolePlayer)
@@ -220,11 +223,8 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
-		if (localPlayer == null ||
+		if (localPlayer.IsInValid() ||
 			exiledPlayer != null ||
-			localPlayer.Data == null ||
-			localPlayer.Data.IsDead ||
-			localPlayer.Data.Disconnected ||
 			this.IsWin)
 		{
 			this.curSkipCount = 0;

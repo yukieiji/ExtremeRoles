@@ -1,10 +1,9 @@
 using HarmonyLib;
 using UnityEngine;
 
-
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -69,9 +68,7 @@ public static class MeetingHudUpdateButtonsPatch
 		}
 
 		var localPc = PlayerControl.LocalPlayer;
-		if (localPc != null &&
-			localPc.Data != null &&
-			!localPc.Data.IsDead &&
+		if (localPc.IsAlive() &&
 			system.InvalidPlayer(localPc))
 		{
 			hud.Glass.sprite = system.MeetingBackground;

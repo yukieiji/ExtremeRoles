@@ -224,10 +224,9 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
     private static int cameraNum = 0;
     public Carpenter() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Carpenter,
-			ColorPalette.CarpenterBrown),
-        false, true, false, false)
+			ColorPalette.CarpenterBrown))
     { }
 
     public static void UpdateMapObject(ref MessageReader reader)

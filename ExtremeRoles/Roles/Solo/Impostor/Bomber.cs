@@ -6,6 +6,7 @@ using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
@@ -55,8 +56,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 
     public Bomber() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Bomber),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Bomber))
     { }
 
     public void CreateAbility()
@@ -160,8 +160,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (rolePlayer.Data.IsDead || 
-			rolePlayer.Data.Disconnected ||
+        if (rolePlayer.IsInValid() ||
 			this.bombPlayerId.Count == 0 ||
 			!GameProgressSystem.IsTaskPhase)
 		{
@@ -178,8 +177,10 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         byte bombTargetPlayerId = this.bombPlayerId.Dequeue();
         PlayerControl bombPlayer = Player.GetPlayerControlById(bombTargetPlayerId);
 
-        if (bombPlayer == null) { return; }
-        if (bombPlayer.Data.IsDead || bombPlayer.Data.Disconnected) { return; }
+        if (bombPlayer.IsInValid())
+		{
+			return;
+		}
 
         HashSet<PlayerControl> target = getAllPlayerInExplosion(
             rolePlayer, bombPlayer);
@@ -215,18 +216,13 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         foreach (NetworkedPlayerInfo playerInfo in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
-
-			byte playerId = playerInfo.PlayerId;
-
-            if (!playerInfo.Disconnected &&
-                !playerInfo.IsDead &&
-                (playerId != sourcePlayerId) &&
-				playerInfo.Object != null &&
+            if (playerInfo.IsAlive() &&
+                (playerInfo.PlayerId != sourcePlayerId) &&
 				(!playerInfo.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer) &&
-                ExtremeRoleManager.TryGetRole(playerId, out var role) &&
+                ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var role) &&
 				// インポスターではない、または自分自身である
-				(	!role.IsImpostor() || 
-					playerId == rolePlayer.PlayerId
+				(	!role.IsImpostor() ||
+					playerInfo.PlayerId == rolePlayer.PlayerId
 				) &&
 				// 無敵ではない
 				(
