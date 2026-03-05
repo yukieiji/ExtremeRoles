@@ -43,13 +43,10 @@ public sealed class ServantRole :
 		QueenRole queen,
 		SingleRoleBase baseRole) :
 		base(
-			RoleCore.BuildNeutral(
+			RoleArgs.BuildNeutral(
 				ExtremeRoleId.Servant,
-				ColorPalette.QueenWhite),
-			baseRole.CanKill,
-			!baseRole.IsImpostor() ? true : baseRole.HasTask,
-			baseRole.UseVent,
-			baseRole.UseSabotage)
+				ColorPalette.QueenWhite,
+				createServantRoleProp(baseRole)))
 	{
 		Loader = queen.Loader;
 		this.status = new ServantStatus(queenPlayerId, queen, baseRole);
@@ -146,7 +143,7 @@ public sealed class ServantRole :
 		var queenPlayer = GameData.Instance.GetPlayerById(this.status.Parent);
 
 		if (AnotherRole is Resurrecter resurrecter &&
-			(queenPlayer == null || queenPlayer.IsDead || queenPlayer.Disconnected))
+			queenPlayer.IsInValid())
 		{
 			Resurrecter.UseResurrect(resurrecter);
 		}
@@ -235,8 +232,30 @@ public sealed class ServantRole :
 			role.Status is IParentChainStatus parent)
 		{
 			var queen = Player.GetPlayerControlById(parent.Parent);
-			return !queen.IsValid();
+			return !queen.IsAlive();
 		}
 		return false;
+	}
+
+	private static RoleProp createServantRoleProp(SingleRoleBase role)
+	{
+		var prop = RolePropPresets.OptionalDefault;
+		if (role.CanKill)
+		{
+			prop |= RoleProp.CanKill;
+		}
+		if (!role.IsImpostor() || role.HasTask)
+		{
+			prop |= RoleProp.HasTask;
+		}
+		if (role.UseVent)
+		{
+			prop |= RoleProp.UseVent;
+		}
+		if (role.UseSabotage)
+		{
+			prop |= RoleProp.UseSabotage;
+		}
+		return prop;
 	}
 }

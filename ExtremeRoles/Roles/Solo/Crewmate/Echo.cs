@@ -83,10 +83,9 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 	private ObjectPoolBehavior? innerPool;
 
 	public Echo() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Echo,
-			ColorPalette.EchoDarkAliceblue),
-		false, true, false, false)
+			ColorPalette.EchoDarkAliceblue))
 	{
 
 	}
@@ -289,7 +288,7 @@ public sealed class Echo : SingleRoleBase, IRoleAutoBuildAbility
 		var sourcePos = source.GetTruePosition();
 		foreach (var player in PlayerCache.AllPlayerControl)
 		{
-			if (!player.IsValid() ||
+			if (player.IsInValid() ||
 				player.PlayerId == source.PlayerId)
 			{
 				continue;

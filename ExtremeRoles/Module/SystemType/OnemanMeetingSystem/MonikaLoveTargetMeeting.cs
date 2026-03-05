@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using UnityEngine;
+
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.GameResult.StatusOverrider;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -197,9 +199,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IVoterShiftor, IVo
 	public bool CanChatPlayer(PlayerControl target)
 		=>
 		!(
-			target.Data == null ||
-			target.Data.IsDead ||
-			target.Data.Disconnected ||
+			target.IsInValid() ||
 			this.system.InvalidPlayer(target)
 		);
 

@@ -96,7 +96,7 @@ public sealed class EmergencyTaskOption(in OptionCategory category)
 
 	private void changePolus(SystemGetter getter)
 	{
-		if (getter.TryGet<ReactorSystemType>(SystemTypes.Reactor, out var reactor))
+		if (getter.TryGet<ReactorSystemType>(SystemTypes.Laboratory, out var reactor))
 		{
 			reactor.ReactorDuration = polusReactorTime;
 		}

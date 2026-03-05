@@ -112,10 +112,9 @@ public sealed class InvestigatorApprentice : MultiAssignRoleBase, IRoleAutoBuild
 		int gameControlId,
 		InvestigatorApprenticeOptionHolder option
 		) : base(
-			RoleCore.BuildCrewmate(
+			RoleArgs.BuildCrewmate(
 				ExtremeRoleId.InvestigatorApprentice,
-				ColorPalette.InvestigatorApprenticeKonai),
-			false, true, false, false)
+				ColorPalette.InvestigatorApprenticeKonai))
 	{
 		Loader = loader;
 		SetControlId(gameControlId);

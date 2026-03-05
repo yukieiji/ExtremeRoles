@@ -45,8 +45,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 
 
     public Boxer() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Boxer),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Boxer))
     { }
 
     public void CreateAbility()

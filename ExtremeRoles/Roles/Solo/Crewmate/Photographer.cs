@@ -7,12 +7,12 @@ using UnityEngine;
 using Hazel;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.Ability;
@@ -166,10 +166,10 @@ public sealed class Photographer :
 
 			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
-				if (player == null ||
-					player.IsDead ||
-					player.Disconnected ||
-					player.Object == null) { continue; }
+				if (player.IsInValid())
+				{
+					continue;
+				}
 
 				Vector3 position = player.Object.transform.position;
 				if (range >= Vector2.Distance(photoCenter, position))
@@ -318,10 +318,9 @@ public sealed class Photographer :
 	public ExtremeAbilityButton Button { get; set; }
 	private PhotoCamera photoCreater;
 	public Photographer() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Photographer,
-			ColorPalette.PhotographerVerdeSiena),
-        false, true, false, false)
+			ColorPalette.PhotographerVerdeSiena))
     { }
 #pragma warning restore CS8618
 

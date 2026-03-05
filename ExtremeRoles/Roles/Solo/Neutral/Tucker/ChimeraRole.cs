@@ -2,15 +2,16 @@ using System;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Tucker;
 
@@ -45,10 +46,10 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		IOptionLoader loader,
 		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
-			RoleCore.BuildNeutral(
+			RoleArgs.BuildNeutral(
 				ExtremeRoleId.Chimera,
-				ColorPalette.TuckerMerdedoie),
-			true, false, option.Vent, false)
+				ColorPalette.TuckerMerdedoie,
+				createChimeraProp(option.Vent)))
 	{
 		this.Loader = loader;
 		this.status = new ChimeraStatus(tuckerPlayer, this);
@@ -111,7 +112,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 		if (!isTuckerDead)
 		{
-			isTuckerDead = tuckerPlayer == null || tuckerPlayer.IsDead;
+			isTuckerDead = tuckerPlayer.IsInValid();
 			if (isTuckerDead)
 			{
 				updateKillCoolTime(tuckerDeathKillCoolOffset);
@@ -121,10 +122,8 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		this.playerReviver.Update();
 
 		// 復活処理
-		if (tuckerPlayer == null ||
+		if (tuckerPlayer.IsInValid() ||
 			!rolePlayer.Data.IsDead ||
-			tuckerPlayer.Disconnected ||
-			tuckerPlayer.IsDead ||
 			this.playerReviver.IsReviving)
 		{
 			return;
@@ -219,5 +218,16 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	{
 		var id = targetRole.Core.Id;
 		return id == Core.Id || id is ExtremeRoleId.Tucker;
+	}
+
+	private static RoleProp createChimeraProp(bool useVent)
+	{
+		var baseProp = RolePropPresets.OptionalDefault;
+		baseProp |= RoleProp.CanKill;
+		if (useVent)
+		{
+			baseProp |= RoleProp.UseVent;
+		}
+		return baseProp;
 	}
 }

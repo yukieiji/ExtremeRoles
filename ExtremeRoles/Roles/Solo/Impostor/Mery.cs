@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
@@ -73,12 +74,9 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
             foreach (NetworkedPlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (playerInfo == null) { continue; }
-
-                if (!playerInfo.Disconnected &&
-                    !ExtremeRoleManager.GameRole[playerInfo.PlayerId].IsImpostor() &&
-                    !playerInfo.IsDead &&
-                    playerInfo.Object != null &&
+                if (playerInfo.IsAlive() &&
+                    ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var role) && 
+					!role.IsImpostor() &&
                     !playerInfo.Object.inVent)
                 {
                     PlayerControl @object = playerInfo.Object;
@@ -190,8 +188,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 	private const CustomVent.Type meryVentType = CustomVent.Type.Mery;
 
     public Mery() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Mery),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Mery))
     { }
 
     public static void Ability(ref MessageReader reader)

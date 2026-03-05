@@ -1,12 +1,11 @@
 using Hazel;
 using System.Collections.Generic;
 
-
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
@@ -120,13 +119,8 @@ public sealed class BakerySystem : IDirtableSystemType
 		this.aliveBakary.RemoveWhere(
 			x =>
 			{
-				PlayerControl player = Player.GetPlayerControlById(x);
-
-				return
-					player == null ||
-					player.Data == null ||
-					player.Data.IsDead ||
-					player.Data.Disconnected;
+				var player = Player.GetPlayerControlById(x);
+				return player.IsInValid();
 			});
 	}
 

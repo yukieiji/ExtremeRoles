@@ -5,6 +5,7 @@ using UnityEngine;
 using Hazel;
 using TMPro;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.AutoActivator;
@@ -288,10 +289,9 @@ public sealed class BodyGuard :
 	private Sprite shildButtonImage;
 
 	public BodyGuard() : base(
-		RoleCore.BuildCrewmate(
+		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.BodyGuard,
-			ColorPalette.BodyGuardOrange),
-        false, true, false, false)
+			ColorPalette.BodyGuardOrange))
     { }
 #pragma warning restore CS8618
 
@@ -348,9 +348,7 @@ public sealed class BodyGuard :
         byte killerPlayerId, byte prevTargetPlayerId, byte targetBodyGuard)
     {
         if (!Player.TryGetPlayerControl(targetBodyGuard, out var bodyGuardPlayer) ||
-			bodyGuardPlayer.Data == null ||
-            bodyGuardPlayer.Data.IsDead ||
-            bodyGuardPlayer.Data.Disconnected)
+			bodyGuardPlayer.IsInValid())
         {
             return false;
         }

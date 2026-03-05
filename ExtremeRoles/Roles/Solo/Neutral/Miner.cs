@@ -4,6 +4,7 @@ using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Compat;
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
@@ -76,10 +77,10 @@ public sealed class Miner :
     private TextPopUpper killLogger;
 
     public Miner() : base(
-		RoleCore.BuildNeutral(
+		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Miner,
-			ColorPalette.MinerIvyGreen),
-        false, false, true, false)
+			ColorPalette.MinerIvyGreen,
+            RoleProp.UseVent | RolePropPresets.OptionalDefault))
     { }
 #pragma warning restore CS8618
 	public static void RpcHandle(ref MessageReader reader)
@@ -266,9 +267,7 @@ public sealed class Miner :
 					continue;
 				}
 
-                if (!playerInfo.Disconnected &&
-                    !playerInfo.IsDead &&
-                    playerInfo.Object != null &&
+                if (playerInfo.IsAlive() &&
                     !playerInfo.Object.inVent)
                 {
 					Vector2 vector = playerInfo.Object.GetTruePosition() - pos;

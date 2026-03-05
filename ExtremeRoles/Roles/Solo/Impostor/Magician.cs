@@ -3,6 +3,8 @@ using System.Linq;
 using System.Data;
 
 using UnityEngine;
+
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -36,8 +38,7 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 		bool IncludeSpawnPoint);
 
     public Magician() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Magician),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Magician))
     { }
 
     public void CreateAbility()
@@ -67,10 +68,7 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		// まずはテレポート先とかにも設定できるプレヤーを取得
 		var validPlayer = PlayerCache.AllPlayerControl.Where(x =>
-			x != null &&
-			x.Data != null &&
-			!x.Data.IsDead &&
-			!x.Data.Disconnected &&
+			x.IsAlive() &&
 			!x.inVent && // ベント入ってない
 			x.moveable &&  // 移動できる状態か
 			!x.inMovingPlat && // なんか乗ってないか

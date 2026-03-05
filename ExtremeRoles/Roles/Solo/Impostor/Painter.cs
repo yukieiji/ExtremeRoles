@@ -33,8 +33,7 @@ public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
     private Sprite transColorPaintImage;
 
     public Painter() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Painter),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Painter))
     { }
 
     public static void PaintDeadBody(

@@ -59,8 +59,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
 	private ResetObjectSystem? system;
 
     public Cracker() : base(
-		RoleCore.BuildImpostor(ExtremeRoleId.Cracker),
-        true, false, true, true)
+		RoleArgs.BuildImpostor(ExtremeRoleId.Cracker))
     { }
 
     public static void CrackDeadBody(

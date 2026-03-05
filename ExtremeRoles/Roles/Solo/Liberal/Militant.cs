@@ -13,11 +13,7 @@ namespace ExtremeRoles.Roles.Solo.Liberal;
 public sealed class Militant : SingleRoleBase
 {
 	public Militant(LiberalDefaultOptionLoader option) : base(
-		RoleCore.BuildLiberal(
-			ExtremeRoleId.Militant,
-			ColorPalette.LiberalColor),
-		true, false,
-		false, false)
+		RoleArgs.BuildLiberalMilitant(ExtremeRoleId.Militant))
 	{
 
 		LiberalSettingOverrider.OverrideDefault(this, option);
