@@ -18,7 +18,6 @@ public sealed class PutExROption : IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 
-
 		var response = context.Response;
 
 		if (AmongUsClient.Instance == null ||
@@ -54,4 +53,3 @@ public sealed class PutExROption : IRequestHandler
 		response.Close();
 	}
 }
-
