@@ -25,9 +25,10 @@ public sealed class PutAuOption : IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-		var newOption = IRequestHandler.DeserializeJson<VanillaOptionPutRequest>(context.Request);
 
-		if (LobbyBehaviour.Instance == null ||
+		if (AmongUsClient.Instance == null ||
+			!AmongUsClient.Instance.AmHost ||
+			LobbyBehaviour.Instance == null ||
 			GameOptionsManager.Instance == null ||
 			GameOptionsManager.Instance.CurrentGameOptions == null)
 		{
@@ -35,6 +36,8 @@ public sealed class PutAuOption : IRequestHandler
 			response.Close();
 			return;
 		}
+
+		var newOption = IRequestHandler.DeserializeJson<VanillaOptionPutRequest>(context.Request);
 
 		var curOption = GameOptionsManager.Instance.CurrentGameOptions;
 		int name = newOption.OptionName;
