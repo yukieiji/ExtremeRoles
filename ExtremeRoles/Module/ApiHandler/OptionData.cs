@@ -8,35 +8,36 @@ namespace ExtremeRoles.Module.ApiHandler;
 
 #nullable enable
 
-public readonly record struct OptionDTO(
-	int ID,
+public readonly record struct OptionDto(
+	int Id,
 	bool IsActive,
 	string TransedName,
 	int Selection,
-	object[] ValueRange,
 	string Format,
-	IReadOnlyList<OptionDTO> Childs);
+	IOptionRangeMeta RangeMeta,
+	IReadOnlyList<OptionDto> Childs);
 
-public readonly record struct CategoryDTO(int ID, string Name, IReadOnlyList<OptionDTO> Options);
-public readonly record struct TabDTO(int ID, string Name, IReadOnlyList<CategoryDTO> Categories);
+public readonly record struct CategoryDto(int Id, string Name, IReadOnlyList<OptionDto> Options);
+public readonly record struct TabDto(OptionTab Id, string Name, IReadOnlyList<CategoryDto> Categories);
 
 public readonly record struct PutOptionRequest(long ID, int Value);
 
 public static class OptionData
 {
 
-	public static IReadOnlyList<TabDTO> GetCurrentOptions()
+	public static IReadOnlyList<TabDto> GetCurrentOptions()
 	{
+		var result = new List<TabDto>();
 		foreach (var tabId in Enum.GetValues<OptionTab>())
 		{
-			var categories = new List<CategoryDTO>();
+			var categories = new List<CategoryDto>();
 			if (!OptionManager.Instance.TryGetTab(tabId, out var container))
 			{
 				continue;
 			}
 			foreach (var category in container.Category)
 			{
-				var options = new List<OptionDTO>();
+				var options = new List<OptionDto>();
 				var idHash = new HashSet<int>();
 				foreach (var option in category.Options)
 				{
@@ -44,14 +45,21 @@ public static class OptionData
 					{
 						continue;
 					}
+					var dto = createOptionDTO(option, idHash);
+					options.Add(dto);
 				}
+				var categoryDto = new CategoryDto(category.Id, category.TransedName, options);
+				categories.Add(categoryDto);
 			}
+			var tabDtos = new TabDto(tabId, Tr.GetString(tabId.ToString()), categories);
+			result.Add(tabDtos);
 		}
+		return result;
 	}
 
-	private static OptionDTO createOptionDTO(IOption option, HashSet<int> regsted)
+	private static OptionDto createOptionDTO(IOption option, HashSet<int> regsted)
 	{
-		var childsResult = new List<OptionDTO>();
+		var childsResult = new List<OptionDto>();
 		if (OptionManager.Instance.TryGetChild(option, out var childs))
 		{
 			foreach (var child in childs)
@@ -60,13 +68,13 @@ public static class OptionData
 				childsResult.Add(createOptionDTO(child, regsted));
 			}
 		}
-		return new OptionDTO(
+		return new OptionDto(
 			option.Info.Id,
 			option.IsViewActive,
 			option.TransedTitle,
 			option.Selection,
-			option.Range,
 			option.Info.Format,
+			option.RangeMetaData,
 			childsResult);
 	}
 }
