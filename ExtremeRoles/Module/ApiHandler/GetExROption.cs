@@ -9,19 +9,17 @@ namespace ExtremeRoles.Module.ApiHandler;
 
 #nullable enable
 
-public readonly record struct OptionDto(
+public readonly record struct ExROptionDto(
 	int Id,
 	bool IsActive,
 	string TransedName,
 	int Selection,
 	string Format,
 	IOptionRangeMeta RangeMeta,
-	IReadOnlyList<OptionDto> Childs);
+	IReadOnlyList<ExROptionDto> Childs);
 
-public readonly record struct CategoryDto(int Id, string Name, IReadOnlyList<OptionDto> Options);
-public readonly record struct TabDto(OptionTab Id, string Name, IReadOnlyList<CategoryDto> Categories);
-
-public readonly record struct PutOptionRequest(long ID, int Value);
+public readonly record struct ExRCategoryDto(int Id, string Name, IReadOnlyList<ExROptionDto> Options);
+public readonly record struct ExRTabDto(OptionTab Id, string Name, IReadOnlyList<ExRCategoryDto> Categories);
 
 public sealed class GetExrOption : IRequestHandler
 {
@@ -36,19 +34,19 @@ public sealed class GetExrOption : IRequestHandler
 		IRequestHandler.Write(response, getCurrentOptions());
 	}
 
-	private static IReadOnlyList<TabDto> getCurrentOptions()
+	private static IReadOnlyList<ExRTabDto> getCurrentOptions()
 	{
-		var result = new List<TabDto>();
+		var result = new List<ExRTabDto>();
 		foreach (var tabId in Enum.GetValues<OptionTab>())
 		{
-			var categories = new List<CategoryDto>();
+			var categories = new List<ExRCategoryDto>();
 			if (!OptionManager.Instance.TryGetTab(tabId, out var container))
 			{
 				continue;
 			}
 			foreach (var category in container.Category)
 			{
-				var options = new List<OptionDto>();
+				var options = new List<ExROptionDto>();
 				var idHash = new HashSet<int>();
 				foreach (var option in category.Options)
 				{
@@ -59,18 +57,18 @@ public sealed class GetExrOption : IRequestHandler
 					var dto = createOptionDTO(option, idHash);
 					options.Add(dto);
 				}
-				var categoryDto = new CategoryDto(category.Id, category.TransedName, options);
+				var categoryDto = new ExRCategoryDto(category.Id, category.TransedName, options);
 				categories.Add(categoryDto);
 			}
-			var tabDtos = new TabDto(tabId, Tr.GetString(tabId.ToString()), categories);
+			var tabDtos = new ExRTabDto(tabId, Tr.GetString(tabId.ToString()), categories);
 			result.Add(tabDtos);
 		}
 		return result;
 	}
 
-	private static OptionDto createOptionDTO(IOption option, HashSet<int> regsted)
+	private static ExROptionDto createOptionDTO(IOption option, HashSet<int> regsted)
 	{
-		var childsResult = new List<OptionDto>();
+		var childsResult = new List<ExROptionDto>();
 		if (OptionManager.Instance.TryGetChild(option, out var childs))
 		{
 			foreach (var child in childs)
@@ -79,7 +77,7 @@ public sealed class GetExrOption : IRequestHandler
 				childsResult.Add(createOptionDTO(child, regsted));
 			}
 		}
-		return new OptionDto(
+		return new ExROptionDto(
 			option.Info.Id,
 			option.IsViewActive,
 			option.TransedTitle,
