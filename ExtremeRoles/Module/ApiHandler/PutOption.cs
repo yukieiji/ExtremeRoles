@@ -24,5 +24,8 @@ public sealed class PutOption : IRequestHandler
 			newOptionSelection.CategoryId,
 			newOptionSelection.OptionId,
 			newOptionSelection.Selection);
+
+		IRequestHandler.SetStatusOK(response);
+		response.Close();
 	}
 }
