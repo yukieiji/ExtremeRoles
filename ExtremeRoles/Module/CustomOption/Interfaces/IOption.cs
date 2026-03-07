@@ -8,6 +8,8 @@ public interface IOption
 {
 	public IOptionInfo Info { get; }
 
+	public IOptionRangeMeta RangeMetaData { get; }
+
 	public string TransedTitle { get; }
 	public string TransedValue { get; }
 

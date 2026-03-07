@@ -10,48 +10,6 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.CustomOption.Implemented;
 
-public class DynamismOptionRange<T>(IOptionRange<T> range)
-	: IOptionRange<T>
-	where T :
-		notnull, IComparable, IConvertible,
-		IComparable<T>, IEquatable<T>
-{
-	public IOptionRange<T> InnerRange { get; set; } = range;
-
-	public T RangedValue => InnerRange.RangedValue;
-	public T Min => InnerRange.Min;
-	public T Max => InnerRange.Max;
-
-	public int Range => InnerRange.Range;
-
-	public int Selection
-	{
-		get => InnerRange.Selection;
-		set
-		{
-			InnerRange.Selection = value;
-		}
-	}
-
-	public event Action OnValueChanged
-	{
-		add
-		{
-			this.InnerRange.OnValueChanged += value;
-		}
-		remove
-		{
-			this.InnerRange.OnValueChanged -= value;
-		}
-	}
-
-	public int GetIndex(T value)
-		=> InnerRange.GetIndex(value);
-
-	public override string ToString()
-		=> InnerRange.ToString();
-}
-
 public class OptionRange<T>(T[] option) : IOptionRange<T>
 	where T :
 		notnull, IComparable, IConvertible,
@@ -77,6 +35,9 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 			this.onValueChanged?.Invoke();
 		}
 	}
+
+	public IOptionRangeMeta Meta => new MetaData<T>(Selection, this.option);
+
 	private readonly T[] option = option;
 	private int selection = 0;
 
