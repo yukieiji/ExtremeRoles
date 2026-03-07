@@ -2,7 +2,6 @@ using System;
 using System.Net;
 
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Module.ApiHandler;
 
@@ -29,3 +28,4 @@ public sealed class PutExROption : IRequestHandler
 		response.Close();
 	}
 }
+

@@ -23,7 +23,7 @@ public readonly record struct TabDto(OptionTab Id, string Name, IReadOnlyList<Ca
 
 public readonly record struct PutOptionRequest(long ID, int Value);
 
-public sealed class GetOption : IRequestHandler
+public sealed class GetExrOption : IRequestHandler
 {
 	public Action<HttpListenerContext> Request => this.requestAction;
 
