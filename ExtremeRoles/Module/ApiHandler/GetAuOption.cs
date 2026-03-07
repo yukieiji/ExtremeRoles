@@ -73,7 +73,7 @@ public sealed class GetAuOption : IRequestHandler
 			{
 				var options = new List<AuOptionDto>(role.AllGameSettings.Count + 1);
 				
-				int count =　curGameOptions.RoleOptions.GetNumPerGame(role.Role);
+				int count = curGameOptions.RoleOptions.GetNumPerGame(role.Role);
 				int chance = curGameOptions.RoleOptions.GetChancePerGame(role.Role);
 
 				options.Add(

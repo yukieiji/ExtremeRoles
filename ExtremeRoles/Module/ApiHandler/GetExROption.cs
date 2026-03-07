@@ -72,15 +72,15 @@ public sealed class GetExrOption : IRequestHandler
 		return categoryDto;
 	}
 
-	private static ExROptionDto createOptionDTO(IOption option, HashSet<int> regsted)
+	private static ExROptionDto createOptionDTO(IOption option, HashSet<int> registered)
 	{
 		var childsResult = new List<ExROptionDto>();
 		if (OptionManager.Instance.TryGetChild(option, out var childs))
 		{
 			foreach (var child in childs)
 			{
-				regsted.Add(option.Info.Id);
-				childsResult.Add(createOptionDTO(child, regsted));
+				registered.Add(option.Info.Id);
+				childsResult.Add(createOptionDTO(child, registered));
 			}
 		}
 		return new ExROptionDto(
