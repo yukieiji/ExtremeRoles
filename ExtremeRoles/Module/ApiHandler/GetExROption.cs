@@ -46,24 +46,30 @@ public sealed class GetExrOption : IRequestHandler
 			}
 			foreach (var category in container.Category)
 			{
-				var options = new List<ExROptionDto>();
-				var idHash = new HashSet<int>();
-				foreach (var option in category.Options)
-				{
-					if (idHash.Contains(option.Info.Id))
-					{
-						continue;
-					}
-					var dto = createOptionDTO(option, idHash);
-					options.Add(dto);
-				}
-				var categoryDto = new ExRCategoryDto(category.Id, category.TransedName, options);
+				var categoryDto = CreateCategoryDto(category);
 				categories.Add(categoryDto);
 			}
 			var tabDtos = new ExRTabDto(tabId, Tr.GetString(tabId.ToString()), categories);
 			result.Add(tabDtos);
 		}
 		return result;
+	}
+
+	public static ExRCategoryDto CreateCategoryDto(OptionCategory category)
+	{
+		var options = new List<ExROptionDto>();
+		var idHash = new HashSet<int>();
+		foreach (var option in category.Options)
+		{
+			if (idHash.Contains(option.Info.Id))
+			{
+				continue;
+			}
+			var dto = createOptionDTO(option, idHash);
+			options.Add(dto);
+		}
+		var categoryDto = new ExRCategoryDto(category.Id, category.TransedName, options);
+		return categoryDto;
 	}
 
 	private static ExROptionDto createOptionDTO(IOption option, HashSet<int> regsted)
