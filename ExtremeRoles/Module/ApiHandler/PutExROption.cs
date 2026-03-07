@@ -15,7 +15,21 @@ public sealed class PutExROption : IRequestHandler
 
 	private void requestAction(HttpListenerContext context)
 	{
+
+
 		var response = context.Response;
+
+		if (AmongUsClient.Instance == null ||
+			!AmongUsClient.Instance.AmHost ||
+			LobbyBehaviour.Instance == null ||
+			GameOptionsManager.Instance == null ||
+			GameOptionsManager.Instance.CurrentGameOptions == null)
+		{
+			IRequestHandler.SetStatusNG(response);
+			response.Close();
+			return;
+		}
+
 		var newOptionSelection = IRequestHandler.DeserializeJson<ExROptionPutRequest>(context.Request);
 
 		OptionManager.Instance.Update(
