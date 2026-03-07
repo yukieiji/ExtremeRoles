@@ -44,6 +44,8 @@ public sealed class PresetOption : IOption
 
 	public IOptionActivator Activator { get; init; }
 
+	public IOptionRangeMeta RangeMetaData => this.holder.Meta;
+
 	private readonly IValueHolder holder;
 
 	public event Action OnValueChanged

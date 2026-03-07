@@ -10,6 +10,8 @@ public sealed class FloatOptionValue(
 	IValue<float>,
 	IValueHolder
 {
+	public IOptionRangeMeta Meta => this.innerRange.Meta;
+
 	public OptionRange<float> InnerRange
 	{
 		get => innerRange;

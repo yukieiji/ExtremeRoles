@@ -6,7 +6,6 @@ public sealed class BoolOptionValue(bool @default) :
 	OptionRange<string>(boolRange),
 	IValue<bool>, IValueHolder
 {
-
 	private readonly bool @default = @default;
 
 	public int DefaultIndex => GetIndex(@default ? "optionOn" : "optionOff");

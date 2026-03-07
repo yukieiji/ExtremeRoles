@@ -11,6 +11,8 @@ public interface IOptionRange<T>
 	public T Min { get; }
 	public T Max { get; }
 
+	public IOptionRangeMeta Meta { get; }
+
 	public int Range { get; }
 
 	public int Selection { get; set; }
