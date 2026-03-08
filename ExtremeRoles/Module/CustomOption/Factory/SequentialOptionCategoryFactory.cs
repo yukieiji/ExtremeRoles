@@ -64,9 +64,6 @@ public sealed class SequentialOptionCategoryFactory(
 		checkValueOption.OnValueChanged += () => {
 			float newMax = checkValueOption.Value<float>();
 			floatRange.InnerRange = OptionRange<float>.Create(min, newMax, step);
-
-			// Selectionを再設定
-			opt.Selection = floatRange.Selection;
 		};
 
 		return opt;
@@ -112,9 +109,6 @@ public sealed class SequentialOptionCategoryFactory(
 		checkValueOption.OnValueChanged += () => {
 			int newMax = checkValueOption.Value<int>();
 			intRange.InnerRange = OptionRange<int>.Create(min, newMax, step);
-
-			// Selectionを再設定
-			opt.Selection = intRange.Selection;
 		};
 		return opt;
 	}

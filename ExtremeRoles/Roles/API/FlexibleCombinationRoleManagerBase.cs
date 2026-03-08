@@ -198,9 +198,6 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			int newMaxValue = Math.Max(this.minimumRoleNum, roleAssignNum / roleSetNum);
 			roleAssinNumRange.InnerRange = OptionRange<int>.Create(
 				this.minimumRoleNum, newMaxValue, 1);
-
-			// Selectionを再設定
-			numSetting.Selection = roleAssinNumRange.Selection;
 		};
 
 		factory.CreateBoolOption(
