@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.ApiHandler;
@@ -9,7 +11,7 @@ namespace ExtremeRoles.Module.ApiHandler;
 #nullable enable
 
 public readonly record struct ExROptionPutRequest(int TabId, int CategoryId, int OptionId, int Selection);
-public readonly record struct UpdatedOptions(ExRCategoryDto UpdatedCategory, IReadOnlyList<ExROptionDto> ChainUpdatedOption);
+public readonly record struct UpdatedOptions(ExRCategoryDto? UpdatedCategory, IReadOnlyList<ExROptionDto> ChainUpdatedOption);
 
 public sealed class PutExROption : IRequestHandler
 {
@@ -34,21 +36,38 @@ public sealed class PutExROption : IRequestHandler
 		var newOptionSelection = IRequestHandler.DeserializeJson<ExROptionPutRequest>(context.Request);
 
 		var tab = (OptionTab)newOptionSelection.TabId;
-		OptionManager.Instance.Update(
-			tab, newOptionSelection.CategoryId,
-			newOptionSelection.OptionId,
-			newOptionSelection.Selection);
+		int categoryId = newOptionSelection.CategoryId;
+		int optionId = newOptionSelection.OptionId;
 
-		if (!OptionManager.Instance.TryGetCategory(tab, newOptionSelection.CategoryId, out var category))
+		if (!OptionManager.Instance.TryGetCategory(tab, categoryId, out var category))
 		{
+			response.StatusCode = (int)HttpStatusCode.BadRequest;
+			response.Close();
+			return;
+		}
+
+		// プリセットは全更新が入るので再度Getで再レンダリングをかける
+		if (PresetOption.IsPreset(categoryId, optionId))
+		{
+			OptionManager.Instance.Update(tab, categoryId, optionId, newOptionSelection.Selection);
 			response.StatusCode = (int)HttpStatusCode.Accepted;
 			response.Close();
 			return;
 		}
 
+		// それ以外はレコードして返す
+		using var recordResult = OptionUpdateRecorder.Instance.StartRecord();
+		OptionManager.Instance.Update(tab, categoryId, optionId, newOptionSelection.Selection);
+
 		var updatedCategory = GetExrOption.CreateCategoryDto(category);
 
-		IRequestHandler.Write(response, new UpdatedOptions(updatedCategory, []));
+		IRequestHandler.Write(response, new UpdatedOptions(
+			updatedCategory,
+			recordResult.Result.Select(x =>
+			{
+				var registered = new HashSet<int>();
+				return GetExrOption.CreateOptionDto(x, registered);
+			}).ToList()));
 		IRequestHandler.SetStatusOK(response);
 		response.Close();
 	}

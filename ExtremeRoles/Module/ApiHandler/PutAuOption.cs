@@ -1,8 +1,12 @@
-using AmongUs.GameOptions;
-using ExtremeRoles.Module.Interface;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text.Json;
+
+using AmongUs.GameOptions;
+
+using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.ApiHandler;
 
@@ -38,6 +42,7 @@ public sealed class PutAuOption : IRequestHandler
 		}
 
 		var newOption = IRequestHandler.DeserializeJson<VanillaOptionPutRequest>(context.Request);
+		using var recordResult = OptionUpdateRecorder.Instance.StartRecord();
 
 		var curOption = GameOptionsManager.Instance.CurrentGameOptions;
 		int name = newOption.OptionName;
@@ -100,6 +105,13 @@ public sealed class PutAuOption : IRequestHandler
 			GameManager.Instance.LogicOptions.SyncOptions();
 		}
 
+		IRequestHandler.Write(response, new UpdatedOptions(
+			null,
+			recordResult.Result.Select(x =>
+			{
+				var registered = new HashSet<int>();
+				return GetExrOption.CreateOptionDto(x, registered);
+			}).ToList()));
 		IRequestHandler.SetStatusOK(response);
 		response.Close();
 	}

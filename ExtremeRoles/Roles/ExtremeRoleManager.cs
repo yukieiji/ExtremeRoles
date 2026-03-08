@@ -282,7 +282,8 @@ public static class ExtremeRoleManager
     public const int OptionOffsetPerRole = 200;
 
 	// Id空間確保のため通常役職の最初のスペクル分減らす
-	public const int RoleCategoryIdOffset = -(int)ExtremeRoleId.SpecialCrew;
+	public const int RoleCategoryIdOffset = 200;
+	private const int conbRoleIdOffset = 1000;
 
 	public static readonly IReadOnlySet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
     {
@@ -443,7 +444,7 @@ public static class ExtremeRoleManager
 		=> RoleCategoryIdOffset + (int)roleId;
 
 	public static int GetCombRoleGroupId(CombinationRoleType roleId)
-		=> (int)roleId;
+		=> conbRoleIdOffset + (int)roleId;
 
 	public static void CreateCombinationRoleOptions()
     {
