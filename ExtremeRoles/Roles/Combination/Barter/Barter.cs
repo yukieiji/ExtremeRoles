@@ -463,8 +463,11 @@ public sealed class BarterRole :
 		this.status.UseCastling();
 
 		var target = MeetingHud.Instance.playerStates
-			.Select(x => x.TargetPlayerId)
-			.Where(x => x != PlayerVoteArea.SkippedVote && x != PlayerVoteArea.DeadVote);
+			.Where(x => 
+				!x.AmDead && 
+				x.TargetPlayerId != PlayerVoteArea.SkippedVote && 
+				x.TargetPlayerId != PlayerVoteArea.DeadVote)
+			.Select(x => x.TargetPlayerId);
 
 		for (int i = 0; i < this.status.OneCastlingNum; ++i)
 		{
