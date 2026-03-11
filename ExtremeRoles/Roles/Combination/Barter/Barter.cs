@@ -13,6 +13,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -129,7 +130,8 @@ public sealed class BarterRole :
 				meetingCastlingText.color = Palette.White;
 				meetingCastlingText.gameObject.SetActive(false);
 
-				if (this.status.IsRandomCastling)
+				if (this.status.IsRandomCastling &&
+					this.randomButton == null)
 				{
 					this.randomButton = UnityObject.Instantiate(meeting.MeetingAbilityButton, meeting.transform);
 					this.randomButton.graphic.sprite = AbilityImage;
@@ -165,7 +167,7 @@ public sealed class BarterRole :
 					meeting.state == MeetingHud.VoteStates.Discussion ||
 					meeting.state == MeetingHud.VoteStates.NotVoted ||
 					meeting.state == MeetingHud.VoteStates.Voted
-				);
+				) && !OnemanMeetingSystemManager.IsActive;
 			bool prevState = this.randomButton.gameObject.activeSelf;
 			this.randomButton.gameObject.SetActive(newState);
 			if (newState != prevState)
