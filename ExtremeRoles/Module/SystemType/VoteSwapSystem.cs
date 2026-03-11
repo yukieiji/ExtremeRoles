@@ -117,7 +117,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		return swapInfo.TryGetValue(source, out target);
 	}
 
-	public static void RemoveTarget(byte playerId)
+	public static void RemovePlayerFromSwaps(byte playerId)
 	{
 		if (TryGet(out var system))
 		{

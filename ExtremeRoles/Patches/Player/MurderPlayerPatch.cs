@@ -106,7 +106,7 @@ public static class PlayerControlMurderPlayerPatch
 		{
 			hidePlayerVoteAreaButton(isLocalPlayerDead, targetPlayerId);
 			hideRaiseHandButton(isLocalPlayerDead);
-			VoteSwapSystem.RemoveTarget(targetPlayerId);
+			VoteSwapSystem.RemovePlayerFromSwaps(targetPlayerId);
 		}
 
 		if (ExtremeRoleManager.GameRole.Count == 0)

@@ -88,7 +88,7 @@ public sealed class BarterRole :
 	private Dictionary<byte, SpriteRenderer> sourceMark = [];
 	private VoteSwapSystem? system;
 	private AbilityButton? randomButton;
-	private float randommCastlingTimer = 0f;
+	private float randomCastlingTimer = 0f;
 
 	public BarterRole(
 		) : base(
@@ -173,9 +173,9 @@ public sealed class BarterRole :
 			this.randomButton.gameObject.SetActive(newState);
 
 			// 連打防止のため
-			if (this.randommCastlingTimer > 0.0f)
+			if (this.randomCastlingTimer > 0.0f)
 			{
-				this.randommCastlingTimer -= Time.deltaTime;
+				this.randomCastlingTimer -= Time.deltaTime;
 			}
 
 			if (newState != prevState)
@@ -337,7 +337,7 @@ public sealed class BarterRole :
 		}
 
 
-		this.randommCastlingTimer = 0.0f;
+		this.randomCastlingTimer = 0.0f;
 	}
 
 	private void meetingInfoSetActive(bool active)
@@ -466,12 +466,12 @@ public sealed class BarterRole :
 	{
 		if (MeetingHud.Instance == null ||
 			this.status is null ||
-			this.randommCastlingTimer > 0.0f)
+			this.randomCastlingTimer > 0.0f)
 		{
 			return;
 		}
 
-		this.randommCastlingTimer = 0.25f;
+		this.randomCastlingTimer = 0.25f;
 		this.status.UseCastling();
 
 		var target = MeetingHud.Instance.playerStates
