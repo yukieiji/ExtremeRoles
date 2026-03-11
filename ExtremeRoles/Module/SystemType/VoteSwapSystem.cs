@@ -117,6 +117,14 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		return swapInfo.TryGetValue(source, out target);
 	}
 
+	public static void RemoveTarget(byte playerId)
+	{
+		if (TryGet(out var system))
+		{
+			system.swapList.RemoveAll(x => x.Item1 == playerId || x.Item2 == playerId);
+		}
+	}
+
 	public void RpcSwapVote(byte source, byte target, ShowOps show)
 	{
 		uint color = show is ShowOps.Hide ? 0 : Design.FromRGBA(
