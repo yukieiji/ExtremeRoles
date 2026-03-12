@@ -13,6 +13,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -87,6 +88,7 @@ public sealed class BarterRole :
 	private Dictionary<byte, SpriteRenderer> sourceMark = [];
 	private VoteSwapSystem? system;
 	private AbilityButton? randomButton;
+	private float randomCastlingTimer = 0f;
 
 	public BarterRole(
 		) : base(
@@ -129,7 +131,8 @@ public sealed class BarterRole :
 				meetingCastlingText.color = Palette.White;
 				meetingCastlingText.gameObject.SetActive(false);
 
-				if (this.status.IsRandomCastling)
+				if (this.status.IsRandomCastling &&
+					this.randomButton == null)
 				{
 					this.randomButton = UnityObject.Instantiate(meeting.MeetingAbilityButton, meeting.transform);
 					this.randomButton.graphic.sprite = AbilityImage;
@@ -165,9 +168,16 @@ public sealed class BarterRole :
 					meeting.state == MeetingHud.VoteStates.Discussion ||
 					meeting.state == MeetingHud.VoteStates.NotVoted ||
 					meeting.state == MeetingHud.VoteStates.Voted
-				);
+				) && !OnemanMeetingSystemManager.IsActive;
 			bool prevState = this.randomButton.gameObject.activeSelf;
 			this.randomButton.gameObject.SetActive(newState);
+
+			// 連打防止のため
+			if (this.randomCastlingTimer > 0.0f)
+			{
+				this.randomCastlingTimer -= Time.deltaTime;
+			}
+
 			if (newState != prevState)
 			{
 				var curPos = this.randomButton.transform.localPosition;
@@ -325,6 +335,9 @@ public sealed class BarterRole :
 			this.HasOtherKillCool = false;
 			this.HasOtherKillRange = false;
 		}
+
+
+		this.randomCastlingTimer = 0.0f;
 	}
 
 	private void meetingInfoSetActive(bool active)
@@ -452,17 +465,21 @@ public sealed class BarterRole :
 	private void randomCastling()
 	{
 		if (MeetingHud.Instance == null ||
-			this.status is null)
+			this.status is null ||
+			this.randomCastlingTimer > 0.0f)
 		{
 			return;
 		}
 
-
+		this.randomCastlingTimer = 0.25f;
 		this.status.UseCastling();
 
 		var target = MeetingHud.Instance.playerStates
-			.Select(x => x.TargetPlayerId)
-			.Where(x => x != PlayerVoteArea.SkippedVote && x != PlayerVoteArea.DeadVote);
+			.Where(x => 
+				!x.AmDead && 
+				x.TargetPlayerId != PlayerVoteArea.SkippedVote && 
+				x.TargetPlayerId != PlayerVoteArea.DeadVote)
+			.Select(x => x.TargetPlayerId);
 
 		for (int i = 0; i < this.status.OneCastlingNum; ++i)
 		{
