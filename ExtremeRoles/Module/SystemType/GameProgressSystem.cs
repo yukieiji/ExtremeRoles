@@ -50,7 +50,7 @@ public sealed class GameProgressSystem : IExtremeSystemType
 			Progress.RoleSetUpEnd => isIntroCheck(cur, Progress.RoleSetUpEnd),
 			Progress.IntroEnd => isIntroCheck(cur, Progress.IntroEnd),
 			Progress.PreTask => (cur is Progress.PreTask || ExileController.Instance != null) && system.isSetUpEnd,
-			Progress.Task => cur is Progress.Task && system.isSetUpEnd,
+			Progress.Task => cur is Progress.Task && system.isSetUpEnd && MeetingHud.Instance == null || ExileController.Instance == null,
 			Progress.Meeting => (cur is Progress.Meeting || MeetingHud.Instance != null || ExileController.Instance != null) && system.isSetUpEnd,
 			Progress.Exiled => (cur is Progress.Exiled || ExileController.Instance != null) && system.isSetUpEnd,
 			_ => cur == check,
