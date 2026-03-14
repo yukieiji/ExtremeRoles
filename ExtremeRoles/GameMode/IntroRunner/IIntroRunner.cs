@@ -8,7 +8,6 @@ using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.CheckPoint;
 using ExtremeRoles.Performance;
@@ -17,7 +16,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Host;
-using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
@@ -30,7 +28,7 @@ public interface IIntroRunner
     public IEnumerator CoRunIntro(IntroCutscene instance)
     {
         GameObject roleAssignText = new GameObject("roleAssignText");
-        var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
+        var text = roleAssignText.AddComponent<LoadingText>();
         text.SetFontSize(3.0f);
         text.SetMessage(Tr.GetString("roleAssignNow"));
 
