@@ -46,10 +46,15 @@ public sealed class GetAuOption : IRequestHandler
 		var curGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
 		List<AuOptionCategoryDto> result = [
 			new AuOptionCategoryDto(
-				"map", [
-				new AuOptionDto("map", "", curGameOptions.GetByte(ByteOptionNames.MapId),
-				new AuOptionInfo(OptionValueType.Byte, (int)ByteOptionNames.MapId),
-				[ 0, 1, 2, 4, 5 ])])];
+				"map",
+				[
+					new AuOptionDto(
+						"map", "", curGameOptions.GetByte(ByteOptionNames.MapId),
+						new AuOptionInfo(OptionValueType.Byte, (int)ByteOptionNames.MapId), [ 0, 1, 2, 4, 5 ]
+					)
+				]
+			)
+		];
 
 		var tr = TranslationController.Instance;
 
@@ -78,9 +83,10 @@ public sealed class GetAuOption : IRequestHandler
 
 				options.Add(
 					new AuOptionDto("DefaultOption", "",
-					new AuRoleOption(count, chance),
-					new AuOptionInfo(OptionValueType.RoleBase, (int)role.Role),
-					null));
+						new AuRoleOption(count, chance),
+						new AuOptionInfo(OptionValueType.RoleBase, (int)role.Role),
+						null)
+					);
 				foreach (var baseGameSetting in role.AllGameSettings)
 				{
 					var dto = convertAuOptionDto(baseGameSetting);
