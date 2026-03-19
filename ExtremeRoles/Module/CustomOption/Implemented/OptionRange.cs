@@ -36,7 +36,7 @@ public class OptionRange<T>(T[] option) : IOptionRange<T>
 		}
 	}
 
-	public IOptionRangeMeta Meta => new MetaData<T>(Selection, this.option);
+	public IOptionRangeMeta Meta => new MetaData<T>(this.option);
 
 	private readonly T[] option = option;
 	private int selection = 0;
