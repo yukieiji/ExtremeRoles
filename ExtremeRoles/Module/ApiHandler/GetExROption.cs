@@ -12,7 +12,7 @@ namespace ExtremeRoles.Module.ApiHandler;
 public readonly record struct ExROptionDto(
 	int Id,
 	bool IsActive,
-	string TransedName,
+	string TranslatedName,
 	int Selection,
 	string Format,
 	IOptionRangeMeta RangeMeta,
