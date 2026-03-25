@@ -1,29 +1,31 @@
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtremeRoles.Module.CustomOption;
 
 #nullable enable
 
+public record CategoryOption(int CategoryId, IOption Option);
+
 public sealed class RecordResult(Action disposeAction) : IDisposable
 {
-	public IReadOnlyList<IOption> Result => this.result;
-
-	private readonly List<IOption> result = new List<IOption>();
+	public Dictionary<int, List<IOption>> Result { get; init; } = new Dictionary<int, List<IOption>>();
 	private readonly Action disposeAction = disposeAction;
 
-	public void Add(IOption option)
+	public void Add(int categoryId, IOption option)
 	{
-		this.result.Add(option); 
+		if (!this.Result.TryGetValue(categoryId, out var options))
+		{
+			options = [];
+			this.Result[categoryId] = options;
+		}
+		options.Add(option);
 	}
 
 	public void Dispose()
 	{
-		this.result.Clear();
+		this.Result.Clear();
 		this.disposeAction.Invoke();
 	}
 }
@@ -38,8 +40,8 @@ public sealed class OptionUpdateRecorder : NullableSingleton<OptionUpdateRecorde
 		return this.record;
 	}
 
-	public void RegisterRecordOption(IOption option)
+	public void RegisterRecordOption(int categoryId, IOption option)
 	{
-		option.OnValueChanged += () => this.record?.Add(option);
+		option.OnValueChanged += () => this.record?.Add(categoryId, option);
 	}
 }
