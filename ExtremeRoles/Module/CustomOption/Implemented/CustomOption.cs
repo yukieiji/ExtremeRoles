@@ -96,8 +96,6 @@ public sealed class CustomOption : IOption
 		// 非表示のオプションは基本的に不具合や内部仕様のハックを元に作成されていることが多いため、デフォルト値に設定し変な挙動が起きにくくする
 		this.Selection = Info.IsHidden ? defaultIndex : config.Value;
 
-		OptionUpdateRecorder.Instance.RegisterRecordOption(this);
-
 		ExtremeRolesPlugin.Logger.LogInfo($"---- Create new Option ----\n{this}\n--------");
 	}
 

@@ -11,7 +11,8 @@ namespace ExtremeRoles.Module.ApiHandler;
 #nullable enable
 
 public readonly record struct ExROptionPutRequest(int TabId, int CategoryId, int OptionId, int Selection);
-public readonly record struct UpdatedOptions(ExRCategoryDto? UpdatedCategory, IReadOnlyList<ExROptionDto> ChainUpdatedOption);
+public readonly record struct CategoryOptionDto(int Id, IReadOnlyList<ExROptionDto> Options);
+public readonly record struct UpdatedOptions(ExRCategoryDto? UpdatedCategory, IReadOnlyList<CategoryOptionDto> ChainUpdatedOption);
 
 public sealed class PutExROption : IRequestHandler
 {
@@ -19,7 +20,6 @@ public sealed class PutExROption : IRequestHandler
 
 	private void requestAction(HttpListenerContext context)
 	{
-
 		var response = context.Response;
 
 		if (AmongUsClient.Instance == null ||
@@ -61,13 +61,18 @@ public sealed class PutExROption : IRequestHandler
 
 		var updatedCategory = GetExrOption.CreateCategoryDto(category);
 
+		recordResult.Result.Remove(category.Id);
+
 		IRequestHandler.Write(response, new UpdatedOptions(
 			updatedCategory,
 			recordResult.Result.Select(x =>
 			{
-				var registered = new HashSet<int>();
-				return GetExrOption.CreateOptionDto(x, registered);
-			}).ToList()));
+				var registed = new HashSet<int>();
+				var options = x.Value.Select(x => GetExrOption.CreateOptionDto(x, registed));
+
+				return new CategoryOptionDto(x.Key, options.ToList());
+			}).ToList())
+		);
 		IRequestHandler.SetStatusOK(response);
 		response.Close();
 	}

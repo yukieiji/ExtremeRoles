@@ -109,9 +109,12 @@ public sealed class PutAuOption : IRequestHandler
 			null,
 			recordResult.Result.Select(x =>
 			{
-				var registered = new HashSet<int>();
-				return GetExrOption.CreateOptionDto(x, registered);
-			}).ToList()));
+				var registed = new HashSet<int>();
+				var options = x.Value.Select(x => GetExrOption.CreateOptionDto(x, registed));
+
+				return new CategoryOptionDto(x.Key, options.ToList());
+			}).ToList())
+		);
 		IRequestHandler.SetStatusOK(response);
 		response.Close();
 	}
