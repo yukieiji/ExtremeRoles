@@ -187,7 +187,7 @@ public class OptionCategoryFactory(
 	public void AddOption(int id, IOption option)
 	{
 		optionPack.AddOption(id, option);
-		OptionUpdateRecorder.Instance.RegisterRecordOption(option);
+		OptionUpdateRecorder.Instance.RegisterRecordOption(this.groupid, option);
 	}
 
 	public int GetOptionId<T>(T option) where T : struct, IConvertible
