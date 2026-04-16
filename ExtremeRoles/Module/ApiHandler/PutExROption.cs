@@ -63,6 +63,7 @@ public sealed class PutExROption : IRequestHandler
 
 		recordResult.Result.Remove(category.Id);
 
+		IRequestHandler.SetStatusOK(response);
 		IRequestHandler.Write(response, new UpdatedOptions(
 			updatedCategory,
 			recordResult.Result.Select(x =>
@@ -73,7 +74,5 @@ public sealed class PutExROption : IRequestHandler
 				return new CategoryOptionDto(x.Key, options.ToList());
 			}).ToList())
 		);
-		IRequestHandler.SetStatusOK(response);
-		response.Close();
 	}
 }
