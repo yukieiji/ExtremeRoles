@@ -74,7 +74,36 @@ public sealed class GetAuOption : IRequestHandler
 
 		if (curGameOptions.RoleOptions != null)
 		{
-			foreach (var role in RoleManager.Instance.AllRoles)
+			// あとでソートする
+			foreach (var role in RoleManager.Instance.AllRoles.ToArray()
+				.Where(x => x.Role switch
+					{
+						RoleTypes.Crewmate or 
+						RoleTypes.Impostor or 
+						RoleTypes.CrewmateGhost or 
+						RoleTypes.ImpostorGhost => false, // デフォルト役職はオプションが無いので弾く
+						_ => true
+					})
+				.OrderBy(x =>
+				{
+					var roleId = x.Role;
+					int intedRoleId = (int)roleId;
+
+					return roleId switch
+					{
+						RoleTypes.Scientist or
+						RoleTypes.Engineer or
+						RoleTypes.GuardianAngel or
+						RoleTypes.Tracker or
+						RoleTypes.Detective => intedRoleId + 128,
+
+						RoleTypes.Shapeshifter or
+						RoleTypes.Phantom or
+						RoleTypes.Viper => intedRoleId + 256,
+
+						_ => intedRoleId - 256, // 未実装だとわかりやすいように最初に表示させておく
+					};
+				}))
 			{
 				var options = new List<AuOptionDto>(role.AllGameSettings.Count + 1);
 				
