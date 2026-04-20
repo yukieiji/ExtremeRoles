@@ -111,7 +111,7 @@ public sealed class GetAuOption : IRequestHandler
 				int chance = curGameOptions.RoleOptions.GetChancePerGame(role.Role);
 
 				options.Add(
-					new AuOptionDto("DefaultOption", "",
+					new AuOptionDto("DefaultOption", role.StringName.ToString(), //わかりやすいようにしておく
 						new AuRoleOption(count, chance),
 						new AuOptionInfo(OptionValueType.RoleBase, (int)role.Role),
 						null)
