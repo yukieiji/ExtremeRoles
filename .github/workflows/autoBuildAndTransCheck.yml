@@ -27,7 +27,7 @@ jobs:
           repository: ${{github.event.pull_request.head.repo.full_name}}
           submodules: true
       - name: SetupNuget
-        uses: nuget/setup-nuget@v3
+        uses: nuget/setup-nuget@v4
       - name: RestoreNugetPackage
         run: nuget restore ExtremeRoles.sln
       - name: SetupPython

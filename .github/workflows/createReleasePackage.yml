@@ -16,7 +16,7 @@ jobs:
         with:
           submodules: true
       - name: SetupNuget
-        uses: nuget/setup-nuget@v3
+        uses: nuget/setup-nuget@v4
       - name: RestoreNugetPackage
         run: nuget restore ExtremeRoles.sln
       - name: SetupPython
