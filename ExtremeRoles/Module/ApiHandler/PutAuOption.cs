@@ -5,9 +5,8 @@ using System.Net;
 using System.Text.Json;
 
 using AmongUs.GameOptions;
-
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.Interface;
-
 namespace ExtremeRoles.Module.ApiHandler;
 
 public enum OptionValueType
@@ -54,7 +53,10 @@ public sealed class PutAuOption : IRequestHandler
 				curOption.SetBool((BoolOptionNames)name, val.GetBoolean());
 				break;
 			case OptionValueType.Byte:
-				curOption.SetByte((ByteOptionNames)name, val.GetByte());
+				var strName = (ByteOptionNames)name;
+				byte value = val.GetByte();
+				curOption.SetByte(strName, value);
+				updateMapButton(strName, value); // マップボタンだけ特殊なので
 				break;
 			case OptionValueType.Int:
 				curOption.SetInt((Int32OptionNames)name, val.GetInt32());
@@ -116,5 +118,35 @@ public sealed class PutAuOption : IRequestHandler
 				return new CategoryOptionDto(x.Key, options.ToList());
 			}).ToList())
 		);
+	}
+	private void updateMapButton(ByteOptionNames strName, byte value)
+	{
+		if (GameSettingMenu.Instance == null ||
+			strName is not ByteOptionNames.MapId)
+		{
+			return;
+		}
+
+		var mapOptionButton = GameSettingMenu.Instance.GameSettingsTab.Children.Find(
+			(Il2CppSystem.Predicate<OptionBehaviour>)(x => x.TryCast<GameOptionsMapPicker>() != null));
+		if (!mapOptionButton.IsTryCast<GameOptionsMapPicker>(out var mapPicker))
+		{
+			return;
+		}
+
+		foreach (var mapSelectButton in mapPicker.mapButtons)
+		{
+			if (mapSelectButton.MapID == value)
+			{
+				mapSelectButton.Button.SelectButton(true);
+				mapPicker.selectedButton = mapSelectButton;
+				mapPicker.SelectMap(value);
+				mapPicker.oldValue = value;
+			}
+			else
+			{
+				mapSelectButton.Button.SelectButton(false);
+			}
+		}
 	}
 }
