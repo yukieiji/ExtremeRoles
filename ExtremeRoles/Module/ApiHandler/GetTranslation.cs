@@ -56,9 +56,15 @@ public sealed class GetTranslation : IRequestHandler
 			keyObj = intKey;
 			translated = TranslationController.Instance.GetString((StringNames)intKey, partsArray);
 		}
-		else
+		else if (req.Key.ValueKind == JsonValueKind.String)
 		{
 			string strKey = req.Key.GetString() ?? "";
+			keyObj = strKey;
+			translated = Tr.GetString(strKey, partsArray);
+		}
+		else
+		{
+			string strKey = req.Key.ToString();
 			keyObj = strKey;
 			translated = Tr.GetString(strKey, partsArray);
 		}
@@ -86,7 +92,11 @@ public sealed class GetTranslation : IRequestHandler
 				{
 					return (object)false;
 				}
-				return (object)(p.GetString() ?? p.ToString());
+				if (p.ValueKind == JsonValueKind.String)
+				{
+					return (object)(p.GetString() ?? "");
+				}
+				return (object)p.ToString();
 			}).ToArray(),
 			translated
 		);
