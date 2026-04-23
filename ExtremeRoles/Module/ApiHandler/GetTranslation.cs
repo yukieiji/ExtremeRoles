@@ -14,26 +14,10 @@ public readonly record struct GetTranslationRequest(JsonElement Key, JsonElement
 
 public readonly record struct GetTranslationResponse(object Key, object[] Param, string Result);
 
-public sealed class GetTranslation : IRequestHandler
+public static class GetTranslationHelper
 {
-	public Action<HttpListenerContext> Request => this.requestAction;
-
-	private void requestAction(HttpListenerContext context)
+	public static GetTranslationResponse Process(GetTranslationRequest req)
 	{
-		var response = context.Response;
-
-		GetTranslationRequest req;
-		try
-		{
-			req = IRequestHandler.DeserializeJson<GetTranslationRequest>(context.Request);
-		}
-		catch (Exception)
-		{
-			IRequestHandler.SetStatusNG(response);
-			response.Close();
-			return;
-		}
-
 		object keyObj;
 		string translated = "";
 
@@ -69,7 +53,7 @@ public sealed class GetTranslation : IRequestHandler
 			translated = Tr.GetString(strKey, partsArray);
 		}
 
-		var result = new GetTranslationResponse(
+		return new GetTranslationResponse(
 			keyObj,
 			(req.Param ?? Array.Empty<JsonElement>()).Select(p =>
 			{
@@ -100,9 +84,61 @@ public sealed class GetTranslation : IRequestHandler
 			}).ToArray(),
 			translated
 		);
+	}
+}
+
+public sealed class GetTranslation : IRequestHandler
+{
+	public Action<HttpListenerContext> Request => this.requestAction;
+
+	private void requestAction(HttpListenerContext context)
+	{
+		var response = context.Response;
+
+		GetTranslationRequest req;
+		try
+		{
+			req = IRequestHandler.DeserializeJson<GetTranslationRequest>(context.Request);
+		}
+		catch (Exception)
+		{
+			IRequestHandler.SetStatusNG(response);
+			response.Close();
+			return;
+		}
+
+		var result = GetTranslationHelper.Process(req);
 
 		IRequestHandler.SetStatusOK(response);
 		IRequestHandler.SetContentsType(response);
 		IRequestHandler.Write(response, result);
+	}
+}
+
+public sealed class GetTranslationBatch : IRequestHandler
+{
+	public Action<HttpListenerContext> Request => this.requestAction;
+
+	private void requestAction(HttpListenerContext context)
+	{
+		var response = context.Response;
+
+		GetTranslationRequest[] req;
+		try
+		{
+			req = IRequestHandler.DeserializeJson<GetTranslationRequest[]>(context.Request);
+		}
+		catch (Exception)
+		{
+			IRequestHandler.SetStatusNG(response);
+			response.Close();
+			return;
+		}
+
+		var results = req.Select(GetTranslationHelper.Process).ToArray();
+
+		IRequestHandler.SetStatusOK(response);
+		IRequestHandler.SetContentsType(response);
+		IRequestHandler.Write(response, results);
 	}
 }
