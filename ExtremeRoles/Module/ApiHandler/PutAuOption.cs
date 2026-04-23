@@ -75,7 +75,7 @@ public sealed class PutAuOption : IRequestHandler
 					return;
 				}
 				RoleTypes roleName = (RoleTypes)name;
-				int maxCount = val.GetProperty("Count").GetInt32();
+				int maxCount = val.GetProperty("MaxCount").GetInt32();
 				int roleChance = val.GetProperty("Chance").GetInt32();
 				curOption.RoleOptions.SetRoleRate(roleName, maxCount, roleChance);
 				curOption.SetInt(Int32OptionNames.RulePreset, 100);
