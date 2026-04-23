@@ -105,6 +105,7 @@ public sealed class PutAuOption : IRequestHandler
 			GameManager.Instance.LogicOptions.SyncOptions();
 		}
 
+		IRequestHandler.SetStatusOK(response);
 		IRequestHandler.Write(response, new UpdatedOptions(
 			null,
 			recordResult.Result.Select(x =>
@@ -115,7 +116,5 @@ public sealed class PutAuOption : IRequestHandler
 				return new CategoryOptionDto(x.Key, options.ToList());
 			}).ToList())
 		);
-		IRequestHandler.SetStatusOK(response);
-		response.Close();
 	}
 }
