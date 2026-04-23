@@ -13,11 +13,9 @@ public sealed class GetTranslationOptionUnit : IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-
-		var units = Enum.GetValues<OptionUnit>();
 		var results = new List<GetTranslationResponse>();
 
-		foreach (var unit in units)
+		foreach (var unit in Enum.GetValues<OptionUnit>())
 		{
 			string key = unit.ToString();
 			string translated;
