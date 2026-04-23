@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -132,7 +132,10 @@ public class ApiServer : IDisposable
 	// REST APIを呼び出す際、パスは「\」ではなく「/」を使い、ヘッダーの「Contents-Type」は常につける
 	private void listenerCallback(IAsyncResult result)
 	{
-		if (!this.listener.IsListening) { return; }
+		if (!this.listener.IsListening)
+		{
+			return;
+		}
 		HttpListenerContext context = this.listener.EndGetContext(result);
 
 		string? url = context.Request.RawUrl;
