@@ -69,11 +69,23 @@ public sealed class GetTranslation : IRequestHandler
 			{
 				if (p.ValueKind == JsonValueKind.Number)
 				{
-					if (p.TryGetInt32(out int i)) return (object)i;
-					if (p.TryGetDouble(out double d)) return (object)d;
+					if (p.TryGetInt32(out int i))
+					{
+						return (object)i;
+					}
+					if (p.TryGetDouble(out double d))
+					{
+						return (object)d;
+					}
 				}
-				if (p.ValueKind == JsonValueKind.True) return (object)true;
-				if (p.ValueKind == JsonValueKind.False) return (object)false;
+				if (p.ValueKind == JsonValueKind.True)
+				{
+					return (object)true;
+				}
+				if (p.ValueKind == JsonValueKind.False)
+				{
+					return (object)false;
+				}
 				return (object)(p.GetString() ?? p.ToString());
 			}).ToArray(),
 			translated
