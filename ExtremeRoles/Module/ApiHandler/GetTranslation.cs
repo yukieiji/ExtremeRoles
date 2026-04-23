@@ -6,6 +6,7 @@ using System.Text.Json;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Extension.Controller;
+using AmongUs.GameOptions;
 using Il2CppObject = Il2CppSystem.Object;
 
 namespace ExtremeRoles.Module.ApiHandler;
