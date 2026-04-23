@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Extension.Controller;
 
 namespace ExtremeRoles.Module.ApiHandler;
 

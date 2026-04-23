@@ -5,9 +5,9 @@ using System.Net;
 using System.Text.Json;
 
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Extension.Controller;
-using AmongUs.GameOptions;
 using Il2CppObject = Il2CppSystem.Object;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.ApiHandler;
 
@@ -57,32 +57,14 @@ public static class GetTranslationHelper
 		return new GetTranslationResponse(
 			keyObj,
 			(req.Param ?? Array.Empty<JsonElement>()).Select(p =>
-			{
-				if (p.ValueKind == JsonValueKind.Number)
+				p.ValueKind switch
 				{
-					if (p.TryGetInt32(out int i))
-					{
-						return (object)i;
-					}
-					if (p.TryGetDouble(out double d))
-					{
-						return (object)d;
-					}
-				}
-				if (p.ValueKind == JsonValueKind.True)
-				{
-					return (object)true;
-				}
-				if (p.ValueKind == JsonValueKind.False)
-				{
-					return (object)false;
-				}
-				if (p.ValueKind == JsonValueKind.String)
-				{
-					return (object)(p.GetString() ?? "");
-				}
-				return (object)p.ToString();
-			}).ToArray(),
+					JsonValueKind.Number => p.TryGetInt32(out int i) ? (object)i : p.TryGetDouble(out double d) ? d : 0,
+					JsonValueKind.True => (object)true,
+					JsonValueKind.False => (object)false,
+					JsonValueKind.String => (object)(p.GetString() ?? ""),
+					_ => (object)p.ToString(),
+				}).ToArray(),
 			translated
 		);
 	}
