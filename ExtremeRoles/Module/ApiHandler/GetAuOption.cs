@@ -44,9 +44,11 @@ public sealed class GetAuOption : IRequestHandler
 		}
 
 		var curGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
+		var tr = TranslationController.Instance;
+
 		List<AuOptionCategoryDto> result = [
 			new AuOptionCategoryDto(
-				"map",
+				tr.GetString(StringNames.GameMapName),
 				[
 					new AuOptionDto(
 						"map", "", curGameOptions.GetByte(ByteOptionNames.MapId),
@@ -55,8 +57,6 @@ public sealed class GetAuOption : IRequestHandler
 				]
 			)
 		];
-
-		var tr = TranslationController.Instance;
 
 		foreach (var category in GameManager.Instance.GameSettingsList.AllCategories)
 		{
