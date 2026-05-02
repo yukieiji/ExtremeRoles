@@ -11,7 +11,7 @@ namespace ExtremeRoles.Module.ApiHandler;
 
 #nullable enable
 
-public readonly record struct PostCsvRequest(DateTime At, string CsvBody);
+public readonly record struct PostCsvRequest(string CsvBody);
 
 public sealed class PostOptionCsv : IRequestHandler
 {
