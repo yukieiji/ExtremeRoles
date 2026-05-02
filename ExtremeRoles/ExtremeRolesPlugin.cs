@@ -127,6 +127,8 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		ApiServer.Register(ConectGame.Path, HttpMethod.Get, new ConectGame());
 		ApiServer.Register("/exr/option/", HttpMethod.Get, new GetExrOption());
 		ApiServer.Register("/exr/option/", HttpMethod.Put, new PutExROption());
+		ApiServer.Register("/exr/role/filter/", HttpMethod.Get, new GetExRAssignFilter());
+		ApiServer.Register("/exr/role/filter/", HttpMethod.Post, new PostExRAssignFilter());
 
 		ScreenManagerHookcs.RegisterLoad();
 
