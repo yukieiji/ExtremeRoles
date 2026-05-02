@@ -127,6 +127,8 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		ApiServer.Register(ConectGame.Path, HttpMethod.Get, new ConectGame());
 		ApiServer.Register("/exr/option/", HttpMethod.Get, new GetExrOption());
 		ApiServer.Register("/exr/option/", HttpMethod.Put, new PutExROption());
+		ApiServer.Register("/exr/option/csv/", HttpMethod.Get, new GetOptionCsv());
+		ApiServer.Register("/exr/option/csv/", HttpMethod.Post, new PostOptionCsv());
 		ApiServer.Register("/exr/role/filter/", HttpMethod.Get, new GetExRAssignFilter());
 		ApiServer.Register("/exr/role/filter/", HttpMethod.Post, new PostExRAssignFilter());
 

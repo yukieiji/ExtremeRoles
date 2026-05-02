@@ -86,6 +86,7 @@ public sealed class PostExRAssignFilter : IRequestHandler
 		}
 
 		IRequestHandler.SetStatusOK(response);
+		response.Close();
 	}
 	private static void addFilterSetRole(Guid filterId, int id)
 	{
