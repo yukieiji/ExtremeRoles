@@ -57,7 +57,7 @@ public static class SabotageButtonRefreshPatch
             (
                 roleCanUseSabotage &&
                 !role.IsImpostor() &&
-                role.Core.Id is not ExtremeRoleId.Vigilante or ExtremeRoleId.Xion &&
+                role.Core.Id is not (ExtremeRoleId.Vigilante or ExtremeRoleId.Xion) &&
                 localPlayer.Data.IsDead
             ))
         {
