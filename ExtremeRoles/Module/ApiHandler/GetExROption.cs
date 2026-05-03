@@ -83,6 +83,7 @@ public sealed class GetExrOption : IRequestHandler
 				childsResult.Add(CreateOptionDto(child, registered));
 			}
 		}
+		registered.Add(option.Info.Id);
 		return new ExROptionDto(
 			option.Info.Id,
 			option.IsViewActive,
