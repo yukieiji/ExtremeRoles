@@ -40,11 +40,6 @@ public sealed class GetExRAssignFilter : IRequestHandler
 
 	private static RoleAssignFilterDto getRoleAssignFilter()
 	{
-		if (!RoleAssignFilter.IsExist)
-		{
-			return new RoleAssignFilterDto();
-		}
-
 		var model = RoleAssignFilter.Instance.Model;
 
 		model.Initialize();
