@@ -44,7 +44,7 @@ public sealed class PostExRAssignFilter : IRequestHandler
 		switch (delta.Op)
 		{
 			case PostExRAssignOps.FilterNewAdd:
-				if (!filter.Model.FilterSet.ContainsKey(delta.FilterId))
+				if (filter.Model.FilterSet.ContainsKey(delta.FilterId))
 				{
 					IRequestHandler.SetStatusNG(response);
 					response.Close();
