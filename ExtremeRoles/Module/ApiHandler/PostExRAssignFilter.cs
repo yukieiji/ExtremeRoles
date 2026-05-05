@@ -64,7 +64,7 @@ public sealed class PostExRAssignFilter : IRequestHandler
 				addFilterSetRole(delta.FilterId, delta.MapRoleId.Value);
 				break;
 			case PostExRAssignOps.FilterAssignNumIncrease:
-				if (!(filter.Model.FilterSet.ContainsKey(delta.FilterId) && delta.MapRoleId.HasValue))
+				if (!filter.Model.FilterSet.ContainsKey(delta.FilterId))
 				{
 					IRequestHandler.SetStatusNG(response);
 					response.Close();
@@ -73,7 +73,7 @@ public sealed class PostExRAssignFilter : IRequestHandler
 				RoleAssignFilterModelUpdater.IncreaseFilterAssignNum(filter.Model, delta.FilterId);
 				break;
 			case PostExRAssignOps.FilterAssignNumDecrease:
-				if (!(filter.Model.FilterSet.ContainsKey(delta.FilterId) && delta.MapRoleId.HasValue))
+				if (!filter.Model.FilterSet.ContainsKey(delta.FilterId))
 				{
 					IRequestHandler.SetStatusNG(response);
 					response.Close();
