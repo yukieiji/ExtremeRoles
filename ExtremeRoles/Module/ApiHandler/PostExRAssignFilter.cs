@@ -14,6 +14,8 @@ public enum PostExRAssignOps
 {
 	FilterNewAdd,
 	FilterRoleAdd,
+	FilterAssignNumIncrese,
+	FilterAssignNumDecrese,
 	FilterRoleDelete,
 	FilterDelete,
 }
@@ -61,6 +63,24 @@ public sealed class PostExRAssignFilter : IRequestHandler
 				}
 				addFilterSetRole(delta.FilterId, delta.MapRoleId.Value);
 				break;
+			case PostExRAssignOps.FilterAssignNumIncrese:
+				if (!(filter.Model.FilterSet.ContainsKey(delta.FilterId) && delta.MapRoleId.HasValue))
+				{
+					IRequestHandler.SetStatusNG(response);
+					response.Close();
+					return;
+				}
+				RoleAssignFilterModelUpdater.IncreseFilterAssignNum(filter.Model, delta.FilterId);
+				break;
+			case PostExRAssignOps.FilterAssignNumDecrese:
+				if (!(filter.Model.FilterSet.ContainsKey(delta.FilterId) && delta.MapRoleId.HasValue))
+				{
+					IRequestHandler.SetStatusNG(response);
+					response.Close();
+					return;
+				}
+				RoleAssignFilterModelUpdater.DecreseFilterAssignNum(filter.Model, delta.FilterId);
+				break;
 			case PostExRAssignOps.FilterRoleDelete:
 				if (!(filter.Model.FilterSet.ContainsKey(delta.FilterId) && delta.MapRoleId.HasValue))
 				{
@@ -84,6 +104,8 @@ public sealed class PostExRAssignFilter : IRequestHandler
 				response.Close();
 				return;
 		}
+		
+		filter.UpdateUi();
 
 		IRequestHandler.SetStatusOK(response);
 		response.Close();

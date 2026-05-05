@@ -84,6 +84,14 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 		logger.LogInfo($" -------- Initialize Complete!! -------- ");
 	}
 
+	public void UpdateUi()
+	{
+		if (this.view != null)
+		{
+			this.view.ReSync();
+		}
+	}
+
 	public bool IsBlock(int intedRoleId) => this.filter.Any(x => x.IsBlock(intedRoleId));
 	public bool IsBlock(byte bytedCombRoleId) => this.filter.Any(
 		x => x.IsBlock(bytedCombRoleId));

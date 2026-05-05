@@ -8,14 +8,11 @@ using UnityEngine.Events;
 using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Helper;
-using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.RoleAssign.Update;
-using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -30,8 +27,8 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		private get => this.model;
 		set
 		{
-			this.initialize(value);
 			this.model = value;
+			this.ReSync();
 		}
 	}
 	[HideFromIl2Cpp]
@@ -178,14 +175,14 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 	}
 
 	[HideFromIl2Cpp]
-	private void initialize(RoleAssignFilterModel model)
+	public void ReSync()
 	{
 		if (this.layout != null)
 		{
 			this.layout.DestroyChildren();
 		}
 
-		foreach (var (filterId, filter) in model.FilterSet)
+		foreach (var (filterId, filter) in this.model.FilterSet)
 		{
 			var filterProp = this.createFilterSet(filterId);
 			var parent = filterProp.Layout.transform;
