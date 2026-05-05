@@ -162,13 +162,13 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		filterSet.IncreseButton.onClick.AddListener(
 			() =>
 			{
-				RoleAssignFilterModelUpdater.IncreseFilterAssignNum(this.Model, id);
+				RoleAssignFilterModelUpdater.IncreaseFilterAssignNum(this.Model, id);
 				filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
 			});
 		filterSet.DecreseButton.onClick.AddListener(
 			() =>
 			{
-				RoleAssignFilterModelUpdater.DecreseFilterAssignNum(this.Model, id);
+				RoleAssignFilterModelUpdater.DecreaseFilterAssignNum(this.Model, id);
 				filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
 			});
 		return filterSet;
