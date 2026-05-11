@@ -17,7 +17,7 @@ public enum ExtremeRoleId : int
 
 ## 2. ExtremeRoleManager への登録
 
-同じファイルの `NormalRole` 辞書に、IDとクラスのインスタンスを紐付けます。
+同じファイルの `NormalRole` 辞書に、IDとクラスのインスタンスを紐付けます。これにより、役職の基本情報の初期化やRPCハンドリングが可能になります。
 
 ```csharp
 public static class ExtremeRoleManager
