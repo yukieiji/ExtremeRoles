@@ -82,6 +82,4 @@ public bool Execute(byte targetId)
 
 ## 便利なインターフェース
 
-- `IInvincible`: キル耐性を持たせたい場合に実装します。
-- `IExiledAnimationOverride`: 追放時のメッセージやアニメーションを変更したい場合に実装します。
-- `IRoleReportHook`: 死体レポートや緊急会議ボタンに割り込みたい場合に実装します。
+AbilityHandler で活用できるインターフェースについては、[重要なメソッドとインターフェース](./08_interfaces_and_methods.md) を参照してください。

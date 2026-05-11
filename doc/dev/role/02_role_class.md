@@ -83,7 +83,4 @@ public MyRole() : base(
 
 ## 重要なメソッドとインターフェース
 
-- `RoleSpecificInit()`: 役職がアサインされた際の初期化処理を記述します。`AbilityHandler`や`StatusModel`の生成をここで行います。
-- `IRoleUpdate`: 毎フレームの更新処理が必要な場合に実装します。
-- `IRoleResetMeeting`: 会議開始/終了時にリセット処理が必要な場合に実装します。
-- `ExiledAction(PlayerControl rolePlayer)`: 追放された時の特殊な処理を記述します。
+利用可能な主要メソッドや拡張インターフェースについては、[重要なメソッドとインターフェース](./08_interfaces_and_methods.md) を参照してください。
