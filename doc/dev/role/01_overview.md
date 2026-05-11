@@ -35,10 +35,12 @@ ExtremeRoles/Roles/Solo/Crewmate/MyRole/
 
 ## 実装と登録の流れ
 
-1.  **Roleクラスの作成**: `SingleRoleBase` を継承してクラスを定義します。
-2.  **役職の登録**: `ExtremeRoleManager` にIDとクラスを登録し、`RoleSelector` の出現リストに追加します。
-3.  **翻訳の追加**: リソースファイル（`.resx`）に名称や説明を追加します。
-4.  **オプションと能力の実装**: `OptionFactory` で設定項目を作り、`AbilityHandler` でロジックを書きます。
-5.  **状態管理の実装**: `StatusModel` で必要なデータを定義します。
+1.  **Roleクラスの作成**: [02_role_class.md](./02_role_class.md)
+2.  **オプションの実装**: [03_option_factory.md](./03_option_factory.md)
+3.  **能力の実装**: [04_ability_handler.md](./04_ability_handler.md)
+4.  **状態管理の実装**: [05_status_model.md](./05_status_model.md)
+5.  **インターフェースの活用**: [06_interfaces_and_methods.md](./06_interfaces_and_methods.md)
+6.  **役職の登録**: [07_registration_and_selector.md](./07_registration_and_selector.md)
+7.  **翻訳の追加**: [08_translation.md](./08_translation.md)
 
 各ステップの詳細は、番号順の各ドキュメントを参照してください。

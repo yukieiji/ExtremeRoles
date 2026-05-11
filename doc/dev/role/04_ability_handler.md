@@ -82,4 +82,4 @@ public bool Execute(byte targetId)
 
 ## 便利なインターフェース
 
-AbilityHandler で活用できるインターフェースについては、[重要なメソッドとインターフェース](./08_interfaces_and_methods.md) を参照してください。
+AbilityHandler で活用できるインターフェースについては、[重要なメソッドとインターフェース](./06_interfaces_and_methods.md) を参照してください。
