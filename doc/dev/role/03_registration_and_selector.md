@@ -17,7 +17,7 @@ public enum ExtremeRoleId : int
 
 ## 2. ExtremeRoleManager への登録
 
-同じファイルの `NormalRole` 辞書に、IDとクラスのインスタンスを紐付けます。これにより、役職の基本情報の初期化やRPCハンドリングが可能になります。
+同じファイルの `NormalRole` 辞書に、IDとクラスのインスタンスを紐付けます。
 
 ```csharp
 public static class ExtremeRoleManager
@@ -47,7 +47,7 @@ private static ExtremeRoleId[] getUseNormalRoleId() =>
 ```
 
 ### かくれんぼ（HideNSeek）モード
-かくれんぼモードでも出現させたい場合は、 `ExtremeRoles/GameMode/RoleSelector/HideNSeekGameModeRoleSelector.cs` の `getUseNormalRoleId()` にも追加します。
+かくれんぼモードでも出現させたい場合は、 `ExtremeRoles/GameMode/RoleSelector/HideNSeekGameModeRoleSelector.cs` の `getUseNormalId()` にも追加します。
 
 ## 4. (オプション) 勝敗判定の登録
 

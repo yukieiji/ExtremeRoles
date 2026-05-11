@@ -4,7 +4,7 @@
 
 ## 基本構造
 
-`IAbility` インターフェースを実装します。必要に応じて `IInvincible` (無敵) や `IExiledAnimationOverride` (追放アニメーションの上書き) などのインターフェースも組み合わせて実装します。
+`IAbility` インターフェースを実装します。
 
 ```csharp
 using ExtremeRoles.Roles.API.Interface.Ability;

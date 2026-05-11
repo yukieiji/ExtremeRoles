@@ -49,7 +49,7 @@ public sealed class MyRole : SingleRoleBase, IRoleUpdate
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        // オプションの作成（別項で詳述）
+        // オプションの作成
     }
 }
 ```
