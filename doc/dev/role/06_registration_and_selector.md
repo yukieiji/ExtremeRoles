@@ -1,10 +1,10 @@
-# 役職の登録と RoleSelector
+# 役職の登録（Registration / Selector）
 
-作成した役職クラスをMODに認識させ、ゲームで利用可能にするための手順と、役職のアサイン（割り当て）の仕組みについて説明します。
+作成した役職クラスをMODに登録し、ゲーム内で選択可能にするための手順を説明します。
 
 ## 1. 役職IDの追加
 
-`ExtremeRoles/Roles/ExtremeRoleManager.cs` 内の `ExtremeRoleId` 列挙型に、新しい役職のIDを追加します。追加する場所（陣営ごとのブロック）に注意してください。
+`ExtremeRoles/Roles/ExtremeRoleManager.cs` 内の `ExtremeRoleId` 列挙型に、新しい役職のIDを追加します。
 
 ```csharp
 public enum ExtremeRoleId : int
@@ -17,7 +17,7 @@ public enum ExtremeRoleId : int
 
 ## 2. ExtremeRoleManager への登録
 
-同じファイルの `NormalRole` 辞書に、IDとクラスのインスタンスを紐付けます。
+同じファイルの `NormalRole` 辞書に、IDとクラスのインスタンスを紐付けます。これにより、役職の基本情報の初期化やRPCハンドリングが可能になります。
 
 ```csharp
 public static class ExtremeRoleManager
@@ -31,22 +31,23 @@ public static class ExtremeRoleManager
 }
 ```
 
-## 3. IRoleSelector によるアサインの仕組み
+## 3. Selector への登録（出現リストへの追加）
 
-`IRoleSelector` は、ゲーム開始時に各プレイヤーにどの役職を割り当てるかを決定するインターフェースです。
+役職をゲームモードの抽選対象に含めるには、各種 `RoleSelector` に登録する必要があります。
 
-- **Classicモード**: `ClassicGameModeRoleSelector` が使用されます。
-- **かくれんぼモード**: `HideNSeekGameModeRoleSelector` が使用されます。
+### Classicモード
+`ExtremeRoles/GameMode/RoleSelector/ClassicGameModeRoleSelector.cs` の `getUseNormalRoleId()` メソッド内の配列に、作成した `ExtremeRoleId` を追加します。
 
-役職を `ExtremeRoleManager.NormalRole` に登録すると、標準的な役職アサインロジックの対象となります。
+```csharp
+private static ExtremeRoleId[] getUseNormalRoleId() =>
+[
+    // ... 既存の役職 ...
+    ExtremeRoleId.MyRole,
+];
+```
 
-### 役職のアサインフロー
-
-1.  ホストがゲームを開始する。
-2.  `ExtremeGameModeManager` が現在の設定に基づき、適切な `IRoleSelector` を選択する。
-3.  `RoleSelector` が役職の重み付けや設定を確認し、各プレイヤーに `ExtremeRoleId` を割り当てる。
-4.  RPCを通じて全クライアントに割り当て情報が送信される。
-5.  各クライアントで `ExtremeRoleManager.SetPlyerIdToSingleRoleId` が呼ばれ、役職クラスのインスタンスが生成・初期化される。
+### かくれんぼ（HideNSeek）モード
+かくれんぼモードでも出現させたい場合は、 `ExtremeRoles/GameMode/RoleSelector/HideNSeekGameModeRoleSelector.cs` の `getUseNormalRoleId()` にも追加します。
 
 ## 4. (オプション) 勝敗判定の登録
 
