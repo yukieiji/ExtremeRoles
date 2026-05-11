@@ -37,12 +37,6 @@ protected override void CreateSpecificOption(
 }
 ```
 
-### 主な作成メソッド
-- `CreateIntOption`: 整数値の選択
-- `CreateFloatOption`: 浮動小数値の選択
-- `CreateBoolOption`: ON/OFFの切り替え
-- `CreateSelectionOption`: 配列や列挙型からの選択
-
 ## オプション値の取得
 
 `RoleSpecificInit` などで、`Loader` を通じて設定値を取得します。
