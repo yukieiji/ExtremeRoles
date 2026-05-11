@@ -1,0 +1,87 @@
+# 能力（Ability）の実装
+
+`AbilityHandler` は役職の能動的な「能力」やロジックを管理するクラスです。
+
+## 基本構造
+
+`IAbility` インターフェースを実装します。必要に応じて `IInvincible` (無敵) や `IExiledAnimationOverride` (追放アニメーションの上書き) などのインターフェースも組み合わせて実装します。
+
+```csharp
+using ExtremeRoles.Roles.API.Interface.Ability;
+
+namespace ExtremeRoles.Roles.Solo.Crewmate.MyRole;
+
+public sealed class MyRoleAbilityHandler(MyRoleStatusModel status) : IAbility
+{
+    private readonly MyRoleStatusModel status = status;
+
+    public void Update(PlayerControl rolePlayer)
+    {
+        // 毎フレームのロジック（Role.Updateから呼び出される想定）
+    }
+
+    public void Reset()
+    {
+        // リセット処理
+    }
+}
+```
+
+## ボタン能力の実装
+
+プレイヤーがボタンを押して発動する能力を作るには、Roleクラスで `IRoleAutoBuildAbility` インターフェースを実装します。
+
+### 1. ボタンの生成 (Roleクラス)
+
+```csharp
+public sealed class MyRole : SingleRoleBase, IRoleAutoBuildAbility
+{
+    public ExtremeAbilityButton? Button { get; set; }
+
+    public void CreateAbility()
+    {
+        // ボタンの生成。アイコン画像や翻訳キーを指定します。
+        this.CreateNormalAbilityButton(
+            "myRoleAbilityKey",
+            UnityObjectLoader.LoadFromResources(ExtremeRoleId.MyRole));
+    }
+
+    // ボタンが表示されるかどうかの判定
+    public bool IsAbilityUse()
+    {
+        // クールタイム中ではないか、対象が範囲内にいるか等を判定
+        return IRoleAbility.IsCommonUse();
+    }
+
+    // ボタンが押された時の実行処理
+    public bool UseAbility()
+    {
+        // 能力の実行ロジック
+        return true;
+    }
+}
+```
+
+## ロジックの分離
+
+最新の設計では、Roleクラスの `UseAbility` から `AbilityHandler` のメソッドを呼び出すようにし、Roleクラス自体には複雑なロジックを置かないようにします。
+
+```csharp
+// Role.cs
+public bool UseAbility()
+{
+    return this.ability?.Execute(this.targetPlayer) ?? false;
+}
+
+// AbilityHandler.cs
+public bool Execute(byte targetId)
+{
+    // 実際の処理
+}
+```
+
+## 便利なインターフェース
+
+- `IInvincible`: キル耐性を持たせたい場合に実装します。
+- `IExiledAnimationOverride`: 追放時のメッセージやアニメーションを変更したい場合に実装します。
+- `IRoleReportHook`: 死体レポートや緊急会議ボタンに割り込みたい場合に実装します。
