@@ -33,7 +33,7 @@ public Color GetTargetRoleSeeColor(
     byte targetPlayerId
 )
 {
-    return this.visual?.GetTargetRoleSeeColor(targetRole, targetPlayerId) ?? Color.white;
+    return this.visual?.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 }
 
 // Visual.cs
