@@ -1,10 +1,10 @@
 # 能力（Ability）の実装
 
-`AbilityHandler` は役職の能動的な「能力」やロジックを管理するクラスです。
+`AbilityHandler` は役職の能動的な「能力」やロジックを管理するクラスとして分離すべきです
 
 ## 基本構造
 
-`IAbility` インターフェースを実装します。
+`IAbility` インターフェースを実装します。`IAbility` はアクセス用のプレースホルダーインターフェースです
 
 ```csharp
 using ExtremeRoles.Roles.API.Interface.Ability;
@@ -64,7 +64,7 @@ public sealed class MyRole : SingleRoleBase, IRoleAutoBuildAbility
 
 ## ロジックの分離
 
-最新の設計では、Roleクラスの `UseAbility` から `AbilityHandler` のメソッドを呼び出すようにし、Roleクラス自体には複雑なロジックを置かないようにします。
+最新の設計では、Roleクラスの `UseAbility` などから `AbilityHandler` のメソッドを呼び出すようにし、Roleクラス自体には複雑なロジックを置かないようにします。
 
 ```csharp
 // Role.cs

@@ -48,7 +48,3 @@ private static ExtremeRoleId[] getUseNormalRoleId() =>
 
 ### かくれんぼ（HideNSeek）モード
 かくれんぼモードでも出現させたい場合は、 `ExtremeRoles/GameMode/RoleSelector/HideNSeekGameModeRoleSelector.cs` の `getUseNormalId()` にも追加します。
-
-## 4. (オプション) 勝敗判定の登録
-
-特殊な勝利条件を持つ役職の場合、`ExtremeRoleManager.SpecialWinCheckRole` にIDを追加し、別途 `WinChecker` を実装する必要があります。

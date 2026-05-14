@@ -4,7 +4,7 @@
 
 ## 基本構造
 
-`IStatusModel` インターフェースを実装します。
+`IStatusModel` インターフェースを実装します。`IStatusModel` はアクセス用のプレースホルダーインターフェースです
 
 ```csharp
 using ExtremeRoles.Roles.API.Interface.Status;

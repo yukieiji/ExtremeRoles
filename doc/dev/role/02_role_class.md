@@ -20,6 +20,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate.MyRole;
 public sealed class MyRole : SingleRoleBase, IRoleUpdate
 {
     public override IStatusModel? Status => status;
+    public override IVisual? Visual => visual;
+    public override IAbility? AbilityClass => ability;
+
+    private MyRoleVisual? visual;
     private MyRoleStatusModel? status;
     private MyRoleAbilityHandler? ability;
 
@@ -43,7 +47,9 @@ public sealed class MyRole : SingleRoleBase, IRoleUpdate
 
         // AbilityHandlerの初期化
         this.ability = new MyRoleAbilityHandler(this.status);
-        this.AbilityClass = this.ability;
+
+        // visualモデルの初期化
+        this.visual = new MyRoleVisual(this.status);
     }
 
     protected override void CreateSpecificOption(
