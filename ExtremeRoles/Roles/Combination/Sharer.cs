@@ -88,7 +88,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 		OptionTab.CombinationTab)
     { }
 
-    public void HookMuderPlayer(
+    public void HookMurderPlayer(
         PlayerControl source,
         PlayerControl target)
     {

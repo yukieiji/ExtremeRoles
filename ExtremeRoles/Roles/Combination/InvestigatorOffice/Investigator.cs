@@ -289,7 +289,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 		this.searchInfo.AllTarget.Add(crime, reporter.PlayerId);
 	}
 
-	public void HookMuderPlayer(
+	public void HookMurderPlayer(
 		PlayerControl source, PlayerControl target)
 	{
 		this.status?.AddCrime(source, target);
