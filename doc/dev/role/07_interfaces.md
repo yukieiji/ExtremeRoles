@@ -56,11 +56,6 @@
 - `Action CreateAbilityAction(PlayerVoteArea instance)`: ボタンが押された時の動作を返します。
 - `Sprite AbilityImage { get; }`: ボタンのアイコン画像。
 
-#### `IRoleHookVoteEnd`
-投票結果が確定した直後に呼ばれます。
-- `void HookVoteEnd(MeetingHud instance, NetworkedPlayerInfo rolePlayer, IReadOnlyDictionary<byte, int> voteIndex)`
-  - `voteIndex`: 各プレイヤーが得た最終的な票数。
-
 ---
 
 ### フック・割り込み
@@ -77,9 +72,19 @@
 - `void OnEndKill()`
 
 #### `IRoleMurderPlayerHook`
-プレイヤーが殺害される瞬間の処理に割り込みます（キルボタン押下時ではなく、実際の死亡処理時）。
-- `void HookMuderPlayer(PlayerControl source, PlayerControl target)`
+プレイヤーが殺害される瞬間の処理（キルボタン押下時ではなく、実際の死亡処理時）。
+- `void HookMurderPlayer(PlayerControl source, PlayerControl target)`
   - `source`: 加害者, `target`: 被害者。
+
+#### `IRoleHookVoteEnd`
+投票結果が確定した直後に呼ばれます。
+- `void HookVoteEnd(MeetingHud instance, NetworkedPlayerInfo rolePlayer, IReadOnlyDictionary<byte, int> voteIndex)`
+  - `voteIndex`: 各プレイヤーが得た最終的な票数。
+
+#### `IRoleReviveHook`
+誰かが組成した瞬間の処理
+- `void HookRevive(PlayerControl revivePlayer)`: 誰かが蘇生した時に呼ばれるフック。
+
 
 ---
 
@@ -95,10 +100,9 @@
 - `T NoneAwakeRole { get; }`: 未覚醒状態のID。
 - `string GetFakeOptionString()`: オプション画面での表示。
 
-#### `IRoleOnRevive` / `IRoleReviveHook`
+#### `IRoleOnRevive`
 蘇生に関する処理を実装します。
 - `void ReviveAction(PlayerControl player)`: 自身が蘇生した時の処理。
-- `void HookRevive(PlayerControl revivePlayer)`: 誰かが蘇生した時に呼ばれるフック。
 
 #### `IRoleFakeIntro`
 イントロ画面で別のチームとして表示させたい場合に実装します。
@@ -113,7 +117,7 @@
 ## 能力・ロジック (AbilityHandler) 向け
 
 #### `IKilledFrom`
-キルボタンが押された瞬間の判定を行います。
+キルボタンが押された瞬間の判定を行います。キルボタンを押したプレイヤーから呼ばれます
 - `bool TryKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)`
   - `true` を返すと、通常のキル処理を続行（殺害を許可）します。
 

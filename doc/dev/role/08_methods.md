@@ -26,10 +26,6 @@
 
 ## 勝利条件・判定
 
-#### `bool IsTeamsWin()`
-自身のチームが勝利したかどうかを判定します。
-- **戻り値**: チームが勝利条件を満たしていれば `true`。
-
 #### `bool IsSameTeam(SingleRoleBase targetRole)`
 対象の役職と同じチームかどうかを判定します。
 - `targetRole`: 比較対象の役職。
@@ -62,7 +58,7 @@
 
 #### `Color GetNameColor(bool isTruthColor = false)`
 プレイヤー名の色を取得します。
-- `isTruthColor`: 真実の色を要求されているか（偽装を考慮するか）。
+- `isTruthColor`: この役職のプレイヤー等が死亡時等に`true`になります。覚醒役職等で色を隠したい時に`override`して分岐を実装します
 - **戻り値**: 表示する `Color`。
 
 #### `Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)`
@@ -92,30 +88,29 @@
 - **用途**: 現在の残り回数やカウントなどを動的に表示したい場合にオーバーライドします。
 
 #### `bool IsBlockShowMeetingRoleInfo()` / `IsBlockShowPlayingRoleInfo()`
-会議中やプレイ中に役職情報を表示するのを制限するかどうか。
+死亡時に会議中やプレイ中に役職情報を表示するのを制限するかどうか。
 - **戻り値**: `true` で非表示。
 
 ---
 
 ## オプション設定
 
-#### `AutoParentSetOptionCategoryFactory CreateSpawnOption()` (abstract)
-役職の出現率や人数のオプションを生成します。
-
 #### `void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)` (abstract)
 役職固有のオプション（例：クールタイム、使用回数など）を生成します。
+`override`して役職特有のオプション作成します
 
 #### `void CreateVisionOption(AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)`
 視界に関するオプションを生成します。
+基本的には使用しないですが、状態に応じて視界に関するオプションを追加したい時に使用します
 
 ---
 
 ## 実装のポイント
 
-`SingleRoleBase` は多くの `virtual` プロパティ（`CanUseAdmin`, `UseVent` など）を持っています。これらをコンストラクタや `RoleSpecificInit` で適切に設定することで、役職の基本的な能力を定義できます。
+`SingleRoleBase` は多くの は多くのフィールドやプロパティ（`CanUseAdmin`, `UseVent`など）を持っています。これらを `RoleSpecificInit` で適切に設定することで、役職の基本的な能力を定義できます。
 
 ```csharp
-public MyRole(RoleArgs arg) : base(arg) {
+protected override void RoleSpecificInit() {
     this.CanKill = true;
     this.UseVent = true;
     this.HasTask = false;
