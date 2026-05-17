@@ -111,8 +111,6 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 		return role;
     }
 
-    public virtual bool IsTeamsWin() => this.IsWin;
-
     protected override void CommonInit()
     {
         var baseOption = GameOptionsManager.Instance.CurrentGameOptions;

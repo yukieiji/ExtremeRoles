@@ -96,7 +96,7 @@ public sealed class ServantRole :
 		Button.OnMeetingEnd();
 	}
 
-	public void HookMuderPlayer(
+	public void HookMurderPlayer(
 		PlayerControl source, PlayerControl target)
 	{
 

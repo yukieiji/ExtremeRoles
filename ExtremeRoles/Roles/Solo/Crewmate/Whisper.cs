@@ -71,7 +71,7 @@ public sealed class Whisper :
         }
     }
 
-    public void HookMuderPlayer(
+    public void HookMurderPlayer(
         PlayerControl source,
         PlayerControl target)
     {

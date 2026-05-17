@@ -286,7 +286,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		this.reviver.Update();
 	}
 
-	public void HookMuderPlayer(PlayerControl source, PlayerControl target)
+	public void HookMurderPlayer(PlayerControl source, PlayerControl target)
 	{
 		if (!(
 				ExtremeRoleManager.TryGetRole(source.PlayerId, out var role) &&
