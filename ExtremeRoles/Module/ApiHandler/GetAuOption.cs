@@ -46,12 +46,13 @@ public sealed class GetAuOption : IRequestHandler
 		var curGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
 		var tr = TranslationController.Instance;
 
+		string mapTrans = tr.GetString(StringNames.GameMapName);
 		List<AuOptionCategoryDto> result = [
 			new AuOptionCategoryDto(
-				tr.GetString(StringNames.GameMapName),
+				mapTrans,
 				[
 					new AuOptionDto(
-						"map", "", curGameOptions.GetByte(ByteOptionNames.MapId),
+						mapTrans, "", curGameOptions.GetByte(ByteOptionNames.MapId),
 						new AuOptionInfo(OptionValueType.Byte, (int)ByteOptionNames.MapId), [ 0, 1, 2, 4, 5 ]
 					)
 				]
