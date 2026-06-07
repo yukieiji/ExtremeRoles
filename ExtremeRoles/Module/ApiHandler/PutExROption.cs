@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.Interface;
 
@@ -12,7 +12,7 @@ namespace ExtremeRoles.Module.ApiHandler;
 
 public readonly record struct ExROptionPutRequest(int TabId, int CategoryId, int OptionId, int Selection);
 public readonly record struct CategoryOptionDto(int Id, IReadOnlyList<ExROptionDto> Options);
-public readonly record struct UpdatedOptions(ExRCategoryDto? UpdatedCategory, IReadOnlyList<CategoryOptionDto> ChainUpdatedOption);
+public readonly record struct UpdatedOptions(ExRCategoryDto? UpdatedCategory, IReadOnlyList<CategoryOptionDto> ChainUpdatedOption, ExRCategoryDto? ChainUpdateCategory = null);
 
 public sealed class PutExROption : IRequestHandler
 {
@@ -63,6 +63,17 @@ public sealed class PutExROption : IRequestHandler
 
 		recordResult.Result.Remove(category.Id);
 
+		ExRCategoryDto? liberalCategoryDto = null;
+
+		if (categoryId == (int)SpawnOptionCategory.RoleSpawnCategory && 
+			(optionId == (int)RoleSpawnOption.MinLiberal || optionId == (int)RoleSpawnOption.MaxLiberal) &&
+			OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.LiberalSetting, out var liberalCategory))
+		{
+			// リベラルのスポーン数を変更した場合、リベラル設定全体が更新されるため、リベラル設定のオプションも更新する
+			recordResult.Result.Remove(liberalCategory.Id);
+			liberalCategoryDto = GetExrOption.CreateCategoryDto(liberalCategory);
+		}
+
 		IRequestHandler.SetStatusOK(response);
 		IRequestHandler.Write(response, new UpdatedOptions(
 			updatedCategory,
@@ -72,7 +83,8 @@ public sealed class PutExROption : IRequestHandler
 				var options = x.Value.Select(x => GetExrOption.CreateOptionDto(x, registed));
 
 				return new CategoryOptionDto(x.Key, options.ToList());
-			}).ToList())
+			}).ToList(),
+			ChainUpdateCategory: liberalCategoryDto)
 		);
 	}
 }
