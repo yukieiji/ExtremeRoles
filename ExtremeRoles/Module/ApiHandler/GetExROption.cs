@@ -4,6 +4,7 @@ using System.Net;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.Interface;
+using UnityEngine;
 
 namespace ExtremeRoles.Module.ApiHandler;
 
@@ -18,7 +19,7 @@ public readonly record struct ExROptionDto(
 	IOptionRangeMeta RangeMeta,
 	IReadOnlyList<ExROptionDto> Childs);
 
-public readonly record struct ExRCategoryDto(int Id, string Name, IReadOnlyList<ExROptionDto> Options);
+public readonly record struct ExRCategoryDto(int Id, string Name, string? ColorCode, IReadOnlyList<ExROptionDto> Options);
 public readonly record struct ExRTabDto(OptionTab Id, string Name, IReadOnlyList<ExRCategoryDto> Categories);
 
 public sealed class GetExrOption : IRequestHandler
@@ -68,7 +69,8 @@ public sealed class GetExrOption : IRequestHandler
 			var dto = CreateOptionDto(option, idHash);
 			options.Add(dto);
 		}
-		var categoryDto = new ExRCategoryDto(category.Id, category.TransedName, options);
+		string? colorCode = category.Color.HasValue ? ColorUtility.ToHtmlStringRGBA(category.Color.Value) : null;
+		var categoryDto = new ExRCategoryDto(category.Id, category.TransedName, colorCode, options);
 		return categoryDto;
 	}
 
