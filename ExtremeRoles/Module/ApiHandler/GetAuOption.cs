@@ -231,7 +231,7 @@ public sealed class GetAuOption : IRequestHandler
 	private static string getSuffix(NumberSuffixes suffixes)
 		=> suffixes switch {
 			NumberSuffixes.Multiplier => "x",
-			NumberSuffixes.Seconds => "second",
+			NumberSuffixes.Seconds => Tr.GetString(OptionUnit.Second.ToString()),
 			_ => "",
 		};
 }
