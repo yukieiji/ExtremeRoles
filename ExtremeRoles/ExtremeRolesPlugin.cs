@@ -122,6 +122,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		ApiServer.Register("/au/translation/batch/", HttpMethod.Post, new GetTranslationBatch());
 		// パラメータを渡せないのでGET
 		ApiServer.Register("/au/translation/batch/optionunit/", HttpMethod.Get, new GetTranslationOptionUnit());
+		ApiServer.Register("/au/translation/batch/role/", HttpMethod.Get, new GetTranslationRole());
 		ApiServer.Register(PostChat.Path, HttpMethod.Post, new PostChat());
 		ApiServer.Register(ChatWebUI.Path, HttpMethod.Get, new OpenChatWebUi());
 		ApiServer.Register(ConectGame.Path, HttpMethod.Get, new ConectGame());
