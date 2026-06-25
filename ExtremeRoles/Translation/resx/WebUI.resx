@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SYNC_BUTTON_TITLE" xml:space="preserve">
+    <value>同期</value>
+  </data>
+  <data name="IMPORT_BUTTON_TITLE" xml:space="preserve">
+    <value>CSVインポート</value>
+  </data>
+  <data name="IMPORT_CONFIRM_TITLE" xml:space="preserve">
+    <value>インポートの確認</value>
+  </data>
+  <data name="IMPORT_CONFIRM_MESSAGE" xml:space="preserve">
+    <value>CSVファイルをインポートして設定を上書きしますか？</value>
+  </data>
+  <data name="EXPORT_CSV_LABEL" xml:space="preserve">
+    <value>エクスポート</value>
+  </data>
+  <data name="EXPORT_CSV_TITLE" xml:space="preserve">
+    <value>CSVとしてエクスポート</value>
+  </data>
+  <data name="CANCEL" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="VIEWER_ROW_TITLE" xml:space="preserve">
+    <value>ダブルクリックで設定場所へ移動</value>
+  </data>
+  <data name="ROLE_SPAWN_RATE" xml:space="preserve">
+    <value>スポーンレート</value>
+  </data>
+  <data name="ROLE_SPAWN_COUNT" xml:space="preserve">
+    <value>数</value>
+  </data>
+  <data name="CLOSE" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="CONFIRM" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="PRESET_SWITCH_TITLE" xml:space="preserve">
+    <value>プリセットの切り替え</value>
+  </data>
+  <data name="PRESET_SWITCH_MESSAGE" xml:space="preserve">
+    <value>プリセットを「{0}」から「{1}」に切り替えます</value>
+  </data>
+  <data name="PRESET_INPUT_PLACEHOLDER" xml:space="preserve">
+    <value>プリセット名を入力...</value>
+  </data>
+  <data name="AU_SETTINGS_TITLE" xml:space="preserve">
+    <value>AmongUsの設定</value>
+  </data>
+  <data name="EXR_SETTINGS_TITLE" xml:space="preserve">
+    <value>ExRの設定</value>
+  </data>
+  <data name="EXR_CONTENT_TEMP" xml:space="preserve">
+    <value>ExRの設定コンテンツ</value>
+  </data>
+  <data name="ROLE_FILTER_ADD_TITLE" xml:space="preserve">
+    <value>フィルター追加: 役職の選択</value>
+  </data>
+  <data name="ROLE_FILTER_ADD_BUTTON" xml:space="preserve">
+    <value>フィルターを追加</value>
+  </data>
+  <data name="ROLE_FILTER_UNKNOWN_ROLE" xml:space="preserve">
+    <value>Unknown Role</value>
+  </data>
+  <data name="ROLE_FILTER_ROLE_ADD_TITLE" xml:space="preserve">
+    <value>役職の追加</value>
+  </data>
+  <data name="ROLE_FILTER_ASSIGN_NUM_LABEL" xml:space="preserve">
+    <value>AssignNum: {0}</value>
+  </data>
+  <data name="ROLE_FILTER_ROLE_ADD_BUTTON" xml:space="preserve">
+    <value>役職を追加</value>
+  </data>
+  <data name="ROLE_FILTER_EMPTY_MESSAGE" xml:space="preserve">
+    <value>フィルターがありません。「フィルターを追加」ボタンから作成してください。</value>
+  </data>
+  <data name="ROLE_FILTER_DELETE_CONFIRM_TITLE" xml:space="preserve">
+    <value>フィルターの削除</value>
+  </data>
+  <data name="ROLE_FILTER_DELETE_CONFIRM_MESSAGE" xml:space="preserve">
+    <value>このフィルターを削除してもよろしいですか？</value>
+  </data>
+  <data name="ROLE_FILTER_ROLE_DELETE_CONFIRM_TITLE" xml:space="preserve">
+    <value>役職の削除</value>
+  </data>
+  <data name="ROLE_FILTER_ROLE_DELETE_CONFIRM_MESSAGE" xml:space="preserve">
+    <value>役職「{0}」をフィルターから削除してもよろしいですか？</value>
+  </data>
+  <data name="ROLE_FILTER_NO_ROLES" xml:space="preserve">
+    <value>No roles selected</value>
+  </data>
+  <data name="ROLE_SELECT_SEARCH_PLACEHOLDER" xml:space="preserve">
+    <value>役職を検索...</value>
+  </data>
+  <data name="OPTION_SEARCH_PLACEHOLDER" xml:space="preserve">
+    <value>オプションを検索...</value>
+  </data>
+  <data name="ROLE_SELECT_DEFAULT_TITLE" xml:space="preserve">
+    <value>役職の選択</value>
+  </data>
+  <data name="CSV_FILE_DESCRIPTION" xml:space="preserve">
+    <value>CSV File</value>
+  </data>
+  <data name="SYNCHRONIZING" xml:space="preserve">
+    <value>Synchronizing...</value>
+  </data>
+  <data name="RIGHT_PANEL_TITLE" xml:space="preserve">
+    <value>Right Panel</value>
+  </data>
+  <data name="AU_OPTIONS_TITLE" xml:space="preserve">
+    <value>Among Us</value>
+  </data>
+  <data name="SETTINGS_TITLE" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="ROLE_FILTER_SHORT_LABEL" xml:space="preserve">
+    <value>R</value>
+  </data>
+  <data name="ON" xml:space="preserve">
+    <value>ON</value>
+  </data>
+  <data name="OFF" xml:space="preserve">
+    <value>OFF</value>
+  </data>
+  <data name="RANDOM_MAP_LABEL" xml:space="preserve">
+    <value>ランダム</value>
+  </data>
+  <data name="NOT_FOUND" xml:space="preserve">
+    <value>見つかりませんでした</value>
+  </data>
+  <data name="SETTINGS_UNDER_PREPARATION" xml:space="preserve">
+    <value>設定項目は現在準備中です。</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="SEARCH_NO_RESULTS" xml:space="preserve">
+    <value>Search No Results</value>
+  </data>
+  <data name="CLIPBOARD_SETTING_TITLE" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="CLIPBOARD_FACTION_COUNTS" xml:space="preserve">
+    <value>陣営数</value>
+  </data>
+  <data name="CLIPBOARD_ROLES" xml:space="preserve">
+    <value>役職</value>
+  </data>
+  <data name="CLIPBOARD_CREW" xml:space="preserve">
+    <value>クルー</value>
+  </data>
+  <data name="CLIPBOARD_IMPOSTOR" xml:space="preserve">
+    <value>インポスター</value>
+  </data>
+  <data name="CLIPBOARD_NEUTRAL" xml:space="preserve">
+    <value>ニュートラル</value>
+  </data>
+  <data name="CLIPBOARD_LIBERAL" xml:space="preserve">
+    <value>リベラル</value>
+  </data>
+  <data name="CLIPBOARD_DETAILED_SETTINGS" xml:space="preserve">
+    <value>詳細設定</value>
+  </data>
+  <data name="CLIPBOARD_OTHERS" xml:space="preserve">
+    <value>その他</value>
+  </data>
+  <data name="CLIPBOARD_OTHERS_NOTE" xml:space="preserve">
+    <value>※ : 何かあればここに書くとよろし</value>
+  </data>
+  <data name="CLIPBOARD_VANILLA_SUFFIX" xml:space="preserve">
+    <value>※バニラ</value>
+  </data>
+  <data name="CLIPBOARD_COPY_BUTTON" xml:space="preserve">
+    <value>クリップボードにコピー</value>
+  </data>
+  <data name="CLIPBOARD_COPY_SUCCESS" xml:space="preserve">
+    <value>設定をクリップボードにコピーしました</value>
+  </data>
+</root>
