@@ -25,7 +25,8 @@ public sealed class GetOptionCsv : IRequestHandler
 			GameManager.Instance == null ||
 			GameOptionsManager.Instance == null ||
 			GameOptionsManager.Instance.currentGameOptions == null ||
-			GameOptionsManager.Instance.gameOptionsFactory == null)
+			GameOptionsManager.Instance.gameOptionsFactory == null ||
+			!AmongUsClient.Instance.AmHost)
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Close();
@@ -35,6 +36,7 @@ public sealed class GetOptionCsv : IRequestHandler
 		using var stream = new MemoryStream();
 		using var writer = new StreamWriter(stream, encoding: Encoding.UTF8);
 		CustomOptionCsvProcessor.ExportToStream(writer);
+		writer.Flush();
 		string csvStr = Encoding.UTF8.GetString(stream.ToArray());
 
 		IRequestHandler.SetStatusOK(response);

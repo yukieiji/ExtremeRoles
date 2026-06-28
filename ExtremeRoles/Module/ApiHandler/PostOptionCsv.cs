@@ -25,7 +25,8 @@ public sealed class PostOptionCsv : IRequestHandler
 			GameManager.Instance == null ||
 			GameOptionsManager.Instance == null ||
 			GameOptionsManager.Instance.currentGameOptions == null ||
-			GameOptionsManager.Instance.gameOptionsFactory == null)
+			GameOptionsManager.Instance.gameOptionsFactory == null ||
+			!AmongUsClient.Instance.AmHost)
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Close();
