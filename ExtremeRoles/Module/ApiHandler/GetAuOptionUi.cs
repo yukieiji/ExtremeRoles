@@ -10,6 +10,8 @@ namespace ExtremeRoles.Module.ApiHandler;
 
 public sealed class GetAuOptionUi : IRequestHandler
 {
+	public const string Path = "/au/option/ui/";
+
 	public Action<HttpListenerContext> Request => this.requestAction;
 
 	private void requestAction(HttpListenerContext context)
