@@ -55,13 +55,14 @@ public sealed class PostExRAssignFilter : IRequestHandler
 				RoleAssignFilterModelUpdater.AddFilter(filter.Model, delta.FilterId);
 				break;
 			case PostExRAssignOps.FilterRoleAdd:
-				if (!(filter.Model.FilterSet.ContainsKey(delta.FilterId) && delta.MapRoleId.HasValue))
+				if (!(filter.Model.FilterSet.ContainsKey(delta.FilterId) && 
+					elta.MapRoleId.HasValue && 
+					tryAddFilterSetRole(delta.FilterId, delta.MapRoleId.Value)))
 				{
 					IRequestHandler.SetStatusNG(response);
 					response.Close();
 					return;
 				}
-				addFilterSetRole(delta.FilterId, delta.MapRoleId.Value);
 				break;
 			case PostExRAssignOps.FilterAssignNumIncrease:
 				if (!filter.Model.FilterSet.ContainsKey(delta.FilterId))
@@ -110,21 +111,25 @@ public sealed class PostExRAssignFilter : IRequestHandler
 		IRequestHandler.SetStatusOK(response);
 		response.Close();
 	}
-	private static void addFilterSetRole(Guid filterId, int id)
+	private static bool tryAddFilterSetRole(Guid filterId, int id)
 	{
 		var model = RoleAssignFilter.Instance.Model;
 
 		if (model.NormalRole.TryGetValue(id, out var roleId))
 		{
-			RoleAssignFilterModelUpdater.AddRoleData(model, filterId, id, roleId);
+			return RoleAssignFilterModelUpdater.AddRoleData(model, filterId, id, roleId);
 		}
 		else if (model.CombRole.TryGetValue(id, out var combId))
 		{
-			RoleAssignFilterModelUpdater.AddRoleData(model, filterId, id, combId);
+			return RoleAssignFilterModelUpdater.AddRoleData(model, filterId, id, combId);
 		}
 		else if (model.GhostRole.TryGetValue(id, out var ghostId))
 		{
-			RoleAssignFilterModelUpdater.AddRoleData(model, filterId, id, ghostId);
+			return RoleAssignFilterModelUpdater.AddRoleData(model, filterId, id, ghostId);
+		}
+		else
+		{
+			return false;
 		}
 	}
 }
