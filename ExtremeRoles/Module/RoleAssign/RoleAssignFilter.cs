@@ -114,8 +114,8 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 
 			this.view = viewObj.GetComponent<RoleAssignFilterView>();
 			this.view.HideObject = hideObj;
-			this.view.Model = this.Model;
 			this.view.Awake();
+			this.view.Model = this.Model;
 		}
 		this.view.gameObject.SetActive(true);
 	}
