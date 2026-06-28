@@ -62,6 +62,7 @@
     <EmbeddedResource Include="Resources\**\*.png" />
     <EmbeddedResource Include="Resources\Config\*.cfg" />
     <EmbeddedResource Include="Resources\JsonData\*.json" />
+    <EmbeddedResource Include="Resources\**\*.html" />
   </ItemGroup>
 
   <ItemGroup>
