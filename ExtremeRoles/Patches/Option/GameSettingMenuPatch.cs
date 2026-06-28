@@ -3,7 +3,10 @@ using System.Collections;
 using BepInEx.Unity.IL2CPP.Utils;
 using HarmonyLib;
 using UnityEngine;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.ApiHandler;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Helper;
 
 #nullable enable
 
@@ -41,13 +44,16 @@ public static class GameSettingMenuStartPatch
 	}
 }
 
-// ここの処理は使わないので消す
 [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
 public static class GameSettingMenuOnEnablePatch
 {
 	public static bool Prefix(GameSettingMenu __instance)
 	{
-		// ここにhttp://localhost:57700/au/option/ui/を開くようにする
+		if (!Key.IsShift())
+		{
+			Application.OpenURL($"{ApiServer.Url}{GetAuOptionUi.Path}");
+		}
+
 		return false;
 	}
 }
