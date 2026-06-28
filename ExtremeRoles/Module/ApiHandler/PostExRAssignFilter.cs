@@ -56,7 +56,7 @@ public sealed class PostExRAssignFilter : IRequestHandler
 				break;
 			case PostExRAssignOps.FilterRoleAdd:
 				if (!(filter.Model.FilterSet.ContainsKey(delta.FilterId) && 
-					elta.MapRoleId.HasValue && 
+					delta.MapRoleId.HasValue && 
 					tryAddFilterSetRole(delta.FilterId, delta.MapRoleId.Value)))
 				{
 					IRequestHandler.SetStatusNG(response);
