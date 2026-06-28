@@ -40,40 +40,20 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SYNC_BUTTON_TITLE" xml:space="preserve">
-    <value>同期</value>
-  </data>
-  <data name="IMPORT_BUTTON_TITLE" xml:space="preserve">
-    <value>CSVインポート</value>
+    <value>AmongUsとオプションを同期</value>
   </data>
   <data name="IMPORT_CONFIRM_TITLE" xml:space="preserve">
-    <value>インポートの確認</value>
+    <value>オプションのインポート</value>
   </data>
   <data name="IMPORT_CONFIRM_MESSAGE" xml:space="preserve">
-    <value>CSVファイルをインポートして設定を上書きしますか？</value>
-  </data>
-  <data name="EXPORT_CSV_LABEL" xml:space="preserve">
-    <value>エクスポート</value>
-  </data>
-  <data name="EXPORT_CSV_TITLE" xml:space="preserve">
-    <value>CSVとしてエクスポート</value>
-  </data>
-  <data name="CANCEL" xml:space="preserve">
-    <value>キャンセル</value>
+    <value>現在のプリセット: 「{0}」にオプションをインポートして上書きします。
+続行しますか？</value>
   </data>
   <data name="VIEWER_ROW_TITLE" xml:space="preserve">
-    <value>ダブルクリックで設定場所へ移動</value>
+    <value>ダブルクリックでオプションへ移動</value>
   </data>
-  <data name="ROLE_SPAWN_RATE" xml:space="preserve">
-    <value>スポーンレート</value>
-  </data>
-  <data name="ROLE_SPAWN_COUNT" xml:space="preserve">
-    <value>数</value>
-  </data>
-  <data name="CLOSE" xml:space="preserve">
-    <value>閉じる</value>
-  </data>
-  <data name="CONFIRM" xml:space="preserve">
-    <value>確定</value>
+  <data name="ROLE_FILTER_CONFIRM" xml:space="preserve">
+    <value>追加</value>
   </data>
   <data name="PRESET_SWITCH_TITLE" xml:space="preserve">
     <value>プリセットの切り替え</value>
@@ -84,71 +64,41 @@
   <data name="PRESET_INPUT_PLACEHOLDER" xml:space="preserve">
     <value>プリセット名を入力...</value>
   </data>
-  <data name="AU_SETTINGS_TITLE" xml:space="preserve">
-    <value>AmongUsの設定</value>
-  </data>
-  <data name="EXR_SETTINGS_TITLE" xml:space="preserve">
-    <value>ExRの設定</value>
-  </data>
-  <data name="EXR_CONTENT_TEMP" xml:space="preserve">
-    <value>ExRの設定コンテンツ</value>
-  </data>
   <data name="ROLE_FILTER_ADD_TITLE" xml:space="preserve">
     <value>フィルター追加: 役職の選択</value>
   </data>
   <data name="ROLE_FILTER_ADD_BUTTON" xml:space="preserve">
     <value>フィルターを追加</value>
   </data>
-  <data name="ROLE_FILTER_UNKNOWN_ROLE" xml:space="preserve">
-    <value>Unknown Role</value>
-  </data>
-  <data name="ROLE_FILTER_ROLE_ADD_TITLE" xml:space="preserve">
-    <value>役職の追加</value>
-  </data>
-  <data name="ROLE_FILTER_ASSIGN_NUM_LABEL" xml:space="preserve">
-    <value>AssignNum: {0}</value>
-  </data>
-  <data name="ROLE_FILTER_ROLE_ADD_BUTTON" xml:space="preserve">
-    <value>役職を追加</value>
-  </data>
-  <data name="ROLE_FILTER_EMPTY_MESSAGE" xml:space="preserve">
-    <value>フィルターがありません。「フィルターを追加」ボタンから作成してください。</value>
-  </data>
   <data name="ROLE_FILTER_DELETE_CONFIRM_TITLE" xml:space="preserve">
     <value>フィルターの削除</value>
   </data>
   <data name="ROLE_FILTER_DELETE_CONFIRM_MESSAGE" xml:space="preserve">
-    <value>このフィルターを削除してもよろしいですか？</value>
+    <value>このフィルターを削除しますか？</value>
   </data>
   <data name="ROLE_FILTER_ROLE_DELETE_CONFIRM_TITLE" xml:space="preserve">
     <value>役職の削除</value>
   </data>
   <data name="ROLE_FILTER_ROLE_DELETE_CONFIRM_MESSAGE" xml:space="preserve">
-    <value>役職「{0}」をフィルターから削除してもよろしいですか？</value>
-  </data>
-  <data name="ROLE_FILTER_NO_ROLES" xml:space="preserve">
-    <value>No roles selected</value>
+    <value>このフィルターから「{0}」を削除しますか？</value>
   </data>
   <data name="ROLE_SELECT_SEARCH_PLACEHOLDER" xml:space="preserve">
-    <value>役職を検索...</value>
+    <value>役職名を入力...</value>
   </data>
   <data name="OPTION_SEARCH_PLACEHOLDER" xml:space="preserve">
-    <value>オプションを検索...</value>
+    <value>オプション名を入力...</value>
   </data>
   <data name="ROLE_SELECT_DEFAULT_TITLE" xml:space="preserve">
     <value>役職の選択</value>
   </data>
   <data name="CSV_FILE_DESCRIPTION" xml:space="preserve">
-    <value>CSV File</value>
+    <value>オプションのCSV</value>
   </data>
   <data name="SYNCHRONIZING" xml:space="preserve">
-    <value>Synchronizing...</value>
+    <value>同期中...</value>
   </data>
   <data name="RIGHT_PANEL_TITLE" xml:space="preserve">
-    <value>Right Panel</value>
-  </data>
-  <data name="AU_OPTIONS_TITLE" xml:space="preserve">
-    <value>Among Us</value>
+    <value>簡易設定ビュー</value>
   </data>
   <data name="SETTINGS_TITLE" xml:space="preserve">
     <value>設定</value>
@@ -156,47 +106,26 @@
   <data name="ROLE_FILTER_SHORT_LABEL" xml:space="preserve">
     <value>R</value>
   </data>
-  <data name="ON" xml:space="preserve">
-    <value>ON</value>
-  </data>
-  <data name="OFF" xml:space="preserve">
-    <value>OFF</value>
-  </data>
   <data name="RANDOM_MAP_LABEL" xml:space="preserve">
     <value>ランダム</value>
   </data>
-  <data name="NOT_FOUND" xml:space="preserve">
-    <value>見つかりませんでした</value>
+  <data name="ROLE_FILTER_NOT_FOUND" xml:space="preserve">
+    <value>役職が見つかりませんでした</value>
   </data>
   <data name="SETTINGS_UNDER_PREPARATION" xml:space="preserve">
-    <value>設定項目は現在準備中です。</value>
-  </data>
-  <data name="OK" xml:space="preserve">
-    <value>OK</value>
+    <value>設定は現在準備中です。</value>
   </data>
   <data name="SEARCH_NO_RESULTS" xml:space="preserve">
-    <value>Search No Results</value>
+    <value>オプションが見つかりませんでした</value>
   </data>
   <data name="CLIPBOARD_SETTING_TITLE" xml:space="preserve">
-    <value>設定</value>
+    <value>現在の設定</value>
   </data>
   <data name="CLIPBOARD_FACTION_COUNTS" xml:space="preserve">
     <value>陣営数</value>
   </data>
   <data name="CLIPBOARD_ROLES" xml:space="preserve">
     <value>役職</value>
-  </data>
-  <data name="CLIPBOARD_CREW" xml:space="preserve">
-    <value>クルー</value>
-  </data>
-  <data name="CLIPBOARD_IMPOSTOR" xml:space="preserve">
-    <value>インポスター</value>
-  </data>
-  <data name="CLIPBOARD_NEUTRAL" xml:space="preserve">
-    <value>ニュートラル</value>
-  </data>
-  <data name="CLIPBOARD_LIBERAL" xml:space="preserve">
-    <value>リベラル</value>
   </data>
   <data name="CLIPBOARD_DETAILED_SETTINGS" xml:space="preserve">
     <value>詳細設定</value>
@@ -211,9 +140,9 @@
     <value>※バニラ</value>
   </data>
   <data name="CLIPBOARD_COPY_BUTTON" xml:space="preserve">
-    <value>クリップボードにコピー</value>
+    <value>設定をコピー</value>
   </data>
   <data name="CLIPBOARD_COPY_SUCCESS" xml:space="preserve">
-    <value>設定をクリップボードにコピーしました</value>
+    <value>現在の設定をクリップボードにコピーしました</value>
   </data>
 </root>
