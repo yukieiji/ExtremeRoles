@@ -108,6 +108,7 @@ public sealed class PutAuOption : IRequestHandler
 		}
 
 		IRequestHandler.SetStatusOK(response);
+		IRequestHandler.SetContentsType(response);
 		IRequestHandler.Write(response, new UpdatedOptions(
 			null,
 			recordResult.Result.Select(x =>

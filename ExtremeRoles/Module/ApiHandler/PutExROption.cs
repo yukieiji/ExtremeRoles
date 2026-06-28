@@ -75,6 +75,7 @@ public sealed class PutExROption : IRequestHandler
 		}
 
 		IRequestHandler.SetStatusOK(response);
+		IRequestHandler.SetContentsType(response);
 		IRequestHandler.Write(response, new UpdatedOptions(
 			updatedCategory,
 			recordResult.Result.Select(x =>
