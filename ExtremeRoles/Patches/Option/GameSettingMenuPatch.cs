@@ -47,6 +47,7 @@ public static class GameSettingMenuOnEnablePatch
 {
 	public static bool Prefix(GameSettingMenu __instance)
 	{
+		// ここにhttp://localhost:57700/au/option/ui/を開くようにする
 		return false;
 	}
 }
