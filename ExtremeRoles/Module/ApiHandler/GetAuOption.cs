@@ -203,7 +203,7 @@ public sealed class GetAuOption : IRequestHandler
 						max = maxImps[playerNum];
 					}
 				}
-				var intRange = OptionRange<float>.GetFloatRange(
+				var intRange = OptionRange<int>.GetIntRange(
 					min, max, @int.Increment);
 				return new AuOptionDto(
 					title, getSuffix(@int.SuffixType), intValue,
