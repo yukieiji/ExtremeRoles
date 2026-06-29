@@ -32,7 +32,7 @@ public sealed class RecordResult(Action disposeAction) : IDisposable
 	}
 }
 
-public sealed class OptionUpdateRecorder
+public sealed class OptionUpdateRecorder : NullableSingleton<OptionUpdateRecorder>
 {
 	private readonly ConcurrentDictionary<uint, RecordResult> records = new();
 	private uint nextId;
