@@ -33,6 +33,11 @@ public static class GameSettingMenuStartPatch
 			// 0はプリセット、1はゲーム設定
 			__instance.ChangeTab(1, ControllerAU.currentTouchType == ControllerAU.TouchType.Joystick);
 		}
+		//// Web設定UIはここで開く、OnEnableだと何故か2度呼ばれる
+		if (!Key.IsShift())
+		{
+			Application.OpenURL($"{ApiServer.Url}{GetAuOptionUi.Path}");
+		}
 		__instance.StartCoroutine(coSelectDefault(__instance));
 	}
 
@@ -45,17 +50,11 @@ public static class GameSettingMenuStartPatch
 }
 
 // 本来はここでExRのオプションを構築したいのだけど処理の都合でバグるためすべての処理を無効化する
-//// Web設定UIはここで開く
 [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
 public static class GameSettingMenuOnEnablePatch
 {
 	public static bool Prefix(GameSettingMenu __instance)
 	{
-		if (!Key.IsShift())
-		{
-			Application.OpenURL($"{ApiServer.Url}{GetAuOptionUi.Path}");
-		}
-
 		return false;
 	}
 }
