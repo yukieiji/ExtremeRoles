@@ -1,6 +1,8 @@
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Threading;
 
 namespace ExtremeRoles.Module.CustomOption;
 
@@ -30,18 +32,28 @@ public sealed class RecordResult(Action disposeAction) : IDisposable
 	}
 }
 
-public sealed class OptionUpdateRecorder : NullableSingleton<OptionUpdateRecorder>
+public sealed class OptionUpdateRecorder
 {
-	private RecordResult? @record;
+	private readonly ConcurrentDictionary<uint, RecordResult> records = new();
+	private uint nextId;
+
+	// 初期化時に一度だけ
+	public void RegisterRecordOption(int categoryId, IOption option)
+	{
+		option.OnValueChanged += () =>
+		{
+			foreach (var record in records.Values)
+			{
+				record.Add(categoryId, option);
+			}
+		};
+	}
 
 	public RecordResult StartRecord()
 	{
-		this.record = new RecordResult(() => this.@record = null);
-		return this.record;
-	}
-
-	public void RegisterRecordOption(int categoryId, IOption option)
-	{
-		option.OnValueChanged += () => this.record?.Add(categoryId, option);
+		uint id = Interlocked.Increment(ref nextId);
+		RecordResult? record = new RecordResult(() => records.TryRemove(id, out _));
+		records.TryAdd(id, record);
+		return record;
 	}
 }
