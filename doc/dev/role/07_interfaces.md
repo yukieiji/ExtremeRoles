@@ -82,7 +82,7 @@
   - `voteIndex`: 各プレイヤーが得た最終的な票数。
 
 #### `IRoleReviveHook`
-誰かが組成した瞬間の処理
+誰かが蘇生した瞬間の処理
 - `void HookRevive(PlayerControl revivePlayer)`: 誰かが蘇生した時に呼ばれるフック。
 
 
