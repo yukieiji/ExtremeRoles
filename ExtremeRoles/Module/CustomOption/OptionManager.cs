@@ -121,6 +121,15 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		Update(category, option, newSelection);
 	}
 
+	public void Update(OptionTab tab, int categoryId, int optionId, int selection)
+	{
+		if (isInvalidOptionUpdate() || !TryGetCategory(tab, categoryId, out var category))
+		{
+			return;
+		}
+		Update(category, optionId, selection);
+	}
+
 	public void Update(in OptionCategory category, in int id, int newIndex)
 	{
 		if (isInvalidOptionUpdate())

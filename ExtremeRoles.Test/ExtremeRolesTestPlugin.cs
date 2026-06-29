@@ -1,4 +1,4 @@
-﻿global using System.Collections;
+global using System.Collections;
 
 using BepInEx.Unity.IL2CPP;
 using BepInEx;
@@ -66,6 +66,9 @@ public static class ChatControllerSendChatPatch
             case "/Performance":
                 ExtremeRolesTestPluginBehaviour.StartPerformanceTests();
                 break;
+			case "/CheckTranslations":
+				TranslationChecker.Check();
+				break;
         }
 	}
 }

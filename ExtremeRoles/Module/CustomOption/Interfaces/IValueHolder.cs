@@ -9,5 +9,7 @@ public interface IValueHolder
 	public int Selection { get; set; }
 	public int Range { get; }
 
+	public IOptionRangeMeta Meta { get; }
+
 	public event Action OnValueChanged;
 }

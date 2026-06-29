@@ -281,6 +281,7 @@ public static class ExtremeRoleManager
 {
     public const int OptionOffsetPerRole = 200;
 
+	// Id空間確保のため通常役職の最初のスペクル分減らす
 	public const int RoleCategoryIdOffset = 200;
 	private const int conbRoleIdOffset = 1000;
 

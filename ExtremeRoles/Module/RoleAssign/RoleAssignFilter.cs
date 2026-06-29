@@ -7,8 +7,6 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Module.CustomOption.OLDS;
-
 
 #nullable enable
 
@@ -17,7 +15,7 @@ namespace ExtremeRoles.Module.RoleAssign;
 public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 {
 	private RoleAssignFilterView? view;
-	private RoleAssignFilterModel model;
+	public RoleAssignFilterModel Model { get; private set; }
 
 	private readonly List<RoleFilterSet> filter = new List<RoleFilterSet>();
 	private const string defaultValue = "";
@@ -25,21 +23,24 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 	public RoleAssignFilter()
 	{
 		this.filter.Clear();
-		this.model = getNewModel();
-		if (this.model.Config.Value != defaultValue)
+		this.Model = getNewModel();
+		if (this.Model.Config.Value != defaultValue)
 		{
-			this.model.DeserializeFromString(this.model.Config.Value);
+			this.Model.DeserializeFromString(this.Model.Config.Value);
 		}
 	}
 
 	public void DeserializeModel(string value)
 	{
-		if (value == defaultValue) { return; }
+		if (value == defaultValue)
+		{
+			return;
+		}
 
-		this.model.DeserializeFromString(value);
+		this.Model.DeserializeFromString(value);
 		if (this.view != null)
 		{
-			this.view.Model = this.model;
+			this.view.Model = this.Model;
 		}
 	}
 
@@ -52,7 +53,7 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 		// フィルターをリセット
 		this.filter.Clear();
 
-		foreach (var (guid, filterModel) in this.model.FilterSet)
+		foreach (var (guid, filterModel) in this.Model.FilterSet)
 		{
 			logger.LogInfo($" ---- Filter:{guid} ---- ");
 
@@ -83,6 +84,14 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 		logger.LogInfo($" -------- Initialize Complete!! -------- ");
 	}
 
+	public void UpdateUi()
+	{
+		if (this.view != null)
+		{
+			this.view.ReSync();
+		}
+	}
+
 	public bool IsBlock(int intedRoleId) => this.filter.Any(x => x.IsBlock(intedRoleId));
 	public bool IsBlock(byte bytedCombRoleId) => this.filter.Any(
 		x => x.IsBlock(bytedCombRoleId));
@@ -105,8 +114,8 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 
 			this.view = viewObj.GetComponent<RoleAssignFilterView>();
 			this.view.HideObject = hideObj;
-			this.view.Model = this.model;
 			this.view.Awake();
+			this.view.Model = this.Model;
 		}
 		this.view.gameObject.SetActive(true);
 	}
@@ -121,14 +130,14 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 			newModel.DeserializeFromString(value);
 		}
 
-		this.model = newModel;
+		this.Model = newModel;
 		if (this.view != null)
 		{
-			this.view.Model = this.model;
+			this.view.Model = this.Model;
 		}
 	}
 
-	public string SerializeModel() => this.model.SerializeToString();
+	public string SerializeModel() => this.Model.SerializeToString();
 
 	public void Update(int intedRoleId)
 	{

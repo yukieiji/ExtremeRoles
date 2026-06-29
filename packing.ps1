@@ -1,6 +1,9 @@
 Write-Host "Init Env..."
 
 pip install -r requirements.txt
+mkdir -Path ExtremeRoles/Resources/settingui -Force
+curl -L -o ExtremeRoles/Resources/settingui/index.html https://github.com/yukieiji/extremeroles.webui/releases/latest/download/index.html
+
 mkdir -Path ExtremeRoles/Resources -Force
 mkdir -Path ExtremeSkins/Resources/Asset -Force
 
