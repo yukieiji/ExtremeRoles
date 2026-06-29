@@ -21,12 +21,13 @@ public sealed class GetOptionCsv : IRequestHandler
 	{
 		var response = context.Response;
 
-		if (LobbyBehaviour.Instance == null ||
+		if (AmongUsClient.Instance == null ||
+			!AmongUsClient.Instance.AmHost ||
+			LobbyBehaviour.Instance == null ||
 			GameManager.Instance == null ||
 			GameOptionsManager.Instance == null ||
 			GameOptionsManager.Instance.currentGameOptions == null ||
-			GameOptionsManager.Instance.gameOptionsFactory == null ||
-			!AmongUsClient.Instance.AmHost)
+			GameOptionsManager.Instance.gameOptionsFactory == null)
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Close();
