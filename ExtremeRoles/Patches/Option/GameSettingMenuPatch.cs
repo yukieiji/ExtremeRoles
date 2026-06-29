@@ -44,6 +44,8 @@ public static class GameSettingMenuStartPatch
 	}
 }
 
+// 本来はここでExRのオプションを構築したいのだけど処理の都合でバグるためすべての処理を無効化する
+//// Web設定UIはここで開く
 [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
 public static class GameSettingMenuOnEnablePatch
 {
