@@ -62,10 +62,12 @@ public sealed class GetExrOption : IRequestHandler
 		var idHash = new HashSet<int>();
 		foreach (var option in category.Options)
 		{
-			if (idHash.Contains(option.Info.Id))
+			int id = option.Info.Id;
+			if (idHash.Contains(id))
 			{
 				continue;
 			}
+			idHash.Add(id);
 			var dto = CreateOptionDto(option, idHash);
 			options.Add(dto);
 		}
@@ -81,7 +83,12 @@ public sealed class GetExrOption : IRequestHandler
 		{
 			foreach (var child in childs)
 			{
-				registered.Add(option.Info.Id);
+				int id = child.Info.Id;
+				if (registered.Contains(id))
+				{
+					continue;
+				}
+				registered.Add(id);
 				childsResult.Add(CreateOptionDto(child, registered));
 			}
 		}
