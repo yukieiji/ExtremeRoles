@@ -12,6 +12,7 @@ public enum Option
     CoolDown,
     MaxCount,
     IsActive,
+   SubOption,
 }
 ```
 
@@ -39,7 +40,7 @@ protected override void CreateSpecificOption(
 
 ## オプション値の取得
 
-`RoleSpecificInit` などで、`Loader` を通じて設定値を取得します。
+`RoleSpecificInit` で`Loader` を通じて設定値を取得します。
 
 ```csharp
 protected override void RoleSpecificInit()

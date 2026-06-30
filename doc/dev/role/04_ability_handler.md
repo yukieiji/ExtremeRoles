@@ -70,7 +70,7 @@ public sealed class MyRole : SingleRoleBase, IRoleAutoBuildAbility
 // Role.cs
 public bool UseAbility()
 {
-    return this.ability?.Execute(this.targetPlayer) ?? false;
+    return this.ability?.Execute(this.targetPlayerId) ?? false;
 }
 
 // AbilityHandler.cs

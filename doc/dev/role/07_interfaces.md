@@ -124,7 +124,8 @@
 #### `IInvincible`
 無敵状態やキル・能力の対象外判定を行います。
 - `bool IsBlockKillFrom(byte? fromPlayer)`: `fromPlayer` からのキルをブロックするか。
-- `bool IsValidKillFromSource(byte source)`: 指定されたソースからのキルが有効か。
+- `bool IsValidKillFromSource(byte source)`: 指定されたソースプレイヤーからのキルが有効か。
+- `bool IsValidAbilitySource(byte source)`: 指定されたソースプレイヤーからの能力発動が有効か。
 
 #### `IExiledAnimationOverrideWhenExiled`
 追放時のアニメーションテキストなどを上書きします。
