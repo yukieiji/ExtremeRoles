@@ -4,17 +4,15 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Twitch;
 
 using AmongUs.GameOptions;
 
-using Twitch;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Migrator;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Module.CustomOption.Migrator;
+using ExtremeRoles.Module.RoleAssign;
 
 
 #nullable enable
@@ -39,6 +37,81 @@ public static class CustomOptionCsvProcessor
 
 		public string Clean(string value)
 			=> regex.Replace(value, string.Empty).Trim();
+	}
+
+	private sealed record ReadResult(Dictionary<string, int> Option, Dictionary<GameModes, List<byte>> VanillaOptions);
+
+	public static void ExportToStream(StreamWriter csv)
+	{
+		var cleaner = new StringCleaner();
+
+		csv.WriteLine(
+			string.Format("{1}{0}{2}{0}{3}{0}{4}",
+				comma,
+				"Game Infos",
+				$"AmongUs ver.{UnityEngine.Application.version}",
+				$"ExtremeRoles ver.{Assembly.GetExecutingAssembly().GetName().Version}",
+				$"Exported on:{DateTime.UtcNow}"));
+
+		csv.WriteLine(
+			string.Format("{1}{0}{2}{0}{3}{0}{4}",
+				comma, "Name", "OptionValue", "CustomOptionName", "SelectedIndex")); //ヘッダー
+
+		foreach (var (tab, tabContainer) in OptionManager.Instance)
+		{
+			foreach (var cate in tabContainer.Category)
+			{
+				int cateId = cate.Id;
+				foreach (var option in cate.Options)
+				{
+					var info = option.Info;
+					if (PresetOption.IsPreset(cateId, info.Id))
+					{
+						continue;
+					}
+
+					csv.WriteLine(
+						string.Format("{1}{0}{2}{0}{3}{0}{4}",
+							comma,
+							cleaner.Clean(option.TransedTitle),
+							cleaner.Clean(option.TransedValue),
+							cleaner.Clean(info.Name),
+							option.Selection));
+				}
+			}
+		}
+
+		csv.WriteLine(
+			string.Format(
+				"{1}{0}{1}", comma, string.Empty));
+
+		csv.WriteLine(
+			string.Format("{1}{0}{2}",
+				comma,
+				roleAssignModelKey,
+				RoleAssignFilter.Instance.SerializeModel()));
+
+		csv.WriteLine(
+			string.Format(
+				"{1}{0}{1}", comma, string.Empty));
+		var gameOptionManager = GameOptionsManager.Instance;
+
+		foreach (GameModes gameMode in Enum.GetValues<GameModes>())
+		{
+			IGameOptions? option = gameMode switch
+			{
+				GameModes.Normal or GameModes.NormalFools =>
+					gameOptionManager.normalGameHostOptions.Cast<IGameOptions>(),
+				GameModes.HideNSeek or GameModes.SeekFools =>
+					gameOptionManager.hideNSeekGameHostOptions.Cast<IGameOptions>(),
+				_ => null,
+			};
+			if (option == null)
+			{
+				continue;
+			}
+			exportIGameOptions(csv, gameOptionManager.gameOptionsFactory, option, gameMode);
+		}
 	}
 
 	public static bool Export()
@@ -69,70 +142,7 @@ public static class CustomOptionCsvProcessor
 		{
 			using var csv = new StreamWriter(path, false, new UTF8Encoding(true));
 
-			csv.WriteLine(
-				string.Format("{1}{0}{2}{0}{3}{0}{4}",
-					comma,
-					"Game Infos",
-					$"AmongUs ver.{UnityEngine.Application.version}",
-					$"ExtremeRoles ver.{Assembly.GetExecutingAssembly().GetName().Version}",
-					$"Exported on:{DateTime.UtcNow}"));
-
-			csv.WriteLine(
-				string.Format("{1}{0}{2}{0}{3}{0}{4}",
-					comma, "Name", "OptionValue", "CustomOptionName", "SelectedIndex")); //ヘッダー
-
-			foreach (var (tab, tabContainer) in OptionManager.Instance)
-			{
-				foreach (var cate in tabContainer.Category)
-				{
-					int cateId = cate.Id;
-					foreach (var option in cate.Options)
-					{
-						var info = option.Info;
-						if (PresetOption.IsPreset(cateId, info.Id))
-						{
-							continue;
-						}
-
-						csv.WriteLine(
-							string.Format("{1}{0}{2}{0}{3}{0}{4}",
-								comma,
-								cleaner.Clean(option.TransedTitle),
-								cleaner.Clean(option.TransedValue),
-								cleaner.Clean(info.Name),
-								option.Selection));
-					}
-				}
-			}
-
-			csv.WriteLine(
-				string.Format(
-					"{1}{0}{1}", comma, string.Empty));
-
-			csv.WriteLine(
-				string.Format("{1}{0}{2}",
-					comma,
-					roleAssignModelKey,
-					RoleAssignFilter.Instance.SerializeModel()));
-
-			csv.WriteLine(
-				string.Format(
-					"{1}{0}{1}", comma, string.Empty));
-			var gameOptionManager = GameOptionsManager.Instance;
-
-			foreach (GameModes gameMode in Enum.GetValues<GameModes>())
-			{
-				IGameOptions? option = gameMode switch
-				{
-					GameModes.Normal or GameModes.NormalFools =>
-						gameOptionManager.normalGameHostOptions.Cast<IGameOptions>(),
-					GameModes.HideNSeek or GameModes.SeekFools =>
-						gameOptionManager.hideNSeekGameHostOptions.Cast<IGameOptions>(),
-					_ => null,
-				};
-				if (option == null) { continue; }
-				exportIGameOptions(csv, gameOptionManager.gameOptionsFactory, option, gameMode);
-			}
+			ExportToStream(csv);
 
 			ExtremeRolesPlugin.Logger.LogInfo("---------- Option Export End ----------");
 
@@ -143,6 +153,146 @@ public static class CustomOptionCsvProcessor
 			Helper.Logging.Error(e.ToString());
 		}
 		return false;
+	}
+
+	public static bool TryImportToStream(StreamReader? csv)
+	{
+		var importedOption = new Dictionary<string, int>();
+		var importedVanillaOptions = new Dictionary<GameModes, List<byte>>();
+
+		if (csv is null)
+		{
+			return false;
+		}
+
+		string? infoData = csv.ReadLine(); // verHeader
+		if (infoData is null)
+		{
+			return false;
+		}
+
+		string[] info = infoData.Split(comma);
+		string exrVersion = info[2];
+
+		ExtremeRolesPlugin.Logger.LogInfo(
+			$"Loading from {info[1]} with {exrVersion} {info[3]} Data");
+
+		string? line = csv.ReadLine(); // ヘッダー
+		while ((line = csv.ReadLine()) != null)
+		{
+			string[] option = line.Split(comma);
+
+			switch (option[0])
+			{
+				case "":
+					continue;
+				case vanilaOptionKey:
+					GameModes mode = (GameModes)Enum.Parse(typeof(GameModes), option[1]);
+					if (!importedVanillaOptions.TryGetValue(
+							mode, out var modeOption) ||
+						modeOption is null)
+					{
+						modeOption = new List<byte>();
+						importedVanillaOptions.Add(mode, modeOption);
+					}
+					modeOption.Add(byte.Parse(option[2]));
+					break;
+				case roleAssignModelKey:
+					RoleAssignFilter.Instance.DeserializeModel(option[1]);
+					break;
+				default:
+					importedOption.Add(
+						option[2], // cleanedName
+						int.Parse(option[3]));
+					break;
+			}
+		}
+
+		var gameOptionManager = GameOptionsManager.Instance;
+
+		foreach (var (mode, bytedOptions) in importedVanillaOptions)
+		{
+			var option = gameOptionManager.gameOptionsFactory.FromBytes(bytedOptions.ToArray());
+
+			if (option == null)
+			{
+				continue;
+			}
+
+			switch (mode)
+			{
+				case GameModes.Normal:
+				case GameModes.NormalFools:
+					if (!option.IsTryCast<NormalGameOption>(out var normalOption))
+					{
+						normalOption = gameOptionManager.MigrateNormalGameOptions(option);
+					}
+					gameOptionManager.normalGameHostOptions = normalOption;
+					gameOptionManager.SaveNormalHostOptions();
+					break;
+				case GameModes.HideNSeek:
+				case GameModes.SeekFools:
+					if (!option.IsTryCast<HnSGameOption>(out var hideNSeekOption))
+					{
+						hideNSeekOption = gameOptionManager.MigrateHideNSeekGameOptions(option);
+					}
+					gameOptionManager.hideNSeekGameHostOptions = hideNSeekOption;
+					gameOptionManager.SaveHideNSeekHostOptions();
+					break;
+				default:
+					break;
+			}
+		}
+
+		exrVersion = exrVersion.Replace("ExtremeRoles ver.", "");
+		if (!Version.TryParse(exrVersion, out var version) ||
+			version is null)
+		{
+			return false;
+		}
+
+		if (MigratorManager.IsMigrate(version))
+		{
+			MigratorManager.MigrateExportedOption(importedOption, version.Major);
+		}
+
+		var optionMng = OptionManager.Instance;
+		var cleaner = new StringCleaner();
+
+		foreach (var (tab, tabContainer) in optionMng)
+		{
+			foreach (var cate in tabContainer.Category)
+			{
+				int cateId = cate.Id;
+
+				foreach (var option in cate.Options)
+				{
+
+					var optionInfo = option.Info;
+					string name = optionInfo.Name;
+					if (optionInfo.IsHidden ||
+						PresetOption.IsPreset(cateId, optionInfo.Id) ||
+						!importedOption.TryGetValue(
+							cleaner.Clean(name), out int selection))
+					{
+						continue;
+					}
+
+					ExtremeRolesPlugin.Logger.LogInfo(
+						$"Update Option : {name} to Selection:{selection}");
+
+					option.Selection = selection;
+				}
+			}
+		}
+
+		if (GameManager.Instance != null &&
+			GameManager.Instance.LogicOptions != null)
+		{
+			GameManager.Instance.LogicOptions.SyncOptions();
+		}
+
+		return true;
 	}
 
 	public static bool Import()
@@ -175,132 +325,10 @@ public static class CustomOptionCsvProcessor
 		{
 			using var csv = new StreamReader(path, new UTF8Encoding(true));
 
-			if (csv is null)
+			if (!TryImportToStream(csv))
 			{
 				return false;
 			}
-
-			string? infoData = csv.ReadLine(); // verHeader
-			if (infoData is null)
-			{
-				return false;
-			}
-
-			string[] info = infoData.Split(comma);
-			string exrVersion = info[2];
-
-			ExtremeRolesPlugin.Logger.LogInfo(
-				$"Loading from {info[1]} with {exrVersion} {info[3]} Data");
-
-			string? line = csv.ReadLine(); // ヘッダー
-			while ((line = csv.ReadLine()) != null)
-			{
-				string[] option = line.Split(comma);
-
-				switch (option[0])
-				{
-					case "":
-						continue;
-					case vanilaOptionKey:
-						GameModes mode = (GameModes)Enum.Parse(typeof(GameModes), option[1]);
-						if (!importedVanillaOptions.TryGetValue(
-								mode, out var modeOption) ||
-							modeOption is null)
-						{
-							modeOption = new List<byte>();
-							importedVanillaOptions.Add(mode, modeOption);
-						}
-						modeOption.Add(byte.Parse(option[2]));
-						break;
-					case roleAssignModelKey:
-						RoleAssignFilter.Instance.DeserializeModel(option[1]);
-						break;
-					default:
-						importedOption.Add(
-							option[2], // cleanedName
-							int.Parse(option[3]));
-						break;
-				}
-			}
-
-			var gameOptionManager = GameOptionsManager.Instance;
-
-			foreach (var (mode, bytedOptions) in importedVanillaOptions)
-			{
-				IGameOptions option = gameOptionManager.gameOptionsFactory.FromBytes(
-					bytedOptions.ToArray());
-
-				if (option == null) { continue; }
-
-				switch (mode)
-				{
-					case GameModes.Normal:
-					case GameModes.NormalFools:
-						if (!option.IsTryCast<NormalGameOption>(out var normalOption))
-						{
-							normalOption = gameOptionManager.MigrateNormalGameOptions(option);
-						}
-						gameOptionManager.normalGameHostOptions = normalOption;
-						gameOptionManager.SaveNormalHostOptions();
-						break;
-					case GameModes.HideNSeek:
-					case GameModes.SeekFools:
-						if (!option.IsTryCast<HnSGameOption>(out var hideNSeekOption))
-						{
-							hideNSeekOption = gameOptionManager.MigrateHideNSeekGameOptions(option);
-						}
-						gameOptionManager.hideNSeekGameHostOptions = hideNSeekOption;
-						gameOptionManager.SaveHideNSeekHostOptions();
-						break;
-					default:
-						break;
-				}
-			}
-
-			exrVersion = exrVersion.Replace("ExtremeRoles ver.", "");
-			if (!Version.TryParse(exrVersion, out var version) ||
-				version is null)
-			{
-				return false;
-			}
-
-			if (MigratorManager.IsMigrate(version))
-			{
-				MigratorManager.MigrateExportedOption(importedOption, version.Major);
-			}
-
-			var optionMng = OptionManager.Instance;
-			var cleaner = new StringCleaner();
-
-			foreach (var (tab, tabContainer) in optionMng)
-			{
-				foreach (var cate in tabContainer.Category)
-				{
-					int cateId = cate.Id;
-
-					foreach (var option in cate.Options)
-					{
-
-						var optionInfo = option.Info;
-						string name = optionInfo.Name;
-						if (optionInfo.IsHidden ||
-							PresetOption.IsPreset(cateId, optionInfo.Id) ||
-							!importedOption.TryGetValue(
-								cleaner.Clean(name),
-							out int selection))
-						{
-							continue;
-						}
-
-						ExtremeRolesPlugin.Logger.LogInfo(
-							$"Update Option : {name} to Selection:{selection}");
-
-						option.Selection = selection;
-					}
-				}
-			}
-
-			optionMng.ShareAllOption();// Share all selections
 
 			ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Complete ----------");
 
@@ -316,7 +344,7 @@ public static class CustomOptionCsvProcessor
 	}
 
 	private static void exportIGameOptions(
-		StreamWriter writer,
+		TextWriter writer,
 		GameOptionsFactory factory,
 		IGameOptions option, GameModes mode)
 	{

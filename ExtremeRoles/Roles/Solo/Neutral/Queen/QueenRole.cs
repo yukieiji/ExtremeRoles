@@ -243,7 +243,7 @@ public sealed class QueenRole :
         this.servantPlayerId.Remove(servantPlayerId);
     }
 
-    public void HookMuderPlayer(
+    public void HookMurderPlayer(
         PlayerControl source, PlayerControl target)
     {
         if (source.PlayerId != target.PlayerId &&

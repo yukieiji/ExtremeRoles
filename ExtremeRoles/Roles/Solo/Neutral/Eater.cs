@@ -101,7 +101,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 				activatingBehavior.ActiveTime));
     }
 
-    public void HookMuderPlayer(
+    public void HookMurderPlayer(
         PlayerControl source, PlayerControl target)
     {
         if (MeetingHud.Instance ||

@@ -3,7 +3,10 @@ using System.Collections;
 using BepInEx.Unity.IL2CPP.Utils;
 using HarmonyLib;
 using UnityEngine;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.ApiHandler;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Helper;
 
 #nullable enable
 
@@ -30,6 +33,11 @@ public static class GameSettingMenuStartPatch
 			// 0はプリセット、1はゲーム設定
 			__instance.ChangeTab(1, ControllerAU.currentTouchType == ControllerAU.TouchType.Joystick);
 		}
+		//// Web設定UIはここで開く、OnEnableだと何故か2度呼ばれる
+		if (!Key.IsShift())
+		{
+			Application.OpenURL($"{ApiServer.Url}{GetAuOptionUi.Path}");
+		}
 		__instance.StartCoroutine(coSelectDefault(__instance));
 	}
 
@@ -41,7 +49,7 @@ public static class GameSettingMenuStartPatch
 	}
 }
 
-// ここの処理は使わないので消す
+// 本来はここでExRのオプションを構築したいのだけど処理の都合でバグるためすべての処理を無効化する
 [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.OnEnable))]
 public static class GameSettingMenuOnEnablePatch
 {

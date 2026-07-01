@@ -381,7 +381,7 @@ public sealed class CurseMaker :
         return;
     }
 
-    public void HookMuderPlayer(PlayerControl source, PlayerControl target)
+    public void HookMurderPlayer(PlayerControl source, PlayerControl target)
     {
         if (MeetingHud.Instance != null || 
 			this.isDeadBodySearchUsed || 

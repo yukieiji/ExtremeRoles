@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
+using AmongUs.GameOptions;
 using BepInEx.Configuration;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
+
 
 #nullable enable
 
@@ -24,9 +26,56 @@ public sealed class RoleAssignFilterModel(ConfigEntry<string> config)
 	public Dictionary<int, CombinationRoleType> CombRole { get; } = new Dictionary<int, CombinationRoleType>();
 	public Dictionary<int, ExtremeGhostRoleId> GhostRole { get; } = new Dictionary<int, ExtremeGhostRoleId>();
 
+	private GameModes? curGameMode = null;
+
 	private const string version = "v1";
 
 	private const char splitChar = '|';
+
+	public void Initialize()
+	{
+		if (this.curGameMode is not null &&
+			this.curGameMode == ExtremeGameModeManager.Instance.CurrentGameMode)
+		{
+			return;
+		}
+
+		this.Id.Clear();
+		this.NormalRole.Clear();
+		this.CombRole.Clear();
+		this.GhostRole.Clear();
+
+		var roleSelector = ExtremeGameModeManager.Instance.RoleSelector;
+
+		// リベラルのデフォルト役職
+		this.Id.Add(0);
+		this.NormalRole.Add(0, ExtremeRoleId.Leader);
+		this.Id.Add(1);
+		this.NormalRole.Add(1, ExtremeRoleId.Dove);
+		this.Id.Add(2);
+		this.NormalRole.Add(2, ExtremeRoleId.Militant);
+
+		int id = 3;
+		foreach (var roleId in roleSelector.UseNormalRoleId)
+		{
+			this.Id.Add(id);
+			this.NormalRole.Add(id, roleId);
+			id++;
+		}
+		foreach (var roleId in roleSelector.UseCombRoleType)
+		{
+			this.Id.Add(id);
+			this.CombRole.Add(id, roleId);
+			id++;
+		}
+		foreach (var roleId in roleSelector.UseGhostRoleId)
+		{
+			this.Id.Add(id);
+			this.GhostRole.Add(id, roleId);
+			id++;
+		}
+		this.curGameMode = ExtremeGameModeManager.Instance.CurrentGameMode;
+	}
 
 	public string SerializeToString()
 	{

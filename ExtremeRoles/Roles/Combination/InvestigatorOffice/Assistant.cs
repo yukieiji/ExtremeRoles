@@ -24,7 +24,7 @@ public sealed class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		downgradeDetective();
 	}
 
-	public void HookMuderPlayer(
+	public void HookMurderPlayer(
 		PlayerControl source, PlayerControl target)
 	{
 		if (MeetingHud.Instance == null)

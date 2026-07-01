@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -86,7 +86,7 @@ public static class RoleAssignFilterModelUpdater
 		updateConfigValue(model);
 	}
 
-	public static void IncreseFilterAssignNum(RoleAssignFilterModel model, Guid targetFilter)
+	public static void IncreaseFilterAssignNum(RoleAssignFilterModel model, Guid targetFilter)
 	{
 		var filter = model.FilterSet[targetFilter];
 		int curNum = filter.AssignNum;
@@ -100,7 +100,7 @@ public static class RoleAssignFilterModelUpdater
 		}
 	}
 
-	public static void DecreseFilterAssignNum(RoleAssignFilterModel model, Guid targetFilter)
+	public static void DecreaseFilterAssignNum(RoleAssignFilterModel model, Guid targetFilter)
 	{
 		var filter = model.FilterSet[targetFilter];
 		int curNum = filter.AssignNum;

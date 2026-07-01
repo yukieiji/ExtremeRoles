@@ -419,7 +419,7 @@ public sealed class Hypnotist :
         }
     }
 
-    public void HookMuderPlayer(
+    public void HookMurderPlayer(
         PlayerControl source, PlayerControl target)
     {
         if (this.doll.Contains(source.PlayerId) &&

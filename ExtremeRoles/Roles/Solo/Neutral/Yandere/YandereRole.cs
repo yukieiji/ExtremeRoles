@@ -306,7 +306,7 @@ public sealed class YandereRole :
         checkRunawayNextMeeting();
     }
 
-    public void HookMuderPlayer(
+    public void HookMurderPlayer(
         PlayerControl source, PlayerControl target)
     {
         if (this.target.IsContain(target.PlayerId))

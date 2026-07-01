@@ -109,7 +109,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		}
 
 		if (this.MultiModalAbilityNum > 1 &&
-			this.State is not AbilityState.Activating or AbilityState.Charging &&
+			this.State is not (AbilityState.Activating or AbilityState.Charging) &&
 			this.blockTimer <= 0.0f)
 		{
 			float delta = Input.mouseScrollDelta.y;

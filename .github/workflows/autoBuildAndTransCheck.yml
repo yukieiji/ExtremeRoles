@@ -17,17 +17,17 @@ jobs:
     steps:
       - name: Generate token
         id: gen_token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           submodules: true
       - name: SetupNuget
-        uses: nuget/setup-nuget@v2
+        uses: nuget/setup-nuget@v4
       - name: RestoreNugetPackage
         run: nuget restore ExtremeRoles.sln
       - name: SetupPython
@@ -43,7 +43,7 @@ jobs:
         with:
           dotnet-version: 10.x
       - name: AddMsBuildToPATH
-        uses: microsoft/setup-msbuild@v2
+        uses: microsoft/setup-msbuild@v3
       - name: RunBuild
         id: build
         run: msbuild ExtremeRoles.sln -t:restore,build -p:Configuration=Release -p:RestorePackagesConfig=true

@@ -115,9 +115,24 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		}
 
 		ApiServer.Register("/au/chat/", HttpMethod.Get, new GetChat());
+		ApiServer.Register(GetAuOptionUi.Path, HttpMethod.Get, new GetAuOptionUi());
+		ApiServer.Register("/au/option/", HttpMethod.Get, new GetAuOption());
+		ApiServer.Register("/au/option/", HttpMethod.Put, new PutAuOption());
+		// パラメータを渡す必要があるのでPost
+		ApiServer.Register("/au/translation/", HttpMethod.Post, new GetTranslation());
+		ApiServer.Register("/au/translation/batch/", HttpMethod.Post, new GetTranslationBatch());
+		// パラメータを渡せないのでGET
+		ApiServer.Register("/au/translation/batch/optionunit/", HttpMethod.Get, new GetTranslationOptionUnit());
+		ApiServer.Register("/au/translation/batch/role/", HttpMethod.Get, new GetTranslationRole());
 		ApiServer.Register(PostChat.Path, HttpMethod.Post, new PostChat());
 		ApiServer.Register(ChatWebUI.Path, HttpMethod.Get, new OpenChatWebUi());
 		ApiServer.Register(ConectGame.Path, HttpMethod.Get, new ConectGame());
+		ApiServer.Register("/exr/option/", HttpMethod.Get, new GetExrOption());
+		ApiServer.Register("/exr/option/", HttpMethod.Put, new PutExROption());
+		ApiServer.Register("/exr/option/csv/", HttpMethod.Get, new GetOptionCsv());
+		ApiServer.Register("/exr/option/csv/", HttpMethod.Post, new PostOptionCsv());
+		ApiServer.Register("/exr/role/filter/", HttpMethod.Get, new GetExRAssignFilter());
+		ApiServer.Register("/exr/role/filter/", HttpMethod.Post, new PostExRAssignFilter());
 
 		ScreenManagerHookcs.RegisterLoad();
 

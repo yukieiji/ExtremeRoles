@@ -107,7 +107,7 @@ public sealed class LonerAbilityHandler(
 
 	public void Update(PlayerControl rolePlayer)
     {
-		if (IntroCutscene.Instance != null)
+		if (!GameProgressSystem.IsTaskPhase)
 		{
 			return;
 		}

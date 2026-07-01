@@ -173,7 +173,7 @@ public sealed class IronMateRole :
 		}
 	}
 
-	public void HookMuderPlayer(PlayerControl source, PlayerControl target)
+	public void HookMurderPlayer(PlayerControl source, PlayerControl target)
 	{
 		if (PlayerControl.LocalPlayer.IsInValid() ||
 			target == null ||

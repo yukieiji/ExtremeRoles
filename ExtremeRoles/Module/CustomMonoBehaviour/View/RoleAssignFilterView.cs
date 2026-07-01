@@ -8,14 +8,11 @@ using UnityEngine.Events;
 using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Helper;
-using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.RoleAssign.Update;
-using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -30,8 +27,8 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		private get => this.model;
 		set
 		{
-			this.initialize(value);
 			this.model = value;
+			this.ReSync();
 		}
 	}
 	[HideFromIl2Cpp]
@@ -98,42 +95,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		}
 		this.addRoleMenu.gameObject.SetActive(false);
 
-		if (this.Model == null) { return; }
-
-		this.Model.Id.Clear();
-		this.Model.NormalRole.Clear();
-		this.Model.CombRole.Clear();
-		this.Model.GhostRole.Clear();
-
-		var roleSelector = ExtremeGameModeManager.Instance.RoleSelector;
-
-		// リベラルのデフォルト役職
-		this.Model.Id.Add(0);
-		this.Model.NormalRole.Add(0, ExtremeRoleId.Leader);
-		this.Model.Id.Add(1);
-		this.Model.NormalRole.Add(1, ExtremeRoleId.Dove);
-		this.Model.Id.Add(2);
-		this.Model.NormalRole.Add(2, ExtremeRoleId.Militant);
-
-		int id = 3;
-		foreach (var roleId in roleSelector.UseNormalRoleId)
-		{
-			this.Model.Id.Add(id);
-			this.Model.NormalRole.Add(id, roleId);
-			id++;
-		}
-		foreach (var roleId in roleSelector.UseCombRoleType)
-		{
-			this.Model.Id.Add(id);
-			this.Model.CombRole.Add(id, roleId);
-			id++;
-		}
-		foreach (var roleId in roleSelector.UseGhostRoleId)
-		{
-			this.Model.Id.Add(id);
-			this.Model.GhostRole.Add(id, roleId);
-			id++;
-		}
+		this.Model?.Initialize();
 	}
 
 	public void OnDisable()
@@ -148,7 +110,10 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 	[HideFromIl2Cpp]
 	private void addNewFilterSet()
 	{
-		if (this.Model == null) { return; }
+		if (this.Model == null)
+		{
+			return;
+		}
 
 		Guid id = Guid.NewGuid();
 
@@ -197,27 +162,27 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		filterSet.IncreseButton.onClick.AddListener(
 			() =>
 			{
-				RoleAssignFilterModelUpdater.IncreseFilterAssignNum(this.Model, id);
+				RoleAssignFilterModelUpdater.IncreaseFilterAssignNum(this.Model, id);
 				filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
 			});
 		filterSet.DecreseButton.onClick.AddListener(
 			() =>
 			{
-				RoleAssignFilterModelUpdater.DecreseFilterAssignNum(this.Model, id);
+				RoleAssignFilterModelUpdater.DecreaseFilterAssignNum(this.Model, id);
 				filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
 			});
 		return filterSet;
 	}
 
 	[HideFromIl2Cpp]
-	private void initialize(RoleAssignFilterModel model)
+	public void ReSync()
 	{
 		if (this.layout != null)
 		{
 			this.layout.DestroyChildren();
 		}
 
-		foreach (var (filterId, filter) in model.FilterSet)
+		foreach (var (filterId, filter) in this.model.FilterSet)
 		{
 			var filterProp = this.createFilterSet(filterId);
 			var parent = filterProp.Layout.transform;

@@ -53,6 +53,8 @@ public sealed class CustomOption : IOption
 
 	public IOptionActivator Activator { get; init; }
 
+	public IOptionRangeMeta RangeMetaData => this.holder.Meta;
+
 	private readonly ConfigBinder config;
 	private readonly IValueHolder holder;
 

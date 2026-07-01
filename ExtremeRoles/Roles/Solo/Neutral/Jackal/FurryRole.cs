@@ -39,7 +39,7 @@ public sealed class FurryRole : SingleRoleBase,
             RolePropPresets.OptionalDefault))
 	{ }
 
-	public void HookMuderPlayer(PlayerControl _, PlayerControl target)
+	public void HookMurderPlayer(PlayerControl _, PlayerControl target)
 	{
 		if (this.isUpdate ||
 			target == null ||

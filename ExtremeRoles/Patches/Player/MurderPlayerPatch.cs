@@ -231,12 +231,12 @@ public static class PlayerControlMurderPlayerPatch
 
 		if (localPlayerRole is IRoleMurderPlayerHook hookRole)
 		{
-			hookRole.HookMuderPlayer(killer, target);
+			hookRole.HookMurderPlayer(killer, target);
 		}
 		if (localPlayerRole is MultiAssignRoleBase multiAssignRole &&
 			multiAssignRole.AnotherRole is IRoleMurderPlayerHook multiHookRole)
 		{
-			multiHookRole.HookMuderPlayer(killer, target);
+			multiHookRole.HookMurderPlayer(killer, target);
 		}
 	}
 
