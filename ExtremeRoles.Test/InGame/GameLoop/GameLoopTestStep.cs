@@ -5,11 +5,10 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Test.Helper;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static ExtremeRoles.Module.GameResult.LiberalMoneyHistory;
+
 using UnityResource = UnityEngine.Resources;
 
 namespace ExtremeRoles.Test.InGame.GameLoop;
