@@ -1,19 +1,16 @@
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Test.Helper;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEngine;
-
-using ExtremeRoles.Roles;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Helper;
-
-using ExtremeRoles.Test.Helper;
-
+using static ExtremeRoles.Module.GameResult.LiberalMoneyHistory;
 using UnityResource = UnityEngine.Resources;
-using Microsoft.Extensions.DependencyInjection;
-using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Test.InGame.GameLoop;
 
@@ -83,12 +80,26 @@ public class GameLoopTestStep(GameLoopTestCaseFactory factory) : TestStepBase
 				yield return testCase.PreTestCase.Invoke(this.Log);
 			}
 
+			yield return new WaitForSeconds(1.0f);
+
+			var randomPlayer = new Queue<PlayerControl>(PlayerCache.AllPlayerControl.OrderBy(x => RandomGenerator.Instance.Next()).ToArray());
+
 			while (GameUtility.IsContinue)
 			{
-				var player = PlayerCache.AllPlayerControl.OrderBy(x => RandomGenerator.Instance.Next()).First();
+				if (!randomPlayer.TryDequeue(out var player))
+				{
+					// 何故かゲームが終了しない場合があるので、強制的に終了させる
+					ShipStatus.Instance.enabled = false;
+					GameManager.Instance.RpcEndGame(GameOverReason.CrewmateDisconnect, false);
+					GameProgressSystem.Current = GameProgressSystem.Progress.None;
+
+					yield return new WaitForSeconds(1.0f);
+					break;
+				}
+
 				if (!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
 					player.Data.IsDead ||
-					role.Core.Id is ExtremeRoleId.Assassin or ExtremeRoleId.Leader)
+					role.Core.Id is (ExtremeRoleId.Assassin or ExtremeRoleId.Leader))
 				{
 					continue;
 				}
