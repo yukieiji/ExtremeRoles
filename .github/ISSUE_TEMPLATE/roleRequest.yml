@@ -42,3 +42,5 @@ body:
         - label: クルー/Crewmate
         - label: インポスター/Impostor
         - label: ニュートラル/Neutral
+        - label: リベラル/Liberal
+
