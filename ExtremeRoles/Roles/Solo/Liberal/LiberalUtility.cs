@@ -58,6 +58,8 @@ public sealed class DoveCommonAbilityHandler
 			return;
 		}
 
+		int completedTaskCount = 0;
+
 		for (int i = 0; i < cachePlayer.Tasks.Count; ++i)
 		{
 			var task = cachePlayer.Tasks[i];
@@ -65,6 +67,25 @@ public sealed class DoveCommonAbilityHandler
 			{
 				continue;
 			}
+			byte playerId = cachePlayer.PlayerId;
+			LiberalMoneyBankSystem.RpcUpdateSystem(playerId, LiberalMoneyHistory.Reason.AddOnTask, taskDelta, boostDelta);
+			break;
+		}
+
+		// 全てのタスクが完了している場合、タスクをランダムに置き換える
+		if (completedTaskCount != cachePlayer.Tasks.Count)
+		{
+			return;
+		}
+
+		for (int i = 0; i < cachePlayer.Tasks.Count; ++i)
+		{
+			var task = cachePlayer.Tasks[i];
+			if (!task.Complete)
+			{
+				continue;
+			}
+
 			int taskTarget = RandomGenerator.Instance.Next(0, this.allTaskNum);
 
 			int taskIndex;
@@ -82,8 +103,6 @@ public sealed class DoveCommonAbilityHandler
 			}
 			byte playerId = cachePlayer.PlayerId;
 			GameSystem.RpcReplaceNewTask(playerId, i, taskIndex);
-			LiberalMoneyBankSystem.RpcUpdateSystem(playerId, LiberalMoneyHistory.Reason.AddOnTask, taskDelta, boostDelta);
-			break;
 		}
 	}
 
