@@ -1,7 +1,5 @@
 #nullable enable
 
-using System.Collections.Generic;
-
 namespace ExtremeRoles.Module.RoleAssign;
 
 public class VanillaRolePlayerOption
@@ -10,4 +8,4 @@ public class VanillaRolePlayerOption
 }
 
 
-public record VanillaRolePlayerMockOption(int PlayerNum, List<string>? MockPlayerNames);
+public record VanillaRolePlayerMockOption(int PlayerNum);

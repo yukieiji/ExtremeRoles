@@ -133,6 +133,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		ApiServer.Register("/exr/option/csv/", HttpMethod.Post, new PostOptionCsv());
 		ApiServer.Register("/exr/role/filter/", HttpMethod.Get, new GetExRAssignFilter());
 		ApiServer.Register("/exr/role/filter/", HttpMethod.Post, new PostExRAssignFilter());
+		ApiServer.Register("/exr/role/simulate/", HttpMethod.Post, new PostExRSimulate());
 
 		ScreenManagerHookcs.RegisterLoad();
 

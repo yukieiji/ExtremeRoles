@@ -25,32 +25,19 @@ public sealed class MockVanillaRolePlayerAssignDataProvider : IVanillaRolePlayer
 
 		var curPlayerData = GameData.Instance.AllPlayers.GetFastEnumerator().Select(x => new VanillaRolePlayerAssignData(x)).ToList();
 
-		if (curPlayerData.Count > option.MockOption.PlayerNum)
+		int playerNum = option.MockOption.PlayerNum;
+
+		if (curPlayerData.Count > playerNum)
 		{
-			this.Data = mockAssignToPlayer(curPlayerData.Take(option.MockOption.PlayerNum));
+			this.Data = mockAssignToPlayer(curPlayerData.Take(playerNum));
 		}
-		else if (curPlayerData.Count < option.MockOption.PlayerNum)
+		else if (curPlayerData.Count < playerNum)
 		{
-			var playerNames = option.MockOption.MockPlayerNames;
-			int delta = option.MockOption.PlayerNum - curPlayerData.Count;
-
-			if (playerNames is null)
-			{
-				playerNames = randomName.Take(delta).ToList();
-			}
-			else if (playerNames.Count < delta)
-			{
-				var additionalNames = randomName.Take(delta - playerNames.Count).ToList();
-				playerNames.AddRange(additionalNames);
-			}
-
-
 			byte maxPlayerId = curPlayerData.Max(x => x.PlayerId);
 			this.Data = mockAssignToPlayer(curPlayerData.Concat(
-				Enumerable.Range(0, option.MockOption.PlayerNum - curPlayerData.Count)
+				Enumerable.Range(0, playerNum - curPlayerData.Count)
 					.Select(x => new VanillaRolePlayerAssignData(
-						(byte)(x + maxPlayerId + 1),
-						playerNames[x], RoleTypes.Crewmate))));
+						(byte)(x + maxPlayerId + 1), $"MockPlayer_{x}", RoleTypes.Crewmate))));
 		}
 		else
 		{
@@ -135,45 +122,4 @@ public sealed class MockVanillaRolePlayerAssignDataProvider : IVanillaRolePlayer
 		result.AddRange(players);
 		return result;
 	}
-
-	private static IEnumerable<string> randomName => new List<string>
-	{
-		"yukieiji",
-		"zunda",
-		"88659",
-		"nanozoku",
-		"exr",
-		"exs",
-		"exv",
-		"ninchi",
-		"tukuyomi",
-		"yachiyo8000",
-		"anko",
-		"mikan",
-		"impostor",
-		"crewmate",
-		"aoi-",
-		"seyana-",
-		"sorena-",
-		"wakaru-",
-		"arena-",
-		"irop-",
-		"kaguyaho-",
-		"kiritanpo",
-		"HelloWorld",
-		"hoge",
-		"sudo",
-		"root",
-		"AmongUS",
-		"NoName",
-		"名前を入れて下さい",
-		"ああああ",
-		"あああい",
-		"あああう",
-		"ExtremeRoles",
-		"ExtremeSkins",
-		"ExtremeHat",
-		"ExtremeVisor",
-		"DMZ",
-	}.OrderBy(x => RandomGenerator.Instance.Next());
 }
