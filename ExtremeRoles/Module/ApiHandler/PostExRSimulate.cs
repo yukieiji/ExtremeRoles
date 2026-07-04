@@ -7,13 +7,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.ApiHandler;
 
 #nullable enable
 
 public readonly record struct SimulateOption(int Cycle, VanillaRolePlayerMockOption Option, List<string>? MockPlayerNames = null);
-public readonly record struct AssignData(string PlayerName, IPlayerToExRoleAssignData RawData);
+public readonly record struct AssignData(string PlayerName, ExtremeRoleId RoleId);
 public readonly record struct SimulateResult(AssignData[] CycleData);
 
 public sealed class PostExRSimulate : IRequestHandler
@@ -86,7 +87,7 @@ public sealed class PostExRSimulate : IRequestHandler
 					playerName = player.DefaultOutfit.PlayerName;
 				}
 				index++;
-				return new AssignData(playerName, x);
+				return new AssignData(playerName, (ExtremeRoleId)x.RoleId);
 			}).ToArray());
 		}).ToArray();
 
