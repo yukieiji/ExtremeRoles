@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
@@ -32,6 +33,8 @@ public sealed class InfinityTaskLoopTestStep() : TestStepBase
 #else
 	private const int repeatNum = 1;
 #endif
+
+	private bool continueMapTaskCheck = false;
 
 	public static void Register(IServiceCollection services)
 	{
@@ -95,23 +98,47 @@ public sealed class InfinityTaskLoopTestStep() : TestStepBase
 
 			} while (noTask);
 
-
-			for (int j = 0; j < taskNum; ++j)
+			int oneMoreCount = taskNum;
+			while (oneMoreCount > 0)
 			{
-				yield return taskRun();
+				int forcount = oneMoreCount;
+				oneMoreCount = 0;
+				for (int j = 0; j < forcount; ++j)
+				{
+					yield return taskRun();
+					if (this.continueMapTaskCheck)
+					{
+						this.continueMapTaskCheck = false;
+						oneMoreCount++;
+					}
+				}
+
 			}
+
 			yield return runNormal();
 		}
 	}
 
 	private IEnumerator runNormal()
 	{
+		var randomPlayer = new Queue<PlayerControl>(PlayerCache.AllPlayerControl.OrderBy(x => RandomGenerator.Instance.Next()).ToArray());
+
 		while (GameUtility.IsContinue)
 		{
-			var player = PlayerCache.AllPlayerControl.OrderBy(x => RandomGenerator.Instance.Next()).First();
+			if (!randomPlayer.TryDequeue(out var player))
+			{
+				// 何故かゲームが終了しない場合があるので、強制的に終了させる
+				ShipStatus.Instance.enabled = false;
+				GameManager.Instance.RpcEndGame(GameOverReason.CrewmateDisconnect, false);
+				GameProgressSystem.Current = GameProgressSystem.Progress.None;
+
+				yield return new WaitForSeconds(1.0f);
+				break;
+			}
+
 			if (!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
 				player.Data.IsDead ||
-				role.Core.Id is ExtremeRoleId.Assassin or ExtremeRoleId.Leader)
+				role.Core.Id is (ExtremeRoleId.Assassin or ExtremeRoleId.Leader))
 			{
 				continue;
 			}
@@ -127,19 +154,31 @@ public sealed class InfinityTaskLoopTestStep() : TestStepBase
 		var localPc = PlayerControl.LocalPlayer;
 
 		NormalPlayerTask? targetTask = null;
-		do
+
+		var target = new Queue<PlayerTask>(localPc.myTasks.GetFastEnumerator().OrderBy(x => RandomGenerator.Instance.Next()).ToArray());
+
+		while (target.TryDequeue(out var task))
 		{
-			var target = localPc.myTasks.GetFastEnumerator().OrderBy(
-				x => RandomGenerator.Instance.Next()).First();
-			if (GameSystem.IgnoreTask.Contains(target.TaskType))
+			if (GameSystem.IgnoreTask.Contains(task.TaskType))
 			{
 				continue;
 			}
-			targetTask = target.TryCast<NormalPlayerTask>();
+			targetTask = task.TryCast<NormalPlayerTask>();
+			if (targetTask != null)
+			{
+				break;
+			}
+		}
 
-		} while (targetTask == null);
+		if (targetTask == null)
+		{
+			this.Log.LogInfo("ALL TASKS IS INVALID");
+			this.continueMapTaskCheck = true;
+			yield return null;
+			yield break;
+		}
 
-		
+
 		Console? targetConsole = null;
 		foreach (var console in ShipStatus.Instance.AllConsoles)
 		{
