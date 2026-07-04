@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
+using AmongUs.GameOptions;
 using Microsoft.Extensions.DependencyInjection;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.ApiHandler;
 
 #nullable enable
 
+public readonly record struct RoleAssignData<T>(T RoleId, ExtremeRoleType Team);
 public readonly record struct SimulateOption(int Cycle, VanillaRolePlayerMockOption Option, List<string>? MockPlayerNames = null);
-public readonly record struct AssignData(string PlayerName, ExtremeRoleId RoleId);
+public readonly record struct AssignData(string PlayerName, string RoleName, ExtremeRoleType Team);
 public readonly record struct SimulateResult(AssignData[] CycleData);
 
 public sealed class PostExRSimulate : IRequestHandler
@@ -44,20 +47,20 @@ public sealed class PostExRSimulate : IRequestHandler
 		int curPlayerCount = GameData.Instance.AllPlayers.Count;
 		int simulatePlayerNum = simulateOption.Option.PlayerNum;
 		List<string> playerNames = simulateOption.MockPlayerNames ?? new List<string>();
+		int playerNums = playerNames.Count;
 		if (simulatePlayerNum > curPlayerCount)
 		{
 			int delta = simulateOption.Option.PlayerNum - curPlayerCount;
-			if (playerNames.Count == 0)
+			if (playerNums == 0)
 			{
 				playerNames = randomName.Take(delta).ToList();
 			}
-			else if (playerNames.Count < delta)
+			else if (playerNums < delta)
 			{
-				var additionalNames = randomName.Take(delta - playerNames.Count).ToList();
+				var additionalNames = randomName.Take(delta - playerNums).ToList();
 				playerNames.AddRange(additionalNames);
 			}
 		}
-		playerNames = playerNames.OrderBy(_ => RandomGenerator.Instance.Next()).ToList();
 
 		// DIスコープを作成して、必要なサービスの設定を行う
 		using var scope = ExtremeRolesPlugin.Instance.Provider.CreateScope();
@@ -66,28 +69,52 @@ public sealed class PostExRSimulate : IRequestHandler
 		var option = provider.GetRequiredService<VanillaRolePlayerOption>();
 		option.MockOption = simulateOption.Option;
 
-		var builder = provider.GetRequiredService<IRoleAssignDataBuilder>();
+		OptionManager.Load();
 
 		// シミュレーションを実行して結果を取得する
-		int index = 0;
 		var result = Enumerable.Range(0, simulateOption.Cycle).Select(_ => {
-			var rawData = builder.Build();
+
+			var rawData = provider.GetRequiredService<IRoleAssignDataBuilder>().Build();
+
+			playerNames = playerNames.OrderBy(_ => RandomGenerator.Instance.Next()).ToList();
+			Dictionary<byte, string> playerIdToName = new Dictionary<byte, string>();
+			int index = 0;
 			return new SimulateResult(rawData.Select(x =>
 			{
 				byte playerId = x.PlayerId;
 				var player = GameData.Instance.GetPlayerById(playerId);
 
-				string playerName;
+				string? playerName;
 				if (player == null)
 				{
-					playerName = index < playerNames.Count ? playerNames[index] : $"Unknown({playerId})";
+					if (!playerIdToName.TryGetValue(playerId, out playerName) || string.IsNullOrEmpty(playerName))
+					{
+						playerName = index < playerNames.Count ? playerNames[index] : $"Unknown({playerId})";
+						playerIdToName[playerId] = playerName;
+						index++;
+					}
 				}
 				else
 				{
 					playerName = player.DefaultOutfit.PlayerName;
 				}
-				index++;
-				return new AssignData(playerName, (ExtremeRoleId)x.RoleId);
+
+				ExtremeRoleType team;
+				string roleName;
+				if (Enum.IsDefined(typeof(RoleTypes), Convert.ToUInt16(x.RoleId)))
+				{
+					var roleId = ((RoleTypes)x.RoleId);
+					roleName = roleId.ToString();
+					team = VanillaRoleProvider.IsImpostorRole(roleId) ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
+				}
+				else
+				{
+					var data = getExRAssignData(x);
+					roleName = data.RoleId.ToString();
+					team = data.Team;
+				}
+
+				return new AssignData(playerName, roleName, team);
 			}).ToArray());
 		}).ToArray();
 
@@ -95,6 +122,25 @@ public sealed class PostExRSimulate : IRequestHandler
 		IRequestHandler.SetStatusOK(response);
 		IRequestHandler.SetContentsType(response);
 		IRequestHandler.Write(response, result);
+	}
+
+	private static RoleAssignData<ExtremeRoleId> getExRAssignData(IPlayerToExRoleAssignData data)
+	{
+		var roleId = (ExtremeRoleId)data.RoleId;
+
+		if (roleId is ExtremeRoleId.Xion)
+		{
+			return new RoleAssignData<ExtremeRoleId>(roleId, ExtremeRoleType.Null);
+		}
+		else if (roleId is ExtremeRoleId.Leader or ExtremeRoleId.Dove or ExtremeRoleId.Militant)
+		{
+			return new RoleAssignData<ExtremeRoleId>(roleId, ExtremeRoleType.Liberal);
+		}
+		var team = data is PlayerToCombRoleAssignData combData ? 
+			ExtremeRoleManager.CombRole[combData.CombTypeId].GetRole(combData.RoleId, (RoleTypes)combData.AmongUsRoleId).Core.Team :
+			ExtremeRoleManager.NormalRole[data.RoleId].Core.Team;
+		
+		return new RoleAssignData<ExtremeRoleId>(roleId, team);
 	}
 
 	private static IEnumerable<string> randomName => new List<string>
@@ -136,5 +182,5 @@ public sealed class PostExRSimulate : IRequestHandler
 		"ExtremeHat",
 		"ExtremeVisor",
 		"DMZ",
-	}.OrderBy(x => RandomGenerator.Instance.Next());
+	}.OrderBy(_ => RandomGenerator.Instance.Next());
 }
