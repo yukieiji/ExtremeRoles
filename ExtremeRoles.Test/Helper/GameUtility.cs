@@ -150,7 +150,10 @@ public static class GameUtility
 
 			foreach (var cate in tabObj.Category)
 			{
-				if (cate.Id == 0) { continue; }
+				if (cate.Id == 0)
+				{
+					continue;
+				}
 
 				foreach (var opt in cate.Options)
 				{
@@ -192,6 +195,11 @@ public static class GameUtility
 
 		disableNeutralRole();
 		disableCombRole();
+
+		// AirShipとかだとタスクが少なすぎて全て無効なタスクになって無限ループしてるっぽいのでタスク数を増やす
+		UpdateAmongUsOption(new RequireOption<Int32OptionNames, int>(Int32OptionNames.NumCommonTasks, 4));
+		UpdateAmongUsOption(new RequireOption<Int32OptionNames, int>(Int32OptionNames.NumShortTasks, 10));
+		UpdateAmongUsOption(new RequireOption<Int32OptionNames, int>(Int32OptionNames.NumLongTasks, 10));
 	}
 
 	public static void PrepereGameWithRole(ManualLogSource logger, HashSet<ExtremeRoleId> ids)
