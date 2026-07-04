@@ -21,6 +21,8 @@ public sealed class DoveCommonAbilityHandler
 	private readonly int normalTask;
 	private readonly int allTaskNum;
 
+	private int oldTaskCompletedCount = 0;
+
 	public DoveCommonAbilityHandler(LiberalDefaultOptionLoader option) : this(
 		option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.TaskCompletedMoney),
 		0.0f)
@@ -38,6 +40,7 @@ public sealed class DoveCommonAbilityHandler
 
 		this.taskDelta = taskDelta;
 		this.boostDelta = boostDelta;
+		this.oldTaskCompletedCount = 0;
 	}
 
 	private NetworkedPlayerInfo? cachePlayer;
@@ -67,9 +70,24 @@ public sealed class DoveCommonAbilityHandler
 			{
 				continue;
 			}
-			byte playerId = cachePlayer.PlayerId;
-			LiberalMoneyBankSystem.RpcUpdateSystem(playerId, LiberalMoneyHistory.Reason.AddOnTask, taskDelta, boostDelta);
-			break;
+			completedTaskCount++;
+		}
+
+		if (completedTaskCount == 0)
+		{
+			return;
+		}
+
+		byte playerId = cachePlayer.PlayerId;
+		if (completedTaskCount != this.oldTaskCompletedCount)
+		{
+			int delta = completedTaskCount - this.oldTaskCompletedCount;
+			for (int i = 0; delta > 0; ++i)
+			{
+				LiberalMoneyBankSystem.RpcUpdateSystem(playerId, LiberalMoneyHistory.Reason.AddOnTask, taskDelta, boostDelta);
+			}
+
+			this.oldTaskCompletedCount = completedTaskCount;
 		}
 
 		// 全てのタスクが完了している場合、タスクをランダムに置き換える
@@ -101,7 +119,6 @@ public sealed class DoveCommonAbilityHandler
 			{
 				taskIndex = GameSystem.GetRandomLongTask();
 			}
-			byte playerId = cachePlayer.PlayerId;
 			GameSystem.RpcReplaceNewTask(playerId, i, taskIndex);
 		}
 	}
