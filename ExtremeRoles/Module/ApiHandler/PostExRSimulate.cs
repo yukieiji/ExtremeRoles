@@ -31,6 +31,7 @@ public sealed class PostExRSimulate : IRequestHandler
 		if (AmongUsClient.Instance == null ||
 			!AmongUsClient.Instance.AmHost ||
 			LobbyBehaviour.Instance == null ||
+			GameData.Instance == null ||
 			GameManager.Instance == null ||
 			GameOptionsManager.Instance == null ||
 			GameOptionsManager.Instance.currentGameOptions == null ||

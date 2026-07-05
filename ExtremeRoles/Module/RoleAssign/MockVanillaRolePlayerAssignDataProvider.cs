@@ -45,7 +45,7 @@ public sealed class MockVanillaRolePlayerAssignDataProvider : IVanillaRolePlayer
 		}
 	}
 
-	public IEnumerable<VanillaRolePlayerAssignData> mockAssignToPlayer(IEnumerable<VanillaRolePlayerAssignData> players)
+	private static IEnumerable<VanillaRolePlayerAssignData> mockAssignToPlayer(IEnumerable<VanillaRolePlayerAssignData> players)
 	{
 		var randomPlayers = players.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
 
@@ -87,7 +87,7 @@ public sealed class MockVanillaRolePlayerAssignDataProvider : IVanillaRolePlayer
 		return impostorPlayers;
 	}
 
-	private List<VanillaRolePlayerAssignData> assignVanillaRoleToPlayer(IRoleOptionsCollection roleOptions, List<VanillaRolePlayerAssignData> players, params RoleTypes[] roles)
+	private static List<VanillaRolePlayerAssignData> assignVanillaRoleToPlayer(IRoleOptionsCollection roleOptions, List<VanillaRolePlayerAssignData> players, params RoleTypes[] roles)
 	{
 		var result = new List<VanillaRolePlayerAssignData>(players.Count);
 

@@ -25,7 +25,7 @@ public sealed class PutExROption : IRequestHandler
 		if (AmongUsClient.Instance == null ||
 			!AmongUsClient.Instance.AmHost ||
 			LobbyBehaviour.Instance == null ||
-			GameManager.Instance == null ||
+			GameData.Instance == null ||
 			GameManager.Instance == null ||
 			GameOptionsManager.Instance == null ||
 			GameOptionsManager.Instance.currentGameOptions == null ||
