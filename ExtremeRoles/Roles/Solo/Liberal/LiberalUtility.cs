@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.Player;
@@ -21,7 +24,7 @@ public sealed class DoveCommonAbilityHandler
 	private readonly int normalTask;
 	private readonly int allTaskNum;
 
-	private int oldTaskCompletedCount = 0;
+	private HashSet<uint> oldTaskComplete = [];
 
 	public DoveCommonAbilityHandler(LiberalDefaultOptionLoader option) : this(
 		option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.TaskCompletedMoney),
@@ -40,7 +43,7 @@ public sealed class DoveCommonAbilityHandler
 
 		this.taskDelta = taskDelta;
 		this.boostDelta = boostDelta;
-		this.oldTaskCompletedCount = 0;
+		this.oldTaskComplete.Clear();
 	}
 
 	private NetworkedPlayerInfo? cachePlayer;
@@ -61,7 +64,7 @@ public sealed class DoveCommonAbilityHandler
 			return;
 		}
 
-		int completedTaskCount = 0;
+		List<uint> curTaskComplete = [];
 
 		for (int i = 0; i < cachePlayer.Tasks.Count; ++i)
 		{
@@ -70,28 +73,29 @@ public sealed class DoveCommonAbilityHandler
 			{
 				continue;
 			}
-			completedTaskCount++;
+			curTaskComplete.Add(task.Id);
 		}
 
-		if (completedTaskCount == 0)
+		if (curTaskComplete.Count == 0 || curTaskComplete.Count == this.oldTaskComplete.Count)
 		{
 			return;
 		}
 
 		byte playerId = cachePlayer.PlayerId;
-		if (completedTaskCount != this.oldTaskCompletedCount)
+		
+		foreach (uint id in curTaskComplete)
 		{
-			int delta = completedTaskCount - this.oldTaskCompletedCount;
-			for (int i = 0; delta > 0; ++i)
+			if (this.oldTaskComplete.Contains(id))
 			{
-				LiberalMoneyBankSystem.RpcUpdateSystem(playerId, LiberalMoneyHistory.Reason.AddOnTask, taskDelta, boostDelta);
+				continue;
 			}
-
-			this.oldTaskCompletedCount = completedTaskCount;
+			LiberalMoneyBankSystem.RpcUpdateSystem(playerId, LiberalMoneyHistory.Reason.AddOnTask, taskDelta, boostDelta);
 		}
 
+		this.oldTaskComplete = curTaskComplete.ToHashSet();
+
 		// 全てのタスクが完了している場合、タスクをランダムに置き換える
-		if (completedTaskCount != cachePlayer.Tasks.Count)
+		if (this.oldTaskComplete.Count != cachePlayer.Tasks.Count)
 		{
 			return;
 		}
