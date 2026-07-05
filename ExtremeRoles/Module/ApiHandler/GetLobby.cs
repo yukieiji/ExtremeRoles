@@ -26,6 +26,7 @@ public sealed class GetLobby : IRequestHandler
 		if (AmongUsClient.Instance == null ||
 			LobbyBehaviour.Instance == null ||
 			GameManager.Instance == null ||
+			GameManager.Instance == null ||
 			GameOptionsManager.Instance == null ||
 			GameOptionsManager.Instance.currentGameOptions == null ||
 			GameOptionsManager.Instance.gameOptionsFactory == null)
