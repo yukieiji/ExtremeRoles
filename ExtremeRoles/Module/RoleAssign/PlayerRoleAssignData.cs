@@ -3,8 +3,8 @@ using System.Linq;
 
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign;
 

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
-using ExtremeRoles.Module.Interface;
+
 using Microsoft.Extensions.DependencyInjection;
+
+using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
