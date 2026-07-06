@@ -25,6 +25,7 @@ public sealed class DoveCommonAbilityHandler
 	private readonly int allTaskNum;
 
 	private HashSet<uint> oldTaskComplete = [];
+	private float waitTimer = 0.0f;
 
 	public DoveCommonAbilityHandler(LiberalDefaultOptionLoader option) : this(
 		option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.TaskCompletedMoney),
@@ -63,6 +64,15 @@ public sealed class DoveCommonAbilityHandler
 		{
 			return;
 		}
+
+		if (this.waitTimer >= 0.0f)
+		{
+			this.waitTimer -= UnityEngine.Time.deltaTime;
+			return;
+		}
+
+		// 1秒ごとに見る
+		this.waitTimer = 1.0f;
 
 		List<uint> curTaskComplete = [];
 
