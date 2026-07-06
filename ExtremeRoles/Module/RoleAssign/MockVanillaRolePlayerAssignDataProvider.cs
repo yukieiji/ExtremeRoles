@@ -7,6 +7,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
 
+#nullable enable
 
 namespace ExtremeRoles.Module.RoleAssign;
 
