@@ -32,7 +32,11 @@ public sealed class PostExRAssignFilter : IRequestHandler
 
 		if (AmongUsClient.Instance == null ||
 			!AmongUsClient.Instance.AmHost ||
-			LobbyBehaviour.Instance == null)
+			LobbyBehaviour.Instance == null ||
+			GameManager.Instance == null ||
+			GameOptionsManager.Instance == null ||
+			GameOptionsManager.Instance.currentGameOptions == null ||
+			GameOptionsManager.Instance.gameOptionsFactory == null)
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Close();
