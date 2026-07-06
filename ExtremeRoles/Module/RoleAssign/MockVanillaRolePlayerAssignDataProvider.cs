@@ -23,7 +23,7 @@ public sealed class MockVanillaRolePlayerAssignDataProvider : IVanillaRolePlayer
 			throw new ArgumentNullException(nameof(option.MockOption));
 		}
 
-
+		// ロビーに居る時点で必ず1人以上絶対に存在する
 		var curPlayerData = GameData.Instance.AllPlayers.GetFastEnumerator().Select(x => new VanillaRolePlayerAssignData(x)).ToList();
 
 		int playerNum = option.MockOption.PlayerNum;
