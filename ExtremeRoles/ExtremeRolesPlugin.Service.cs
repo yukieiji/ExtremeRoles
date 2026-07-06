@@ -31,11 +31,10 @@ public partial class ExtremeRolesPlugin
 
 		collection
 			.AddScoped<VanillaRolePlayerOption>()
+			.AddScoped<IVanillaRolePlayerAssignDataProvider, VanillaRolePlayerAssignDataProviderSelector>()
 
-			.AddScoped<DefaultVanillaRolePlayerAssignDataProvider>()
-			.AddScoped<MockVanillaRolePlayerAssignDataProvider>()
-
-			.AddScoped<IVanillaRolePlayerAssignDataProvider, VanillaRolePlayerAssignDataProviderSelector>();
+			.AddTransient<DefaultVanillaRolePlayerAssignDataProvider>()
+			.AddTransient<MockVanillaRolePlayerAssignDataProvider>();
 
 		collection
 			.AddTransient<IRoleAssignDataBuilder, ExtremeRoleAssignDataBuilder>()
