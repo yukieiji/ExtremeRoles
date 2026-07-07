@@ -67,9 +67,6 @@
   <data name="ROLE_FILTER_ADD_TITLE" xml:space="preserve">
     <value>フィルター追加: 役職の選択</value>
   </data>
-  <data name="ROLE_FILTER_ADD_BUTTON" xml:space="preserve">
-    <value>フィルターを追加</value>
-  </data>
   <data name="ROLE_FILTER_DELETE_CONFIRM_TITLE" xml:space="preserve">
     <value>フィルターの削除</value>
   </data>
@@ -100,9 +97,6 @@
   <data name="RIGHT_PANEL_TITLE" xml:space="preserve">
     <value>簡易設定ビュー</value>
   </data>
-  <data name="SETTINGS_TITLE" xml:space="preserve">
-    <value>設定</value>
-  </data>
   <data name="ROLE_FILTER_SHORT_LABEL" xml:space="preserve">
     <value>R</value>
   </data>
@@ -124,14 +118,8 @@
   <data name="CLIPBOARD_FACTION_COUNTS" xml:space="preserve">
     <value>陣営数</value>
   </data>
-  <data name="CLIPBOARD_ROLES" xml:space="preserve">
-    <value>役職</value>
-  </data>
   <data name="CLIPBOARD_DETAILED_SETTINGS" xml:space="preserve">
     <value>詳細設定</value>
-  </data>
-  <data name="CLIPBOARD_OTHERS" xml:space="preserve">
-    <value>その他</value>
   </data>
   <data name="CLIPBOARD_OTHERS_NOTE" xml:space="preserve">
     <value>※ : 何かあればここに書くとよろし</value>
@@ -144,5 +132,65 @@
   </data>
   <data name="CLIPBOARD_COPY_SUCCESS" xml:space="preserve">
     <value>現在の設定をクリップボードにコピーしました</value>
+  </data>
+  <data name="SIMULATE_EXECUTING_LABEL" xml:space="preserve">
+    <value>役職割り当て中・・・</value>
+  </data>
+  <data name="SIMULATE_LABEL" xml:space="preserve">
+    <value>役職割り当てシミュレート</value>
+  </data>
+  <data name="SIMULATE_RESULT_HEADER" xml:space="preserve">
+    <value>役職の割り当て結果</value>
+  </data>
+  <data name="EXECUTE_BUTTON_LABEL" xml:space="preserve">
+    <value>実行</value>
+  </data>
+  <data name="SIMULATE_RESULT_TITLE" xml:space="preserve">
+    <value>割り当て結果</value>
+  </data>
+  <data name="COPY_BUTTON_LABEL" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="SIMULATE_DETAILS_SETTING" xml:space="preserve">
+    <value>シミュレート設定</value>
+  </data>
+  <data name="LOBBY_INFO_TITLE" xml:space="preserve">
+    <value>部屋の情報</value>
+  </data>
+  <data name="CYCLE_LABEL" xml:space="preserve">
+    <value>実行回数</value>
+  </data>
+  <data name="PLAYER_NUM_LABEL" xml:space="preserve">
+    <value>プレイヤー数</value>
+  </data>
+  <data name="EMPTY_SIMULATE_MESSAGE" xml:space="preserve">
+    <value>「実行」ボタンを押して役職の割り当てをシミュレート</value>
+  </data>
+  <data name="SERVER_TITLE" xml:space="preserve">
+    <value>サーバー</value>
+  </data>
+  <data name="CURRENT_PLAYER_LABEL" xml:space="preserve">
+    <value>現在のプレイヤー</value>
+  </data>
+  <data name="RIGHT_SIDEBAR_SETTING" xml:space="preserve">
+    <value>簡易設定ビュー設定</value>
+  </data>
+  <data name="LEFT_SIDEBAR_SETTING" xml:space="preserve">
+    <value>左ナビゲーションサイドバー設定</value>
+  </data>
+  <data name="SAVE_STATE_TO_BROWSER" xml:space="preserve">
+    <value>開閉状態の保持</value>
+  </data>
+  <data name="INITIAL_SIDEBAR_STATE" xml:space="preserve">
+    <value>初期開閉状態</value>
+  </data>
+  <data name="SIDEBAR_OPEN_LABEL" xml:space="preserve">
+    <value>オープン</value>
+  </data>
+  <data name="SIDEBAR_CLOSE_LABEL" xml:space="preserve">
+    <value>クローズ</value>
+  </data>
+  <data name="SIMULATE_SETTING_PLAYER_NAME" xml:space="preserve">
+    <value>役職割り当てシュミレート時のダミープレイヤー名</value>
   </data>
 </root>

@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
-public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
+public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider, IVanillaRolePlayerAssignDataProvider provider)
 {
 	public IReadOnlyList<VanillaRolePlayerAssignData> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
 	public IReadOnlyList<IPlayerToExRoleAssignData> Data => this.assignData;
@@ -28,9 +27,7 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 		}
 	}
 
-	private readonly List<VanillaRolePlayerAssignData> needRoleAssignPlayer =
-		GameData.Instance.AllPlayers.GetFastEnumerator().Select(
-			x => new VanillaRolePlayerAssignData(x))
+	private readonly List<VanillaRolePlayerAssignData> needRoleAssignPlayer = provider.Data
 		.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
 	private int gameControlId = 0;
 

@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.Player;
@@ -21,6 +24,9 @@ public sealed class DoveCommonAbilityHandler
 	private readonly int normalTask;
 	private readonly int allTaskNum;
 
+	private HashSet<uint> oldTaskComplete = [];
+	private float waitTimer = 0.0f;
+
 	public DoveCommonAbilityHandler(LiberalDefaultOptionLoader option) : this(
 		option.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.TaskCompletedMoney),
 		0.0f)
@@ -38,6 +44,7 @@ public sealed class DoveCommonAbilityHandler
 
 		this.taskDelta = taskDelta;
 		this.boostDelta = boostDelta;
+		this.oldTaskComplete.Clear();
 	}
 
 	private NetworkedPlayerInfo? cachePlayer;
@@ -58,6 +65,17 @@ public sealed class DoveCommonAbilityHandler
 			return;
 		}
 
+		if (this.waitTimer >= 0.0f)
+		{
+			this.waitTimer -= UnityEngine.Time.deltaTime;
+			return;
+		}
+
+		// 1秒ごとに見る
+		this.waitTimer = 1.0f;
+
+		List<uint> curTaskComplete = [];
+
 		for (int i = 0; i < cachePlayer.Tasks.Count; ++i)
 		{
 			var task = cachePlayer.Tasks[i];
@@ -65,6 +83,41 @@ public sealed class DoveCommonAbilityHandler
 			{
 				continue;
 			}
+			curTaskComplete.Add(task.Id);
+		}
+
+		if (curTaskComplete.Count == 0 || curTaskComplete.Count == this.oldTaskComplete.Count)
+		{
+			return;
+		}
+
+		byte playerId = cachePlayer.PlayerId;
+		
+		foreach (uint id in curTaskComplete)
+		{
+			if (this.oldTaskComplete.Contains(id))
+			{
+				continue;
+			}
+			LiberalMoneyBankSystem.RpcUpdateSystem(playerId, LiberalMoneyHistory.Reason.AddOnTask, taskDelta, boostDelta);
+		}
+
+		this.oldTaskComplete = curTaskComplete.ToHashSet();
+
+		// 全てのタスクが完了している場合、タスクをランダムに置き換える
+		if (this.oldTaskComplete.Count != cachePlayer.Tasks.Count)
+		{
+			return;
+		}
+
+		for (int i = 0; i < cachePlayer.Tasks.Count; ++i)
+		{
+			var task = cachePlayer.Tasks[i];
+			if (!task.Complete)
+			{
+				continue;
+			}
+
 			int taskTarget = RandomGenerator.Instance.Next(0, this.allTaskNum);
 
 			int taskIndex;
@@ -80,10 +133,7 @@ public sealed class DoveCommonAbilityHandler
 			{
 				taskIndex = GameSystem.GetRandomLongTask();
 			}
-			byte playerId = cachePlayer.PlayerId;
 			GameSystem.RpcReplaceNewTask(playerId, i, taskIndex);
-			LiberalMoneyBankSystem.RpcUpdateSystem(playerId, LiberalMoneyHistory.Reason.AddOnTask, taskDelta, boostDelta);
-			break;
 		}
 	}
 

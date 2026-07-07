@@ -29,6 +29,12 @@ public partial class ExtremeRolesPlugin
 			.AddTransient<IRoleAssignDataPreparer, ExtremeRoleAssginDataPreparer>()
 			.AddTransient<ISpawnDataManager, RoleSpawnDataManager>();
 
+		collection
+			.AddScoped<VanillaRolePlayerOption>()
+			.AddScoped<IVanillaRolePlayerAssignDataProvider, VanillaRolePlayerAssignDataProviderSelector>()
+
+			.AddTransient<DefaultVanillaRolePlayerAssignDataProvider>()
+			.AddTransient<MockVanillaRolePlayerAssignDataProvider>();
 
 		collection
 			.AddTransient<IRoleAssignDataBuilder, ExtremeRoleAssignDataBuilder>()
