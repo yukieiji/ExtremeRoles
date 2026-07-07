@@ -190,4 +190,7 @@
   <data name="SIDEBAR_CLOSE_LABEL" xml:space="preserve">
     <value>クローズ</value>
   </data>
+  <data name="SIMULATE_SETTING_PLAYER_NAME" xml:space="preserve">
+    <value>役職割り当てシュミレート時のダミープレイヤー名</value>
+  </data>
 </root>
