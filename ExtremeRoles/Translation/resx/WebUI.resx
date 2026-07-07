@@ -172,4 +172,22 @@
   <data name="CURRENT_PLAYER_LABEL" xml:space="preserve">
     <value>現在のプレイヤー</value>
   </data>
+  <data name="RIGHT_SIDEBAR_SETTING" xml:space="preserve">
+    <value>簡易設定ビュー設定</value>
+  </data>
+  <data name="LEFT_SIDEBAR_SETTING" xml:space="preserve">
+    <value>左ナビゲーションサイドバー設定</value>
+  </data>
+  <data name="SAVE_STATE_TO_BROWSER" xml:space="preserve">
+    <value>開閉状態の保持</value>
+  </data>
+  <data name="INITIAL_SIDEBAR_STATE" xml:space="preserve">
+    <value>初期開閉状態</value>
+  </data>
+  <data name="SIDEBAR_OPEN_LABEL" xml:space="preserve">
+    <value>オープン</value>
+  </data>
+  <data name="SIDEBAR_CLOSE_LABEL" xml:space="preserve">
+    <value>クローズ</value>
+  </data>
 </root>
