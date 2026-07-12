@@ -580,8 +580,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			if (!this.allFire.TryGetValue(playerId, out var fire) ||
 				fire == null)
 			{
-				var player = Player.GetPlayerControlById(playerId);
-				if (player == null)
+				if (!Player.TryGetPlayerControl(playerId, out var player))
 				{
 					return;
 				}

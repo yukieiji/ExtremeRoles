@@ -111,8 +111,7 @@ public sealed class TuckerRole :
 
 	public static void RemoveChimera(byte rolePlayerId, byte targetPlayerId)
 	{
-		var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
-		if (rolePlayer == null ||
+		if (!Player.TryGetPlayerControl(rolePlayerId, out var rolePlayer) ||
 			!ExtremeRoleManager.TryGetSafeCastedRole<TuckerRole>(rolePlayerId, out var tucker) ||
 			tucker.option is null)
 		{

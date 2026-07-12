@@ -74,8 +74,7 @@ public sealed class CEOForceMeeting : IOnemanMeeting, IVoterValidtor
 		{
 			return false;
 		}
-		var player = Helper.Player.GetPlayerControlById(target);
-		if (player == null)
+		if (!Helper.Player.TryGetPlayerControl(target, out var player))
 		{
 			return false;
 		}

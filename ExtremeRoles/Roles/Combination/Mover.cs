@@ -100,8 +100,7 @@ public sealed class Mover :
         MoverRpc rpcId = (MoverRpc)reader.ReadByte();
         byte rolePlayerId = reader.ReadByte();
 
-        var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
-        if (rolePlayer == null ||
+        if (!Player.TryGetPlayerControl(rolePlayerId, out var rolePlayer) ||
 			!ExtremeRoleManager.TryGetSafeCastedRole<Mover>(rolePlayerId, out var role))
         {
             return;

@@ -56,8 +56,10 @@ public sealed class Summoner :
 
 	public static void RpcOps(byte rolePlayerId, byte targetPlayerId, float x, float y, bool isDead)
 	{
-		var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
-		if (rolePlayer == null) { return; }
+		if (!Player.TryGetPlayerControl(rolePlayerId, out var rolePlayer))
+		{
+			return;
+		}
 
 		var pos = new Vector2(x, y);
 		rolePlayer.NetTransform.SnapTo(pos);
@@ -78,9 +80,10 @@ public sealed class Summoner :
 		}
 		else
 		{
-			var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-			if (targetPlayer == null) { return; }
-			targetPlayer.NetTransform.SnapTo(pos);
+			if (Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer))
+			{
+				targetPlayer.NetTransform.SnapTo(pos);
+			}
 		}
 	}
 
