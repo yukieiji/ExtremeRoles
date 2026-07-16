@@ -19,9 +19,10 @@ public sealed class StressProgress(float range, float waitTime, StressProgress.O
 
 	public float StressGage { get; private set; } = 0.0f;
 
-	public void ResetTimer()
+	public void Reset()
 	{
 		this.waitTimer = this.waitTime;
+		this.StressGage = 0.0f;
 	}
 
 	public void Update(PlayerControl rolePlayer, in float deltaTime)
@@ -89,7 +90,7 @@ public sealed class LonerStatusModel(
 
 	public float StressGage => this.stress.StressGage;
 
-	public void ResetTimer() => this.stress.ResetTimer();
+	public void ResetStress() => this.stress.Reset();
 
 	public void Update(PlayerControl rolePlayer, in float deltaTime)
 	{
