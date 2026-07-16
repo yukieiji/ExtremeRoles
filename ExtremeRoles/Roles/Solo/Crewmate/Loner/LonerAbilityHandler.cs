@@ -109,6 +109,7 @@ public sealed class LonerAbilityHandler(
     {
 		if (!GameProgressSystem.IsTaskPhase)
 		{
+			this.status.ResetStress();
 			return;
 		}
 
