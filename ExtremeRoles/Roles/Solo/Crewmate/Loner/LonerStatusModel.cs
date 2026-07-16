@@ -19,14 +19,13 @@ public sealed class StressProgress(float range, float waitTime, StressProgress.O
 
 	public float StressGage { get; private set; } = 0.0f;
 
+	public void ResetTimer()
+	{
+		this.waitTimer = this.waitTime;
+	}
+
 	public void Update(PlayerControl rolePlayer, in float deltaTime)
 	{
-		if (!GameProgressSystem.IsTaskPhase)
-		{
-			this.waitTimer = this.waitTime;
-			return;
-		}
-
 		if (Minigame.Instance != null && 
 			!this.option.ProgressOnTask)
 		{
@@ -89,6 +88,8 @@ public sealed class LonerStatusModel(
 	private readonly StressProgress stress = new StressProgress(stressRange, stressWaitTime, stressOption);
 
 	public float StressGage => this.stress.StressGage;
+
+	public void ResetTimer() => this.stress.ResetTimer();
 
 	public void Update(PlayerControl rolePlayer, in float deltaTime)
 	{
