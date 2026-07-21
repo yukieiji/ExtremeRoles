@@ -121,10 +121,12 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 		if (role.Status is IRoleFakeIntro mainFake &&
 			mainFake.FakeTeam == teamId)
 		{
-			var player = Player.GetPlayerControlById(playerId);
-			impTeam.Add(player);
-			Logging.Debug($"Add fake {teamId}: {playerId}");
-			return true;
+			if (Player.TryGetPlayerControl(playerId, out var player))
+			{
+				impTeam.Add(player);
+				Logging.Debug($"Add fake {teamId}: {playerId}");
+				return true;
+			}
 		}
 		return false;
 	}

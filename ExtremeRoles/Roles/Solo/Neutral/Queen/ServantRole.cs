@@ -172,10 +172,8 @@ public sealed class ServantRole :
 
 	public override string GetFullDescription()
 	{
-		var queen = Player.GetPlayerControlById(queenPlayerId);
 		string fullDesc = base.GetFullDescription();
-
-		if (queen == null ||
+		if (!Player.TryGetPlayerControl(queenPlayerId, out var queen) ||
 			queen.Data == null)
 		{
 			return fullDesc;
@@ -231,8 +229,11 @@ public sealed class ServantRole :
 		if (ExtremeRoleManager.TryGetSafeCastedRole<ServantRole>(rolePlayer.PlayerId, out var role) &&
 			role.Status is IParentChainStatus parent)
 		{
-			var queen = Player.GetPlayerControlById(parent.Parent);
-			return !queen.IsAlive();
+			if (Player.TryGetPlayerControl(parent.Parent, out var queen))
+			{
+				return !queen.IsAlive();
+			}
+			return false;
 		}
 		return false;
 	}

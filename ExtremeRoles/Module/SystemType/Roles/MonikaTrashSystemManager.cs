@@ -171,8 +171,7 @@ public sealed class MonikaTrashSystem(bool canSeeCrew) : IDirtableSystemType
 				break;
 			case Ops.StartMeeting:
 				byte callerId = msgReader.ReadByte();
-				var caller = Player.GetPlayerControlById(callerId);
-				if (caller == null)
+				if (!Player.TryGetPlayerControl(callerId, out var caller))
 				{
 					return;
 				}
@@ -248,8 +247,7 @@ public sealed class MonikaTrashSystem(bool canSeeCrew) : IDirtableSystemType
 	{
 		this.trash.Add(targetPlayerId);
 
-		var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-		if (targetPlayer == null)
+		if (!Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer))
 		{
 			return;
 		}

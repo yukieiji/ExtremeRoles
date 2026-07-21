@@ -130,8 +130,7 @@ public sealed class Boxer : SingleRoleBase, IRoleAutoBuildAbility
 		{
 			return;
 		}
-		var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-		if (targetPlayer == null ||
+		if (!Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer) ||
 			targetPlayer.Data == null)
 		{
 			return;

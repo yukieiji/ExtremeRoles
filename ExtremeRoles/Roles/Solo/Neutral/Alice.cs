@@ -152,8 +152,7 @@ public sealed class Alice :
 			return;
 		}
 
-        var player = Helper.Player.GetPlayerControlById(targetPlayerId);
-        if (player == null)
+        if (!Helper.Player.TryGetPlayerControl(targetPlayerId, out var player))
 		{
 			return;
 		}

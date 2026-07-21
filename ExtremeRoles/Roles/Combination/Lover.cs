@@ -145,8 +145,7 @@ public sealed class Lover : MultiAssignRoleBase
 			return "";
 		}
 		// 最初は確定
-		var firstLover = Player.GetPlayerControlById(lover[0]);
-		if (firstLover != null)
+		if (Player.TryGetPlayerControl(lover[0], out var firstLover))
 		{
 			builder.Append(firstLover.Data.PlayerName);
 		}
@@ -156,8 +155,7 @@ public sealed class Lover : MultiAssignRoleBase
 			// 後は適当に・・・
             for (int i = 1; i < lover.Count; ++i)
             {
-				var targetLover = Player.GetPlayerControlById(lover[i]);
-				if (targetLover == null)
+				if (!Player.TryGetPlayerControl(lover[i], out var targetLover))
 				{
 					continue;
 				}
@@ -429,10 +427,12 @@ public sealed class Lover : MultiAssignRoleBase
 			}
 			else
 			{
-				var player = Player.GetPlayerControlById(playerId);
-				if (player.IsAlive())
+				if (Player.TryGetPlayerControl(playerId, out var player))
 				{
-					anotherPlayerId.Invoke(player);
+					if (player.IsAlive())
+					{
+						anotherPlayerId.Invoke(player);
+					}
 				}
 			}
 		}
