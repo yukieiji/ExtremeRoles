@@ -44,16 +44,18 @@ public sealed class StressProgress(float range, float waitTime, StressProgress.O
 		foreach (var playerInfo in
 			GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			if (isValidPlayer(rolePlayer, playerInfo))
+			if (!isValidPlayer(rolePlayer, playerInfo))
 			{
-				PlayerControl target = playerInfo.Object;
+				continue;
+			}
 
-				var vector = target.GetTruePosition() - truePos;
-				float magnitude = vector.magnitude;
-				if (magnitude <= this.range)
-				{
-					stressDeltaNum += deltaTime;
-				}
+			PlayerControl target = playerInfo.Object;
+
+			var vector = target.GetTruePosition() - truePos;
+			float magnitude = vector.magnitude;
+			if (magnitude <= this.range)
+			{
+				stressDeltaNum += deltaTime;
 			}
 		}
 		
