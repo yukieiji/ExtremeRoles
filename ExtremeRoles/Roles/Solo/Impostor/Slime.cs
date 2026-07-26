@@ -43,9 +43,12 @@ public sealed class Slime :
         SlimeRpc rpcId = (SlimeRpc)reader.ReadByte();
         byte rolePlayerId = reader.ReadByte();
 
-        var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
+        if (!Player.TryGetPlayerControl(rolePlayerId, out var rolePlayer))
+        {
+            return;
+        }
         var role = ExtremeRoleManager.GetSafeCastedRole<Slime>(rolePlayerId);
-		if (role == null || rolePlayer == null ||
+		if (role == null ||
 			(
 				role.seeMorphMerlin &&
 				PlayerControl.LocalPlayer != null &&

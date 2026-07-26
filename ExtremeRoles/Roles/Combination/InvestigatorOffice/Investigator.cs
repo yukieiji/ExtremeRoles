@@ -527,8 +527,7 @@ public sealed class Investigator : MultiAssignRoleBase, IRoleMurderPlayerHook, I
 				showStr = Tr.GetString(key, roleStr);
 				break;
 			case SearchCond.FindName:
-				var player = Player.GetPlayerControlById(info.Killer);
-				if (player == null ||
+				if (!Player.TryGetPlayerControl(info.Killer, out var player) ||
 					player.Data == null)
 				{
 					return;

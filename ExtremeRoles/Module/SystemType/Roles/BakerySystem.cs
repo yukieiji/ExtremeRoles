@@ -119,8 +119,11 @@ public sealed class BakerySystem : IDirtableSystemType
 		this.aliveBakary.RemoveWhere(
 			x =>
 			{
-				var player = Player.GetPlayerControlById(x);
-				return player.IsInValid();
+				if (Player.TryGetPlayerControl(x, out var player))
+				{
+					return player.IsInValid();
+				}
+				return true;
 			});
 	}
 

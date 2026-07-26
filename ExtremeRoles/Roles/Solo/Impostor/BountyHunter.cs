@@ -80,11 +80,18 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
 
     public override string GetFullDescription()
     {
+        string targetPlayerName = "Unknown Player";
+        if (Player.TryGetPlayerControl(this.targetId, out var targetPlayer) &&
+            targetPlayer.Data != null)
+        {
+            targetPlayerName = targetPlayer.Data.PlayerName;
+        }
+
         return string.Format(
             base.GetFullDescription(),
             this.targetKillCool,
             this.noneTargetKillCool,
-            Player.GetPlayerControlById(this.targetId).Data.PlayerName);
+            targetPlayerName);
     }
 
     public bool TryRolePlayerKillTo(
@@ -275,7 +282,9 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
         }
 
         this.targetArrowUpdateTimer = this.targetArrowUpdateTime;
-        this.targetArrow.UpdateTarget(
-            Player.GetPlayerControlById(this.targetId).transform.position);
+        if (Player.TryGetPlayerControl(this.targetId, out var targetPlayer))
+        {
+            this.targetArrow.UpdateTarget(targetPlayer.transform.position);
+        }
     }
 }

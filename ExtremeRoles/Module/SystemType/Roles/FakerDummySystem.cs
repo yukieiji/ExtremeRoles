@@ -355,8 +355,11 @@ public sealed class FakerDummySystem(bool seeDummyMerlin) : IExtremeSystemType
 		byte dummyTargetId = msgReader.ReadByte();
 		byte fakerOps = msgReader.ReadByte();
 
-		PlayerControl rolePlyaer = Player.GetPlayerControlById(fakerPlayerId);
-		PlayerControl targetPlyaer = Player.GetPlayerControlById(dummyTargetId);
+		if (!Player.TryGetPlayerControl(fakerPlayerId, out var rolePlyaer) ||
+			!Player.TryGetPlayerControl(dummyTargetId, out var targetPlyaer))
+		{
+			return;
+		}
 
 		IFakerObject fake;
 		switch ((Faker.FakerDummyOps)fakerOps)
