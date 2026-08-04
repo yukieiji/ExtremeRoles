@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
-    <Version>2026.7.16.1</Version>
+    <Version>2026.8.5.0</Version>
     <!--<VersionPrefix>2026.7.16</VersionPrefix>-->
     <VersionSuffix>4thAnniversary</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
