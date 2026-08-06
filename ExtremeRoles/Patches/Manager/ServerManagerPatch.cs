@@ -12,6 +12,7 @@ namespace ExtremeRoles.Patches.Manager;
 public static class ServerManagerLoadServersPatch
 {
 	private const string nosServer = "Nebula on the Ship JP";
+	private const string snrServerDomain = "supernewroles.com";
 
 	public static void Prefix(ServerManager __instance)
 	{
@@ -27,7 +28,10 @@ public static class ServerManagerLoadServersPatch
 			});
 		jsonServerData.CleanAndMerge(ServerManager.DefaultRegions);
 
-		if (jsonServerData.Regions.Any(x => x.Name.Contains(nosServer)))
+		if (jsonServerData.Regions.Any(
+				x => x.Name.Contains(nosServer) ||
+				string.IsNullOrEmpty(x.PingServer) ||
+				x.PingServer.EndsWith(snrServerDomain, System.StringComparison.OrdinalIgnoreCase)))
 		{
 			FileIO.Delete(__instance.serverInfoFileJson);
 		}
