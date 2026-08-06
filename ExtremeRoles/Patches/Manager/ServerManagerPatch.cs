@@ -29,8 +29,9 @@ public static class ServerManagerLoadServersPatch
 		jsonServerData.CleanAndMerge(ServerManager.DefaultRegions);
 
 		if (jsonServerData.Regions.Any(
-				x => x.Name.Contains(nosServer) || 
-				x.PingServer.ToLower().EndsWith(snrServerDomain)))
+				x => x.Name.Contains(nosServer) ||
+				string.IsNullOrEmpty(x.PingServer) ||
+				x.PingServer.EndsWith(snrServerDomain, System.StringComparison.OrdinalIgnoreCase)))
 		{
 			FileIO.Delete(__instance.serverInfoFileJson);
 		}
