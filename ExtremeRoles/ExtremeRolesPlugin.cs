@@ -3,8 +3,8 @@ global using Tr = ExtremeRoles.Extension.Controller.TranslationControllerExtensi
 global using InfoOverlay = ExtremeRoles.Module.InfoOverlay.Controller;
 global using ExRError = ExtremeRoles.Module.ErrorCode<ExtremeRoles.ErrorCode>;
 
-global using NormalGameOption = AmongUs.GameOptions.NormalGameOptionsV10;
-global using HnSGameOption = AmongUs.GameOptions.HideNSeekGameOptionsV10;
+global using NormalGameOption = AmongUs.GameOptions.NormalGameOptionsV11;
+global using HnSGameOption = AmongUs.GameOptions.HideNSeekGameOptionsV11;
 
 using System;
 using System.Net.Http;

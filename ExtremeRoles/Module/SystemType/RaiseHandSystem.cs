@@ -23,7 +23,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 		{
 			this.hand = Object.Instantiate(
 				pva.Background, pva.LevelNumberText.transform);
-			this.hand.name = $"raisehand_{pva.TargetPlayerId}";
+			this.hand.name = $"raisehand_{pva.PlayerId}";
 			this.hand.sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
 				Resources.ObjectPath.RaiseHandIcon);
 			this.hand.transform.localPosition = new Vector3(2.0f, -0.75f, -3f);
@@ -99,7 +99,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 
 	public void AddHand(PlayerVoteArea player)
 	{
-		this.allHand[player.TargetPlayerId] = new Behavior(player);
+		this.allHand[player.PlayerId] = new Behavior(player);
 	}
 
 	public void RaiseHandButtonSetActive(bool active)

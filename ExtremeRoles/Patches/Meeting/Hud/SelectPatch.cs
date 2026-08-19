@@ -69,7 +69,7 @@ public static class MeetingHudSelectPatch
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{
 			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-			if (suspectStateIdx != (int)playerVoteArea.TargetPlayerId)
+			if (suspectStateIdx != (int)playerVoteArea.PlayerId)
 			{
 				playerVoteArea.ClearButtons();
 			}

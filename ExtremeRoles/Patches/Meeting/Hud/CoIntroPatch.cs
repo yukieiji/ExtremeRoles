@@ -11,12 +11,12 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 
 #nullable enable
 
-[HarmonyPatch(typeof(MeetingHud._CoIntro_d__53), nameof(MeetingHud._CoIntro_d__53.MoveNext))]
+[HarmonyPatch(typeof(MeetingHud._CoIntro_d__57), nameof(MeetingHud._CoIntro_d__57.MoveNext))]
 public static class MeetingHudCoIntroPatch
 {
 	public const float MeetingAbilityButtonXOffset = 1.0f;
 	public static void Postfix(
-		MeetingHud._CoIntro_d__53 __instance, ref bool __result)
+		MeetingHud._CoIntro_d__57 __instance, ref bool __result)
 	{
 		if (__result || ExtremeRoleManager.GameRole.Count == 0 || OnemanMeetingSystemManager.IsActive)
 		{

@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
@@ -21,7 +21,7 @@ public static class MeetingHudSetForegroundForDeadPatch
 
 		var meeting = HudManager.Instance.MeetingPrefab;
 
-		__instance.amDead = false;
+		__instance.hasForegroundForDeadBeenSet = false;
 		__instance.Glass.sprite = meeting.Glass.sprite;
 		__instance.Glass.color = meeting.Glass.color;
 		return false;

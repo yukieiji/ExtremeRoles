@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.Module.CustomOption.OLDS;
 
@@ -88,7 +88,7 @@ public sealed class V10toV11 : MigratorBase
 		{ S(GlobalOption.DisableNeutralSpecialForceEnd), $"{ShipGlobalOptionCategory.NeutralWinOption}{NeutralWinOption.DisableSpecialEnd}" },
 
 		{ S(GlobalOption.IsAssignNeutralToVanillaCrewGhostRole), $"{ShipGlobalOptionCategory.GhostRoleGlobalOption}{GhostRoleGlobalOption.IsAssignNeutralToVanillaCrewGhostRole}" },
-		{ S(GlobalOption.IsRemoveAngleIcon)                    , $"{ShipGlobalOptionCategory.GhostRoleGlobalOption}{GhostRoleGlobalOption.IsRemoveAngleIcon}" },
+		{ S(GlobalOption.IsRemoveAngleIcon)                    , $"{ShipGlobalOptionCategory.GhostRoleGlobalOption}IsRemoveAngleIcon" }, // 無くなったけどね・・・
 		{ S(GlobalOption.IsBlockGAAbilityReport)               , $"{ShipGlobalOptionCategory.GhostRoleGlobalOption}{GhostRoleGlobalOption.IsBlockGAAbilityReport}" },
 	};
 }

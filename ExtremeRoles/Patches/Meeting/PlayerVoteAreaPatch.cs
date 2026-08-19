@@ -21,7 +21,7 @@ public static class NamePlateHelper
 	{
 		var playerInfo = GameData.Instance.GetPlayerById(
 			playerId != byte.MaxValue ?
-			playerId : pva.TargetPlayerId);
+			playerId : pva.PlayerId);
 		if (playerInfo == null)
 		{
 			return;
@@ -71,9 +71,9 @@ public static class PlayerVoteAreaSelectPatch
 		var button = __instance.gameObject.TryAddComponent<ExtremePlayerVoteAreaButton>();
 
 		if (!button.TryGetMeetingButton(__instance, out var buttonEnumerable) ||
-			__instance.voteComplete ||
+			__instance.VoteComplete ||
 			__instance.Parent == null ||
-			!__instance.Parent.Select((int)__instance.TargetPlayerId))
+			!__instance.Parent.Select((int)__instance.PlayerId))
 		{
 			return false;
 		}
@@ -122,9 +122,7 @@ public static class PlayerVoteAreaSetDeadPatch
 {
 	public static bool Prefix(
 		PlayerVoteArea __instance,
-		[HarmonyArgument(0)] bool didReport,
-		[HarmonyArgument(1)] bool isDead,
-		[HarmonyArgument(2)] bool isGuardian = false)
+		[HarmonyArgument(0)] bool isDead)
 	{
 		if (!OnemanMeetingSystemManager.IsActive)
 		{
@@ -132,32 +130,9 @@ public static class PlayerVoteAreaSetDeadPatch
 		}
 
 		__instance.AmDead = false;
-		__instance.DidReport = didReport;
-		__instance.Megaphone.enabled = didReport;
 		__instance.Overlay.gameObject.SetActive(false);
 		__instance.XMark.gameObject.SetActive(false);
 
 		return false;
-	}
-
-	public static void Postfix(
-		PlayerVoteArea __instance,
-		[HarmonyArgument(0)] bool didReport,
-		[HarmonyArgument(1)] bool isDead,
-		[HarmonyArgument(2)] bool isGuardian = false)
-    {
-		var ga = __instance.GAIcon.gameObject;
-
-		if (ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsRemoveAngleIcon)
-		{
-			ga.SetActive(false);
-		}
-		else
-		{
-			bool isGhostRole = isGuardian ||
-				ExtremeGhostRoleManager.GameRole.ContainsKey(__instance.TargetPlayerId);
-
-			ga.SetActive(isGhostRole);
-		}
 	}
 }

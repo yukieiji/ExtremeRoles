@@ -44,7 +44,7 @@ public static class MeetingHudSortButtonsPatch
 			var validPva = new List<PlayerVoteArea>(curPlayerState.Count);
 			foreach (var pva in curPlayerState)
 			{
-				if (!validPlayer.Contains(pva.TargetPlayerId))
+				if (!validPlayer.Contains(pva.PlayerId))
 				{
 					pva.transform.localPosition = offset;
 				}
@@ -118,10 +118,10 @@ public static class MeetingHudSortButtonsPatch
 			var status = new MeetingStatus(pva, isHudOverrideTaskActive);
 
 			ISubscriber subscriber =
-				pva.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId ?
+				pva.PlayerId == PlayerControl.LocalPlayer.PlayerId ?
 				new LocalPlayerMeetingVisualUpdateEvent(status) :
 				new OtherPlayerMeetingVisualUpdateEvent(
-					GameData.Instance.GetPlayerById(pva.TargetPlayerId), status);
+					GameData.Instance.GetPlayerById(pva.PlayerId), status);
 
 			EventManager.Instance.Register(subscriber, ModEvent.VisualUpdate);
 
@@ -139,7 +139,7 @@ public static class MeetingHudSortButtonsPatch
 
 	private static int playerName2Int(PlayerVoteArea pva)
 	{
-		var player = GameData.Instance.GetPlayerById(pva.TargetPlayerId);
+		var player = GameData.Instance.GetPlayerById(pva.PlayerId);
 		if (player == null)
 		{
 			return 0;

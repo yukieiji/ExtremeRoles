@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -16,7 +16,7 @@ public interface IRoleMeetingButtonAbility
 
 	protected static void DefaultButtonMod(PlayerVoteArea instance, UiElement abilityButton, string name)
 	{
-		abilityButton.name = $"{name}_{instance.TargetPlayerId}";
+		abilityButton.name = $"{name}_{instance.PlayerId}";
 		var controllerHighlight = abilityButton.transform.FindChild("ControllerHighlight");
 		if (controllerHighlight != null)
 		{

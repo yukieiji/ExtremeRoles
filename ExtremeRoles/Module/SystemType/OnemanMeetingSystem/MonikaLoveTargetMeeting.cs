@@ -250,7 +250,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IVoterShiftor, IVo
 		int index = 0;
 		foreach (var pva in pvas)
 		{
-			if (!this.target.Contain(pva.TargetPlayerId) ||
+			if (!this.target.Contain(pva.PlayerId) ||
 				index > 1) // 念のため2人以上になった場合は非表示にする
 			{
 				pva.transform.position = MeetingHudSortButtonsPatch.HideOffset;

@@ -190,10 +190,10 @@ public sealed class Legislator :
             {
                 caller.WriteByte((byte)AbilityType.SetVoteTarget);
                 caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
-                caller.WriteByte(instance.TargetPlayerId);
+                caller.WriteByte(instance.PlayerId);
             }
             this.SetTargetVote(
-                instance.TargetPlayerId);
+                instance.PlayerId);
 
             foreach (var vote in this.voteCheckMark.Values)
             {
@@ -204,19 +204,19 @@ public sealed class Legislator :
             }
 
             if (!this.voteCheckMark.TryGetValue(
-                    instance.TargetPlayerId,
+                    instance.PlayerId,
                     out SpriteRenderer? checkMark) ||
                 checkMark == null)
             {
                 checkMark = UnityEngine.Object.Instantiate(
                     instance.Background, instance.LevelNumberText.transform);
-                checkMark.name = $"legislator_SpecialVoteCheckMark_{instance.TargetPlayerId}";
+                checkMark.name = $"legislator_SpecialVoteCheckMark_{instance.PlayerId}";
                 checkMark.sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
                     Resources.ObjectPath.CaptainSpecialVoteCheck);
                 checkMark.transform.localPosition = new Vector3(7.25f, -0.5f, -3f);
                 checkMark.transform.localScale = new Vector3(1.0f, 3.5f, 1.0f);
                 checkMark.gameObject.layer = 5;
-                this.voteCheckMark[instance.TargetPlayerId] = checkMark;
+                this.voteCheckMark[instance.PlayerId] = checkMark;
             }
             checkMark.gameObject.SetActive(true);
         }

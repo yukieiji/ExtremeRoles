@@ -28,7 +28,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		out IEnumerable<IPlayerVoteAreaButtonPostionComputer>? result)
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
-		byte targetPlayerId = pva.TargetPlayerId;
+		byte targetPlayerId = pva.PlayerId;
 		result = null;
 
 		if (!this.meetingButton.TryGetValue(targetPlayerId, out var button))
@@ -120,11 +120,11 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		PlayerVoteArea pva,
 		IRoleMeetingButtonAbility buttonRole)
 		=> !(
-			pva.TargetPlayerId == PlayerVoteArea.SkippedVote ||
+			pva.PlayerId == PlayerVoteArea.SkippedVote ||
 			pva.AmDead ||
 			buttonRole.IsBlockMeetingButtonAbility(pva) ||
-			pva.voteComplete ||
+			pva.VoteComplete ||
 			pva.Parent == null ||
-			!pva.Parent.Select((int)pva.TargetPlayerId)
+			!pva.Parent.Select((int)pva.PlayerId)
 		);
 }

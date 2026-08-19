@@ -171,7 +171,7 @@ public static class PlayerControlMurderPlayerPatch
 			}
 			
 			// 死んだ人のPVAに対しての処理
-			if (pva.TargetPlayerId == targetPlayerId)
+			if (pva.PlayerId == targetPlayerId)
 			{
 				pva.Cancel(); // 生きている人目線 : 死んだ人の投票ボタンを強制的に閉じる
 				pva.UnsetVote(); // 死んだ人目線 : 死んだ人の投票自体を消す
@@ -182,7 +182,7 @@ public static class PlayerControlMurderPlayerPatch
 			}
 
 			// 死んだ人に投票していた場合、その投票をキャンセル
-			if (pva.VotedFor == targetPlayerId)
+			if (pva.VotedForId == targetPlayerId)
 			{
 				pva.UnsetVote();
 				isReset = true;
@@ -190,7 +190,7 @@ public static class PlayerControlMurderPlayerPatch
 		}
 		if (isReset)
 		{
-			meeting.ClearVote();
+			meeting.ClearVote(targetPlayerId, isLocalPlayerDead);
 		}
 	}
 

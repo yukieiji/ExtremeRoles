@@ -14,6 +14,8 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 
 #nullable enable
 
+file record struct ExiledInfo(NetworkedPlayerInfo? Target, bool IsOverruled=false, ushort Nonce=0);
+
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
 public static class MeetingHudCheckForEndVotingPatch
 {
@@ -70,7 +72,7 @@ public static class MeetingHudCheckForEndVotingPatch
 
 		foreach (var playerVoteArea in instance.playerStates)
 		{
-			byte playerId = playerVoteArea.TargetPlayerId;
+			byte playerId = playerVoteArea.PlayerId;
 
 			// 切断されたプレイヤーは残っている状態で役職を持たない状態になるのでキーチェックはしておく
 			if (ExtremeRoleManager.GameRole.ContainsKey(playerId))
@@ -83,7 +85,7 @@ public static class MeetingHudCheckForEndVotingPatch
 			}
 
 			// 投票先を全格納
-			byte votedForId = playerVoteArea.VotedFor;
+			byte votedForId = playerVoteArea.VotedForId;
 			voteTarget.Add(playerId, votedForId);
 
 			if (votedForId != PlayerVoteArea.DeadVote &&
@@ -143,18 +145,25 @@ public static class MeetingHudCheckForEndVotingPatch
 			}
 		}
 
-		NetworkedPlayerInfo? exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
+		var exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
 			(NetworkedPlayerInfo v) => !isTie && v.PlayerId == result.PlayerId);
+		var exiledInfo = instance.TryGetWinningOverrule(out var judgeOverrule, out var me, out var judgeTarget) ? 
+			new ExiledInfo(
+				judgeTarget.Role.TeamType == RoleTeamTypes.Impostor ? GameData.Instance.GetPlayerById(judgeOverrule.OverruledPlayerId) : me,
+				true, judgeOverrule.OverruleNonce) :
+			new ExiledInfo(exiled);
 
-		if (exiled != null)
+		if (exiledInfo.Target != null)
 		{
 			var builder = new StringBuilder();
 			builder
 				.AppendLine("--- Exiled Player Info ---")
 				.Append(" - PlayerId:").Append(result.PlayerId).AppendLine()
-				.Append(" - PlayerName:").AppendLine(exiled.PlayerName)
-				.Append(" - IsDead:").Append(exiled.IsDead).AppendLine()
-				.Append(" - VoteNum:").Append(result.VoteNum);
+				.Append(" - PlayerName:").AppendLine(exiledInfo.Target.PlayerName)
+				.Append(" - IsDead:").Append(exiledInfo.Target.IsDead).AppendLine()
+				.Append(" - VoteNum:").Append(result.VoteNum)
+				.Append(" - IsOverruled:").Append(exiledInfo.IsOverruled)
+				.Append(" - Nonce:").Append(exiledInfo.Nonce);
 			logger.LogInfo(builder.ToString());
 		}
 		else
@@ -165,10 +174,10 @@ public static class MeetingHudCheckForEndVotingPatch
 		var array = instance.playerStates.Select(
 			x => new MeetingHud.VoterState
 			{
-				VoterId = x.TargetPlayerId,
-				VotedForId = x.VotedFor
+				VoterId = x.PlayerId,
+				VotedForId = x.VotedForId
 			}).ToArray();
 
-		instance.RpcVotingComplete(array, exiled, isTie);
+		instance.RpcVotingComplete(array, exiledInfo.Target, isTie, exiledInfo.IsOverruled, exiledInfo.Nonce);
 	}
 }

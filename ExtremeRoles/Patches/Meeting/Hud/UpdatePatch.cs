@@ -32,7 +32,7 @@ public static class MeetingHudUpdatePatch
 		infoOverlayBlockUpdate(__instance);
 		changeNamePlate(__instance);
 
-		if (__instance.state == MeetingHud.VoteStates.Animating)
+		if (__instance.state == MeetingHud.MeetingStates.Animating)
 		{
 			return;
 		}
@@ -46,7 +46,7 @@ public static class MeetingHudUpdatePatch
 	private static void infoOverlayBlockUpdate(MeetingHud __instance)
 	{
 		if (InfoOverlay.Instance.IsBlock &&
-			__instance.state != MeetingHud.VoteStates.Animating)
+			__instance.state != MeetingHud.MeetingStates.Animating)
 		{
 			InfoOverlay.Instance.IsBlock = false;
 		}
@@ -95,12 +95,12 @@ public static class MeetingHudUpdatePatch
 					continue;
 				}
 
-				if (pva.DidVote && pva.VotedFor == b.ParentId)
+				if (pva.DidVote && pva.VotedForId == b.ParentId)
 				{
 					pva.UnsetVote();
-					if (PlayerControl.LocalPlayer.PlayerId == pva.TargetPlayerId)
+					if (PlayerControl.LocalPlayer.PlayerId == pva.PlayerId)
 					{
-						hud.ClearVote();
+						hud.ClearVote(pva.PlayerId, true);
 					}
 					if (AmongUsClient.Instance.AmHost)
 					{
@@ -108,9 +108,9 @@ public static class MeetingHudUpdatePatch
 					}
 				}
 
-				if (pva.TargetPlayerId == b.ParentId)
+				if (pva.PlayerId == b.ParentId)
 				{
-					pva.SetDead(pva.DidReport, true);
+					pva.SetDead(pva.DidReport);
 					pva.Overlay.gameObject.SetActive(true);
 				}
 			}
@@ -137,7 +137,7 @@ public static class MeetingHudUpdatePatch
 			hud.SkipVoteButton.gameObject.SetActive(
 				system.IsSkipButtonActive && 
 				system.Caller == localPlayer.PlayerId &&
-				hud.state == MeetingHud.VoteStates.NotVoted);
+				hud.state == MeetingHud.MeetingStates.NotVoted);
 
 			HudManager.Instance.Chat.gameObject.SetActive(
 				(

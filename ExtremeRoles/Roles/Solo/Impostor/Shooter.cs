@@ -85,7 +85,7 @@ public sealed class Shooter :
 
     public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
     {
-        byte target = instance.TargetPlayerId;
+        byte target = instance.PlayerId;
 
 		return
 			this.curShootNum <= 0 ||
@@ -107,7 +107,7 @@ public sealed class Shooter :
     public Action CreateAbilityAction(PlayerVoteArea instance)
     {
 
-        byte target = instance.TargetPlayerId;
+        byte target = instance.PlayerId;
 
         void shooterKill()
         {

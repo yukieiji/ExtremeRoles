@@ -95,7 +95,7 @@ public sealed class LocalPlayerMeetingVisualUpdateEvent(
 		SingleRoleBase role,
 		GhostRoleBase? ghostRole)
 	{
-		info.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ?
+		info.text = MeetingHud.Instance.state == MeetingHud.MeetingStates.Results ?
 			"" : getMeetingInfo(local, isCommActive, role, ghostRole);
 		info.gameObject.SetActive(true);
 	}
@@ -278,7 +278,7 @@ public sealed class OtherPlayerMeetingVisualUpdateEvent(
 		else
 		{
 			info.text =
-				MeetingHud.Instance.state == MeetingHud.VoteStates.Results ?
+				MeetingHud.Instance.state == MeetingHud.MeetingStates.Results ?
 				"" : getMeetingInfo(targetRole, targetGhostRole);
 			info.gameObject.SetActive(!isMeetingInfoBlock);
 		}

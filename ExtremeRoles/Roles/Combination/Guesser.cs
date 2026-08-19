@@ -532,7 +532,7 @@ public sealed class Guesser :
     public bool IsBlockMeetingButtonAbility(
         PlayerVoteArea instance)
     {
-        byte target = instance.TargetPlayerId;
+        byte target = instance.PlayerId;
 
         return
             this.bulletNum <= 0 ||
@@ -548,7 +548,7 @@ public sealed class Guesser :
     {
         void openGusserUi()
         {
-			byte targetPlayerId = instance.TargetPlayerId;
+			byte targetPlayerId = instance.PlayerId;
 			var info = GameData.Instance.GetPlayerById(targetPlayerId);
 			if (info == null)
 			{

@@ -58,7 +58,7 @@ public sealed class AssassinAssassinateTargetMeeting : IOnemanMeeting
 			{
 				int randomPlayerIndex = UnityEngine.Random.RandomRange(
 					0, meeting.playerStates.Length);
-				voteTarget = meeting.playerStates[randomPlayerIndex].TargetPlayerId;
+				voteTarget = meeting.playerStates[randomPlayerIndex].PlayerId;
 
 				targetImposter = ExtremeRoleManager.TryGetRole(
 					voteTarget, out var sourcePlayerRole) && sourcePlayerRole.IsImpostor();

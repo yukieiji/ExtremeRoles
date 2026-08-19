@@ -103,7 +103,7 @@ public sealed class GuesserUi : MonoBehaviour
 		if (this.isActive &&
             (
                 !meetingHud ||
-				meetingHud.state == MeetingHud.VoteStates.Results ||
+				meetingHud.state == MeetingHud.MeetingStates.Results ||
 				Input.GetKeyDown(KeyCode.Escape) ||
 				this.targetPlayer.IsInValid() ||
 				localPlayer.IsInValid()
