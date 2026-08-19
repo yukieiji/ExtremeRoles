@@ -4,9 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
-    <Version>2026.8.5.0</Version>
+    <Version>2026.8.19.0</Version>
     <!--<VersionPrefix>2026.7.16</VersionPrefix>-->
-    <VersionSuffix>4thAnniversary</VersionSuffix>
+    <VersionSuffix>AmongUsV1800</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
