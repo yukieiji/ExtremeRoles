@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 #if RELEASE
 using BepInEx;
@@ -83,6 +83,7 @@ public static class MainMenuManagerStartPatch
     public static void Postfix(MainMenuManager __instance)
     {
         ModManager.Instance.ShowModStamp();
+		ModId.Register();
 
 #if RELEASE
         if (!ExtremeRolesPlugin.IgnoreOverrideConsoleDisable.Value &&

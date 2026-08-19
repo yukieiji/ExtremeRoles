@@ -33,7 +33,9 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
 	public const string SkinComitCategory = "SkinComit";
 
-    public override void Load()
+	public const string ModId = "452f8d0c-9da9-4770-a6e4-eb245aeb0a0e";
+
+	public override void Load()
     {
 		if (ExtremeRoles.ExtremeRolesPlugin.DebugMode == null)
 		{

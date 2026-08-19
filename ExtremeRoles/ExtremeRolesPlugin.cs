@@ -54,6 +54,8 @@ public partial class ExtremeRolesPlugin : BasePlugin
 	public HttpClient Http { get; } = new HttpClient();
 	public IServiceProvider Provider { get; }
 
+	public const string ModId = "66002ef4-226f-433e-a937-0628a4bd82e0";
+
 	public ExtremeRolesPlugin() : base()
 	{
 		Instance = this;
@@ -75,7 +77,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		Provider = BuildProvider();
 	}
 
-    public override void Load()
+	public override void Load()
     {
 		try
 		{
