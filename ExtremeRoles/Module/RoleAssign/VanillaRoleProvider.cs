@@ -61,7 +61,8 @@ public sealed class VanillaRoleProvider : IVanillaRoleProvider
 			RoleTypes.Scientist or
 			RoleTypes.Noisemaker or
 			RoleTypes.Tracker or
-			RoleTypes.Detective;
+			RoleTypes.Detective or
+			RoleTypes.Judge;
 
 	public static bool IsImpostorRole(RoleTypes role)
 		=> IsDefaultImpostorRole(role) || IsImpostorAdditionalRole(role);

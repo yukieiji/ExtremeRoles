@@ -220,6 +220,7 @@ public static class PlayerControlFixedUpdatePatch
 			case RoleTypes.Tracker:
 			case RoleTypes.Phantom:
 			case RoleTypes.Viper:
+			case RoleTypes.Judge:
 				abilityButton.Hide();
 				break;
 			case RoleTypes.Detective:
