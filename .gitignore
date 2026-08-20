@@ -375,3 +375,7 @@ ExtremeSkins/Resources/LangData/stringData.json
 
 # Hypothesis cache
 .hypothesis/
+
+# Mock builder temp directory
+.mockbuilder/
+ExtremeRoles.Test/.mockbuilder/
