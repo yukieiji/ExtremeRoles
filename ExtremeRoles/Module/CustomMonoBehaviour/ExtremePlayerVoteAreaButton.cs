@@ -35,6 +35,11 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		var localPlayer = PlayerControl.LocalPlayer;
 		byte targetPlayerId = pva.PlayerId;
 		result = null;
+		if (localPlayer == null)
+		{
+			Logging.Debug($"LocalPlayer is null");
+			return true;
+		}
 
 		if (!this.meetingButton.TryGetValue(targetPlayerId, out var button))
 		{
@@ -84,7 +89,8 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			if (!judge.IsBlockedByTasks() && !judge.HasAlreadyOverruledThisMeeting && judge.HasAnOverruleUse)
 			{
 				overruleButton.gameObject.SetActive(true);
-				if (PlayerControl.LocalPlayer.Data.Role.IsAffectedByComms)
+				// ジャッジの判定中にDataとRoleがnullになることはないはずなので、nullチェックは不要
+				if (localPlayer.Data.Role.IsAffectedByComms)
 				{
 					pva.JudgeOverruleButtonCommsDisable.SetActive(true);
 					overruleButton.enabled = false;
@@ -200,7 +206,8 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		var localPlayer = PlayerControl.LocalPlayer;
 
 		// ジャッジ + 会議能力ボタン持ち役職組み合わせの判定
-		if (localPlayer != null &&
+		if (localPlayer.Data != null &&
+			localPlayer.Data.Role != null &&
 			localPlayer.Data.Role.IsTryCast<JudgeRole>(out var judgeRole1) &&
 			role is VanillaRoleWrapper vr &&
 			vr.VanilaRoleId is RoleTypes.Judge &&
@@ -214,7 +221,8 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		}
 		// 会議能力ボタン持ち役職 + ジャッジの組み合わせの判定
 		else if (
-			localPlayer != null &&
+			localPlayer.Data != null &&
+			localPlayer.Data.Role != null &&
 			localPlayer.Data.Role.IsTryCast<JudgeRole>(out var judgeRole2) &&
 			role is IRoleMeetingButtonAbility mt2 &&
 			isOkRoleAbilityButton(pva, mt2) &&
