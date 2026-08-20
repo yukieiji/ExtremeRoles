@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Resources;
@@ -12,12 +12,14 @@ public sealed class HelpButton
 	public bool IsInitialized => this.body != null;
 
 	private GameObject? body = null;
+	private static GameObject MenuButton => GameObject.Find("MenuButton");
+	private static PassiveButton InfoButton => HudManager.Instance.MatchInfoButton;
 
 	public void CreateInfoButton(System.Action openAct)
 	{
+		var menuButton = MenuButton;
 		this.body = Object.Instantiate(
-			GameObject.Find("MenuButton"),
-			GameObject.Find("TopRight/MenuButton").transform);
+			menuButton, menuButton.transform);
 		Object.DontDestroyOnLoad(this.body);
 
 		this.body.name = "infoRoleButton";
@@ -33,7 +35,6 @@ public sealed class HelpButton
 			Object.Destroy(aspect);
 		}
 		this.body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-		this.body.transform.localPosition = new Vector3(-1.075f, 0.0f, 0.0f);
 
 		passiveButton.inactiveSprites.GetComponent<SpriteRenderer>().sprite = UnityObjectLoader.LoadFromResources<Sprite>(
 			ObjectPath.CommonTextureAsset,
@@ -50,5 +51,23 @@ public sealed class HelpButton
 
 		passiveButton.selectedSprites.GetComponent<SpriteRenderer>().sprite = activeSprite;
 		passiveButton.activeSprites.GetComponent<SpriteRenderer>().sprite = activeSprite;
+	}
+
+	public void SetLobbyParent()
+	{
+		if (this.body != null)
+		{
+			this.body.transform.SetParent(MenuButton.transform);
+			this.body.transform.localPosition = new Vector3(-1.275f, 0.0f, 0.0f);
+		}
+	}
+
+	public void SetGameParent()
+	{
+		if (this.body != null)
+		{
+			this.body.transform.SetParent(InfoButton.transform);
+			this.body.transform.localPosition = new Vector3(-0.75f, 0.0f, 0.0f);
+		}
 	}
 }
