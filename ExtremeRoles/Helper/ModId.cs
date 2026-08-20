@@ -6,7 +6,14 @@ public static class ModId
 {
 	public static void Register()
 	{
-		CurrentModRegistration.ModRegistrationGuidString = ExtremeRolesPlugin.ModId;
+		if (string.IsNullOrEmpty(ExtremeRolesPlugin.ModId))
+		{
+			CurrentModRegistration.ModRegistrationGuidString = ExtremeRolesPlugin.ModId;
+		}
+		else
+		{
+			Combine(ExtremeRolesPlugin.ModId); // 何らかのModが登録されている場合は、ModIdを組み合わせる
+		}
 	}
 
 	public static void Combine(string modId)
