@@ -3,6 +3,7 @@ using HarmonyLib;
 namespace ExtremeRoles.Patches;
 
 
+/*
 // ローカルゲームで部屋が作れない不具合の修正
 // AmongUsくん？お前が始めた物語なのになんでローカルゲームで部屋が作れないんだよおおおおおおおおおおおおお！！！！！！！！！！！！！！！
 [HarmonyPatch(
@@ -22,3 +23,4 @@ public static class CurrentModRegistrationTryGetModRegistrationGuidPatch
 		return true;
 	}
 }
+*/

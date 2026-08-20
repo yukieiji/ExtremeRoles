@@ -83,7 +83,9 @@ public static class MainMenuManagerStartPatch
     public static void Postfix(MainMenuManager __instance)
     {
         ModManager.Instance.ShowModStamp();
-		ModId.Register();
+		// AMCIのサポートは一旦止める
+		/// 理由: 公式サーバーやローカルサーバーで動作しないため、まだ動くしとりあえずIDだけは取っておく
+		// ModId.Register();
 
 #if RELEASE
         if (!ExtremeRolesPlugin.IgnoreOverrideConsoleDisable.Value &&
@@ -95,7 +97,7 @@ public static class MainMenuManagerStartPatch
         }
 #endif
 
-        var exrLogo = new GameObject("bannerLogoExtremeRoles");
+		var exrLogo = new GameObject("bannerLogoExtremeRoles");
 		exrLogo.transform.parent = __instance.mainMenuUI.transform;
 		exrLogo.transform.position = new Vector3(1.95f, 1.0f, 1.0f);
         var renderer = exrLogo.AddComponent<SpriteRenderer>();
