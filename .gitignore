@@ -378,4 +378,4 @@ ExtremeSkins/Resources/LangData/stringData.json
 
 # Mock builder temp directory
 .mockbuilder/
-ExtremeRoles.Test/.mockbuilder/
+ExtremeRoles.UnitTest/.mockbuilder/
