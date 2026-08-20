@@ -188,7 +188,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			pva.PlayerId == PlayerVoteArea.SkippedVote ||
 			pva.AmDead ||
 			buttonRole.IsBlockMeetingButtonAbility(pva) ||
-			pva.DidVote ||
+			pva.VoteComplete ||
 			pva.Parent == null ||
 			!pva.Parent.Select((int)pva.PlayerId)
 		);
