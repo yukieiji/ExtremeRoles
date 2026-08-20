@@ -48,31 +48,31 @@ public class PlayerTests : IDisposable
     }
 
     [Fact]
-    public void TryGetPlayerControl_InMockEnv_ThrowsNotImplementedDueToStrippedUnityInequality()
+    public void TryGetPlayerControl_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedOperator()
     {
-        Assert.Throws<NotImplementedException>(() => Player.TryGetPlayerControl(5, out _));
+        Assert.Throws<NotImplementedException>(() => Player.TryGetPlayerControl(99, out _));
     }
 
     [Fact]
-    public void TryGetPlayerInfo_InMockEnv_ThrowsNotImplementedDueToStrippedGameData()
+    public void TryGetPlayerInfo_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedGameData()
     {
         Assert.Throws<NotImplementedException>(() => Player.TryGetPlayerInfo(1, out _));
     }
 
     [Fact]
-    public void TryGetPlayerRoom_InMockEnv_ThrowsNotImplementedDueToStrippedUnityEquality()
+    public void TryGetPlayerRoom_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedUnityOperator()
     {
         Assert.Throws<NotImplementedException>(() => Player.TryGetPlayerRoom(null!, out _));
     }
 
     [Fact]
-    public void TryGetPlayerColiderRoom_InMockEnv_ThrowsNotImplementedDueToStrippedUnityEquality()
+    public void TryGetPlayerColiderRoom_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedUnityOperator()
     {
         Assert.Throws<NotImplementedException>(() => Player.TryGetPlayerColiderRoom(null!, out _));
     }
 
     [Fact]
-    public void IsValidPlayer_InMockEnv_ThrowsNotImplementedDueToStrippedUnityEquality()
+    public void IsValidPlayer_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedUnityOperator()
     {
         var mockSourcePlayer = new Mock<PlayerControl>();
         var mockRole = new Mock<SingleRoleBase>();
@@ -81,7 +81,7 @@ public class PlayerTests : IDisposable
     }
 
     [Fact]
-    public void GetAllPlayerInRange_InMockEnv_ThrowsNotImplementedDueToStrippedShipStatus()
+    public void GetAllPlayerInRange_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedShipStatus()
     {
         var mockSourcePlayer = new Mock<PlayerControl>();
         var mockRole = new Mock<SingleRoleBase>();
