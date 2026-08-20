@@ -176,6 +176,7 @@ public static class PlayerControlMurderPlayerPatch
 				pva.Cancel(); // 生きている人目線 : 死んだ人の投票ボタンを強制的に閉じる
 				pva.UnsetVote(); // 死んだ人目線 : 死んだ人の投票自体を消す
 				meeting.ClearVote(pva.PlayerId, isLocalPlayerDead);
+				isDirty = true;
 				if (pva.ThumbsDown != null)
 				{
 					pva.ThumbsDown.enabled = false;
