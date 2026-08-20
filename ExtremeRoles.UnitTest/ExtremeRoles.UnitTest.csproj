@@ -20,10 +20,12 @@
     </PackageReference>
     <PackageReference Include="coverlet.collector" Version="6.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition="!Exists('$(MSBuildProjectDirectory)/.mockbuilder/build/output/ExtremeRoles.dll')">
+    <PackageReference Include="AmongUs.GameLibs.Steam" Version="2026.8.18" PrivateAssets="all" />
     <ProjectReference Include="..\ExtremeRoles\ExtremeRoles.csproj" />
   </ItemGroup>
 
