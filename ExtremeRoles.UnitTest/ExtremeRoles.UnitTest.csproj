@@ -20,11 +20,14 @@
     </PackageReference>
     <PackageReference Include="coverlet.collector" Version="6.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="!Exists('$(MSBuildProjectDirectory)/.mockbuilder/build/output/ExtremeRoles.dll')">
+    <ProjectReference Include="..\ExtremeRoles\ExtremeRoles.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)/.mockbuilder/build/output/ExtremeRoles.dll')">
     <Reference Include="$(MSBuildProjectDirectory)/.mockbuilder/build/output/*.dll" />
   </ItemGroup>
 
