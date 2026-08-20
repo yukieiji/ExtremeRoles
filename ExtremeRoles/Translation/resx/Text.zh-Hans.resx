@@ -282,9 +282,6 @@
   <data name="GhostRoleGlobalOptionIsAssignNeutralToVanillaCrewGhostRole" xml:space="preserve">
     <value>独立阵营可以获得幽灵职业</value>
   </data>
-  <data name="GhostRoleGlobalOptionIsRemoveAngleIcon" xml:space="preserve">
-    <value>不显示获得幽灵职业玩家的守护天使图标</value>
-  </data>
   <data name="GhostRoleGlobalOptionIsBlockGAAbilityReport" xml:space="preserve">
     <value>禁用守护天使的能力发动报告</value>
   </data>

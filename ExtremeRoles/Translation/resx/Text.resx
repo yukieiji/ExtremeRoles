@@ -367,9 +367,6 @@
   <data name="GhostRoleGlobalOptionIsAssignNeutralToVanillaCrewGhostRole" xml:space="preserve">
     <value>第三陣営役職がバニラの幽霊役職にアサインされるか</value>
   </data>
-  <data name="GhostRoleGlobalOptionIsRemoveAngleIcon" xml:space="preserve">
-    <value>ゴーストロールの天使アイコンを無効化する</value>
-  </data>
   <data name="GhostRoleGlobalOptionIsBlockGAAbilityReport" xml:space="preserve">
     <value>守護天使の能力発動報告を無効化する</value>
   </data>
@@ -1430,5 +1427,8 @@ ExR等を最低限の機能のみで起動しています</value>
   </data>
   <data name="buttonAbility" xml:space="preserve">
     <value>ボタン能力</value>
+  </data>
+  <data name="Judge" xml:space="preserve">
+    <value>ジャッジ</value>
   </data>
 </root>

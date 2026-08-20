@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-    <data name="MODNAME_TRANS" xml:space="preserve">
+  <data name="MODNAME_TRANS" xml:space="preserve">
     <value>極端職業</value>
   </data>
   <data name="GeneralTab" xml:space="preserve">
@@ -287,9 +287,6 @@
   </data>
   <data name="GhostRoleGlobalOptionIsAssignNeutralToVanillaCrewGhostRole" xml:space="preserve">
     <value>獨立陣營可以獲得幽靈職業</value>
-  </data>
-  <data name="GhostRoleGlobalOptionIsRemoveAngleIcon" xml:space="preserve">
-    <value>不顯示獲得幽靈職業玩家的守護天使圖標</value>
   </data>
   <data name="GhostRoleGlobalOptionIsBlockGAAbilityReport" xml:space="preserve">
     <value>禁用守護天使的能力發動報告</value>
