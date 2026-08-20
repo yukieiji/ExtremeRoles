@@ -6,7 +6,7 @@ public static class ModId
 {
 	public static void Register()
 	{
-		if (string.IsNullOrEmpty(ExtremeRolesPlugin.ModId))
+		if (string.IsNullOrEmpty(CurrentModRegistration.ModRegistrationGuidString))
 		{
 			CurrentModRegistration.ModRegistrationGuidString = ExtremeRolesPlugin.ModId;
 		}
