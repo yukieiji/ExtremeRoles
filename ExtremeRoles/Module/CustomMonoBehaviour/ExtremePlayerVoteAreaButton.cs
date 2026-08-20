@@ -55,6 +55,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			overruleButton.gameObject.SetActive(false);
 			pva.JudgeOverruleButtonCommsDisable.SetActive(false);
 		}
+		button.HideAllButton();
 
 		var group = button.Group;
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))

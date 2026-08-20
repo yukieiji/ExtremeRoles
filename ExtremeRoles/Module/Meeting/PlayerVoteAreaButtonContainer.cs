@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -51,5 +51,12 @@ public sealed class PlayerVoteAreaButtonContainer(PlayerVoteArea pva)
 		button = cacheButton;
 		button.gameObject.SetActive(true);
 		return result;
+	}
+	public void HideAllButton()
+	{
+		foreach (var button in this.cache.Values)
+		{
+			button.gameObject.SetActive(false);
+		}
 	}
 }
