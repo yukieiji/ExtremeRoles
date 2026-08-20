@@ -362,7 +362,7 @@ public sealed class Heretic :
 
 	public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
 		=> PlayerControl.LocalPlayer == null ||
-			instance.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId ||
+			instance.PlayerId == PlayerControl.LocalPlayer.PlayerId ||
 			!(this.killMode is KillMode.AbilityOnMeeting or KillMode.AbilityOnMeetingTarget);
 
 	public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
@@ -376,7 +376,7 @@ public sealed class Heretic :
 				return;
 			}
 
-			this.meetingTarget = instance.TargetPlayerId;
+			this.meetingTarget = instance.PlayerId;
 
 			if (this.killMode is KillMode.AbilityOnMeetingTarget)
 			{

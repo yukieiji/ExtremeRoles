@@ -594,7 +594,7 @@ public sealed class BodyGuard :
     public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
     {
         byte bodyGuardPlayerId = PlayerControl.LocalPlayer.PlayerId;
-        byte targetPlayerId = instance.TargetPlayerId;
+        byte targetPlayerId = instance.PlayerId;
 
         if (targetPlayerId == bodyGuardPlayerId ||
 			shilded.IsShielding(bodyGuardPlayerId, targetPlayerId))
@@ -619,7 +619,7 @@ public sealed class BodyGuard :
 	public Action CreateAbilityAction(PlayerVoteArea instance)
     {
         PlayerControl player = PlayerControl.LocalPlayer;
-        byte targetPlayerId = instance.TargetPlayerId;
+        byte targetPlayerId = instance.PlayerId;
 
         void meetingfeatShield()
         {

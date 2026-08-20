@@ -81,7 +81,7 @@ public sealed class MockVanillaRolePlayerAssignDataProvider : IVanillaRolePlayer
 		// 残っているのはクルーのプレイヤーだけなので、クルーの役職を割り当てる
 		var crewmatePlayers = assignVanillaRoleToPlayer(
 			curOptions.RoleOptions, randomPlayers,
-			RoleTypes.Scientist, RoleTypes.Engineer, RoleTypes.Detective, RoleTypes.Noisemaker, RoleTypes.Tracker);
+			RoleTypes.Scientist, RoleTypes.Engineer, RoleTypes.Detective, RoleTypes.Noisemaker, RoleTypes.Tracker, RoleTypes.Judge);
 
 		impostorPlayers.AddRange(crewmatePlayers);
 

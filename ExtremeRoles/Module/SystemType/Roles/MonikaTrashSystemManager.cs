@@ -233,7 +233,7 @@ public sealed class MonikaTrashSystem(bool canSeeCrew) : IDirtableSystemType
 		=> this.trash.Contains(playerId);
 
 	public bool InvalidPlayer(PlayerVoteArea pva)
-		=> InvalidPlayer(pva.TargetPlayerId);
+		=> InvalidPlayer(pva.PlayerId);
 
 	public bool InvalidPlayer(PlayerControl player)
 		=> this.trash.Contains(player.PlayerId);

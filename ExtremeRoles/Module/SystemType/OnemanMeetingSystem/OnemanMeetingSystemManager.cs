@@ -285,27 +285,27 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		for (int i = 0; i < meeting.playerStates.Length; i++)
 		{
 			PlayerVoteArea playerVoteArea = meeting.playerStates[i];
-			if (playerVoteArea.TargetPlayerId == this.Caller)
+			if (playerVoteArea.PlayerId == this.Caller)
 			{
-				playerVoteArea.VotedFor = overridedVoteFor;
+				playerVoteArea.VotedForId = overridedVoteFor;
 			}
 			else
 			{
-				playerVoteArea.VotedFor = PlayerVoteArea.MissedVote;
+				playerVoteArea.VotedForId = PlayerVoteArea.MissedVote;
 			}
 			meeting.SetDirtyBit(1U);
 
 			voteResult[i] = new MeetingHud.VoterState
 			{
-				VoterId = playerVoteArea.TargetPlayerId,
-				VotedForId = playerVoteArea.VotedFor
+				VoterId = playerVoteArea.PlayerId,
+				VotedForId = playerVoteArea.VotedForId
 			};
 
 		}
 		meeting.RpcVotingComplete(
 			voteResult,
 			result.ExiledTarget,
-			true);
+			true, false, 0);
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
@@ -352,12 +352,12 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		bool result = false;
 		voteFor = byte.MaxValue;
 
-		foreach (PlayerVoteArea playerVoteArea in meeting.playerStates)
+		foreach (var pva in meeting.playerStates)
 		{
-			if (playerVoteArea.TargetPlayerId == this.Caller)
+			if (pva.PlayerId == this.Caller)
 			{
-				result = playerVoteArea.DidVote;
-				voteFor = playerVoteArea.VotedFor;
+				result = pva.DidVote;
+				voteFor = pva.VotedForId;
 				break;
 			}
 		}

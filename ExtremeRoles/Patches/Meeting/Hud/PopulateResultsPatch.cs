@@ -115,7 +115,7 @@ public static class MeetingHudPopulateResultsPatch
 		foreach (var pva in __instance.playerStates)
 		{
 			pva.ClearForResults();
-			playerAreaMap[pva.TargetPlayerId] = pva;
+			playerAreaMap[pva.PlayerId] = pva;
 		}
 
 		// 各種表の情報

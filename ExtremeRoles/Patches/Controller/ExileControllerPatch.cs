@@ -47,7 +47,7 @@ public static class ExileControllerBeginePatch
 
 		if (HudManager.Instance != null)
 		{
-			HudManager.Instance.SetMapButtonEnabled(false);
+			HudManager.Instance.SetMapAndInfoButtonsEnabled(false);
 		}
 	}
 

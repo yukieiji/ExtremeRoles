@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -54,7 +54,7 @@ public sealed class ConfirmMenu : MonoBehaviour
 		var meetingHud = MeetingHud.Instance;
 
 		if (!meetingHud ||
-			meetingHud.state == MeetingHud.VoteStates.Results ||
+			meetingHud.state == MeetingHud.MeetingStates.Results ||
 			Input.GetKeyDown(KeyCode.Escape))
 		{
 			this.gameObject.SetActive(false);

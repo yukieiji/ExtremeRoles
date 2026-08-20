@@ -165,9 +165,9 @@ public sealed class BarterRole :
 		{
 			bool newState = meeting != null &&
 				(
-					meeting.state == MeetingHud.VoteStates.Discussion ||
-					meeting.state == MeetingHud.VoteStates.NotVoted ||
-					meeting.state == MeetingHud.VoteStates.Voted
+					meeting.state == MeetingHud.MeetingStates.Discussion ||
+					meeting.state == MeetingHud.MeetingStates.NotVoted ||
+					meeting.state == MeetingHud.MeetingStates.Voted
 				) && !OnemanMeetingSystemManager.IsActive;
 			bool prevState = this.randomButton.gameObject.activeSelf;
 			this.randomButton.gameObject.SetActive(newState);
@@ -199,7 +199,7 @@ public sealed class BarterRole :
 			return true;
 		}
 
-		byte target = instance.TargetPlayerId;
+		byte target = instance.PlayerId;
 		if (this.status is null ||
 			!this.status.CanUseNoneRandomCastling())
 		{
@@ -217,7 +217,7 @@ public sealed class BarterRole :
 	{
 		void execCastling()
 		{
-			byte target = instance.TargetPlayerId;
+			byte target = instance.PlayerId;
 			if (!this.source.HasValue)
 			{
 				this.source = target;
@@ -477,13 +477,13 @@ public sealed class BarterRole :
 		var target = MeetingHud.Instance.playerStates
 			.Where(x => 
 				!x.AmDead && 
-				x.TargetPlayerId != PlayerVoteArea.SkippedVote && 
-				x.TargetPlayerId != PlayerVoteArea.DeadVote)
-			.Select(x => x.TargetPlayerId);
+				x.PlayerId != PlayerVoteArea.SkippedVote && 
+				x.PlayerId != PlayerVoteArea.DeadVote)
+			.Select(x => x.PlayerId);
 
 		for (int i = 0; i < this.status.OneCastlingNum; ++i)
 		{
-			byte[] item = target.OrderBy(x => RandomGenerator.Instance.Next()).Take(2).ToArray();
+			var item = target.OrderBy(x => RandomGenerator.Instance.Next()).Take(2).ToArray();
 			this.system?.RpcSwapVote(item[0], item[1], this.showOps);
 		}
 	}

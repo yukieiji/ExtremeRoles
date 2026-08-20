@@ -9,7 +9,7 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 
 #nullable enable
 
-[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
+[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateForeground))]
 public static class MeetingHudUpdateButtonsPatch
 {
 	public static bool Prefix(MeetingHud __instance)
@@ -27,14 +27,14 @@ public static class MeetingHudUpdateButtonsPatch
 
 		var meeting = HudManager.Instance.MeetingPrefab;
 
-		__instance.amDead = false;
+		__instance.hasForegroundForDeadBeenSet = false;
 		__instance.Glass.sprite = meeting.Glass.sprite;
 		__instance.Glass.color = meeting.Glass.color;
 
 		foreach (var pva in __instance.playerStates)
 		{
 			NetworkedPlayerInfo playerById = GameData.Instance.GetPlayerById(
-				pva.TargetPlayerId);
+				pva.PlayerId);
 			if (playerById == null)
 			{
 				pva.SetDisabled();

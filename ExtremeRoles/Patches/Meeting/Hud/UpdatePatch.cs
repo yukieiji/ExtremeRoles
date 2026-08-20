@@ -32,7 +32,7 @@ public static class MeetingHudUpdatePatch
 		infoOverlayBlockUpdate(__instance);
 		changeNamePlate(__instance);
 
-		if (__instance.state == MeetingHud.VoteStates.Animating)
+		if (__instance.state == MeetingHud.MeetingStates.Animating)
 		{
 			return;
 		}
@@ -46,7 +46,7 @@ public static class MeetingHudUpdatePatch
 	private static void infoOverlayBlockUpdate(MeetingHud __instance)
 	{
 		if (InfoOverlay.Instance.IsBlock &&
-			__instance.state != MeetingHud.VoteStates.Animating)
+			__instance.state != MeetingHud.MeetingStates.Animating)
 		{
 			InfoOverlay.Instance.IsBlock = false;
 		}
@@ -80,6 +80,7 @@ public static class MeetingHudUpdatePatch
 		// This fixes a bug with the original game where pressing the button and a kill happens simultaneously
 		// results in bodies sometimes being created *after* the meeting starts, marking them as dead and
 		// removing the corpses so there's no random corpses leftover afterwards
+		bool isDirty = false;
 
 		foreach (var b in Object.FindObjectsOfType<DeadBody>())
 		{
@@ -95,25 +96,26 @@ public static class MeetingHudUpdatePatch
 					continue;
 				}
 
-				if (pva.DidVote && pva.VotedFor == b.ParentId)
+				if (pva.VotedForId == b.ParentId)
 				{
-					pva.UnsetVote();
-					if (PlayerControl.LocalPlayer.PlayerId == pva.TargetPlayerId)
-					{
-						hud.ClearVote();
-					}
-					if (AmongUsClient.Instance.AmHost)
-					{
-						hud.SetDirtyBit(1U);
-					}
+					hud.ClearVote(
+						pva.PlayerId,
+						PlayerControl.LocalPlayer != null &&
+						PlayerControl.LocalPlayer.PlayerId == pva.PlayerId);
+					isDirty = true;
 				}
 
-				if (pva.TargetPlayerId == b.ParentId)
+				if (pva.PlayerId == b.ParentId)
 				{
-					pva.SetDead(pva.DidReport, true);
+					pva.SetDead(true);
 					pva.Overlay.gameObject.SetActive(true);
 				}
 			}
+		}
+
+		if (isDirty && AmongUsClient.Instance.AmHost)
+		{
+			hud.SetDirtyBit(1U);
 		}
 	}
 
@@ -137,7 +139,7 @@ public static class MeetingHudUpdatePatch
 			hud.SkipVoteButton.gameObject.SetActive(
 				system.IsSkipButtonActive && 
 				system.Caller == localPlayer.PlayerId &&
-				hud.state == MeetingHud.VoteStates.NotVoted);
+				hud.state == MeetingHud.MeetingStates.NotVoted);
 
 			HudManager.Instance.Chat.gameObject.SetActive(
 				(

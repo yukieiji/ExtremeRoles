@@ -25,22 +25,14 @@ public static class MeetingHudConfirmPatch
 			return false;
 		}
 
-		for (int i = 0; i < __instance.playerStates.Length; i++)
-		{
-			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-			playerVoteArea.ClearButtons();
-			playerVoteArea.voteComplete = true;
-		}
-		__instance.SkipVoteButton.ClearButtons();
-		__instance.SkipVoteButton.voteComplete = true;
-		__instance.SkipVoteButton.gameObject.SetActive(false);
+		__instance.SetVoteComplete(true, true);
 
-		MeetingHud.VoteStates voteStates = __instance.state;
-		if (voteStates != MeetingHud.VoteStates.NotVoted)
+		MeetingHud.MeetingStates voteStates = __instance.state;
+		if (voteStates != MeetingHud.MeetingStates.NotVoted)
 		{
 			return false;
 		}
-		__instance.state = MeetingHud.VoteStates.Voted;
+		__instance.state = MeetingHud.MeetingStates.Voted;
 		__instance.CmdCastVote(
 			PlayerControl.LocalPlayer.PlayerId, suspectStateIdx);
 
@@ -50,7 +42,7 @@ public static class MeetingHudConfirmPatch
 		MeetingHud __instance,
 		[HarmonyArgument(0)] byte suspectStateIdx)
 	{
-		if (__instance.state != MeetingHud.VoteStates.Voted ||
+		if (__instance.state != MeetingHud.MeetingStates.Voted ||
 			OnemanMeetingSystemManager.IsActive)
 		{
 			return;

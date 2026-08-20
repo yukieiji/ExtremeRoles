@@ -54,19 +54,21 @@ public sealed class Controller : NullableSingleton<Controller>
 		{
 			this.button.CreateInfoButton(toggleView);
 		}
+		this.button.SetLobbyParent();
 		UpdateFunc.InitializeLobby(this.model);
 	}
 
 	public void InitializeToGame()
 	{
-		if (!GameSystem.IsFreePlay)
-		{
-			UpdateFunc.InitializeGame(this.model);
-		}
-		else
+		if (GameSystem.IsFreePlay)
 		{
 			UpdateFunc.InitializeLobby(this.model);
 		}
+		else
+		{
+			UpdateFunc.InitializeGame(this.model);
+		}
+		this.button.SetGameParent();
 	}
 
 	public void UpdateOnEvent()

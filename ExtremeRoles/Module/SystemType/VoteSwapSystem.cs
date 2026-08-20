@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Hazel;
+using InnerNet;
 using UnityEngine;
 
 using ExtremeRoles.Extension.Vector;
@@ -21,8 +22,8 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	private readonly List<(byte, byte)> swapList = [];
 	private readonly Dictionary<byte, List<SpriteRenderer>> img = [];
 	
-	private Dictionary<byte, PlayerVoteArea>? pva;
-	private Dictionary<byte, byte>? cache;
+	private Dictionary<PlayerId, PlayerVoteArea>? pva;
+	private Dictionary<PlayerId, PlayerId>? cache;
 
 	private const float animeDuration = 1.5f;
 
@@ -114,7 +115,9 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			return false;
 		}
 		var swapInfo = system.getSwapInfo();
-		return swapInfo.TryGetValue(source, out target);
+		bool result = swapInfo.TryGetValue(source, out var targetStruct);
+		target = targetStruct;
+		return result;
 	}
 
 	public static void RemovePlayerFromSwaps(byte playerId)
@@ -148,7 +151,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 			this.img.Clear();
 
 			this.cache = null;
-			this.pva = MeetingHud.Instance.playerStates.ToDictionary(x => x.TargetPlayerId);
+			this.pva = MeetingHud.Instance.playerStates.ToDictionary(x => x.PlayerId);
 		}
 	}
 
@@ -179,7 +182,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		if (this.pva is null)
 		{
 			this.pva = MeetingHud.Instance.playerStates.ToDictionary(
-				x => x.TargetPlayerId);
+				x => x.PlayerId);
 		}
 
 		var color = Design.ToRGBA(colorUint);
@@ -199,7 +202,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 		var finalVoteInfo = new Dictionary<byte, int>();
 		foreach (var (originalTarget, originalVote) in voteInfo)
 		{
-			if (!swapInfo.TryGetValue(originalTarget, out byte target))
+			if (!swapInfo.TryGetValue(originalTarget, out var target))
 			{
 				// スワップ先が見つからない時に票が消えないようにするため元のやつをいれる
 				target = originalTarget;
@@ -212,11 +215,11 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 
 
 	// Swapした結果の全プレイヤーの全投票位置が来る
-	private IReadOnlyDictionary<byte, byte> getSwapInfo()
+	private IReadOnlyDictionary<PlayerId, PlayerId> getSwapInfo()
 	{
 		if (this.pva is null || this.swapList.Count == 0)
 		{
-			return new Dictionary<byte, byte>();
+			return new Dictionary<PlayerId, PlayerId>();
 		}
 
 		if (this.cache is null)
@@ -260,7 +263,7 @@ public sealed class VoteSwapSystem : IExtremeSystemType
 	{
 		var img = UnityEngine.Object.Instantiate(
 			pva.Background, pva.LevelNumberText.transform);
-		img.name = $"swap_img_{pva.TargetPlayerId}_{index}";
+		img.name = $"swap_img_{pva.PlayerId}_{index}";
 		img.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
 			ObjectPath.CommonTextureAsset,
 			string.Format(
