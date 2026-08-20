@@ -185,7 +185,7 @@ public static class PlayerControlMurderPlayerPatch
 
 			if (pva.VotedForId == targetPlayerId)
 			{
-				meeting.ClearVote(pva.VotedForId, isLocalPlayerDead);
+				meeting.ClearVote(pva.PlayerId, isLocalPlayerDead);
 				isDirty = true;
 				if (pva.ThumbsDown != null)
 				{
