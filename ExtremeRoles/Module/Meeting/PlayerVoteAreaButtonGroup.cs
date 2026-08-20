@@ -18,7 +18,10 @@ public sealed class PlayerVoteAreaButtonGroup
 	public PlayerVoteAreaButtonGroup(PlayerVoteArea __instance)
 	{
 		this.AddFirstRow(__instance.CancelButton);
-		this.AddFirstRow(__instance.ConfirmButton);
+		if (!__instance.DidVote)
+		{
+			this.AddFirstRow(__instance.ConfirmButton);
+		}
 	}
 
 	public void ResetFirst()

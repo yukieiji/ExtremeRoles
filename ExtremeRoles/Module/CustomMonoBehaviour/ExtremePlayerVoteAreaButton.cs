@@ -50,15 +50,15 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		float startPos = pva.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 		var overruleButton = pva.JudgeOverruleButton;
 
+		if (overruleButton != null)
+		{
+			overruleButton.gameObject.SetActive(false);
+			pva.JudgeOverruleButtonCommsDisable.SetActive(false);
+		}
+
 		var group = button.Group;
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
-			if (overruleButton != null)
-			{
-				overruleButton.gameObject.SetActive(false);
-				pva.JudgeOverruleButtonCommsDisable.SetActive(false);
-			}
-
 			result = group.DefaultFlatten(startPos);
 			bool isVotor = system.Caller == localPlayer.PlayerId;
 			Logging.Debug($"Is oneman meeting votor : {isVotor}");
@@ -187,7 +187,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			pva.PlayerId == PlayerVoteArea.SkippedVote ||
 			pva.AmDead ||
 			buttonRole.IsBlockMeetingButtonAbility(pva) ||
-			pva.VoteComplete ||
+			pva.DidVote ||
 			pva.Parent == null ||
 			!pva.Parent.Select((int)pva.PlayerId)
 		);
