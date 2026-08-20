@@ -56,7 +56,7 @@ public sealed class PlayerVoteAreaButtonGroup
 	}
 
 	public IEnumerable<IPlayerVoteAreaButtonPostionComputer> DefaultFlatten(float startPos)
-		=> setUpComputer(this.first.GetRange(0, 2), Vector2.zero, startPos);
+		=> setUpComputer(this.first, Vector2.zero, startPos);
 
 	public void AddFirstRow(UiElement element)
 	{
