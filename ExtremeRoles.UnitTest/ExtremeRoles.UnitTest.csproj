@@ -27,6 +27,15 @@
   <ItemGroup Condition="!Exists('$(MSBuildProjectDirectory)/.mockbuilder/build/output/ExtremeRoles.dll')">
     <PackageReference Include="AmongUs.GameLibs.Steam" Version="2026.8.18" PrivateAssets="all" />
     <ProjectReference Include="..\ExtremeRoles\ExtremeRoles.csproj" />
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(NuGetPackageRoot)amongus.gamelibs.steam/2026.8.18/ref/net6.0/Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>$(NuGetPackageRoot)amongus.gamelibs.steam/2026.8.18/ref/net6.0/Il2Cppmscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppSystem">
+      <HintPath>$(NuGetPackageRoot)amongus.gamelibs.steam/2026.8.18/ref/net6.0/Il2CppSystem.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)/.mockbuilder/build/output/ExtremeRoles.dll')">
