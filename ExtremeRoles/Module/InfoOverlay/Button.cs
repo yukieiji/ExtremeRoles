@@ -12,14 +12,14 @@ public sealed class HelpButton
 	public bool IsInitialized => this.body != null;
 
 	private GameObject? body = null;
-	private static GameObject MenuButton => GameObject.Find("MenuButton");
-	private static PassiveButton InfoButton => HudManager.Instance.MatchInfoButton;
+	private static GameObject menuButton => GameObject.Find("MenuButton");
+	private static PassiveButton infoButton => HudManager.Instance.MatchInfoButton;
 
 	public void CreateInfoButton(System.Action openAct)
 	{
-		var menuButton = MenuButton;
+		var menu = menuButton;
 		this.body = Object.Instantiate(
-			menuButton, menuButton.transform);
+			menu, menu.transform);
 		Object.DontDestroyOnLoad(this.body);
 
 		this.body.name = "infoRoleButton";
@@ -57,7 +57,7 @@ public sealed class HelpButton
 	{
 		if (this.body != null)
 		{
-			this.body.transform.SetParent(MenuButton.transform);
+			this.body.transform.SetParent(menuButton.transform);
 			this.body.transform.localPosition = new Vector3(-1.275f, 0.0f, 0.0f);
 		}
 	}
@@ -66,7 +66,7 @@ public sealed class HelpButton
 	{
 		if (this.body != null)
 		{
-			this.body.transform.SetParent(InfoButton.transform);
+			this.body.transform.SetParent(infoButton.transform);
 			this.body.transform.localPosition = new Vector3(-0.75f, 0.0f, 0.0f);
 		}
 	}
