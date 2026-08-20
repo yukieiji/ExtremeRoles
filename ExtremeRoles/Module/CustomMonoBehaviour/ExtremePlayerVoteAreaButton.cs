@@ -43,10 +43,17 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		}
 
 		float startPos = pva.AnimateButtonsFromLeft ? 0.2f : 1.95f;
+		var overruleButton = pva.JudgeOverruleButton;
 
 		var group = button.Group;
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
+			if (overruleButton != null)
+			{
+				overruleButton.gameObject.SetActive(false);
+				pva.JudgeOverruleButtonCommsDisable.SetActive(false);
+			}
+
 			result = group.DefaultFlatten(startPos);
 			bool isVotor = system.Caller == localPlayer.PlayerId;
 			Logging.Debug($"Is oneman meeting votor : {isVotor}");
@@ -65,15 +72,13 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 		var multiRole = role as MultiAssignRoleBase;
 
-		if (pva.JudgeOverruleButton != null &&
+		if (overruleButton != null &&
 			IsMultiedJudgeRole(pva, role, out var judge, out var vanillaRole, out var exrMeetingButtonRole))
 		{
 			Logging.Debug($"LocalPlayer is dual meeting ability button with judge");
 
 			// 2つ目のボタンをリセットしてから、JudgeOverruleButtonを追加する
 			group.ResetSecond();
-
-			var overruleButton = pva.JudgeOverruleButton;
 
 			// JudgeOverruleButtonの表示条件を判定する
 			if (!judge.IsBlockedByTasks() && !judge.HasAlreadyOverruledThisMeeting && judge.HasAnOverruleUse)
