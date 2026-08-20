@@ -161,7 +161,7 @@ public static class PlayerControlMurderPlayerPatch
 		in bool isLocalPlayerDead, in byte targetPlayerId)
 	{
 		var meeting = MeetingHud.Instance;
-		bool isReset = false;
+		bool isDirty = false;
 		foreach (var pva in meeting.playerStates)
 		{
 			// 死んだ人が投票ボタンを開いている場合、それをすべて閉じる
@@ -169,28 +169,21 @@ public static class PlayerControlMurderPlayerPatch
 			{
 				pva.Cancel();
 			}
-			
-			// 死んだ人のPVAに対しての処理
-			if (pva.PlayerId == targetPlayerId)
+
+			if (pva.VotedForId == targetPlayerId)
 			{
-				pva.Cancel(); // 生きている人目線 : 死んだ人の投票ボタンを強制的に閉じる
-				pva.UnsetVote(); // 死んだ人目線 : 死んだ人の投票自体を消す
+				meeting.ClearVote(pva.VotedForId, isLocalPlayerDead);
+				isDirty = true;
 				if (pva.ThumbsDown != null)
 				{
 					pva.ThumbsDown.enabled = false;
 				}
 			}
-
-			// 死んだ人に投票していた場合、その投票をキャンセル
-			if (pva.VotedForId == targetPlayerId)
-			{
-				pva.UnsetVote();
-				isReset = true;
-			}
 		}
-		if (isReset)
+
+		if (isDirty && AmongUsClient.Instance.AmHost)
 		{
-			meeting.ClearVote(targetPlayerId, isLocalPlayerDead);
+			meeting.SetDirtyBit(1U);
 		}
 	}
 

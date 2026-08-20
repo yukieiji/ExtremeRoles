@@ -25,15 +25,7 @@ public static class MeetingHudConfirmPatch
 			return false;
 		}
 
-		for (int i = 0; i < __instance.playerStates.Length; i++)
-		{
-			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-			playerVoteArea.ClearButtons();
-			playerVoteArea.VoteComplete = true;
-		}
-		__instance.SkipVoteButton.ClearButtons();
-		__instance.SkipVoteButton.VoteComplete = true;
-		__instance.SkipVoteButton.gameObject.SetActive(false);
+		__instance.SetVoteComplete(true, true);
 
 		MeetingHud.MeetingStates voteStates = __instance.state;
 		if (voteStates != MeetingHud.MeetingStates.NotVoted)

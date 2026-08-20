@@ -352,12 +352,12 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		bool result = false;
 		voteFor = byte.MaxValue;
 
-		foreach (PlayerVoteArea playerVoteArea in meeting.playerStates)
+		foreach (var pva in meeting.playerStates)
 		{
-			if (playerVoteArea.PlayerId == this.Caller)
+			if (pva.PlayerId == this.Caller)
 			{
-				result = playerVoteArea.DidVote;
-				voteFor = playerVoteArea.VotedForId;
+				result = pva.DidVote;
+				voteFor = pva.VotedForId;
 				break;
 			}
 		}
