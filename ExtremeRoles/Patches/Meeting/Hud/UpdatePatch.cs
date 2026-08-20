@@ -110,7 +110,7 @@ public static class MeetingHudUpdatePatch
 
 				if (pva.PlayerId == b.ParentId)
 				{
-					pva.SetDead(pva.DidReport);
+					pva.SetDead(true);
 					pva.Overlay.gameObject.SetActive(true);
 				}
 			}
