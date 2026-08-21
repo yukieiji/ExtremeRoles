@@ -1,9 +1,7 @@
 using System;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Roles.API;
 using Moq;
-using UnityEngine;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Helper;
@@ -75,17 +73,49 @@ public class PlayerTests : IDisposable
     public void IsValidPlayer_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedUnityOperator()
     {
         var mockSourcePlayer = new Mock<PlayerControl>();
-        var mockRole = new Mock<SingleRoleBase>();
 
-        Assert.Throws<NotImplementedException>(() => Player.IsValidPlayer(mockRole.Object, mockSourcePlayer.Object, null!));
+        Assert.Throws<NotImplementedException>(() => Player.IsValidPlayer(null!, mockSourcePlayer.Object, null!));
+    }
+
+    [Fact]
+    public void IsValidPlayer_WhenTargetPlayerIsProvided_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedUnityOperator()
+    {
+        var mockSourcePlayer = new Mock<PlayerControl>();
+        var mockTargetInfo = new Mock<NetworkedPlayerInfo>();
+
+        Assert.Throws<NotImplementedException>(() => Player.IsValidPlayer(null!, mockSourcePlayer.Object, mockTargetInfo.Object));
     }
 
     [Fact]
     public void GetAllPlayerInRange_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedShipStatus()
     {
         var mockSourcePlayer = new Mock<PlayerControl>();
-        var mockRole = new Mock<SingleRoleBase>();
 
-        Assert.Throws<NotImplementedException>(() => Player.GetAllPlayerInRange(mockSourcePlayer.Object, mockRole.Object, 5.0f));
+        Assert.Throws<NotImplementedException>(() => Player.GetAllPlayerInRange(mockSourcePlayer.Object, null!, 5.0f));
+    }
+
+    [Fact]
+    public void IsPlayerInRangeAndDrawOutLine_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedShipStatus()
+    {
+        var mockSourcePlayer = new Mock<PlayerControl>();
+        var mockTargetPlayer = new Mock<PlayerControl>();
+
+        Assert.Throws<NotImplementedException>(() => Player.IsPlayerInRangeAndDrawOutLine(mockSourcePlayer.Object, mockTargetPlayer.Object, null!, 5.0f));
+    }
+
+    [Fact]
+    public void GetClosestPlayerInRange_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedShipStatus()
+    {
+        var mockSourcePlayer = new Mock<PlayerControl>();
+
+        Assert.Throws<NotImplementedException>(() => Player.GetClosestPlayerInRange(mockSourcePlayer.Object, null!, 5.0f));
+    }
+
+    [Fact]
+    public void TryGetClosestPlayerInRange_InMockEnv_ThrowsNotImplementedExceptionDueToStrippedShipStatus()
+    {
+        var mockSourcePlayer = new Mock<PlayerControl>();
+
+        Assert.Throws<NotImplementedException>(() => Player.TryGetClosestPlayerInRange(mockSourcePlayer.Object, null!, 5.0f, out _));
     }
 }
