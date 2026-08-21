@@ -6,22 +6,29 @@ namespace ExtremeRoles.Performance;
 // Il2Cpp
 public static class PlayerCache
 {
-	public static readonly List<PlayerControl> AllPlayerControl = new List<PlayerControl>();
+	public static IReadOnlyList<PlayerControl> AllPlayerControl => allPlayerControlCache;
+
+	private static readonly List<PlayerControl> allPlayerControlCache = [];
 
 	public static　void AddPlayerControl(PlayerControl pc)
 	{
-		lock (AllPlayerControl)
+		lock (allPlayerControlCache)
 		{
-			AllPlayerControl.Remove(pc);
-			AllPlayerControl.Add(pc);
+			allPlayerControlCache.Remove(pc);
+			allPlayerControlCache.Add(pc);
 		}
 	}
 
 	public static void RemovePlayerControl(PlayerControl pc)
 	{
-		lock (AllPlayerControl)
+		RemovePlayerControl(p => p.Pointer == pc.Pointer);
+	}
+
+	public static void RemovePlayerControl(Predicate<PlayerControl> predicate)
+	{
+		lock (allPlayerControlCache)
 		{
-			AllPlayerControl.RemoveAll(p => p.Pointer == pc.Pointer);
+			allPlayerControlCache.RemoveAll(predicate);
 		}
 	}
 }
