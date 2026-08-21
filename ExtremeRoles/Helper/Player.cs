@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -22,6 +23,42 @@ namespace ExtremeRoles.Helper;
 
 public static class Player
 {
+	private static GameData? GetGameDataInstance()
+	{
+		try
+		{
+			return GameData.Instance;
+		}
+		catch (NullReferenceException)
+		{
+			return null;
+		}
+	}
+
+	private static ShipStatus? GetShipStatusInstance()
+	{
+		try
+		{
+			return ShipStatus.Instance;
+		}
+		catch (NullReferenceException)
+		{
+			return null;
+		}
+	}
+
+	private static PlayerControl? GetLocalPlayer()
+	{
+		try
+		{
+			return PlayerControl.LocalPlayer;
+		}
+		catch (NullReferenceException)
+		{
+			return null;
+		}
+	}
+
 	public static float DefaultKillCoolTime => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown);
 
 	private static Il2CppReferenceArray<Collider2D> hitBuffer = new Il2CppReferenceArray<Collider2D>(20);
@@ -35,7 +72,7 @@ public static class Player
 	public static Dictionary<byte, PoolablePlayer> CreatePlayerIcon(
 		Transform? parent = null, Vector3? scale = null)
 	{
-		if (parent == null)
+		if (ReferenceEquals(parent, null))
 		{
 			parent = HudManager.Instance.transform;
 		}
@@ -45,7 +82,7 @@ public static class Player
 
 		foreach (PlayerControl player in PlayerCache.AllPlayerControl)
 		{
-			PoolablePlayer poolPlayer = Object.Instantiate(
+			PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate(
 				Module.Prefab.PlayerPrefab, parent);
 
 			poolPlayer.gameObject.SetActive(true);
@@ -83,21 +120,22 @@ public static class Player
 
 	public static bool TryGetPlayerControl(byte id, [NotNullWhen(true)] out PlayerControl? result)
 	{
-		result = PlayerCache.AllPlayerControl.FirstOrDefault(x => x != null && x.PlayerId == id);
-		return result != null;
+		result = GetPlayerControlById(id);
+		return !ReferenceEquals(result, null);
 	}
 
 	public static bool TryGetPlayerInfo(byte id, [NotNullWhen(true)] out NetworkedPlayerInfo? player)
 	{
-		if (GameData.Instance == null)
+		player = null;
+		var gameData = GetGameDataInstance();
+		if (ReferenceEquals(gameData, null))
 		{
-			player = null;
 			return false;
 		}
 
-		player = GameData.Instance.GetPlayerById(id);
+		player = gameData.GetPlayerById(id);
 
-		return player != null;
+		return !ReferenceEquals(player, null);
 	}
 
     public static Console? GetClosestConsole(PlayerControl player, float radius)
@@ -129,8 +167,14 @@ public static class Player
 
     public static PlayerControl? GetClosestPlayerInKillRange()
     {
+		var localPlayer = GetLocalPlayer();
+		if (ReferenceEquals(localPlayer, null) || ReferenceEquals(localPlayer.Data, null))
+		{
+			return null;
+		}
+
         var playersInAbilityRangeSorted =
-            PlayerControl.LocalPlayer.Data.Role.GetPlayersInAbilityRangeSorted(
+            localPlayer.Data.Role.GetPlayersInAbilityRangeSorted(
                 RoleBehaviour.GetTempPlayerList());
         if (playersInAbilityRangeSorted.Count <= 0)
         {
@@ -141,6 +185,11 @@ public static class Player
 
     public static PlayerControl? GetClosestPlayerInKillRange(PlayerControl player)
     {
+		if (ReferenceEquals(player, null) || ReferenceEquals(player.Data, null))
+		{
+			return null;
+		}
+
         var playersInAbilityRangeSorted =
             player.Data.Role.GetPlayersInAbilityRangeSorted(
                 RoleBehaviour.GetTempPlayerList());
@@ -156,8 +205,15 @@ public static class Player
 		float range,
 		[NotNullWhen(true)] out PlayerControl? targetPlayer)
 	{
-		targetPlayer = GetClosestPlayerInRange(PlayerControl.LocalPlayer, role, range);
-		return targetPlayer != null;
+		var localPlayer = GetLocalPlayer();
+		if (ReferenceEquals(localPlayer, null))
+		{
+			targetPlayer = null;
+			return false;
+		}
+
+		targetPlayer = GetClosestPlayerInRange(localPlayer, role, range);
+		return !ReferenceEquals(targetPlayer, null);
 	}
 
 	public static bool TryGetClosestPlayerInRange(
@@ -167,7 +223,7 @@ public static class Player
 		[NotNullWhen(true)] out PlayerControl? targetPlayer)
 	{
 		targetPlayer = GetClosestPlayerInRange(sourcePlayer, role, range);
-		return targetPlayer != null;
+		return !ReferenceEquals(targetPlayer, null);
 	}
 
 	public static PlayerControl? GetClosestPlayerInRange(
@@ -211,9 +267,22 @@ public static class Player
     {
         task = null;
 
-        SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];
+        if (ReferenceEquals(player, null))
+        {
+            return false;
+        }
+
+        if (!ExtremeRoleManager.GameRole.TryGetValue(player.PlayerId, out SingleRoleBase? role))
+        {
+            return false;
+        }
 
         if (!role.HasTask())
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(player.myTasks, null))
         {
             return false;
         }
@@ -226,7 +295,7 @@ public static class Player
         if (!playerTask) { return false; }
         task = playerTask.TryCast<NormalPlayerTask>();
 
-        return task != null && !task.IsComplete;
+        return !ReferenceEquals(task, null) && !task.IsComplete;
     }
 
     public static List<PlayerControl> GetAllPlayerInRange(
@@ -236,7 +305,14 @@ public static class Player
 
         List<PlayerControl> result = new List<PlayerControl>();
 
-        if (!ShipStatus.Instance)
+        if (ReferenceEquals(sourcePlayer, null) || ReferenceEquals(role, null))
+        {
+            return result;
+        }
+
+        var shipStatus = GetShipStatusInstance();
+        var gameData = GetGameDataInstance();
+        if (ReferenceEquals(shipStatus, null) || ReferenceEquals(gameData, null) || ReferenceEquals(gameData.AllPlayers, null))
         {
             return result;
         }
@@ -244,7 +320,7 @@ public static class Player
         Vector2 truePosition = sourcePlayer.GetTruePosition();
 
         foreach (NetworkedPlayerInfo playerInfo in
-            GameData.Instance.AllPlayers.GetFastEnumerator())
+            gameData.AllPlayers.GetFastEnumerator())
         {
             if (IsValidPlayer(role, sourcePlayer, playerInfo))
             {
@@ -282,11 +358,20 @@ public static class Player
 
     public static float GetPlayerTaskGage(PlayerControl player)
     {
+        if (ReferenceEquals(player, null) || ReferenceEquals(player.Data, null))
+        {
+            return 0f;
+        }
         return GetPlayerTaskGage(player.Data);
     }
 
     public static float GetPlayerTaskGage(NetworkedPlayerInfo player)
     {
+        if (ReferenceEquals(player, null) || ReferenceEquals(player.Tasks, null))
+        {
+            return 0f;
+        }
+
         int taskNum = 0;
         int compNum = 0;
 
@@ -300,13 +385,24 @@ public static class Player
             }
         }
 
+        if (taskNum == 0)
+        {
+            return 0f;
+        }
+
         return (float)compNum / (float)taskNum;
 
     }
 
     public static NetworkedPlayerInfo? GetDeadBodyInfo(float range)
     {
-        Vector2 playerPos = PlayerControl.LocalPlayer.GetTruePosition();
+        var localPlayer = GetLocalPlayer();
+        if (ReferenceEquals(localPlayer, null))
+        {
+            return null;
+        }
+
+        Vector2 playerPos = localPlayer.GetTruePosition();
 
         foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
             playerPos, range,
@@ -320,11 +416,12 @@ public static class Player
             {
                 Vector2 truePosition = component.TruePosition;
                 if ((Vector2.Distance(truePosition, playerPos) <= range) &&
-                    (PlayerControl.LocalPlayer.CanMove) &&
+                    (localPlayer.CanMove) &&
                     (!PhysicsHelpers.AnythingBetween(
                         playerPos, truePosition, Constants.ShipAndObjectsMask, false)))
                 {
-                    return GameData.Instance.GetPlayerById(component.ParentId);
+                    var gameData = GetGameDataInstance();
+                    return gameData != null ? gameData.GetPlayerById(component.ParentId) : null;
                 }
             }
         }
@@ -333,9 +430,10 @@ public static class Player
 
 	public static void RpcUncheckSnap(byte targetPlayerId, Vector2 pos, bool isTeleportXion=false)
     {
+        var localPlayer = GetLocalPlayer();
 		if (isTeleportXion &&
 			Xion.PlayerId == targetPlayerId &&
-			PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+			localPlayer != null && localPlayer.PlayerId == targetPlayerId)
 		{
 			Xion.RpcTeleportTo(pos);
 			return;
@@ -402,7 +500,7 @@ public static class Player
 	{
 		roomeId = null;
 
-		if (player == null)
+		if (ReferenceEquals(player, null))
 		{
 			return false;
 		}
@@ -415,14 +513,20 @@ public static class Player
 	{
 		roomeId = null;
 
-		if (playerCollider == null)
+		if (ReferenceEquals(playerCollider, null))
 		{
 			return false;
 		}
 
-		foreach (PlainShipRoom room in ShipStatus.Instance.AllRooms)
+		var shipStatus = GetShipStatusInstance();
+		if (ReferenceEquals(shipStatus, null) || ReferenceEquals(shipStatus.AllRooms, null))
 		{
-			if (room != null && room.roomArea)
+			return false;
+		}
+
+		foreach (PlainShipRoom room in shipStatus.AllRooms)
+		{
+			if (!ReferenceEquals(room, null) && room.roomArea)
 			{
 				int hitCount = room.roomArea.OverlapCollider(playerHitFilter, hitBuffer);
 				if (isHit(playerCollider, hitBuffer, hitCount))
@@ -432,6 +536,7 @@ public static class Player
 				}
 			}
 		}
+
 		return false;
 	}
 
@@ -440,7 +545,13 @@ public static class Player
         PlayerControl targetPlayer,
         SingleRoleBase role, float range)
     {
-        if (!ShipStatus.Instance)
+        if (ReferenceEquals(sourcePlayer, null) || ReferenceEquals(targetPlayer, null) || ReferenceEquals(role, null))
+        {
+            return false;
+        }
+
+        var shipStatus = GetShipStatusInstance();
+        if (ReferenceEquals(shipStatus, null))
         {
             return false;
         }
@@ -460,7 +571,6 @@ public static class Player
             !PhysicsHelpers.AnyNonTriggersBetween(
                 truePosition, vector.normalized,
                 magnitude, Constants.ShipAndObjectsMask);
-
     }
 
 	private static bool isHit(
@@ -483,22 +593,23 @@ public static class Player
         PlayerControl sourcePlayer,
         NetworkedPlayerInfo targetPlayer)
     {
-		if (targetPlayer == null)
+		if (ReferenceEquals(targetPlayer, null) || ReferenceEquals(sourcePlayer, null) || ReferenceEquals(role, null))
 		{
 			return false;
 		}
+
 		byte targetPlayerId = targetPlayer.PlayerId;
 		byte sourcePlayerId = sourcePlayer.PlayerId;
 
-        return (
+		return (
 			targetPlayerId != sourcePlayerId &&
 			targetPlayer.IsAlive() &&
-            !targetPlayer.Object.inVent &&
+			!targetPlayer.Object.inVent &&
 			!targetPlayer.Object.inMovingPlat &&
 			!targetPlayer.Object.onLadder &&
 			ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
-            !role.IsSameTeam(targetRole) &&
+			!role.IsSameTeam(targetRole) &&
 			(targetRole.AbilityClass is not IInvincible invincible || invincible.IsValidAbilitySource(sourcePlayerId))
-        );
+		);
     }
 }
