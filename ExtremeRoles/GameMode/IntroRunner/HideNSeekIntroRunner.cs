@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 
 using UnityEngine;
 using PowerTools;
@@ -8,6 +8,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using System.Linq;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
@@ -50,7 +51,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
 		}
 
 		PlayerControl impostor =
-            PlayerCache.AllPlayerControl.Find(
+            PlayerCache.AllPlayerControl.FirstOrDefault(
 				(PlayerControl pc) => pc.Data.Role.IsImpostor);
 
         if (impostor == null)
