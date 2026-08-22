@@ -12,16 +12,16 @@ using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
 
 namespace ExtremeRoles.Patches.MiniGame;
 
-[HarmonyPatch(typeof(HauntMenuMinigame), nameof(HauntMenuMinigame.SetFilterText))]
-public static class HauntMenuMinigameFilterTextPatch
+// 何故かSetFilterTextが動作しないのでSetHauntTargetで上書きする
+[HarmonyPatch(typeof(HauntMenuMinigame), nameof(HauntMenuMinigame.SetHauntTarget))]
+public static class HauntMenuMinigameSetHauntTargetPatch
 {
-    public static bool Prefix(HauntMenuMinigame __instance)
+    public static void Postfix(HauntMenuMinigame __instance)
     {
-        if (__instance.HauntTarget == null ||
-			ExtremeRoleManager.GameRole.Count == 0 ||
+		if (__instance.HauntTarget == null ||
 			!ExtremeRoleManager.TryGetRole(__instance.HauntTarget.PlayerId, out var targetRole))
 		{
-			return true;
+			return;
 		}
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
@@ -41,8 +41,6 @@ public static class HauntMenuMinigameFilterTextPatch
 		) ?
                 "？？？" :
                 Tr.GetString(targetRole.Core.Team.ToString());
-
-        return false;
     }
 }
 
