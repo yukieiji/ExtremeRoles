@@ -149,7 +149,8 @@ public static class MeetingHudCheckForEndVotingPatch
 			(NetworkedPlayerInfo v) => !isTie && v.PlayerId == result.PlayerId);
 		var exiledInfo = instance.TryGetWinningOverrule(out var judgeOverrule, out var me, out var judgeTarget) ? 
 			new ExiledInfo(
-				judgeTarget.Role.TeamType == RoleTeamTypes.Impostor ? GameData.Instance.GetPlayerById(judgeOverrule.OverruledPlayerId) : me,
+				ExtremeRoleManager.TryGetRole(judgeOverrule.OverruledPlayerId, out var role) && role.IsImpostor() ? 
+					GameData.Instance.GetPlayerById(judgeOverrule.OverruledPlayerId) : me,
 				true, judgeOverrule.OverruleNonce) :
 			new ExiledInfo(exiled);
 
