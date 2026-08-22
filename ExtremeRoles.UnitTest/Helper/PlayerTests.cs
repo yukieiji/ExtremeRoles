@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.Serialization;
 using AmongUs.GameOptions;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
@@ -87,11 +86,7 @@ public class PlayerTests : IDisposable
     {
         if (CompatModManager.Instance == null)
         {
-            var inst = FormatterServices.GetUninitializedObject(typeof(CompatModManager));
-            var loadedModField = typeof(CompatModManager).GetField("loadedMod", BindingFlags.NonPublic | BindingFlags.Instance);
-            loadedModField?.SetValue(inst, new Dictionary<CompatModType, ModIntegratorBase>());
-            var prop = typeof(CompatModManager).GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
-            prop?.SetValue(null, inst);
+            CompatModManager.Initialize();
         }
     }
 
@@ -153,8 +148,14 @@ public class PlayerTests : IDisposable
         mockEq.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<UnityEngine.Object>()))
             .Returns((UnityEngine.Object x, UnityEngine.Object y) =>
             {
-                if (ReferenceEquals(x, y)) return true;
-                if (ReferenceEquals(x, null) || ReferenceEquals(y, null)) return false;
+                if (ReferenceEquals(x, y))
+                {
+                    return true;
+                }
+                if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
+                {
+                    return false;
+                }
                 return ReferenceEquals(x, y);
             });
         MockObjectop_EqualityHelper.Instance = mockEq.Object;
@@ -163,8 +164,14 @@ public class PlayerTests : IDisposable
         mockIneq.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<UnityEngine.Object>()))
             .Returns((UnityEngine.Object x, UnityEngine.Object y) =>
             {
-                if (ReferenceEquals(x, y)) return false;
-                if (ReferenceEquals(x, null) || ReferenceEquals(y, null)) return true;
+                if (ReferenceEquals(x, y))
+                {
+                    return false;
+                }
+                if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
+                {
+                    return true;
+                }
                 return !ReferenceEquals(x, y);
             });
         MockObjectop_InequalityHelper.Instance = mockIneq.Object;
