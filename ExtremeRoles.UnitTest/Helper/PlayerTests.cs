@@ -19,7 +19,6 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Helper;
 
-[Collection("Global Test Collection")]
 public class PlayerTests : IDisposable
 {
     private static readonly IGameOptions globalGameOptions;
