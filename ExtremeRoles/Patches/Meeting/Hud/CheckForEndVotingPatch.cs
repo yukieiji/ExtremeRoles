@@ -146,8 +146,6 @@ public static class MeetingHudCheckForEndVotingPatch
 			}
 		}
 
-		var exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
-			(NetworkedPlayerInfo v) => !isTie && v.PlayerId == result.PlayerId);
 		var exiledInfo = instance.TryGetWinningOverrule(out var judgeOverrule, out var me, out var judgeTarget) ? 
 			new ExiledInfo(
 				ExtremeRoleManager.TryGetRole(judgeOverrule.OverruledPlayerId, out var role) && (
@@ -160,7 +158,8 @@ public static class MeetingHudCheckForEndVotingPatch
 				) ? 
 					GameData.Instance.GetPlayerById(judgeOverrule.OverruledPlayerId) : me,
 				true, judgeOverrule.OverruleNonce) :
-			new ExiledInfo(exiled);
+			new ExiledInfo(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
+				(NetworkedPlayerInfo v) => !isTie && v.PlayerId == result.PlayerId));
 
 		if (exiledInfo.Target != null)
 		{
