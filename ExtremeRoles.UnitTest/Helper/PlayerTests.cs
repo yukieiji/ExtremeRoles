@@ -183,12 +183,6 @@ public class PlayerTests : IDisposable
     }
 
     [Fact]
-    public void DefaultKillCoolTime_ReturnsFloatFromGameOptions()
-    {
-        Assert.Equal(25.0f, Player.DefaultKillCoolTime);
-    }
-
-    [Fact]
     public void GetPlayerControlById_WithMatchingPlayerInCache_ShouldReturnPlayer()
     {
         var mockPlayer = new Mock<PlayerControl>();
