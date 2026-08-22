@@ -1,3 +1,4 @@
+using AmongUs.GameOptions;
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
@@ -15,10 +16,16 @@ public static class MatchInfoGuideHelper
 {
 	public static void CreateModRoleEntry(MatchInfoGuide instance)
 	{
+		if (AmongUsClient.Instance == null ||
+			TutorialManager.InstanceExists)
+		{
+			return;
+		}
+
 		var parent = instance.settingsTabs[2].GetComponent<Scroller>().Inner;
 		var prehab = instance.MatchInfoRolePanelPrefab;
 
-		bool noRole = true;
+		int num = 0;
 
 		foreach (var role in Roles.ExtremeRoleManager.NormalRole.Values)
 		{
@@ -28,7 +35,7 @@ public static class MatchInfoGuideHelper
 				roleNum > 0)
 			{
 				createRoleEntry(prehab, parent, role.GetColoredRoleName(true), roleNum, selection);
-				noRole = false;
+				num++;
 			}
 		}
 
@@ -40,7 +47,7 @@ public static class MatchInfoGuideHelper
 				roleNum > 0)
 			{
 				createRoleEntry(prehab, parent, combRole.GetOptionName(), roleNum, selection);
-				noRole = false;
+				num++;
 			}
 		}
 
@@ -52,11 +59,22 @@ public static class MatchInfoGuideHelper
 				roleNum > 0)
 			{
 				createRoleEntry(prehab, parent, role.GetColoredRoleName(), roleNum, selection);
-				noRole = false;
+				num++;
 			}
 		}
 
-		instance.rolesEnabledMessage.SetActive(instance.rolesEnabledMessage.activeSelf && noRole);
+		foreach (RoleBehaviour roleBehaviour in DestroyableSingleton<RoleManager>.Instance.AllRoles)
+		{
+			if (roleBehaviour.Role != RoleTypes.Crewmate && roleBehaviour.Role != RoleTypes.Impostor && 
+				roleBehaviour.Role != RoleTypes.CrewmateGhost && roleBehaviour.Role != RoleTypes.ImpostorGhost && 
+				GameOptionsManager.Instance.CurrentGameOptions.RoleOptions.GetChancePerGame(roleBehaviour.Role) > 0)
+			{
+				num++;
+			}
+		}
+		instance.rolesEnabledMessage.SetActive(num == 0);
+		instance.MatchInfoRoleScroller.SetYBoundsMax(Mathf.Clamp(Mathf.Ceil(num / 2f) + instance.RoleEntryBoundsModifier, 0f, 999f));
+		instance.MatchInfoRoleMaskArea.material.SetInt(PlayerMaterial.MaskLayer, 50);
 	}
 
 	private static void createRoleEntry(
@@ -100,6 +118,8 @@ public static class MatchInfoGuideHelper
 		{
 			addModSettingEntry(instance, tab, id);
 		}
+
+		instance.matchInfoSettingsMaskArea.material.SetInt(PlayerMaterial.MaskLayer, 50);
 	}
 
 	private static void addRoleSpawnNumOption(MatchInfoGuide instance, OptionTabContainer tab)
