@@ -22,27 +22,6 @@ namespace ExtremeRoles.UnitTest.Helper;
 [Collection("Global Test Collection")]
 public class PlayerTests : IDisposable
 {
-    public class TestRole : SingleRoleBase
-    {
-        private readonly bool isSameTeam;
-
-        public TestRole(IAbility? ability = null, bool isSameTeam = false)
-        {
-            AbilityClass = ability;
-            this.isSameTeam = isSameTeam;
-        }
-
-        public override bool IsSameTeam(SingleRoleBase role) => isSameTeam;
-
-        public override IOptionLoader Loader => null!;
-
-        protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }
-
-        protected override void CommonInit() { }
-
-        protected override void RoleSpecificInit() { }
-    }
-
     private static readonly IGameOptions globalGameOptions;
     private static readonly GameOptionsManager globalGameOptionsManager;
     private static readonly GameData globalGameData;
@@ -87,6 +66,8 @@ public class PlayerTests : IDisposable
     {
         PlayerCache.AllPlayerControl.Clear();
         ExtremeRoleManager.GameRole.Clear();
+
+        ExtremeRoles.GameMode.ExtremeGameModeManager.Create(AmongUs.GameOptions.GameModes.Normal);
 
         globalGameDataHelper.Setup(h => h.Invoke()).Returns(globalGameData);
         MockGameDataget_InstanceHelper.Instance = globalGameDataHelper.Object;
@@ -329,7 +310,7 @@ public class PlayerTests : IDisposable
     public void IsValidPlayer_WhenTargetPlayerNull_ReturnsFalse()
     {
         var mockSourcePlayer = new Mock<PlayerControl>();
-        var sourceRole = new TestRole();
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
         bool result = Player.IsValidPlayer(sourceRole, mockSourcePlayer.Object, null!);
 
@@ -347,7 +328,7 @@ public class PlayerTests : IDisposable
         mockTargetInfo.SetupGet(t => t.IsDead).Returns(false);
         mockTargetInfo.SetupGet(t => t.Disconnected).Returns(false);
 
-        var sourceRole = new TestRole();
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
         bool result = Player.IsValidPlayer(sourceRole, mockSourcePlayer.Object, mockTargetInfo.Object);
 
@@ -365,7 +346,7 @@ public class PlayerTests : IDisposable
         mockTargetInfo.SetupGet(t => t.IsDead).Returns(true);
         mockTargetInfo.SetupGet(t => t.Disconnected).Returns(false);
 
-        var sourceRole = new TestRole();
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
         bool result = Player.IsValidPlayer(sourceRole, mockSourcePlayer.Object, mockTargetInfo.Object);
 
@@ -390,7 +371,7 @@ public class PlayerTests : IDisposable
         mockTargetInfo.SetupGet(t => t.Disconnected).Returns(false);
         mockTargetInfo.SetupGet(t => t.Object).Returns(mockTargetControl.Object);
 
-        var sourceRole = new TestRole();
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
         bool result = Player.IsValidPlayer(sourceRole, mockSourcePlayer.Object, mockTargetInfo.Object);
 
@@ -416,7 +397,7 @@ public class PlayerTests : IDisposable
         mockTargetInfo.SetupGet(t => t.Disconnected).Returns(false);
         mockTargetInfo.SetupGet(t => t.Object).Returns(mockTargetControl.Object);
 
-        var sourceRole = new TestRole();
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
         bool result = Player.IsValidPlayer(sourceRole, mockSourcePlayer.Object, mockTargetInfo.Object);
 
@@ -443,7 +424,7 @@ public class PlayerTests : IDisposable
         mockTargetInfo.SetupGet(t => t.Disconnected).Returns(false);
         mockTargetInfo.SetupGet(t => t.Object).Returns(mockTargetControl.Object);
 
-        var sourceRole = new TestRole();
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
         bool result = Player.IsValidPlayer(sourceRole, mockSourcePlayer.Object, mockTargetInfo.Object);
 
@@ -470,8 +451,8 @@ public class PlayerTests : IDisposable
         mockTargetInfo.SetupGet(t => t.Disconnected).Returns(false);
         mockTargetInfo.SetupGet(t => t.Object).Returns(mockTargetControl.Object);
 
-        var targetRole = new TestRole();
-        var sourceRole = new TestRole(isSameTeam: true);
+        var targetRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
         ExtremeRoleManager.GameRole[targetId] = targetRole;
 
@@ -504,8 +485,10 @@ public class PlayerTests : IDisposable
         mockInvincible.Setup(i => i.IsValidAbilitySource(sourceId)).Returns(false);
         var mockAbility = mockInvincible.As<IAbility>();
 
-        var targetRole = new TestRole(mockAbility.Object);
-        var sourceRole = new TestRole(isSameTeam: false);
+        var targetRole = new ExtremeRoles.Roles.Solo.Neutral.Monika();
+        typeof(SingleRoleBase).GetProperty(nameof(SingleRoleBase.AbilityClass))!.SetValue(targetRole, mockAbility.Object);
+
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
         ExtremeRoleManager.GameRole[targetId] = targetRole;
 
@@ -534,8 +517,8 @@ public class PlayerTests : IDisposable
         mockTargetInfo.SetupGet(t => t.Disconnected).Returns(false);
         mockTargetInfo.SetupGet(t => t.Object).Returns(mockTargetControl.Object);
 
-        var targetRole = new TestRole();
-        var sourceRole = new TestRole(isSameTeam: false);
+        var targetRole = new ExtremeRoles.Roles.Solo.Neutral.Monika();
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
         ExtremeRoleManager.GameRole[targetId] = targetRole;
 
@@ -548,7 +531,7 @@ public class PlayerTests : IDisposable
     public void GetAllPlayerInRange_WhenShipStatusNull_ReturnsEmptyList()
     {
         var mockSourcePlayer = new Mock<PlayerControl>();
-        var sourceRole = new TestRole();
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
         var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
         mockShipHelper.Setup(h => h.Invoke()).Returns((ShipStatus)null!);
@@ -564,7 +547,7 @@ public class PlayerTests : IDisposable
     public void TryGetClosestPlayerInRange_WhenNoPlayerInRange_ReturnsFalse()
     {
         var mockSourcePlayer = new Mock<PlayerControl>();
-        var sourceRole = new TestRole();
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
         var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
         mockShipHelper.Setup(h => h.Invoke()).Returns((ShipStatus)null!);
