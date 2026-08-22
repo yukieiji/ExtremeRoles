@@ -72,11 +72,14 @@ public sealed class CompatModManager
 		Instance = new CompatModManager();
 	}
 
-	private CompatModManager()
+	internal CompatModManager()
 	{
 		RemoveMap();
 		var logger = ExtremeRolesPlugin.Logger;
-
+		if (logger == null || IL2CPPChainloader.Instance == null)
+		{
+			return;
+		}
 
 		logger.LogInfo(
 			$"---------- CompatModManager Initialize Start with AmongUs ver.{UnityEngine.Application.version} ----------");
