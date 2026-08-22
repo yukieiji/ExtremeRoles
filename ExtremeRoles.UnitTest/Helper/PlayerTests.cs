@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using AmongUs.GameOptions;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Player;
@@ -9,6 +11,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Ability;
@@ -267,6 +270,9 @@ public class PlayerTests : IDisposable
         Assert.Same(mockInfo.Object, info);
     }
 
+
+
+
     [Fact]
     public void TryGetPlayerRoom_WhenPlayerNull_ReturnsFalseAndNull()
     {
@@ -304,6 +310,60 @@ public class PlayerTests : IDisposable
         var target = Player.GetClosestPlayerInKillRange(mockPlayer.Object);
 
         Assert.Null(target);
+    }
+
+    [Fact]
+    public void GetClosestPlayerInKillRange_WhenPlayerInRange_ReturnsClosestPlayer()
+    {
+        var mockTargetPlayer = new Mock<PlayerControl>();
+
+        var mockList = new Mock<Il2CppSystem.Collections.Generic.List<PlayerControl>>(IntPtr.Zero);
+        mockList.SetupGet(l => l.Count).Returns(1);
+        mockList.SetupGet(l => l[0]).Returns(mockTargetPlayer.Object);
+
+        var mockRole = new Mock<RoleBehaviour>();
+        mockRole.Setup(r => r.GetPlayersInAbilityRangeSorted(It.IsAny<Il2CppSystem.Collections.Generic.List<PlayerControl>>()))
+            .Returns(mockList.Object);
+
+        var mockInfo = new Mock<NetworkedPlayerInfo>();
+        mockInfo.SetupGet(i => i.Role).Returns(mockRole.Object);
+
+        var mockPlayer = new Mock<PlayerControl>();
+        mockPlayer.SetupGet(p => p.Data).Returns(mockInfo.Object);
+
+        var target = Player.GetClosestPlayerInKillRange(mockPlayer.Object);
+
+        Assert.NotNull(target);
+        Assert.Same(mockTargetPlayer.Object, target);
+    }
+
+    [Fact]
+    public void GetClosestPlayerInKillRange_Parameterless_WhenPlayerInRange_ReturnsClosestPlayer()
+    {
+        var mockTargetPlayer = new Mock<PlayerControl>();
+
+        var mockList = new Mock<Il2CppSystem.Collections.Generic.List<PlayerControl>>(IntPtr.Zero);
+        mockList.SetupGet(l => l.Count).Returns(1);
+        mockList.SetupGet(l => l[0]).Returns(mockTargetPlayer.Object);
+
+        var mockRole = new Mock<RoleBehaviour>();
+        mockRole.Setup(r => r.GetPlayersInAbilityRangeSorted(It.IsAny<Il2CppSystem.Collections.Generic.List<PlayerControl>>()))
+            .Returns(mockList.Object);
+
+        var mockInfo = new Mock<NetworkedPlayerInfo>();
+        mockInfo.SetupGet(i => i.Role).Returns(mockRole.Object);
+
+        var mockLocalPlayer = new Mock<PlayerControl>();
+        mockLocalPlayer.SetupGet(p => p.Data).Returns(mockInfo.Object);
+
+        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        mockLocalHelper.Setup(h => h.Invoke()).Returns(mockLocalPlayer.Object);
+        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+
+        var target = Player.GetClosestPlayerInKillRange();
+
+        Assert.NotNull(target);
+        Assert.Same(mockTargetPlayer.Object, target);
     }
 
     [Fact]
@@ -544,7 +604,7 @@ public class PlayerTests : IDisposable
     }
 
     [Fact]
-    public void TryGetClosestPlayerInRange_WhenNoPlayerInRange_ReturnsFalse()
+    public void TryGetClosestPlayerInRange_4Params_WhenNoPlayerInRange_ReturnsFalse()
     {
         var mockSourcePlayer = new Mock<PlayerControl>();
         var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
@@ -554,6 +614,26 @@ public class PlayerTests : IDisposable
         MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
         bool found = Player.TryGetClosestPlayerInRange(mockSourcePlayer.Object, sourceRole, 5.0f, out var targetPlayer);
+
+        Assert.False(found);
+        Assert.Null(targetPlayer);
+    }
+
+    [Fact]
+    public void TryGetClosestPlayerInRange_3Params_WhenNoPlayerInRange_ReturnsFalse()
+    {
+        var mockLocalPlayer = new Mock<PlayerControl>();
+        var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
+
+        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        mockLocalHelper.Setup(h => h.Invoke()).Returns(mockLocalPlayer.Object);
+        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+
+        var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
+        mockShipHelper.Setup(h => h.Invoke()).Returns((ShipStatus)null!);
+        MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
+
+        bool found = Player.TryGetClosestPlayerInRange(sourceRole, 5.0f, out var targetPlayer);
 
         Assert.False(found);
         Assert.Null(targetPlayer);
