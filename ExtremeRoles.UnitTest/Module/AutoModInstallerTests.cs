@@ -1,7 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.JsonData;
 using ExtremeRoles.UnitTest.Helper;
 using Moq;
 using Xunit;
@@ -10,9 +17,41 @@ namespace ExtremeRoles.UnitTest.Module;
 
 public class AutoModInstallerTests
 {
+    private sealed class MockHttpMessageHandler : HttpMessageHandler
+    {
+        private readonly string _responseJson;
+
+        public MockHttpMessageHandler(string responseJson)
+        {
+            _responseJson = responseJson;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(_responseJson, Encoding.UTF8, "application/json")
+            };
+            return Task.FromResult(response);
+        }
+    }
+
     public AutoModInstallerTests()
     {
         MockSetupHelper.SetupCommonMocks();
+
+        var loggerField = typeof(ExtremeRolesPlugin).GetField("Logger", BindingFlags.NonPublic | BindingFlags.Static);
+        if (loggerField != null && loggerField.GetValue(null) == null)
+        {
+            loggerField.SetValue(null, BepInEx.Logging.Logger.CreateLogSource("UnitTest"));
+        }
+
+        if (ExtremeRolesPlugin.Instance == null)
+        {
+            var plugin = (ExtremeRolesPlugin)FormatterServices.GetUninitializedObject(typeof(ExtremeRolesPlugin));
+            typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(plugin, new HttpClient());
+            typeof(ExtremeRolesPlugin).GetProperty("Instance", BindingFlags.Public | BindingFlags.Static)?.SetValue(null, plugin);
+        }
     }
 
     private sealed class DummyRepositoryInfo : AutoModInstaller.IRepositoryInfo
@@ -104,5 +143,101 @@ public class AutoModInstallerTests
 
         Assert.Single(repo.DllName);
         Assert.Equal("ExtremeRoles.dll", repo.DllName[0]);
+    }
+
+    [Fact]
+    public async Task AutoModInstaller_Update_WhenInfoPopupIsNull_ReturnsWithoutError()
+    {
+        var installer = new AutoModInstaller();
+        installer.InfoPopup = null;
+
+        await installer.Update();
+
+        Assert.False(installer.IsInit);
+    }
+
+    [Fact]
+    public async Task ExRRepositoryInfo_GetInstallData_Update_FetchesLatestReleaseAndParsesData()
+    {
+        string json = "{\"tag_name\":\"v99999.0.0\",\"assets\":[{\"content_type\":\"application/octet-stream\",\"browser_download_url\":\"https://github.com/yukieiji/ExtremeRoles/releases/download/v99999.0.0/ExtremeRoles.dll\"}]}";
+        var customClient = new HttpClient(new MockHttpMessageHandler(json));
+        typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(ExtremeRolesPlugin.Instance, customClient);
+
+        var repo = new ExRRepositoryInfo();
+        var result = await repo.GetInstallData(AutoModInstaller.InstallType.Update);
+
+        Assert.Single(result);
+        Assert.Equal("ExtremeRoles.dll", result[0].DllName);
+        Assert.Equal("https://github.com/yukieiji/ExtremeRoles/releases/download/v99999.0.0/ExtremeRoles.dll", result[0].DownloadUrl);
+    }
+
+    [Fact]
+    public async Task ExRRepositoryInfo_GetInstallData_Downgrade_FetchesReleasesAndParsesData()
+    {
+        string json = "[{\"tag_name\":\"v0.0.1\",\"assets\":[{\"content_type\":\"application/octet-stream\",\"browser_download_url\":\"https://github.com/yukieiji/ExtremeRoles/releases/download/v0.0.1/ExtremeRoles.dll\"}]}]";
+        var customClient = new HttpClient(new MockHttpMessageHandler(json));
+        typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(ExtremeRolesPlugin.Instance, customClient);
+
+        var repo = new ExRRepositoryInfo();
+        var result = await repo.GetInstallData(AutoModInstaller.InstallType.Downgrade);
+
+        Assert.Single(result);
+        Assert.Equal("ExtremeRoles.dll", result[0].DllName);
+        Assert.Equal("https://github.com/yukieiji/ExtremeRoles/releases/download/v0.0.1/ExtremeRoles.dll", result[0].DownloadUrl);
+    }
+
+    [Fact]
+    public void ExRRepositoryInfo_GetReleaseDiff_CalculatesCorrectly()
+    {
+        var method = typeof(ExRRepositoryInfo).GetMethod("getReleaseDiff", BindingFlags.NonPublic | BindingFlags.Static);
+        Assert.NotNull(method);
+
+        var releaseData = new GitHubReleaseData
+        {
+            tag_name = "v99999.0.0"
+        };
+        var currentVersion = new Version("1.0.0");
+
+        var diff = (int)method.Invoke(null, new object[] { releaseData, currentVersion })!;
+
+        Assert.True(diff < 0);
+    }
+
+    [Fact]
+    public void ExRRepositoryInfo_ConvertReleaseToDownloadData_FiltersAssetsCorrectly()
+    {
+        var method = typeof(ExRRepositoryInfo).GetMethod("convertReleaseToDownloadData", BindingFlags.NonPublic | BindingFlags.Instance);
+        Assert.NotNull(method);
+
+        var repo = new ExRRepositoryInfo();
+        var resultList = new List<AutoModInstaller.DownloadData>();
+
+        var releaseData = new GitHubReleaseData
+        {
+            assets = new[]
+            {
+                new GitHubAsset
+                {
+                    browser_download_url = "https://github.com/example/ExtremeRoles.dll",
+                    content_type = "application/octet-stream"
+                },
+                new GitHubAsset
+                {
+                    browser_download_url = "https://github.com/example/Unrelated.dll",
+                    content_type = "application/octet-stream"
+                },
+                new GitHubAsset
+                {
+                    browser_download_url = "https://github.com/example/ExtremeRoles.dll",
+                    content_type = "application/x-zip-compressed"
+                }
+            }
+        };
+
+        method.Invoke(repo, new object[] { resultList, releaseData });
+
+        Assert.Single(resultList);
+        Assert.Equal("https://github.com/example/ExtremeRoles.dll", resultList[0].DownloadUrl);
+        Assert.Equal("ExtremeRoles.dll", resultList[0].DllName);
     }
 }
