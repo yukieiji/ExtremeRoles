@@ -366,6 +366,19 @@ public class GameSystemTests : IDisposable
     }
 
     [Fact]
+    public void GetRandomShortTaskId_WhenShortTasksNull_ReturnsByteMax()
+    {
+        var mockShip = new Mock<ShipStatus>();
+        mockShip.SetupGet(s => s.ShortTasks).Returns((NormalPlayerTask[])null!);
+        globalShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
+
+        int result = GameSystem.GetRandomShortTaskId();
+
+        Assert.Equal(byte.MaxValue, result);
+    }
+
+
+    [Fact]
     public void GetRandomLongTask_WhenShipStatusNull_ReturnsByteMax()
     {
         globalShipHelper.Setup(h => h.Invoke()).Returns((ShipStatus)null!);
