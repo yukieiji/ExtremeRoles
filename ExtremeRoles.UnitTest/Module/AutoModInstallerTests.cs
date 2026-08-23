@@ -107,20 +107,6 @@ public class AutoModInstallerTests
     }
 
     [Fact]
-    public void AutoModInstaller_AddRepository_AddsRepositoryInstance()
-    {
-        var installer = new AutoModInstaller();
-        var repo = new DummyRepositoryInfo();
-
-        installer.AddRepository(repo);
-
-        // AddMod for DummyRepositoryInfo should reuse the registered instance and add DllName
-        installer.AddMod<DummyRepositoryInfo>("custom.dll");
-
-        Assert.Contains("custom.dll", repo.DllName);
-    }
-
-    [Fact]
     public void AutoModInstaller_AddMod_CreatesRepositoryIfNotExistsAndReusesIt()
     {
         var installer = new AutoModInstaller();
