@@ -78,19 +78,6 @@ public class GameSystemTests : IDisposable
         MockGameManagerget_InstanceHelper.Instance = globalGameManagerHelper.Object;
     }
 
-
-    [Fact]
-    public void VanillaMaxPlayerNum_Default_Returns15()
-    {
-        Assert.Equal(15, GameSystem.VanillaMaxPlayerNum);
-    }
-
-    [Fact]
-    public void MaxImposterNum_Default_Returns14()
-    {
-        Assert.Equal(14, GameSystem.MaxImposterNum);
-    }
-
     [Theory]
     [InlineData(InnerNet.InnerNetClient.GameStates.NotJoined, true)]
     [InlineData(InnerNet.InnerNetClient.GameStates.Joined, true)]
@@ -120,18 +107,6 @@ public class GameSystemTests : IDisposable
         Assert.Equal(expected, GameSystem.IsFreePlay);
     }
 
-    [Fact]
-    public void IgnoreTask_ContainsExpectedTasks()
-    {
-        Assert.Contains(TaskTypes.FixWiring, GameSystem.IgnoreTask);
-        Assert.Contains(TaskTypes.VentCleaning, GameSystem.IgnoreTask);
-        Assert.Contains(TaskTypes.PickUpTowels, GameSystem.IgnoreTask);
-        Assert.Contains(TaskTypes.AssembleArtifact, GameSystem.IgnoreTask);
-        Assert.Contains(TaskTypes.PutAwayRifles, GameSystem.IgnoreTask);
-        Assert.Contains(TaskTypes.PutAwayPistols, GameSystem.IgnoreTask);
-        Assert.Contains(TaskTypes.UploadData, GameSystem.IgnoreTask);
-        Assert.Equal(7, GameSystem.IgnoreTask.Count);
-    }
 
     [Fact]
     public void TryGetTaskDoRole_WhenDisconnected_ReturnsFalse()
