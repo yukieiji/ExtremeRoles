@@ -68,6 +68,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C5FBD511-2
 		test_add_role_translation_keys.py = test_add_role_translation_keys.py
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtremeRoles.UnitTest", "ExtremeRoles.UnitTest\ExtremeRoles.UnitTest.csproj", "{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,6 +164,12 @@ Global
 		{E5E2F8A0-4366-4157-A110-7F3DE2A67C2E}.Release|x64.Build.0 = Release|Any CPU
 		{E5E2F8A0-4366-4157-A110-7F3DE2A67C2E}.Release|x86.ActiveCfg = Release|Any CPU
 		{E5E2F8A0-4366-4157-A110-7F3DE2A67C2E}.Release|x86.Build.0 = Release|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Release|x64.ActiveCfg = Release|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
