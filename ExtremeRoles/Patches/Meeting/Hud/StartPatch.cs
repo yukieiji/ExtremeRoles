@@ -23,6 +23,8 @@ public static class MeetingHudStartPatch
 {
 	public static void Postfix(MeetingHud __instance)
 	{
+		MeetingHudUpdateForegroundPatchHelper.Patch(__instance);
+
 		GameProgressSystem.Current = GameProgressSystem.Progress.Meeting;
 
 		var state = ExtremeRolesPlugin.ShipState;

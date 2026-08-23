@@ -1,46 +1,40 @@
-using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.Extension.Player;
-using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
 #nullable enable
 
-[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateForeground))]
-public static class MeetingHudUpdateButtonsPatch
+public static class MeetingHudUpdateButtonsPatchHelper
 {
-	public static bool Prefix(MeetingHud __instance)
+	public static void Patch(MeetingHud __instance)
 	{
 		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
 			monikaTrashUpdate(__instance);
-			return true;
+			MeetingHudUpdateForegroundPatchHelper.Patch(__instance);
+			return;
 		}
-
 		if (!system.IsActiveMeeting<MonikaLoveTargetMeeting>())
 		{
 			monikaTrashUpdate(__instance);
 		}
 
 		var meeting = HudManager.Instance.MeetingPrefab;
-
 		__instance.hasForegroundForDeadBeenSet = false;
 		__instance.Glass.sprite = meeting.Glass.sprite;
 		__instance.Glass.color = meeting.Glass.color;
-
 		foreach (var pva in __instance.playerStates)
 		{
-			NetworkedPlayerInfo playerById = GameData.Instance.GetPlayerById(
-				pva.PlayerId);
+			var playerById = GameData.Instance.GetPlayerById(pva.PlayerId);
 			if (playerById == null)
 			{
 				pva.SetDisabled();
 				continue;
 			}
-
 			switch (system.GetVoteAreaState(playerById))
 			{
 				case VoteAreaState.XMark:
@@ -57,7 +51,6 @@ public static class MeetingHudUpdateButtonsPatch
 					break;
 			}
 		}
-		return false;
 	}
 
 	private static void monikaTrashUpdate(MeetingHud hud)
@@ -76,7 +69,7 @@ public static class MeetingHudUpdateButtonsPatch
 
 		foreach (var pva in hud.playerStates)
 		{
-			if (pva == null || 
+			if (pva == null ||
 				pva.AmDead ||
 				!system.InvalidPlayer(pva))
 			{

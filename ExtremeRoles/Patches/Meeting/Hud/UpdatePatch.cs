@@ -28,7 +28,7 @@ public static class MeetingHudUpdatePatch
 
 	public static void Postfix(MeetingHud __instance)
 	{
-
+		MeetingHudUpdateButtonsPatchHelper.Patch(__instance);
 		infoOverlayBlockUpdate(__instance);
 		changeNamePlate(__instance);
 
