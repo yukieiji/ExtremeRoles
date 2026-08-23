@@ -197,6 +197,10 @@ public static class GameSystem
 		}
 
 		var taskIndex = getTaskIndex(ShipStatus.Instance.CommonTasks);
+		if (taskIndex.Count == 0)
+		{
+			return byte.MaxValue;
+		}
 		return taskIndex.GetRandomItem();
 	}
 
@@ -208,7 +212,10 @@ public static class GameSystem
 		}
 
 		var taskIndex = getTaskIndex(ShipStatus.Instance.LongTasks);
-
+		if (taskIndex.Count == 0)
+		{
+			return byte.MaxValue;
+		}
 		return taskIndex.GetRandomItem();
 	}
 
@@ -220,7 +227,10 @@ public static class GameSystem
 		}
 
 		var taskIndex = getTaskIndex(ShipStatus.Instance.ShortTasks);
-
+		if (taskIndex.Count == 0)
+		{
+			return byte.MaxValue;
+		}
 		return taskIndex.GetRandomItem();
 	}
 
@@ -522,10 +532,16 @@ public static class GameSystem
 
 	private static IReadOnlyList<int> getTaskIndex(
 		NormalPlayerTask[] tasks)
-		=> tasks
-			.Where(x => !IgnoreTask.Contains(x.TaskType))
+	{
+		if (tasks == null)
+		{
+			return Array.Empty<int>();
+		}
+		return tasks
+			.Where(x => x != null && !IgnoreTask.Contains(x.TaskType))
 			.Select(x => x.Index)
 			.ToList();
+	}
 
 	public static bool TryGetKillDistance([NotNullWhen(true)] out Il2CppStructArray<float>? arr)
 	{
