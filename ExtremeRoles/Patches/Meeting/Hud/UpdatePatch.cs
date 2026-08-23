@@ -130,29 +130,39 @@ public static class MeetingHudUpdatePatch
 
 	private static void updateButtons(MeetingHud hud)
 	{
-		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
-			system.TryGetMeetingTitle(out string title))
+		if (!(
+				OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
+				system.TryGetMeetingTitle(out string title)
+			))
 		{
 
-			var localPlayer = PlayerControl.LocalPlayer;
-			hud.TitleText.text = title;
-			hud.SkipVoteButton.gameObject.SetActive(
-				system.IsSkipButtonActive && 
-				system.Caller == localPlayer.PlayerId &&
-				hud.state == MeetingHud.MeetingStates.NotVoted);
 
-			HudManager.Instance.Chat.gameObject.SetActive(
-				(
-					localPlayer != null
-					&&
-					(
-						localPlayer.PlayerId == system.Caller ||
-						system.CanChatPlayer(localPlayer)
-					)
-				));
+			monikaTrashLayerSystemUpdate(hud);
 			return;
 		}
-		monikaTrashLayerSystemUpdate(hud);
+
+		var localPlayer = PlayerControl.LocalPlayer;
+		hud.TitleText.text = title;
+		hud.SkipVoteButton.gameObject.SetActive(
+			system.IsSkipButtonActive &&
+			system.Caller == localPlayer.PlayerId &&
+			hud.state == MeetingHud.MeetingStates.NotVoted);
+
+		if (!system.ActivateChatOverride)
+		{
+			return;
+		}
+
+		HudManager.Instance.Chat.gameObject.SetActive(
+			(
+				localPlayer != null
+				&&
+				(
+					localPlayer.PlayerId == system.Caller ||
+					system.CanChatPlayer(localPlayer)
+				)
+			));
+
 	}
 
 	private static void monikaTrashLayerSystemUpdate(MeetingHud hud)
