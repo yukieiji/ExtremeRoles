@@ -531,7 +531,7 @@ public static class GameSystem
 	}
 
 	private static IReadOnlyList<int> getTaskIndex(
-		NormalPlayerTask[] tasks)
+		NormalPlayerTask[]? tasks)
 	{
 		if (tasks == null)
 		{
