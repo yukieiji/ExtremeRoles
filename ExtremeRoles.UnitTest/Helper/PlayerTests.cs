@@ -474,17 +474,52 @@ public class PlayerTests : IDisposable
         mockTargetInfo.SetupGet(t => t.Disconnected).Returns(false);
         mockTargetInfo.SetupGet(t => t.Object).Returns(mockTargetControl.Object);
 
-        var targetRole = new ExtremeRoles.Roles.Solo.Neutral.Monika();
+        var targetRole = new ExtremeRoles.Roles.Solo.Neutral.TaskMaster();
         var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
-        ExtremeRoleManager.GameRole[targetId] = targetRole;
+		ExtremeRoleManager.GameRole[sourceId] = sourceRole;
+		ExtremeRoleManager.GameRole[targetId] = targetRole;
 
         bool result = Player.IsValidPlayer(sourceRole, mockSourcePlayer.Object, mockTargetInfo.Object);
 
         Assert.True(result);
     }
 
-    [Fact]
+	[Fact]
+	public void IsValidPlayer_WhenAllConditionsMet_ReturnsFalse()
+	{
+		byte sourceId = 1;
+		byte targetId = 2;
+
+		var mockSourcePlayer = new Mock<PlayerControl>();
+		mockSourcePlayer.SetupGet(p => p.PlayerId).Returns(sourceId);
+
+		var mockTargetControl = new Mock<PlayerControl>();
+		mockTargetControl.SetupGet(p => p.inVent).Returns(false);
+		mockTargetControl.SetupGet(p => p.inMovingPlat).Returns(false);
+		mockTargetControl.SetupGet(p => p.onLadder).Returns(false);
+
+		var mockTargetInfo = new Mock<NetworkedPlayerInfo>();
+		mockTargetInfo.SetupGet(t => t.PlayerId).Returns(targetId);
+		mockTargetInfo.SetupGet(t => t.IsDead).Returns(false);
+		mockTargetInfo.SetupGet(t => t.Disconnected).Returns(false);
+		mockTargetInfo.SetupGet(t => t.Object).Returns(mockTargetControl.Object);
+
+		var targetRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
+		var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
+
+		targetRole.SetControlId(10);
+		sourceRole.SetControlId(10);
+
+		ExtremeRoleManager.GameRole[sourceId] = sourceRole;
+		ExtremeRoleManager.GameRole[targetId] = targetRole;
+
+		bool result = Player.IsValidPlayer(sourceRole, mockSourcePlayer.Object, mockTargetInfo.Object);
+
+		Assert.False(result);
+	}
+
+	[Fact]
     public void GetAllPlayerInRange_WhenShipStatusNull_ReturnsEmptyList()
     {
         var mockSourcePlayer = new Mock<PlayerControl>();

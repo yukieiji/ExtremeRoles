@@ -7,7 +7,7 @@ using Moq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ExtremeRoles.UnitTest.Helper;
+namespace ExtremeRoles.UnitTest;
 
 public static class MockSetupHelper
 {

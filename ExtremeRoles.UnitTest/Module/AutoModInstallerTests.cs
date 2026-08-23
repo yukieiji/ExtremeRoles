@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.JsonData;
-using ExtremeRoles.UnitTest.Helper;
 using Moq;
 using Xunit;
 

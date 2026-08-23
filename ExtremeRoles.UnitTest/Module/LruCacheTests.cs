@@ -4,7 +4,6 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using BepInEx.Configuration;
 using ExtremeRoles.Module;
-using ExtremeRoles.UnitTest.Helper;
 using UnityEngine;
 using Xunit;
 
