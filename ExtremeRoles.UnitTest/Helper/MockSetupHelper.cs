@@ -5,6 +5,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ExtremeRoles.UnitTest.Helper;
 
@@ -117,6 +118,18 @@ public static class MockSetupHelper
         mockImplicit.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()))
             .Returns((UnityEngine.Object obj) => !ReferenceEquals(obj, null));
         MockObjectop_ImplicitHelper.Instance = mockImplicit.Object;
+
+        var mockDestroy = new Mock<MockObjectDestroyHelper>();
+        mockDestroy.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<float>()));
+        MockObjectDestroyHelper.Instance = mockDestroy.Object;
+
+        var mockDestroy2 = new Mock<MockObjectDestroyHelper2>();
+        mockDestroy2.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()));
+        MockObjectDestroyHelper2.Instance = mockDestroy2.Object;
+
+        var mockMiscDestroy = new Mock<MockMiscDestroyHelper>();
+        mockMiscDestroy.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()));
+        MockMiscDestroyHelper.Instance = mockMiscDestroy.Object;
 
         var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper>();
         mockFindObjects.Setup(x => x.Invoke(It.IsAny<Il2CppSystem.Type>())).Returns((Il2CppReferenceArray<UnityEngine.Object>)null!);
