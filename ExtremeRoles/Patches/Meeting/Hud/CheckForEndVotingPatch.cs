@@ -10,6 +10,7 @@ using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -29,13 +30,14 @@ public static class MeetingHudCheckForEndVotingPatch
 			return true;
 		}
 
-		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
+		Logging.Debug(" ----- MeetingHud.CheckForEndVoting Prefix ----- ");
+		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
-			normalMeetingVote(__instance);
+			system.OverrideMeetingHudCheckForEndVoting(__instance);
 		}
 		else
 		{
-			system.OverrideMeetingHudCheckForEndVoting(__instance);
+			normalMeetingVote(__instance);
 		}
 
 		return false;
