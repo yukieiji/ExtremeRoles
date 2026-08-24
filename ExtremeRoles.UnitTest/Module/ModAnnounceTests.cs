@@ -48,19 +48,10 @@ public class ModAnnounceTests : IDisposable
         Directory.SetCurrentDirectory(_tempWorkingDir);
 
         MockSetupHelper.SetupCommonMocks();
+		MockSetupHelper.SetupLogger();
 
-        var loggerField = typeof(ExtremeRolesPlugin).GetField("Logger", BindingFlags.NonPublic | BindingFlags.Static);
-        if (loggerField != null && loggerField.GetValue(null) == null)
-        {
-            loggerField.SetValue(null, BepInEx.Logging.Logger.CreateLogSource("UnitTest"));
-        }
-
-        if (ExtremeRolesPlugin.Instance == null)
-        {
-            var plugin = (ExtremeRolesPlugin)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(ExtremeRolesPlugin));
-            typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(plugin, new HttpClient());
-            typeof(ExtremeRolesPlugin).GetProperty("Instance", BindingFlags.Public | BindingFlags.Static)?.SetValue(null, plugin);
-        }
+		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
+		MockSetupHelper.SetupMockHttps(plugin);
 
         SetupDataManagerSettings();
     }
@@ -213,8 +204,7 @@ public class ModAnnounceTests : IDisposable
             return new HttpResponseMessage(HttpStatusCode.NotFound);
         }));
 
-        typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)
-            ?.SetValue(ExtremeRolesPlugin.Instance, customClient);
+		MockSetupHelper.SetupMockHttps(ExtremeRolesPlugin.Instance, customClient);
 
         IEnumerator coroutine = ModAnnounce.CoFetchAnnounce();
 
@@ -252,10 +242,9 @@ public class ModAnnounceTests : IDisposable
             }
         }));
 
-        typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)
-            ?.SetValue(ExtremeRolesPlugin.Instance, customClient);
+		MockSetupHelper.SetupMockHttps(ExtremeRolesPlugin.Instance, customClient);
 
-        IEnumerator coroutine = ModAnnounce.CoFetchAnnounce();
+		IEnumerator coroutine = ModAnnounce.CoFetchAnnounce();
 
         Exception? caughtEx = null;
         try

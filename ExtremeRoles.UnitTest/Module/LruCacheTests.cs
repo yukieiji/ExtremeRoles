@@ -18,11 +18,7 @@ public class LruCacheTests
     {
         MockSetupHelper.SetupCommonMocks();
 
-        var loggerField = typeof(ExtremeRolesPlugin).GetField("Logger", BindingFlags.NonPublic | BindingFlags.Static);
-        if (loggerField != null && loggerField.GetValue(null) == null)
-        {
-            loggerField.SetValue(null, BepInEx.Logging.Logger.CreateLogSource("UnitTest"));
-        }
+		MockSetupHelper.SetupLogger();
 
         var debugModeProperty = typeof(ExtremeRolesPlugin).GetProperty("DebugMode", BindingFlags.Public | BindingFlags.Static);
         if (debugModeProperty != null && debugModeProperty.GetValue(null) == null)

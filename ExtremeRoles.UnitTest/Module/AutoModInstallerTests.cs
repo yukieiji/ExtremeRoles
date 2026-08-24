@@ -40,18 +40,10 @@ public class AutoModInstallerTests
     {
         MockSetupHelper.SetupCommonMocks();
 
-        var loggerField = typeof(ExtremeRolesPlugin).GetField("Logger", BindingFlags.NonPublic | BindingFlags.Static);
-        if (loggerField != null && loggerField.GetValue(null) == null)
-        {
-            loggerField.SetValue(null, BepInEx.Logging.Logger.CreateLogSource("UnitTest"));
-        }
+		MockSetupHelper.SetupLogger();
 
-        if (ExtremeRolesPlugin.Instance == null)
-        {
-            var plugin = (ExtremeRolesPlugin)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(ExtremeRolesPlugin));
-            typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(plugin, new HttpClient());
-            typeof(ExtremeRolesPlugin).GetProperty("Instance", BindingFlags.Public | BindingFlags.Static)?.SetValue(null, plugin);
-        }
+		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
+		MockSetupHelper.SetupMockHttps(plugin);
     }
 
     private sealed class DummyRepositoryInfo : AutoModInstaller.IRepositoryInfo
@@ -147,7 +139,7 @@ public class AutoModInstallerTests
     {
         string json = "{\"tag_name\":\"v99999.0.0\",\"assets\":[{\"content_type\":\"application/octet-stream\",\"browser_download_url\":\"https://github.com/yukieiji/ExtremeRoles/releases/download/v99999.0.0/ExtremeRoles.dll\"}]}";
         var customClient = new HttpClient(new MockHttpMessageHandler(json));
-        typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(ExtremeRolesPlugin.Instance, customClient);
+		MockSetupHelper.SetupMockHttps(ExtremeRolesPlugin.Instance, customClient);
 
         var repo = new ExRRepositoryInfo();
         var result = await repo.GetInstallData(AutoModInstaller.InstallType.Update);
@@ -162,9 +154,9 @@ public class AutoModInstallerTests
     {
         string json = "[{\"tag_name\":\"v0.0.1\",\"assets\":[{\"content_type\":\"application/octet-stream\",\"browser_download_url\":\"https://github.com/yukieiji/ExtremeRoles/releases/download/v0.0.1/ExtremeRoles.dll\"}]}]";
         var customClient = new HttpClient(new MockHttpMessageHandler(json));
-        typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(ExtremeRolesPlugin.Instance, customClient);
+		MockSetupHelper.SetupMockHttps(ExtremeRolesPlugin.Instance, customClient);
 
-        var repo = new ExRRepositoryInfo();
+		var repo = new ExRRepositoryInfo();
         var result = await repo.GetInstallData(AutoModInstaller.InstallType.Downgrade);
 
         Assert.Single(result);

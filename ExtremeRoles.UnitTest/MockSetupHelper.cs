@@ -1,3 +1,5 @@
+using BepInEx.Configuration;
+using BepInEx.Unity.IL2CPP;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -5,6 +7,8 @@ using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
 using System;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,6 +32,38 @@ public static class MockSetupHelper
             CompatModManager.Initialize();
         }
     }
+
+	public static ExtremeRolesPlugin SetupMockExtremeRolePlugin()
+	{
+		if (ExtremeRolesPlugin.Instance == null)
+		{
+			var plugin = (ExtremeRolesPlugin)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeRolesPlugin));
+			var instanceField = typeof(ExtremeRolesPlugin).GetField("<Instance>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
+			instanceField?.SetValue(null, plugin);
+		}
+		return ExtremeRolesPlugin.Instance!;
+	}
+
+	public static void SetupLogger(string loggerName = "UnitTest")
+	{
+		var loggerField = typeof(ExtremeRolesPlugin).GetField("Logger", BindingFlags.NonPublic | BindingFlags.Static);
+		if (loggerField != null && loggerField.GetValue(null) == null)
+		{
+			loggerField.SetValue(null, BepInEx.Logging.Logger.CreateLogSource("UnitTest"));
+		}
+	}
+
+	public static void SetupMockConfig(ExtremeRolesPlugin plugin)
+	{
+		var config = new ConfigFile(Path.Combine(Path.GetTempPath(), "test.cfg"), true);
+		var configField = typeof(BasePlugin).GetField("<Config>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
+		configField?.SetValue(plugin, config);
+	}
+
+	public static void SetupMockHttps(ExtremeRolesPlugin plugin, HttpClient? client = null)
+	{
+		typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(plugin, client ?? new HttpClient());
+	}
 
 	public static Mock<T> SetupDestroyableSingletonMock<T>() where T : DestroyableSingleton<T>
 	{

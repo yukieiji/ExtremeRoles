@@ -1,3 +1,12 @@
+using BepInEx;
+using BepInEx.Configuration;
+using BepInEx.Unity.IL2CPP;
+using ExtremeRoles.Compat;
+using ExtremeRoles.Extension.Manager;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +17,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BepInEx;
-using BepInEx.Configuration;
-using BepInEx.Unity.IL2CPP;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Moq;
+using xCloud;
 using Xunit;
-using ExtremeRoles.Compat;
-using ExtremeRoles.Extension.Manager;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.UnitTest.Module;
 
@@ -44,25 +45,11 @@ public sealed class CustomRegionTests
 	public CustomRegionTests()
 	{
 		MockSetupHelper.SetupCommonMocks();
+		MockSetupHelper.SetupLogger();
 
-		var loggerField = typeof(ExtremeRolesPlugin).GetField("Logger", BindingFlags.NonPublic | BindingFlags.Static);
-		if (loggerField != null && loggerField.GetValue(null) == null)
-		{
-			loggerField.SetValue(null, BepInEx.Logging.Logger.CreateLogSource("UnitTest"));
-		}
-
-		if (ExtremeRolesPlugin.Instance == null)
-		{
-			var plugin = (ExtremeRolesPlugin)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeRolesPlugin));
-			var config = new ConfigFile("test.cfg", true);
-			var configField = typeof(BasePlugin).GetField("<Config>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-			configField?.SetValue(plugin, config);
-
-			typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(plugin, new HttpClient());
-
-			var instanceField = typeof(ExtremeRolesPlugin).GetField("<Instance>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
-			instanceField?.SetValue(null, plugin);
-		}
+		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
+		MockSetupHelper.SetupMockConfig(plugin);
+		MockSetupHelper.SetupMockHttps(plugin);
 
 		if (ClientOption.Instance == null)
 		{
@@ -111,7 +98,7 @@ public sealed class CustomRegionTests
 	private static void SetMockHttpClient(Func<HttpRequestMessage, HttpResponseMessage> handler)
 	{
 		var customClient = new HttpClient(new MockHttpMessageHandler(handler));
-		typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(ExtremeRolesPlugin.Instance, customClient);
+		MockSetupHelper.SetupMockHttps(ExtremeRolesPlugin.Instance, customClient);
 	}
 
 	[Fact]
