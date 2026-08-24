@@ -473,9 +473,9 @@ public class GameSystemTests : IDisposable
     {
         byte targetPlayerId = 5;
 
-		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper>();
-		mockFindObjects.Setup(x => x.Invoke(It.IsAny<Il2CppSystem.Type>())).Returns((Il2CppReferenceArray<UnityEngine.Object>)null!);
-		MockObjectFindObjectsOfTypeHelper.Instance = mockFindObjects.Object;
+		var mockFindObjects3 = new Mock<MockObjectFindObjectsOfTypeHelper3>();
+		mockFindObjects3.Setup(x => x.Invoke<DeadBody>()).Returns(new Il2CppReferenceArray<DeadBody>(IntPtr.Zero));
+		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects3.Object;
 
 		DeadBody? body = GameSystem.GetDeadBody(targetPlayerId);
 
