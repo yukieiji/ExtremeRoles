@@ -36,7 +36,7 @@ public class LruCacheTests
 
     private DummyScriptableObject CreateDummyObject()
     {
-        return (DummyScriptableObject)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(DummyScriptableObject));
+        return new DummyScriptableObject();
     }
 
     private sealed class DummyScriptableObject : ScriptableObject
