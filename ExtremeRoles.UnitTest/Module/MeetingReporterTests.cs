@@ -136,8 +136,9 @@ public class MeetingReporterTests : IDisposable
     [Fact]
     public void RpcAddTargetMeetingChatReport_LocalPlayer_AddsChatDirectly()
     {
-        byte localId = 0; // PlayerId field on PlayerControl defaults to 0
+        byte localId = 0;
         var mockPlayer = new Mock<PlayerControl>();
+        mockPlayer.SetupGet(p => p.PlayerId).Returns(localId);
 
         var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
         mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
@@ -182,6 +183,7 @@ public class MeetingReporterTests : IDisposable
     {
         byte localId = 0;
         var mockPlayer = new Mock<PlayerControl>();
+        mockPlayer.SetupGet(p => p.PlayerId).Returns(localId);
 
         var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
         mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
@@ -222,8 +224,10 @@ public class MeetingReporterTests : IDisposable
     [Fact]
     public void RpcOp_TargetChatReport_WhenTargetIsNotLocalPlayer_DoesNotEnqueue()
     {
+        byte localId = 0;
         byte targetId = 7;
         var mockPlayer = new Mock<PlayerControl>();
+        mockPlayer.SetupGet(p => p.PlayerId).Returns(localId);
 
         var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
         mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
