@@ -103,7 +103,7 @@ public class PlayerReviverTests
     [Fact]
     public void Reset_ResetsResurrectTimerAndHidesText()
     {
-        // Mock HudManager.Instance
+        // Mock HudManager.Instance via uninitialized object and singleton helper
         var hudManager = (HudManager)RuntimeHelpers.GetUninitializedObject(typeof(HudManager));
         var mockSingleton = new Mock<MockDestroyableSingletonget_InstanceHelper<HudManager>>();
         mockSingleton.Setup(s => s.Invoke()).Returns(hudManager);
