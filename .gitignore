@@ -379,3 +379,8 @@ ExtremeSkins/Resources/LangData/stringData.json
 # Mock builder temp directory
 .mockbuilder/
 ExtremeRoles.UnitTest/.mockbuilder/
+
+# Coverage report outputs
+CoverageReport/
+TestResults/
+*.cobertura.xml
