@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
-using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
 using Xunit;
@@ -22,22 +21,8 @@ using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[HarmonyPatch(typeof(ServerManager), nameof(ServerManager.Instance), MethodType.Getter)]
-public static class ServerManagerInstancePatch
-{
-    public static bool Prefix(ref ServerManager __result)
-    {
-        if (CustomRegionTests.GlobalServerManagerMock != null)
-        {
-            __result = CustomRegionTests.GlobalServerManagerMock.Object;
-            return false;
-        }
-        return true;
-    }
-}
-
 [Collection("UnityMock")]
-public sealed class CustomRegionTests : IDisposable
+public sealed class CustomRegionTests
 {
     private sealed class MockHttpMessageHandler : HttpMessageHandler
     {
@@ -54,9 +39,7 @@ public sealed class CustomRegionTests : IDisposable
         }
     }
 
-    public static Mock<ServerManager>? GlobalServerManagerMock { get; private set; }
-    private static Harmony? harmonyInstance;
-    private static readonly List<IRegionInfo> availableRegions = new();
+    private readonly List<IRegionInfo> availableRegions = new();
 
     public CustomRegionTests()
     {
@@ -86,30 +69,18 @@ public sealed class CustomRegionTests : IDisposable
             ClientOption.Create();
         }
 
-        SetupMockServerManager();
+        SetupServerManagerMock();
     }
 
-    private static void SetupMockServerManager()
+    private void SetupServerManagerMock()
     {
-        if (harmonyInstance == null)
-        {
-            harmonyInstance = new Harmony("test.customregion.patch");
-            harmonyInstance.PatchAll(typeof(ServerManagerInstancePatch).Assembly);
-        }
-
-        if (GlobalServerManagerMock != null)
-        {
-            return;
-        }
-
         availableRegions.Clear();
-        GlobalServerManagerMock = new Mock<ServerManager>(IntPtr.Zero);
-        GC.SuppressFinalize(GlobalServerManagerMock.Object);
+        var mockServerManager = MockSetupHelper.SetupServerManager();
 
-        GlobalServerManagerMock.SetupGet(m => m.AvailableRegions)
+        mockServerManager.SetupGet(m => m.AvailableRegions)
             .Returns(() => new Il2CppReferenceArray<IRegionInfo>(availableRegions.ToArray()));
 
-        GlobalServerManagerMock.SetupSet(m => m.AvailableRegions = It.IsAny<Il2CppReferenceArray<IRegionInfo>>())
+        mockServerManager.SetupSet(m => m.AvailableRegions = It.IsAny<Il2CppReferenceArray<IRegionInfo>>())
             .Callback<Il2CppReferenceArray<IRegionInfo>>(arr =>
             {
                 availableRegions.Clear();
@@ -122,7 +93,7 @@ public sealed class CustomRegionTests : IDisposable
                 }
             });
 
-        GlobalServerManagerMock.Setup(m => m.AddOrUpdateRegion(It.IsAny<IRegionInfo>()))
+        mockServerManager.Setup(m => m.AddOrUpdateRegion(It.IsAny<IRegionInfo>()))
             .Callback<IRegionInfo>(r =>
             {
                 int existingIndex = availableRegions.FindIndex(x => x.Name == r.Name);
@@ -135,12 +106,6 @@ public sealed class CustomRegionTests : IDisposable
                     availableRegions.Add(r);
                 }
             });
-    }
-
-    public void Dispose()
-    {
-        harmonyInstance?.UnpatchSelf();
-        harmonyInstance = null;
     }
 
     private static void SetMockHttpClient(Func<HttpRequestMessage, HttpResponseMessage> handler)

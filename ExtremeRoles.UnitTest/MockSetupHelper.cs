@@ -1,16 +1,35 @@
 using System;
-using ExtremeRoles.Compat;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
+using System.Reflection;
+using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
 using UnityEngine;
 using UnityEngine.UI;
+using ExtremeRoles.Compat;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.UnitTest;
 
+public static class ServerManagerInstancePatch
+{
+    public static Mock<ServerManager>? ServerManagerMock { get; set; }
+
+    public static bool Prefix(ref ServerManager __result)
+    {
+        if (ServerManagerMock != null)
+        {
+            __result = ServerManagerMock.Object;
+            return false;
+        }
+        return true;
+    }
+}
+
 public static class MockSetupHelper
 {
+    private static Harmony? serverManagerHarmony;
+
     public static void SetupCommonMocks()
     {
         SetupColorHelpers();
@@ -18,6 +37,27 @@ public static class MockSetupHelper
         SetupMathfHelpers();
         SetupCompatModManager();
         SetupUnityObjectOperators();
+        SetupServerManager();
+    }
+
+    public static Mock<ServerManager> SetupServerManager()
+    {
+        if (serverManagerHarmony == null)
+        {
+            serverManagerHarmony = new Harmony("test.servermanager.patch");
+            var originalGetter = typeof(ServerManager).GetProperty(nameof(ServerManager.Instance), BindingFlags.Public | BindingFlags.Static)?.GetMethod;
+            var prefixMethod = typeof(ServerManagerInstancePatch).GetMethod(nameof(ServerManagerInstancePatch.Prefix), BindingFlags.Public | BindingFlags.Static);
+            if (originalGetter != null && prefixMethod != null)
+            {
+                serverManagerHarmony.Patch(originalGetter, prefix: new HarmonyMethod(prefixMethod));
+            }
+        }
+
+        var mock = new Mock<ServerManager>(IntPtr.Zero);
+        GC.SuppressFinalize(mock.Object);
+        ServerManagerInstancePatch.ServerManagerMock = mock;
+
+        return mock;
     }
 
     public static void SetupCompatModManager()
