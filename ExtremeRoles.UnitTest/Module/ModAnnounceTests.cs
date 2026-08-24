@@ -22,8 +22,8 @@ namespace ExtremeRoles.UnitTest.Module;
 [Collection("UnityMock")]
 public class ModAnnounceTests : IDisposable
 {
-    private readonly string _cacheDir = "ExtremeRoles/Cache";
-    private readonly List<string> _tempFilesCreated = new();
+    private readonly string _previousCurrentDir;
+    private readonly string _tempWorkingDir;
 
     private sealed class MockHttpMessageHandler : HttpMessageHandler
     {
@@ -42,6 +42,11 @@ public class ModAnnounceTests : IDisposable
 
     public ModAnnounceTests()
     {
+        _previousCurrentDir = Directory.GetCurrentDirectory();
+        _tempWorkingDir = Path.Combine(Path.GetTempPath(), "ExR_ModAnnounceTest_" + Path.GetRandomFileName());
+        Directory.CreateDirectory(_tempWorkingDir);
+        Directory.SetCurrentDirectory(_tempWorkingDir);
+
         MockSetupHelper.SetupCommonMocks();
 
         var loggerField = typeof(ExtremeRolesPlugin).GetField("Logger", BindingFlags.NonPublic | BindingFlags.Static);
@@ -79,27 +84,16 @@ public class ModAnnounceTests : IDisposable
 
     public void Dispose()
     {
-        foreach (var file in _tempFilesCreated)
-        {
-            if (File.Exists(file))
-            {
-                try { File.Delete(file); } catch { }
-            }
-        }
+        Directory.SetCurrentDirectory(_previousCurrentDir);
 
-        if (Directory.Exists(_cacheDir))
+        if (Directory.Exists(_tempWorkingDir))
         {
-            var files = Directory.GetFiles(_cacheDir);
-            if (files.Length == 0)
+            try
             {
-                try { Directory.Delete(_cacheDir); } catch { }
+                Directory.Delete(_tempWorkingDir, true);
             }
+            catch { }
         }
-    }
-
-    private void TrackFile(string path)
-    {
-        _tempFilesCreated.Add(path);
     }
 
     private static void RunCoroutine(IEnumerator coroutine)
@@ -163,13 +157,13 @@ public class ModAnnounceTests : IDisposable
     [Fact]
     public void AddModAnnounce_WhenCacheFileExists_HandlesModAnnounces()
     {
-        if (!Directory.Exists(_cacheDir))
+        string cacheDir = "ExtremeRoles/Cache";
+        if (!Directory.Exists(cacheDir))
         {
-            Directory.CreateDirectory(_cacheDir);
+            Directory.CreateDirectory(cacheDir);
         }
 
-        string saveFile = $"ExtremeRoles/Cache/Announce_{DataManager.Settings.Language.CurrentLanguage}.json";
-        TrackFile(saveFile);
+        string saveFile = $"{cacheDir}/Announce_{DataManager.Settings.Language.CurrentLanguage}.json";
 
         var modAnnounces = new[]
         {
@@ -194,13 +188,13 @@ public class ModAnnounceTests : IDisposable
     [Fact]
     public void AddModAnnounce_WhenFileCorrupted_ReturnsVanillaAnnounce()
     {
-        if (!Directory.Exists(_cacheDir))
+        string cacheDir = "ExtremeRoles/Cache";
+        if (!Directory.Exists(cacheDir))
         {
-            Directory.CreateDirectory(_cacheDir);
+            Directory.CreateDirectory(cacheDir);
         }
 
-        string saveFile = $"ExtremeRoles/Cache/Announce_{DataManager.Settings.Language.CurrentLanguage}.json";
-        TrackFile(saveFile);
+        string saveFile = $"{cacheDir}/Announce_{DataManager.Settings.Language.CurrentLanguage}.json";
 
         File.WriteAllText(saveFile, "Invalid JSON content {{{");
 
@@ -235,11 +229,6 @@ public class ModAnnounceTests : IDisposable
     public void CoFetchAnnounce_WhenServerReturnsValidDates_DownloadsAndSavesAnnounces()
     {
         string saveFile = $"ExtremeRoles/Cache/Announce_{DataManager.Settings.Language.CurrentLanguage}.json";
-        TrackFile(saveFile);
-        if (File.Exists(saveFile))
-        {
-            File.Delete(saveFile);
-        }
 
         var announceTime = new DateTime(2020, 1, 1, 10, 0, 0);
         string datesJson = JsonSerializer.Serialize(new List<DateTime> { announceTime });
