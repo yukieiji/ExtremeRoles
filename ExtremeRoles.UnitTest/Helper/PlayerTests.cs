@@ -61,7 +61,7 @@ public class PlayerTests : IDisposable
 
     private void ResetAllState()
     {
-        PlayerCache.AllPlayerControl.Clear();
+        PlayerCache.RemovePlayerControl(_ => true);
         ExtremeRoleManager.GameRole.Clear();
 
         ExtremeRoles.GameMode.ExtremeGameModeManager.Create(AmongUs.GameOptions.GameModes.Normal);
@@ -88,7 +88,7 @@ public class PlayerTests : IDisposable
         var mockPlayer = new Mock<PlayerControl>();
         mockPlayer.SetupGet(p => p.PlayerId).Returns((byte)5);
 
-        PlayerCache.AllPlayerControl.Add(mockPlayer.Object);
+        PlayerCache.AddPlayerControl(mockPlayer.Object);
 
         var result = Player.GetPlayerControlById(5);
 
@@ -102,7 +102,7 @@ public class PlayerTests : IDisposable
         var mockPlayer = new Mock<PlayerControl>();
         mockPlayer.SetupGet(p => p.PlayerId).Returns((byte)5);
 
-        PlayerCache.AllPlayerControl.Add(mockPlayer.Object);
+        PlayerCache.AddPlayerControl(mockPlayer.Object);
 
         var result = Player.GetPlayerControlById(99);
 
@@ -114,7 +114,7 @@ public class PlayerTests : IDisposable
     {
         var mockPlayer = new Mock<PlayerControl>();
         mockPlayer.SetupGet(p => p.PlayerId).Returns((byte)5);
-        PlayerCache.AllPlayerControl.Add(mockPlayer.Object);
+        PlayerCache.AddPlayerControl(mockPlayer.Object);
 
         bool result = Player.TryGetPlayerControl(5, out var foundPlayer);
 
@@ -128,7 +128,7 @@ public class PlayerTests : IDisposable
     {
         var mockPlayer = new Mock<PlayerControl>();
         mockPlayer.SetupGet(p => p.PlayerId).Returns((byte)5);
-        PlayerCache.AllPlayerControl.Add(mockPlayer.Object);
+        PlayerCache.AddPlayerControl(mockPlayer.Object);
 
         bool result = Player.TryGetPlayerControl(99, out var foundPlayer);
 

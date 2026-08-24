@@ -7,4 +7,4 @@ echo "=== Building ExtremeRoles with Mock ==="
 bash "$SCRIPT_DIR/ExtremeRoles.UnitTest/build_with_mock.sh"
 
 echo "=== Running Unit Tests ==="
-dotnet test "$SCRIPT_DIR/ExtremeRoles.UnitTest/ExtremeRoles.UnitTest.csproj" "$@"
+dotnet test --project "$SCRIPT_DIR/ExtremeRoles.UnitTest/ExtremeRoles.UnitTest.csproj" "$@"

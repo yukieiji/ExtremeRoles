@@ -132,7 +132,7 @@ public static class MockSetupHelper
         MockMiscDestroyHelper.Instance = mockMiscDestroy.Object;
 
         var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper>();
-        mockFindObjects.Setup(x => x.Invoke(It.IsAny<Il2CppSystem.Type>())).Returns((Il2CppReferenceArray<UnityEngine.Object>)null!);
+        mockFindObjects.Setup(x => x.Invoke(It.IsAny<Il2CppSystem.Type>())).Returns(new Il2CppReferenceArray<UnityEngine.Object>(IntPtr.Zero));
         MockObjectFindObjectsOfTypeHelper.Instance = mockFindObjects.Object;
 
         var mockFindObjects2 = new Mock<MockObjectFindObjectsOfTypeHelper2>();

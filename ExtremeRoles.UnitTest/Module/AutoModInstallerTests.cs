@@ -47,7 +47,7 @@ public class AutoModInstallerTests
 
         if (ExtremeRolesPlugin.Instance == null)
         {
-            var plugin = (ExtremeRolesPlugin)FormatterServices.GetUninitializedObject(typeof(ExtremeRolesPlugin));
+            var plugin = (ExtremeRolesPlugin)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(ExtremeRolesPlugin));
             typeof(ExtremeRolesPlugin).GetField("<Http>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(plugin, new HttpClient());
             typeof(ExtremeRolesPlugin).GetProperty("Instance", BindingFlags.Public | BindingFlags.Static)?.SetValue(null, plugin);
         }

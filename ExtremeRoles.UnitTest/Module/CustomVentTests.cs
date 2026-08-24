@@ -146,7 +146,7 @@ public class CustomVentTests
 
         customVent.Add(CustomVent.Type.Mery, vent);
 
-        var dummySprite = (Sprite)FormatterServices.GetUninitializedObject(typeof(Sprite));
+        var dummySprite = new Mock<Sprite>(IntPtr.Zero).Object;
         var ventAnimField = typeof(CustomVent).GetField("ventAnimation", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         var ventAnimDict = ventAnimField?.GetValue(customVent) as Dictionary<CustomVent.Type, Sprite?[]>;
         Assert.NotNull(ventAnimDict);
