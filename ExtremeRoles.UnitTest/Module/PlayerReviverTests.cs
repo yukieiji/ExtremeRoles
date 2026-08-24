@@ -103,14 +103,13 @@ public class PlayerReviverTests
     [Fact]
     public void Reset_ResetsResurrectTimerAndHidesText()
     {
-        // Mock HudManager.Instance via uninitialized object and singleton helper
+        // Setup HudManager.Instance via Moq singleton helper and uninitialized object
         var hudManager = (HudManager)RuntimeHelpers.GetUninitializedObject(typeof(HudManager));
         var mockSingleton = new Mock<MockDestroyableSingletonget_InstanceHelper<HudManager>>();
         mockSingleton.Setup(s => s.Invoke()).Returns(hudManager);
         var oldHudInstance = MockDestroyableSingletonget_InstanceHelper<HudManager>.Instance;
         MockDestroyableSingletonget_InstanceHelper<HudManager>.Instance = mockSingleton.Object;
 
-        // Set OnemanMeetingSystemManager.IsActive to true
         var systemManager = (ExtremeSystemTypeManager)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
         var allSystems = new System.Collections.Generic.Dictionary<ExtremeSystemType, ExtremeRoles.Module.Interface.IExtremeSystemType>();
         var onemanManager = (OnemanMeetingSystemManager)RuntimeHelpers.GetUninitializedObject(typeof(OnemanMeetingSystemManager));
