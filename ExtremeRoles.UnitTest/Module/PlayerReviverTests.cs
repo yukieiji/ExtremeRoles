@@ -52,9 +52,8 @@ public class PlayerReviverTests
 
         Assert.NotNull(reviveTokenType);
 
-        object token = FormatterServices.GetUninitializedObject(reviveTokenType);
-
         var flags = BindingFlags.NonPublic | BindingFlags.Instance;
+        object token = Activator.CreateInstance(reviveTokenType, flags | BindingFlags.Public, null, new object?[] { resurrectTime, resurrectText, rolePlayer, onReviveCompleted, onDispose }, null)!;
         reviveTokenType.GetField("resurrectTimer", flags)?.SetValue(token, resurrectTime);
         reviveTokenType.GetField("maxTime", flags)?.SetValue(token, resurrectTime);
         reviveTokenType.GetField("resurrectText", flags)?.SetValue(token, resurrectText);

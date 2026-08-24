@@ -142,6 +142,10 @@ public static class GameSystem
 	public static DeadBody? GetDeadBody(byte playerId)
 	{
 		DeadBody[] array = UnityObject.FindObjectsOfType<DeadBody>();
+		if (array == null)
+		{
+			return null;
+		}
 		return array.FirstOrDefault(
 			x => GameData.Instance.GetPlayerById(x.ParentId).PlayerId == playerId);
 	}

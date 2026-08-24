@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using BepInEx.Configuration;
+using Moq;
 using ExtremeRoles.Module;
 using UnityEngine;
 using Xunit;
@@ -32,7 +33,7 @@ public class LruCacheTests
 
     private DummyScriptableObject CreateDummyObject()
     {
-        return (DummyScriptableObject)FormatterServices.GetUninitializedObject(typeof(DummyScriptableObject));
+        return (DummyScriptableObject)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(DummyScriptableObject));
     }
 
     private sealed class DummyScriptableObject : ScriptableObject

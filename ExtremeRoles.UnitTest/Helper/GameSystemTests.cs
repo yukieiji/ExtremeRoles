@@ -57,7 +57,7 @@ public class GameSystemTests : IDisposable
 
     private void ResetAllState()
     {
-        PlayerCache.AllPlayerControl.Clear();
+        PlayerCache.RemovePlayerControl(_ => true);
         ExtremeRoleManager.GameRole.Clear();
 
         globalGameDataHelper.Setup(h => h.Invoke()).Returns(globalGameData);
@@ -450,7 +450,7 @@ public class GameSystemTests : IDisposable
     [Fact]
     public void TryGetKillDistance_WhenKillDistancesPresent_ReturnsTrueAndArray()
     {
-        var mockArray = (Il2CppStructArray<float>)FormatterServices.GetUninitializedObject(typeof(Il2CppStructArray<float>));
+        var mockArray = new Mock<Il2CppStructArray<float>>(IntPtr.Zero).Object;
 
         var mockGameOptions = new Mock<IGameOptions>(IntPtr.Zero);
         mockGameOptions.Setup(g => g.GetFloatArray(FloatArrayOptionNames.KillDistances)).Returns(mockArray);
@@ -474,7 +474,7 @@ public class GameSystemTests : IDisposable
         byte targetPlayerId = 5;
 
 		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper>();
-		mockFindObjects.Setup(x => x.Invoke(It.IsAny<Il2CppSystem.Type>())).Returns(new Il2CppReferenceArray<UnityEngine.Object>(IntPtr.Zero));
+		mockFindObjects.Setup(x => x.Invoke(It.IsAny<Il2CppSystem.Type>())).Returns((Il2CppReferenceArray<UnityEngine.Object>)null!);
 		MockObjectFindObjectsOfTypeHelper.Instance = mockFindObjects.Object;
 
 		DeadBody? body = GameSystem.GetDeadBody(targetPlayerId);
