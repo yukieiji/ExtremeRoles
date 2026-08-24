@@ -1,8 +1,11 @@
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using Moq;
 using System;
 using System.Reflection;
 using System.Runtime.Serialization;
-using ExtremeRoles.Module;
-using Moq;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using Xunit;
@@ -97,46 +100,124 @@ public class PlayerReviverTests
         Assert.False(reviver.IsReviving);
     }
 
-    [Fact]
-    public void Reset_ResetsResurrectTimerAndHidesText()
-    {
-        var reviver = new PlayerReviver(5.0f);
-        var textMock = new Mock<TextMeshPro>(IntPtr.Zero);
-        var gameObjectMock = new Mock<GameObject>(IntPtr.Zero);
+	[Fact]
+	public void Reset_ResetsResurrectTimerAndHidesTextWithOnemanMeeting()
+	{
+		// Setup HudManager.Instance via Moq singleton helper and uninitialized object
+		var hud = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
+		var chat = new Mock<ChatController>();
+		var chatObj = new Mock<GameObject>(IntPtr.Zero);
+		chat.Setup(x => x.gameObject).Returns(chatObj.Object);
+		hud.Setup(x => x.Chat).Returns(chat.Object);
 
-        textMock.SetupGet(t => t.gameObject).Returns(gameObjectMock.Object);
+		var systemManager = (ExtremeSystemTypeManager)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
+		var allSystems = new Dictionary<ExtremeSystemType, ExtremeRoles.Module.Interface.IExtremeSystemType>();
+		var onemanManager = (OnemanMeetingSystemManager)RuntimeHelpers.GetUninitializedObject(typeof(OnemanMeetingSystemManager));
 
-        var player = CreateMockPlayerControl();
+		var mockMeeting = new Mock<IOnemanMeeting>();
+		typeof(OnemanMeetingSystemManager)
+			.GetField("meeting", BindingFlags.NonPublic | BindingFlags.Instance)
+			?.SetValue(onemanManager, mockMeeting.Object);
 
-        object token = CreateReviveToken(
-            5.0f,
-            textMock.Object,
-            player,
-            (_) => { },
-            () => reviver.Release());
+		allSystems[ExtremeSystemType.OnemanMeetingSystem] = onemanManager;
 
-        var tokenType = token.GetType();
-        var flags = BindingFlags.NonPublic | BindingFlags.Instance;
-        tokenType.GetField("resurrectTimer", flags)?.SetValue(token, 2.0f);
+		typeof(ExtremeSystemTypeManager)
+			.GetField("allSystems", BindingFlags.NonPublic | BindingFlags.Instance)
+			?.SetValue(systemManager, allSystems);
+		var instanceField = typeof(ExtremeSystemTypeManager).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static);
+		instanceField?.SetValue(null, systemManager);
 
-        // Verify token Reset directly on ReviveToken to avoid uninitialized native Il2Cpp call in hideChatWhenMeeting
-        var resetMethod = tokenType.GetMethod("Reset", flags | BindingFlags.Public);
-        Assert.NotNull(resetMethod);
 
-        // Clear hideChatWhenMeeting call or call inner Reset logic:
-        // ReviveToken.Reset updates resurrectTimer back to maxTime and sets active to false
-        tokenType.GetField("resurrectTimer", flags)?.SetValue(token, 5.0f);
-        if (textMock.Object != null)
-        {
-            textMock.Object.gameObject.SetActive(false);
-        }
+		var reviver = new PlayerReviver(5.0f);
+		var textMock = new Mock<TextMeshPro>(IntPtr.Zero);
+		var textGameObjectMock = new Mock<GameObject>(IntPtr.Zero);
 
-        float currentTimer = (float)(tokenType.GetField("resurrectTimer", flags)?.GetValue(token) ?? 0f);
-        Assert.Equal(5.0f, currentTimer);
-        gameObjectMock.Verify(g => g.SetActive(false), Times.AtLeastOnce());
-    }
+		textMock.SetupGet(t => t.gameObject).Returns(textGameObjectMock.Object);
 
-    [Fact]
+		var player = CreateMockPlayerControl();
+
+		object token = CreateReviveToken(
+			5.0f,
+			textMock.Object,
+			player,
+			(_) => { },
+			() => reviver.Release());
+
+		var tokenType = token.GetType();
+		var flags = BindingFlags.NonPublic | BindingFlags.Instance;
+		tokenType.GetField("resurrectTimer", flags)?.SetValue(token, 2.0f);
+
+		var resetMethod = tokenType.GetMethod("Reset", flags | BindingFlags.Public);
+		Assert.NotNull(resetMethod);
+
+		resetMethod.Invoke(token, null);
+
+		float currentTimer = (float)(tokenType.GetField("resurrectTimer", flags)?.GetValue(token) ?? 0f);
+		Assert.Equal(5.0f, currentTimer);
+
+		textGameObjectMock.Verify(g => g.SetActive(false), Times.AtLeastOnce());
+		chatObj.VerifyNoOtherCalls();
+	}
+
+	[Fact]
+	public void Reset_ResetsResurrectTimerAndHidesText()
+	{
+		// Setup HudManager.Instance via Moq singleton helper and uninitialized object
+		var hud = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
+		var chat = new Mock<ChatController>();
+		var chatObj = new Mock<GameObject>(IntPtr.Zero);
+		chat.Setup(x => x.gameObject).Returns(chatObj.Object);
+		hud.Setup(x => x.Chat).Returns(chat.Object);
+
+		var systemManager = (ExtremeSystemTypeManager)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
+		var allSystems = new Dictionary<ExtremeSystemType, ExtremeRoles.Module.Interface.IExtremeSystemType>();
+		var onemanManager = (OnemanMeetingSystemManager)RuntimeHelpers.GetUninitializedObject(typeof(OnemanMeetingSystemManager));
+
+		typeof(OnemanMeetingSystemManager)
+			.GetField("meeting", BindingFlags.NonPublic | BindingFlags.Instance)
+			?.SetValue(onemanManager, null);
+
+		allSystems[ExtremeSystemType.OnemanMeetingSystem] = onemanManager;
+
+		typeof(ExtremeSystemTypeManager)
+			.GetField("allSystems", BindingFlags.NonPublic | BindingFlags.Instance)
+			?.SetValue(systemManager, allSystems);
+		var instanceField = typeof(ExtremeSystemTypeManager).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static);
+		instanceField?.SetValue(null, systemManager);
+
+
+		var reviver = new PlayerReviver(5.0f);
+		var textMock = new Mock<TextMeshPro>(IntPtr.Zero);
+		var textGameObjectMock = new Mock<GameObject>(IntPtr.Zero);
+
+		textMock.SetupGet(t => t.gameObject).Returns(textGameObjectMock.Object);
+
+		var player = CreateMockPlayerControl();
+
+		object token = CreateReviveToken(
+			5.0f,
+			textMock.Object,
+			player,
+			(_) => { },
+			() => reviver.Release());
+
+		var tokenType = token.GetType();
+		var flags = BindingFlags.NonPublic | BindingFlags.Instance;
+		tokenType.GetField("resurrectTimer", flags)?.SetValue(token, 2.0f);
+
+		var resetMethod = tokenType.GetMethod("Reset", flags | BindingFlags.Public);
+		Assert.NotNull(resetMethod);
+
+		resetMethod.Invoke(token, null);
+
+		float currentTimer = (float)(tokenType.GetField("resurrectTimer", flags)?.GetValue(token) ?? 0f);
+		Assert.Equal(5.0f, currentTimer);
+
+		textGameObjectMock.Verify(g => g.SetActive(false), Times.AtLeastOnce());
+		chatObj.Verify(g => g.SetActive(false), Times.Once());
+	}
+
+	[Fact]
     public void ReviveToken_ExecuteRevive_WhenNullRolePlayer_DoesNotThrow()
     {
         var textMock = new Mock<TextMeshPro>(IntPtr.Zero);
