@@ -482,7 +482,28 @@ public class GameSystemTests : IDisposable
         Assert.Null(body);
     }
 
-    [Fact]
+	[Fact]
+	public void GetDeadBody_WhenDeadBodiesExist_ReturnsBody()
+	{
+		byte targetPlayerId = 5;
+
+
+		var mockDeadBody1 = new Mock<DeadBody>(IntPtr.Zero);
+		mockDeadBody1.SetupGet(d => d.ParentId).Returns(targetPlayerId);
+		var mockDeadBody2 = new Mock<DeadBody>(IntPtr.Zero);
+		mockDeadBody2.SetupGet(d => d.ParentId).Returns((byte)10);
+
+		var mockFindObjects3 = new Mock<MockObjectFindObjectsOfTypeHelper3>();
+		mockFindObjects3.Setup(x => x.Invoke<DeadBody>()).Returns(new Il2CppReferenceArray<DeadBody>([mockDeadBody1.Object, mockDeadBody2.Object]));
+		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects3.Object;
+
+		DeadBody? body = GameSystem.GetDeadBody(targetPlayerId);
+
+		Assert.NotNull(body);
+		Assert.Same(mockDeadBody1.Object, body);
+	}
+
+	[Fact]
     public void GetShipObj_WhenMapIdExceeds5_ThrowsArgumentException()
     {
         Assert.Throws<ArgumentException>(() => GameSystem.GetShipObj(6));
