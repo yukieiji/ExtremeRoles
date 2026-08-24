@@ -9,6 +9,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
+[Collection("UnityMock")]
 public class PlayerReviverTests
 {
     public PlayerReviverTests()

@@ -11,6 +11,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
+[Collection("UnityMock")]
 public class LruCacheTests
 {
     public LruCacheTests()
@@ -26,7 +27,7 @@ public class LruCacheTests
         var debugModeProperty = typeof(ExtremeRolesPlugin).GetProperty("DebugMode", BindingFlags.Public | BindingFlags.Static);
         if (debugModeProperty != null && debugModeProperty.GetValue(null) == null)
         {
-            var tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+			string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             var config = new ConfigFile(tempPath, true);
             var entry = config.Bind("DeBug", "DebugMode", false);
             debugModeProperty.SetValue(null, entry);

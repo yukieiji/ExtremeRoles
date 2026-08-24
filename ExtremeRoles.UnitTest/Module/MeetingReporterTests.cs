@@ -11,6 +11,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
+[Collection("UnityMock")]
 public class MeetingReporterTests : IDisposable
 {
     public MeetingReporterTests()
