@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
@@ -25,7 +26,8 @@ public class LruCacheTests
         var debugModeProperty = typeof(ExtremeRolesPlugin).GetProperty("DebugMode", BindingFlags.Public | BindingFlags.Static);
         if (debugModeProperty != null && debugModeProperty.GetValue(null) == null)
         {
-            var config = new ConfigFile("test.cfg", true);
+            var tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            var config = new ConfigFile(tempPath, true);
             var entry = config.Bind("DeBug", "DebugMode", false);
             debugModeProperty.SetValue(null, entry);
         }
