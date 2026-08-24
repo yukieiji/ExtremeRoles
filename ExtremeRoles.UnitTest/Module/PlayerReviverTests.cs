@@ -2,6 +2,9 @@ using System;
 using System.Reflection;
 using System.Runtime.Serialization;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using Moq;
 using TMPro;
 using UnityEngine;
@@ -99,6 +102,24 @@ public class PlayerReviverTests
     [Fact]
     public void Reset_ResetsResurrectTimerAndHidesText()
     {
+        var mockMeeting = new Mock<IOnemanMeeting>();
+        var onemanSystem = (OnemanMeetingSystemManager)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(OnemanMeetingSystemManager));
+        typeof(OnemanMeetingSystemManager)
+            .GetField("meeting", BindingFlags.NonPublic | BindingFlags.Instance)?
+            .SetValue(onemanSystem, mockMeeting.Object);
+
+        var extremeSystemManager = (ExtremeSystemTypeManager)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
+        var allSystems = new System.Collections.Generic.Dictionary<ExtremeSystemType, IExtremeSystemType>
+        {
+            { ExtremeSystemType.OnemanMeetingSystem, onemanSystem }
+        };
+        typeof(ExtremeSystemTypeManager)
+            .GetField("allSystems", BindingFlags.NonPublic | BindingFlags.Instance)?
+            .SetValue(extremeSystemManager, allSystems);
+        typeof(ExtremeSystemTypeManager)
+            .GetField("instance", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static)?
+            .SetValue(null, extremeSystemManager);
+
         var reviver = new PlayerReviver(5.0f);
         var textMock = new Mock<TextMeshPro>(IntPtr.Zero);
         var gameObjectMock = new Mock<GameObject>(IntPtr.Zero);
@@ -114,21 +135,15 @@ public class PlayerReviverTests
             (_) => { },
             () => reviver.Release());
 
+        typeof(PlayerReviver)
+            .GetField("token", BindingFlags.NonPublic | BindingFlags.Instance)?
+            .SetValue(reviver, token);
+
         var tokenType = token.GetType();
         var flags = BindingFlags.NonPublic | BindingFlags.Instance;
         tokenType.GetField("resurrectTimer", flags)?.SetValue(token, 2.0f);
 
-        // Verify token Reset directly on ReviveToken to avoid uninitialized native Il2Cpp call in hideChatWhenMeeting
-        var resetMethod = tokenType.GetMethod("Reset", flags | BindingFlags.Public);
-        Assert.NotNull(resetMethod);
-
-        // Clear hideChatWhenMeeting call or call inner Reset logic:
-        // ReviveToken.Reset updates resurrectTimer back to maxTime and sets active to false
-        tokenType.GetField("resurrectTimer", flags)?.SetValue(token, 5.0f);
-        if (textMock.Object != null)
-        {
-            textMock.Object.gameObject.SetActive(false);
-        }
+        reviver.Reset();
 
         float currentTimer = (float)(tokenType.GetField("resurrectTimer", flags)?.GetValue(token) ?? 0f);
         Assert.Equal(5.0f, currentTimer);
