@@ -206,7 +206,7 @@ public sealed class CustomRegionTests
 		var mockServerManager = new Mock<ServerManager>(IntPtr.Zero);
 		GC.SuppressFinalize(mockServerManager.Object);
 
-		var mockRegion = new Mock<IRegionInfo>();
+		var mockRegion = new Mock<IRegionInfo>(IntPtr.Zero);
 		mockRegion.SetupGet(r => r.Name).Returns(IRegionInfoExtension.ExROfficialServerTokyoManinName);
 
 		mockServerManager.SetupGet(m => m.CurrentRegion).Returns(mockRegion.Object);
@@ -235,7 +235,7 @@ public sealed class CustomRegionTests
 			};
 		});
 
-		var mockOtherRegion = new Mock<IRegionInfo>();
+		var mockOtherRegion = new Mock<IRegionInfo>(IntPtr.Zero);
 		mockOtherRegion.SetupGet(r => r.Name).Returns("OtherServer");
 
 		ServerManager.Instance.AddOrUpdateRegion(mockOtherRegion.Object);
