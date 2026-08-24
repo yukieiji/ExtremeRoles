@@ -168,9 +168,6 @@ public class PlayerTests : IDisposable
         Assert.Same(mockInfo.Object, info);
     }
 
-
-
-
     [Fact]
     public void TryGetPlayerRoom_WhenPlayerNull_ReturnsFalseAndNull()
     {

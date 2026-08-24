@@ -1,9 +1,10 @@
-using System;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +29,16 @@ public static class MockSetupHelper
         }
     }
 
-    public static void SetupMathfHelpers()
+	public static Mock<T> SetupDestroyableSingletonMock<T>() where T : DestroyableSingleton<T>
+	{
+		var mock = new Mock<T>(IntPtr.Zero);
+		var mockSingleton = new Mock<MockDestroyableSingletonget_InstanceHelper<T>>();
+		MockDestroyableSingletonget_InstanceHelper<T>.Instance = mockSingleton.Object;
+		mockSingleton.Setup(x => x.Invoke()).Returns(mock.Object);
+		return mock;
+	}
+
+	public static void SetupMathfHelpers()
     {
         var mockClamp01 = new Mock<MockMathfClamp01Helper>();
         mockClamp01.Setup(h => h.Invoke(It.IsAny<float>())).Returns((float f) => Math.Clamp(f, 0f, 1f));
