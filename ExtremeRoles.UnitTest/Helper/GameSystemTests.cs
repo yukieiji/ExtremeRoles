@@ -473,7 +473,11 @@ public class GameSystemTests : IDisposable
     {
         byte targetPlayerId = 5;
 
-        DeadBody? body = GameSystem.GetDeadBody(targetPlayerId);
+		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper>();
+		mockFindObjects.Setup(x => x.Invoke(It.IsAny<Il2CppSystem.Type>())).Returns(new Il2CppReferenceArray<UnityEngine.Object>(IntPtr.Zero));
+		MockObjectFindObjectsOfTypeHelper.Instance = mockFindObjects.Object;
+
+		DeadBody? body = GameSystem.GetDeadBody(targetPlayerId);
 
         Assert.Null(body);
     }

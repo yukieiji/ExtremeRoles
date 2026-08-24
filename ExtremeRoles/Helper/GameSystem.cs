@@ -141,10 +141,9 @@ public static class GameSystem
 
 	public static DeadBody? GetDeadBody(byte playerId)
 	{
-		DeadBody[]? array = UnityObject.FindObjectsOfType<DeadBody>();
-		DeadBody? body = array?.FirstOrDefault(
+		DeadBody[] array = UnityObject.FindObjectsOfType<DeadBody>();
+		return array.FirstOrDefault(
 			x => GameData.Instance.GetPlayerById(x.ParentId).PlayerId == playerId);
-		return body;
 	}
 
 	public static bool TryGetTaskDoRole(NetworkedPlayerInfo player, [NotNullWhen(true)] out SingleRoleBase? role)
