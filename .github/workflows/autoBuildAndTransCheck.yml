@@ -44,6 +44,8 @@ jobs:
           dotnet-version: 10.x
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v3
+      - name: RunTests
+        run: powershell ./run_tests.ps1
       - name: RunBuild
         id: build
         run: msbuild ExtremeRoles.sln -t:restore,build -p:Configuration=Release -p:RestorePackagesConfig=true
