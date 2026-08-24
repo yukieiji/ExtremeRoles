@@ -11,6 +11,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.UnitTest;
 
+[HarmonyPatch(typeof(ServerManager), nameof(ServerManager.Instance), MethodType.Getter)]
 public static class ServerManagerInstancePatch
 {
     public static Mock<ServerManager>? ServerManagerMock { get; set; }
@@ -53,11 +54,14 @@ public static class MockSetupHelper
             }
         }
 
-        var mock = new Mock<ServerManager>(IntPtr.Zero);
-        GC.SuppressFinalize(mock.Object);
-        ServerManagerInstancePatch.ServerManagerMock = mock;
+        if (ServerManagerInstancePatch.ServerManagerMock == null)
+        {
+            var mock = new Mock<ServerManager>(IntPtr.Zero);
+            GC.SuppressFinalize(mock.Object);
+            ServerManagerInstancePatch.ServerManagerMock = mock;
+        }
 
-        return mock;
+        return ServerManagerInstancePatch.ServerManagerMock;
     }
 
     public static void SetupCompatModManager()
