@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.Manager;
 
@@ -79,22 +80,8 @@ public static class CustomRegion
 
 	private static readonly Dictionary<string, Region> curCustomRegion = [];
 
-	private static IReadOnlyList<IRegionInfo> newCustomRegion
-	{
-		get
-		{
-			var provider = ExtremeRolesPlugin.Instance.Provider;
-			if (provider != null)
-			{
-				var regionProvider = (ICustomRegionProvider?)provider.GetService(typeof(ICustomRegionProvider));
-				if (regionProvider != null)
-				{
-					return regionProvider.Provide();
-				}
-			}
-			return new DefaultCustomRegionProvider().Provide();
-		}
-	}
+	private static IReadOnlyList<IRegionInfo> newCustomRegion =>
+		ExtremeRolesPlugin.Instance.Provider.GetRequiredService<ICustomRegionProvider>().Provide();
 
 	public static bool TryGetStatus(string name, out RegionStatusEnum @enum)
 	{

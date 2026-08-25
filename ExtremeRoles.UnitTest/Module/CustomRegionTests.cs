@@ -7,6 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption;
 using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -103,11 +104,12 @@ public sealed class CustomRegionTests
 			return new List<IRegionInfo> { mockTokyoRegion.Object, mockCustomRegion.Object };
 		});
 
-		var serviceProviderMock = new Mock<IServiceProvider>();
-		serviceProviderMock.Setup(sp => sp.GetService(typeof(ICustomRegionProvider))).Returns(mockProvider.Object);
+		var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+		services.AddSingleton<ICustomRegionProvider>(mockProvider.Object);
+		var serviceProvider = services.BuildServiceProvider();
 
 		var backingField = typeof(ExtremeRolesPlugin).GetField("<Provider>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-		backingField?.SetValue(ExtremeRolesPlugin.Instance, serviceProviderMock.Object);
+		backingField?.SetValue(ExtremeRolesPlugin.Instance, serviceProvider);
 	}
 
 	private void SetupServerManagerMock()
