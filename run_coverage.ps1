@@ -23,11 +23,13 @@ if (-not (Test-Path $coverageDir)) {
 $coverageXml = Join-Path $coverageDir "report.cobertura.xml"
 $projPath = Join-Path $ScriptDir "ExtremeRoles.UnitTest\ExtremeRoles.UnitTest.csproj"
 
+$configPath = Join-Path $ScriptDir "coverage.config"
 $testArgs = @(
     "test",
     "--project", $projPath,
     "--",
     "--coverage",
+    "--coverage-settings", $configPath,
     "--coverage-output-format", "xml",
     "--coverage-output", $coverageXml
 ) + $args

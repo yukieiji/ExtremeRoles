@@ -21,6 +21,7 @@ mkdir -p "$COVERAGE_DIR"
 set +e
 dotnet test --project "$SCRIPT_DIR/ExtremeRoles.UnitTest/ExtremeRoles.UnitTest.csproj" -- \
   --coverage \
+  --coverage-settings "$SCRIPT_DIR/coverage.config" \
   --coverage-output-format xml \
   --coverage-output "$COVERAGE_XML" \
   "$@"
