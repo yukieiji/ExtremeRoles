@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		MakeEnv.bat = MakeEnv.bat
 		packing.ps1 = packing.ps1
 		README.md = README.md
+		run_coverage.ps1 = run_coverage.ps1
 		run_tests.ps1 = run_tests.ps1
 	EndProjectSection
 EndProject
@@ -62,6 +63,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{159E0F
 		.gitignore = .gitignore
 		.gitmodules = .gitmodules
 		.vsconfig = .vsconfig
+		ExtremeRoles.UnitTest\coverage.config = ExtremeRoles.UnitTest\coverage.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C5FBD511-285E-4BE3-8344-268E6BE48A12}"
