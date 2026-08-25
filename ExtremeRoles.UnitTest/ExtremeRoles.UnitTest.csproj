@@ -28,4 +28,9 @@
     <Reference Include="$(MSBuildProjectDirectory)/.mockbuilder/build/output/*.dll" />
   </ItemGroup>
 
+  <Target Name="BuildMock" BeforeTargets="BeforeBuild">
+    <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\build_with_mock.ps1&quot;" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="bash &quot;$(MSBuildProjectDirectory)/build_with_mock.sh&quot;" Condition="'$(OS)' != 'Windows_NT'" />
+  </Target>
+
 </Project>
