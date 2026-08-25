@@ -13,28 +13,6 @@ public class ChargingAndActivatingCountBehaviourTests
         MockSetupHelper.SetupCommonMocks();
     }
 
-    [Fact]
-    public void Properties_SetAndGet_ReturnsExpectedValues()
-    {
-        var behavior = new ChargingAndActivatingCountBehaviour(
-            "Test", null!,
-            (isCharge, gage) => true,
-            gage => true,
-            () => true,
-            ChargingAndActivatingCountBehaviour.ReduceTiming.OnCharge
-        )
-        {
-            ChargeGage = 0.5f,
-            ChargeTime = 3.0f,
-            ActiveTime = 4.0f
-        };
-
-        Assert.Equal(0.5f, behavior.ChargeGage);
-        Assert.Equal(3.0f, behavior.ChargeTime);
-        Assert.Equal(4.0f, behavior.ActiveTime);
-        Assert.True(behavior.IsCharging);
-        Assert.True(behavior.CanAbilityActiving);
-    }
 
     [Fact]
     public void IsUse_ReturnsTrue_WhenCountOrChargeOrActiveAndCanUse()

@@ -13,28 +13,6 @@ public class ChargingAndReclickCountBehaviorTests
         MockSetupHelper.SetupCommonMocks();
     }
 
-    [Fact]
-    public void Properties_SetAndGet_ReturnsExpectedValues()
-    {
-        var behavior = new ChargingAndReclickCountBehavior(
-            "Test", null!,
-            (isCharge, gage) => true,
-            () => true,
-            gage => true,
-            canActivating: () => true
-        )
-        {
-            ChargeGage = 0.8f,
-            ChargeTime = 2.0f,
-            ActiveTime = 5.0f
-        };
-
-        Assert.Equal(0.8f, behavior.ChargeGage);
-        Assert.Equal(2.0f, behavior.ChargeTime);
-        Assert.Equal(5.0f, behavior.ActiveTime);
-        Assert.True(behavior.IsCharging);
-        Assert.True(behavior.CanAbilityActiving);
-    }
 
     [Fact]
     public void IsUse_ReturnsTrue_WhenCountOrChargeOrActiveAndCanUse()

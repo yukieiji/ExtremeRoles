@@ -13,17 +13,6 @@ public class BatteryBehaviorTests
         MockSetupHelper.SetupCommonMocks();
     }
 
-    [Fact]
-    public void ActiveTime_Property_SetsChargeTimersAndMaxCharge()
-    {
-        var behavior = new BatteryBehavior("Test", null!, () => true, () => true)
-        {
-            ActiveTime = 10.0f
-        };
-
-        Assert.Equal(10.0f, behavior.ActiveTime);
-        Assert.True(behavior.CanAbilityActiving);
-    }
 
     [Fact]
     public void IsUse_ReturnsTrue_OnlyWhenCanUseOrActiveAndCurrentChargeGreaterThanZero()

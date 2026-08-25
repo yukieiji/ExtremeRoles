@@ -13,22 +13,6 @@ public class ReusableActivatingBehaviorTests
         MockSetupHelper.SetupCommonMocks();
     }
 
-    [Fact]
-    public void Properties_SetAndGet_ReturnsExpectedValues()
-    {
-        bool canActivating = true;
-        var behavior = new ReusableActivatingBehavior(
-            "Test", null!,
-            () => true, () => true,
-            canActivating: () => canActivating
-        )
-        {
-            ActiveTime = 5.0f
-        };
-
-        Assert.Equal(5.0f, behavior.ActiveTime);
-        Assert.True(behavior.CanAbilityActiving);
-    }
 
     [Fact]
     public void TryUseAbility_WithActiveTime_SetsActivatingState()

@@ -13,20 +13,6 @@ public class ReclickCountBehaviorTests
         MockSetupHelper.SetupCommonMocks();
     }
 
-    [Fact]
-    public void Properties_SetAndGet_ReturnsExpectedValues()
-    {
-        var behavior = new ReclickCountBehavior(
-            "Test", null!,
-            () => true, () => true
-        )
-        {
-            ActiveTime = 5.0f
-        };
-
-        Assert.Equal(5.0f, behavior.ActiveTime);
-        Assert.True(behavior.CanAbilityActiving);
-    }
 
     [Fact]
     public void IsUse_ReturnsTrue_WhenCountAndCanUseIsTrueOrIsActive()

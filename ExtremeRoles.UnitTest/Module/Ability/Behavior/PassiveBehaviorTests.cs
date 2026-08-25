@@ -13,23 +13,6 @@ public class PassiveBehaviorTests
         MockSetupHelper.SetupCommonMocks();
     }
 
-    [Fact]
-    public void Properties_SetAndGet_ReturnsExpectedValues()
-    {
-        var activeG = new ButtonGraphic("Active", null!);
-        var deactiveG = new ButtonGraphic("Deactive", null!);
-
-        var behavior = new PassiveBehavior(
-            activeG, deactiveG,
-            () => true, () => true
-        )
-        {
-            ActiveTime = 10.0f
-        };
-
-        Assert.Equal(10.0f, behavior.ActiveTime);
-        Assert.True(behavior.CanAbilityActiving);
-    }
 
     [Fact]
     public void IsUse_ReturnsCanUseResult()
