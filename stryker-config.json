@@ -1,0 +1,13 @@
+{
+  "stryker-config": {
+    "project": "ExtremeRoles.csproj",
+    "test-projects": [
+      "ExtremeRoles.UnitTest/ExtremeRoles.UnitTest.csproj"
+    ],
+    "reporters": [
+      "html",
+      "progress"
+    ],
+    "open-report": "html"
+  }
+}
