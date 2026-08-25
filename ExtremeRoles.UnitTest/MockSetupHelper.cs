@@ -23,6 +23,14 @@ public static class MockSetupHelper
         SetupMathfHelpers();
         SetupCompatModManager();
         SetupUnityObjectOperators();
+        SetupConstantsHelpers();
+    }
+
+    public static void SetupConstantsHelpers()
+    {
+        var mockBroadcastHelper = new Mock<MockConstantsGetBroadcastVersionHelper>();
+        mockBroadcastHelper.Setup(h => h.Invoke()).Returns(50000);
+        MockConstantsGetBroadcastVersionHelper.Instance = mockBroadcastHelper.Object;
     }
 
     public static void SetupCompatModManager()

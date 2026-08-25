@@ -5,6 +5,7 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption;
+using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
 using System;
@@ -56,7 +57,42 @@ public sealed class CustomRegionTests
 			ClientOption.Create();
 		}
 
+		ResetCustomRegionCache();
+		SetupRegionFactoryMock();
 		SetupServerManagerMock();
+	}
+
+	private static void ResetCustomRegionCache()
+	{
+		var field = typeof(CustomRegion).GetField("curCustomRegion", BindingFlags.NonPublic | BindingFlags.Static);
+		if (field?.GetValue(null) is System.Collections.IDictionary dict)
+		{
+			dict.Clear();
+		}
+	}
+
+	private void SetupRegionFactoryMock()
+	{
+		var mockFactory = new Mock<IRegionFactory>();
+		mockFactory.Setup(f => f.CreateStaticRegion(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ushort>(), It.IsAny<bool>()))
+			.Returns<string, string, ushort, bool>((name, ip, port, useDtls) =>
+			{
+				var mockRegion = new Mock<IRegionInfo>(IntPtr.Zero);
+				mockRegion.SetupGet(r => r.Name).Returns(name);
+				mockRegion.SetupGet(r => r.TranslateName).Returns(StringNames.NoTranslation);
+
+				var mockServer = new Mock<ServerInfo>(IntPtr.Zero);
+				mockServer.SetupGet(s => s.Name).Returns(name);
+				mockServer.SetupGet(s => s.Ip).Returns(ip);
+				mockServer.SetupGet(s => s.Port).Returns(port);
+				mockServer.SetupGet(s => s.UseDtls).Returns(useDtls);
+
+				mockRegion.SetupGet(r => r.Servers).Returns(new Il2CppReferenceArray<ServerInfo>([mockServer.Object]));
+
+				return mockRegion.Object;
+			});
+
+		CustomRegion.RegionFactory = mockFactory.Object;
 	}
 
 	private void SetupServerManagerMock()

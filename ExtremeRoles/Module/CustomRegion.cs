@@ -34,8 +34,33 @@ public readonly record struct Region(
 	RegionStatus Status,
 	IRegionInfo Info);
 
+public interface IRegionFactory
+{
+	IRegionInfo CreateStaticRegion(string name, string ip, ushort port, bool useDtls);
+}
+
+public sealed class DefaultRegionFactory : IRegionFactory
+{
+	public IRegionInfo CreateStaticRegion(string name, string ip, ushort port, bool useDtls)
+	{
+		ServerInfo[] servers = [new ServerInfo(name, ip, port, useDtls)];
+		if (ip.StartsWith("https"))
+		{
+			return new StaticHttpRegionInfo(
+				name, StringNames.NoTranslation, ip, servers).Cast<IRegionInfo>();
+		}
+		else
+		{
+			return new DnsRegionInfo(
+				ip, name, StringNames.NoTranslation, servers).Cast<IRegionInfo>();
+		}
+	}
+}
+
 public static class CustomRegion
 {
+	public static IRegionFactory RegionFactory { get; set; } = new DefaultRegionFactory();
+
 	public static IRegionInfo? EditableServer =>
 		ServerManager.Instance.AvailableRegions.FirstOrDefault(
 			x => x.Name == IRegionInfoExtension.FullCustomServerName);
@@ -137,23 +162,8 @@ public static class CustomRegion
 	private static IRegionInfo createStaticRegion(
 		string name, string ip, ushort port, bool useDtls)
 	{
-		var server = createServerInfo(name, ip, port, useDtls);
-		if (ip.StartsWith("https"))
-		{
-			return new StaticHttpRegionInfo(
-				name, StringNames.NoTranslation, ip, server).Cast<IRegionInfo>();
-		}
-		else
-		{
-			return new DnsRegionInfo(
-				ip, name, StringNames.NoTranslation, server).Cast<IRegionInfo>();
-		}
+		return RegionFactory.CreateStaticRegion(name, ip, port, useDtls);
 	}
-
-	private static ServerInfo[] createServerInfo(string name, string ip, ushort port, bool useDtls)
-		=> [
-			new ServerInfo(name, ip, port, useDtls)
-		];
 
 	private static RegionStatus getStatus(IRegionInfo info)
 	{
@@ -176,8 +186,9 @@ public static class CustomRegion
 		}
 		catch (Exception e)
 		{
+			bool isJsonException = e is System.Text.Json.JsonException || e.GetType().Name == "JsonException";
 			return defaultStatus(
-				e is System.Text.Json.JsonException ? RegionStatusEnum.None : RegionStatusEnum.Ng);
+				isJsonException ? RegionStatusEnum.None : RegionStatusEnum.Ng);
 		}
 	}
 	private static RegionStatus defaultStatus(RegionStatusEnum status= RegionStatusEnum.None) => new RegionStatus(
