@@ -488,6 +488,12 @@ public class GameSystemTests : IDisposable
 	{
 		byte targetPlayerId = 5;
 
+		Mock.Get(globalGameData).Setup(g => g.GetPlayerById(It.IsAny<byte>())).Returns<byte>(id =>
+		{
+			var mockPlayer = new Mock<NetworkedPlayerInfo>();
+			mockPlayer.SetupGet(p => p.PlayerId).Returns(id);
+			return mockPlayer.Object;
+		});
 
 		var mockDeadBody1 = new Mock<DeadBody>(IntPtr.Zero);
 		mockDeadBody1.SetupGet(d => d.ParentId).Returns(targetPlayerId);

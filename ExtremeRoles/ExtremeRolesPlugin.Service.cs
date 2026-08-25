@@ -85,6 +85,8 @@ public partial class ExtremeRolesPlugin
 		// EventManager
 		collection.AddSingleton<IEventManager, Module.Event.EventManager>();
 
+		collection.AddTransient<ICustomRegionProvider, DefaultCustomRegionProvider>();
+
 		return collection.BuildServiceProvider();
 	}
 }

@@ -5,7 +5,9 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption;
+using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -56,7 +58,58 @@ public sealed class CustomRegionTests
 			ClientOption.Create();
 		}
 
+		ResetCustomRegionCache();
+		SetupCustomRegionProviderMock();
 		SetupServerManagerMock();
+	}
+
+	private static void ResetCustomRegionCache()
+	{
+		var field = typeof(CustomRegion).GetField("curCustomRegion", BindingFlags.NonPublic | BindingFlags.Static);
+		if (field?.GetValue(null) is System.Collections.IDictionary dict)
+		{
+			dict.Clear();
+		}
+	}
+
+	private void SetupCustomRegionProviderMock()
+	{
+		var mockProvider = new Mock<ICustomRegionProvider>();
+		mockProvider.Setup(p => p.Provide()).Returns(() =>
+		{
+			var mockTokyoRegion = new Mock<IRegionInfo>(IntPtr.Zero);
+			mockTokyoRegion.SetupGet(r => r.Name).Returns(IRegionInfoExtension.ExROfficialServerTokyoManinName);
+			mockTokyoRegion.SetupGet(r => r.TranslateName).Returns(StringNames.NoTranslation);
+
+			var mockTokyoServer = new Mock<ServerInfo>(IntPtr.Zero);
+			mockTokyoServer.SetupGet(s => s.Name).Returns(IRegionInfoExtension.ExROfficialServerTokyoManinName);
+			mockTokyoServer.SetupGet(s => s.Ip).Returns("168.138.196.31");
+			mockTokyoServer.SetupGet(s => s.Port).Returns((ushort)22023);
+			mockTokyoServer.SetupGet(s => s.UseDtls).Returns(false);
+
+			mockTokyoRegion.SetupGet(r => r.Servers).Returns(new Il2CppReferenceArray<ServerInfo>([mockTokyoServer.Object]));
+
+			var mockCustomRegion = new Mock<IRegionInfo>(IntPtr.Zero);
+			mockCustomRegion.SetupGet(r => r.Name).Returns(IRegionInfoExtension.FullCustomServerName);
+			mockCustomRegion.SetupGet(r => r.TranslateName).Returns(StringNames.NoTranslation);
+
+			var mockCustomServer = new Mock<ServerInfo>(IntPtr.Zero);
+			mockCustomServer.SetupGet(s => s.Name).Returns(IRegionInfoExtension.FullCustomServerName);
+			mockCustomServer.SetupGet(s => s.Ip).Returns(ClientOption.Instance?.Ip?.Value ?? "127.0.0.1");
+			mockCustomServer.SetupGet(s => s.Port).Returns(ClientOption.Instance?.Port?.Value ?? (ushort)22023);
+			mockCustomServer.SetupGet(s => s.UseDtls).Returns(false);
+
+			mockCustomRegion.SetupGet(r => r.Servers).Returns(new Il2CppReferenceArray<ServerInfo>([mockCustomServer.Object]));
+
+			return new List<IRegionInfo> { mockTokyoRegion.Object, mockCustomRegion.Object };
+		});
+
+		var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+		services.AddSingleton<ICustomRegionProvider>(mockProvider.Object);
+		var serviceProvider = services.BuildServiceProvider();
+
+		var backingField = typeof(ExtremeRolesPlugin).GetField("<Provider>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
+		backingField?.SetValue(ExtremeRolesPlugin.Instance, serviceProvider);
 	}
 
 	private void SetupServerManagerMock()
