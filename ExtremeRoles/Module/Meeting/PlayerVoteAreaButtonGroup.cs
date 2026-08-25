@@ -30,7 +30,7 @@ public sealed class PlayerVoteAreaButtonGroup
 		{
 			return;
 		}
-		this.first.RemoveRange(3, this.first.Count + 1 - 3);
+		this.first.RemoveRange(3, this.first.Count - 3);
 	}
 
 	public void ResetSecond()
