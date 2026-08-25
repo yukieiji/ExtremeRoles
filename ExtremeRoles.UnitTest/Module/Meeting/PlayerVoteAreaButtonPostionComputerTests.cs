@@ -12,6 +12,9 @@ public class PlayerVoteAreaButtonPostionComputerTests
     public PlayerVoteAreaButtonPostionComputerTests()
     {
         MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupMockExtremeRolePlugin();
+        MockSetupHelper.SetupLogger();
+        MockSetupHelper.SetupDebugMode();
 
         var mockActionImplicit = new Mock<Il2CppSystem.MockActionop_ImplicitHelper<float>>();
         mockActionImplicit.Setup(x => x.Invoke(It.IsAny<Action<float>>()))

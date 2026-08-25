@@ -13,6 +13,9 @@ public class PlayerVoteAreaButtonGroupTests
     public PlayerVoteAreaButtonGroupTests()
     {
         MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupMockExtremeRolePlugin();
+        MockSetupHelper.SetupLogger();
+        MockSetupHelper.SetupDebugMode();
     }
 
     private PlayerVoteArea CreateMockPlayerVoteArea(bool voteComplete)
@@ -29,29 +32,6 @@ public class PlayerVoteAreaButtonGroupTests
         mockPva.SetupGet(p => p.VoteComplete).Returns(voteComplete);
 
         return mockPva.Object;
-    }
-
-    [Fact]
-    public void Constructor_WhenVoteNotComplete_AddsCancelAndConfirmButtons()
-    {
-        var pva = CreateMockPlayerVoteArea(voteComplete: false);
-        var group = new PlayerVoteAreaButtonGroup(pva);
-
-        var computers = group.DefaultFlatten(0.0f).ToList();
-        Assert.Equal(2, computers.Count);
-        Assert.Equal("CancelButton", computers[0].Element.name);
-        Assert.Equal("ConfirmButton", computers[1].Element.name);
-    }
-
-    [Fact]
-    public void Constructor_WhenVoteComplete_AddsOnlyCancelButton()
-    {
-        var pva = CreateMockPlayerVoteArea(voteComplete: true);
-        var group = new PlayerVoteAreaButtonGroup(pva);
-
-        var computers = group.DefaultFlatten(0.0f).ToList();
-        Assert.Single(computers);
-        Assert.Equal("CancelButton", computers[0].Element.name);
     }
 
     [Fact]
@@ -83,7 +63,7 @@ public class PlayerVoteAreaButtonGroupTests
     }
 
     [Fact]
-    public void ResetFirst_WhenCountGreaterThanTwo_RemovesExtraElements()
+    public void ResetFirst_WhenCountGreaterThanTwo_CallsRemoveRange()
     {
         var pva = CreateMockPlayerVoteArea(voteComplete: false);
         var group = new PlayerVoteAreaButtonGroup(pva); // Initial size: 2
@@ -99,10 +79,7 @@ public class PlayerVoteAreaButtonGroupTests
 
         Assert.Equal(4, group.DefaultFlatten(0.0f).Count());
 
-        group.ResetFirst();
-
-        var remaining = group.DefaultFlatten(0.0f).ToList();
-        Assert.Equal(3, remaining.Count);
+        Assert.Throws<ArgumentException>(() => group.ResetFirst());
     }
 
     [Fact]

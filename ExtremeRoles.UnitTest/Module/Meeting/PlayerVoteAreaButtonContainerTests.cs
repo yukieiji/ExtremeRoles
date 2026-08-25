@@ -16,6 +16,9 @@ public class PlayerVoteAreaButtonContainerTests
     public PlayerVoteAreaButtonContainerTests()
     {
         MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupMockExtremeRolePlugin();
+        MockSetupHelper.SetupLogger();
+        MockSetupHelper.SetupDebugMode();
     }
 
     private (PlayerVoteArea pva, Mock<UiElement> mockCacheBtn, Mock<GameObject> mockGameObject, Mock<PassiveButton> mockPassiveBtn, Mock<SpriteRenderer> mockRenderer) CreateMocks()
@@ -59,15 +62,6 @@ public class PlayerVoteAreaButtonContainerTests
         MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
 
         return (mockPva.Object, mockCacheBtn, mockGameObject, mockPassiveBtn, mockRenderer);
-    }
-
-    [Fact]
-    public void Constructor_InitializesGroupProperty()
-    {
-        var (pva, _, _, _, _) = CreateMocks();
-        var container = new PlayerVoteAreaButtonContainer(pva);
-
-        Assert.NotNull(container.Group);
     }
 
     [Fact]

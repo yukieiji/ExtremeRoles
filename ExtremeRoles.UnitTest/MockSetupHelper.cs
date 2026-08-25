@@ -25,9 +25,6 @@ public static class MockSetupHelper
         SetupCompatModManager();
         SetupUnityObjectOperators();
         SetupVector2Helpers();
-        SetupMockExtremeRolePlugin();
-        SetupLogger();
-        SetupDebugMode();
     }
 
     public static void SetupDebugMode()
