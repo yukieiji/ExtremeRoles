@@ -34,14 +34,28 @@ public readonly record struct Region(
 	RegionStatus Status,
 	IRegionInfo Info);
 
-public interface IRegionFactory
+public interface ICustomRegionProvider
 {
-	IRegionInfo CreateStaticRegion(string name, string ip, ushort port, bool useDtls);
+	IReadOnlyList<IRegionInfo> Provide();
 }
 
-public sealed class DefaultRegionFactory : IRegionFactory
+public sealed class DefaultCustomRegionProvider : ICustomRegionProvider
 {
-	public IRegionInfo CreateStaticRegion(string name, string ip, ushort port, bool useDtls)
+	public IReadOnlyList<IRegionInfo> Provide()
+	{
+		return [
+			createStaticRegion(
+				IRegionInfoExtension.ExROfficialServerTokyoManinName,
+				"168.138.196.31", 22023, false), // Only ExtremeRoles!!
+			createStaticRegion(
+				IRegionInfoExtension.FullCustomServerName,
+				ClientOption.Instance.Ip.Value,
+				ClientOption.Instance.Port.Value, false),
+		];
+	}
+
+	private static IRegionInfo createStaticRegion(
+		string name, string ip, ushort port, bool useDtls)
 	{
 		ServerInfo[] servers = [new ServerInfo(name, ip, port, useDtls)];
 		if (ip.StartsWith("https"))
@@ -59,23 +73,28 @@ public sealed class DefaultRegionFactory : IRegionFactory
 
 public static class CustomRegion
 {
-	public static IRegionFactory RegionFactory { get; set; } = new DefaultRegionFactory();
-
 	public static IRegionInfo? EditableServer =>
 		ServerManager.Instance.AvailableRegions.FirstOrDefault(
 			x => x.Name == IRegionInfoExtension.FullCustomServerName);
 
 	private static readonly Dictionary<string, Region> curCustomRegion = [];
 
-	private static IRegionInfo[] newCustomRegion => [
-		createStaticRegion(
-			IRegionInfoExtension.ExROfficialServerTokyoManinName,
-			"168.138.196.31", 22023, false), // Only ExtremeRoles!!
-		createStaticRegion(
-			IRegionInfoExtension.FullCustomServerName,
-			ClientOption.Instance.Ip.Value,
-			ClientOption.Instance.Port.Value, false),
-	];
+	private static IReadOnlyList<IRegionInfo> newCustomRegion
+	{
+		get
+		{
+			var provider = ExtremeRolesPlugin.Instance.Provider;
+			if (provider != null)
+			{
+				var regionProvider = (ICustomRegionProvider?)provider.GetService(typeof(ICustomRegionProvider));
+				if (regionProvider != null)
+				{
+					return regionProvider.Provide();
+				}
+			}
+			return new DefaultCustomRegionProvider().Provide();
+		}
+	}
 
 	public static bool TryGetStatus(string name, out RegionStatusEnum @enum)
 	{
@@ -159,11 +178,6 @@ public static class CustomRegion
 		}
 	}
 
-	private static IRegionInfo createStaticRegion(
-		string name, string ip, ushort port, bool useDtls)
-	{
-		return RegionFactory.CreateStaticRegion(name, ip, port, useDtls);
-	}
 
 	private static RegionStatus getStatus(IRegionInfo info)
 	{
