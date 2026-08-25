@@ -1,13 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-using System.Linq;
-using System.Collections.Generic;
-
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Resources;
+using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.Ability;
 
@@ -15,8 +13,6 @@ namespace ExtremeRoles.Module.Ability;
 
 public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 {
-	public static Func<string, GameObject> CreateGameObjectHandler { get; set; } = name => new GameObject(name);
-
 	public int MultiModalAbilityNum => allAbility.Count;
 	private readonly SpriteRenderer multiAbilityImg;
 	private readonly List<BehaviorBase> allAbility;
@@ -26,11 +22,13 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 	public ExtremeMultiModalAbilityButton(
 		List<BehaviorBase> behaviorors,
 		IButtonAutoActivator activator,
-		KeyCode hotKey) : base(
+		KeyCode hotKey,
+		IGameObjectFactory? gameObjectFactory = null) : base(
 			behaviorors[0],
 			activator,
 			hotKey)
 	{
+		gameObjectFactory ??= new DefaultGameObjectFactory();
 		this.allAbility = behaviorors.ToList();
 		if (this.MultiModalAbilityNum > 1)
 		{
@@ -45,21 +43,13 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 			}
 		}
 
-		var obj = CreateGameObjectHandler("MultiAbilityImg");
+		var obj = gameObjectFactory.Create("MultiAbilityImg");
 		obj.transform.SetParent(this.Transform);
 		obj.transform.position = this.Transform.position;
 		obj.transform.localPosition = new Vector3(0.0f, 0.0f, 0.25f);
 		this.multiAbilityImg = obj.AddComponent<SpriteRenderer>();
 		this.multiAbilityImg.name = "MultiAbilityImg";
-		try
-		{
-			this.multiAbilityImg.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
-				ObjectPath.CommonTextureAsset,
-				string.Format(ObjectPath.CommonImagePathFormat, "MultiAbility"));
-		}
-		catch
-		{
-		}
+		this.multiAbilityImg.sprite = gameObjectFactory.LoadMultiAbilitySprite();
 		this.multiAbilityImg.enabled = this.MultiModalAbilityNum > 1;
 	}
 

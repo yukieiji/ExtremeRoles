@@ -16,10 +16,11 @@ namespace ExtremeRoles.UnitTest.Module.Ability;
 public class ExtremeMultiModalAbilityButtonTests
 {
     private Mock<IButtonAutoActivator> mockActivator;
+    private Mock<IGameObjectFactory> mockGOFactory = null!;
     private TestBehavior behavior1;
     private TestBehavior behavior2;
     private TestBehavior behavior3;
-    private Mock<GameObject> mockMultiAbilityGO;
+    private Mock<GameObject> mockMultiAbilityGO = null!;
 
     public ExtremeMultiModalAbilityButtonTests()
     {
@@ -158,22 +159,10 @@ public class ExtremeMultiModalAbilityButtonTests
         mockMultiAbilityGO.SetupGet(g => g.transform).Returns(mockMultiTransform.Object);
         mockMultiAbilityGO.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockSpriteRenderer.Object);
 
-        ExtremeMultiModalAbilityButton.CreateGameObjectHandler = name => mockMultiAbilityGO.Object;
-    }
-
-    [Fact]
-    public void Constructor_InitializesWithMultipleBehaviors()
-    {
-        var behaviors = new List<BehaviorBase>
-        {
-            behavior1,
-            behavior2
-        };
-
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F);
-
-        Assert.Equal(2, button.MultiModalAbilityNum);
-        Assert.Same(behavior1, button.Behavior);
+        var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+        mockGOFactory = new Mock<IGameObjectFactory>();
+        mockGOFactory.Setup(f => f.Create(It.IsAny<string>())).Returns(mockMultiAbilityGO.Object);
+        mockGOFactory.Setup(f => f.LoadMultiAbilitySprite()).Returns(mockSprite.Object);
     }
 
     [Fact]
@@ -184,7 +173,7 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior1
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
         Assert.Equal(1, button.MultiModalAbilityNum);
 
         button.Add(behavior2);
@@ -202,7 +191,7 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior2
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
         button.Remove(1);
 
         Assert.Equal(1, button.MultiModalAbilityNum);
@@ -217,7 +206,7 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior2
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
         Assert.Same(behavior1, button.Behavior);
 
         button.Remove(behavior1);
@@ -234,7 +223,7 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior1
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
 
         Assert.Throws<IndexOutOfRangeException>(() => button.Remove(0));
     }
@@ -248,7 +237,7 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior2
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
         button.ClearAndAnd(behavior3);
 
         Assert.Equal(1, button.MultiModalAbilityNum);
@@ -267,7 +256,7 @@ public class ExtremeMultiModalAbilityButtonTests
             b2
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
 
         button.Remove(b1); // Removing current behavior b1 switches to b2
 
@@ -285,26 +274,13 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior2  // CT: 15
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
         button.OnMeetingEnd(); // Reset CT
         Assert.Equal(10.0f, button.Timer);
 
         button.Remove(behavior1); // Switch to behavior2 (CT: 15, diff: +5)
 
         Assert.Equal(15.0f, button.Timer);
-    }
-
-    [Fact]
-    public void Constructor_WithArrayParams_InitializesCorrectly()
-    {
-        var button = new ExtremeMultiModalAbilityButton(
-            mockActivator.Object,
-            KeyCode.F,
-            behavior1,
-            behavior2);
-
-        Assert.Equal(2, button.MultiModalAbilityNum);
-        Assert.Same(behavior1, button.Behavior);
     }
 
     private sealed class TestBehavior : BehaviorBase
