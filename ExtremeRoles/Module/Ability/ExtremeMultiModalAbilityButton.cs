@@ -6,6 +6,7 @@ using UnityEngine;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Module.Ability;
 
@@ -23,12 +24,15 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		List<BehaviorBase> behaviorors,
 		IButtonAutoActivator activator,
 		KeyCode hotKey,
-		IGameObjectFactory? gameObjectFactory = null) : base(
+		IGameObjectFactory? gameObjectFactory = null,
+		ISpriteLoader? spriteLoader = null) : base(
 			behaviorors[0],
 			activator,
 			hotKey)
 	{
 		gameObjectFactory ??= new DefaultGameObjectFactory();
+		spriteLoader ??= new DefaultSpriteLoader();
+
 		this.allAbility = behaviorors.ToList();
 		if (this.MultiModalAbilityNum > 1)
 		{
@@ -49,7 +53,9 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		obj.transform.localPosition = new Vector3(0.0f, 0.0f, 0.25f);
 		this.multiAbilityImg = obj.AddComponent<SpriteRenderer>();
 		this.multiAbilityImg.name = "MultiAbilityImg";
-		this.multiAbilityImg.sprite = gameObjectFactory.LoadMultiAbilitySprite();
+		this.multiAbilityImg.sprite = spriteLoader.LoadSprite(
+			ObjectPath.CommonTextureAsset,
+			string.Format(ObjectPath.CommonImagePathFormat, "MultiAbility"));
 		this.multiAbilityImg.enabled = this.MultiModalAbilityNum > 1;
 	}
 

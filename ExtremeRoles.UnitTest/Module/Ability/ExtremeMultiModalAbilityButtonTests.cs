@@ -17,6 +17,7 @@ public class ExtremeMultiModalAbilityButtonTests
 {
     private Mock<IButtonAutoActivator> mockActivator;
     private Mock<IGameObjectFactory> mockGOFactory = null!;
+    private Mock<ISpriteLoader> mockSpriteLoader = null!;
     private TestBehavior behavior1;
     private TestBehavior behavior2;
     private TestBehavior behavior3;
@@ -159,10 +160,12 @@ public class ExtremeMultiModalAbilityButtonTests
         mockMultiAbilityGO.SetupGet(g => g.transform).Returns(mockMultiTransform.Object);
         mockMultiAbilityGO.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockSpriteRenderer.Object);
 
-        var mockSprite = new Mock<Sprite>(IntPtr.Zero);
         mockGOFactory = new Mock<IGameObjectFactory>();
         mockGOFactory.Setup(f => f.Create(It.IsAny<string>())).Returns(mockMultiAbilityGO.Object);
-        mockGOFactory.Setup(f => f.LoadMultiAbilitySprite()).Returns(mockSprite.Object);
+
+        var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+        mockSpriteLoader = new Mock<ISpriteLoader>();
+        mockSpriteLoader.Setup(s => s.LoadSprite(It.IsAny<string>(), It.IsAny<string>())).Returns(mockSprite.Object);
     }
 
     [Fact]
@@ -173,7 +176,7 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior1
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object, mockSpriteLoader.Object);
         Assert.Equal(1, button.MultiModalAbilityNum);
 
         button.Add(behavior2);
@@ -191,7 +194,7 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior2
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object, mockSpriteLoader.Object);
         button.Remove(1);
 
         Assert.Equal(1, button.MultiModalAbilityNum);
@@ -206,7 +209,7 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior2
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object, mockSpriteLoader.Object);
         Assert.Same(behavior1, button.Behavior);
 
         button.Remove(behavior1);
@@ -223,7 +226,7 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior1
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object, mockSpriteLoader.Object);
 
         Assert.Throws<IndexOutOfRangeException>(() => button.Remove(0));
     }
@@ -237,7 +240,7 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior2
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object, mockSpriteLoader.Object);
         button.ClearAndAnd(behavior3);
 
         Assert.Equal(1, button.MultiModalAbilityNum);
@@ -256,7 +259,7 @@ public class ExtremeMultiModalAbilityButtonTests
             b2
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object, mockSpriteLoader.Object);
 
         button.Remove(b1); // Removing current behavior b1 switches to b2
 
@@ -274,7 +277,7 @@ public class ExtremeMultiModalAbilityButtonTests
             behavior2  // CT: 15
         };
 
-        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object);
+        var button = new ExtremeMultiModalAbilityButton(behaviors, mockActivator.Object, KeyCode.F, mockGOFactory.Object, mockSpriteLoader.Object);
         button.OnMeetingEnd(); // Reset CT
         Assert.Equal(10.0f, button.Timer);
 
