@@ -23,7 +23,6 @@ public static class MockSetupHelper
         SetupMathfHelpers();
         SetupCompatModManager();
         SetupUnityObjectOperators();
-        SetupConstantsHelpers();
     }
 
     public static void SetupConstantsHelpers()

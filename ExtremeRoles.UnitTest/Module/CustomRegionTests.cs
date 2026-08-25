@@ -47,6 +47,7 @@ public sealed class CustomRegionTests
 	public CustomRegionTests()
 	{
 		MockSetupHelper.SetupCommonMocks();
+		MockSetupHelper.SetupConstantsHelpers();
 		MockSetupHelper.SetupLogger();
 
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
