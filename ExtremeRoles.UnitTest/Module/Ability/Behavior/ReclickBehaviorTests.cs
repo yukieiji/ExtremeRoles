@@ -1,19 +1,11 @@
-using System;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability.Behavior;
 
-[Collection("UnityMock")]
 public class ReclickBehaviorTests
 {
-    public ReclickBehaviorTests()
-    {
-        MockSetupHelper.SetupCommonMocks();
-    }
-
-
     [Fact]
     public void IsUse_ReturnsTrue_WhenCanUseIsTrueOrActive()
     {
@@ -44,7 +36,7 @@ public class ReclickBehaviorTests
         bool success1 = behavior.TryUseAbility(0f, AbilityState.Ready, out var state1);
         Assert.True(success1);
         Assert.Equal(AbilityState.Activating, state1);
-        Assert.True(behavior.IsUse()); // IsUse true while active even if canUse false
+        Assert.True(behavior.IsUse());
 
         // Activating -> CoolDown (Reclick)
         bool success2 = behavior.TryUseAbility(0f, AbilityState.Activating, out var state2);
@@ -57,7 +49,7 @@ public class ReclickBehaviorTests
     {
         var behavior = new ReclickBehavior(
             "Test", null!,
-            () => true, () => false // ability fails
+            () => true, () => false
         );
 
         Assert.False(behavior.TryUseAbility(0f, AbilityState.Ready, out var state1));
@@ -80,7 +72,7 @@ public class ReclickBehaviorTests
             abilityOff: () => offCalled = true
         );
 
-        behavior.TryUseAbility(0f, AbilityState.Ready, out _); // active
+        behavior.TryUseAbility(0f, AbilityState.Ready, out _);
 
         behavior.AbilityOff();
         Assert.True(offCalled);

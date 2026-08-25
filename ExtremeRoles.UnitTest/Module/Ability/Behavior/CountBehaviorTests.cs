@@ -1,4 +1,3 @@
-using System;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
@@ -19,7 +18,7 @@ public class CountBehaviorTests
         bool canUse = true;
         var behavior = new CountBehavior("Test", null!, () => canUse, () => true);
 
-        Assert.False(behavior.IsUse()); // count is 0
+        Assert.False(behavior.IsUse());
 
         behavior.SetAbilityCount(2);
         Assert.True(behavior.IsUse());
@@ -45,22 +44,18 @@ public class CountBehaviorTests
     public void TryUseAbility_AbnormalCases_ReturnsFalse()
     {
         var behavior = new CountBehavior("Test", null!, () => true, () => true);
-        behavior.SetAbilityCount(0); // Count is 0
+        behavior.SetAbilityCount(0);
 
-        // Zero count
         Assert.False(behavior.TryUseAbility(0f, AbilityState.Ready, out var state1));
         Assert.Equal(AbilityState.Ready, state1);
 
         behavior.SetAbilityCount(1);
-        // Timer > 0
         Assert.False(behavior.TryUseAbility(1.0f, AbilityState.Ready, out var state2));
         Assert.Equal(AbilityState.Ready, state2);
 
-        // State not ready
         Assert.False(behavior.TryUseAbility(0f, AbilityState.CoolDown, out var state3));
         Assert.Equal(AbilityState.CoolDown, state3);
 
-        // Ability func returns false
         var behaviorFail = new CountBehavior("Test", null!, () => true, () => false);
         behaviorFail.SetAbilityCount(1);
         Assert.False(behaviorFail.TryUseAbility(0f, AbilityState.Ready, out var state4));
@@ -73,16 +68,12 @@ public class CountBehaviorTests
         var behavior = new CountBehavior("Test", null!, () => true, () => true);
         behavior.SetAbilityCount(1);
 
-        // First update after SetAbilityCount returns CoolDown due to isUpdate flag
         Assert.Equal(AbilityState.CoolDown, behavior.Update(AbilityState.Ready));
-
-        // Subsequent update returns curState if count > 0
         Assert.Equal(AbilityState.Ready, behavior.Update(AbilityState.Ready));
 
-        // When count <= 0, returns AbilityState.None
         var behaviorZero = new CountBehavior("Test", null!, () => true, () => true);
         behaviorZero.SetAbilityCount(0);
-        behaviorZero.Update(AbilityState.Ready); // Clear isUpdate
+        behaviorZero.Update(AbilityState.Ready);
         Assert.Equal(AbilityState.None, behaviorZero.Update(AbilityState.Ready));
     }
 

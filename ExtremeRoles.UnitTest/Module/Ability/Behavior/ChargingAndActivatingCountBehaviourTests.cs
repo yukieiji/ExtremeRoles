@@ -1,4 +1,3 @@
-using System;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
@@ -13,7 +12,6 @@ public class ChargingAndActivatingCountBehaviourTests
         MockSetupHelper.SetupCommonMocks();
     }
 
-
     [Fact]
     public void IsUse_ReturnsTrue_WhenCountOrChargeOrActiveAndCanUse()
     {
@@ -26,7 +24,7 @@ public class ChargingAndActivatingCountBehaviourTests
             ChargingAndActivatingCountBehaviour.ReduceTiming.OnCharge
         );
 
-        Assert.False(behavior.IsUse()); // count 0
+        Assert.False(behavior.IsUse());
 
         behavior.SetAbilityCount(1);
         Assert.True(behavior.IsUse());
@@ -54,7 +52,7 @@ public class ChargingAndActivatingCountBehaviourTests
         bool success1 = behavior.TryUseAbility(0f, AbilityState.Ready, out var state1);
         Assert.True(success1);
         Assert.Equal(AbilityState.Charging, state1);
-        Assert.Equal(1, behavior.AbilityCount); // Reduced on charge
+        Assert.Equal(1, behavior.AbilityCount);
 
         // Charging -> Activating
         bool success2 = behavior.TryUseAbility(0f, AbilityState.Charging, out var state2);
@@ -73,7 +71,7 @@ public class ChargingAndActivatingCountBehaviourTests
             ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive
         )
         {
-            ActiveTime = 0.0f // CoolDown state
+            ActiveTime = 0.0f
         };
         behavior.SetAbilityCount(1);
 
@@ -82,7 +80,7 @@ public class ChargingAndActivatingCountBehaviourTests
         Assert.Equal(AbilityState.Charging, state1);
         Assert.Equal(1, behavior.AbilityCount);
 
-        // Charging -> CoolDown (since ActiveTime <= 0)
+        // Charging -> CoolDown
         behavior.TryUseAbility(0f, AbilityState.Charging, out var state2);
         Assert.Equal(AbilityState.CoolDown, state2);
         Assert.Equal(0, behavior.AbilityCount);
@@ -117,17 +115,15 @@ public class ChargingAndActivatingCountBehaviourTests
         var behavior = new ChargingAndActivatingCountBehaviour(
             "Test", null!,
             (isCharge, gage) => true,
-            gage => false, // ability fails
-            () => false, // onCharge fails
+            gage => false,
+            () => false,
             ChargingAndActivatingCountBehaviour.ReduceTiming.OnCharge
         );
         behavior.SetAbilityCount(1);
 
-        // onCharge fails
         Assert.False(behavior.TryUseAbility(0f, AbilityState.Ready, out var state1));
         Assert.Equal(AbilityState.Ready, state1);
 
-        // Invalid state (e.g., CoolDown)
         Assert.False(behavior.TryUseAbility(0f, AbilityState.CoolDown, out var state2));
         Assert.Equal(AbilityState.CoolDown, state2);
     }

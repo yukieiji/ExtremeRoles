@@ -1,18 +1,11 @@
-using System;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability.Behavior;
 
-[Collection("UnityMock")]
 public class NullBehaviourTests
 {
-    public NullBehaviourTests()
-    {
-        MockSetupHelper.SetupCommonMocks();
-    }
-
     [Fact]
     public void Constructor_InitializesDefaultValues()
     {

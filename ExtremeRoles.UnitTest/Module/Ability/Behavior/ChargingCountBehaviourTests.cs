@@ -1,4 +1,3 @@
-using System;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
@@ -12,7 +11,6 @@ public class ChargingCountBehaviourTests
     {
         MockSetupHelper.SetupCommonMocks();
     }
-
 
     [Fact]
     public void IsUse_ReturnsTrue_WhenCountOrChargeAndCanUse()
@@ -87,7 +85,7 @@ public class ChargingCountBehaviourTests
             "Test", null!,
             (isCharge, gage) => true,
             gage => true,
-            () => false, // onCharge fails
+            () => false,
             ChargingCountBehaviour.ReduceTiming.OnCharge
         );
         behavior.SetAbilityCount(1);

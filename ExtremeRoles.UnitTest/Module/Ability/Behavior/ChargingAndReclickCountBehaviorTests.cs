@@ -1,4 +1,3 @@
-using System;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
@@ -12,7 +11,6 @@ public class ChargingAndReclickCountBehaviorTests
     {
         MockSetupHelper.SetupCommonMocks();
     }
-
 
     [Fact]
     public void IsUse_ReturnsTrue_WhenCountOrChargeOrActiveAndCanUse()
@@ -59,7 +57,7 @@ public class ChargingAndReclickCountBehaviorTests
         bool success2 = behavior.TryUseAbility(0f, AbilityState.Charging, out var state2);
         Assert.True(success2);
         Assert.Equal(AbilityState.Activating, state2);
-        Assert.Equal(0, behavior.AbilityCount); // Reduced on charge finish / activate
+        Assert.Equal(0, behavior.AbilityCount);
 
         // Activating -> CoolDown (Reclick)
         bool success3 = behavior.TryUseAbility(0f, AbilityState.Activating, out var state3);
@@ -90,20 +88,17 @@ public class ChargingAndReclickCountBehaviorTests
         var behavior = new ChargingAndReclickCountBehavior(
             "Test", null!,
             (isCharge, gage) => true,
-            () => false, // onCharge fails
+            () => false,
             gage => true
         );
         behavior.SetAbilityCount(1);
 
-        // onCharge fails
         Assert.False(behavior.TryUseAbility(0f, AbilityState.Ready, out var state1));
         Assert.Equal(AbilityState.Ready, state1);
 
-        // Timer > 0 on Ready
         Assert.False(behavior.TryUseAbility(2.0f, AbilityState.Ready, out var state2));
         Assert.Equal(AbilityState.Ready, state2);
 
-        // Invalid state
         Assert.False(behavior.TryUseAbility(0f, AbilityState.None, out var state3));
         Assert.Equal(AbilityState.None, state3);
     }

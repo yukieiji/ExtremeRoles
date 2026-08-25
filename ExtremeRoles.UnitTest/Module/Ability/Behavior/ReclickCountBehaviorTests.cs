@@ -1,4 +1,3 @@
-using System;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
@@ -13,7 +12,6 @@ public class ReclickCountBehaviorTests
         MockSetupHelper.SetupCommonMocks();
     }
 
-
     [Fact]
     public void IsUse_ReturnsTrue_WhenCountAndCanUseIsTrueOrIsActive()
     {
@@ -23,7 +21,7 @@ public class ReclickCountBehaviorTests
             () => canUseVal, () => true
         );
 
-        Assert.False(behavior.IsUse()); // count 0
+        Assert.False(behavior.IsUse());
 
         behavior.SetAbilityCount(2);
         Assert.True(behavior.IsUse());
@@ -48,7 +46,7 @@ public class ReclickCountBehaviorTests
         bool success1 = behavior.TryUseAbility(0f, AbilityState.Ready, out var state1);
         Assert.True(success1);
         Assert.Equal(AbilityState.Activating, state1);
-        Assert.Equal(1, behavior.AbilityCount); // Decremented
+        Assert.Equal(1, behavior.AbilityCount);
 
         // Activating -> CoolDown (Reclick)
         bool success2 = behavior.TryUseAbility(0f, AbilityState.Activating, out var state2);
@@ -61,7 +59,7 @@ public class ReclickCountBehaviorTests
     {
         var behavior = new ReclickCountBehavior(
             "Test", null!,
-            () => true, () => false // ability fails
+            () => true, () => false
         );
         behavior.SetAbilityCount(1);
 

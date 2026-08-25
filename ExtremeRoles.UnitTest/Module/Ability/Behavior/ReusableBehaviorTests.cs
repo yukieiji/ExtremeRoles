@@ -1,18 +1,11 @@
-using System;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability.Behavior;
 
-[Collection("UnityMock")]
 public class ReusableBehaviorTests
 {
-    public ReusableBehaviorTests()
-    {
-        MockSetupHelper.SetupCommonMocks();
-    }
-
     [Fact]
     public void IsUse_ReturnsCanUseResult()
     {

@@ -1,19 +1,11 @@
-using System;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability.Behavior;
 
-[Collection("UnityMock")]
 public class PassiveBehaviorTests
 {
-    public PassiveBehaviorTests()
-    {
-        MockSetupHelper.SetupCommonMocks();
-    }
-
-
     [Fact]
     public void IsUse_ReturnsCanUseResult()
     {
@@ -47,14 +39,14 @@ public class PassiveBehaviorTests
         Assert.True(success1);
         Assert.Equal(AbilityState.CoolDown, state1);
         Assert.Equal("Deactive", behavior.Graphic.Text);
-        Assert.Equal(5.0f, behavior.CoolTime); // Set to activeTime
+        Assert.Equal(5.0f, behavior.CoolTime);
 
         // Toggle OFF (via second use)
         bool success2 = behavior.TryUseAbility(0f, AbilityState.Ready, out var state2);
         Assert.True(success2);
         Assert.Equal(AbilityState.CoolDown, state2);
         Assert.Equal("Active", behavior.Graphic.Text);
-        Assert.Equal(15.0f, behavior.CoolTime); // Restored to baseCoolTime
+        Assert.Equal(15.0f, behavior.CoolTime);
     }
 
     [Fact]
@@ -62,7 +54,7 @@ public class PassiveBehaviorTests
     {
         var behavior = new PassiveBehavior(
             new ButtonGraphic("A", null!), new ButtonGraphic("D", null!),
-            () => true, () => false // ability fails
+            () => true, () => false
         );
 
         Assert.False(behavior.TryUseAbility(0f, AbilityState.Ready, out var state1));
@@ -105,7 +97,7 @@ public class PassiveBehaviorTests
             canActivating: () => canActivating
         );
 
-        behavior.TryUseAbility(0f, AbilityState.Ready, out _); // active = true
+        behavior.TryUseAbility(0f, AbilityState.Ready, out _);
 
         canActivating = false;
         var newState = behavior.Update(AbilityState.Ready);

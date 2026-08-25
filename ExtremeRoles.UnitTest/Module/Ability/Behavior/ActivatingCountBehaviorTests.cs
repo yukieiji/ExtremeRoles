@@ -1,4 +1,3 @@
-using System;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
@@ -19,7 +18,7 @@ public class ActivatingCountBehaviorTests
         bool canUse = true;
         var behavior = new ActivatingCountBehavior("Test", null!, () => canUse, () => true);
 
-        Assert.False(behavior.IsUse()); // count 0, not activating
+        Assert.False(behavior.IsUse());
 
         behavior.SetAbilityCount(1);
         Assert.True(behavior.IsUse());
@@ -66,11 +65,11 @@ public class ActivatingCountBehaviorTests
         bool success = behavior.TryUseAbility(0f, AbilityState.Ready, out var newState);
 
         Assert.True(success);
-        Assert.Equal(1, behavior.AbilityCount); // Not reduced yet
+        Assert.Equal(1, behavior.AbilityCount);
 
         behavior.AbilityOff();
         Assert.True(offCalled);
-        Assert.Equal(0, behavior.AbilityCount); // Reduced now
+        Assert.Equal(0, behavior.AbilityCount);
     }
 
     [Fact]

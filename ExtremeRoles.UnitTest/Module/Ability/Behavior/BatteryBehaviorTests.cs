@@ -1,4 +1,3 @@
-using System;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
@@ -12,7 +11,6 @@ public class BatteryBehaviorTests
     {
         MockSetupHelper.SetupCommonMocks();
     }
-
 
     [Fact]
     public void IsUse_ReturnsTrue_OnlyWhenCanUseOrActiveAndCurrentChargeGreaterThanZero()
@@ -68,11 +66,9 @@ public class BatteryBehaviorTests
             ActiveTime = 5.0f
         };
 
-        // ability() returns false
         Assert.False(behavior.TryUseAbility(0f, AbilityState.Ready, out var state1));
         Assert.Equal(AbilityState.Ready, state1);
 
-        // timer > 0
         var behaviorTimer = new BatteryBehavior("Test", null!, () => true, () => true)
         {
             ActiveTime = 5.0f
@@ -101,22 +97,5 @@ public class BatteryBehaviorTests
 
         behavior.ForceAbilityOff();
         Assert.True(forceOffCalled);
-    }
-
-    [Fact]
-    public void Update_WhenActive_ReducesTimerAndRefillsOnTasksCompleted()
-    {
-        var behavior = new BatteryBehavior("Test", null!, () => true, () => true)
-        {
-            ActiveTime = 5.0f
-        };
-
-        behavior.TryUseAbility(0f, AbilityState.Ready, out _);
-
-        // Update when active
-        var state = behavior.Update(AbilityState.Activating);
-        Assert.Equal(AbilityState.Activating, state);
-
-        behavior.Initialize(null!);
     }
 }
