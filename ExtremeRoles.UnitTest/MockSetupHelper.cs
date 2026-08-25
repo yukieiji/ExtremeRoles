@@ -102,6 +102,10 @@ public static class MockSetupHelper
         var mockAbs = new Mock<MockMathfAbsHelper>();
         mockAbs.Setup(h => h.Invoke(It.IsAny<float>())).Returns((float f) => Math.Abs(f));
         MockMathfAbsHelper.Instance = mockAbs.Object;
+
+        var mockCeilToInt = new Mock<MockMathfCeilToIntHelper>();
+        mockCeilToInt.Setup(h => h.Invoke(It.IsAny<float>())).Returns((float f) => (int)Math.Ceiling(f));
+        MockMathfCeilToIntHelper.Instance = mockCeilToInt.Object;
     }
 
     public static void SetupColorHelpers()
@@ -131,6 +135,18 @@ public static class MockSetupHelper
         MockPaletteget_WhiteHelper.Instance = new Mock<MockPaletteget_WhiteHelper>().Object;
         MockPaletteget_ClearWhiteHelper.Instance = new Mock<MockPaletteget_ClearWhiteHelper>().Object;
         MockPaletteget_BlackHelper.Instance = new Mock<MockPaletteget_BlackHelper>().Object;
+
+        var mockEnabledColor = new Mock<MockPaletteget_EnabledColorHelper>();
+        mockEnabledColor.Setup(x => x.Invoke()).Returns(new Color(1f, 1f, 1f, 1f));
+        MockPaletteget_EnabledColorHelper.Instance = mockEnabledColor.Object;
+
+        var mockDisabledClear = new Mock<MockPaletteget_DisabledClearHelper>();
+        mockDisabledClear.Setup(x => x.Invoke()).Returns(new Color(0f, 0f, 0f, 0f));
+        MockPaletteget_DisabledClearHelper.Instance = mockDisabledClear.Object;
+
+        var mockDisabledGrey = new Mock<MockPaletteget_DisabledGreyHelper>();
+        mockDisabledGrey.Setup(x => x.Invoke()).Returns(new Color(0.5f, 0.5f, 0.5f, 1f));
+        MockPaletteget_DisabledGreyHelper.Instance = mockDisabledGrey.Object;
     }
 
     public static void SetupUnityObjectOperators()
