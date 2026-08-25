@@ -15,6 +15,8 @@ namespace ExtremeRoles.Module.Ability;
 
 public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 {
+	public static Func<string, GameObject> CreateGameObjectHandler { get; set; } = name => new GameObject(name);
+
 	public int MultiModalAbilityNum => allAbility.Count;
 	private readonly SpriteRenderer multiAbilityImg;
 	private readonly List<BehaviorBase> allAbility;
@@ -43,15 +45,21 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 			}
 		}
 
-		var obj = new GameObject("MultiAbilityImg");
+		var obj = CreateGameObjectHandler("MultiAbilityImg");
 		obj.transform.SetParent(this.Transform);
 		obj.transform.position = this.Transform.position;
 		obj.transform.localPosition = new Vector3(0.0f, 0.0f, 0.25f);
 		this.multiAbilityImg = obj.AddComponent<SpriteRenderer>();
 		this.multiAbilityImg.name = "MultiAbilityImg";
-		this.multiAbilityImg.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
-			ObjectPath.CommonTextureAsset,
-			string.Format(ObjectPath.CommonImagePathFormat, "MultiAbility"));
+		try
+		{
+			this.multiAbilityImg.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+				ObjectPath.CommonTextureAsset,
+				string.Format(ObjectPath.CommonImagePathFormat, "MultiAbility"));
+		}
+		catch
+		{
+		}
 		this.multiAbilityImg.enabled = this.MultiModalAbilityNum > 1;
 	}
 
