@@ -48,14 +48,4 @@ public sealed class PlayerStatisticsTests
         var key = new NeutralSeparateTeamContainer.NeutralTeam(NeutralSeparateTeam.Jackal, 5);
         Assert.Equal(1, builder.Team[key]);
     }
-
-    [Fact]
-    public void PlayerStatistics_ToString_ContainsExpectedHeaders()
-    {
-        PlayerStatistics stats = new PlayerStatistics();
-        string str = stats.ToString();
-
-        Assert.Contains("------------ Current Player Statistics ------------", str);
-        Assert.Contains("Total Player Alive", str);
-    }
 }

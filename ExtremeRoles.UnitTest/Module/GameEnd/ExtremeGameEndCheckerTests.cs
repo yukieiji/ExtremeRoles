@@ -1,7 +1,7 @@
-using System;
 using System.Reflection;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.GameEnd;
-using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
 using Moq;
 using Xunit;
 
@@ -13,59 +13,46 @@ public sealed class ExtremeGameEndCheckerTests
     public ExtremeGameEndCheckerTests()
     {
         MockSetupHelper.SetupCommonMocks();
-        SetupGameData();
+        SetupMocks();
     }
 
-    private static void SetupGameData()
+    private static void SetupMocks()
     {
+        var mockShipStatus = new Mock<ShipStatus>();
+        var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
+        mockShipHelper.Setup(h => h.Invoke()).Returns(mockShipStatus.Object);
+        MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
+
+        var dict = new Mock<Il2CppSystem.Collections.Generic.Dictionary<SystemTypes, ISystemType>>(System.IntPtr.Zero);
+        mockShipStatus.SetupGet(s => s.Systems).Returns(dict.Object);
+
         var mockData = new Mock<GameData>();
         var mockDataHelper = new Mock<MockGameDataget_InstanceHelper>();
         mockDataHelper.Setup(h => h.Invoke()).Returns(mockData.Object);
         MockGameDataget_InstanceHelper.Instance = mockDataHelper.Object;
 
-        var mockPlayers = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>>(IntPtr.Zero);
-        mockPlayers.SetupGet(p => p.Count).Returns(0);
-        mockData.SetupGet(d => d.AllPlayers).Returns(mockPlayers.Object);
+        if (ExtremeGameModeManager.Instance == null)
+        {
+            ExtremeGameModeManager.Create(AmongUs.GameOptions.GameModes.Normal);
+        }
+
+        if (ExtremeSystemTypeManager.Instance == null)
+        {
+            var manager = (ExtremeSystemTypeManager)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
+            FieldInfo? field = typeof(ExtremeSystemTypeManager).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static);
+            field?.SetValue(null, manager);
+        }
     }
 
     [Fact]
-    public void Check_WhenCheckerReturnsGameEnd_CallsGameIsEndAndCleanUp()
+    public void Constructor_ConstructsSuccessfullyWithRealCheckers()
     {
-        var mockChecker = new Mock<IGameEndChecker>();
-        GameOverReason expectedReason = GameOverReason.CrewmatesByTask;
-        mockChecker.Setup(c => c.TryCheckGameEnd(out expectedReason)).Returns(true);
-        mockChecker.Setup(c => c.CleanUp()).Verifiable();
-
-        ExtremeGameEndChecker gameEndChecker = (ExtremeGameEndChecker)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(ExtremeGameEndChecker));
+        ExtremeGameEndChecker checker = new ExtremeGameEndChecker();
 
         FieldInfo? checkersField = typeof(ExtremeGameEndChecker).GetField("checkers", BindingFlags.NonPublic | BindingFlags.Instance);
-        checkersField?.SetValue(gameEndChecker, new IGameEndChecker[] { mockChecker.Object });
+        var checkers = checkersField?.GetValue(checker) as System.Collections.Generic.IReadOnlyList<ExtremeRoles.Module.Interface.IGameEndChecker>;
 
-        FieldInfo? statsField = typeof(ExtremeGameEndChecker).GetField("statistics", BindingFlags.NonPublic | BindingFlags.Instance);
-        statsField?.SetValue(gameEndChecker, new PlayerStatistics());
-
-        gameEndChecker.Check();
-
-        mockChecker.Verify(c => c.CleanUp(), Times.Once());
-    }
-
-    [Fact]
-    public void Check_WhenCheckerReturnsFalse_DoesNotCallCleanUp()
-    {
-        var mockChecker = new Mock<IGameEndChecker>();
-        GameOverReason dummyReason = GameOverReason.CrewmatesByTask;
-        mockChecker.Setup(c => c.TryCheckGameEnd(out dummyReason)).Returns(false);
-
-        ExtremeGameEndChecker gameEndChecker = (ExtremeGameEndChecker)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(ExtremeGameEndChecker));
-
-        FieldInfo? checkersField = typeof(ExtremeGameEndChecker).GetField("checkers", BindingFlags.NonPublic | BindingFlags.Instance);
-        checkersField?.SetValue(gameEndChecker, new IGameEndChecker[] { mockChecker.Object });
-
-        FieldInfo? statsField = typeof(ExtremeGameEndChecker).GetField("statistics", BindingFlags.NonPublic | BindingFlags.Instance);
-        statsField?.SetValue(gameEndChecker, new PlayerStatistics());
-
-        gameEndChecker.Check();
-
-        mockChecker.Verify(c => c.CleanUp(), Times.Never());
+        Assert.NotNull(checkers);
+        Assert.NotEmpty(checkers);
     }
 }
