@@ -1,6 +1,6 @@
 ﻿namespace ExtremeRoles.Module.Ability.Behavior.Interface;
 
-internal interface IHideLogic
+public interface IHideLogic
 {
 	public void Hide();
 	public void Show();
