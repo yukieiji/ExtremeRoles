@@ -155,6 +155,11 @@ public static class MockSetupHelper
 		var mockSingleton = new Mock<MockDestroyableSingletonget_InstanceHelper<T>>();
 		MockDestroyableSingletonget_InstanceHelper<T>.Instance = mockSingleton.Object;
 		mockSingleton.Setup(x => x.Invoke()).Returns(mock.Object);
+
+		var mockExists = new Mock<MockDestroyableSingletonget_InstanceExistsHelper<T>>();
+		MockDestroyableSingletonget_InstanceExistsHelper<T>.Instance = mockExists.Object;
+		mockExists.Setup(x => x.Invoke()).Returns(true);
+
 		return mock;
 	}
 
