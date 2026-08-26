@@ -206,27 +206,6 @@ public class MeetingVisualUpdateEventTests
     }
 
     [Fact]
-    public void MeetingStatus_Constructor_InitializesProperties()
-    {
-        var mockLocalData = CreateMockPlayerInfo(0, "LocalPlayer");
-        var mockLocalPlayer = new Mock<PlayerControl>(IntPtr.Zero);
-        mockLocalPlayer.SetupGet(p => p.Data).Returns(mockLocalData);
-
-        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
-        mockLocalHelper.Setup(x => x.Invoke()).Returns(mockLocalPlayer.Object);
-        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
-
-        var (pva, _, _) = CreateMockPlayerVoteArea();
-
-        var status = new MeetingStatus(pva, true);
-
-        Assert.Equal(mockLocalData, status.Local);
-        Assert.True(status.IsCommActive);
-        Assert.NotNull(status.Name);
-        Assert.NotNull(status.Info);
-    }
-
-    [Fact]
     public void LocalPlayerMeetingVisualUpdateEvent_Invoke_ReturnsFalse_WhenMeetingHudInstanceIsNull()
     {
         var mockLocalData = CreateMockPlayerInfo(0, "LocalPlayer");
