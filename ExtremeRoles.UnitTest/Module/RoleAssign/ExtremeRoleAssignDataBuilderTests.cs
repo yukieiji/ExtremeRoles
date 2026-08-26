@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using ExtremeRoles;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using Moq;
 using Xunit;
 
@@ -29,7 +29,7 @@ public class ExtremeRoleAssignDataBuilderTests
     }
 
     [Fact]
-    public void Test_ExtremeRoleAssignDataBuilder_Build()
+    public void Test_ExtremeRoleAssignDataBuilder_Build_ExecutesBehavioursAndReturnsAssignedData()
     {
         var mockServiceProvider = new Mock<IServiceProvider>();
 
@@ -55,9 +55,17 @@ public class ExtremeRoleAssignDataBuilderTests
         var mockValidator = new Mock<IRoleAssignValidator>();
         mockValidator.Setup(x => x.IsReBuild(It.IsAny<PreparationData>())).Returns(false);
 
+        var mockBehaviour = new Mock<IRoleAssignDataBuildBehaviour>();
+        mockBehaviour.SetupGet(x => x.Priority).Returns((int)ExtremeRoleAssignDataBuilder.Priority.Single);
+        mockBehaviour.Setup(x => x.Build(It.Ref<PreparationData>.IsAny))
+            .Callback((in PreparationData data) =>
+            {
+                data.Assign.AddAssignData(new PlayerToSingleRoleAssignData(1, (int)ExtremeRoleId.Sheriff, data.Assign.ControlId));
+            });
+
         mockServiceProvider
             .Setup(x => x.GetService(typeof(IEnumerable<IRoleAssignDataBuildBehaviour>)))
-            .Returns(new List<IRoleAssignDataBuildBehaviour>());
+            .Returns(new List<IRoleAssignDataBuildBehaviour> { mockBehaviour.Object });
 
         var builder = new ExtremeRoleAssignDataBuilder(
             mockServiceProvider.Object,
@@ -67,6 +75,14 @@ public class ExtremeRoleAssignDataBuilderTests
 
         var result = builder.Build();
 
-        Assert.NotNull(result);
+        Assert.Single(result);
+        Assert.IsType<PlayerToSingleRoleAssignData>(result[0]);
+        var single = (PlayerToSingleRoleAssignData)result[0];
+        Assert.Equal((byte)1, single.PlayerId);
+        Assert.Equal((int)ExtremeRoleId.Sheriff, single.RoleId);
+        Assert.Equal(0, single.ControlId);
+
+        mockFilterInitializer.Verify(x => x.Initialize(It.IsAny<RoleAssignFilter>(), It.IsAny<PreparationData>()), Times.Once);
+        mockBehaviour.Verify(x => x.Build(It.Ref<PreparationData>.IsAny), Times.Once);
     }
 }

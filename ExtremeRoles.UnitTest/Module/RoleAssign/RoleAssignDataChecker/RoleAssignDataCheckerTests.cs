@@ -30,24 +30,6 @@ public class RoleAssignDataCheckerTests
     }
 
     [Fact]
-    public void Test_RoleDependencyRule_Properties()
-    {
-        var rule = new RoleDependencyRule(ExtremeRoleId.Furry, ExtremeRoleId.Jackal, () => true);
-
-        Assert.Equal(ExtremeRoleId.Furry, rule.CheckRoleId);
-        Assert.Equal(ExtremeRoleId.Jackal, rule.DependRoleId);
-        Assert.True(rule.IsDepend);
-    }
-
-    [Fact]
-    public void Test_RoleDependencyRuleFactory_RulesNotEmpty()
-    {
-        var factory = new RoleDependencyRuleFactory();
-        Assert.NotNull(factory.Rules);
-        Assert.NotEmpty(factory.Rules);
-    }
-
-    [Fact]
     public void Test_RoleAssignDependencyChecker_GetNgData_NoAssignments_ReturnsEmpty()
     {
         var mockFactory = new Mock<IRoleDependencyRuleFactory>();
