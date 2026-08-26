@@ -21,8 +21,10 @@ public static class MockSetupHelper
         SetupColorHelpers();
         SetupPaletteHelpers();
         SetupMathfHelpers();
+        SetupRandomHelpers();
         SetupCompatModManager();
         SetupUnityObjectOperators();
+        SetupLobbyBehaviourMock();
     }
 
     public static void SetupConstantsHelpers()
@@ -38,6 +40,14 @@ public static class MockSetupHelper
         {
             CompatModManager.Initialize();
         }
+    }
+
+    public static void SetupLobbyBehaviourMock()
+    {
+        var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
+        var mockInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
+        mockInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
+        MockLobbyBehaviourget_InstanceHelper.Instance = mockInstance.Object;
     }
 
 	public static ExtremeRolesPlugin SetupMockExtremeRolePlugin()
@@ -65,6 +75,13 @@ public static class MockSetupHelper
 		var config = new ConfigFile(Path.Combine(Path.GetTempPath(), "test.cfg"), true);
 		var configField = typeof(BasePlugin).GetField("<Config>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
 		configField?.SetValue(plugin, config);
+
+		var debugModeProp = typeof(ExtremeRolesPlugin).GetProperty("DebugMode", BindingFlags.Public | BindingFlags.Static);
+		if (debugModeProp != null && debugModeProp.GetValue(null) == null)
+		{
+			var entry = config.Bind("DeBug", "DebugMode", false);
+			debugModeProp.SetValue(null, entry);
+		}
 	}
 
 	public static void SetupMockHttps(ExtremeRolesPlugin plugin, HttpClient? client = null)
@@ -81,6 +98,13 @@ public static class MockSetupHelper
 		return mock;
 	}
 
+    public static void SetupRandomHelpers()
+    {
+        var mockInitState = new Mock<MockRandomInitStateHelper>();
+        mockInitState.Setup(x => x.Invoke(It.IsAny<int>()));
+        MockRandomInitStateHelper.Instance = mockInitState.Object;
+    }
+
 	public static void SetupMathfHelpers()
     {
         var mockClamp01 = new Mock<MockMathfClamp01Helper>();
@@ -90,6 +114,10 @@ public static class MockSetupHelper
         var mockClamp = new Mock<MockMathfClampHelper>();
         mockClamp.Setup(h => h.Invoke(It.IsAny<float>(), It.IsAny<float>(), It.IsAny<float>())).Returns((float v, float min, float max) => Math.Clamp(v, min, max));
         MockMathfClampHelper.Instance = mockClamp.Object;
+
+        var mockClamp2 = new Mock<MockMathfClampHelper2>();
+        mockClamp2.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).Returns((int v, int min, int max) => Math.Clamp(v, min, max));
+        MockMathfClampHelper2.Instance = mockClamp2.Object;
 
         var mockMax = new Mock<MockMathfMaxHelper>();
         mockMax.Setup(h => h.Invoke(It.IsAny<float>(), It.IsAny<float>())).Returns((float a, float b) => Math.Max(a, b));
@@ -110,6 +138,14 @@ public static class MockSetupHelper
 
     public static void SetupColorHelpers()
     {
+        var mockEq = new Mock<MockColorop_EqualityHelper>();
+        mockEq.Setup(x => x.Invoke(It.IsAny<Color>(), It.IsAny<Color>())).Returns((Color a, Color b) => a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a);
+        MockColorop_EqualityHelper.Instance = mockEq.Object;
+
+        var mockIneq = new Mock<MockColorop_InequalityHelper>();
+        mockIneq.Setup(x => x.Invoke(It.IsAny<Color>(), It.IsAny<Color>())).Returns((Color a, Color b) => a.r != b.r || a.g != b.g || a.b != b.b || a.a != b.a);
+        MockColorop_InequalityHelper.Instance = mockIneq.Object;
+
         MockColor32op_ImplicitHelper.Instance = new Mock<MockColor32op_ImplicitHelper>().Object;
         MockColor32op_ImplicitHelper2.Instance = new Mock<MockColor32op_ImplicitHelper2>().Object;
         MockColorop_ImplicitHelper.Instance = new Mock<MockColorop_ImplicitHelper>().Object;
