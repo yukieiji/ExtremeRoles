@@ -1,8 +1,13 @@
 using System;
+using System.Collections.Generic;
 using ExtremeRoles;
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.RoleAssign.Update;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
@@ -30,10 +35,10 @@ public class ExtremeRoleAssignDataPreparerAndBuilderTests
     public void Test_ExtremeRoleAssginDataPreparer_Prepare()
     {
         var mockAssignData = new Mock<IVanillaRolePlayerAssignDataProvider>();
-        mockAssignData.SetupGet(x => x.Data).Returns(new System.Collections.Generic.List<VanillaRolePlayerAssignData>());
+        mockAssignData.SetupGet(x => x.Data).Returns(new List<VanillaRolePlayerAssignData>());
         var mockRoleProvider = new Mock<IVanillaRoleProvider>();
-        mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new System.Collections.Generic.HashSet<AmongUs.GameOptions.RoleTypes>());
-        mockRoleProvider.SetupGet(x => x.AllImpostor).Returns(new System.Collections.Generic.HashSet<AmongUs.GameOptions.RoleTypes>());
+        mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new HashSet<AmongUs.GameOptions.RoleTypes>());
+        mockRoleProvider.SetupGet(x => x.AllImpostor).Returns(new HashSet<AmongUs.GameOptions.RoleTypes>());
 
         var playerRoleAssignData = new PlayerRoleAssignData(mockRoleProvider.Object, mockAssignData.Object);
         var mockSpawnDataManager = new Mock<ISpawnDataManager>();
@@ -54,17 +59,26 @@ public class ExtremeRoleAssignDataPreparerAndBuilderTests
     }
 
     [Fact]
-    public void Test_AssignFilterInitializer_Initialize()
+    public void Test_AssignFilterInitializer_Initialize_ReappliesAssignmentsToFilterState()
     {
+        var filter = RoleAssignFilter.Instance;
+        filter.Model.FilterSet.Clear();
+
+        var filterGuid = Guid.NewGuid();
+        RoleAssignFilterModelUpdater.AddFilter(filter.Model, filterGuid);
+        RoleAssignFilterModelUpdater.AddRoleData(filter.Model, filterGuid, 1, ExtremeRoleId.Sheriff);
+        RoleAssignFilterModelUpdater.AddRoleData(filter.Model, filterGuid, 2, CombinationRoleType.Lover);
+
         var mockAssignData = new Mock<IVanillaRolePlayerAssignDataProvider>();
-        mockAssignData.SetupGet(x => x.Data).Returns(new System.Collections.Generic.List<VanillaRolePlayerAssignData>());
+        mockAssignData.SetupGet(x => x.Data).Returns(new List<VanillaRolePlayerAssignData>());
         var mockRoleProvider = new Mock<IVanillaRoleProvider>();
-        mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new System.Collections.Generic.HashSet<AmongUs.GameOptions.RoleTypes>());
-        mockRoleProvider.SetupGet(x => x.AllImpostor).Returns(new System.Collections.Generic.HashSet<AmongUs.GameOptions.RoleTypes>());
+        mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new HashSet<AmongUs.GameOptions.RoleTypes>());
+        mockRoleProvider.SetupGet(x => x.AllImpostor).Returns(new HashSet<AmongUs.GameOptions.RoleTypes>());
 
         var playerRoleAssignData = new PlayerRoleAssignData(mockRoleProvider.Object, mockAssignData.Object);
-        var singleAssign = new PlayerToSingleRoleAssignData(1, 10, 100);
-        playerRoleAssignData.AddAssignData(singleAssign);
+        playerRoleAssignData.AddAssignData(new PlayerToSingleRoleAssignData(1, (int)ExtremeRoleId.Sheriff, 100));
+        var combData = new PlayerToCombRoleAssignData(2, (int)ExtremeRoleId.Sheriff, (byte)CombinationRoleType.Lover, 101, 0);
+        playerRoleAssignData.TryAddCombRoleAssignData(combData, ExtremeRoleType.Crewmate);
 
         var mockSpawnDataManager = new Mock<ISpawnDataManager>();
         var mockSpawnLimiter = new Mock<ISpawnLimiter>();
@@ -72,6 +86,9 @@ public class ExtremeRoleAssignDataPreparerAndBuilderTests
         var prepData = new PreparationData(playerRoleAssignData, mockSpawnDataManager.Object, mockSpawnLimiter.Object);
 
         var initializer = new AssignFilterInitializer();
-        initializer.Initialize(RoleAssignFilter.Instance, prepData);
+        initializer.Initialize(filter, prepData);
+
+        Assert.True(filter.IsBlock((int)ExtremeRoleId.Sheriff));
+        Assert.True(filter.IsBlock((byte)CombinationRoleType.Lover));
     }
 }
