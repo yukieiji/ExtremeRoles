@@ -34,37 +34,35 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
     }
 
     [Fact]
-    public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionSet_QueriesMockProviderService()
+    public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionSet_ResolvesMockProvider()
     {
-        var mockOption = new VanillaRolePlayerOption { MockOption = new VanillaRolePlayerMockOption(5) };
+        var mockOption = new VanillaRolePlayerOption { MockOption = new VanillaRolePlayerMockOption(2) };
         var mockServiceProvider = new Mock<IServiceProvider>();
-
         mockServiceProvider
             .Setup(x => x.GetService(typeof(MockVanillaRolePlayerAssignDataProvider)))
-            .Throws(new InvalidOperationException("MockProviderRequested"));
+            .Throws(new InvalidOperationException("ResolvedMockProvider"));
 
         var selector = new VanillaRolePlayerAssignDataProviderSelector(mockOption, mockServiceProvider.Object);
 
         var ex = Assert.Throws<InvalidOperationException>(() => _ = selector.Data);
-        Assert.Equal("MockProviderRequested", ex.Message);
+        Assert.Equal("ResolvedMockProvider", ex.Message);
         mockServiceProvider.Verify(x => x.GetService(typeof(MockVanillaRolePlayerAssignDataProvider)), Times.Once);
         mockServiceProvider.Verify(x => x.GetService(typeof(DefaultVanillaRolePlayerAssignDataProvider)), Times.Never);
     }
 
     [Fact]
-    public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionNull_QueriesDefaultProviderService()
+    public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionNull_ResolvesDefaultProvider()
     {
         var mockOption = new VanillaRolePlayerOption { MockOption = null };
         var mockServiceProvider = new Mock<IServiceProvider>();
-
         mockServiceProvider
             .Setup(x => x.GetService(typeof(DefaultVanillaRolePlayerAssignDataProvider)))
-            .Throws(new InvalidOperationException("DefaultProviderRequested"));
+            .Throws(new InvalidOperationException("ResolvedDefaultProvider"));
 
         var selector = new VanillaRolePlayerAssignDataProviderSelector(mockOption, mockServiceProvider.Object);
 
         var ex = Assert.Throws<InvalidOperationException>(() => _ = selector.Data);
-        Assert.Equal("DefaultProviderRequested", ex.Message);
+        Assert.Equal("ResolvedDefaultProvider", ex.Message);
         mockServiceProvider.Verify(x => x.GetService(typeof(DefaultVanillaRolePlayerAssignDataProvider)), Times.Once);
         mockServiceProvider.Verify(x => x.GetService(typeof(MockVanillaRolePlayerAssignDataProvider)), Times.Never);
     }

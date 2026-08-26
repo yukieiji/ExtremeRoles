@@ -6,6 +6,7 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
@@ -31,8 +32,6 @@ public class ExtremeRoleAssignDataBuilderTests
     [Fact]
     public void Test_ExtremeRoleAssignDataBuilder_Build_ExecutesBehavioursAndReturnsAssignedData()
     {
-        var mockServiceProvider = new Mock<IServiceProvider>();
-
         var mockRoleProvider = new Mock<IVanillaRoleProvider>();
         mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new HashSet<AmongUs.GameOptions.RoleTypes>());
         mockRoleProvider.SetupGet(x => x.AllImpostor).Returns(new HashSet<AmongUs.GameOptions.RoleTypes>());
@@ -63,12 +62,12 @@ public class ExtremeRoleAssignDataBuilderTests
                 data.Assign.AddAssignData(new PlayerToSingleRoleAssignData(1, (int)ExtremeRoleId.Sheriff, data.Assign.ControlId));
             });
 
-        mockServiceProvider
-            .Setup(x => x.GetService(typeof(IEnumerable<IRoleAssignDataBuildBehaviour>)))
-            .Returns(new List<IRoleAssignDataBuildBehaviour> { mockBehaviour.Object });
+        var services = new ServiceCollection();
+        services.AddSingleton(mockBehaviour.Object);
+        var serviceProvider = services.BuildServiceProvider();
 
         var builder = new ExtremeRoleAssignDataBuilder(
-            mockServiceProvider.Object,
+            serviceProvider,
             mockPreparer.Object,
             mockFilterInitializer.Object,
             mockValidator.Object);
