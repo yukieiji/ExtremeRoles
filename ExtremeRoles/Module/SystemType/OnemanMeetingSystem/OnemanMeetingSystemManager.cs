@@ -33,6 +33,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 	}
 
 	public byte Caller { get; private set; }
+	public bool ActivateChatOverride { get; private set; }
 
 	public static bool IsActive
 		=> ExtremeSystemTypeManager.Instance.TryGet<OnemanMeetingSystemManager>(systemType, out var system) &&
@@ -117,9 +118,12 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		}
 		meeting.VoteTarget = byte.MaxValue;
 
+		// セットアップ
 		this.starting = true;
 		this.Caller = caller.PlayerId;
 		this.meeting = meeting;
+		this.ActivateChatOverride = true;
+
 		ExtremeRolesPlugin.Logger.LogInfo($"Start Oneman Meeting: {meetingType}");
 
 		if (reporter == null || caller.PlayerId == reporter.PlayerId)
@@ -310,6 +314,11 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
+		if (timing is ResetTiming.MeetingEnd)
+		{
+			this.ActivateChatOverride = false;
+		}
+
 		if (this.starting || // 会議開始中はMeetingHud.Instanceがnullになるのでフラグで管理
 			timing is not ResetTiming.ExiledEnd ||
 			TryGetGameEndReason(out _))

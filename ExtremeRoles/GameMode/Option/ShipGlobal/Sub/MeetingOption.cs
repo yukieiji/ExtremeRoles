@@ -1,4 +1,7 @@
+using AmongUs.GameOptions;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
@@ -11,6 +14,7 @@ public enum MeetingOption : int
 	FixedMeetingPlayerLevel,
 	DisableSkipInEmergencyMeeting,
 	DisableSelfVote,
+	OverruleSuccessIsNeutral,
 }
 
 public readonly struct MeetingHudOption
@@ -21,6 +25,7 @@ public readonly struct MeetingHudOption
 	public readonly bool IsFixedVoteAreaPlayerLevel;
 	public readonly bool IsBlockSkipInMeeting;
 	public readonly bool DisableSelfVote;
+	public readonly bool OverruleSuccessIsNeutral;
 
 	public MeetingHudOption()
 	{
@@ -35,6 +40,7 @@ public readonly struct MeetingHudOption
 		this.IsFixedVoteAreaPlayerLevel = category.GetValue<bool>((int)MeetingOption.FixedMeetingPlayerLevel);
 		this.IsBlockSkipInMeeting = category.GetValue<bool>((int)MeetingOption.DisableSkipInEmergencyMeeting);
 		this.DisableSelfVote = category.GetValue<bool>((int)MeetingOption.DisableSelfVote);
+		this.OverruleSuccessIsNeutral = category.GetValue<bool>((int)MeetingOption.OverruleSuccessIsNeutral);
 	}
 
 	public static void Create(in OptionCategoryFactory factory)
@@ -45,5 +51,9 @@ public readonly struct MeetingHudOption
 		factory.CreateBoolOption(MeetingOption.FixedMeetingPlayerLevel, false);
 		factory.CreateBoolOption(MeetingOption.DisableSkipInEmergencyMeeting, false);
 		factory.CreateBoolOption(MeetingOption.DisableSelfVote, false);
+
+		factory.CreateBoolOption(
+			MeetingOption.OverruleSuccessIsNeutral,
+			false, new VanillaRoleActive(RoleTypes.Judge));
 	}
 }

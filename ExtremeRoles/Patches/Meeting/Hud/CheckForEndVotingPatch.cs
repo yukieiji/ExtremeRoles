@@ -9,6 +9,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -28,13 +30,14 @@ public static class MeetingHudCheckForEndVotingPatch
 			return true;
 		}
 
-		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
+		Logging.Debug(" ----- MeetingHud.CheckForEndVoting Prefix ----- ");
+		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
-			normalMeetingVote(__instance);
+			system.OverrideMeetingHudCheckForEndVoting(__instance);
 		}
 		else
 		{
-			system.OverrideMeetingHudCheckForEndVoting(__instance);
+			normalMeetingVote(__instance);
 		}
 
 		return false;
@@ -145,13 +148,20 @@ public static class MeetingHudCheckForEndVotingPatch
 			}
 		}
 
-		var exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
-			(NetworkedPlayerInfo v) => !isTie && v.PlayerId == result.PlayerId);
 		var exiledInfo = instance.TryGetWinningOverrule(out var judgeOverrule, out var me, out var judgeTarget) ? 
 			new ExiledInfo(
-				judgeTarget.Role.TeamType == RoleTeamTypes.Impostor ? GameData.Instance.GetPlayerById(judgeOverrule.OverruledPlayerId) : me,
+				ExtremeRoleManager.TryGetRole(judgeOverrule.OverruledPlayerId, out var role) && (
+					role.IsImpostor() 
+					|| 
+					(
+						ExtremeGameModeManager.Instance.ShipOption.Meeting.OverruleSuccessIsNeutral &&
+						role.IsNeutral()
+					)
+				) ? 
+					GameData.Instance.GetPlayerById(judgeOverrule.OverruledPlayerId) : me,
 				true, judgeOverrule.OverruleNonce) :
-			new ExiledInfo(exiled);
+			new ExiledInfo(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
+				(NetworkedPlayerInfo v) => !isTie && v.PlayerId == result.PlayerId));
 
 		if (exiledInfo.Target != null)
 		{

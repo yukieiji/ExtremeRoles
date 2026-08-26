@@ -375,3 +375,12 @@ ExtremeSkins/Resources/LangData/stringData.json
 
 # Hypothesis cache
 .hypothesis/
+
+# Mock builder temp directory
+.mockbuilder/
+ExtremeRoles.UnitTest/.mockbuilder/
+
+# Coverage report outputs
+CoverageReport/
+TestResults/
+*.cobertura.xml

@@ -1431,4 +1431,7 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="Judge" xml:space="preserve">
     <value>ジャッジ</value>
   </data>
+  <data name="MeetingOptionOverruleSuccessIsNeutral" xml:space="preserve">
+    <value>ジャッジの能力がニュートラルでも成功するか</value>
+  </data>
 </root>

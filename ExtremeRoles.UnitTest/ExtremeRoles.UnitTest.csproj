@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <OutputType>Exe</OutputType>
+    <EnableMicrosoftTestingPlatform>true</EnableMicrosoftTestingPlatform>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" />
+    <PackageReference Include="Il2CppInterop.Common" Version="1.5.3-Headless" />
+    <PackageReference Include="Il2CppInterop.Generator" Version="1.5.3-Headless" />
+    <PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.5.3-Headless" />
+    <PackageReference Include="Il2CppInterop.Runtime" Version="1.5.3-Headless" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.10.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="xunit.v3" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="$(MSBuildProjectDirectory)/.mockbuilder/build/output/*.dll" />
+  </ItemGroup>
+
+  <Target Name="BuildMock" BeforeTargets="BeforeBuild">
+    <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\build_with_mock.ps1&quot;" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="bash &quot;$(MSBuildProjectDirectory)/build_with_mock.sh&quot;" Condition="'$(OS)' != 'Windows_NT'" />
+  </Target>
+
+</Project>

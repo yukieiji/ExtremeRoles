@@ -9,7 +9,7 @@ public sealed class RolePlayerId(int id, int gameId)
 	private readonly int gameId = gameId;
 
 	public override string ToString()
-		=> $"InternalId:{this.internalId}  GameId:{this.internalId}";
+		=> $"InternalId:{this.internalId}  GameId:{this.gameId}";
 
 	public void Serialize(in MessageWriter writer)
 	{

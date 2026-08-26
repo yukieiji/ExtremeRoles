@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.Manager;
 
@@ -34,6 +35,43 @@ public readonly record struct Region(
 	RegionStatus Status,
 	IRegionInfo Info);
 
+public interface ICustomRegionProvider
+{
+	IReadOnlyList<IRegionInfo> Provide();
+}
+
+public sealed class DefaultCustomRegionProvider : ICustomRegionProvider
+{
+	public IReadOnlyList<IRegionInfo> Provide()
+	{
+		return [
+			createStaticRegion(
+				IRegionInfoExtension.ExROfficialServerTokyoManinName,
+				"168.138.196.31", 22023, false), // Only ExtremeRoles!!
+			createStaticRegion(
+				IRegionInfoExtension.FullCustomServerName,
+				ClientOption.Instance.Ip.Value,
+				ClientOption.Instance.Port.Value, false),
+		];
+	}
+
+	private static IRegionInfo createStaticRegion(
+		string name, string ip, ushort port, bool useDtls)
+	{
+		ServerInfo[] servers = [new ServerInfo(name, ip, port, useDtls)];
+		if (ip.StartsWith("https"))
+		{
+			return new StaticHttpRegionInfo(
+				name, StringNames.NoTranslation, ip, servers).Cast<IRegionInfo>();
+		}
+		else
+		{
+			return new DnsRegionInfo(
+				ip, name, StringNames.NoTranslation, servers).Cast<IRegionInfo>();
+		}
+	}
+}
+
 public static class CustomRegion
 {
 	public static IRegionInfo? EditableServer =>
@@ -42,15 +80,8 @@ public static class CustomRegion
 
 	private static readonly Dictionary<string, Region> curCustomRegion = [];
 
-	private static IRegionInfo[] newCustomRegion => [
-		createStaticRegion(
-			IRegionInfoExtension.ExROfficialServerTokyoManinName,
-			"168.138.196.31", 22023, false), // Only ExtremeRoles!!
-		createStaticRegion(
-			IRegionInfoExtension.FullCustomServerName,
-			ClientOption.Instance.Ip.Value,
-			ClientOption.Instance.Port.Value, false),
-	];
+	private static IReadOnlyList<IRegionInfo> newCustomRegion =>
+		ExtremeRolesPlugin.Instance.Provider.GetRequiredService<ICustomRegionProvider>().Provide();
 
 	public static bool TryGetStatus(string name, out RegionStatusEnum @enum)
 	{
@@ -134,26 +165,6 @@ public static class CustomRegion
 		}
 	}
 
-	private static IRegionInfo createStaticRegion(
-		string name, string ip, ushort port, bool useDtls)
-	{
-		var server = createServerInfo(name, ip, port, useDtls);
-		if (ip.StartsWith("https"))
-		{
-			return new StaticHttpRegionInfo(
-				name, StringNames.NoTranslation, ip, server).Cast<IRegionInfo>();
-		}
-		else
-		{
-			return new DnsRegionInfo(
-				ip, name, StringNames.NoTranslation, server).Cast<IRegionInfo>();
-		}
-	}
-
-	private static ServerInfo[] createServerInfo(string name, string ip, ushort port, bool useDtls)
-		=> [
-			new ServerInfo(name, ip, port, useDtls)
-		];
 
 	private static RegionStatus getStatus(IRegionInfo info)
 	{
@@ -176,8 +187,9 @@ public static class CustomRegion
 		}
 		catch (Exception e)
 		{
+			bool isJsonException = e is System.Text.Json.JsonException || e.GetType().Name == "JsonException";
 			return defaultStatus(
-				e is System.Text.Json.JsonException ? RegionStatusEnum.None : RegionStatusEnum.Ng);
+				isJsonException ? RegionStatusEnum.None : RegionStatusEnum.Ng);
 		}
 	}
 	private static RegionStatus defaultStatus(RegionStatusEnum status= RegionStatusEnum.None) => new RegionStatus(

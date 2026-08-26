@@ -15,16 +15,16 @@ public interface IPlayerVoteAreaButtonPostionComputer
 public sealed class PlayerVoteAreaButtonPostionComputer(
 	float time, UiElement element, float endOffset) : IPlayerVoteAreaButtonPostionComputer
 {
-	public Vector2 Anchor { private get; set; } = Vector2.right;
-	public Vector2 Offset { private get; set; } = Vector2.zero;
-	public float StartOffset { private get; set; }
+	public Vector2 Anchor { get; set; } = Vector2.right;
+	public Vector2 Offset { get; set; } = Vector2.zero;
+	public float StartOffset { get; set; }
 	public UiElement Element { get; } = element;
 
 	private readonly float time = time;
 	private readonly float endOffset = endOffset;
 
 	public override string ToString()
-		=> $"{Element.name}, Start:{StartOffset}, Anchor:{Anchor}, Offset:{Offset}";
+		=> $"{Element.name}, Start:{StartOffset}, Anchor:({this.Anchor.x}, {this.Anchor.y}), Offset:({this.Offset.x}, {this.Offset.y})";
 
 	public Il2CppIEnumerator Compute()
 		=> Effects.Lerp(this.time, (Il2CppActionFloat)this.deltaPos);

@@ -142,9 +142,8 @@ public static class GameSystem
 	public static DeadBody? GetDeadBody(byte playerId)
 	{
 		DeadBody[] array = UnityObject.FindObjectsOfType<DeadBody>();
-		DeadBody? body = array.FirstOrDefault(
+		return array.FirstOrDefault(
 			x => GameData.Instance.GetPlayerById(x.ParentId).PlayerId == playerId);
-		return body;
 	}
 
 	public static bool TryGetTaskDoRole(NetworkedPlayerInfo player, [NotNullWhen(true)] out SingleRoleBase? role)
@@ -197,6 +196,10 @@ public static class GameSystem
 		}
 
 		var taskIndex = getTaskIndex(ShipStatus.Instance.CommonTasks);
+		if (taskIndex.Count == 0)
+		{
+			return byte.MaxValue;
+		}
 		return taskIndex.GetRandomItem();
 	}
 
@@ -208,7 +211,10 @@ public static class GameSystem
 		}
 
 		var taskIndex = getTaskIndex(ShipStatus.Instance.LongTasks);
-
+		if (taskIndex.Count == 0)
+		{
+			return byte.MaxValue;
+		}
 		return taskIndex.GetRandomItem();
 	}
 
@@ -220,7 +226,10 @@ public static class GameSystem
 		}
 
 		var taskIndex = getTaskIndex(ShipStatus.Instance.ShortTasks);
-
+		if (taskIndex.Count == 0)
+		{
+			return byte.MaxValue;
+		}
 		return taskIndex.GetRandomItem();
 	}
 
@@ -521,11 +530,17 @@ public static class GameSystem
 	}
 
 	private static IReadOnlyList<int> getTaskIndex(
-		NormalPlayerTask[] tasks)
-		=> tasks
-			.Where(x => !IgnoreTask.Contains(x.TaskType))
+		NormalPlayerTask[]? tasks)
+	{
+		if (tasks == null)
+		{
+			return Array.Empty<int>();
+		}
+		return tasks
+			.Where(x => x != null && !IgnoreTask.Contains(x.TaskType))
 			.Select(x => x.Index)
 			.ToList();
+	}
 
 	public static bool TryGetKillDistance([NotNullWhen(true)] out Il2CppStructArray<float>? arr)
 	{

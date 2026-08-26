@@ -23,10 +23,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}"
 	ProjectSection(SolutionItems) = preProject
 		ExtremeSkinsTransData.xlsx = ExtremeSkinsTransData.xlsx
+		generate_report.bat = generate_report.bat
 		LICENSE.md = LICENSE.md
 		MakeEnv.bat = MakeEnv.bat
 		packing.ps1 = packing.ps1
 		README.md = README.md
+		run_coverage.ps1 = run_coverage.ps1
+		run_tests.ps1 = run_tests.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHubActions", "GitHubActions", "{00B61FF2-566F-4C38-847B-D6E28E7CA474}"
@@ -61,12 +64,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{159E0F
 		.gitignore = .gitignore
 		.gitmodules = .gitmodules
 		.vsconfig = .vsconfig
+		ExtremeRoles.UnitTest\coverage.config = ExtremeRoles.UnitTest\coverage.config
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C5FBD511-285E-4BE3-8344-268E6BE48A12}"
 	ProjectSection(SolutionItems) = preProject
 		test_add_role_translation_keys.py = test_add_role_translation_keys.py
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtremeRoles.UnitTest", "ExtremeRoles.UnitTest\ExtremeRoles.UnitTest.csproj", "{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -162,6 +168,12 @@ Global
 		{E5E2F8A0-4366-4157-A110-7F3DE2A67C2E}.Release|x64.Build.0 = Release|Any CPU
 		{E5E2F8A0-4366-4157-A110-7F3DE2A67C2E}.Release|x86.ActiveCfg = Release|Any CPU
 		{E5E2F8A0-4366-4157-A110-7F3DE2A67C2E}.Release|x86.Build.0 = Release|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Release|x64.ActiveCfg = Release|Any CPU
+		{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
