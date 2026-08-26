@@ -3,12 +3,14 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using ExtremeRoles;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
@@ -40,7 +42,6 @@ public class ExtremeRoleAssignDataBuilderTests
     [Fact]
     public void Build_ExecutesBehavioursAndReturnsAssignData()
     {
-        var mockServiceProvider = new Mock<IServiceProvider>();
         var mockPreparer = new Mock<IRoleAssignDataPreparer>();
         var mockInitializer = new Mock<IAssignFilterInitializer>();
         var mockValidator = new Mock<IRoleAssignValidator>();
@@ -60,13 +61,14 @@ public class ExtremeRoleAssignDataBuilderTests
         var mockBehaviour = new Mock<IRoleAssignDataBuildBehaviour>();
         mockBehaviour.SetupGet(b => b.Priority).Returns((int)ExtremeRoleAssignDataBuilder.Priority.Single);
 
-        mockServiceProvider.Setup(p => p.GetService(typeof(IEnumerable<IRoleAssignDataBuildBehaviour>)))
-            .Returns(new[] { mockBehaviour.Object });
+        var services = new ServiceCollection();
+        services.AddSingleton(mockBehaviour.Object);
+        var provider = services.BuildServiceProvider();
 
         mockValidator.Setup(v => v.IsReBuild(prepData)).Returns(false);
 
         var builder = new ExtremeRoleAssignDataBuilder(
-            mockServiceProvider.Object,
+            provider,
             mockPreparer.Object,
             mockInitializer.Object,
             mockValidator.Object);

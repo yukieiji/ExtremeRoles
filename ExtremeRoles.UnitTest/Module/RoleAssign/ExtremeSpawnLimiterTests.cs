@@ -1,6 +1,7 @@
 #nullable enable
 
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using Xunit;
@@ -24,21 +25,28 @@ public class ExtremeSpawnLimiterTests
     }
 
     [Fact]
-    public void Reduce_And_CanSpawn()
+    public void CanSpawn_And_Reduce_Behavior()
     {
         var limiter = new ExtremeSpawnLimiter();
 
-        limiter.Reduce(ExtremeRoleType.Crewmate, 2);
+        int initialCrewLimit = limiter.Get(ExtremeRoleType.Crewmate);
+        Assert.True(limiter.CanSpawn(ExtremeRoleType.Crewmate, 0));
 
-        Assert.NotNull(limiter.ToString());
+        limiter.Reduce(ExtremeRoleType.Crewmate, -2);
+        Assert.Equal(initialCrewLimit + 2, limiter.Get(ExtremeRoleType.Crewmate));
+        Assert.True(limiter.CanSpawn(ExtremeRoleType.Crewmate, 1));
     }
 
     [Fact]
-    public void ToString_ReturnsFormattedString()
+    public void ToString_ContainsTeamAndLimitDetails()
     {
         var limiter = new ExtremeSpawnLimiter();
         var str = limiter.ToString();
 
         Assert.Contains("Spawn Limit", str);
+        Assert.Contains("Team:Crewmate", str);
+        Assert.Contains("Team:Impostor", str);
+        Assert.Contains("Team:Neutral", str);
+        Assert.Contains("Team:Liberal", str);
     }
 }
