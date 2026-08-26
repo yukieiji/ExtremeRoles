@@ -25,6 +25,26 @@ public static class MockSetupHelper
         SetupCompatModManager();
         SetupUnityObjectOperators();
         SetupVector2Helpers();
+
+        var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
+        var mockLobbyInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
+        mockLobbyInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
+        MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyInstance.Object;
+
+        SetupGameDataMock();
+    }
+
+    public static Mock<GameData> SetupGameDataMock()
+    {
+        var mockGameData = new Mock<GameData>(IntPtr.Zero);
+        var mockList = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>>(IntPtr.Zero);
+        mockGameData.SetupGet(g => g.AllPlayers).Returns(mockList.Object);
+
+        var mockGameDataHelper = new Mock<MockGameDataget_InstanceHelper>();
+        mockGameDataHelper.Setup(h => h.Invoke()).Returns(mockGameData.Object);
+        MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
+
+        return mockGameData;
     }
 
     public static void SetupDebugMode()
@@ -168,6 +188,10 @@ public static class MockSetupHelper
         mockClamp.Setup(h => h.Invoke(It.IsAny<float>(), It.IsAny<float>(), It.IsAny<float>())).Returns((float v, float min, float max) => Math.Clamp(v, min, max));
         MockMathfClampHelper.Instance = mockClamp.Object;
 
+        var mockClamp2 = new Mock<MockMathfClampHelper2>();
+        mockClamp2.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).Returns((int v, int min, int max) => Math.Clamp(v, min, max));
+        MockMathfClampHelper2.Instance = mockClamp2.Object;
+
         var mockMax = new Mock<MockMathfMaxHelper>();
         mockMax.Setup(h => h.Invoke(It.IsAny<float>(), It.IsAny<float>())).Returns((float a, float b) => Math.Max(a, b));
         MockMathfMaxHelper.Instance = mockMax.Object;
@@ -187,6 +211,19 @@ public static class MockSetupHelper
 
     public static void SetupColorHelpers()
     {
+        var mockColorEq = new Mock<MockColorop_EqualityHelper>();
+        mockColorEq.Setup(x => x.Invoke(It.IsAny<Color>(), It.IsAny<Color>()))
+            .Returns((Color a, Color b) => a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a);
+        MockColorop_EqualityHelper.Instance = mockColorEq.Object;
+
+        var mockColorIneq = new Mock<MockColorop_InequalityHelper>();
+        mockColorIneq.Setup(x => x.Invoke(It.IsAny<Color>(), It.IsAny<Color>()))
+            .Returns((Color a, Color b) => a.r != b.r || a.g != b.g || a.b != b.b || a.a != b.a);
+        MockColorop_InequalityHelper.Instance = mockColorIneq.Object;
+
+        var mockRandomInitState = new Mock<MockRandomInitStateHelper>();
+        MockRandomInitStateHelper.Instance = mockRandomInitState.Object;
+
         MockColor32op_ImplicitHelper.Instance = new Mock<MockColor32op_ImplicitHelper>().Object;
         MockColor32op_ImplicitHelper2.Instance = new Mock<MockColor32op_ImplicitHelper2>().Object;
         MockColorop_ImplicitHelper.Instance = new Mock<MockColorop_ImplicitHelper>().Object;
