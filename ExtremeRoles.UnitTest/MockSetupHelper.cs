@@ -9,6 +9,7 @@ using Moq;
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,11 +19,49 @@ public static class MockSetupHelper
 {
     public static void SetupCommonMocks()
     {
+        SetupVectorHelpers();
         SetupColorHelpers();
         SetupPaletteHelpers();
         SetupMathfHelpers();
         SetupCompatModManager();
         SetupUnityObjectOperators();
+        SetupPlayerTaskHelpers();
+    }
+
+    public static void SetupPlayerTaskHelpers()
+    {
+        var mockHasTask = new Mock<MockPlayerTaskPlayerHasTaskOfTypeHelper>();
+        MockPlayerTaskPlayerHasTaskOfTypeHelper.Instance = mockHasTask.Object;
+    }
+
+    public static void SetupVectorHelpers()
+    {
+        var mockZero = new Mock<MockVector3get_zeroHelper>();
+        mockZero.Setup(h => h.Invoke()).Returns(new Vector3(0f, 0f, 0f));
+        MockVector3get_zeroHelper.Instance = mockZero.Object;
+
+        var mockUp = new Mock<MockVector3get_upHelper>();
+        mockUp.Setup(h => h.Invoke()).Returns(new Vector3(0f, 1f, 0f));
+        MockVector3get_upHelper.Instance = mockUp.Object;
+
+        var mockOne = new Mock<MockVector3get_oneHelper>();
+        mockOne.Setup(h => h.Invoke()).Returns(new Vector3(1f, 1f, 1f));
+        MockVector3get_oneHelper.Instance = mockOne.Object;
+
+        var mockAdd = new Mock<MockVector3op_AdditionHelper>();
+        mockAdd.Setup(h => h.Invoke(It.IsAny<Vector3>(), It.IsAny<Vector3>()))
+            .Returns((Vector3 a, Vector3 b) => new Vector3(a.x + b.x, a.y + b.y, a.z + b.z));
+        MockVector3op_AdditionHelper.Instance = mockAdd.Object;
+
+        var mockMult = new Mock<MockVector3op_MultiplyHelper>();
+        mockMult.Setup(h => h.Invoke(It.IsAny<Vector3>(), It.IsAny<float>()))
+            .Returns((Vector3 a, float d) => new Vector3(a.x * d, a.y * d, a.z * d));
+        MockVector3op_MultiplyHelper.Instance = mockMult.Object;
+
+        var mockMult2 = new Mock<MockVector3op_MultiplyHelper2>();
+        mockMult2.Setup(h => h.Invoke(It.IsAny<float>(), It.IsAny<Vector3>()))
+            .Returns((float d, Vector3 a) => new Vector3(a.x * d, a.y * d, a.z * d));
+        MockVector3op_MultiplyHelper2.Instance = mockMult2.Object;
     }
 
     public static void SetupConstantsHelpers()
@@ -47,6 +86,21 @@ public static class MockSetupHelper
 			var plugin = (ExtremeRolesPlugin)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeRolesPlugin));
 			var instanceField = typeof(ExtremeRolesPlugin).GetField("<Instance>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
 			instanceField?.SetValue(null, plugin);
+
+			var shipStateField = typeof(ExtremeRolesPlugin).GetField("<ShipState>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
+			if (shipStateField != null && shipStateField.GetValue(null) == null)
+			{
+				var shipState = (ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus)FormatterServices.GetUninitializedObject(typeof(ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus));
+				var deadInfoField = typeof(ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus).GetField("deadPlayerInfo", BindingFlags.NonPublic | BindingFlags.Instance);
+				deadInfoField?.SetValue(shipState, new Dictionary<byte, ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.DeadInfo>());
+				var deadedAssassinField = typeof(ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus).GetField("deadedAssassin", BindingFlags.NonPublic | BindingFlags.Instance);
+				deadedAssassinField?.SetValue(shipState, new Queue<byte>());
+				var plusWinnerField = typeof(ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus).GetField("plusWinner", BindingFlags.NonPublic | BindingFlags.Instance);
+				plusWinnerField?.SetValue(shipState, new List<NetworkedPlayerInfo>());
+				var versionField = typeof(ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus).GetField("playerVersion", BindingFlags.NonPublic | BindingFlags.Instance);
+				versionField?.SetValue(shipState, new Dictionary<int, Version>());
+				shipStateField.SetValue(null, shipState);
+			}
 		}
 		return ExtremeRolesPlugin.Instance!;
 	}
@@ -78,6 +132,15 @@ public static class MockSetupHelper
 		var mockSingleton = new Mock<MockDestroyableSingletonget_InstanceHelper<T>>();
 		MockDestroyableSingletonget_InstanceHelper<T>.Instance = mockSingleton.Object;
 		mockSingleton.Setup(x => x.Invoke()).Returns(mock.Object);
+
+		var mockExists = new Mock<MockDestroyableSingletonget_InstanceExistsHelper<T>>();
+		mockExists.Setup(x => x.Invoke()).Returns(() =>
+		{
+			var helper = MockDestroyableSingletonget_InstanceHelper<T>.Instance;
+			return helper != null && helper.Invoke() != null;
+		});
+		MockDestroyableSingletonget_InstanceExistsHelper<T>.Instance = mockExists.Object;
+
 		return mock;
 	}
 
@@ -114,6 +177,30 @@ public static class MockSetupHelper
         MockColor32op_ImplicitHelper2.Instance = new Mock<MockColor32op_ImplicitHelper2>().Object;
         MockColorop_ImplicitHelper.Instance = new Mock<MockColorop_ImplicitHelper>().Object;
         MockColorop_ImplicitHelper2.Instance = new Mock<MockColorop_ImplicitHelper2>().Object;
+
+        var mockColorDiv = new Mock<MockColorop_DivisionHelper>();
+        mockColorDiv.Setup(h => h.Invoke(It.IsAny<Color>(), It.IsAny<float>()))
+            .Returns((Color c, float b) => new Color(c.r / b, c.g / b, c.b / b, c.a / b));
+        MockColorop_DivisionHelper.Instance = mockColorDiv.Object;
+
+        var mockColorAdd = new Mock<MockColorop_AdditionHelper>();
+        mockColorAdd.Setup(h => h.Invoke(It.IsAny<Color>(), It.IsAny<Color>()))
+            .Returns((Color a, Color b) => new Color(a.r + b.r, a.g + b.g, a.b + b.b, a.a + b.a));
+        MockColorop_AdditionHelper.Instance = mockColorAdd.Object;
+
+        var mockColorEq = new Mock<MockColorop_EqualityHelper>();
+        mockColorEq.Setup(h => h.Invoke(It.IsAny<Color>(), It.IsAny<Color>()))
+            .Returns((Color a, Color b) => a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a);
+        MockColorop_EqualityHelper.Instance = mockColorEq.Object;
+
+        var mockColorIneq = new Mock<MockColorop_InequalityHelper>();
+        mockColorIneq.Setup(h => h.Invoke(It.IsAny<Color>(), It.IsAny<Color>()))
+            .Returns((Color a, Color b) => !(a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a));
+        MockColorop_InequalityHelper.Instance = mockColorIneq.Object;
+
+        var mockToHtml = new Mock<MockColorUtilityToHtmlStringRGBAHelper>();
+        mockToHtml.Setup(h => h.Invoke(It.IsAny<Color>())).Returns("FFFFFFFF");
+        MockColorUtilityToHtmlStringRGBAHelper.Instance = mockToHtml.Object;
 
         MockColorget_blackHelper.Instance = new Mock<MockColorget_blackHelper>().Object;
         MockColorget_blueHelper.Instance = new Mock<MockColorget_blueHelper>().Object;
