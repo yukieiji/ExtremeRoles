@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using BepInEx.Configuration;
 using ExtremeRoles;
 using ExtremeRoles.GhostRoles;
@@ -32,9 +34,9 @@ public class RoleAssignFilterModelTests
         var data = new RoleFilterData
         {
             AssignNum = 2,
-            FilterNormalId = new System.Collections.Generic.Dictionary<int, ExtremeRoleId>(),
-            FilterCombinationId = new System.Collections.Generic.Dictionary<int, CombinationRoleType>(),
-            FilterGhostRole = new System.Collections.Generic.Dictionary<int, ExtremeGhostRoleId>()
+            FilterNormalId = new Dictionary<int, ExtremeRoleId>(),
+            FilterCombinationId = new Dictionary<int, CombinationRoleType>(),
+            FilterGhostRole = new Dictionary<int, ExtremeGhostRoleId>()
         };
 
         Assert.Equal(2, data.AssignNum);
@@ -56,10 +58,28 @@ public class RoleAssignFilterModelTests
         Assert.Contains(0, model.Id);
         Assert.Equal(ExtremeRoleId.Leader, model.NormalRole[0]);
 
+        var filterData = new RoleFilterData
+        {
+            AssignNum = 3,
+            FilterNormalId = new Dictionary<int, ExtremeRoleId> { { 0, ExtremeRoleId.Sheriff } },
+            FilterCombinationId = new Dictionary<int, CombinationRoleType> { { 1, CombinationRoleType.Lover } },
+            FilterGhostRole = new Dictionary<int, ExtremeGhostRoleId> { { 2, ExtremeGhostRoleId.Wisp } }
+        };
+        var guid = Guid.NewGuid();
+        model.FilterSet.Add(guid, filterData);
+
         string serialized = model.SerializeToString();
         Assert.NotNull(serialized);
         Assert.StartsWith("v1", serialized);
 
-        model.DeserializeFromString(serialized);
+        var deserializedModel = new RoleAssignFilterModel(entry);
+        deserializedModel.DeserializeFromString(serialized);
+
+        Assert.Single(deserializedModel.FilterSet);
+        var deserializedData = deserializedModel.FilterSet.Values.First();
+        Assert.Equal(3, deserializedData.AssignNum);
+        Assert.Equal(ExtremeRoleId.Sheriff, deserializedData.FilterNormalId[0]);
+        Assert.Equal(CombinationRoleType.Lover, deserializedData.FilterCombinationId[1]);
+        Assert.Equal(ExtremeGhostRoleId.Wisp, deserializedData.FilterGhostRole[2]);
     }
 }
