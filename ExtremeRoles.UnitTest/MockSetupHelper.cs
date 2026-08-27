@@ -19,8 +19,6 @@ public static class MockSetupHelper
 {
     public static void SetupCommonMocks()
     {
-        Il2CppEnumeratorExtension.IsUnitTest = true;
-
         SetupColorHelpers();
         SetupPaletteHelpers();
         SetupMathfHelpers();
@@ -28,12 +26,16 @@ public static class MockSetupHelper
         SetupUnityObjectOperators();
         SetupVector2Helpers();
 
+        SetupGameDataMock();
+    }
+
+    public static Mock<LobbyBehaviour> SetupLobbyMock()
+    {
         var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
         var mockLobbyInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
         mockLobbyInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
         MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyInstance.Object;
-
-        SetupGameDataMock();
+        return mockLobby;
     }
 
     public static Mock<GameData> SetupGameDataMock()

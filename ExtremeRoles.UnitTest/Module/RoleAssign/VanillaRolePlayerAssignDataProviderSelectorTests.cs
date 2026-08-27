@@ -5,7 +5,6 @@ using ExtremeRoles;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Performance.Il2Cpp;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
@@ -56,107 +55,88 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
         return mockPlayer.Object;
     }
 
+    private static void SetGameDataPlayers(List<NetworkedPlayerInfo> players)
+    {
+        var mockGameData = MockSetupHelper.SetupGameDataMock();
+        var mockList = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>>(System.IntPtr.Zero);
+        mockList.SetupGet(l => l.Count).Returns(players.Count);
+        mockList.Setup(l => l[It.IsAny<int>()]).Returns((int index) => players[index]);
+        mockGameData.SetupGet(g => g.AllPlayers).Returns(mockList.Object);
+    }
+
     [Fact]
     public void Test_DefaultVanillaRolePlayerAssignDataProvider_ReturnsDataFromGameData()
     {
         var mockPlayer = CreateMockPlayerInfo(0, "HostPlayer");
-        Il2CppEnumeratorExtension.UnitTestDataOverride = new List<NetworkedPlayerInfo> { mockPlayer };
+        SetGameDataPlayers(new List<NetworkedPlayerInfo> { mockPlayer });
 
-        try
-        {
-            var provider = new DefaultVanillaRolePlayerAssignDataProvider();
-            var result = provider.Data.ToList();
+        var provider = new DefaultVanillaRolePlayerAssignDataProvider();
+        var result = provider.Data.ToList();
 
-            Assert.NotNull(result);
-            Assert.Single(result);
-            Assert.Equal(0, result[0].PlayerId);
-            Assert.Equal("HostPlayer", result[0].PlayerName);
-            Assert.Equal(RoleTypes.Crewmate, result[0].Role);
-        }
-        finally
-        {
-            Il2CppEnumeratorExtension.UnitTestDataOverride = null;
-        }
+        Assert.NotNull(result);
+        Assert.Single(result);
+        Assert.Equal(0, result[0].PlayerId);
+        Assert.Equal("HostPlayer", result[0].PlayerName);
+        Assert.Equal(RoleTypes.Crewmate, result[0].Role);
     }
 
     [Fact]
     public void Test_MockVanillaRolePlayerAssignDataProvider_PadsPlayersToRequestedNumber()
     {
         var mockPlayer = CreateMockPlayerInfo(0, "HostPlayer");
-        Il2CppEnumeratorExtension.UnitTestDataOverride = new List<NetworkedPlayerInfo> { mockPlayer };
+        SetGameDataPlayers(new List<NetworkedPlayerInfo> { mockPlayer });
 
-        try
+        var option = new VanillaRolePlayerOption
         {
-            var option = new VanillaRolePlayerOption
-            {
-                MockOption = new VanillaRolePlayerMockOption(4)
-            };
+            MockOption = new VanillaRolePlayerMockOption(4)
+        };
 
-            var provider = new MockVanillaRolePlayerAssignDataProvider(option);
-            var result = provider.Data.ToList();
+        var provider = new MockVanillaRolePlayerAssignDataProvider(option);
+        var result = provider.Data.ToList();
 
-            Assert.NotNull(result);
-            Assert.Equal(4, result.Count);
-            Assert.Contains(result, p => p.PlayerId == 0 && p.PlayerName == "HostPlayer");
-            Assert.Contains(result, p => p.PlayerName.StartsWith("MockPlayer_"));
-        }
-        finally
-        {
-            Il2CppEnumeratorExtension.UnitTestDataOverride = null;
-        }
+        Assert.NotNull(result);
+        Assert.Equal(4, result.Count);
+        Assert.Contains(result, p => p.PlayerId == 0 && p.PlayerName == "HostPlayer");
+        Assert.Contains(result, p => p.PlayerName.StartsWith("MockPlayer_"));
     }
 
     [Fact]
     public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionSet_QueriesMockProviderFromServiceProviderAndReturnsData()
     {
         var mockPlayer = CreateMockPlayerInfo(0, "HostPlayer");
-        Il2CppEnumeratorExtension.UnitTestDataOverride = new List<NetworkedPlayerInfo> { mockPlayer };
+        SetGameDataPlayers(new List<NetworkedPlayerInfo> { mockPlayer });
 
-        try
-        {
-            var mockOption = new VanillaRolePlayerOption { MockOption = new VanillaRolePlayerMockOption(2) };
+        var mockOption = new VanillaRolePlayerOption { MockOption = new VanillaRolePlayerMockOption(2) };
 
-            var services = new ServiceCollection();
-            services.AddSingleton(mockOption);
-            services.AddSingleton<MockVanillaRolePlayerAssignDataProvider>();
-            var serviceProvider = services.BuildServiceProvider();
+        var services = new ServiceCollection();
+        services.AddSingleton(mockOption);
+        services.AddSingleton<MockVanillaRolePlayerAssignDataProvider>();
+        var serviceProvider = services.BuildServiceProvider();
 
-            var selector = new VanillaRolePlayerAssignDataProviderSelector(mockOption, serviceProvider);
-            var result = selector.Data.ToList();
+        var selector = new VanillaRolePlayerAssignDataProviderSelector(mockOption, serviceProvider);
+        var result = selector.Data.ToList();
 
-            Assert.NotNull(result);
-            Assert.Equal(2, result.Count);
-        }
-        finally
-        {
-            Il2CppEnumeratorExtension.UnitTestDataOverride = null;
-        }
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count);
     }
 
     [Fact]
     public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionNull_QueriesDefaultProviderFromServiceProvider()
     {
         var mockPlayer = CreateMockPlayerInfo(0, "HostPlayer");
-        Il2CppEnumeratorExtension.UnitTestDataOverride = new List<NetworkedPlayerInfo> { mockPlayer };
+        SetGameDataPlayers(new List<NetworkedPlayerInfo> { mockPlayer });
 
-        try
-        {
-            var services = new ServiceCollection();
-            services.AddSingleton<DefaultVanillaRolePlayerAssignDataProvider>();
-            var serviceProvider = services.BuildServiceProvider();
+        var services = new ServiceCollection();
+        services.AddSingleton<DefaultVanillaRolePlayerAssignDataProvider>();
+        var serviceProvider = services.BuildServiceProvider();
 
-            var mockOptionNull = new VanillaRolePlayerOption { MockOption = null };
-            var selector = new VanillaRolePlayerAssignDataProviderSelector(mockOptionNull, serviceProvider);
+        var mockOptionNull = new VanillaRolePlayerOption { MockOption = null };
+        var selector = new VanillaRolePlayerAssignDataProviderSelector(mockOptionNull, serviceProvider);
 
-            var result = selector.Data.ToList();
+        var result = selector.Data.ToList();
 
-            Assert.NotNull(result);
-            Assert.Single(result);
-            Assert.Equal("HostPlayer", result[0].PlayerName);
-        }
-        finally
-        {
-            Il2CppEnumeratorExtension.UnitTestDataOverride = null;
-        }
+        Assert.NotNull(result);
+        Assert.Single(result);
+        Assert.Equal("HostPlayer", result[0].PlayerName);
     }
 }
