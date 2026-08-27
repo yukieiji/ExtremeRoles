@@ -29,13 +29,30 @@ public static class MockSetupHelper
         SetupGameDataMock();
     }
 
+    public static Mock<AmongUsClient> SetupAmongUsClientMock()
+    {
+        if (MockAmongUsClientget_InstanceHelper.Instance == null)
+        {
+            var mockClient = new Mock<AmongUsClient>(IntPtr.Zero);
+            var mockClientHelper = new Mock<MockAmongUsClientget_InstanceHelper>();
+            mockClientHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
+            MockAmongUsClientget_InstanceHelper.Instance = mockClientHelper.Object;
+            return mockClient;
+        }
+        return Mock<AmongUsClient>.Get(AmongUsClient.Instance);
+    }
+
     public static Mock<LobbyBehaviour> SetupLobbyMock()
     {
-        var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
-        var mockLobbyInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
-        mockLobbyInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
-        MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyInstance.Object;
-        return mockLobby;
+        if (MockLobbyBehaviourget_InstanceHelper.Instance == null)
+        {
+            var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
+            var mockLobbyInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
+            mockLobbyInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
+            MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyInstance.Object;
+            return mockLobby;
+        }
+        return Mock<LobbyBehaviour>.Get(LobbyBehaviour.Instance);
     }
 
     public static Mock<GameData> SetupGameDataMock()
@@ -163,7 +180,7 @@ public static class MockSetupHelper
 
 	public static void SetupMockConfig(ExtremeRolesPlugin plugin)
 	{
-		var config = new ConfigFile(Path.Combine(Path.GetTempPath(), "test.cfg"), true);
+		var config = new ConfigFile(Path.Combine(Path.GetTempPath(), $"test_{Guid.NewGuid():N}.cfg"), true);
 		var configField = typeof(BasePlugin).GetField("<Config>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
 		configField?.SetValue(plugin, config);
 	}
