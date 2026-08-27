@@ -8,3 +8,6 @@ Write-Host "=== Building ExtremeRoles with Mock ==="
 Write-Host "=== Running Unit Tests ==="
 $projPath = Join-Path $ScriptDir "ExtremeRoles.UnitTest\ExtremeRoles.UnitTest.csproj"
 & dotnet test --project $projPath $args
+if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
+}
