@@ -9,8 +9,22 @@ namespace ExtremeRoles.Performance.Il2Cpp
 {
     public static class Il2CppEnumeratorExtension
     {
+        public static bool IsUnitTest { get; set; }
+        public static object? UnitTestDataOverride { get; set; }
+
         public static System.Collections.Generic.IEnumerable<T> GetFastEnumerator<T>(
-            this List<T> list) where T : Il2CppSystem.Object => new Il2CppListEnumerable<T>(list);
+            this List<T> list) where T : Il2CppSystem.Object
+        {
+            if (IsUnitTest)
+            {
+                if (UnitTestDataOverride is System.Collections.Generic.IEnumerable<T> overrideData)
+                {
+                    return overrideData;
+                }
+                return System.Array.Empty<T>();
+            }
+            return new Il2CppListEnumerable<T>(list);
+        }
     }
 
     public unsafe class Il2CppListEnumerable<T> : System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IEnumerator<T> where T : Il2CppSystem.Object

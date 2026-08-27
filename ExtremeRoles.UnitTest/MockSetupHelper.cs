@@ -19,6 +19,8 @@ public static class MockSetupHelper
 {
     public static void SetupCommonMocks()
     {
+        Il2CppEnumeratorExtension.IsUnitTest = true;
+
         SetupColorHelpers();
         SetupPaletteHelpers();
         SetupMathfHelpers();
