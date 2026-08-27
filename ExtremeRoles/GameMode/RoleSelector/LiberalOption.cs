@@ -51,7 +51,15 @@ public enum LiberalGlobalSetting
 	MilitantKillRange,
 }
 
-public sealed class LiberalDefaultOptionLoader : IOptionLoader
+public interface ILiberalOptionLoader : IOptionLoader
+{
+	public string RoleSpawnSetting { get; }
+	public IReadOnlyList<IOption> GlobalOption { get; }
+	public IReadOnlyList<IOption> LeaderOption { get; }
+	public IReadOnlyList<IOption> MilitantOption { get; }
+}
+
+public sealed class LiberalDefaultOptionLoader : ILiberalOptionLoader
 {
 	public IReadOnlyList<IOption> GlobalOption { get; }
 	public IReadOnlyList<IOption> LeaderOption { get; }
