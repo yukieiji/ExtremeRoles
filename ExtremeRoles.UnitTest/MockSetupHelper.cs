@@ -27,15 +27,34 @@ public static class MockSetupHelper
         SetupVector2Helpers();
 
         SetupGameDataMock();
+        SetupAmongUsClientMock();
+        SetupLobbyMock();
+    }
+
+    public static Mock<AmongUsClient> SetupAmongUsClientMock()
+    {
+        if (MockAmongUsClientget_InstanceHelper.Instance == null)
+        {
+            var mockClient = new Mock<AmongUsClient>(IntPtr.Zero);
+            var mockClientHelper = new Mock<MockAmongUsClientget_InstanceHelper>();
+            mockClientHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
+            MockAmongUsClientget_InstanceHelper.Instance = mockClientHelper.Object;
+            return mockClient;
+        }
+        return Mock<AmongUsClient>.Get(AmongUsClient.Instance);
     }
 
     public static Mock<LobbyBehaviour> SetupLobbyMock()
     {
-        var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
-        var mockLobbyInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
-        mockLobbyInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
-        MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyInstance.Object;
-        return mockLobby;
+        if (MockLobbyBehaviourget_InstanceHelper.Instance == null)
+        {
+            var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
+            var mockLobbyInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
+            mockLobbyInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
+            MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyInstance.Object;
+            return mockLobby;
+        }
+        return Mock<LobbyBehaviour>.Get(LobbyBehaviour.Instance);
     }
 
     public static Mock<GameData> SetupGameDataMock()

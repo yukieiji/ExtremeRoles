@@ -15,5 +15,5 @@ public sealed class OptionTabContainer(OptionTab tab)
 		=> this.allCategory.TryGetValue(id, out category) && category != null;
 
 	public void AddGroup(in OptionCategory category)
-		=> this.allCategory.Add(category.Id, category);
+		=> this.allCategory[category.Id] = category;
 }

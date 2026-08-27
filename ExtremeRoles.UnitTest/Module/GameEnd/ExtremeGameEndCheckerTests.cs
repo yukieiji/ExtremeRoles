@@ -39,7 +39,7 @@ public sealed class ExtremeGameEndCheckerTests
 
         if (ExtremeSystemTypeManager.Instance == null)
         {
-            var manager = (ExtremeSystemTypeManager)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
+            var manager = (ExtremeSystemTypeManager)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
             FieldInfo? field = typeof(ExtremeSystemTypeManager).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static);
             field?.SetValue(null, manager);
         }
