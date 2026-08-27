@@ -10,7 +10,22 @@ namespace ExtremeRoles.Performance.Il2Cpp
     public static class Il2CppEnumeratorExtension
     {
         public static System.Collections.Generic.IEnumerable<T> GetFastEnumerator<T>(
-            this List<T> list) where T : Il2CppSystem.Object => new Il2CppListEnumerable<T>(list);
+            this List<T> list) where T : Il2CppSystem.Object
+        {
+            try
+            {
+                return new Il2CppListEnumerable<T>(list);
+            }
+            catch
+            {
+                var result = new System.Collections.Generic.List<T>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    result.Add(list[i]);
+                }
+                return result;
+            }
+        }
     }
 
     public unsafe class Il2CppListEnumerable<T> : System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IEnumerator<T> where T : Il2CppSystem.Object
