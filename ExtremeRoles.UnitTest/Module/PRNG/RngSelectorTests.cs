@@ -10,6 +10,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.PRNG;
 
+[Collection("UnityMock")]
 public sealed class RngSelectorTests
 {
 	private const int randCategoryKey = (int)OptionCreator.CommonOption.RandomOption;
@@ -56,33 +57,12 @@ public sealed class RngSelectorTests
 
 	private static void EnsureRandomOptionCategory(bool useStrong, int algorithm)
 	{
-		if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, randCategoryKey, out var category))
+		if (ClientOption.Instance == null)
 		{
-			using (var factory = OptionCategoryAssembler.CreateOptionCategory(
-				OptionCreator.CommonOption.RandomOption,
-				color: OptionCreator.DefaultOptionColor))
-			{
-				var strongOption = factory.CreateBoolOption(
-					OptionCreator.RandomOptionKey.UseStrong,
-					useStrong);
-
-				factory.CreateSelectionOption(
-					OptionCreator.RandomOptionKey.Algorithm,
-					[
-						"Pcg32XshRr", "Pcg64RxsMXs",
-						"Xorshift64", "Xorshift128",
-						"Xorshiro256StarStar",
-						"Xorshiro512StarStar",
-						"RomuMono", "RomuTrio", "RomuQuad",
-						"Seiran128", "Shioi128", "JFT32",
-					],
-					new InvertActive(strongOption));
-			}
-
-			OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, randCategoryKey, out category);
+			OptionCreator.Create();
 		}
 
-		if (category != null)
+		if (OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, randCategoryKey, out var category))
 		{
 			var useStrongOpt = category.Get((int)OptionCreator.RandomOptionKey.UseStrong);
 			useStrongOpt.Selection = useStrong ? 1 : 0;
