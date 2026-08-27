@@ -1,6 +1,7 @@
 using System.Reflection;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.GameEnd;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using Moq;
 using Xunit;
@@ -50,7 +51,7 @@ public sealed class ExtremeGameEndCheckerTests
         ExtremeGameEndChecker checker = new ExtremeGameEndChecker();
 
         FieldInfo? checkersField = typeof(ExtremeGameEndChecker).GetField("checkers", BindingFlags.NonPublic | BindingFlags.Instance);
-        var checkers = checkersField?.GetValue(checker) as System.Collections.Generic.IReadOnlyList<ExtremeRoles.Module.Interface.IGameEndChecker>;
+        var checkers = checkersField?.GetValue(checker) as System.Collections.Generic.IReadOnlyList<IGameEndChecker>;
 
         Assert.NotNull(checkers);
         Assert.NotEmpty(checkers);

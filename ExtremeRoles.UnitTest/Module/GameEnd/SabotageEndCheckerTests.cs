@@ -45,15 +45,15 @@ public sealed class SabotageEndCheckerTests
     [Fact]
     public void TeroristTeroSabotageSystemEndChecker_TryCheckGameEnd_ReturnsTrueWhenExplosionTimerNegative()
     {
-        ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem system = (ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem));
-        System.Reflection.PropertyInfo? prop = typeof(ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem).GetProperty(nameof(ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.ExplosionTimer), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        TeroristTeroSabotageSystem system = (TeroristTeroSabotageSystem)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(TeroristTeroSabotageSystem));
+        System.Reflection.PropertyInfo? prop = typeof(TeroristTeroSabotageSystem).GetProperty(nameof(TeroristTeroSabotageSystem.ExplosionTimer), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         if (prop != null && prop.CanWrite)
         {
             prop.SetValue(system, -1.0f);
         }
         else
         {
-            System.Reflection.FieldInfo? field = typeof(ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem).GetField("<ExplosionTimer>k__BackingField", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            System.Reflection.FieldInfo? field = typeof(TeroristTeroSabotageSystem).GetField("<ExplosionTimer>k__BackingField", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             field?.SetValue(system, -1.0f);
         }
 

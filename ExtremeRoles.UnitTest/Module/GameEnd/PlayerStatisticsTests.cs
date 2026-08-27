@@ -28,6 +28,21 @@ public sealed class PlayerStatisticsTests
     }
 
     [Fact]
+    public void NeutralSeparateTeamContainer_AddMultipleDifferentTeams_WorksCorrectly()
+    {
+        NeutralSeparateTeamContainer container = new NeutralSeparateTeamContainer();
+        container.Add(NeutralSeparateTeam.Jackal, 1);
+        container.Add(NeutralSeparateTeam.Lover, 2);
+
+        Assert.Equal(2, container.Team.Count);
+        var jackalKey = new NeutralSeparateTeamContainer.NeutralTeam(NeutralSeparateTeam.Jackal, 1);
+        var loverKey = new NeutralSeparateTeamContainer.NeutralTeam(NeutralSeparateTeam.Lover, 2);
+
+        Assert.Equal(1, container.Team[jackalKey]);
+        Assert.Equal(1, container.Team[loverKey]);
+    }
+
+    [Fact]
     public void NeutralSeparateTeamContainer_AddSubTeam_WhenMainNotPresent_AppearsInTeam()
     {
         NeutralSeparateTeamContainer container = new NeutralSeparateTeamContainer();
