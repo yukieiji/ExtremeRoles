@@ -27,11 +27,12 @@ if [ -z "$BUILDER_EXEC" ]; then
 
     # Check if response contains valid asset info
     if ! echo "$RELEASE_JSON" | grep -q "$ASSET_NAME"; then
-        echo "Fetching release info without token failed. Trying with TestableAmongUsAccess token..."
-        if [ -n "$TestableAmongUsAccess" ]; then
-            RELEASE_JSON=$(curl -sSL -H "Authorization: token $TestableAmongUsAccess" "https://api.github.com/repos/yukieiji/TestableAmongUsModBuilder/releases/latest")
+        echo "Fetching release info without token failed. Trying with token..."
+        TOKEN="${TestableAmongUsAccess:-${GITHUB_TOKEN:-${GH_TOKEN}}}"
+        if [ -n "$TOKEN" ]; then
+            RELEASE_JSON=$(curl -sSL -H "Authorization: token $TOKEN" "https://api.github.com/repos/yukieiji/TestableAmongUsModBuilder/releases/latest")
         else
-            echo "Error: Failed to fetch release info and TestableAmongUsAccess environment variable is not set." >&2
+            echo "Error: Failed to fetch release info and token environment variable is not set." >&2
             exit 1
         fi
     fi
@@ -66,10 +67,11 @@ sys.exit(1)
 
     if [ "$DOWNLOAD_SUCCESS" -ne 1 ]; then
         echo "Downloading asset without token failed. Retrying with token..."
-        if [ -n "$TestableAmongUsAccess" ]; then
-            curl -sSL -H "Authorization: token $TestableAmongUsAccess" -H "Accept: application/octet-stream" "$ASSET_API_URL" -o "$ZIP_PATH"
+        TOKEN="${TestableAmongUsAccess:-${GITHUB_TOKEN:-${GH_TOKEN}}}"
+        if [ -n "$TOKEN" ]; then
+            curl -sSL -H "Authorization: token $TOKEN" -H "Accept: application/octet-stream" "$ASSET_API_URL" -o "$ZIP_PATH"
         else
-            echo "Error: Download failed and TestableAmongUsAccess environment variable is not set." >&2
+            echo "Error: Download failed and token environment variable is not set." >&2
             exit 1
         fi
     fi

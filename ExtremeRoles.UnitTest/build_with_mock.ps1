@@ -29,8 +29,14 @@ if (-not (Test-Path $builderExe) -and -not (Test-Path $builderDll)) {
     }
 
     if ($null -eq $releaseJson) {
-        Write-Host "Fetching release info without token failed. Trying with TestableAmongUsAccess token..."
+        Write-Host "Fetching release info without token failed. Trying with token..."
         $token = $env:TestableAmongUsAccess
+        if ([string]::IsNullOrWhiteSpace($token)) {
+            $token = $env:GITHUB_TOKEN
+        }
+        if ([string]::IsNullOrWhiteSpace($token)) {
+            $token = $env:GH_TOKEN
+        }
         if ([string]::IsNullOrWhiteSpace($token)) {
             Write-Error "Failed to fetch release info and TestableAmongUsAccess environment variable is not set."
             exit 1
@@ -63,6 +69,12 @@ if (-not (Test-Path $builderExe) -and -not (Test-Path $builderDll)) {
     if (-not $downloaded) {
         Write-Host "Downloading asset without token failed. Retrying with token..."
         $token = $env:TestableAmongUsAccess
+        if ([string]::IsNullOrWhiteSpace($token)) {
+            $token = $env:GITHUB_TOKEN
+        }
+        if ([string]::IsNullOrWhiteSpace($token)) {
+            $token = $env:GH_TOKEN
+        }
         if ([string]::IsNullOrWhiteSpace($token)) {
             Write-Error "Download failed and TestableAmongUsAccess environment variable is not set."
             exit 1

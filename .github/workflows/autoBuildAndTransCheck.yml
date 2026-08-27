@@ -45,6 +45,8 @@ jobs:
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v3
       - name: RunTests
+        env:
+          TestableAmongUsAccess: ${{ steps.gen_token.outputs.token }}
         run: powershell ./run_tests.ps1
       - name: RunBuild
         id: build
