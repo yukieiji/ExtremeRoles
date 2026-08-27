@@ -180,7 +180,7 @@ public static class MockSetupHelper
 
 	public static void SetupMockConfig(ExtremeRolesPlugin plugin)
 	{
-		var config = new ConfigFile(Path.Combine(Path.GetTempPath(), "test.cfg"), true);
+		var config = new ConfigFile(Path.Combine(Path.GetTempPath(), $"test_{Guid.NewGuid():N}.cfg"), true);
 		var configField = typeof(BasePlugin).GetField("<Config>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
 		configField?.SetValue(plugin, config);
 	}
