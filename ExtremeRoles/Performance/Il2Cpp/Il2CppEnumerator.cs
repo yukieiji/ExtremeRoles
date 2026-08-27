@@ -18,7 +18,12 @@ namespace ExtremeRoles.Performance.Il2Cpp
             }
             catch
             {
-                return list.ToArray();
+                var result = new System.Collections.Generic.List<T>();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    result.Add(list[i]);
+                }
+                return result;
             }
         }
     }

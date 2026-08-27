@@ -25,6 +25,7 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
         if (ClientOption.Instance == null)
         {
             OptionCreator.Create();
+            OptionManager.Load();
         }
 
         var mockOptions = new Mock<IGameOptions>(System.IntPtr.Zero);
@@ -61,11 +62,12 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
         var mockList = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>>(System.IntPtr.Zero);
         mockList.SetupGet(l => l.Count).Returns(players.Count);
         mockList.Setup(l => l[It.IsAny<int>()]).Returns((int index) => players[index]);
+
         mockGameData.SetupGet(g => g.AllPlayers).Returns(mockList.Object);
     }
 
     [Fact]
-    public void Test_DefaultVanillaRolePlayerAssignDataProvider_ReturnsDataFromGameData()
+    public void Test_DefaultVanillaRolePlayerAssignDataProvider_SinglePlayer()
     {
         var mockPlayer = CreateMockPlayerInfo(0, "HostPlayer");
         SetGameDataPlayers(new List<NetworkedPlayerInfo> { mockPlayer });
@@ -81,32 +83,98 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
     }
 
     [Fact]
-    public void Test_MockVanillaRolePlayerAssignDataProvider_PadsPlayersToRequestedNumber()
+    public void Test_DefaultVanillaRolePlayerAssignDataProvider_MultiplePlayers()
     {
-        var mockPlayer = CreateMockPlayerInfo(0, "HostPlayer");
-        SetGameDataPlayers(new List<NetworkedPlayerInfo> { mockPlayer });
+        var player1 = CreateMockPlayerInfo(0, "Player1", RoleTypes.Crewmate);
+        var player2 = CreateMockPlayerInfo(1, "Player2", RoleTypes.Impostor);
+        var player3 = CreateMockPlayerInfo(2, "Player3", RoleTypes.Scientist);
+        SetGameDataPlayers(new List<NetworkedPlayerInfo> { player1, player2, player3 });
+
+        var provider = new DefaultVanillaRolePlayerAssignDataProvider();
+        var result = provider.Data.ToList();
+
+        Assert.NotNull(result);
+        Assert.Equal(3, result.Count);
+        Assert.Equal(0, result[0].PlayerId);
+        Assert.Equal("Player1", result[0].PlayerName);
+        Assert.Equal(1, result[1].PlayerId);
+        Assert.Equal("Player2", result[1].PlayerName);
+        Assert.Equal(2, result[2].PlayerId);
+        Assert.Equal("Player3", result[2].PlayerName);
+    }
+
+    [Fact]
+    public void Test_MockVanillaRolePlayerAssignDataProvider_WhenLobbyCountLessThanRequested_PadsPlayers()
+    {
+        var player1 = CreateMockPlayerInfo(0, "HostPlayer");
+        var player2 = CreateMockPlayerInfo(1, "Player1");
+        SetGameDataPlayers(new List<NetworkedPlayerInfo> { player1, player2 });
 
         var option = new VanillaRolePlayerOption
         {
-            MockOption = new VanillaRolePlayerMockOption(4)
+            MockOption = new VanillaRolePlayerMockOption(5)
         };
 
         var provider = new MockVanillaRolePlayerAssignDataProvider(option);
         var result = provider.Data.ToList();
 
         Assert.NotNull(result);
-        Assert.Equal(4, result.Count);
+        Assert.Equal(5, result.Count);
         Assert.Contains(result, p => p.PlayerId == 0 && p.PlayerName == "HostPlayer");
-        Assert.Contains(result, p => p.PlayerName.StartsWith("MockPlayer_"));
+        Assert.Contains(result, p => p.PlayerId == 1 && p.PlayerName == "Player1");
+        Assert.Equal(3, result.Count(p => p.PlayerName.StartsWith("MockPlayer_")));
+    }
+
+    [Fact]
+    public void Test_MockVanillaRolePlayerAssignDataProvider_WhenLobbyCountGreaterThanRequested_TrimsPlayers()
+    {
+        var player1 = CreateMockPlayerInfo(0, "HostPlayer");
+        var player2 = CreateMockPlayerInfo(1, "Player1");
+        var player3 = CreateMockPlayerInfo(2, "Player2");
+        SetGameDataPlayers(new List<NetworkedPlayerInfo> { player1, player2, player3 });
+
+        var option = new VanillaRolePlayerOption
+        {
+            MockOption = new VanillaRolePlayerMockOption(2)
+        };
+
+        var provider = new MockVanillaRolePlayerAssignDataProvider(option);
+        var result = provider.Data.ToList();
+
+        Assert.NotNull(result);
+        Assert.Equal(2, result.Count);
+        Assert.DoesNotContain(result, p => p.PlayerName.StartsWith("MockPlayer_"));
+    }
+
+    [Fact]
+    public void Test_MockVanillaRolePlayerAssignDataProvider_WhenLobbyCountEqualsRequested_ReturnsExactPlayers()
+    {
+        var player1 = CreateMockPlayerInfo(0, "HostPlayer");
+        var player2 = CreateMockPlayerInfo(1, "Player1");
+        var player3 = CreateMockPlayerInfo(2, "Player2");
+        SetGameDataPlayers(new List<NetworkedPlayerInfo> { player1, player2, player3 });
+
+        var option = new VanillaRolePlayerOption
+        {
+            MockOption = new VanillaRolePlayerMockOption(3)
+        };
+
+        var provider = new MockVanillaRolePlayerAssignDataProvider(option);
+        var result = provider.Data.ToList();
+
+        Assert.NotNull(result);
+        Assert.Equal(3, result.Count);
+        Assert.DoesNotContain(result, p => p.PlayerName.StartsWith("MockPlayer_"));
     }
 
     [Fact]
     public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionSet_QueriesMockProviderFromServiceProviderAndReturnsData()
     {
-        var mockPlayer = CreateMockPlayerInfo(0, "HostPlayer");
-        SetGameDataPlayers(new List<NetworkedPlayerInfo> { mockPlayer });
+        var player1 = CreateMockPlayerInfo(0, "HostPlayer");
+        var player2 = CreateMockPlayerInfo(1, "Player1");
+        SetGameDataPlayers(new List<NetworkedPlayerInfo> { player1, player2 });
 
-        var mockOption = new VanillaRolePlayerOption { MockOption = new VanillaRolePlayerMockOption(2) };
+        var mockOption = new VanillaRolePlayerOption { MockOption = new VanillaRolePlayerMockOption(4) };
 
         var services = new ServiceCollection();
         services.AddSingleton(mockOption);
@@ -117,14 +185,15 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
         var result = selector.Data.ToList();
 
         Assert.NotNull(result);
-        Assert.Equal(2, result.Count);
+        Assert.Equal(4, result.Count);
     }
 
     [Fact]
     public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionNull_QueriesDefaultProviderFromServiceProvider()
     {
-        var mockPlayer = CreateMockPlayerInfo(0, "HostPlayer");
-        SetGameDataPlayers(new List<NetworkedPlayerInfo> { mockPlayer });
+        var player1 = CreateMockPlayerInfo(0, "HostPlayer");
+        var player2 = CreateMockPlayerInfo(1, "Player1");
+        SetGameDataPlayers(new List<NetworkedPlayerInfo> { player1, player2 });
 
         var services = new ServiceCollection();
         services.AddSingleton<DefaultVanillaRolePlayerAssignDataProvider>();
@@ -136,7 +205,8 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
         var result = selector.Data.ToList();
 
         Assert.NotNull(result);
-        Assert.Single(result);
+        Assert.Equal(2, result.Count);
         Assert.Equal("HostPlayer", result[0].PlayerName);
+        Assert.Equal("Player1", result[1].PlayerName);
     }
 }
