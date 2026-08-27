@@ -27,8 +27,6 @@ public static class MockSetupHelper
         SetupVector2Helpers();
 
         SetupGameDataMock();
-        SetupAmongUsClientMock();
-        SetupLobbyMock();
     }
 
     public static Mock<AmongUsClient> SetupAmongUsClientMock()
