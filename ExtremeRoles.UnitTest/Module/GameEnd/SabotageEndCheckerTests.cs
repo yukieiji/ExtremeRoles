@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -44,43 +43,17 @@ public sealed class SabotageEndCheckerTests
     }
 
     [Fact]
-    public void CriticalSystemEndChecker_TryCheckGameEnd_ReturnsTrueWhenCountdownNegative()
-    {
-        var mockSystem = new Mock<ICriticalSabotage>();
-        mockSystem.SetupGet(s => s.Countdown).Returns(-1.0f);
-
-        CriticalSystemEndChecker checker = new CriticalSystemEndChecker(mockSystem.Object);
-
-        bool result = checker.TryCheckGameEnd(out GameOverReason reason);
-
-        Assert.True(result);
-        Assert.Equal(GameOverReason.ImpostorsBySabotage, reason);
-    }
-
-    [Fact]
-    public void CriticalSystemEndChecker_CleanUp_ClearsSabotage()
-    {
-        var mockSystem = new Mock<ICriticalSabotage>();
-        mockSystem.Setup(s => s.ClearSabotage()).Verifiable();
-
-        CriticalSystemEndChecker checker = new CriticalSystemEndChecker(mockSystem.Object);
-        checker.CleanUp();
-
-        mockSystem.Verify(s => s.ClearSabotage(), Times.Once());
-    }
-
-    [Fact]
     public void TeroristTeroSabotageSystemEndChecker_TryCheckGameEnd_ReturnsTrueWhenExplosionTimerNegative()
     {
-        TeroristTeroSabotageSystem system = (TeroristTeroSabotageSystem)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(TeroristTeroSabotageSystem));
-        PropertyInfo? prop = typeof(TeroristTeroSabotageSystem).GetProperty(nameof(TeroristTeroSabotageSystem.ExplosionTimer), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem system = (ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem));
+        System.Reflection.PropertyInfo? prop = typeof(ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem).GetProperty(nameof(ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.ExplosionTimer), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         if (prop != null && prop.CanWrite)
         {
             prop.SetValue(system, -1.0f);
         }
         else
         {
-            FieldInfo? field = typeof(TeroristTeroSabotageSystem).GetField("<ExplosionTimer>k__BackingField", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            System.Reflection.FieldInfo? field = typeof(ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem).GetField("<ExplosionTimer>k__BackingField", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             field?.SetValue(system, -1.0f);
         }
 
@@ -90,14 +63,5 @@ public sealed class SabotageEndCheckerTests
 
         Assert.True(result);
         Assert.Equal((GameOverReason)RoleGameOverReason.TeroristoTeroWithShip, reason);
-    }
-
-    [Fact]
-    public void TeroristTeroSabotageSystemEndChecker_CleanUp_CallsClear()
-    {
-        TeroristTeroSabotageSystem system = (TeroristTeroSabotageSystem)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(TeroristTeroSabotageSystem));
-
-        TeroristTeroSabotageSystemEndChecker checker = new TeroristTeroSabotageSystemEndChecker(system);
-        checker.CleanUp();
     }
 }

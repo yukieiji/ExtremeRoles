@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using ExtremeRoles.Module.GameEnd;
 using Moq;
@@ -12,28 +11,19 @@ public sealed class ImpostorAliveWinCheckerTests
     public ImpostorAliveWinCheckerTests()
     {
         MockSetupHelper.SetupCommonMocks();
-        SetupGameData();
     }
 
-    private static void SetupGameData()
+    private static void SetupLastDeathReasonMock(DeathReason deathReason)
     {
-        var mockData = new Mock<GameData>();
-        var mockHelper = new Mock<MockGameDataget_InstanceHelper>();
-        mockHelper.Setup(h => h.Invoke()).Returns(mockData.Object);
-        MockGameDataget_InstanceHelper.Instance = mockHelper.Object;
-    }
-
-    private static void SetProperty<T>(object target, string propertyName, T value)
-    {
-        PropertyInfo? prop = target.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        prop?.SetValue(target, value);
+        var mockGetter = new Mock<MockGameDataget_LastDeathReasonHelper>();
+        mockGetter.Setup(h => h.Invoke()).Returns(deathReason);
+        MockGameDataget_LastDeathReasonHelper.Instance = mockGetter.Object;
     }
 
     [Fact]
     public void TryCheckGameEnd_ImpostorsEqualOrOutnumberOthers_Exile_ReturnsTrueWithVoteReason()
     {
-        var field = typeof(GameData).GetField("<LastDeathReason>k__BackingField", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-        field?.SetValue(null, DeathReason.Exile);
+        SetupLastDeathReasonMock(DeathReason.Exile);
 
         PlayerStatistics stats = new PlayerStatistics();
         SetProperty(stats, nameof(PlayerStatistics.LiberalMilitantAlive), 0);
@@ -51,8 +41,7 @@ public sealed class ImpostorAliveWinCheckerTests
     [Fact]
     public void TryCheckGameEnd_ImpostorsEqualOrOutnumberOthers_Kill_ReturnsTrueWithKillReason()
     {
-        var field = typeof(GameData).GetField("<LastDeathReason>k__BackingField", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-        field?.SetValue(null, DeathReason.Kill);
+        SetupLastDeathReasonMock(DeathReason.Kill);
 
         PlayerStatistics stats = new PlayerStatistics();
         SetProperty(stats, nameof(PlayerStatistics.LiberalMilitantAlive), 0);
@@ -70,8 +59,7 @@ public sealed class ImpostorAliveWinCheckerTests
     [Fact]
     public void TryCheckGameEnd_ImpostorsFewerThanOthers_ReturnsFalse()
     {
-        var field = typeof(GameData).GetField("<LastDeathReason>k__BackingField", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-        field?.SetValue(null, DeathReason.Kill);
+        SetupLastDeathReasonMock(DeathReason.Kill);
 
         PlayerStatistics stats = new PlayerStatistics();
         SetProperty(stats, nameof(PlayerStatistics.LiberalMilitantAlive), 0);
@@ -83,5 +71,11 @@ public sealed class ImpostorAliveWinCheckerTests
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 
         Assert.False(result);
+    }
+
+    private static void SetProperty<T>(object target, string propertyName, T value)
+    {
+        PropertyInfo? prop = target.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        prop?.SetValue(target, value);
     }
 }

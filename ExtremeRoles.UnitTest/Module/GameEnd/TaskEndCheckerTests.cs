@@ -1,5 +1,6 @@
 using System.Reflection;
 using ExtremeRoles.Module.GameEnd;
+using Moq;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
@@ -12,24 +13,18 @@ public sealed class TaskEndCheckerTests
         MockSetupHelper.SetupCommonMocks();
     }
 
-    private static void SetField<T>(object target, string fieldName, T value)
-    {
-        FieldInfo? field = target.GetType().GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        field?.SetValue(target, value);
-    }
-
     [Fact]
     public void TryCheckGameEnd_CompletedTasksEqualTotalTasks_ReturnsTrue()
     {
-        TaskEndChecker checker = new TaskEndChecker();
-        FieldInfo? dataField = typeof(TaskEndChecker).GetField("data", BindingFlags.NonPublic | BindingFlags.Instance);
-        object? gameData = dataField?.GetValue(checker);
+        var mockData = new Mock<GameData>();
+        mockData.SetupGet(d => d.TotalTasks).Returns(10);
+        mockData.SetupGet(d => d.CompletedTasks).Returns(10);
 
-        if (gameData != null)
-        {
-            SetField(gameData, "TotalTasks", 10);
-            SetField(gameData, "CompletedTasks", 10);
-        }
+        var mockHelper = new Mock<MockGameDataget_InstanceHelper>();
+        mockHelper.Setup(h => h.Invoke()).Returns(mockData.Object);
+        MockGameDataget_InstanceHelper.Instance = mockHelper.Object;
+
+        TaskEndChecker checker = new TaskEndChecker();
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 
@@ -40,15 +35,15 @@ public sealed class TaskEndCheckerTests
     [Fact]
     public void TryCheckGameEnd_CompletedTasksLessThanTotalTasks_ReturnsFalse()
     {
-        TaskEndChecker checker = new TaskEndChecker();
-        FieldInfo? dataField = typeof(TaskEndChecker).GetField("data", BindingFlags.NonPublic | BindingFlags.Instance);
-        object? gameData = dataField?.GetValue(checker);
+        var mockData = new Mock<GameData>();
+        mockData.SetupGet(d => d.TotalTasks).Returns(10);
+        mockData.SetupGet(d => d.CompletedTasks).Returns(5);
 
-        if (gameData != null)
-        {
-            SetField(gameData, "TotalTasks", 10);
-            SetField(gameData, "CompletedTasks", 5);
-        }
+        var mockHelper = new Mock<MockGameDataget_InstanceHelper>();
+        mockHelper.Setup(h => h.Invoke()).Returns(mockData.Object);
+        MockGameDataget_InstanceHelper.Instance = mockHelper.Object;
+
+        TaskEndChecker checker = new TaskEndChecker();
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 
