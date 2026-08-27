@@ -29,7 +29,7 @@ public class RoleAssignValidatorTests
     }
 
     [Fact]
-    public void Test_IsReBuild_NoCheckers_ReturnsFalse()
+    public void Test_IsReBuild_NoCheckersOrNoNgData_ReturnsFalse()
     {
         var services = new ServiceCollection();
         var serviceProvider = services.BuildServiceProvider();
@@ -54,15 +54,15 @@ public class RoleAssignValidatorTests
     }
 
     [Fact]
-    public void Test_IsReBuild_WithChecker_NoNgData_ReturnsFalse()
+    public void Test_IsReBuild_WhenCheckerFindsNgData_RemovesNgAssignmentAndReturnsTrue()
     {
         var mockChecker = new Mock<IRoleAssignDataChecker>();
         mockChecker
-            .Setup(x => x.GetNgData(It.IsAny<PreparationData>()))
-            .Returns(new HashSet<ExtremeRoleId>());
+            .Setup(x => x.GetNgData(It.Ref<PreparationData>.IsAny))
+            .Returns(new HashSet<ExtremeRoleId> { ExtremeRoleId.Sheriff });
 
         var services = new ServiceCollection();
-        services.AddSingleton(mockChecker.Object);
+        services.AddSingleton<IRoleAssignDataChecker>(mockChecker.Object);
         var serviceProvider = services.BuildServiceProvider();
 
         var validator = new RoleAssignValidator(serviceProvider);
@@ -74,6 +74,8 @@ public class RoleAssignValidatorTests
         mockRoleProvider.SetupGet(x => x.AllImpostor).Returns(new HashSet<AmongUs.GameOptions.RoleTypes>());
 
         var playerRoleAssign = new PlayerRoleAssignData(mockRoleProvider.Object, mockAssign.Object);
+        playerRoleAssign.AddAssignData(new PlayerToSingleRoleAssignData(1, (int)ExtremeRoleId.Sheriff, 100));
+
         var mockSpawnData = new Mock<ISpawnDataManager>();
         var mockLimiter = new Mock<ISpawnLimiter>();
 
@@ -81,6 +83,7 @@ public class RoleAssignValidatorTests
 
         bool result = validator.IsReBuild(prepData);
 
-        Assert.False(result);
+        Assert.True(result);
+        Assert.Empty(playerRoleAssign.Data);
     }
 }
