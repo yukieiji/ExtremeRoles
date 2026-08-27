@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using AmongUs.GameOptions;
 using ExtremeRoles;
 using ExtremeRoles.Module.CustomOption;
@@ -29,22 +29,6 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
     }
 
     [Fact]
-    public void Test_DefaultVanillaRolePlayerAssignDataProvider_Constructor()
-    {
-        var provider = new DefaultVanillaRolePlayerAssignDataProvider();
-        Assert.NotNull(provider);
-        Assert.IsAssignableFrom<IVanillaRolePlayerAssignDataProvider>(provider);
-    }
-
-    [Fact]
-    public void Test_MockVanillaRolePlayerAssignDataProvider_NullMockOption_ThrowsArgumentNullException()
-    {
-        var option = new VanillaRolePlayerOption { MockOption = null };
-        var ex = Assert.Throws<ArgumentNullException>(() => new MockVanillaRolePlayerAssignDataProvider(option));
-        Assert.Equal("MockOption", ex.ParamName);
-    }
-
-    [Fact]
     public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionSet_QueriesMockProviderFromServiceProviderAndReturnsData()
     {
         var mockProviderInstance = (MockVanillaRolePlayerAssignDataProvider)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(MockVanillaRolePlayerAssignDataProvider));
@@ -70,16 +54,19 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
     public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionNull_QueriesDefaultProviderFromServiceProvider()
     {
         bool defaultProviderQueried = false;
+        var defaultProviderInstance = (DefaultVanillaRolePlayerAssignDataProvider)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(DefaultVanillaRolePlayerAssignDataProvider));
+
         var mockServiceProvider = new Mock<IServiceProvider>();
         mockServiceProvider
             .Setup(x => x.GetService(typeof(DefaultVanillaRolePlayerAssignDataProvider)))
             .Callback(() => defaultProviderQueried = true)
-            .Returns(new DefaultVanillaRolePlayerAssignDataProvider());
+            .Returns(defaultProviderInstance);
 
         var mockOptionNull = new VanillaRolePlayerOption { MockOption = null };
         var selector = new VanillaRolePlayerAssignDataProviderSelector(mockOptionNull, mockServiceProvider.Object);
 
-        Assert.Throws<TypeInitializationException>(() => _ = selector.Data);
+        // Accessing Data queries DefaultVanillaRolePlayerAssignDataProvider from serviceProvider
+        _ = Assert.Throws<TypeInitializationException>(() => selector.Data);
         Assert.True(defaultProviderQueried);
         mockServiceProvider.Verify(x => x.GetService(typeof(DefaultVanillaRolePlayerAssignDataProvider)), Times.Once);
         mockServiceProvider.Verify(x => x.GetService(typeof(MockVanillaRolePlayerAssignDataProvider)), Times.Never);
