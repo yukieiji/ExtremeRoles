@@ -31,6 +31,11 @@ public class BuildBehaviourTests
             OptionCreator.Create();
         }
 
+        if (ExtremeGameModeManager.Instance == null)
+        {
+            ExtremeGameModeManager.Create(GameModes.Normal);
+        }
+
         RoleAssignFilter.Instance.Model.FilterSet.Clear();
         RoleAssignFilter.Instance.Initialize();
     }
