@@ -25,6 +25,40 @@ public static class MockSetupHelper
         SetupCompatModManager();
         SetupUnityObjectOperators();
         SetupVector2Helpers();
+        SetupTranslationController();
+        SetupAmongUsClient();
+        SetupLobbyBehaviour();
+    }
+
+    public static Mock<LobbyBehaviour> SetupLobbyBehaviour()
+    {
+        var mock = new Mock<LobbyBehaviour>();
+        var mockHelper = new Mock<MockLobbyBehaviourget_InstanceHelper>();
+        mockHelper.Setup(x => x.Invoke()).Returns((LobbyBehaviour)null!);
+        MockLobbyBehaviourget_InstanceHelper.Instance = mockHelper.Object;
+        return mock;
+    }
+
+    public static Mock<AmongUsClient> SetupAmongUsClient()
+    {
+        var mockClient = new Mock<AmongUsClient>();
+        var mockHelper = new Mock<MockAmongUsClientget_InstanceHelper>();
+        mockHelper.Setup(x => x.Invoke()).Returns(mockClient.Object);
+        MockAmongUsClientget_InstanceHelper.Instance = mockHelper.Object;
+        return mockClient;
+    }
+
+    public static void SetupTranslationController()
+    {
+        var mock = SetupDestroyableSingletonMock<TranslationController>();
+        mock.Setup(x => x.GetString(It.IsAny<StringNames>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>()))
+            .Returns((StringNames id, Il2CppReferenceArray<Il2CppSystem.Object> args) => id.ToString());
+        mock.Setup(x => x.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>()))
+            .Returns((string id, string defaultStr, Il2CppReferenceArray<Il2CppSystem.Object> parts) => defaultStr ?? id);
+        mock.Setup(x => x.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
+            .Returns((string id, string defaultStr, Il2CppSystem.Object[] parts) => defaultStr ?? id);
+        mock.Setup(x => x.GetStringWithDefault(It.IsAny<StringNames>(), It.IsAny<string>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>()))
+            .Returns((StringNames id, string defaultStr, Il2CppReferenceArray<Il2CppSystem.Object> parts) => defaultStr ?? id.ToString());
     }
 
     public static void SetupDebugMode()
@@ -172,6 +206,10 @@ public static class MockSetupHelper
         var mockClamp = new Mock<MockMathfClampHelper>();
         mockClamp.Setup(h => h.Invoke(It.IsAny<float>(), It.IsAny<float>(), It.IsAny<float>())).Returns((float v, float min, float max) => Math.Clamp(v, min, max));
         MockMathfClampHelper.Instance = mockClamp.Object;
+
+        var mockClamp2 = new Mock<MockMathfClampHelper2>();
+        mockClamp2.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).Returns((int v, int min, int max) => Math.Clamp(v, min, max));
+        MockMathfClampHelper2.Instance = mockClamp2.Object;
 
         var mockMax = new Mock<MockMathfMaxHelper>();
         mockMax.Setup(h => h.Invoke(It.IsAny<float>(), It.IsAny<float>())).Returns((float a, float b) => Math.Max(a, b));
