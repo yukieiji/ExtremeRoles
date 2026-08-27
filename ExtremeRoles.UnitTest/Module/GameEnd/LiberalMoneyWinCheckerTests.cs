@@ -1,7 +1,9 @@
 using System.Reflection;
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
+using Moq;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
@@ -23,9 +25,11 @@ public sealed class LiberalMoneyWinCheckerTests
     [Fact]
     public void TryCheckGameEnd_MoneyEqualsWinMoney_ReturnsTrue()
     {
-        LiberalMoneyBankSystem system = (LiberalMoneyBankSystem)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(LiberalMoneyBankSystem));
+        var mockOption = new Mock<ILiberalOptionLoader>();
+        mockOption.Setup(o => o.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.WinMoney)).Returns(100);
+
+        LiberalMoneyBankSystem system = new LiberalMoneyBankSystem(mockOption.Object);
         SetProperty(system, nameof(LiberalMoneyBankSystem.Money), 100f);
-        SetProperty(system, nameof(LiberalMoneyBankSystem.WinMoney), 100f);
 
         LiberalMoneyWinChecker checker = new LiberalMoneyWinChecker(system);
 
@@ -38,9 +42,11 @@ public sealed class LiberalMoneyWinCheckerTests
     [Fact]
     public void TryCheckGameEnd_MoneyLessThanWinMoney_ReturnsFalse()
     {
-        LiberalMoneyBankSystem system = (LiberalMoneyBankSystem)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(LiberalMoneyBankSystem));
+        var mockOption = new Mock<ILiberalOptionLoader>();
+        mockOption.Setup(o => o.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.WinMoney)).Returns(100);
+
+        LiberalMoneyBankSystem system = new LiberalMoneyBankSystem(mockOption.Object);
         SetProperty(system, nameof(LiberalMoneyBankSystem.Money), 50f);
-        SetProperty(system, nameof(LiberalMoneyBankSystem.WinMoney), 100f);
 
         LiberalMoneyWinChecker checker = new LiberalMoneyWinChecker(system);
 

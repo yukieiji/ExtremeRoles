@@ -1,5 +1,6 @@
 using System;
 using ExtremeRoles.Module.GameEnd;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
@@ -45,7 +46,9 @@ public sealed class SabotageEndCheckerTests
     [Fact]
     public void TeroristTeroSabotageSystemEndChecker_TryCheckGameEnd_ReturnsTrueWhenExplosionTimerNegative()
     {
-        TeroristTeroSabotageSystem system = (TeroristTeroSabotageSystem)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(TeroristTeroSabotageSystem));
+        var mockSoundProvider = new Mock<ISoundProvider>();
+        TeroristTeroSabotageSystem system = new TeroristTeroSabotageSystem(default, false, mockSoundProvider.Object);
+
         System.Reflection.PropertyInfo? prop = typeof(TeroristTeroSabotageSystem).GetProperty(nameof(TeroristTeroSabotageSystem.ExplosionTimer), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         if (prop != null && prop.CanWrite)
         {

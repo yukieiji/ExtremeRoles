@@ -8,7 +8,7 @@ using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public class LiberalMoneyBankSystem(LiberalDefaultOptionLoader option) : IDirtableSystemType
+public class LiberalMoneyBankSystem(ILiberalOptionLoader option) : IDirtableSystemType
 {
     public const ExtremeSystemType SystemType = ExtremeSystemType.LiberalMoneyBank;
 
