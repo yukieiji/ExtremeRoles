@@ -215,7 +215,7 @@ public class InGameVisualUpdaterTests
 		MockObjectInstantiateHelper10.Instance = m10.Object;
 	}
 
-	private static (Mock<PlayerControl> playerMock, Mock<TextMeshPro> nameTextMock, Mock<TextMeshPro> infoTextMock) CreateMockPlayer(
+	private static (Mock<PlayerControl> playerMock, Mock<TextMeshPro> nameTextMock, Mock<TextMeshPro> infoTextMock, Mock<GameObject> infoGoMock) CreateMockPlayer(
 		byte playerId = 0,
 		string playerName = "TestPlayer",
 		bool isDead = false,
@@ -289,13 +289,13 @@ public class InGameVisualUpdaterTests
 
 		SetupInstantiateFor(nameTextMock.Object, infoTextMock.Object);
 
-		return (playerMock, nameTextMock, infoTextMock);
+		return (playerMock, nameTextMock, infoTextMock, infoGoMock);
 	}
 
 	[Fact]
 	public void LocalPlayerVisualUpdater_Update_ReturnsEarly_WhenPlayerInvalid()
 	{
-		var (playerMock, nameTextMock, _) = CreateMockPlayer();
+		var (playerMock, nameTextMock, _, _) = CreateMockPlayer();
 		playerMock.SetupGet(p => p.Data).Returns((NetworkedPlayerInfo)null!);
 
 		var updater = new LocalPlayerVisualUpdater(playerMock.Object);
@@ -308,7 +308,7 @@ public class InGameVisualUpdaterTests
 	[Fact]
 	public void LocalPlayerVisualUpdater_Update_UpdatesNameAndColor_WhenValidPlayer()
 	{
-		var (playerMock, nameTextMock, infoTextMock) = CreateMockPlayer(0, "LocalPlayer");
+		var (playerMock, nameTextMock, infoTextMock, infoGoMock) = CreateMockPlayer(0, "LocalPlayer");
 		var updater = new LocalPlayerVisualUpdater(playerMock.Object);
 
 		var role = new DummySingleRole(
@@ -325,12 +325,13 @@ public class InGameVisualUpdaterTests
 		Assert.Equal(Color.red, nameTextMock.Object.color);
 		Assert.Equal("SheriffRole", infoTextMock.Object.text);
 		Assert.Equal(ExtremeRoles.Module.InGameVisualUpdater.InGameVisualUpdaterBase.RoleInfoObjectName, infoTextMock.Object.gameObject.name);
+		infoGoMock.Verify(g => g.SetActive(true), Times.AtLeastOnce());
 	}
 
 	[Fact]
 	public void LocalPlayerVisualUpdater_Update_BlendsGhostRoleColorAndSetsGhostRoleName()
 	{
-		var (playerMock, nameTextMock, infoTextMock) = CreateMockPlayer(0, "LocalPlayer", isDead: true);
+		var (playerMock, nameTextMock, infoTextMock, _) = CreateMockPlayer(0, "LocalPlayer", isDead: true);
 		var updater = new LocalPlayerVisualUpdater(playerMock.Object);
 
 		var role = new DummySingleRole(
@@ -353,7 +354,7 @@ public class InGameVisualUpdaterTests
 	[Fact]
 	public void LocalPlayerVisualUpdater_Update_CallsIRoleUpdateAndMultiAssignRole()
 	{
-		var (playerMock, _, _) = CreateMockPlayer(0, "LocalPlayer");
+		var (playerMock, _, _, _) = CreateMockPlayer(0, "LocalPlayer");
 		var updater = new LocalPlayerVisualUpdater(playerMock.Object);
 
 		var updateRole = new DummyUpdateRole(RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white));
@@ -373,7 +374,7 @@ public class InGameVisualUpdaterTests
 	[Fact]
 	public void LocalPlayerVisualUpdater_Update_DisablesInfo_WhenNotVisual()
 	{
-		var (playerMock, _, infoTextMock) = CreateMockPlayer(0, "LocalPlayer", isVisible: false);
+		var (playerMock, _, _, infoGoMock) = CreateMockPlayer(0, "LocalPlayer", isVisible: false);
 		var updater = new LocalPlayerVisualUpdater(playerMock.Object);
 
 		var role = new DummySingleRole(
@@ -386,14 +387,14 @@ public class InGameVisualUpdaterTests
 
 		updater.Update();
 
-		infoTextMock.Object.gameObject.SetActive(false);
+		infoGoMock.Verify(g => g.SetActive(false), Times.AtLeastOnce());
 	}
 
 	[Fact]
 	public void OtherPlayerVisualUpdater_Update_ReturnsEarly_WhenTargetRoleNotFound()
 	{
-		var (localMock, _, _) = CreateMockPlayer(0, "LocalPlayer");
-		var (targetMock, targetNameText, _) = CreateMockPlayer(1, "TargetPlayer");
+		var (localMock, _, _, _) = CreateMockPlayer(0, "LocalPlayer");
+		var (targetMock, targetNameText, _, _) = CreateMockPlayer(1, "TargetPlayer");
 
 		var updater = new OtherPlayerVisualUpdater(localMock.Object, targetMock.Object);
 
@@ -409,8 +410,8 @@ public class InGameVisualUpdaterTests
 	[Fact]
 	public void OtherPlayerVisualUpdater_Update_UpdatesTargetVisuals_WhenGhostsSeeRoleActive()
 	{
-		var (localMock, _, _) = CreateMockPlayer(0, "LocalPlayer", isDead: true);
-		var (targetMock, targetNameText, targetInfoText) = CreateMockPlayer(1, "TargetPlayer");
+		var (localMock, _, _, _) = CreateMockPlayer(0, "LocalPlayer", isDead: true);
+		var (targetMock, targetNameText, targetInfoText, targetInfoGoMock) = CreateMockPlayer(1, "TargetPlayer");
 
 		ClientOption.Instance.GhostsSeeRole.Value = true;
 		ClientOption.Instance.GhostsSeeTask.Value = true;
@@ -429,13 +430,14 @@ public class InGameVisualUpdaterTests
 		Assert.Equal("TargetPlayer[LookedTag]", targetNameText.Object.text);
 		Assert.Equal(Color.red, targetNameText.Object.color);
 		Assert.Equal("Assassin", targetInfoText.Object.text);
+		targetInfoGoMock.Verify(g => g.SetActive(true), Times.AtLeastOnce());
 	}
 
 	[Fact]
 	public void OtherPlayerVisualUpdater_Update_PaintsGhostColor_WhenLocalGhostRoleExists()
 	{
-		var (localMock, _, _) = CreateMockPlayer(0, "LocalPlayer", isDead: false);
-		var (targetMock, targetNameText, _) = CreateMockPlayer(1, "TargetPlayer");
+		var (localMock, _, _, _) = CreateMockPlayer(0, "LocalPlayer", isDead: false);
+		var (targetMock, targetNameText, _, _) = CreateMockPlayer(1, "TargetPlayer");
 
 		ClientOption.Instance.GhostsSeeRole.Value = false;
 
@@ -459,8 +461,8 @@ public class InGameVisualUpdaterTests
 	[Fact]
 	public void OtherPlayerVisualUpdater_Update_BlockCondition_GuardianAngel_HidesInfo()
 	{
-		var (localMock, _, _) = CreateMockPlayer(0, "LocalPlayer", isDead: true, roleType: RoleTypes.GuardianAngel);
-		var (targetMock, _, targetInfoText) = CreateMockPlayer(1, "TargetPlayer");
+		var (localMock, _, _, _) = CreateMockPlayer(0, "LocalPlayer", isDead: true, roleType: RoleTypes.GuardianAngel);
+		var (targetMock, _, _, targetInfoGoMock) = CreateMockPlayer(1, "TargetPlayer");
 
 		ClientOption.Instance.GhostsSeeRole.Value = true;
 
@@ -474,6 +476,6 @@ public class InGameVisualUpdaterTests
 		var updater = new OtherPlayerVisualUpdater(localMock.Object, targetMock.Object);
 		updater.Update();
 
-		targetInfoText.Object.gameObject.SetActive(false);
+		targetInfoGoMock.Verify(g => g.SetActive(false), Times.AtLeastOnce());
 	}
 }
