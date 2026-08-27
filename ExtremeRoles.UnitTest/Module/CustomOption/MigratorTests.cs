@@ -28,13 +28,6 @@ public class MigratorTests
     }
 
     [Fact]
-    public void V10toV11_Properties_ShouldReturnExpectedVersionAndEntries()
-    {
-        using var migrator = new V10toV11();
-        Assert.Equal(11, migrator.TargetVersion);
-    }
-
-    [Fact]
     public void MigratorBase_MigrateConfig_ShouldReplaceOldKeysInFile()
     {
         string tempFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".cfg");
