@@ -32,6 +32,19 @@ public sealed class SabotageEndCheckerTests
     }
 
     [Fact]
+    public void LifeSuppSystemEndChecker_TryCheckGameEnd_ReturnsFalseWhenCountdownPositive()
+    {
+        var mockSystem = new Mock<LifeSuppSystemType>(IntPtr.Zero);
+        mockSystem.SetupGet(s => s.Countdown).Returns(10.0f);
+
+        LifeSuppSystemEndChecker checker = new LifeSuppSystemEndChecker(mockSystem.Object);
+
+        bool result = checker.TryCheckGameEnd(out GameOverReason reason);
+
+        Assert.False(result);
+    }
+
+    [Fact]
     public void LifeSuppSystemEndChecker_CleanUp_ResetsCountdown()
     {
         var mockSystem = new Mock<LifeSuppSystemType>(IntPtr.Zero);
@@ -66,5 +79,29 @@ public sealed class SabotageEndCheckerTests
 
         Assert.True(result);
         Assert.Equal((GameOverReason)RoleGameOverReason.TeroristoTeroWithShip, reason);
+    }
+
+    [Fact]
+    public void TeroristTeroSabotageSystemEndChecker_TryCheckGameEnd_ReturnsFalseWhenExplosionTimerPositive()
+    {
+        var mockSoundProvider = new Mock<ISoundProvider>();
+        TeroristTeroSabotageSystem system = new TeroristTeroSabotageSystem(default, false, mockSoundProvider.Object);
+
+        System.Reflection.PropertyInfo? prop = typeof(TeroristTeroSabotageSystem).GetProperty(nameof(TeroristTeroSabotageSystem.ExplosionTimer), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        if (prop != null && prop.CanWrite)
+        {
+            prop.SetValue(system, 30.0f);
+        }
+        else
+        {
+            System.Reflection.FieldInfo? field = typeof(TeroristTeroSabotageSystem).GetField("<ExplosionTimer>k__BackingField", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            field?.SetValue(system, 30.0f);
+        }
+
+        TeroristTeroSabotageSystemEndChecker checker = new TeroristTeroSabotageSystemEndChecker(system);
+
+        bool result = checker.TryCheckGameEnd(out GameOverReason reason);
+
+        Assert.False(result);
     }
 }
