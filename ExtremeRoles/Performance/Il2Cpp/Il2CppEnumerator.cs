@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using Il2CppInterop.Runtime.Runtime;
 using Il2CppSystem.Collections.Generic;
@@ -18,7 +18,7 @@ namespace ExtremeRoles.Performance.Il2Cpp
             }
             catch
             {
-                var result = new System.Collections.Generic.List<T>();
+                var result = new System.Collections.Generic.List<T>(list.Count);
                 for (int i = 0; i < list.Count; i++)
                 {
                     result.Add(list[i]);
