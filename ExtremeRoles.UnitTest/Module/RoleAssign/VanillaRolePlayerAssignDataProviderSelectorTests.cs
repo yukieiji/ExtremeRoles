@@ -4,6 +4,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.RoleAssign;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
@@ -34,35 +35,46 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
     }
 
     [Fact]
-    public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionSet_ResolvesMockProvider()
+    public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionSet_ReturnsMockProviderData()
     {
+        var mockProviderInstance = (MockVanillaRolePlayerAssignDataProvider)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(MockVanillaRolePlayerAssignDataProvider));
+        var expectedData = new List<VanillaRolePlayerAssignData>
+        {
+            new VanillaRolePlayerAssignData(1, "MockPlayer", RoleTypes.Crewmate)
+        };
+
+        typeof(MockVanillaRolePlayerAssignDataProvider)
+            .GetField("<Data>k__BackingField", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)?
+            .SetValue(mockProviderInstance, expectedData);
+
         var mockOption = new VanillaRolePlayerOption { MockOption = new VanillaRolePlayerMockOption(2) };
-        var mockServiceProvider = new Mock<IServiceProvider>();
-        mockServiceProvider
-            .Setup(x => x.GetService(typeof(MockVanillaRolePlayerAssignDataProvider)))
-            .Throws(new InvalidOperationException("ResolvedMockProvider"));
+        var services = new ServiceCollection();
+        services.AddSingleton(mockProviderInstance);
+        var serviceProvider = services.BuildServiceProvider();
 
-        var selector = new VanillaRolePlayerAssignDataProviderSelector(mockOption, mockServiceProvider.Object);
+        var selector = new VanillaRolePlayerAssignDataProviderSelector(mockOption, serviceProvider);
 
-        var ex = Assert.Throws<InvalidOperationException>(() => _ = selector.Data);
-        Assert.Equal("ResolvedMockProvider", ex.Message);
-        mockServiceProvider.Verify(x => x.GetService(typeof(MockVanillaRolePlayerAssignDataProvider)), Times.Once);
-        mockServiceProvider.Verify(x => x.GetService(typeof(DefaultVanillaRolePlayerAssignDataProvider)), Times.Never);
+        Assert.Same(expectedData, selector.Data);
     }
 
     [Fact]
-    public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionNull_ResolvesDefaultProvider()
+    public void Test_VanillaRolePlayerAssignDataProviderSelector_WhenMockOptionNull_ResolvesDefaultProviderFromServices()
     {
+        bool defaultProviderRequested = false;
+        var defaultProviderInstance = (DefaultVanillaRolePlayerAssignDataProvider)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(DefaultVanillaRolePlayerAssignDataProvider));
+
         var mockOption = new VanillaRolePlayerOption { MockOption = null };
         var mockServiceProvider = new Mock<IServiceProvider>();
         mockServiceProvider
             .Setup(x => x.GetService(typeof(DefaultVanillaRolePlayerAssignDataProvider)))
-            .Throws(new InvalidOperationException("ResolvedDefaultProvider"));
+            .Callback(() => defaultProviderRequested = true)
+            .Returns(defaultProviderInstance);
 
         var selector = new VanillaRolePlayerAssignDataProviderSelector(mockOption, mockServiceProvider.Object);
 
-        var ex = Assert.Throws<InvalidOperationException>(() => _ = selector.Data);
-        Assert.Equal("ResolvedDefaultProvider", ex.Message);
+        // Accessing Data attempts to call DefaultVanillaRolePlayerAssignDataProvider.Data which throws due to unmanaged GameAssembly
+        Assert.Throws<TypeInitializationException>(() => _ = selector.Data);
+        Assert.True(defaultProviderRequested);
         mockServiceProvider.Verify(x => x.GetService(typeof(DefaultVanillaRolePlayerAssignDataProvider)), Times.Once);
         mockServiceProvider.Verify(x => x.GetService(typeof(MockVanillaRolePlayerAssignDataProvider)), Times.Never);
     }
