@@ -13,6 +13,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability;
 
+[Collection("UnityMock")]
 public class ExtremeMultiModalAbilityButtonTests
 {
     private Mock<IButtonAutoActivator> mockActivator;
