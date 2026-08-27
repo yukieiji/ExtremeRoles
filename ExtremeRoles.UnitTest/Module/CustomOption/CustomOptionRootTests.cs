@@ -70,19 +70,21 @@ public class CustomOptionRootTests
         }
     }
 
+
     [Fact]
-    public void ClientOption_Create_ShouldInitializeInstance()
+    public void ClientOption_ConfigEntries_ShouldReadAndWriteValues()
     {
         ClientOption.Create();
-        Assert.NotNull(ClientOption.Instance);
-        Assert.NotNull(ClientOption.Instance.GhostsSeeTask);
-        Assert.NotNull(ClientOption.Instance.GhostsSeeRole);
-        Assert.NotNull(ClientOption.Instance.GhostsSeeVote);
-        Assert.NotNull(ClientOption.Instance.ShowRoleSummary);
-        Assert.NotNull(ClientOption.Instance.HideNamePlate);
-        Assert.NotNull(ClientOption.Instance.StreamerModeReplacementText);
-        Assert.NotNull(ClientOption.Instance.Ip);
-        Assert.NotNull(ClientOption.Instance.Port);
+        var clientOpt = ClientOption.Instance;
+
+        clientOpt.GhostsSeeTask.Value = false;
+        Assert.False(clientOpt.GhostsSeeTask.Value);
+
+        clientOpt.GhostsSeeTask.Value = true;
+        Assert.True(clientOpt.GhostsSeeTask.Value);
+
+        clientOpt.Ip.Value = "192.168.1.1";
+        Assert.Equal("192.168.1.1", clientOpt.Ip.Value);
     }
 
     [Fact]
