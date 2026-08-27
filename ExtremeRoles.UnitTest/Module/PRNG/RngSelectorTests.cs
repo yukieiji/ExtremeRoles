@@ -99,10 +99,13 @@ public sealed class RngSelectorTests
 
 		// Act
 		var selector = new RngSelector();
+		int val1 = selector.Instance.Next();
+		int val2 = selector.Instance.Next();
 
 		// Assert
 		Assert.True(selector.IsStrong);
 		Assert.IsType<Pcg32XshRr>(selector.Instance);
+		Assert.NotEqual(val1, val2);
 	}
 
 	[Fact]
@@ -130,10 +133,13 @@ public sealed class RngSelectorTests
 		// Act: Change UseStrong to false
 		EnsureRandomOptionCategory(false, 0);
 		selector.Initialize();
+		int val1 = selector.Instance.Next();
+		int val2 = selector.Instance.Next();
 
 		// Assert
 		Assert.False(selector.IsStrong);
 		Assert.IsType<SystemRandomWrapper>(selector.Instance);
+		Assert.NotEqual(val1, val2);
 	}
 
 	[Theory]
@@ -156,9 +162,12 @@ public sealed class RngSelectorTests
 
 		// Act
 		var selector = new RngSelector();
+		int val1 = selector.Instance.Next();
+		int val2 = selector.Instance.Next();
 
 		// Assert
 		Assert.True(selector.IsStrong);
 		Assert.IsType(expectedType, selector.Instance);
+		Assert.NotEqual(val1, val2);
 	}
 }
