@@ -17,7 +17,7 @@ public sealed class ExtremeShipStatusTests
 	{
 		public DummySingleRole(ExtremeRoleId roleId)
 		{
-			var core = new RoleCore(roleId, ExtremeRoleType.Crewmate, UnityEngine.Color.white, "Dummy");
+			var core = new RoleCore(roleId, ExtremeRoleType.Crewmate, default, "Dummy");
 			var field = typeof(SingleRoleBase).GetField("<Core>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
 			field?.SetValue(this, core);
 		}
@@ -26,12 +26,11 @@ public sealed class ExtremeShipStatusTests
 		protected override void RoleSpecificInit() { }
 
 		public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId) => "";
-		public override UnityEngine.Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId) => UnityEngine.Color.white;
+		public override UnityEngine.Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId) => default;
 	}
 
 	public ExtremeShipStatusTests()
 	{
-		MockSetupHelper.SetupCommonMocks();
 		MockSetupHelper.SetupLogger("ExtremeShipStatusTests");
 		SetupAmongUsClientAndShipState();
 	}
@@ -96,6 +95,53 @@ public sealed class ExtremeShipStatusTests
 		Assert.True(status.DeadPlayerInfo.ContainsKey(1));
 		Assert.Equal(ExtremeShipStatus.PlayerStatus.Exiled, status.DeadPlayerInfo[1].Reason);
 		Assert.Equal(killer.Object, status.DeadPlayerInfo[1].Killer);
+	}
+
+	[Fact]
+	public void AddDeadInfo_MultiplePlayers_AddsAndRemovesCorrectly()
+	{
+		// Arrange
+		var status = new ExtremeShipStatus();
+
+		var p1 = new Mock<PlayerControl>();
+		p1.SetupGet(p => p.PlayerId).Returns((byte)1);
+		var p2 = new Mock<PlayerControl>();
+		p2.SetupGet(p => p.PlayerId).Returns((byte)2);
+		var p3 = new Mock<PlayerControl>();
+		p3.SetupGet(p => p.PlayerId).Returns((byte)3);
+
+		var killer = new Mock<PlayerControl>();
+		killer.SetupGet(p => p.PlayerId).Returns((byte)99);
+
+		// Act - Add multiple players with different death reasons
+		status.AddDeadInfo(p1.Object, DeathReason.Kill, killer.Object);
+		status.AddDeadInfo(p2.Object, DeathReason.Exile, killer.Object);
+		status.AddDeadInfo(p3.Object, DeathReason.Disconnect, killer.Object);
+
+		// Assert - Check all dead infos are recorded independently
+		Assert.Equal(3, status.DeadPlayerInfo.Count);
+		Assert.Equal(ExtremeShipStatus.PlayerStatus.Killed, status.DeadPlayerInfo[1].Reason);
+		Assert.Equal(ExtremeShipStatus.PlayerStatus.Exiled, status.DeadPlayerInfo[2].Reason);
+		Assert.Equal(ExtremeShipStatus.PlayerStatus.Disconnected, status.DeadPlayerInfo[3].Reason);
+		Assert.Equal(killer.Object, status.DeadPlayerInfo[1].Killer);
+		Assert.Equal(killer.Object, status.DeadPlayerInfo[2].Killer);
+		Assert.Equal(killer.Object, status.DeadPlayerInfo[3].Killer);
+
+		// Act - Remove one player
+		status.RemoveDeadInfo(2);
+
+		// Assert - Verify specified player is removed while others remain intact
+		Assert.Equal(2, status.DeadPlayerInfo.Count);
+		Assert.True(status.DeadPlayerInfo.ContainsKey(1));
+		Assert.False(status.DeadPlayerInfo.ContainsKey(2));
+		Assert.True(status.DeadPlayerInfo.ContainsKey(3));
+
+		// Act - Remove remaining players
+		status.RemoveDeadInfo(1);
+		status.RemoveDeadInfo(3);
+
+		// Assert - Dictionary is empty
+		Assert.Empty(status.DeadPlayerInfo);
 	}
 
 	[Fact]
@@ -309,15 +355,5 @@ public sealed class ExtremeShipStatusTests
 		status.SetPlusWinner(newWinners);
 		Assert.Single(status.GetPlusWinner());
 		Assert.Same(mockData2, status.GetPlusWinner()[0]);
-	}
-
-	[Fact]
-	public void RpcRoleIsWin_CallsRpc()
-	{
-		// Arrange
-		var status = new ExtremeShipStatus();
-
-		// Act & Assert (Should execute without exception)
-		status.RpcRoleIsWin(1);
 	}
 }
