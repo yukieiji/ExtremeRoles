@@ -8,10 +8,10 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Meeting;
 
-public class PlayerVoteAreaButtonGroupTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
+public class PlayerVoteAreaButtonGroupTests : SerialTestBase, IClassFixture<UnityCommonMock>
 {
     public PlayerVoteAreaButtonGroupTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
-        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock(), unityCommonMock.TimeMock, new LoggerMock())
     {
         MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupDebugMode();

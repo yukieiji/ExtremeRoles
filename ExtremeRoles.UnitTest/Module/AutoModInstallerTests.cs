@@ -15,7 +15,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-public class AutoModInstallerTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
+public class AutoModInstallerTests : SerialTestBase, IClassFixture<UnityCommonMock>
 {
     private sealed class MockHttpMessageHandler : HttpMessageHandler
     {
@@ -37,7 +37,7 @@ public class AutoModInstallerTests : SerialTestBase, IClassFixture<SerialFixture
     }
 
     public AutoModInstallerTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
-        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock(), unityCommonMock.TimeMock, new LoggerMock())
     {
 
 

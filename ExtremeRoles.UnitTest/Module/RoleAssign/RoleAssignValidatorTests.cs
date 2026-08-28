@@ -12,10 +12,10 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign;
 
-public class RoleAssignValidatorTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
+public class RoleAssignValidatorTests : SerialTestBase, IClassFixture<UnityCommonMock>
 {
     public RoleAssignValidatorTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
-        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock(), unityCommonMock.TimeMock, new LoggerMock())
     {
         MockSetupHelper.SetupPaletteHelpers();
         MockSetupHelper.SetupAmongUsClientMock();

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-public class LruCacheTests : SerialTestBase, IClassFixture<SerialFixture>
+public class LruCacheTests : SerialTestBase
 {
     public LruCacheTests(SerialFixture fixture)
         : base(fixture, new LoggerMock())

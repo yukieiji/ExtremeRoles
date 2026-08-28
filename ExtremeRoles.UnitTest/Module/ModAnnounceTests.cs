@@ -20,7 +20,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-public class ModAnnounceTests : SerialTestBase, IDisposable, IClassFixture<SerialFixture>
+public class ModAnnounceTests : SerialTestBase, IDisposable
 {
     private readonly string _previousCurrentDir;
     private readonly string _tempWorkingDir;

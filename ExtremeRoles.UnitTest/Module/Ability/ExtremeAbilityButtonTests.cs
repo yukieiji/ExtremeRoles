@@ -19,10 +19,10 @@ using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.UnitTest.Module.Ability;
 
-public class ExtremeAbilityButtonTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
+public class ExtremeAbilityButtonTests : SerialTestBase, IClassFixture<UnityCommonMock>
 {
     public ExtremeAbilityButtonTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
-        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock(), unityCommonMock.TimeMock, new LoggerMock())
     {
         MockSetupHelper.SetupMockExtremeRolePlugin();
     }

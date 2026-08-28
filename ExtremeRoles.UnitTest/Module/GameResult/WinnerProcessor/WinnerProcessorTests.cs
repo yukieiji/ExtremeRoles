@@ -18,7 +18,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameResult.WinnerProcessor;
 
-public class WinnerProcessorTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
+public class WinnerProcessorTests : SerialTestBase, IClassFixture<UnityCommonMock>
 {
     private sealed class DummySingleRole : SingleRoleBase
     {
@@ -34,7 +34,7 @@ public class WinnerProcessorTests : SerialTestBase, IClassFixture<SerialFixture>
     }
 
     public WinnerProcessorTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
-        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock(), unityCommonMock.TimeMock, new LoggerMock())
     {
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);

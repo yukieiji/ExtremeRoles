@@ -18,7 +18,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Event;
 
-public class MeetingVisualUpdateEventTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
+public class MeetingVisualUpdateEventTests : SerialTestBase, IClassFixture<UnityCommonMock>
 {
     private sealed class DummySingleRole : SingleRoleBase
     {
@@ -69,7 +69,7 @@ public class MeetingVisualUpdateEventTests : SerialTestBase, IClassFixture<Seria
     }
 
     public MeetingVisualUpdateEventTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
-        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.TimeMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock())
     {
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);

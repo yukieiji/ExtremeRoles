@@ -9,10 +9,10 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-public class CustomVentTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
+public class CustomVentTests : SerialTestBase, IClassFixture<UnityCommonMock>
 {
     public CustomVentTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
-        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.TimeMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock())
     {
     }
 

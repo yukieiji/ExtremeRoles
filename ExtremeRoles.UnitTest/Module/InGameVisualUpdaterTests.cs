@@ -20,7 +20,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-public class InGameVisualUpdaterTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
+public class InGameVisualUpdaterTests : SerialTestBase, IClassFixture<UnityCommonMock>
 {
 	private sealed class DummySingleRole : SingleRoleBase
 	{
@@ -127,7 +127,7 @@ public class InGameVisualUpdaterTests : SerialTestBase, IClassFixture<SerialFixt
 	}
 
 	public InGameVisualUpdaterTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
-        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.TimeMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock())
     {
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);

@@ -14,10 +14,10 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign.Model;
 
-public class RoleAssignFilterModelTests : SerialTestBase, IClassFixture<SerialFixture>
+public class RoleAssignFilterModelTests : SerialTestBase
 {
-    public RoleAssignFilterModelTests(SerialFixture fixture)
-        : base(fixture, new LoggerMock())
+    public RoleAssignFilterModelTests(SerialFixture fixture, GameOptionsManagerMock gameOptionsManagerMock)
+        : base(fixture, gameOptionsManagerMock, new LoggerMock())
     {
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();

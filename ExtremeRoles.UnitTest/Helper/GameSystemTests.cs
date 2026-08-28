@@ -18,7 +18,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Helper;
 
-public class GameSystemTests : SerialTestBase, IDisposable, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
+public class GameSystemTests : SerialTestBase, IDisposable, IClassFixture<UnityCommonMock>
 {
     private static readonly IGameOptions globalGameOptions;
     private static readonly GameOptionsManager globalGameOptionsManager;
@@ -46,7 +46,7 @@ public class GameSystemTests : SerialTestBase, IDisposable, IClassFixture<Serial
     }
 
     public GameSystemTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
-        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.TimeMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock())
     {
         ResetAllState();
     }

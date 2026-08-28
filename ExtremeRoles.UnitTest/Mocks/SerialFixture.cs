@@ -2,7 +2,7 @@ using ExtremeRoles.UnitTest.Mocks;
 using System.Collections.Concurrent;
 using Xunit;
 
-[assembly: AssemblyFixture<SerialFixture>]
+[assembly: AssemblyFixture(typeof(SerialFixture))]
 
 namespace ExtremeRoles.UnitTest.Mocks;
 

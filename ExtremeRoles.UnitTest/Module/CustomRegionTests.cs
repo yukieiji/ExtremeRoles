@@ -25,7 +25,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-public sealed class CustomRegionTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
+public sealed class CustomRegionTests : SerialTestBase, IClassFixture<UnityCommonMock>
 {
 	private sealed class MockHttpMessageHandler : HttpMessageHandler
 	{
@@ -45,7 +45,7 @@ public sealed class CustomRegionTests : SerialTestBase, IClassFixture<SerialFixt
 	private readonly List<IRegionInfo> availableRegions = new();
 
 	public CustomRegionTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
-        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock(), unityCommonMock.TimeMock, new LoggerMock())
     {
 		MockSetupHelper.SetupConstantsHelpers();
 

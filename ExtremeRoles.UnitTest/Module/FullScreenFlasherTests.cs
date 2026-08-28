@@ -11,10 +11,10 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-public class FullScreenFlasherTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
+public class FullScreenFlasherTests : SerialTestBase, IClassFixture<UnityCommonMock>
 {
     public FullScreenFlasherTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
-        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.TimeMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock())
     {
 
         var mockActionImplicit = new Mock<Il2CppSystem.MockActionop_ImplicitHelper<float>>();
