@@ -13,12 +13,11 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign.Model;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupLogger))]
 public class RoleAssignFilterModelTests
 {
     public RoleAssignFilterModelTests()
     {
-        MockSetupHelper.SetupCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();

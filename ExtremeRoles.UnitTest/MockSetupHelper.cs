@@ -18,18 +18,19 @@ namespace ExtremeRoles.UnitTest;
 
 public static class MockSetupHelper
 {
-    public static void SetupCommonMocks()
+    public static void SetupUnityCommonMocks()
     {
         SetupColorHelpers();
-        SetupPaletteHelpers();
         SetupMathfHelpers();
-        SetupCompatModManager();
         SetupUnityObjectOperators();
         SetupVector2Helpers();
-
-        SetupGameDataMock();
-        SetupExtremeSystemTypeManagerMock();
     }
+
+	// AmongUs本体のコードでよく使うものをまとめる
+	public static void SetupAmongUsCommonMocks()
+	{
+
+	}
 
     public static void SetupExtremeSystemTypeManagerMock()
     {

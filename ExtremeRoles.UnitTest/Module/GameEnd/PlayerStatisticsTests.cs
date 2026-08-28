@@ -4,14 +4,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-[Collection("UnityMock")]
 public sealed class PlayerStatisticsTests
 {
-    public PlayerStatisticsTests()
-    {
-        MockSetupHelper.SetupCommonMocks();
-    }
-
     [Fact]
     public void NeutralSeparateTeamContainer_AddAndClear_WorksCorrectly()
     {

@@ -17,7 +17,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameResult.WinnerProcessor;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
+[Collection(nameof(MockSetupHelper.SetupLogger))]
 public class WinnerProcessorTests
 {
     private sealed class DummySingleRole : SingleRoleBase
@@ -35,7 +36,7 @@ public class WinnerProcessorTests
 
     public WinnerProcessorTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupLogger("WinnerProcessorTests");
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);

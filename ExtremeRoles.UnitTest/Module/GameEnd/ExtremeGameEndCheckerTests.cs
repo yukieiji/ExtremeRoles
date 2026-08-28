@@ -8,12 +8,10 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-[Collection("UnityMock")]
 public sealed class ExtremeGameEndCheckerTests
 {
     public ExtremeGameEndCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
         SetupMocks();
     }
 

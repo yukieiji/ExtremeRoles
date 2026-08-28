@@ -12,12 +12,12 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class PlayerReviverTests
 {
     public PlayerReviverTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     private static PlayerControl CreateMockPlayerControl(byte playerId = 1)
@@ -57,7 +57,7 @@ public class PlayerReviverTests
         Assert.NotNull(reviveTokenType);
 
         var flags = BindingFlags.NonPublic | BindingFlags.Instance;
-        object token = Activator.CreateInstance(reviveTokenType, flags | BindingFlags.Public, null, new object?[] { resurrectTime, resurrectText, rolePlayer, onReviveCompleted, onDispose }, null)!;
+        object token = Activator.CreateInstance(reviveTokenType, flags | BindingFlags.Public, null, [resurrectTime, resurrectText, rolePlayer, onReviveCompleted, onDispose], null)!;
         reviveTokenType.GetField("resurrectTimer", flags)?.SetValue(token, resurrectTime);
         reviveTokenType.GetField("maxTime", flags)?.SetValue(token, resurrectTime);
         reviveTokenType.GetField("resurrectText", flags)?.SetValue(token, resurrectText);

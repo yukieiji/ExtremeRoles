@@ -8,12 +8,13 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameResult;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
+[Collection(nameof(MockSetupHelper.SetupLogger))]
 public class WinnerContainerTests
 {
     public WinnerContainerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupLogger("WinnerContainerTests");
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);

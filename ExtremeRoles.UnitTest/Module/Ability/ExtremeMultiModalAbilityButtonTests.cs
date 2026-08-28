@@ -13,7 +13,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ExtremeMultiModalAbilityButtonTests
 {
     private Mock<IButtonAutoActivator> mockActivator;
@@ -26,7 +26,7 @@ public class ExtremeMultiModalAbilityButtonTests
 
     public ExtremeMultiModalAbilityButtonTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
         var mockVectorOne = new Mock<MockVector3get_oneHelper>();
         mockVectorOne.Setup(x => x.Invoke()).Returns(new Vector3(1f, 1f, 1f));

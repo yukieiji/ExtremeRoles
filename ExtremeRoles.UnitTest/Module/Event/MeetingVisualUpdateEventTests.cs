@@ -17,7 +17,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Event;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class MeetingVisualUpdateEventTests
 {
     private sealed class DummySingleRole : SingleRoleBase
@@ -70,7 +70,7 @@ public class MeetingVisualUpdateEventTests
 
     public MeetingVisualUpdateEventTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
         if (ClientOption.Instance == null)

@@ -5,12 +5,10 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-[Collection("UnityMock")]
 public sealed class LiberalAliveWinCheckerTests
 {
     public LiberalAliveWinCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
     }
 
     private static void SetProperty<T>(object target, string propertyName, T value)

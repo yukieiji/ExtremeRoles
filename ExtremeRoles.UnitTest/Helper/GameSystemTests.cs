@@ -17,7 +17,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Helper;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class GameSystemTests : IDisposable
 {
     private static readonly IGameOptions globalGameOptions;
@@ -43,7 +43,7 @@ public class GameSystemTests : IDisposable
         globalGameData = new Mock<GameData>().Object;
         globalShipStatus = new Mock<ShipStatus>().Object;
 
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     public GameSystemTests()

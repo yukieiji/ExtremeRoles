@@ -10,12 +10,12 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class FullScreenFlasherTests
 {
     public FullScreenFlasherTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
         var mockActionImplicit = new Mock<Il2CppSystem.MockActionop_ImplicitHelper<float>>();
         mockActionImplicit.Setup(x => x.Invoke(It.IsAny<Action<float>>()))
@@ -69,7 +69,7 @@ public class FullScreenFlasherTests
     [Fact]
     public void Flash_WhenHudManagerInstanceIsNotNull_CreatesRendererAndStartsCoroutine()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
         var hudMock = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
 
@@ -119,7 +119,7 @@ public class FullScreenFlasherTests
     [Fact]
     public void CreateLerpAction_ExecutesTimelinePhasesCorrectly()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
         var hudMock = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
 
@@ -184,7 +184,7 @@ public class FullScreenFlasherTests
     [Fact]
     public void Hide_WhenRendererIsNotNull_DisablesRenderer()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
         var hudMock = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
 
@@ -232,7 +232,7 @@ public class FullScreenFlasherTests
     [Fact]
     public void Reset_WhenRendererIsNotNull_DestroysGameObject()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
         var hudMock = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
 
@@ -294,7 +294,7 @@ public class FullScreenFlasherTests
     [Fact]
     public void FullScreenRepeatFlasherWithAudio_SetActive_False_StopsCoroutineAndDisablesFlush()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
         var hudMock = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
 
@@ -330,7 +330,7 @@ public class FullScreenFlasherTests
     [Fact]
     public void FullScreenRepeatFlasherWithAudio_StartReactorFlush_ExecutesCoroutineSteps()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
         var hudMock = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
 

@@ -11,13 +11,11 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupLogger))]
 public class LruCacheTests
 {
     public LruCacheTests()
     {
-        MockSetupHelper.SetupCommonMocks();
-
 		MockSetupHelper.SetupLogger();
 
         var debugModeProperty = typeof(ExtremeRolesPlugin).GetProperty("DebugMode", BindingFlags.Public | BindingFlags.Static);

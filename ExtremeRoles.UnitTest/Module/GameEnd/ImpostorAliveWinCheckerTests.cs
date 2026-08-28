@@ -5,12 +5,10 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-[Collection("UnityMock")]
 public sealed class ImpostorAliveWinCheckerTests
 {
     public ImpostorAliveWinCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
     }
 
     private static void SetupLastDeathReasonMock(DeathReason deathReason)

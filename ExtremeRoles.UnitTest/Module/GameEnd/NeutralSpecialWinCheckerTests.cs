@@ -8,12 +8,10 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-[Collection("UnityMock")]
 public sealed class NeutralSpecialWinCheckerTests
 {
     public NeutralSpecialWinCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
         SetupAmongUsClientAndShipState();
     }
 

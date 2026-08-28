@@ -10,15 +10,12 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.PRNG;
 
-[Collection("UnityMock")]
 public sealed class RngSelectorTests
 {
 	private const int randCategoryKey = (int)OptionCreator.CommonOption.RandomOption;
 
 	public RngSelectorTests()
 	{
-		MockSetupHelper.SetupCommonMocks();
-
 		var mockProcFreq = new Mock<MockSystemInfoget_processorFrequencyHelper>();
 		mockProcFreq.Setup(h => h.Invoke()).Returns(3000);
 		MockSystemInfoget_processorFrequencyHelper.Instance = mockProcFreq.Object;

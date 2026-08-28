@@ -15,7 +15,8 @@ using TaskInfo = ExtremeRoles.Module.GameResult.ExtremeGameResultManager.TaskInf
 
 namespace ExtremeRoles.UnitTest.Module.GameResult;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
+[Collection(nameof(MockSetupHelper.SetupLogger))]
 public class WinnerInitializerTests
 {
     private sealed class DummySingleRole : SingleRoleBase
@@ -32,7 +33,7 @@ public class WinnerInitializerTests
 
     public WinnerInitializerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupLogger("WinnerInitializerTests");
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);

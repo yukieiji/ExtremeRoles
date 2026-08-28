@@ -6,12 +6,13 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Meeting;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
+[Collection(nameof(MockSetupHelper.SetupLogger))]
 public class PlayerVoteAreaButtonPostionComputerTests
 {
     public PlayerVoteAreaButtonPostionComputerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();

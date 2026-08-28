@@ -4,12 +4,12 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class CrewmateAliveWinCheckerTests
 {
     public CrewmateAliveWinCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     private static void SetProperty<T>(object target, string propertyName, T value)
