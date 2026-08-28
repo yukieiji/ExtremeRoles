@@ -1,4 +1,3 @@
-using ExtremeRoles.UnitTest.Mocks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ExtremeRoles.Helper;
@@ -6,13 +5,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Helper;
 
-public class JsonParserTests : SerialTestBase, IClassFixture<SerialFixture>
+public class JsonParserTests
 {
-    public JsonParserTests(SerialFixture fixture)
-        : base(fixture)
-    {
-    }
-
     public class SampleData
     {
         [JsonPropertyName("name")]

@@ -1,17 +1,11 @@
-using ExtremeRoles.UnitTest.Mocks;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability.Behavior;
 
-public class NullBehaviourTests : SerialTestBase, IClassFixture<SerialFixture>
+public class NullBehaviourTests
 {
-    public NullBehaviourTests(SerialFixture fixture)
-        : base(fixture)
-    {
-    }
-
     [Fact]
     public void Constructor_InitializesDefaultValues()
     {

@@ -1,17 +1,11 @@
-using ExtremeRoles.UnitTest.Mocks;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability.Behavior;
 
-public class ReclickBehaviorTests : SerialTestBase, IClassFixture<SerialFixture>
+public class ReclickBehaviorTests
 {
-    public ReclickBehaviorTests(SerialFixture fixture)
-        : base(fixture)
-    {
-    }
-
     [Fact]
     public void IsUse_ReturnsTrue_WhenCanUseIsTrueOrActive()
     {

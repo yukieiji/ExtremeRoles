@@ -1,4 +1,3 @@
-using ExtremeRoles.UnitTest.Mocks;
 using System;
 using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Module.Interface;
@@ -10,10 +9,9 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-public sealed class SabotageEndCheckerTests : SerialTestBase, IClassFixture<SerialFixture>
+public sealed class SabotageEndCheckerTests
 {
-    public SabotageEndCheckerTests(SerialFixture fixture)
-        : base(fixture)
+    public SabotageEndCheckerTests()
     {
     }
 

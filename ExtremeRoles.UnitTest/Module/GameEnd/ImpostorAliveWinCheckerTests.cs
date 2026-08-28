@@ -1,4 +1,3 @@
-using ExtremeRoles.UnitTest.Mocks;
 using System.Reflection;
 using ExtremeRoles.Module.GameEnd;
 using Moq;
@@ -6,10 +5,9 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-public sealed class ImpostorAliveWinCheckerTests : SerialTestBase, IClassFixture<SerialFixture>
+public sealed class ImpostorAliveWinCheckerTests
 {
-    public ImpostorAliveWinCheckerTests(SerialFixture fixture)
-        : base(fixture)
+    public ImpostorAliveWinCheckerTests()
     {
     }
 

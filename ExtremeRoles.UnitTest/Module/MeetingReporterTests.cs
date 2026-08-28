@@ -1,4 +1,3 @@
-using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -11,10 +10,9 @@ using UnityEngine;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
-public class MeetingReporterTests : SerialTestBase, IDisposable, IClassFixture<SerialFixture>
+public class MeetingReporterTests : IDisposable
 {
-    public MeetingReporterTests(SerialFixture fixture)
-        : base(fixture)
+    public MeetingReporterTests()
     {
         var mockDeltaTime = new Mock<MockTimeget_deltaTimeHelper>();
         mockDeltaTime.Setup(h => h.Invoke()).Returns(0.1f);

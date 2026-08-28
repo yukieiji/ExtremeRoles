@@ -1,4 +1,3 @@
-using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Reflection;
 using ExtremeRoles.GhostRoles.API;
@@ -14,13 +13,8 @@ using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.Pla
 
 namespace ExtremeRoles.UnitTest.Module.GameResult.StatusOverrider;
 
-public class StatusOverriderTests : SerialTestBase, IClassFixture<SerialFixture>
+public class StatusOverriderTests
 {
-    public StatusOverriderTests(SerialFixture fixture)
-        : base(fixture)
-    {
-    }
-
     private sealed class DummySingleRole : SingleRoleBase
     {
         public DummySingleRole(RoleCore core)
