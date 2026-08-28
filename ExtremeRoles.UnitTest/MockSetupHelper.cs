@@ -1,6 +1,7 @@
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using HarmonyLib;
@@ -27,6 +28,17 @@ public static class MockSetupHelper
         SetupVector2Helpers();
 
         SetupGameDataMock();
+        SetupExtremeSystemTypeManagerMock();
+    }
+
+    public static void SetupExtremeSystemTypeManagerMock()
+    {
+        var instanceField = typeof(ExtremeSystemTypeManager).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static);
+        if (instanceField != null && instanceField.GetValue(null) == null)
+        {
+            var systemManager = (ExtremeSystemTypeManager)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
+            instanceField.SetValue(null, systemManager);
+        }
     }
 
     public static Mock<AmongUsClient> SetupAmongUsClientMock()
