@@ -12,7 +12,6 @@ public class MigratorTests
 {
     public MigratorTests()
     {
-        MockSetupHelper.SetupCommonMocks();
         MockSetupHelper.SetupLogger();
     }
 
