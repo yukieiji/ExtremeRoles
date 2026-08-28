@@ -19,7 +19,7 @@ public class SelectionOptionValueTests
 
     public SelectionOptionValueTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+
         var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>()))
             .Returns((string id, string defaultStr, Il2CppReferenceArray<Il2CppSystem.Object> parts) => !string.IsNullOrEmpty(defaultStr) ? defaultStr : id);

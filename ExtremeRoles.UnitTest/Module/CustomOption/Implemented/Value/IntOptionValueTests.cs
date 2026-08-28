@@ -9,7 +9,7 @@ public class IntOptionValueTests
 {
     public IntOptionValueTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+
     }
 
     [Fact]

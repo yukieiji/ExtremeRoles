@@ -9,7 +9,7 @@ public class FloatOptionValueTests
 {
     public FloatOptionValueTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        //
     }
 
     [Fact]
