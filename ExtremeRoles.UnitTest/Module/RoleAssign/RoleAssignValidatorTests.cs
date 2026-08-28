@@ -17,8 +17,10 @@ public class RoleAssignValidatorTests : SerialTestBase, IClassFixture<SerialFixt
     public RoleAssignValidatorTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
         : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
     {
+        MockSetupHelper.SetupPaletteHelpers();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
+        MockSetupHelper.SetupGameDataMock();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
         MockSetupHelper.SetupDebugMode();

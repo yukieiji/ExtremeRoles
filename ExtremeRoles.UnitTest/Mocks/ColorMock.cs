@@ -1,7 +1,4 @@
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace ExtremeRoles.UnitTest.Mocks;
@@ -28,16 +25,48 @@ public class ColorMock : ISerialMockSetup
 		MockColorop_ImplicitHelper.Instance = new Mock<MockColorop_ImplicitHelper>().Object;
 		MockColorop_ImplicitHelper2.Instance = new Mock<MockColorop_ImplicitHelper2>().Object;
 
-		MockColorget_blackHelper.Instance = new Mock<MockColorget_blackHelper>().Object;
-		MockColorget_blueHelper.Instance = new Mock<MockColorget_blueHelper>().Object;
-		MockColorget_clearHelper.Instance = new Mock<MockColorget_clearHelper>().Object;
-		MockColorget_cyanHelper.Instance = new Mock<MockColorget_cyanHelper>().Object;
-		MockColorget_grayHelper.Instance = new Mock<MockColorget_grayHelper>().Object;
-		MockColorget_greenHelper.Instance = new Mock<MockColorget_greenHelper>().Object;
-		MockColorget_greyHelper.Instance = new Mock<MockColorget_greyHelper>().Object;
-		MockColorget_magentaHelper.Instance = new Mock<MockColorget_magentaHelper>().Object;
-		MockColorget_redHelper.Instance = new Mock<MockColorget_redHelper>().Object;
-		MockColorget_whiteHelper.Instance = new Mock<MockColorget_whiteHelper>().Object;
-		MockColorget_yellowHelper.Instance = new Mock<MockColorget_yellowHelper>().Object;
+		var mockWhite = new Mock<MockColorget_whiteHelper>();
+		mockWhite.Setup(x => x.Invoke()).Returns(new Color(1f, 1f, 1f, 1f));
+		MockColorget_whiteHelper.Instance = mockWhite.Object;
+
+		var mockBlack = new Mock<MockColorget_blackHelper>();
+		mockBlack.Setup(x => x.Invoke()).Returns(new Color(0f, 0f, 0f, 1f));
+		MockColorget_blackHelper.Instance = mockBlack.Object;
+
+		var mockBlue = new Mock<MockColorget_blueHelper>();
+		mockBlue.Setup(x => x.Invoke()).Returns(new Color(0f, 0f, 1f, 1f));
+		MockColorget_blueHelper.Instance = mockBlue.Object;
+
+		var mockClear = new Mock<MockColorget_clearHelper>();
+		mockClear.Setup(x => x.Invoke()).Returns(new Color(0f, 0f, 0f, 0f));
+		MockColorget_clearHelper.Instance = mockClear.Object;
+
+		var mockCyan = new Mock<MockColorget_cyanHelper>();
+		mockCyan.Setup(x => x.Invoke()).Returns(new Color(0f, 1f, 1f, 1f));
+		MockColorget_cyanHelper.Instance = mockCyan.Object;
+
+		var mockGray = new Mock<MockColorget_grayHelper>();
+		mockGray.Setup(x => x.Invoke()).Returns(new Color(0.5f, 0.5f, 0.5f, 1f));
+		MockColorget_grayHelper.Instance = mockGray.Object;
+
+		var mockGreen = new Mock<MockColorget_greenHelper>();
+		mockGreen.Setup(x => x.Invoke()).Returns(new Color(0f, 1f, 0f, 1f));
+		MockColorget_greenHelper.Instance = mockGreen.Object;
+
+		var mockGrey = new Mock<MockColorget_greyHelper>();
+		mockGrey.Setup(x => x.Invoke()).Returns(new Color(0.5f, 0.5f, 0.5f, 1f));
+		MockColorget_greyHelper.Instance = mockGrey.Object;
+
+		var mockMagenta = new Mock<MockColorget_magentaHelper>();
+		mockMagenta.Setup(x => x.Invoke()).Returns(new Color(1f, 0f, 1f, 1f));
+		MockColorget_magentaHelper.Instance = mockMagenta.Object;
+
+		var mockRed = new Mock<MockColorget_redHelper>();
+		mockRed.Setup(x => x.Invoke()).Returns(new Color(1f, 0f, 0f, 1f));
+		MockColorget_redHelper.Instance = mockRed.Object;
+
+		var mockYellow = new Mock<MockColorget_yellowHelper>();
+		mockYellow.Setup(x => x.Invoke()).Returns(new Color(1f, 0.92f, 0.016f, 1f));
+		MockColorget_yellowHelper.Instance = mockYellow.Object;
 	}
 }
