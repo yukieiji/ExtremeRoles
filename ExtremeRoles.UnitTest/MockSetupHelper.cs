@@ -34,9 +34,14 @@ public static class MockSetupHelper
     public static void SetupExtremeSystemTypeManagerMock()
     {
         var instanceField = typeof(ExtremeSystemTypeManager).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static);
-        if (instanceField != null && instanceField.GetValue(null) == null)
+        if (instanceField != null)
         {
             var systemManager = (ExtremeSystemTypeManager)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
+            var allSystemsField = typeof(ExtremeSystemTypeManager).GetField("allSystems", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (allSystemsField != null && allSystemsField.GetValue(systemManager) == null)
+            {
+                allSystemsField.SetValue(systemManager, new System.Collections.Generic.Dictionary<ExtremeSystemType, ExtremeRoles.Module.Interface.IExtremeSystemType>());
+            }
             instanceField.SetValue(null, systemManager);
         }
     }
