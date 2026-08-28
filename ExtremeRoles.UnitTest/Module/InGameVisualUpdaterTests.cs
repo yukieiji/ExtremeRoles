@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using AmongUs.GameOptions;
@@ -19,8 +20,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public class InGameVisualUpdaterTests
+public class InGameVisualUpdaterTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
 	private sealed class DummySingleRole : SingleRoleBase
 	{
@@ -126,9 +126,9 @@ public class InGameVisualUpdaterTests
 		protected override void UseAbility(RPCOperator.RpcCaller caller) { }
 	}
 
-	public InGameVisualUpdaterTests()
-	{
-		MockSetupHelper.SetupUnityCommonMocks();
+	public InGameVisualUpdaterTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
+    {
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
 		if (ClientOption.Instance == null)

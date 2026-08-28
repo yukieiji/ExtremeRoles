@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.Interface;
 using Moq;
@@ -5,8 +6,13 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Event;
 
-public class EventManagerTests
+public class EventManagerTests : SerialTestBase, IClassFixture<SerialFixture>
 {
+    public EventManagerTests(SerialFixture fixture)
+        : base(fixture)
+    {
+    }
+
     [Fact]
     public void RegisterAndInvoke_CallsSubscribers()
     {

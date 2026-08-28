@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -8,12 +9,11 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public class CustomVentTests
+public class CustomVentTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
-    public CustomVentTests()
+    public CustomVentTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
     {
-        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     private static Vent CreateMockVent(int id)

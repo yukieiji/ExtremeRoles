@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,12 +8,11 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.CustomOption.Migrator;
 
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public class MigratorTests
+public class MigratorTests : SerialTestBase, IClassFixture<SerialFixture>
 {
-    public MigratorTests()
+    public MigratorTests(SerialFixture fixture)
+        : base(fixture, new LoggerMock())
     {
-        MockSetupHelper.SetupLogger();
     }
 
     private sealed class TestMigrator : MigratorBase

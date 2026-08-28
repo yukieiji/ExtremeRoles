@@ -1,11 +1,17 @@
+using ExtremeRoles.UnitTest.Mocks;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability.Behavior;
 
-public class ReusableActivatingBehaviorTests
+public class ReusableActivatingBehaviorTests : SerialTestBase, IClassFixture<SerialFixture>
 {
+    public ReusableActivatingBehaviorTests(SerialFixture fixture)
+        : base(fixture)
+    {
+    }
+
     [Fact]
     public void TryUseAbility_WithActiveTime_SetsActivatingState()
     {

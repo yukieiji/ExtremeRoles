@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
@@ -12,12 +13,11 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public class PlayerReviverTests
+public class PlayerReviverTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
-    public PlayerReviverTests()
+    public PlayerReviverTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
     {
-        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     private static PlayerControl CreateMockPlayerControl(byte playerId = 1)

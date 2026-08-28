@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -10,12 +11,13 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.PRNG;
 
-public sealed class RngSelectorTests
+public sealed class RngSelectorTests : SerialTestBase, IClassFixture<SerialFixture>
 {
 	private const int randCategoryKey = (int)OptionCreator.CommonOption.RandomOption;
 
-	public RngSelectorTests()
-	{
+	public RngSelectorTests(SerialFixture fixture)
+        : base(fixture, new LoggerMock())
+    {
 		var mockProcFreq = new Mock<MockSystemInfoget_processorFrequencyHelper>();
 		mockProcFreq.Setup(h => h.Invoke()).Returns(3000);
 		MockSystemInfoget_processorFrequencyHelper.Instance = mockProcFreq.Object;
@@ -45,7 +47,6 @@ public sealed class RngSelectorTests
 		MockMathfClampToIntHelper.Instance = mockClampToInt.Object;
 
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
-		MockSetupHelper.SetupLogger();
 		MockSetupHelper.SetupDebugMode();
 		MockSetupHelper.SetupMockConfig(plugin);
 

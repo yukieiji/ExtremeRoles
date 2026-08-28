@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using ExtremeRoles.Module.Ability;
@@ -13,8 +14,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public class ExtremeMultiModalAbilityButtonTests
+public class ExtremeMultiModalAbilityButtonTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
     private Mock<IButtonAutoActivator> mockActivator;
     private Mock<IGameObjectFactory> mockGOFactory = null!;
@@ -24,9 +24,9 @@ public class ExtremeMultiModalAbilityButtonTests
     private TestBehavior behavior3;
     private Mock<GameObject> mockMultiAbilityGO = null!;
 
-    public ExtremeMultiModalAbilityButtonTests()
+    public ExtremeMultiModalAbilityButtonTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
     {
-        MockSetupHelper.SetupUnityCommonMocks();
 
         var mockVectorOne = new Mock<MockVector3get_oneHelper>();
         mockVectorOne.Setup(x => x.Invoke()).Returns(new Vector3(1f, 1f, 1f));

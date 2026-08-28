@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Roles;
@@ -10,15 +11,12 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Meeting;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public class PlayerVoteAreaButtonContainerTests
+public class PlayerVoteAreaButtonContainerTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
-    public PlayerVoteAreaButtonContainerTests()
+    public PlayerVoteAreaButtonContainerTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
     {
-        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupMockExtremeRolePlugin();
-        MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
     }
 

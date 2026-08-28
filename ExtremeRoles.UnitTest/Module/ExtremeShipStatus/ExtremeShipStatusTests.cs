@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,8 +11,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.ExtremeShipStatusTests;
 
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public sealed class ExtremeShipStatusTests
+public sealed class ExtremeShipStatusTests : SerialTestBase, IClassFixture<SerialFixture>
 {
 	private sealed class DummySingleRole : SingleRoleBase
 	{
@@ -29,9 +29,9 @@ public sealed class ExtremeShipStatusTests
 		public override UnityEngine.Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId) => default;
 	}
 
-	public ExtremeShipStatusTests()
-	{
-		MockSetupHelper.SetupLogger("ExtremeShipStatusTests");
+	public ExtremeShipStatusTests(SerialFixture fixture)
+        : base(fixture, new LoggerMock())
+    {
 		SetupAmongUsClientAndShipState();
 	}
 

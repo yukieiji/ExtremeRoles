@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System.Reflection;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameEnd;
@@ -8,9 +9,10 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-public sealed class NeutralSpecialWinCheckerTests
+public sealed class NeutralSpecialWinCheckerTests : SerialTestBase, IClassFixture<SerialFixture>
 {
-    public NeutralSpecialWinCheckerTests()
+    public NeutralSpecialWinCheckerTests(SerialFixture fixture)
+        : base(fixture)
     {
         SetupAmongUsClientAndShipState();
     }

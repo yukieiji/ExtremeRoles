@@ -1,11 +1,17 @@
+using ExtremeRoles.UnitTest.Mocks;
 using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Roles;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-public sealed class PlayerStatisticsTests
+public sealed class PlayerStatisticsTests : SerialTestBase, IClassFixture<SerialFixture>
 {
+    public PlayerStatisticsTests(SerialFixture fixture)
+        : base(fixture)
+    {
+    }
+
     [Fact]
     public void NeutralSeparateTeamContainer_AddAndClear_WorksCorrectly()
     {

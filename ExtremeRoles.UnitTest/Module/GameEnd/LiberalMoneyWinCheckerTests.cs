@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System.Reflection;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.GameEnd;
@@ -8,9 +9,10 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-public sealed class LiberalMoneyWinCheckerTests
+public sealed class LiberalMoneyWinCheckerTests : SerialTestBase, IClassFixture<SerialFixture>
 {
-    public LiberalMoneyWinCheckerTests()
+    public LiberalMoneyWinCheckerTests(SerialFixture fixture)
+        : base(fixture)
     {
     }
 

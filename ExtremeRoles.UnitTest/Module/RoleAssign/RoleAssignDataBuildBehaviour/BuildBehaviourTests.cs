@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System.Collections.Generic;
 using AmongUs.GameOptions;
 using ExtremeRoles;
@@ -13,17 +14,15 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public class BuildBehaviourTests
+public class BuildBehaviourTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
-    public BuildBehaviourTests()
+    public BuildBehaviourTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
     {
-        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
-        MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
 
         if (ClientOption.Instance == null)

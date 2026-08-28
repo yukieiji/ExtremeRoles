@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -21,8 +22,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Helper;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public class PlayerTests : IDisposable
+public class PlayerTests : SerialTestBase, IDisposable, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
     private static readonly IGameOptions globalGameOptions;
     private static readonly GameOptionsManager globalGameOptionsManager;
@@ -47,10 +47,10 @@ public class PlayerTests : IDisposable
         globalGameData = new Mock<GameData>().Object;
         globalShipStatus = new Mock<ShipStatus>().Object;
 
-        MockSetupHelper.SetupUnityCommonMocks();
     }
 
-    public PlayerTests()
+    public PlayerTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
     {
         ResetAllState();
     }

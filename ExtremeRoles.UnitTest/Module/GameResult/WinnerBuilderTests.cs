@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Reflection;
 using ExtremeRoles.Module.ExtremeShipStatus;
@@ -9,14 +10,11 @@ using TaskInfo = ExtremeRoles.Module.GameResult.ExtremeGameResultManager.TaskInf
 
 namespace ExtremeRoles.UnitTest.Module.GameResult;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public class WinnerBuilderTests
+public class WinnerBuilderTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
-    public WinnerBuilderTests()
+    public WinnerBuilderTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
     {
-        MockSetupHelper.SetupUnityCommonMocks();
-        MockSetupHelper.SetupLogger("WinnerBuilderTests");
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 

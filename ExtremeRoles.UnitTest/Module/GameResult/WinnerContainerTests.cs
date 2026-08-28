@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -8,14 +9,11 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameResult;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public class WinnerContainerTests
+public class WinnerContainerTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
-    public WinnerContainerTests()
+    public WinnerContainerTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
     {
-        MockSetupHelper.SetupUnityCommonMocks();
-        MockSetupHelper.SetupLogger("WinnerContainerTests");
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 

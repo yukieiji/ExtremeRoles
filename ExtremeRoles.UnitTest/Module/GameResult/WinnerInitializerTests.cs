@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -15,9 +16,7 @@ using TaskInfo = ExtremeRoles.Module.GameResult.ExtremeGameResultManager.TaskInf
 
 namespace ExtremeRoles.UnitTest.Module.GameResult;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public class WinnerInitializerTests
+public class WinnerInitializerTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
     private sealed class DummySingleRole : SingleRoleBase
     {
@@ -31,10 +30,9 @@ public class WinnerInitializerTests
         protected override void RoleSpecificInit() { }
     }
 
-    public WinnerInitializerTests()
+    public WinnerInitializerTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
     {
-        MockSetupHelper.SetupUnityCommonMocks();
-        MockSetupHelper.SetupLogger("WinnerInitializerTests");
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 

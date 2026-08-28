@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using ExtremeRoles.Module.CustomMonoBehaviour;
@@ -9,12 +10,11 @@ using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.Pla
 
 namespace ExtremeRoles.UnitTest.Module.GameResult;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public class RoleHistoryTests
+public class RoleHistoryTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
-    public RoleHistoryTests()
+    public RoleHistoryTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
     {
-        MockSetupHelper.SetupUnityCommonMocks();
         var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         mockTranslation.Setup(t => t.GetString(
             It.IsAny<string>(),

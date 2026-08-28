@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using ExtremeRoles.Module;
 using Hazel;
@@ -6,8 +7,13 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-public class RolePlayerIdGeneratorTests
+public class RolePlayerIdGeneratorTests : SerialTestBase, IClassFixture<SerialFixture>
 {
+    public RolePlayerIdGeneratorTests(SerialFixture fixture)
+        : base(fixture)
+    {
+    }
+
     [Fact]
     public void Generate_SingleControlId_IncrementsInternalId()
     {

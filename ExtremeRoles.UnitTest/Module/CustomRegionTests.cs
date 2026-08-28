@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
@@ -24,9 +25,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public sealed class CustomRegionTests
+public sealed class CustomRegionTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
 	private sealed class MockHttpMessageHandler : HttpMessageHandler
 	{
@@ -45,11 +44,10 @@ public sealed class CustomRegionTests
 
 	private readonly List<IRegionInfo> availableRegions = new();
 
-	public CustomRegionTests()
-	{
-		MockSetupHelper.SetupUnityCommonMocks();
+	public CustomRegionTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
+    {
 		MockSetupHelper.SetupConstantsHelpers();
-		MockSetupHelper.SetupLogger();
 
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);

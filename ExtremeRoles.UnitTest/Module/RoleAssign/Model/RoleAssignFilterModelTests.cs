@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,16 +14,15 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign.Model;
 
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public class RoleAssignFilterModelTests
+public class RoleAssignFilterModelTests : SerialTestBase, IClassFixture<SerialFixture>
 {
-    public RoleAssignFilterModelTests()
+    public RoleAssignFilterModelTests(SerialFixture fixture)
+        : base(fixture, new LoggerMock())
     {
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
-        MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
 
         if (ClientOption.Instance == null)

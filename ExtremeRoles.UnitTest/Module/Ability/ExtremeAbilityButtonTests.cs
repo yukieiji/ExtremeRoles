@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -18,13 +19,11 @@ using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.UnitTest.Module.Ability;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public class ExtremeAbilityButtonTests
+public class ExtremeAbilityButtonTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
-    public ExtremeAbilityButtonTests()
+    public ExtremeAbilityButtonTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
     {
-        MockSetupHelper.SetupUnityCommonMocks();
-        MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupMockExtremeRolePlugin();
     }
 

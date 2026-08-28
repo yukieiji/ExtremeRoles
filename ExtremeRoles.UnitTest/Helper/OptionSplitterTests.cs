@@ -1,11 +1,17 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System.Collections.Generic;
 using ExtremeRoles.Helper;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Helper;
 
-public class OptionSplitterTests
+public class OptionSplitterTests : SerialTestBase, IClassFixture<SerialFixture>
 {
+    public OptionSplitterTests(SerialFixture fixture)
+        : base(fixture)
+    {
+    }
+
     [Fact]
     public void IsValidOption_NullOptionId_ShouldReturnTrue()
     {

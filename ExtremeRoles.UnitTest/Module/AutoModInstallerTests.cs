@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -14,9 +15,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public class AutoModInstallerTests
+public class AutoModInstallerTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
     private sealed class MockHttpMessageHandler : HttpMessageHandler
     {
@@ -37,11 +36,10 @@ public class AutoModInstallerTests
         }
     }
 
-    public AutoModInstallerTests()
+    public AutoModInstallerTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
     {
-        MockSetupHelper.SetupUnityCommonMocks();
 
-		MockSetupHelper.SetupLogger();
 
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockHttps(plugin);

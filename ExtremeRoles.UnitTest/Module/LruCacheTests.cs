@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.IO;
 using System.Reflection;
@@ -11,12 +12,11 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public class LruCacheTests
+public class LruCacheTests : SerialTestBase, IClassFixture<SerialFixture>
 {
-    public LruCacheTests()
+    public LruCacheTests(SerialFixture fixture)
+        : base(fixture, new LoggerMock())
     {
-		MockSetupHelper.SetupLogger();
 
         var debugModeProperty = typeof(ExtremeRolesPlugin).GetProperty("DebugMode", BindingFlags.Public | BindingFlags.Static);
         if (debugModeProperty != null && debugModeProperty.GetValue(null) == null)

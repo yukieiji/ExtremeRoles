@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,8 +20,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public class ModAnnounceTests : IDisposable
+public class ModAnnounceTests : SerialTestBase, IDisposable, IClassFixture<SerialFixture>
 {
     private readonly string _previousCurrentDir;
     private readonly string _tempWorkingDir;
@@ -40,14 +40,14 @@ public class ModAnnounceTests : IDisposable
         }
     }
 
-    public ModAnnounceTests()
+    public ModAnnounceTests(SerialFixture fixture)
+        : base(fixture, new LoggerMock())
     {
         _previousCurrentDir = Directory.GetCurrentDirectory();
         _tempWorkingDir = Path.Combine(Path.GetTempPath(), "ExR_ModAnnounceTest_" + Path.GetRandomFileName());
         Directory.CreateDirectory(_tempWorkingDir);
         Directory.SetCurrentDirectory(_tempWorkingDir);
 
-		MockSetupHelper.SetupLogger();
 
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockHttps(plugin);

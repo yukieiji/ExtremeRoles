@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System;
 using System.Collections.Generic;
 using AmongUs.GameOptions;
@@ -17,8 +18,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Event;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public class MeetingVisualUpdateEventTests
+public class MeetingVisualUpdateEventTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
     private sealed class DummySingleRole : SingleRoleBase
     {
@@ -68,9 +68,9 @@ public class MeetingVisualUpdateEventTests
         protected override void UseAbility(RPCOperator.RpcCaller caller) { }
     }
 
-    public MeetingVisualUpdateEventTests()
+    public MeetingVisualUpdateEventTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
     {
-        MockSetupHelper.SetupUnityCommonMocks();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
         if (ClientOption.Instance == null)

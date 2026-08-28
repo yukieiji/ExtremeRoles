@@ -1,3 +1,4 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System.Collections.Generic;
 using ExtremeRoles;
 using ExtremeRoles.Module.CustomOption;
@@ -11,18 +12,15 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-[Collection(nameof(MockSetupHelper.SetupLogger))]
-public class RoleAssignValidatorTests
+public class RoleAssignValidatorTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
-    public RoleAssignValidatorTests()
+    public RoleAssignValidatorTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock, new LoggerMock())
     {
-        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
-        MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
 
         if (ClientOption.Instance == null)

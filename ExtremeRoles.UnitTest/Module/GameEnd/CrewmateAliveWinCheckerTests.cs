@@ -1,15 +1,15 @@
+using ExtremeRoles.UnitTest.Mocks;
 using System.Reflection;
 using ExtremeRoles.Module.GameEnd;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public sealed class CrewmateAliveWinCheckerTests
+public sealed class CrewmateAliveWinCheckerTests : SerialTestBase, IClassFixture<SerialFixture>, IClassFixture<UnityCommonMock>
 {
-    public CrewmateAliveWinCheckerTests()
+    public CrewmateAliveWinCheckerTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
+        : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, unityCommonMock.PaletteMock, unityCommonMock.GameOptionsManagerMock, unityCommonMock.CompatModManagerMock, unityCommonMock.TimeMock)
     {
-        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     private static void SetProperty<T>(object target, string propertyName, T value)
