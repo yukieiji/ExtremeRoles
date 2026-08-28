@@ -37,10 +37,10 @@ public sealed class ExtremeGameEndCheckerTests
             ExtremeGameModeManager.Create(AmongUs.GameOptions.GameModes.Normal);
         }
 
-        if (ExtremeSystemTypeManager.Instance == null)
+        FieldInfo? field = typeof(ExtremeSystemTypeManager).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static);
+        if (field?.GetValue(null) == null)
         {
             var manager = (ExtremeSystemTypeManager)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
-            FieldInfo? field = typeof(ExtremeSystemTypeManager).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static);
             field?.SetValue(null, manager);
         }
     }

@@ -1,6 +1,8 @@
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using HarmonyLib;
@@ -27,6 +29,21 @@ public static class MockSetupHelper
         SetupVector2Helpers();
 
         SetupGameDataMock();
+        SetupExtremeSystemTypeManager();
+    }
+
+    public static void SetupExtremeSystemTypeManager()
+    {
+        FieldInfo? field = typeof(ExtremeSystemTypeManager).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static);
+        if (field != null && field.GetValue(null) == null)
+        {
+            var manager = (ExtremeSystemTypeManager)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
+            var allSystems = new System.Collections.Generic.Dictionary<ExtremeSystemType, IExtremeSystemType>();
+            typeof(ExtremeSystemTypeManager)
+                .GetField("allSystems", BindingFlags.NonPublic | BindingFlags.Instance)?
+                .SetValue(manager, allSystems);
+            field.SetValue(null, manager);
+        }
     }
 
     public static Mock<AmongUsClient> SetupAmongUsClientMock()
