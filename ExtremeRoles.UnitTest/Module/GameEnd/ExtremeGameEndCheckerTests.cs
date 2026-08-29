@@ -2,29 +2,22 @@ using System.Reflection;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.UnitTest.Mocks;
 using Moq;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
 
-public sealed class ExtremeGameEndCheckerTests
+public sealed class ExtremeGameEndCheckerTests : SerialTestBase
 {
-    public ExtremeGameEndCheckerTests()
+    public ExtremeGameEndCheckerTests(SerialFixture fixture)
+        : base(fixture, new ShipStatusMock(), new AmongUsClientMock())
     {
         SetupMocks();
     }
 
     private static void SetupMocks()
     {
-        var mockShipStatus = new Mock<ShipStatus>();
-        var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
-        mockShipHelper.Setup(h => h.Invoke()).Returns(mockShipStatus.Object);
-        MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
-
-        var dict = new Mock<Il2CppSystem.Collections.Generic.Dictionary<SystemTypes, ISystemType>>(System.IntPtr.Zero);
-        mockShipStatus.SetupGet(s => s.Systems).Returns(dict.Object);
-
         var mockData = new Mock<GameData>();
         var mockDataHelper = new Mock<MockGameDataget_InstanceHelper>();
         mockDataHelper.Setup(h => h.Invoke()).Returns(mockData.Object);

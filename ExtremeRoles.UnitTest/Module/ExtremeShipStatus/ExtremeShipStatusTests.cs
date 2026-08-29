@@ -30,7 +30,7 @@ public sealed class ExtremeShipStatusTests : SerialTestBase, IClassFixture<GameO
 	}
 
 	public ExtremeShipStatusTests(SerialFixture fixture, GameOptionsManagerMock gameOptionsManagerMock)
-        : base(fixture, gameOptionsManagerMock, new LoggerMock())
+        : base(fixture, gameOptionsManagerMock, new LoggerMock(), new ShipStatusMock(), new AmongUsClientMock())
     {
 		SetupAmongUsClientAndShipState();
 	}
