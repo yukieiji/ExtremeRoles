@@ -57,19 +57,10 @@ public sealed class SabotageEndCheckerTests
     [Fact]
     public void TeroristTeroSabotageSystemEndChecker_TryCheckGameEnd_ReturnsTrueWhenExplosionTimerNegative()
     {
-        var mockSoundProvider = new Mock<ISoundProvider>();
-        TeroristTeroSabotageSystem system = new TeroristTeroSabotageSystem(default, false, mockSoundProvider.Object);
+        var system = (TeroristTeroSabotageSystem)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(TeroristTeroSabotageSystem));
 
-        System.Reflection.PropertyInfo? prop = typeof(TeroristTeroSabotageSystem).GetProperty(nameof(TeroristTeroSabotageSystem.ExplosionTimer), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        if (prop != null && prop.CanWrite)
-        {
-            prop.SetValue(system, -1.0f);
-        }
-        else
-        {
-            System.Reflection.FieldInfo? field = typeof(TeroristTeroSabotageSystem).GetField("<ExplosionTimer>k__BackingField", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            field?.SetValue(system, -1.0f);
-        }
+        System.Reflection.FieldInfo? field = typeof(TeroristTeroSabotageSystem).GetField("<ExplosionTimer>k__BackingField", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        field?.SetValue(system, -1.0f);
 
         TeroristTeroSabotageSystemEndChecker checker = new TeroristTeroSabotageSystemEndChecker(system);
 
@@ -82,19 +73,10 @@ public sealed class SabotageEndCheckerTests
     [Fact]
     public void TeroristTeroSabotageSystemEndChecker_TryCheckGameEnd_ReturnsFalseWhenExplosionTimerPositive()
     {
-        var mockSoundProvider = new Mock<ISoundProvider>();
-        TeroristTeroSabotageSystem system = new TeroristTeroSabotageSystem(default, false, mockSoundProvider.Object);
+        var system = (TeroristTeroSabotageSystem)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(TeroristTeroSabotageSystem));
 
-        System.Reflection.PropertyInfo? prop = typeof(TeroristTeroSabotageSystem).GetProperty(nameof(TeroristTeroSabotageSystem.ExplosionTimer), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        if (prop != null && prop.CanWrite)
-        {
-            prop.SetValue(system, 30.0f);
-        }
-        else
-        {
-            System.Reflection.FieldInfo? field = typeof(TeroristTeroSabotageSystem).GetField("<ExplosionTimer>k__BackingField", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            field?.SetValue(system, 30.0f);
-        }
+        System.Reflection.FieldInfo? field = typeof(TeroristTeroSabotageSystem).GetField("<ExplosionTimer>k__BackingField", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        field?.SetValue(system, 30.0f);
 
         TeroristTeroSabotageSystemEndChecker checker = new TeroristTeroSabotageSystemEndChecker(system);
 
