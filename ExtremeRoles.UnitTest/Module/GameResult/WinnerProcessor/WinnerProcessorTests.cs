@@ -36,6 +36,11 @@ public class WinnerProcessorTests : SerialTestBase, IClassFixture<UnityCommonMoc
     public WinnerProcessorTests(SerialFixture fixture, UnityCommonMock unityCommonMock)
         : base(fixture, unityCommonMock.OperatorsMock, unityCommonMock.Vector2Mock, unityCommonMock.ColorMock, unityCommonMock.MathfMock, new PaletteMock(), new GameOptionsManagerMock(), new CompatModManagerMock(), unityCommonMock.TimeMock, new LoggerMock())
     {
+        if (ExtremeRoles.GameMode.ExtremeGameModeManager.Instance == null)
+        {
+            ExtremeRoles.GameMode.ExtremeGameModeManager.Create(AmongUs.GameOptions.GameModes.Normal);
+        }
+
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
