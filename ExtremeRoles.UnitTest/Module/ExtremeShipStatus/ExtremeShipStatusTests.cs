@@ -11,7 +11,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.ExtremeShipStatusTests;
 
-public sealed class ExtremeShipStatusTests : SerialTestBase
+public sealed class ExtremeShipStatusTests : SerialTestBase, IClassFixture<GameOptionsManagerMock>
 {
 	private sealed class DummySingleRole : SingleRoleBase
 	{

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.CustomOption.Migrator;
 
-public class MigratorTests : SerialTestBase
+public class MigratorTests : SerialTestBase, IClassFixture<GameOptionsManagerMock>, IClassFixture<CompatModManagerMock>
 {
     public MigratorTests(SerialFixture fixture, GameOptionsManagerMock gameOptionsManagerMock, CompatModManagerMock compatModManagerMock)
         : base(fixture, gameOptionsManagerMock, compatModManagerMock, new LoggerMock())

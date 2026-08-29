@@ -14,7 +14,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign.Model;
 
-public class RoleAssignFilterModelTests : SerialTestBase
+public class RoleAssignFilterModelTests : SerialTestBase, IClassFixture<GameOptionsManagerMock>
 {
     public RoleAssignFilterModelTests(SerialFixture fixture, GameOptionsManagerMock gameOptionsManagerMock)
         : base(fixture, gameOptionsManagerMock, new LoggerMock())
