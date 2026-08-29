@@ -17,8 +17,7 @@
     <PackageReference Include="Il2CppInterop.Generator" Version="1.5.3-Headless" />
     <PackageReference Include="Il2CppInterop.HarmonySupport" Version="1.5.3-Headless" />
     <PackageReference Include="Il2CppInterop.Runtime" Version="1.5.3-Headless" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11" />
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.10.0" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="xunit.v3" Version="4.0.0" />
