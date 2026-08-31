@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameEnd;
@@ -8,7 +9,6 @@ using Moq;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
-
 
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class SpecialRoleWinCheckerTests
@@ -43,17 +43,13 @@ public sealed class SpecialRoleWinCheckerTests
         mockPlayerHelper.Setup(x => x.Invoke()).Returns(mockLocalPlayer.Object);
     }
 
-    private static void SetProperty<T>(object target, string propertyName, T value)
-    {
-        PropertyInfo? prop = target.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        prop?.SetValue(target, value);
-    }
-
     [Fact]
     public void TryCheckGameEnd_NoSpecialWinRoles_ReturnsFalse()
     {
-        PlayerStatistics stats = new PlayerStatistics();
-        SpecialRoleWinChecker checker = new SpecialRoleWinChecker(stats);
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.SpecialWinCheckRoleAlive).Returns(new Dictionary<int, IWinChecker>());
+
+        SpecialRoleWinChecker checker = new SpecialRoleWinChecker(mockStats.Object);
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 
@@ -63,17 +59,19 @@ public sealed class SpecialRoleWinCheckerTests
     [Fact]
     public void TryCheckGameEnd_SpecialWinRoleWins_ReturnsTrue()
     {
-        PlayerStatistics stats = new PlayerStatistics();
-
         var mockWinChecker = new Mock<IWinChecker>();
-        mockWinChecker.Setup(w => w.IsWin(It.IsAny<PlayerStatistics>())).Returns(true);
+        mockWinChecker.Setup(w => w.IsWin(It.IsAny<IPlayerStatistics>())).Returns(true);
         mockWinChecker.SetupGet(w => w.Reason).Returns(RoleGameOverReason.TaskMasterGoHome);
 
-        FieldInfo? field = typeof(PlayerStatistics).GetField("specialWinCheckRoleAlive", BindingFlags.NonPublic | BindingFlags.Instance);
-        var dict = (System.Collections.Generic.Dictionary<int, IWinChecker>)field!.GetValue(stats)!;
-        dict.Add(1, mockWinChecker.Object);
+        var dict = new Dictionary<int, IWinChecker>
+        {
+            { 1, mockWinChecker.Object }
+        };
 
-        SpecialRoleWinChecker checker = new SpecialRoleWinChecker(stats);
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.SpecialWinCheckRoleAlive).Returns(dict);
+
+        SpecialRoleWinChecker checker = new SpecialRoleWinChecker(mockStats.Object);
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 

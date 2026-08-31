@@ -1,10 +1,11 @@
-using System.Reflection;
+using System.Collections.Generic;
 using ExtremeRoles.Module.GameEnd;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
+using Moq;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
-
 
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class LiberalAliveWinCheckerTests
@@ -14,22 +15,17 @@ public sealed class LiberalAliveWinCheckerTests
         MockSetupHelper.SetupUnityCommonMocks();
     }
 
-    private static void SetProperty<T>(object target, string propertyName, T value)
-    {
-        PropertyInfo? prop = target.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        prop?.SetValue(target, value);
-    }
-
     [Fact]
     public void TryCheckGameEnd_OnlyLiberalAlive_ReturnsTrue()
     {
-        PlayerStatistics stats = new PlayerStatistics();
-        SetProperty(stats, nameof(PlayerStatistics.TeamCrewmateAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.TeamImpostorAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.TotalAlive), 2);
-        SetProperty(stats, nameof(PlayerStatistics.TeamLiberalAlive), 2);
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.TeamCrewmateAlive).Returns(0);
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(0);
+        mockStats.SetupGet(s => s.TotalAlive).Returns(2);
+        mockStats.SetupGet(s => s.TeamLiberalAlive).Returns(2);
+        mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>());
 
-        LiberalAliveWinChecker checker = new LiberalAliveWinChecker(stats);
+        LiberalAliveWinChecker checker = new LiberalAliveWinChecker(mockStats.Object);
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 
@@ -40,13 +36,14 @@ public sealed class LiberalAliveWinCheckerTests
     [Fact]
     public void TryCheckGameEnd_CrewmatesAlive_ReturnsFalse()
     {
-        PlayerStatistics stats = new PlayerStatistics();
-        SetProperty(stats, nameof(PlayerStatistics.TeamCrewmateAlive), 1);
-        SetProperty(stats, nameof(PlayerStatistics.TeamImpostorAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.TotalAlive), 2);
-        SetProperty(stats, nameof(PlayerStatistics.TeamLiberalAlive), 1);
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.TeamCrewmateAlive).Returns(1);
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(0);
+        mockStats.SetupGet(s => s.TotalAlive).Returns(2);
+        mockStats.SetupGet(s => s.TeamLiberalAlive).Returns(1);
+        mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>());
 
-        LiberalAliveWinChecker checker = new LiberalAliveWinChecker(stats);
+        LiberalAliveWinChecker checker = new LiberalAliveWinChecker(mockStats.Object);
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 

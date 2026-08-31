@@ -2,9 +2,9 @@ using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.GameEnd;
 
-public sealed class ImpostorAliveWinChecker(PlayerStatistics statistics) : IGameEndChecker
+public sealed class ImpostorAliveWinChecker(IPlayerStatistics statistics) : IGameEndChecker
 {
-	private readonly PlayerStatistics statistics = statistics;
+	private readonly IPlayerStatistics statistics = statistics;
 
 	public bool TryCheckGameEnd(out GameOverReason reason)
 	{
