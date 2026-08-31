@@ -20,6 +20,7 @@ public class BuildBehaviourTests
     public BuildBehaviourTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupExtremeSystemTypeManagerMock();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
@@ -27,7 +28,7 @@ public class BuildBehaviourTests
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
 
-        if (ClientOption.Instance == null)
+        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
         {
             OptionCreator.Create();
         }
