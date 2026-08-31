@@ -10,7 +10,7 @@ public sealed class ImpostorAliveWinCheckerTests
 {
     public ImpostorAliveWinCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     private static void SetupLastDeathReasonMock(DeathReason deathReason)

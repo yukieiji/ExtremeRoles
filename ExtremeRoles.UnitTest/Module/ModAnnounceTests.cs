@@ -47,7 +47,7 @@ public class ModAnnounceTests : IDisposable
         Directory.CreateDirectory(_tempWorkingDir);
         Directory.SetCurrentDirectory(_tempWorkingDir);
 
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupLogger();
 
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();

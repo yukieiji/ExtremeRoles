@@ -16,7 +16,7 @@ public class LruCacheTests
 {
     public LruCacheTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
 		MockSetupHelper.SetupLogger();
 

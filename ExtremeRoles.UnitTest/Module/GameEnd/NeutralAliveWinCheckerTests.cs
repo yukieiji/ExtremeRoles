@@ -13,7 +13,7 @@ public sealed class NeutralAliveWinCheckerTests
 {
     public NeutralAliveWinCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         SetupAmongUsClientAndShipState();
     }
 

@@ -9,7 +9,7 @@ public class ChargingAndActivatingCountBehaviourTests
 {
     public ChargingAndActivatingCountBehaviourTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     [Fact]

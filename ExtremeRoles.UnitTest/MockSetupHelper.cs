@@ -18,7 +18,8 @@ namespace ExtremeRoles.UnitTest;
 
 public static class MockSetupHelper
 {
-    public static void SetupCommonMocks()
+	// UnityのCommonMock
+    public static void SetupUnityCommonMocks()
     {
         SetupColorHelpers();
         SetupPaletteHelpers();

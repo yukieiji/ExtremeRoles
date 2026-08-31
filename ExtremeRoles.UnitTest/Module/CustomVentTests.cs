@@ -13,7 +13,7 @@ public class CustomVentTests
 {
     public CustomVentTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     private static Vent CreateMockVent(int id)

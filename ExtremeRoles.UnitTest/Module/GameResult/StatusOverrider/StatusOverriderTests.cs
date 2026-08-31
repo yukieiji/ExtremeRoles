@@ -30,7 +30,7 @@ public class StatusOverriderTests
 
     public StatusOverriderTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     private static NetworkedPlayerInfo CreateMockPlayerInfo(byte playerId, bool isDead = false, bool disconnected = false)

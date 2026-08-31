@@ -13,7 +13,7 @@ public sealed class LiberalMoneyWinCheckerTests
 {
     public LiberalMoneyWinCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     private static void SetProperty<T>(object target, string propertyName, T value)

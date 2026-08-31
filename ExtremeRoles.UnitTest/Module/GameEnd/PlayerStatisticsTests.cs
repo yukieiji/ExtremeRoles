@@ -9,7 +9,7 @@ public sealed class PlayerStatisticsTests
 {
     public PlayerStatisticsTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     [Fact]

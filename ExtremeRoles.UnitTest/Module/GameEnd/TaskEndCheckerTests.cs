@@ -10,7 +10,7 @@ public sealed class TaskEndCheckerTests
 {
     public TaskEndCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     [Fact]

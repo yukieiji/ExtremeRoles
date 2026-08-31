@@ -17,7 +17,7 @@ public class PlayerReviverTests
 {
     public PlayerReviverTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     private static PlayerControl CreateMockPlayerControl(byte playerId = 1)

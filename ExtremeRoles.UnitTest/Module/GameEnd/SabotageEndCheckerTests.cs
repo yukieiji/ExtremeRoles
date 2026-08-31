@@ -14,7 +14,7 @@ public sealed class SabotageEndCheckerTests
 {
     public SabotageEndCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     [Fact]

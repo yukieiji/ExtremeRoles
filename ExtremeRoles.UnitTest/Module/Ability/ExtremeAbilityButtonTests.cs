@@ -23,7 +23,7 @@ public class ExtremeAbilityButtonTests
 {
     public ExtremeAbilityButtonTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupMockExtremeRolePlugin();
     }

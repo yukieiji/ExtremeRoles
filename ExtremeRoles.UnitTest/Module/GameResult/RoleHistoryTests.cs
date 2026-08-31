@@ -14,7 +14,7 @@ public class RoleHistoryTests
 {
     public RoleHistoryTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         mockTranslation.Setup(t => t.GetString(
             It.IsAny<string>(),

@@ -13,7 +13,7 @@ public sealed class ExtremeGameEndCheckerTests
 {
     public ExtremeGameEndCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         SetupMocks();
     }
 

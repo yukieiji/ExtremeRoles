@@ -12,7 +12,7 @@ public class PlayerVoteAreaButtonGroupTests
 {
     public PlayerVoteAreaButtonGroupTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();

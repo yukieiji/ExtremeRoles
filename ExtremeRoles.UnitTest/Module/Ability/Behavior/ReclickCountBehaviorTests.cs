@@ -9,7 +9,7 @@ public class ReclickCountBehaviorTests
 {
     public ReclickCountBehaviorTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     [Fact]

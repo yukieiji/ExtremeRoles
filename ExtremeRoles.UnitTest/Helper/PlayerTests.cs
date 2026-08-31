@@ -47,7 +47,7 @@ public class PlayerTests : IDisposable
         globalGameData = new Mock<GameData>().Object;
         globalShipStatus = new Mock<ShipStatus>().Object;
 
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     public PlayerTests()

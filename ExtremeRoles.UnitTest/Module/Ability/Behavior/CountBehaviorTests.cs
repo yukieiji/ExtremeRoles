@@ -9,7 +9,7 @@ public class CountBehaviorTests
 {
     public CountBehaviorTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     [Fact]

@@ -34,7 +34,7 @@ public class PlayerSummaryBuilderTests
 
     public PlayerSummaryBuilderTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupLogger("PlayerSummaryBuilderTests");
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);

@@ -70,7 +70,7 @@ public class MeetingVisualUpdateEventTests
 
     public MeetingVisualUpdateEventTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
         if (ClientOption.Instance == null)

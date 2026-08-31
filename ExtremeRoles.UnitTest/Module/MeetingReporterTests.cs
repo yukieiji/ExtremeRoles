@@ -16,7 +16,7 @@ public class MeetingReporterTests : IDisposable
 {
     public MeetingReporterTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
         var mockDeltaTime = new Mock<MockTimeget_deltaTimeHelper>();
         mockDeltaTime.Setup(h => h.Invoke()).Returns(0.1f);
@@ -28,7 +28,7 @@ public class MeetingReporterTests : IDisposable
     public void Dispose()
     {
         MeetingReporter.Reset();
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     [Fact]

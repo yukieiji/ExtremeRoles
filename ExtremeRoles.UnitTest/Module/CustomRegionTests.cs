@@ -46,7 +46,7 @@ public sealed class CustomRegionTests
 
 	public CustomRegionTests()
 	{
-		MockSetupHelper.SetupCommonMocks();
+		MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupConstantsHelpers();
 		MockSetupHelper.SetupLogger();
 

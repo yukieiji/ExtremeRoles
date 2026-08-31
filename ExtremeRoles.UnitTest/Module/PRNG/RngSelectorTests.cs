@@ -17,7 +17,7 @@ public sealed class RngSelectorTests
 
 	public RngSelectorTests()
 	{
-		MockSetupHelper.SetupCommonMocks();
+		MockSetupHelper.SetupUnityCommonMocks();
 
 		var mockProcFreq = new Mock<MockSystemInfoget_processorFrequencyHelper>();
 		mockProcFreq.Setup(h => h.Invoke()).Returns(3000);

@@ -9,7 +9,7 @@ public class BatteryBehaviorTests
 {
     public BatteryBehaviorTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     [Fact]

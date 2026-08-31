@@ -16,7 +16,7 @@ public class RoleAssignFilterModelUpdaterTests
 {
     public RoleAssignFilterModelUpdaterTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();

@@ -11,7 +11,7 @@ public class PlayerVoteAreaButtonPostionComputerTests
 {
     public PlayerVoteAreaButtonPostionComputerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();

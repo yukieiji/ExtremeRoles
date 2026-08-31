@@ -38,7 +38,7 @@ public class AutoModInstallerTests
 
     public AutoModInstallerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
 		MockSetupHelper.SetupLogger();
 

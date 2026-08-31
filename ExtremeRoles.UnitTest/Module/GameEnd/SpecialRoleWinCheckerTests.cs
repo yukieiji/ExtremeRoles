@@ -14,7 +14,7 @@ public sealed class SpecialRoleWinCheckerTests
 {
     public SpecialRoleWinCheckerTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         SetupAmongUsClientAndShipState();
     }
 

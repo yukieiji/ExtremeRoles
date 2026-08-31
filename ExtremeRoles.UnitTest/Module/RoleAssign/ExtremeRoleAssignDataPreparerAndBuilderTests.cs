@@ -19,7 +19,7 @@ public class ExtremeRoleAssignDataPreparerAndBuilderTests
 {
     public ExtremeRoleAssignDataPreparerAndBuilderTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
