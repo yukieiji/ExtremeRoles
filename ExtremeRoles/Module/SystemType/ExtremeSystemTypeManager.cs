@@ -13,6 +13,7 @@ using ExtremeRoles.Module.Interface;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>;
+using ExtremeRoles.Extension.Il2Cpp;
 
 
 #nullable enable
@@ -88,7 +89,6 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 			}
 			return instance;
 		}
-		set => instance = value;
 	}
 
 	public const SystemTypes Type = (SystemTypes)60;
@@ -301,9 +301,11 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	internal static void AddSystem()
 	{
 		var system = Instance;
-		if (system is ExtremeSystemTypeManager manager)
+		if (system is ExtremeSystemTypeManager manager &&
+			ShipStatus.Instance != null &&
+			manager.IsTryCast<ISystemType>(out var iSystem))
 		{
-			ShipStatus.Instance.Systems.Add(Type, manager.Cast<ISystemType>());
+			ShipStatus.Instance.Systems.Add(Type, iSystem);
 		}
 	}
 
