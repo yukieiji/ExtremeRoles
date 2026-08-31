@@ -25,7 +25,7 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
+public sealed class TeroristTeroSabotageSystem : ITeroristTeroSabotageSystem
 {
 	public readonly record struct Option(
 		float ExplosionTime, int BombNum,
