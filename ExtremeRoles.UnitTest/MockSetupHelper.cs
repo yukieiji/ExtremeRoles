@@ -27,6 +27,31 @@ public static class MockSetupHelper
         SetupCompatModManager();
         SetupUnityObjectOperators();
         SetupVector2Helpers();
+        SetupTimeHelpers();
+    }
+
+    public static void SetupTimeHelpers()
+    {
+        var mockDeltaTime = new Mock<MockTimeget_deltaTimeHelper>();
+        mockDeltaTime.Setup(h => h.Invoke()).Returns(0.1f);
+        MockTimeget_deltaTimeHelper.Instance = mockDeltaTime.Object;
+
+        var mockFixedDeltaTime = new Mock<MockTimeget_fixedDeltaTimeHelper>();
+        mockFixedDeltaTime.Setup(h => h.Invoke()).Returns(0.02f);
+        MockTimeget_fixedDeltaTimeHelper.Instance = mockFixedDeltaTime.Object;
+    }
+
+    public static Mock<PlayerControl> SetupPlayerControlMocks()
+    {
+        if (MockPlayerControlget_LocalPlayerHelper.Instance == null)
+        {
+            var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+            var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+            mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
+            MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+            return mockPlayer;
+        }
+        return Mock<PlayerControl>.Get(PlayerControl.LocalPlayer);
     }
 
     public static void SetupExtremeSystemTypeManagerMock()
