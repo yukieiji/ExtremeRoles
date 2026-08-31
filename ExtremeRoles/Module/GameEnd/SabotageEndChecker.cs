@@ -49,9 +49,9 @@ public sealed class CriticalSystemEndChecker(ICriticalSabotage system) : IGameEn
 	}
 }
 
-public sealed class TeroristTeroSabotageSystemEndChecker(TeroristTeroSabotageSystem system) : IGameEndChecker
+public sealed class TeroristTeroSabotageSystemEndChecker(ITeroristTeroSabotageSystem system) : IGameEndChecker
 {
-	private readonly TeroristTeroSabotageSystem system = system;
+	private readonly ITeroristTeroSabotageSystem system = system;
 
 	public bool TryCheckGameEnd(out GameOverReason reason)
 	{
@@ -96,7 +96,7 @@ public sealed class SabotageEndChecker : IGameEndChecker
 		{
 			checkers.Add(heli);
 		}
-		if (ExtremeSystemTypeManager.Instance.TryGet<TeroristTeroSabotageSystem>(
+		if (ExtremeSystemTypeManager.Instance.TryGet<ITeroristTeroSabotageSystem>(
 			TeroristTeroSabotageSystem.SystemType, out var teroSabo))
 		{
 			checkers.Add(new TeroristTeroSabotageSystemEndChecker(teroSabo));
