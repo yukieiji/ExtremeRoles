@@ -27,6 +27,7 @@ public class ExtremeAbilityButtonTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupMockExtremeRolePlugin();
+        MockSetupHelper.SetupPlayerControlMocks();
     }
 
     private sealed class TestBehavior : BehaviorBase
