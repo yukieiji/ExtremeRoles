@@ -14,7 +14,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class AutoModInstallerTests
 {
     private sealed class MockHttpMessageHandler : HttpMessageHandler

@@ -4,7 +4,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability.Behavior;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ReclickCountBehaviorTests
 {
     public ReclickCountBehaviorTests()

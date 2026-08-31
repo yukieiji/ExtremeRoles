@@ -7,7 +7,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Meeting;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class PlayerVoteAreaButtonGroupTests
 {
     public PlayerVoteAreaButtonGroupTests()

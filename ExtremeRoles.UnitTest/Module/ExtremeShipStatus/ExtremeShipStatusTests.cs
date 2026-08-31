@@ -10,7 +10,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.ExtremeShipStatusTests;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class ExtremeShipStatusTests
 {
 	private sealed class DummySingleRole : SingleRoleBase

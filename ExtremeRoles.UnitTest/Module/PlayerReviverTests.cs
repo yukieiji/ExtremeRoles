@@ -12,7 +12,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class PlayerReviverTests
 {
     public PlayerReviverTests()

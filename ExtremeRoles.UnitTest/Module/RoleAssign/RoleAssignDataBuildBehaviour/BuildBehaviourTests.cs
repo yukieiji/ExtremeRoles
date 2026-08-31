@@ -13,7 +13,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class BuildBehaviourTests
 {
     public BuildBehaviourTests()

@@ -10,7 +10,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.PRNG;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class RngSelectorTests
 {
 	private const int randCategoryKey = (int)OptionCreator.CommonOption.RandomOption;

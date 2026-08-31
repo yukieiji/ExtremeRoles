@@ -19,7 +19,9 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection("UnityMock")]
+
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class InGameVisualUpdaterTests
 {
 	private sealed class DummySingleRole : SingleRoleBase

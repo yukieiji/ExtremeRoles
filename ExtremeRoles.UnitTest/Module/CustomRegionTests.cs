@@ -24,7 +24,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class CustomRegionTests
 {
 	private sealed class MockHttpMessageHandler : HttpMessageHandler

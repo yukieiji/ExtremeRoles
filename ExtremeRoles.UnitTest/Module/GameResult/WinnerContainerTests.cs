@@ -8,7 +8,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameResult;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class WinnerContainerTests
 {
     public WinnerContainerTests()

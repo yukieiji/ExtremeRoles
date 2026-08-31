@@ -11,7 +11,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign.Update;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class RoleAssignFilterModelUpdaterTests
 {
     public RoleAssignFilterModelUpdaterTests()

@@ -9,7 +9,8 @@ using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.Pla
 
 namespace ExtremeRoles.UnitTest.Module.GameResult;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class RoleHistoryTests
 {
     public RoleHistoryTests()

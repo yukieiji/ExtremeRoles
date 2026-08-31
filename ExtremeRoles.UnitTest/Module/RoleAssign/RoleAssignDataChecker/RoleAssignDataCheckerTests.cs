@@ -12,7 +12,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign.RoleAssignDataChecker;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class RoleAssignDataCheckerTests
 {
     public RoleAssignDataCheckerTests()

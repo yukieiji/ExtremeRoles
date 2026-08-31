@@ -7,7 +7,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.CustomOption.Migrator;
 
-[Collection("UnityMock")]
+
 public class MigratorTests
 {
     public MigratorTests()

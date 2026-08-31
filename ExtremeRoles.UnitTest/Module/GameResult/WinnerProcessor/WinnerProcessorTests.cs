@@ -17,7 +17,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameResult.WinnerProcessor;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class WinnerProcessorTests
 {
     private sealed class DummySingleRole : SingleRoleBase

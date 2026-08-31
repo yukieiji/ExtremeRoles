@@ -13,7 +13,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign.Model;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class RoleAssignFilterModelTests
 {
     public RoleAssignFilterModelTests()

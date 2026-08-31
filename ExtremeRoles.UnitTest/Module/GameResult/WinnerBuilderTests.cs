@@ -9,7 +9,8 @@ using TaskInfo = ExtremeRoles.Module.GameResult.ExtremeGameResultManager.TaskInf
 
 namespace ExtremeRoles.UnitTest.Module.GameResult;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class WinnerBuilderTests
 {
     public WinnerBuilderTests()

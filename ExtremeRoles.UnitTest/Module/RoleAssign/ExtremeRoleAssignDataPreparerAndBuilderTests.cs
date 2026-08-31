@@ -14,7 +14,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.RoleAssign;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ExtremeRoleAssignDataPreparerAndBuilderTests
 {
     public ExtremeRoleAssignDataPreparerAndBuilderTests()

@@ -13,7 +13,8 @@ using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.Pla
 
 namespace ExtremeRoles.UnitTest.Module.GameResult.StatusOverrider;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class StatusOverriderTests
 {
     private sealed class DummySingleRole : SingleRoleBase
