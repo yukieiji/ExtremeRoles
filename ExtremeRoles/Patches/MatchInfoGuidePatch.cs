@@ -266,6 +266,13 @@ public static class MatchInfoGuideCreateNormalModeSettingsPatch
 	{
 		MatchInfoGuideHelper.CreateModSettingEntry(__instance);
 		MatchInfoGuideHelper.CreateModRoleEntry(__instance);
+		
+		// 何で公式はインポスターの人数をいちいち数えてるんだ？
+		__instance.CreateSettingsEntry(
+			StringNames.GameNumImpostors,
+			(GameOptionsManager.Instance != null &&
+			 GameOptionsManager.Instance.currentNormalGameOptions != null ?
+			 GameOptionsManager.Instance.currentNormalGameOptions.NumImpostors : 0).ToString());
 	}
 }
 
