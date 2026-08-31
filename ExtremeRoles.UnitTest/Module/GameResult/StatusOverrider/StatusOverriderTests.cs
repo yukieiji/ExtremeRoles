@@ -27,7 +27,12 @@ public class StatusOverriderTests
         protected override void RoleSpecificInit() { }
     }
 
-    private static NetworkedPlayerInfo CreateMockPlayerInfo(byte playerId, bool isDead = false, bool disconnected = false)
+	public StatusOverriderTests()
+	{
+		MockSetupHelper.SetupColorHelpers();
+	}
+
+	private static NetworkedPlayerInfo CreateMockPlayerInfo(byte playerId, bool isDead = false, bool disconnected = false)
     {
         var mockPlayer = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
         mockPlayer.SetupGet(p => p.PlayerId).Returns(playerId);
