@@ -27,9 +27,6 @@ public static class MockSetupHelper
         SetupCompatModManager();
         SetupUnityObjectOperators();
         SetupVector2Helpers();
-
-        SetupGameDataMock();
-        SetupExtremeSystemTypeManagerMock();
     }
 
     public static void SetupExtremeSystemTypeManagerMock()
@@ -170,10 +167,28 @@ public static class MockSetupHelper
 
     public static void SetupCompatModManager()
     {
+        InitializeBepInExPaths();
         if (CompatModManager.Instance == null)
         {
             CompatModManager.Initialize();
         }
+    }
+
+    private static void InitializeBepInExPaths()
+    {
+        try
+        {
+            var tempCfg = Path.Combine(Path.GetTempPath(), "bepinex.cfg");
+            var setBepInExConfigPath = typeof(BepInEx.Paths).GetMethod("set_BepInExConfigPath", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            setBepInExConfigPath?.Invoke(null, new object[] { tempCfg });
+
+            var setConfigPath = typeof(BepInEx.Paths).GetMethod("set_ConfigPath", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            setConfigPath?.Invoke(null, new object[] { tempCfg });
+
+            var setBepInRootPath = typeof(BepInEx.Paths).GetMethod("set_BepInExRootPath", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            setBepInRootPath?.Invoke(null, new object[] { Path.GetTempPath() });
+        }
+        catch { }
     }
 
 	public static ExtremeRolesPlugin SetupMockExtremeRolePlugin()
@@ -255,6 +270,10 @@ public static class MockSetupHelper
 
     public static void SetupColorHelpers()
     {
+        var mockToHtml = new Mock<MockColorUtilityToHtmlStringRGBAHelper>();
+        mockToHtml.Setup(x => x.Invoke(It.IsAny<Color>())).Returns("FFFFFF");
+        MockColorUtilityToHtmlStringRGBAHelper.Instance = mockToHtml.Object;
+
         var mockColorEq = new Mock<MockColorop_EqualityHelper>();
         mockColorEq.Setup(x => x.Invoke(It.IsAny<Color>(), It.IsAny<Color>()))
             .Returns((Color a, Color b) => a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a);

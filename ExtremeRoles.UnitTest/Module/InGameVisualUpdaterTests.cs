@@ -131,6 +131,7 @@ public class InGameVisualUpdaterTests
 	public InGameVisualUpdaterTests()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupGameDataMock();
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
 		if (ClientOption.Instance == null)

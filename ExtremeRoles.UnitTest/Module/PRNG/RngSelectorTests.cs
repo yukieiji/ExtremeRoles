@@ -19,6 +19,7 @@ public sealed class RngSelectorTests
 	public RngSelectorTests()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 
 		var mockProcFreq = new Mock<MockSystemInfoget_processorFrequencyHelper>();
 		mockProcFreq.Setup(h => h.Invoke()).Returns(3000);
@@ -58,7 +59,7 @@ public sealed class RngSelectorTests
 
 	private static void EnsureRandomOptionCategory(bool useStrong, int algorithm)
 	{
-		if (ClientOption.Instance == null)
+		if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, randCategoryKey, out _))
 		{
 			OptionCreator.Create();
 		}

@@ -18,6 +18,7 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
     public VanillaRolePlayerAssignDataProviderSelectorTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupGameDataMock();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
@@ -25,10 +26,9 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
 
-        if (ClientOption.Instance == null)
+        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
         {
             OptionCreator.Create();
-            OptionManager.Load();
         }
 
         var mockOptions = new Mock<IGameOptions>(System.IntPtr.Zero);
