@@ -21,7 +21,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Helper;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class PlayerTests : IDisposable
 {
     private static readonly IGameOptions globalGameOptions;

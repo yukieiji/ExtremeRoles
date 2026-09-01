@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.SystemType.CheckPoint;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class OnemanMeetingCheckpointTests : IDisposable
 {
 	public OnemanMeetingCheckpointTests()

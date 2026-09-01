@@ -13,7 +13,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.SystemType;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class AssassinAssassinateTargetMeetingTests : IDisposable
 {
 	private sealed class DummyRole : SingleRoleBase
