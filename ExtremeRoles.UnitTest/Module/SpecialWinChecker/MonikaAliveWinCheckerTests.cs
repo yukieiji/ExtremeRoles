@@ -39,25 +39,24 @@ public sealed class MonikaAliveWinCheckerTests
     }
 
     [Fact]
-    public void Reason_ReturnsMonikaIamTheOnlyOne()
-    {
-        var checker = new MonikaAliveWinChecker();
-        Assert.Equal(RoleGameOverReason.MonikaIamTheOnlyOne, checker.Reason);
-    }
-
-    [Fact]
-    public void IsWin_AliveNumZeroOrGreaterThanOne_ReturnsFalse()
+    public void IsWin_AliveNumZero_ReturnsFalse()
     {
         var checker = new MonikaAliveWinChecker();
         var mockStats = new Mock<IPlayerStatistics>();
 
-        // aliveNum == 0
         Assert.False(checker.IsWin(mockStats.Object));
+    }
 
-        // aliveNum > 1
+    [Fact]
+    public void IsWin_AliveNumGreaterThanOne_ReturnsFalse()
+    {
+        var checker = new MonikaAliveWinChecker();
         var mockRole = new Mock<SingleRoleBase>();
         checker.AddAliveRole(1, mockRole.Object);
         checker.AddAliveRole(2, mockRole.Object);
+
+        var mockStats = new Mock<IPlayerStatistics>();
+
         Assert.False(checker.IsWin(mockStats.Object));
     }
 

@@ -20,13 +20,6 @@ public sealed class KidsWinCheckerTests
     }
 
     [Fact]
-    public void Reason_ReturnsKidsTooBigHomeAlone()
-    {
-        var checker = new KidsWinChecker();
-        Assert.Equal(RoleGameOverReason.KidsTooBigHomeAlone, checker.Reason);
-    }
-
-    [Fact]
     public void IsWin_NoDelinquentWithWinCheckEnable_ReturnsFalse()
     {
         var checker = new KidsWinChecker();

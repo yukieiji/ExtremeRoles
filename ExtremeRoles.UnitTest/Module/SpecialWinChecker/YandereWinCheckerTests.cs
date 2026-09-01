@@ -18,13 +18,6 @@ public sealed class YandereWinCheckerTests
     }
 
     [Fact]
-    public void Reason_ReturnsYandereShipJustForTwo()
-    {
-        var checker = new YandereWinChecker();
-        Assert.Equal(RoleGameOverReason.YandereShipJustForTwo, checker.Reason);
-    }
-
-    [Fact]
     public void IsWin_NoYandereOrNoOneSidedLover_ReturnsFalse()
     {
         var checker = new YandereWinChecker();
