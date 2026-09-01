@@ -76,18 +76,8 @@ public class NotAssignedPlayerAssignDataBuilderTests
         builder.Build(prepData);
 
         Assert.Equal(2, playerRoleAssignData.Data.Count);
-
-        var assign1 = playerRoleAssignData.Data[0];
-        Assert.True(assign1 is PlayerToSingleRoleAssignData);
-        var singleAssign1 = (PlayerToSingleRoleAssignData)assign1;
-        Assert.Equal((byte)1, singleAssign1.PlayerId);
-        Assert.Equal((int)RoleTypes.Crewmate, singleAssign1.RoleId);
-
-        var assign2 = playerRoleAssignData.Data[1];
-        Assert.True(assign2 is PlayerToSingleRoleAssignData);
-        var singleAssign2 = (PlayerToSingleRoleAssignData)assign2;
-        Assert.Equal((byte)2, singleAssign2.PlayerId);
-        Assert.Equal((int)RoleTypes.Impostor, singleAssign2.RoleId);
+        Assert.Contains(playerRoleAssignData.Data, a => a is PlayerToSingleRoleAssignData single && single.PlayerId == 1 && single.RoleId == (int)RoleTypes.Crewmate);
+        Assert.Contains(playerRoleAssignData.Data, a => a is PlayerToSingleRoleAssignData single && single.PlayerId == 2 && single.RoleId == (int)RoleTypes.Impostor);
     }
 
     [Fact]

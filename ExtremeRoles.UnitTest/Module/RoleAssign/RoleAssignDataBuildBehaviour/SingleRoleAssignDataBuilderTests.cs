@@ -105,6 +105,59 @@ public class SingleRoleAssignDataBuilderTests
     }
 
     [Fact]
+    public void Build_AssignsMultipleRolesToMultiplePlayers()
+    {
+        var mockRoleProvider = new Mock<IVanillaRoleProvider>();
+        mockRoleProvider.SetupGet(x => x.CrewmateRole).Returns(new HashSet<RoleTypes>());
+        mockRoleProvider.SetupGet(x => x.ImpostorRole).Returns(new HashSet<RoleTypes>());
+        mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new HashSet<RoleTypes> { RoleTypes.Crewmate });
+        mockRoleProvider.SetupGet(x => x.AllImpostor).Returns(new HashSet<RoleTypes> { RoleTypes.Impostor });
+
+        var builder = new SingleRoleAssignDataBuilder(mockRoleProvider.Object);
+
+        var players = new List<VanillaRolePlayerAssignData>
+        {
+            new VanillaRolePlayerAssignData(1, "CrewPlayer1", RoleTypes.Crewmate),
+            new VanillaRolePlayerAssignData(2, "CrewPlayer2", RoleTypes.Crewmate),
+            new VanillaRolePlayerAssignData(3, "ImpPlayer1", RoleTypes.Impostor)
+        };
+        var mockAssignData = new Mock<IVanillaRolePlayerAssignDataProvider>();
+        mockAssignData.SetupGet(x => x.Data).Returns(players);
+
+        var playerRoleAssignData = new PlayerRoleAssignData(mockRoleProvider.Object, mockAssignData.Object);
+
+        var crewSpawnDict = new Dictionary<int, SingleRoleSpawnData>
+        {
+            { (int)ExtremeRoleId.Sheriff, new SingleRoleSpawnData(1, 100, 10) },
+            { (int)ExtremeRoleId.Maintainer, new SingleRoleSpawnData(1, 100, 10) }
+        };
+        var impSpawnDict = new Dictionary<int, SingleRoleSpawnData>
+        {
+            { (int)ExtremeRoleId.BountyHunter, new SingleRoleSpawnData(1, 100, 10) }
+        };
+
+        var singleSpawnData = new Dictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnData>>
+        {
+            { ExtremeRoleType.Crewmate, crewSpawnDict },
+            { ExtremeRoleType.Impostor, impSpawnDict }
+        };
+
+        var mockSpawnData = new Mock<ISpawnDataManager>();
+        mockSpawnData.SetupGet(x => x.CurrentSingleRoleSpawnData).Returns(singleSpawnData);
+
+        var mockLimiter = new Mock<ISpawnLimiter>();
+        mockLimiter.Setup(x => x.CanSpawn(It.IsAny<ExtremeRoleType>(), It.IsAny<int>())).Returns(true);
+        mockLimiter.Setup(x => x.Get(ExtremeRoleType.Neutral)).Returns(0);
+        mockLimiter.Setup(x => x.Get(ExtremeRoleType.Liberal)).Returns(0);
+
+        var prepData = new PreparationData(playerRoleAssignData, mockSpawnData.Object, mockLimiter.Object);
+
+        builder.Build(prepData);
+
+        Assert.Equal(3, playerRoleAssignData.Data.Count);
+    }
+
+    [Fact]
     public void Build_AssignsNeutralRoles_WhenLimitGreaterThanZero()
     {
         var mockRoleProvider = new Mock<IVanillaRoleProvider>();
