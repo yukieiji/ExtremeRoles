@@ -28,7 +28,7 @@ internal sealed class YandereWinChecker : IWinChecker
 	}
 
 	public bool IsWin(
-		PlayerStatistics statistics)
+		IPlayerStatistics statistics)
 	{
 		List<PlayerControl> aliveOneSideLover = [];
 

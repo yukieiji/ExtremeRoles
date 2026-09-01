@@ -2,9 +2,9 @@ using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.GameEnd;
 
-public sealed class CrewmateAliveWinChecker(PlayerStatistics statistics) : IGameEndChecker
+public sealed class CrewmateAliveWinChecker(IPlayerStatistics statistics) : IGameEndChecker
 {
-	private readonly PlayerStatistics statistics = statistics;
+	private readonly IPlayerStatistics statistics = statistics;
 
 	public bool TryCheckGameEnd(out GameOverReason reason)
 	{

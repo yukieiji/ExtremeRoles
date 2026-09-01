@@ -1,9 +1,10 @@
-using System.Reflection;
+using System.Collections.Generic;
 using ExtremeRoles.Module.GameEnd;
+using ExtremeRoles.Module.Interface;
+using Moq;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameEnd;
-
 
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class CrewmateAliveWinCheckerTests
@@ -13,22 +14,17 @@ public sealed class CrewmateAliveWinCheckerTests
         MockSetupHelper.SetupUnityCommonMocks();
     }
 
-    private static void SetProperty<T>(object target, string propertyName, T value)
-    {
-        PropertyInfo? prop = target.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        prop?.SetValue(target, value);
-    }
-
     [Fact]
     public void TryCheckGameEnd_CrewmatesAliveAndNoThreats_ReturnsTrue()
     {
-        PlayerStatistics stats = new PlayerStatistics();
-        SetProperty(stats, nameof(PlayerStatistics.TeamCrewmateAlive), 2);
-        SetProperty(stats, nameof(PlayerStatistics.LiberalMilitantAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.TeamImpostorAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.TotalAlive), 2);
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.TeamCrewmateAlive).Returns(2);
+        mockStats.SetupGet(s => s.LiberalMilitantAlive).Returns(0);
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(0);
+        mockStats.SetupGet(s => s.TotalAlive).Returns(2);
+        mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>());
 
-        CrewmateAliveWinChecker checker = new CrewmateAliveWinChecker(stats);
+        CrewmateAliveWinChecker checker = new CrewmateAliveWinChecker(mockStats.Object);
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 
@@ -39,14 +35,15 @@ public sealed class CrewmateAliveWinCheckerTests
     [Fact]
     public void TryCheckGameEnd_OnlyNeutralsAliveNoCrewmatesNoThreats_ReturnsTrue()
     {
-        PlayerStatistics stats = new PlayerStatistics();
-        SetProperty(stats, nameof(PlayerStatistics.TeamCrewmateAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.LiberalMilitantAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.TeamImpostorAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.TotalAlive), 2);
-        SetProperty(stats, nameof(PlayerStatistics.TeamNeutralAlive), 2);
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.TeamCrewmateAlive).Returns(0);
+        mockStats.SetupGet(s => s.LiberalMilitantAlive).Returns(0);
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(0);
+        mockStats.SetupGet(s => s.TotalAlive).Returns(2);
+        mockStats.SetupGet(s => s.TeamNeutralAlive).Returns(2);
+        mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>());
 
-        CrewmateAliveWinChecker checker = new CrewmateAliveWinChecker(stats);
+        CrewmateAliveWinChecker checker = new CrewmateAliveWinChecker(mockStats.Object);
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 
@@ -57,13 +54,14 @@ public sealed class CrewmateAliveWinCheckerTests
     [Fact]
     public void TryCheckGameEnd_ImpostorAlive_ReturnsFalse()
     {
-        PlayerStatistics stats = new PlayerStatistics();
-        SetProperty(stats, nameof(PlayerStatistics.TeamCrewmateAlive), 1);
-        SetProperty(stats, nameof(PlayerStatistics.LiberalMilitantAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.TeamImpostorAlive), 1);
-        SetProperty(stats, nameof(PlayerStatistics.TotalAlive), 2);
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.TeamCrewmateAlive).Returns(1);
+        mockStats.SetupGet(s => s.LiberalMilitantAlive).Returns(0);
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(1);
+        mockStats.SetupGet(s => s.TotalAlive).Returns(2);
+        mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>());
 
-        CrewmateAliveWinChecker checker = new CrewmateAliveWinChecker(stats);
+        CrewmateAliveWinChecker checker = new CrewmateAliveWinChecker(mockStats.Object);
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 

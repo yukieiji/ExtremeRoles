@@ -1,5 +1,6 @@
-using System.Reflection;
+using System.Collections.Generic;
 using ExtremeRoles.Module.GameEnd;
+using ExtremeRoles.Module.Interface;
 using Moq;
 using Xunit;
 
@@ -25,12 +26,13 @@ public sealed class ImpostorAliveWinCheckerTests
     {
         SetupLastDeathReasonMock(DeathReason.Exile);
 
-        PlayerStatistics stats = new PlayerStatistics();
-        SetProperty(stats, nameof(PlayerStatistics.LiberalMilitantAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.TeamImpostorAlive), 2);
-        SetProperty(stats, nameof(PlayerStatistics.TotalAlive), 3);
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.LiberalMilitantAlive).Returns(0);
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(2);
+        mockStats.SetupGet(s => s.TotalAlive).Returns(3);
+        mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>());
 
-        ImpostorAliveWinChecker checker = new ImpostorAliveWinChecker(stats);
+        ImpostorAliveWinChecker checker = new ImpostorAliveWinChecker(mockStats.Object);
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 
@@ -43,12 +45,13 @@ public sealed class ImpostorAliveWinCheckerTests
     {
         SetupLastDeathReasonMock(DeathReason.Kill);
 
-        PlayerStatistics stats = new PlayerStatistics();
-        SetProperty(stats, nameof(PlayerStatistics.LiberalMilitantAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.TeamImpostorAlive), 1);
-        SetProperty(stats, nameof(PlayerStatistics.TotalAlive), 2);
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.LiberalMilitantAlive).Returns(0);
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(1);
+        mockStats.SetupGet(s => s.TotalAlive).Returns(2);
+        mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>());
 
-        ImpostorAliveWinChecker checker = new ImpostorAliveWinChecker(stats);
+        ImpostorAliveWinChecker checker = new ImpostorAliveWinChecker(mockStats.Object);
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 
@@ -61,21 +64,16 @@ public sealed class ImpostorAliveWinCheckerTests
     {
         SetupLastDeathReasonMock(DeathReason.Kill);
 
-        PlayerStatistics stats = new PlayerStatistics();
-        SetProperty(stats, nameof(PlayerStatistics.LiberalMilitantAlive), 0);
-        SetProperty(stats, nameof(PlayerStatistics.TeamImpostorAlive), 1);
-        SetProperty(stats, nameof(PlayerStatistics.TotalAlive), 3);
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.LiberalMilitantAlive).Returns(0);
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(1);
+        mockStats.SetupGet(s => s.TotalAlive).Returns(3);
+        mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>());
 
-        ImpostorAliveWinChecker checker = new ImpostorAliveWinChecker(stats);
+        ImpostorAliveWinChecker checker = new ImpostorAliveWinChecker(mockStats.Object);
 
         bool result = checker.TryCheckGameEnd(out GameOverReason reason);
 
         Assert.False(result);
-    }
-
-    private static void SetProperty<T>(object target, string propertyName, T value)
-    {
-        PropertyInfo? prop = target.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        prop?.SetValue(target, value);
     }
 }
