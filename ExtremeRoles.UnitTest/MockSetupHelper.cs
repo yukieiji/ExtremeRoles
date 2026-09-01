@@ -209,6 +209,21 @@ public static class MockSetupHelper
             {
                 allSystemsField.SetValue(systemManager, new System.Collections.Generic.Dictionary<ExtremeSystemType, ExtremeRoles.Module.Interface.IExtremeSystemType>());
             }
+            var dirtableSystemsField = typeof(ExtremeSystemTypeManager).GetField("dirtableSystems", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (dirtableSystemsField != null && dirtableSystemsField.GetValue(systemManager) == null)
+            {
+                dirtableSystemsField.SetValue(systemManager, new System.Collections.Generic.Dictionary<ExtremeSystemType, ExtremeRoles.Module.Interface.IDirtableSystemType>());
+            }
+            var sabotageSystemField = typeof(ExtremeSystemTypeManager).GetField("sabotageSystem", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (sabotageSystemField != null && sabotageSystemField.GetValue(systemManager) == null)
+            {
+                sabotageSystemField.SetValue(systemManager, new System.Collections.Generic.List<ExtremeRoles.Module.Interface.ISabotageExtremeSystemType>());
+            }
+            var dirtySystemField = typeof(ExtremeSystemTypeManager).GetField("dirtySystem", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (dirtySystemField != null && dirtySystemField.GetValue(systemManager) == null)
+            {
+                dirtySystemField.SetValue(systemManager, new System.Collections.Generic.List<ExtremeSystemType>());
+            }
             instanceField.SetValue(null, systemManager);
         }
     }
