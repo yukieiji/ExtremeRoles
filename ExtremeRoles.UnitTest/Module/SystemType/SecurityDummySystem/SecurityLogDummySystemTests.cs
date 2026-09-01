@@ -43,26 +43,46 @@ public class SecurityLogDummySystemTests : IDisposable
 	}
 
 	[Fact]
-	public void Add_Remove_Clear_ManageTargetsCorrectly()
+	public void Add_And_Remove_ManageTargetsCorrectly()
 	{
 		// Arrange
 		var system = new SecurityLogDummySystem();
 
+		var mockPlayer1 = new Mock<PlayerControl>();
+		mockPlayer1.SetupGet(p => p.PlayerId).Returns((byte)1);
+		var mockData1 = new Mock<NetworkedPlayerInfo>();
+		mockData1.SetupGet(d => d.Disconnected).Returns(false);
+		mockPlayer1.SetupGet(p => p.Data).Returns(mockData1.Object);
+
+		var mockPlayer2 = new Mock<PlayerControl>();
+		mockPlayer2.SetupGet(p => p.PlayerId).Returns((byte)2);
+		var mockData2 = new Mock<NetworkedPlayerInfo>();
+		mockData2.SetupGet(d => d.Disconnected).Returns(false);
+		mockPlayer2.SetupGet(p => p.Data).Returns(mockData2.Object);
+
+		PlayerCache.AddPlayerControl(mockPlayer1.Object);
+		PlayerCache.AddPlayerControl(mockPlayer2.Object);
+
+		var mockLogger = new Mock<SecurityLogBehaviour>(IntPtr.Zero);
+		var mockLogEntries = new Mock<Il2CppSystem.Collections.Generic.List<SecurityLogBehaviour.SecurityLogEntry>>(IntPtr.Zero);
+		mockLogger.SetupGet(l => l.LogEntries).Returns(mockLogEntries.Object);
+
+		SecurityLogBehaviour loggerObj = mockLogger.Object;
 		var mockShipStatus = new Mock<ShipStatus>(IntPtr.Zero);
-		SecurityLogBehaviour? outLogger = null;
-		mockShipStatus.Setup(s => s.TryGetComponent(out outLogger)).Returns(false);
+		mockShipStatus.Setup(s => s.TryGetComponent(out loggerObj)).Returns(true);
 
 		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShipStatus.Object);
 		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
-		// Act
+		// Act - Add 1 and 2, then remove 1
 		system.Add(1, 2);
 		system.Remove(1);
-		system.Clear();
 
-		// Assert
-		Assert.NotNull(system);
+		system.Begin();
+
+		// Assert - HasNew is set because player 2 is still targeted
+		mockLogger.VerifySet(l => l.HasNew = true, Times.Once);
 	}
 
 	[Fact]
@@ -84,8 +104,8 @@ public class SecurityLogDummySystemTests : IDisposable
 		system.Begin();
 		system.Close();
 
-		// Assert
-		Assert.NotNull(system);
+		// Assert - Verified no exceptions thrown when logger is missing
+		mockShipStatus.Verify(s => s.TryGetComponent(out outLogger), Times.Exactly(2));
 	}
 
 	[Fact]
@@ -122,11 +142,10 @@ public class SecurityLogDummySystemTests : IDisposable
 		// Assert - LogEntries and HasNew set
 		mockLogger.VerifySet(l => l.HasNew = true, Times.Once);
 
-		// Act - Close and Clear
+		// Act - Close
 		system.Close();
-		system.Clear();
 
-		// Assert
-		Assert.NotNull(system);
+		// Assert - Logger component was queried again on close
+		mockShipStatus.Verify(s => s.TryGetComponent(out loggerObj), Times.AtLeastOnce);
 	}
 }

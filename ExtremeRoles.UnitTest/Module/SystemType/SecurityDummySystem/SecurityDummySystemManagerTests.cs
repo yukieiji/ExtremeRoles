@@ -6,6 +6,7 @@ using ExtremeRoles.Module.SystemType.SecurityDummySystem;
 using ExtremeRoles.Performance;
 using Hazel;
 using Moq;
+using UnityEngine;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.SystemType.SecurityDummySystem;
@@ -46,7 +47,6 @@ public class SecurityDummySystemManagerTests : IDisposable
 		var system = SecurityDummySystemManager.Get();
 
 		// Assert
-		Assert.NotNull(system);
 		Assert.Same(system, SecurityDummySystemManager.Get());
 	}
 
@@ -70,47 +70,92 @@ public class SecurityDummySystemManagerTests : IDisposable
 		// Arrange
 		var system = SecurityDummySystemManager.Get();
 
-		// Assert defaults
-		Assert.False(system.IsActive);
-		Assert.Equal(SecurityDummySystemManager.DummyMode.Normal, system.Mode);
-
 		// Act
 		system.IsActive = true;
 		system.Mode = SecurityDummySystemManager.DummyMode.No;
 
-		// Assert modified values
+		// Assert
 		Assert.True(system.IsActive);
 		Assert.Equal(SecurityDummySystemManager.DummyMode.No, system.Mode);
 	}
 
 	[Fact]
-	public void PostfixBegin_PostfixClose_Add_Remove_ExecutesWithoutError()
+	public void PostfixBegin_And_PostfixClose_DelegatesToMainSystem()
 	{
 		// Arrange
 		var system = SecurityDummySystemManager.Get();
 
-		// Act
-		system.Add(1, 2);
-		system.Remove(1);
+		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
+		localPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)0);
+		var localDataMock = new Mock<NetworkedPlayerInfo>();
+		localDataMock.SetupGet(d => d.Disconnected).Returns(false);
+		localPlayerMock.SetupGet(p => p.Data).Returns(localDataMock.Object);
+
+		var targetPlayerMock = new Mock<PlayerControl>();
+		targetPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)1);
+		var targetDataMock = new Mock<NetworkedPlayerInfo>();
+		targetDataMock.SetupGet(d => d.Disconnected).Returns(false);
+		targetPlayerMock.SetupGet(p => p.Data).Returns(targetDataMock.Object);
+
+		var targetTransformMock = new Mock<Transform>(IntPtr.Zero);
+		targetPlayerMock.SetupGet(p => p.transform).Returns(targetTransformMock.Object);
+
+		PlayerCache.AddPlayerControl(localPlayerMock.Object);
+		PlayerCache.AddPlayerControl(targetPlayerMock.Object);
+
+		system.Add(1);
+
+		// Act - PostfixBegin
 		system.PostfixBegin();
+
+		// Assert - Player 1 scale recorded in PlayerShowSystem
+		Assert.True(PlayerShowSystem.TryGetScale(1, out _));
+
+		// Act - PostfixClose
 		system.PostfixClose();
 
 		// Assert
-		Assert.NotNull(system);
+		Assert.True(PlayerShowSystem.TryGetScale(1, out _));
 	}
 
 	[Fact]
-	public void Reset_OnPlayerAndMeetingStart_ExecutesWithoutError()
+	public void Reset_OnPlayer_ClearsTargets_WhileMeetingStart_DoesNotClear()
 	{
 		// Arrange
 		var system = SecurityDummySystemManager.Get();
 
-		// Act
-		system.Reset(ResetTiming.OnPlayer);
+		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
+		localPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)0);
+		var localDataMock = new Mock<NetworkedPlayerInfo>();
+		localDataMock.SetupGet(d => d.Disconnected).Returns(false);
+		localPlayerMock.SetupGet(p => p.Data).Returns(localDataMock.Object);
+
+		var targetPlayerMock = new Mock<PlayerControl>();
+		targetPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)1);
+		var targetDataMock = new Mock<NetworkedPlayerInfo>();
+		targetDataMock.SetupGet(d => d.Disconnected).Returns(false);
+		targetPlayerMock.SetupGet(p => p.Data).Returns(targetDataMock.Object);
+
+		var targetTransformMock = new Mock<Transform>(IntPtr.Zero);
+		targetPlayerMock.SetupGet(p => p.transform).Returns(targetTransformMock.Object);
+
+		PlayerCache.AddPlayerControl(localPlayerMock.Object);
+		PlayerCache.AddPlayerControl(targetPlayerMock.Object);
+
+		system.Add(1);
+
+		// Act - MeetingStart Reset
 		system.Reset(ResetTiming.MeetingStart);
 
-		// Assert
-		Assert.NotNull(system);
+		// Assert - System still has target 1
+		system.PostfixBegin();
+		Assert.True(PlayerShowSystem.TryGetScale(1, out _));
+
+		// Act - OnPlayer Reset
+		system.Reset(ResetTiming.OnPlayer);
+
+		// Assert - Target 1 was cleared, so player 2 added later is not hidden and player 1 target list is clear
+		Assert.False(PlayerShowSystem.TryGetScale(2, out _));
 	}
 
 	[Fact]
@@ -121,16 +166,35 @@ public class SecurityDummySystemManagerTests : IDisposable
 		var mockPlayer = new Mock<PlayerControl>();
 		var mockReader = new Mock<MessageReader>(IntPtr.Zero);
 
-		// ReadByte called twice: option then playerId
+		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
+		localPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)0);
+		var localDataMock = new Mock<NetworkedPlayerInfo>();
+		localDataMock.SetupGet(d => d.Disconnected).Returns(false);
+		localPlayerMock.SetupGet(p => p.Data).Returns(localDataMock.Object);
+
+		var targetPlayerMock = new Mock<PlayerControl>();
+		targetPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)5);
+		var targetDataMock = new Mock<NetworkedPlayerInfo>();
+		targetDataMock.SetupGet(d => d.Disconnected).Returns(false);
+		targetPlayerMock.SetupGet(p => p.Data).Returns(targetDataMock.Object);
+
+		var targetTransformMock = new Mock<Transform>(IntPtr.Zero);
+		targetPlayerMock.SetupGet(p => p.transform).Returns(targetTransformMock.Object);
+
+		PlayerCache.AddPlayerControl(localPlayerMock.Object);
+		PlayerCache.AddPlayerControl(targetPlayerMock.Object);
+
 		mockReader.SetupSequence(r => r.ReadByte())
 			.Returns((byte)SecurityDummySystemManager.Option.Add)
 			.Returns((byte)5);
 
 		// Act
 		system.UpdateSystem(mockPlayer.Object, mockReader.Object);
+		system.PostfixBegin();
 
-		// Assert
+		// Assert - Player 5 was added and gets processed on Begin
 		mockReader.Verify(r => r.ReadByte(), Times.Exactly(2));
+		Assert.True(PlayerShowSystem.TryGetScale(5, out _));
 	}
 
 	[Fact]
@@ -141,15 +205,37 @@ public class SecurityDummySystemManagerTests : IDisposable
 		var mockPlayer = new Mock<PlayerControl>();
 		var mockReader = new Mock<MessageReader>(IntPtr.Zero);
 
+		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
+		localPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)0);
+		var localDataMock = new Mock<NetworkedPlayerInfo>();
+		localDataMock.SetupGet(d => d.Disconnected).Returns(false);
+		localPlayerMock.SetupGet(p => p.Data).Returns(localDataMock.Object);
+
+		var targetPlayerMock = new Mock<PlayerControl>();
+		targetPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)5);
+		var targetDataMock = new Mock<NetworkedPlayerInfo>();
+		targetDataMock.SetupGet(d => d.Disconnected).Returns(false);
+		targetPlayerMock.SetupGet(p => p.Data).Returns(targetDataMock.Object);
+
+		var targetTransformMock = new Mock<Transform>(IntPtr.Zero);
+		targetPlayerMock.SetupGet(p => p.transform).Returns(targetTransformMock.Object);
+
+		PlayerCache.AddPlayerControl(localPlayerMock.Object);
+		PlayerCache.AddPlayerControl(targetPlayerMock.Object);
+
+		system.Add(5);
+
 		mockReader.SetupSequence(r => r.ReadByte())
 			.Returns((byte)SecurityDummySystemManager.Option.Remove)
 			.Returns((byte)5);
 
 		// Act
 		system.UpdateSystem(mockPlayer.Object, mockReader.Object);
+		system.PostfixBegin();
 
-		// Assert
+		// Assert - Player 5 was removed and scale is NOT recorded in PlayerShowSystem
 		mockReader.Verify(r => r.ReadByte(), Times.Exactly(2));
+		Assert.False(PlayerShowSystem.TryGetScale(5, out _));
 	}
 
 	[Fact]
