@@ -51,6 +51,11 @@ public class WinnerProcessorTests
         var debugEntry = debugConfig.Bind("Debug", "DebugMode", false);
         var debugProp = typeof(ExtremeRolesPlugin).GetProperty("DebugMode", BindingFlags.Public | BindingFlags.Static);
         debugProp?.SetValue(null, debugEntry);
+
+        if (ExtremeRoles.GameMode.ExtremeGameModeManager.Instance == null)
+        {
+            ExtremeRoles.GameMode.ExtremeGameModeManager.Create(AmongUs.GameOptions.GameModes.Normal);
+        }
     }
 
     private static NetworkedPlayerInfo CreateMockPlayerInfo(byte playerId, string name = "Player")

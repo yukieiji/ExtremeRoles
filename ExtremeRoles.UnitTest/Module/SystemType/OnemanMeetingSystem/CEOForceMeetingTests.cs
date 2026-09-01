@@ -21,8 +21,13 @@ public class CEOForceMeetingTests
 		bool canChat = meeting.CanChatPlayer(null!);
 		Assert.False(canChat);
 
-		bool defaultForeground = meeting.IsDefaultForegroundForDead(null!, 1);
-		Assert.True(defaultForeground);
+		MockSetupHelper.SetupPlayerControlMocks();
+		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+		bool defaultForegroundSame = meeting.IsDefaultForegroundForDead(null!, localPlayerId);
+		Assert.False(defaultForegroundSame);
+
+		bool defaultForegroundDiff = meeting.IsDefaultForegroundForDead(null!, (byte)(localPlayerId + 1));
+		Assert.True(defaultForegroundDiff);
 
 		bool validChat = meeting.IsValidShowChatPlayer(null!);
 		Assert.False(validChat);

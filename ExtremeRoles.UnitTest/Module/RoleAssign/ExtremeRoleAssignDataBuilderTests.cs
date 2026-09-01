@@ -68,6 +68,11 @@ public class ExtremeRoleAssignDataBuilderTests
         services.AddSingleton(mockBehaviour.Object);
         var serviceProvider = services.BuildServiceProvider();
 
+        if (ExtremeRoles.GameMode.ExtremeGameModeManager.Instance == null)
+        {
+            ExtremeRoles.GameMode.ExtremeGameModeManager.Create(AmongUs.GameOptions.GameModes.Normal);
+        }
+
         var builder = new ExtremeRoleAssignDataBuilder(
             serviceProvider,
             mockPreparer.Object,

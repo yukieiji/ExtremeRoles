@@ -40,6 +40,11 @@ public class RoleAssignFilterModelTests
         var config = new ConfigFile(tempPath, true);
         var entry = config.Bind("Test", "Filter", "");
 
+        if (ExtremeRoles.GameMode.ExtremeGameModeManager.Instance == null)
+        {
+            ExtremeRoles.GameMode.ExtremeGameModeManager.Create(AmongUs.GameOptions.GameModes.Normal);
+        }
+
         var model = new RoleAssignFilterModel(entry);
         model.Initialize();
 
