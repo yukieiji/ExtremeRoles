@@ -11,7 +11,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.SystemType.SecurityDummySystem;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class SecurityDummySystemManagerTests : IDisposable
 {
 	public SecurityDummySystemManagerTests()

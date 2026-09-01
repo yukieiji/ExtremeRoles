@@ -19,7 +19,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.SystemType;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class MonikaLoveTargetMeetingTests : IDisposable
 {
 	private sealed class DummyRole : SingleRoleBase
