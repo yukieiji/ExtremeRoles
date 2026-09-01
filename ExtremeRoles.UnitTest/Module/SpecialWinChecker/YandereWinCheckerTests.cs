@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameEnd;
@@ -19,14 +18,6 @@ namespace ExtremeRoles.UnitTest.Module.SpecialWinChecker;
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class YandereWinCheckerTests
 {
-    private static YandereRole CreateYandereRole(PlayerControl? loverPlayer)
-    {
-        var yandere = (YandereRole)RuntimeHelpers.GetUninitializedObject(typeof(YandereRole));
-        var backing = typeof(YandereRole).GetField("<OneSidedLover>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-        backing?.SetValue(yandere, loverPlayer);
-        return yandere;
-    }
-
     private sealed class DummySingleRole : SingleRoleBase
     {
         public DummySingleRole(ExtremeRoleId roleId, ExtremeRoleType team, bool canKill = false)
@@ -80,11 +71,151 @@ public sealed class YandereWinCheckerTests
     public void IsWin_OneSidedLoverNullOrDead_ReturnsFalse()
     {
         var checker = new YandereWinChecker();
-        var yandereRole = CreateYandereRole(null);
+        var yandereRole = new YandereRole();
+        yandereRole.OneSidedLover = null!;
         checker.AddAliveRole(1, yandereRole);
 
         var mockStats = new Mock<IPlayerStatistics>();
         Assert.False(checker.IsWin(mockStats.Object));
+    }
+
+    [Fact]
+    public void IsWin_OneSidedLoverIsImpostor_ConditionsMet_ReturnsTrue()
+    {
+        ExtremeRoleManager.GameRole.Clear();
+
+        byte yandereId = 1;
+        byte loverId = 2;
+
+        var mockLoverInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+        mockLoverInfo.SetupGet(p => p.PlayerId).Returns(loverId);
+        mockLoverInfo.SetupGet(p => p.IsDead).Returns(false);
+        mockLoverInfo.SetupGet(p => p.Disconnected).Returns(false);
+
+        var mockGameData = MockSetupHelper.SetupGameDataMock();
+        mockGameData.Setup(g => g.GetPlayerById(loverId)).Returns(mockLoverInfo.Object);
+
+        var mockLoverPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+        mockLoverPlayer.SetupGet(p => p.PlayerId).Returns(loverId);
+        mockLoverPlayer.SetupGet(p => p.Data).Returns(mockLoverInfo.Object);
+
+        var yandereRole = new YandereRole();
+        yandereRole.OneSidedLover = mockLoverPlayer.Object;
+
+        var loverRole = new DummySingleRole(ExtremeRoleId.Bait, ExtremeRoleType.Impostor);
+
+        ExtremeRoleManager.GameRole[yandereId] = yandereRole;
+        ExtremeRoleManager.GameRole[loverId] = loverRole;
+
+        var checker = new YandereWinChecker();
+        checker.AddAliveRole(yandereId, yandereRole);
+
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.TotalAlive).Returns(2);
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(1);
+        mockStats.SetupGet(s => s.AssassinAlive).Returns(0);
+        mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>());
+        mockStats.SetupGet(s => s.LiberalMilitantAlive).Returns(0);
+
+        Assert.True(checker.IsWin(mockStats.Object));
+    }
+
+    [Theory]
+    [InlineData(ExtremeRoleId.Alice)]
+    [InlineData(ExtremeRoleId.Jackal)]
+    [InlineData(ExtremeRoleId.Sidekick)]
+    [InlineData(ExtremeRoleId.Lover)]
+    [InlineData(ExtremeRoleId.Missionary)]
+    [InlineData(ExtremeRoleId.Miner)]
+    [InlineData(ExtremeRoleId.Eater)]
+    [InlineData(ExtremeRoleId.Traitor)]
+    [InlineData(ExtremeRoleId.Queen)]
+    [InlineData(ExtremeRoleId.Delinquent)]
+    [InlineData(ExtremeRoleId.Chimera)]
+    public void IsWin_OneSidedLoverIsNeutralSwitchRoles_ConditionsMet_ReturnsTrue(ExtremeRoleId roleId)
+    {
+        ExtremeRoleManager.GameRole.Clear();
+
+        byte yandereId = 1;
+        byte loverId = 2;
+
+        var mockLoverInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+        mockLoverInfo.SetupGet(p => p.PlayerId).Returns(loverId);
+        mockLoverInfo.SetupGet(p => p.IsDead).Returns(false);
+        mockLoverInfo.SetupGet(p => p.Disconnected).Returns(false);
+
+        var mockGameData = MockSetupHelper.SetupGameDataMock();
+        mockGameData.Setup(g => g.GetPlayerById(loverId)).Returns(mockLoverInfo.Object);
+
+        var mockLoverPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+        mockLoverPlayer.SetupGet(p => p.PlayerId).Returns(loverId);
+        mockLoverPlayer.SetupGet(p => p.Data).Returns(mockLoverInfo.Object);
+
+        var yandereRole = new YandereRole();
+        yandereRole.OneSidedLover = mockLoverPlayer.Object;
+
+        var loverRole = new DummySingleRole(roleId, ExtremeRoleType.Neutral);
+
+        ExtremeRoleManager.GameRole[yandereId] = yandereRole;
+        ExtremeRoleManager.GameRole[loverId] = loverRole;
+
+        var checker = new YandereWinChecker();
+        checker.AddAliveRole(yandereId, yandereRole);
+
+        var neutralDict = new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>
+        {
+            { new NeutralSeparateTeamContainer.NeutralTeam(NeutralSeparateTeam.Jackal, 1), 1 }
+        };
+
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.TotalAlive).Returns(2);
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(0);
+        mockStats.SetupGet(s => s.AssassinAlive).Returns(0);
+        mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(neutralDict);
+        mockStats.SetupGet(s => s.LiberalMilitantAlive).Returns(0);
+
+        Assert.True(checker.IsWin(mockStats.Object));
+    }
+
+    [Fact]
+    public void IsWin_OneSidedLoverIsLiberalMilitant_ConditionsMet_ReturnsTrue()
+    {
+        ExtremeRoleManager.GameRole.Clear();
+
+        byte yandereId = 1;
+        byte loverId = 2;
+
+        var mockLoverInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+        mockLoverInfo.SetupGet(p => p.PlayerId).Returns(loverId);
+        mockLoverInfo.SetupGet(p => p.IsDead).Returns(false);
+        mockLoverInfo.SetupGet(p => p.Disconnected).Returns(false);
+
+        var mockGameData = MockSetupHelper.SetupGameDataMock();
+        mockGameData.Setup(g => g.GetPlayerById(loverId)).Returns(mockLoverInfo.Object);
+
+        var mockLoverPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+        mockLoverPlayer.SetupGet(p => p.PlayerId).Returns(loverId);
+        mockLoverPlayer.SetupGet(p => p.Data).Returns(mockLoverInfo.Object);
+
+        var yandereRole = new YandereRole();
+        yandereRole.OneSidedLover = mockLoverPlayer.Object;
+
+        var loverRole = new DummySingleRole(ExtremeRoleId.Militant, ExtremeRoleType.Liberal, canKill: true);
+
+        ExtremeRoleManager.GameRole[yandereId] = yandereRole;
+        ExtremeRoleManager.GameRole[loverId] = loverRole;
+
+        var checker = new YandereWinChecker();
+        checker.AddAliveRole(yandereId, yandereRole);
+
+        var mockStats = new Mock<IPlayerStatistics>();
+        mockStats.SetupGet(s => s.TotalAlive).Returns(2);
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(0);
+        mockStats.SetupGet(s => s.AssassinAlive).Returns(0);
+        mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>());
+        mockStats.SetupGet(s => s.LiberalMilitantAlive).Returns(1);
+
+        Assert.True(checker.IsWin(mockStats.Object));
     }
 
     [Fact]
@@ -106,7 +237,9 @@ public sealed class YandereWinCheckerTests
         mockLoverPlayer.SetupGet(p => p.PlayerId).Returns(loverId);
         mockLoverPlayer.SetupGet(p => p.Data).Returns(mockLoverInfo.Object);
 
-        var yandereRole = CreateYandereRole(mockLoverPlayer.Object);
+        var yandereRole = new YandereRole();
+        yandereRole.OneSidedLover = mockLoverPlayer.Object;
+
         var loverRole = new DummySingleRole(ExtremeRoleId.Sheriff, ExtremeRoleType.Crewmate);
 
         ExtremeRoleManager.GameRole[yandereId] = yandereRole;
@@ -117,7 +250,7 @@ public sealed class YandereWinCheckerTests
 
         var mockStats = new Mock<IPlayerStatistics>();
         mockStats.SetupGet(s => s.TotalAlive).Returns(4);
-        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(2); // 2 Impostors alive, 0 assassin, 0 lover imp -> 2 > 0 -> false
+        mockStats.SetupGet(s => s.TeamImpostorAlive).Returns(2); // 2 Impostors alive -> false
         mockStats.SetupGet(s => s.AssassinAlive).Returns(0);
         mockStats.SetupGet(s => s.SeparatedNeutralAlive).Returns(new Dictionary<NeutralSeparateTeamContainer.NeutralTeam, int>());
         mockStats.SetupGet(s => s.LiberalMilitantAlive).Returns(0);
