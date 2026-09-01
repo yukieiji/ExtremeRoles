@@ -292,6 +292,13 @@ public class InGameVisualUpdaterTests
 
 		SetupInstantiateFor(nameTextMock.Object, infoTextMock.Object);
 
+		if (playerId == 0)
+		{
+			var localPlayerHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+			localPlayerHelper.Setup(h => h.Invoke()).Returns(playerMock.Object);
+			MockPlayerControlget_LocalPlayerHelper.Instance = localPlayerHelper.Object;
+		}
+
 		return (playerMock, nameTextMock, infoTextMock, infoGoMock);
 	}
 
@@ -419,8 +426,8 @@ public class InGameVisualUpdaterTests
 		ClientOption.Instance.GhostsSeeRole.Value = true;
 		ClientOption.Instance.GhostsSeeTask.Value = true;
 
-		var localRole = new DummySingleRole(RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white), Color.white, "Sheriff");
-		var targetRole = new DummySingleRole(RoleArgs.BuildImpostor(ExtremeRoleId.Assassin), Color.red, "Assassin", "[LookerTag]", new DummyRoleVisual("[LookedTag]"));
+		var localRole = new DummySingleRole(RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white), Color.white, "Sheriff", "[LookerTag]");
+		var targetRole = new DummySingleRole(RoleArgs.BuildImpostor(ExtremeRoleId.Assassin), Color.red, "Assassin", "", new DummyRoleVisual("[LookedTag]"));
 
 		ExtremeRoleManager.GameRole.Clear();
 		ExtremeRoleManager.GameRole[0] = localRole;
@@ -430,7 +437,7 @@ public class InGameVisualUpdaterTests
 		var updater = new OtherPlayerVisualUpdater(localMock.Object, targetMock.Object);
 		updater.Update();
 
-		Assert.Equal("TargetPlayer[LookedTag]", targetNameText.Object.text);
+		Assert.Equal("TargetPlayer[LookerTag][LookedTag]", targetNameText.Object.text);
 		Assert.Equal(Color.red, targetNameText.Object.color);
 		Assert.Equal("Assassin", targetInfoText.Object.text);
 		targetInfoGoMock.Verify(g => g.SetActive(true), Times.AtLeastOnce());

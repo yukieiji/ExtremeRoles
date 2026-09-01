@@ -50,11 +50,13 @@ public class HostUpdateSystemTests
 	[Fact]
 	public void Deteriorate_WhenNotHost_DoesNotUpdate()
 	{
+		var mockClient = MockSetupHelper.SetupAmongUsClientMock();
+		mockClient.SetupGet(c => c.AmHost).Returns(false);
+
 		var system = new HostUpdateSystem();
 		var mockUpdatable = new Mock<IUpdatableObject>();
 		system.Add(mockUpdatable.Object);
 
-		// Without AmongUsClient instance
 		system.Deteriorate(1.0f);
 		mockUpdatable.Verify(x => x.Update(It.IsAny<int>()), Times.Never);
 	}
