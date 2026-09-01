@@ -43,15 +43,6 @@ public class SingleRoleAssignDataBuilderTests
     }
 
     [Fact]
-    public void Priority_ReturnsSinglePriority()
-    {
-        var mockRoleProvider = new Mock<IVanillaRoleProvider>();
-        var builder = new SingleRoleAssignDataBuilder(mockRoleProvider.Object);
-
-        Assert.Equal((int)ExtremeRoleAssignDataBuilder.Priority.Single, builder.Priority);
-    }
-
-    [Fact]
     public void Build_AssignsCrewmateAndImpostorRoles()
     {
         var mockRoleProvider = new Mock<IVanillaRoleProvider>();

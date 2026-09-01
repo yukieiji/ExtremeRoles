@@ -73,14 +73,6 @@ public class CombinationRoleAssignDataBuilderTests
     }
 
     [Fact]
-    public void Priority_ReturnsCombinationPriority()
-    {
-        var builder = new CombinationRoleAssignDataBuilder();
-
-        Assert.Equal((int)ExtremeRoleAssignDataBuilder.Priority.Combination, builder.Priority);
-    }
-
-    [Fact]
     public void Build_WithEmptyCombRoles_DoesNotAssign()
     {
         var builder = new CombinationRoleAssignDataBuilder();

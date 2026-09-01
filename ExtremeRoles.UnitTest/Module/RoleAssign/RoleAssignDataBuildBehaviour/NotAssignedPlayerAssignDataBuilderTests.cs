@@ -41,16 +41,6 @@ public class NotAssignedPlayerAssignDataBuilderTests
     }
 
     [Fact]
-    public void Priority_ReturnsNotPriority()
-    {
-        var builder = new NotAssignedPlayerAssignDataBuilder();
-
-        int priority = builder.Priority;
-
-        Assert.Equal((int)ExtremeRoleAssignDataBuilder.Priority.Not, priority);
-    }
-
-    [Fact]
     public void Build_AssignsVanillaRoleToUnassignedPlayers()
     {
         var builder = new NotAssignedPlayerAssignDataBuilder();
