@@ -34,7 +34,6 @@ public sealed class CEOForceMeetingTests : IDisposable
 		MockSetupHelper.SetupPlayerControlMocks();
 
 		setupTranslationController();
-		setupObjectImplicitHelpers();
 	}
 
 	private static void setupTranslationController()
@@ -46,23 +45,6 @@ public sealed class CEOForceMeetingTests : IDisposable
 		mockTranslation
 			.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object>>()))
 			.Returns((string id, string defaultStr, Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object> parts) => !string.IsNullOrEmpty(defaultStr) ? defaultStr : id);
-	}
-
-	private static void setupObjectImplicitHelpers()
-	{
-		Il2CppSystem.MockObjectop_ImplicitHelper.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper2.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper2>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper3.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper3>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper4.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper4>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper5.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper5>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper6.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper6>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper7.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper7>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper8.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper8>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper9.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper9>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper10.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper10>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper11.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper11>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper12.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper12>().Object;
-		Il2CppSystem.MockObjectop_ImplicitHelper13.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper13>().Object;
 	}
 
 	[Fact]
