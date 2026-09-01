@@ -130,4 +130,44 @@ public class CombinationRoleAssignDataBuilderTests
 
         Assert.Empty(playerRoleAssignData.Data);
     }
+
+    [Fact]
+    public void Build_WhenLimiterCannotSpawn_DoesNotAssign()
+    {
+        var builder = new CombinationRoleAssignDataBuilder();
+
+        byte combType = (byte)CombinationRoleType.Lover;
+
+        var mockRoleProvider = new Mock<IVanillaRoleProvider>();
+        mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new HashSet<RoleTypes> { RoleTypes.Crewmate });
+        mockRoleProvider.SetupGet(x => x.AllImpostor).Returns(new HashSet<RoleTypes>());
+
+        var mockAssignData = new Mock<IVanillaRolePlayerAssignDataProvider>();
+        mockAssignData.SetupGet(x => x.Data).Returns(new List<VanillaRolePlayerAssignData>
+        {
+            new VanillaRolePlayerAssignData(1, "Player1", RoleTypes.Crewmate),
+            new VanillaRolePlayerAssignData(2, "Player2", RoleTypes.Crewmate)
+        });
+
+        var playerRoleAssignData = new PlayerRoleAssignData(mockRoleProvider.Object, mockAssignData.Object);
+
+        var combManager = ExtremeRoleManager.CombRole[combType];
+        var combSpawnData = new Dictionary<byte, CombinationRoleSpawnData>
+        {
+            { combType, new CombinationRoleSpawnData(combManager, 1, 100, 10, false) }
+        };
+
+        var mockSpawnData = new Mock<ISpawnDataManager>();
+        mockSpawnData.SetupGet(x => x.CurrentCombRoleSpawnData).Returns(combSpawnData);
+
+        var mockLimiter = new Mock<ISpawnLimiter>();
+        // Return false for CanSpawn
+        mockLimiter.Setup(x => x.CanSpawn(It.IsAny<ExtremeRoleType>(), It.IsAny<int>())).Returns(false);
+
+        var prepData = new PreparationData(playerRoleAssignData, mockSpawnData.Object, mockLimiter.Object);
+
+        builder.Build(prepData);
+
+        Assert.Empty(playerRoleAssignData.Data);
+    }
 }
