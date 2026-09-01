@@ -46,12 +46,9 @@ public sealed class KidsWinCheckerTests
 
     private static void SetupGameModeManager()
     {
-        var manager = ExtremeGameModeManager.Instance;
-        if (manager == null)
+        if (ExtremeGameModeManager.Instance == null)
         {
-            var mockManager = new Mock<ExtremeGameModeManager>();
-            var prop = typeof(ExtremeGameModeManager).GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
-            prop?.SetValue(null, mockManager.Object);
+            ExtremeGameModeManager.Create(AmongUs.GameOptions.GameModes.Normal);
         }
     }
 
