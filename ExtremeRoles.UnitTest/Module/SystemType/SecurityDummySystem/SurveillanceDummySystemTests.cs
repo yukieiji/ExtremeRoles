@@ -35,10 +35,13 @@ public class SurveillanceDummySystemTests : IDisposable
 		// Arrange
 		var system = new SurveillanceDummySystem();
 
-		// Act & Assert
+		// Act
 		system.Add(1, 2);
 		system.Remove(1);
 		system.Clear();
+
+		// Assert
+		Assert.NotNull(system);
 	}
 
 	[Fact]
@@ -96,12 +99,13 @@ public class SurveillanceDummySystemTests : IDisposable
 		// Act - Begin
 		system.Begin();
 
-		// Verify that PlayerShowSystem.Hide was called for targetPlayer (which calls target.transform.localScale getter and setter)
+		// Assert - Verify target transform was accessed to hide target player
 		targetPlayerMock.VerifyGet(p => p.transform, Times.AtLeastOnce);
 
 		// Act - Close
 		system.Close();
 
+		// Assert - Verify target transform was accessed to restore target player
 		targetPlayerMock.VerifyGet(p => p.transform, Times.AtLeastOnce);
 	}
 

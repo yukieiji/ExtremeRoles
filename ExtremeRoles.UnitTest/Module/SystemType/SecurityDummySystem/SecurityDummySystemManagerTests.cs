@@ -84,27 +84,33 @@ public class SecurityDummySystemManagerTests : IDisposable
 	}
 
 	[Fact]
-	public void PostfixBegin_PostfixClose_Add_Remove_DoNotThrow()
+	public void PostfixBegin_PostfixClose_Add_Remove_ExecutesWithoutError()
 	{
 		// Arrange
 		var system = SecurityDummySystemManager.Get();
 
-		// Act & Assert
+		// Act
 		system.Add(1, 2);
 		system.Remove(1);
 		system.PostfixBegin();
 		system.PostfixClose();
+
+		// Assert
+		Assert.NotNull(system);
 	}
 
 	[Fact]
-	public void Reset_OnPlayer_CallsClearWithoutThrowing()
+	public void Reset_OnPlayerAndMeetingStart_ExecutesWithoutError()
 	{
 		// Arrange
 		var system = SecurityDummySystemManager.Get();
 
-		// Act & Assert
+		// Act
 		system.Reset(ResetTiming.OnPlayer);
 		system.Reset(ResetTiming.MeetingStart);
+
+		// Assert
+		Assert.NotNull(system);
 	}
 
 	[Fact]

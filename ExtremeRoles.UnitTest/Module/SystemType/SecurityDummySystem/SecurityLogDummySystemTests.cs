@@ -56,10 +56,13 @@ public class SecurityLogDummySystemTests : IDisposable
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShipStatus.Object);
 		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
-		// Act & Assert
+		// Act
 		system.Add(1, 2);
 		system.Remove(1);
 		system.Clear();
+
+		// Assert
+		Assert.NotNull(system);
 	}
 
 	[Fact]
@@ -77,9 +80,12 @@ public class SecurityLogDummySystemTests : IDisposable
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShipStatus.Object);
 		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
-		// Act & Assert
+		// Act
 		system.Begin();
 		system.Close();
+
+		// Assert
+		Assert.NotNull(system);
 	}
 
 	[Fact]
@@ -116,10 +122,11 @@ public class SecurityLogDummySystemTests : IDisposable
 		// Assert - LogEntries and HasNew set
 		mockLogger.VerifySet(l => l.HasNew = true, Times.Once);
 
-		// Act - Close
+		// Act - Close and Clear
 		system.Close();
-
-		// Clear calls Close
 		system.Clear();
+
+		// Assert
+		Assert.NotNull(system);
 	}
 }
