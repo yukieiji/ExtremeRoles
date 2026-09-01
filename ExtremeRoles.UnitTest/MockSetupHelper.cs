@@ -18,7 +18,8 @@ namespace ExtremeRoles.UnitTest;
 
 public static class MockSetupHelper
 {
-	// UnityのCommonMock
+	// UnityEngineの共通Mock
+	// ここにAmongUsのMockは追加しないスコープ違い
     public static void SetupUnityCommonMocks()
     {
         SetupColorHelpers();
