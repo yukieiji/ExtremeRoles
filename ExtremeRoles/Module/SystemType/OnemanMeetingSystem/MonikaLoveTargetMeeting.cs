@@ -8,6 +8,7 @@ using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.GameResult.StatusOverrider;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Patches.Meeting.Hud;
 
@@ -47,7 +48,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IVoterShiftor, IVo
 	{
 		get
 		{
-			foreach (var player in GameData.Instance.AllPlayers)
+			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
 
 				if (!(

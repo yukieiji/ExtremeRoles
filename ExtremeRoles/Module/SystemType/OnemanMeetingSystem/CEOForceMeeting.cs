@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -16,7 +17,7 @@ public sealed class CEOForceMeeting : IOnemanMeeting, IVoterValidtor
 	{
 		get
 		{
-			foreach (var player in GameData.Instance.AllPlayers)
+			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
 				// 死んだ人だけ除外する
 				if (!(

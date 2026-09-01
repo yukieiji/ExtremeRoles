@@ -27,7 +27,116 @@ public static class MockSetupHelper
         SetupCompatModManager();
         SetupUnityObjectOperators();
         SetupVector2Helpers();
+        SetupVector3Helpers();
         SetupTimeHelpers();
+        SetupRandomHelpers();
+    }
+
+    public static void SetupRandomHelpers()
+    {
+        if (UnityEngine.MockRandomRandomRangeIntHelper.Instance == null)
+        {
+            var mock = new Mock<UnityEngine.MockRandomRandomRangeIntHelper>();
+            mock.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>())).Returns((int min, int max) => min);
+            UnityEngine.MockRandomRandomRangeIntHelper.Instance = mock.Object;
+        }
+
+        if (UnityEngine.MockRandomRandomRangeHelper.Instance == null)
+        {
+            var mock = new Mock<UnityEngine.MockRandomRandomRangeHelper>();
+            mock.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>())).Returns((int min, int max) => min);
+            UnityEngine.MockRandomRandomRangeHelper.Instance = mock.Object;
+        }
+
+        if (UnityEngine.MockRandomRandomRangeHelper2.Instance == null)
+        {
+            var mock = new Mock<UnityEngine.MockRandomRandomRangeHelper2>();
+            mock.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>())).Returns((int min, int max) => min);
+            UnityEngine.MockRandomRandomRangeHelper2.Instance = mock.Object;
+        }
+
+        if (UnityEngine.MockRandomRangeHelper.Instance == null)
+        {
+            var mock = new Mock<UnityEngine.MockRandomRangeHelper>();
+            mock.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>())).Returns((int min, int max) => min);
+            UnityEngine.MockRandomRangeHelper.Instance = mock.Object;
+        }
+
+        if (UnityEngine.MockRandomRangeHelper2.Instance == null)
+        {
+            var mock = new Mock<UnityEngine.MockRandomRangeHelper2>();
+            mock.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>())).Returns((int min, int max) => min);
+            UnityEngine.MockRandomRangeHelper2.Instance = mock.Object;
+        }
+    }
+
+    public static void SetupVector3Helpers()
+    {
+        if (MockVector3get_upHelper.Instance == null)
+        {
+            var mockUp = new Mock<MockVector3get_upHelper>();
+            mockUp.Setup(x => x.Invoke()).Returns(new Vector3(0f, 1f, 0f));
+            MockVector3get_upHelper.Instance = mockUp.Object;
+        }
+
+        if (MockVector3get_zeroHelper.Instance == null)
+        {
+            var mockZero = new Mock<MockVector3get_zeroHelper>();
+            mockZero.Setup(x => x.Invoke()).Returns(new Vector3(0f, 0f, 0f));
+            MockVector3get_zeroHelper.Instance = mockZero.Object;
+        }
+
+        if (MockVector3op_AdditionHelper.Instance == null)
+        {
+            var mockAdd = new Mock<MockVector3op_AdditionHelper>();
+            mockAdd.Setup(x => x.Invoke(It.IsAny<Vector3>(), It.IsAny<Vector3>()))
+                .Returns((Vector3 a, Vector3 b) => new Vector3(a.x + b.x, a.y + b.y, a.z + b.z));
+            MockVector3op_AdditionHelper.Instance = mockAdd.Object;
+        }
+
+        if (MockVector3op_MultiplyHelper.Instance == null)
+        {
+            var mockMult = new Mock<MockVector3op_MultiplyHelper>();
+            mockMult.Setup(x => x.Invoke(It.IsAny<Vector3>(), It.IsAny<float>()))
+                .Returns((Vector3 a, float d) => new Vector3(a.x * d, a.y * d, a.z * d));
+            MockVector3op_MultiplyHelper.Instance = mockMult.Object;
+        }
+    }
+
+    public static void SetupObjectImplicitHelpers()
+    {
+        InnerNet.MockPlayerIdop_ImplicitHelper.Instance ??= new Mock<InnerNet.MockPlayerIdop_ImplicitHelper>().Object;
+        InnerNet.MockPlayerIdop_ImplicitHelper2.Instance ??= new Mock<InnerNet.MockPlayerIdop_ImplicitHelper2>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper2.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper2>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper3.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper3>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper4.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper4>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper5.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper5>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper6.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper6>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper7.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper7>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper8.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper8>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper9.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper9>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper10.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper10>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper11.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper11>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper12.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper12>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper13.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper13>().Object;
+    }
+
+    public static void SetupPlayerVoteAreaMocks()
+    {
+        if (MockPlayerVoteAreaget_MissedVoteHelper.Instance == null)
+        {
+            var mockMissed = new Mock<MockPlayerVoteAreaget_MissedVoteHelper>();
+            mockMissed.Setup(h => h.Invoke()).Returns((byte)252);
+            MockPlayerVoteAreaget_MissedVoteHelper.Instance = mockMissed.Object;
+        }
+
+        if (MockPlayerVoteAreaget_HasNotVotedHelper.Instance == null)
+        {
+            var mockHasNotVoted = new Mock<MockPlayerVoteAreaget_HasNotVotedHelper>();
+            mockHasNotVoted.Setup(h => h.Invoke()).Returns((byte)253);
+            MockPlayerVoteAreaget_HasNotVotedHelper.Instance = mockHasNotVoted.Object;
+        }
     }
 
     public static void SetupTimeHelpers()
