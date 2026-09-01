@@ -9,12 +9,7 @@ public class ValueHolderAssemblerTests
 {
 	public ValueHolderAssemblerTests()
 	{
-		MockSetupHelper.SetupUnityCommonMocks();
-		MockSetupHelper.SetupAmongUsClientMock();
-		MockSetupHelper.SetupLobbyMock();
-		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
-		MockSetupHelper.SetupMockConfig(plugin);
-		MockSetupHelper.SetupLogger();
+		MockSetupHelper.SetupMathfHelpers();
 	}
 
 	[Fact]
