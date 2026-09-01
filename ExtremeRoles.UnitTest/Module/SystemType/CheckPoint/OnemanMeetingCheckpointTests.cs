@@ -56,7 +56,10 @@ public class OnemanMeetingCheckpointTests : IDisposable
 
 		var checkpoint = new OnemanMeetingCheckpoint(mockReader.Object);
 
-		// Act & Assert
+		// Act
 		checkpoint.HandleChecked();
+
+		// Assert
+		mockReader.Verify(r => r.ReadByte(), Times.Once);
 	}
 }

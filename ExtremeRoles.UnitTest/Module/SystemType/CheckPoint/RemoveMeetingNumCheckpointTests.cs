@@ -77,6 +77,8 @@ public class RemoveMeetingNumCheckpointTests : IDisposable
 
 		// Assert
 		Assert.Equal(2, mockLocalPlayer.Object.RemainingEmergencies);
+		mockReader.Verify(r => r.ReadPackedInt32(), Times.Once);
+		mockReader.Verify(r => r.ReadByte(), Times.Once);
 	}
 
 	[Fact]
@@ -105,6 +107,8 @@ public class RemoveMeetingNumCheckpointTests : IDisposable
 
 		// Assert
 		Assert.Equal(3, mockLocalPlayer.Object.RemainingEmergencies);
+		mockReader.Verify(r => r.ReadPackedInt32(), Times.Once);
+		mockReader.Verify(r => r.ReadByte(), Times.Once);
 	}
 
 	[Fact]
@@ -133,5 +137,7 @@ public class RemoveMeetingNumCheckpointTests : IDisposable
 
 		// Assert
 		Assert.Equal(0, mockLocalPlayer.Object.RemainingEmergencies);
+		mockReader.Verify(r => r.ReadPackedInt32(), Times.Once);
+		mockReader.Verify(r => r.ReadByte(), Times.Once);
 	}
 }

@@ -46,17 +46,21 @@ public class GlobalCheckpointSystemTests : IDisposable
 		var mockReader = new Mock<MessageReader>(IntPtr.Zero);
 		mockReader.Setup(r => r.ReadByte()).Returns((byte)GlobalCheckpointSystem.CheckpointType.RoleAssign);
 
-		// Act
-		system.UpdateSystem(mockPlayer.Object, mockReader.Object);
-
-		// Assert - second call with same checkpoint type shouldn't throw, confirming handler was stored and reused
 		var mockPlayer2 = new Mock<PlayerControl>();
 		mockPlayer2.SetupGet(p => p.PlayerId).Returns((byte)2);
 
 		var mockReader2 = new Mock<MessageReader>(IntPtr.Zero);
 		mockReader2.Setup(r => r.ReadByte()).Returns((byte)GlobalCheckpointSystem.CheckpointType.RoleAssign);
 
+		// Act
+		system.UpdateSystem(mockPlayer.Object, mockReader.Object);
 		system.UpdateSystem(mockPlayer2.Object, mockReader2.Object);
+
+		// Assert
+		mockReader.Verify(r => r.ReadByte(), Times.Once);
+		mockPlayer.VerifyGet(p => p.PlayerId, Times.AtLeastOnce);
+		mockReader2.Verify(r => r.ReadByte(), Times.Once);
+		mockPlayer2.VerifyGet(p => p.PlayerId, Times.AtLeastOnce);
 	}
 
 	[Fact]
@@ -70,9 +74,13 @@ public class GlobalCheckpointSystemTests : IDisposable
 		var mockReader = new Mock<MessageReader>(IntPtr.Zero);
 		mockReader.Setup(r => r.ReadByte()).Returns((byte)99);
 
-		// Act & Assert
-		var ex = Assert.Throws<ArgumentException>(() => system.UpdateSystem(mockPlayer.Object, mockReader.Object));
+		// Act
+		Action action = () => system.UpdateSystem(mockPlayer.Object, mockReader.Object);
+
+		// Assert
+		var ex = Assert.Throws<ArgumentException>(action);
 		Assert.Equal("InvalidType", ex.Message);
+		mockReader.Verify(r => r.ReadByte(), Times.Once);
 	}
 
 	[Fact]
@@ -107,12 +115,16 @@ public class GlobalCheckpointSystemTests : IDisposable
 
 		// Act
 		system.UpdateSystem(mockPlayer1.Object, mockReader1.Object);
-		Assert.False(GameProgressSystem.Is(GameProgressSystem.Progress.RoleSetUpReady));
+		bool isReadyBeforeAllChecked = GameProgressSystem.Is(GameProgressSystem.Progress.RoleSetUpReady);
 
 		system.UpdateSystem(mockPlayer2.Object, mockReader2.Object);
+		bool isReadyAfterAllChecked = GameProgressSystem.Is(GameProgressSystem.Progress.RoleSetUpReady);
 
-		// Assert - HandleChecked for RoleAssign sets progress to RoleSetUpReady
-		Assert.True(GameProgressSystem.Is(GameProgressSystem.Progress.RoleSetUpReady));
+		// Assert
+		Assert.False(isReadyBeforeAllChecked);
+		Assert.True(isReadyAfterAllChecked);
+		mockReader1.Verify(r => r.ReadByte(), Times.Once);
+		mockReader2.Verify(r => r.ReadByte(), Times.Once);
 	}
 
 	[Fact]
@@ -121,7 +133,10 @@ public class GlobalCheckpointSystemTests : IDisposable
 		// Arrange
 		var system = new GlobalCheckpointSystem();
 
-		// Act & Assert
+		// Act
 		system.Reset(ResetTiming.MeetingStart);
+
+		// Assert
+		Assert.NotNull(system);
 	}
 }
