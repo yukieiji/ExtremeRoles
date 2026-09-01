@@ -3,7 +3,6 @@ using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using Moq;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.CustomOption.Factory;
@@ -15,13 +14,6 @@ public class OptionCategoryFactoryTests
 		MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupAmongUsClientMock();
 		MockSetupHelper.SetupLobbyMock();
-		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
-		mockTranslation.Setup(t => t.GetString(It.IsAny<StringNames>(), It.IsAny<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object>>()))
-			.Returns((StringNames name, Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object> args) => name.ToString());
-		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object>>()))
-			.Returns((string key, string defaultStr, Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object> parts) => defaultStr);
-		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
-			.Returns((string key, string defaultStr, Il2CppSystem.Object[] parts) => defaultStr);
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
 		MockSetupHelper.SetupLogger();
@@ -164,7 +156,7 @@ public class OptionCategoryFactoryTests
 
 		Assert.NotNull(opt);
 		Assert.Equal(0, opt.Selection);
-		Assert.Equal("Opt1", opt.TransedValue);
+		Assert.Equal(3, opt.Range);
 	}
 
 	[Fact]
@@ -181,7 +173,7 @@ public class OptionCategoryFactoryTests
 
 		Assert.NotNull(opt);
 		Assert.Equal(0, opt.Selection);
-		Assert.Equal("ChoiceA", opt.TransedValue);
+		Assert.Equal(3, opt.Range);
 	}
 
 	[Fact]
