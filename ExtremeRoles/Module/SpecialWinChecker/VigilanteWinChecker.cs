@@ -15,7 +15,7 @@ internal sealed class VigilanteWinChecker : IWinChecker
 	{ }
 
 	public bool IsWin(
-		PlayerStatistics statistics)
+		IPlayerStatistics statistics)
 	{
 		int heroNum = 0;
 		int villanNum = 0;

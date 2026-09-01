@@ -3,9 +3,9 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.GameEnd;
 
-public sealed class SpecialRoleWinChecker(PlayerStatistics statistics) : IGameEndChecker
+public sealed class SpecialRoleWinChecker(IPlayerStatistics statistics) : IGameEndChecker
 {
-	private readonly PlayerStatistics statistics = statistics;
+	private readonly IPlayerStatistics statistics = statistics;
 
 	public bool TryCheckGameEnd(out GameOverReason reason)
 	{

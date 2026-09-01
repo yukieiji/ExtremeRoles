@@ -22,7 +22,7 @@ internal sealed class MonikaAliveWinChecker : IWinChecker
 	}
 
 	public bool IsWin(
-		PlayerStatistics statistics)
+		IPlayerStatistics statistics)
 	{
 		if (this.aliveNum > 1 ||
 			this.aliveNum <= 0 ||

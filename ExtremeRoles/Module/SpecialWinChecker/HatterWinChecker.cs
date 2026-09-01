@@ -18,7 +18,7 @@ internal sealed class HatterWinChecker : IWinChecker
 	}
 
 	public bool IsWin(
-		PlayerStatistics statistics)
+		IPlayerStatistics statistics)
 	{
 		int killerPlayer = statistics.TeamImpostorAlive;
 
