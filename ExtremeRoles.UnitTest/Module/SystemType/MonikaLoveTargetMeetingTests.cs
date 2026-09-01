@@ -51,6 +51,7 @@ public sealed class MonikaLoveTargetMeetingTests : IDisposable
 		MockSetupHelper.SetupGameDataMock();
 		MockSetupHelper.SetupPlayerControlMocks();
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
+		MockSetupHelper.SetupObjectImplicitHelpers();
 
 		var manager = ExtremeSystemTypeManager.Instance;
 		var flags = BindingFlags.NonPublic | BindingFlags.Instance;

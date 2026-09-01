@@ -28,8 +28,6 @@ public static class MockSetupHelper
         SetupUnityObjectOperators();
         SetupVector2Helpers();
         SetupTimeHelpers();
-        SetupObjectImplicitHelpers();
-        SetupPlayerVoteAreaMocks();
     }
 
     public static void SetupObjectImplicitHelpers()

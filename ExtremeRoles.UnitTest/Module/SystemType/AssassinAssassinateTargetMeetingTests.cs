@@ -42,6 +42,8 @@ public sealed class AssassinAssassinateTargetMeetingTests : IDisposable
 		MockSetupHelper.SetupLogger();
 		MockSetupHelper.SetupGameDataMock();
 		MockSetupHelper.SetupPlayerControlMocks();
+		MockSetupHelper.SetupObjectImplicitHelpers();
+		MockSetupHelper.SetupPlayerVoteAreaMocks();
 
 		setupTranslationController();
 

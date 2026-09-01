@@ -32,6 +32,7 @@ public sealed class CEOForceMeetingTests : IDisposable
 		MockSetupHelper.SetupLogger();
 		MockSetupHelper.SetupGameDataMock();
 		MockSetupHelper.SetupPlayerControlMocks();
+		MockSetupHelper.SetupObjectImplicitHelpers();
 
 		setupTranslationController();
 	}
