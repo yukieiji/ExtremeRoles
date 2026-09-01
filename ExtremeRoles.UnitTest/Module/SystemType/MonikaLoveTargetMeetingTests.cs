@@ -7,6 +7,7 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Patches.Meeting.Hud;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -181,6 +182,57 @@ public sealed class MonikaLoveTargetMeetingTests : IDisposable
 		var exiledInfo = meeting.CreateExiledInfo(3);
 		Assert.True(exiledInfo.IsShowPlayer);
 		Assert.Equal("MonikaMeetingExiled", exiledInfo.Text);
+	}
+
+	[Fact]
+	public void Shift_And_GetTitle_WhenLocalPlayerIsTarget()
+	{
+		// Arrange
+		registerMonikaTrashSystem();
+		var meeting = new MonikaLoveTargetMeeting();
+
+		var mockGameData = MockSetupHelper.SetupGameDataMock();
+
+		var mockPlayer1 = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		mockPlayer1.SetupGet(p => p.PlayerId).Returns((byte)1);
+		mockPlayer1.SetupGet(p => p.IsDead).Returns(false);
+		mockPlayer1.SetupGet(p => p.Disconnected).Returns(false);
+
+		var mockPlayer2 = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		mockPlayer2.SetupGet(p => p.PlayerId).Returns((byte)2);
+		mockPlayer2.SetupGet(p => p.IsDead).Returns(false);
+		mockPlayer2.SetupGet(p => p.Disconnected).Returns(false);
+
+		var players = new List<NetworkedPlayerInfo?> { mockPlayer1.Object, mockPlayer2.Object };
+
+		var mockList = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>>(IntPtr.Zero);
+		mockList.SetupGet(l => l.Count).Returns(players.Count);
+		mockList.Setup(l => l[It.IsAny<int>()]).Returns((int i) => players[i]!);
+
+		mockGameData.SetupGet(g => g.AllPlayers).Returns(mockList.Object);
+
+		_ = meeting.ValidPlayer.ToList();
+
+		var mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
+		mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
+
+		// Local player (1) is in target list, caller is 3
+		Assert.Equal("MonikaMeetingSelectTarget", meeting.GetTitle(3));
+
+		// Test Shift method
+		var mockPva1 = new Mock<PlayerVoteArea>(IntPtr.Zero);
+		mockPva1.SetupGet(p => p.PlayerId).Returns((byte)1);
+		var mockTransform1 = new Mock<Transform>(IntPtr.Zero);
+		mockPva1.SetupGet(p => p.transform).Returns(mockTransform1.Object);
+
+		var mockPvaNonTarget = new Mock<PlayerVoteArea>(IntPtr.Zero);
+		mockPvaNonTarget.SetupGet(p => p.PlayerId).Returns((byte)99);
+		var mockTransformNonTarget = new Mock<Transform>(IntPtr.Zero);
+		mockPvaNonTarget.SetupGet(p => p.transform).Returns(mockTransformNonTarget.Object);
+
+		meeting.Shift(Vector3.zero, new Vector2(1f, 1f), new[] { mockPva1.Object, mockPvaNonTarget.Object });
+
+		mockTransformNonTarget.VerifySet(t => t.position = MeetingHudSortButtonsPatch.HideOffset, Times.Once);
 	}
 
 	[Fact]

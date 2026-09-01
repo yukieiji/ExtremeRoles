@@ -30,6 +30,20 @@ public sealed class OnemanMeetingSystemManagerTests : IDisposable
 		MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupLogger();
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
+		MockSetupHelper.SetupObjectImplicitHelpers();
+
+		setupTranslationController();
+	}
+
+	private static void setupTranslationController()
+	{
+		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
+		mockTranslation
+			.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
+			.Returns((string id, string defaultStr, Il2CppSystem.Object[] parts) => !string.IsNullOrEmpty(defaultStr) ? defaultStr : id);
+		mockTranslation
+			.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object>>()))
+			.Returns((string id, string defaultStr, Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object> parts) => !string.IsNullOrEmpty(defaultStr) ? defaultStr : id);
 	}
 
 	private static (Mock<PlayerControl> caller, Mock<PlayerControl> reporter) createCallerAndReporter()
@@ -116,6 +130,8 @@ public sealed class OnemanMeetingSystemManagerTests : IDisposable
 		// Arrange
 		var system = OnemanMeetingSystemManager.CreateOrGet();
 		var (mockCaller, mockReporter) = createCallerAndReporter();
+		var mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
+		mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
 
 		// Act
 		system.Start(mockCaller.Object, OnemanMeetingSystemManager.Type.CEO, mockReporter.Object);
@@ -131,6 +147,11 @@ public sealed class OnemanMeetingSystemManagerTests : IDisposable
 		Assert.True(OnemanMeetingSystemManager.TryGetOnemanMeetingName(out string name));
 		Assert.Equal(nameof(CEOForceMeeting), name);
 		mockReporter.Verify(r => r.ReportDeadBody(It.IsAny<NetworkedPlayerInfo>()), Times.Once);
+
+		// Active delegated methods test
+		Assert.True(system.TryGetMeetingTitle(out string title));
+		Assert.Equal("CEOMeetingCEO", title);
+		Assert.False(system.IsDefaultForegroundForDead(null!));
 	}
 
 	[Fact]

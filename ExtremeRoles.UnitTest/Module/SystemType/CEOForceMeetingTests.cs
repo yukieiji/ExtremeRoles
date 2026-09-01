@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
@@ -35,6 +36,8 @@ public sealed class CEOForceMeetingTests : IDisposable
 		MockSetupHelper.SetupObjectImplicitHelpers();
 
 		setupTranslationController();
+
+		ExtremeRoleManager.GameRole.Clear();
 	}
 
 	private static void setupTranslationController()
@@ -208,5 +211,39 @@ public sealed class CEOForceMeetingTests : IDisposable
 
 		// Assert
 		Assert.False(result);
+	}
+
+	[Fact]
+	public void TryStartMeeting_WhenRoleIsCEO_AndPlayerNull_ReturnsFalse()
+	{
+		// Arrange
+		var meeting = new CEOForceMeeting();
+		var ceoRole = (CEO)RuntimeHelpers.GetUninitializedObject(typeof(CEO));
+		ExtremeRoleManager.GameRole[10] = ceoRole;
+
+		// Act
+		bool result = meeting.TryStartMeeting(10);
+
+		// Assert
+		Assert.False(result);
+	}
+
+	[Fact]
+	public void TryStartMeeting_WhenRoleIsCEO_AndPlayerExists_ReturnsTrue()
+	{
+		// Arrange
+		var meeting = new CEOForceMeeting();
+		var ceoRole = (CEO)RuntimeHelpers.GetUninitializedObject(typeof(CEO));
+		ExtremeRoleManager.GameRole[10] = ceoRole;
+
+		var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+		mockPlayer.SetupGet(p => p.PlayerId).Returns((byte)10);
+		PlayerCache.AddPlayerControl(mockPlayer.Object);
+
+		// Act
+		bool result = meeting.TryStartMeeting(10);
+
+		// Assert
+		Assert.True(result);
 	}
 }

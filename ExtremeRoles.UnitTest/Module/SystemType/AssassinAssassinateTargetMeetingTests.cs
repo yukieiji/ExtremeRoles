@@ -1,9 +1,11 @@
 using System;
+using System.Runtime.CompilerServices;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Combination.Avalon;
 using Moq;
 using Xunit;
 
@@ -147,6 +149,24 @@ public sealed class AssassinAssassinateTargetMeetingTests : IDisposable
 	}
 
 	[Fact]
+	public void CreateVoteResult_WhenMissedVote_AutoTargetsFromMeetingPlayerStates()
+	{
+		// Arrange
+		var meeting = new AssassinAssassinateTargetMeeting();
+		var mockMeeting = new Mock<MeetingHud>(IntPtr.Zero);
+
+		var pva = new Mock<PlayerVoteArea>(IntPtr.Zero);
+		mockMeeting.SetupGet(m => m.playerStates).Returns(new PlayerVoteArea[] { pva.Object });
+
+		// Act
+		var result = meeting.CreateVoteResult(mockMeeting.Object, 252);
+
+		// Assert
+		Assert.Equal(0, result.VoteFor);
+		Assert.Null(result.ExiledTarget);
+	}
+
+	[Fact]
 	public void GetTitle_And_IsDefaultForegroundForDead_BehaveAsExpected()
 	{
 		// Arrange
@@ -238,5 +258,39 @@ public sealed class AssassinAssassinateTargetMeetingTests : IDisposable
 
 		// Assert
 		Assert.False(result);
+	}
+
+	[Fact]
+	public void TryStartMeeting_WhenRoleIsAssassin_AndPlayerNull_ReturnsFalse()
+	{
+		// Arrange
+		var meeting = new AssassinAssassinateTargetMeeting();
+		var assassinRole = (Assassin)RuntimeHelpers.GetUninitializedObject(typeof(Assassin));
+		ExtremeRoleManager.GameRole[1] = assassinRole;
+
+		// Act
+		bool result = meeting.TryStartMeeting(1);
+
+		// Assert
+		Assert.False(result);
+	}
+
+	[Fact]
+	public void TryStartMeeting_WhenRoleIsAssassin_AndPlayerExists_ReturnsTrue()
+	{
+		// Arrange
+		var meeting = new AssassinAssassinateTargetMeeting();
+		var assassinRole = (Assassin)RuntimeHelpers.GetUninitializedObject(typeof(Assassin));
+		ExtremeRoleManager.GameRole[1] = assassinRole;
+
+		var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+		mockPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
+		PlayerCache.AddPlayerControl(mockPlayer.Object);
+
+		// Act
+		bool result = meeting.TryStartMeeting(1);
+
+		// Assert
+		Assert.True(result);
 	}
 }
