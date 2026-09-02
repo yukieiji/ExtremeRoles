@@ -306,6 +306,17 @@ public static class MockSetupHelper
         mockVec2Implicit2.Setup(x => x.Invoke(It.IsAny<Vector2>()))
             .Returns((Vector2 v) => new Vector3(v.x, v.y, 0f));
         MockVector2op_ImplicitHelper2.Instance = mockVec2Implicit2.Object;
+
+        var mockRotate = new Mock<MockExtensionsRotateHelper>();
+        mockRotate.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<float>()))
+            .Returns((Vector2 v, float degrees) =>
+            {
+                float rad = degrees * ((float)Math.PI / 180f);
+                float cos = (float)Math.Cos(rad);
+                float sin = (float)Math.Sin(rad);
+                return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
+            });
+        MockExtensionsRotateHelper.Instance = mockRotate.Object;
     }
 
     public static void SetupConstantsHelpers()
