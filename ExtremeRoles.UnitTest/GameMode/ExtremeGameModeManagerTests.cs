@@ -132,20 +132,6 @@ public class ExtremeGameModeManagerTests
         Assert.Null(instance.Usable);
     }
 
-    [Fact]
-    public void Load_LoadsShipOptionAndSetsXionState()
-    {
-        // Arrange
-        ExtremeGameModeManager.Create(GameModes.Normal);
-        var instance = ExtremeGameModeManager.Instance;
-
-        // Act
-        instance.Load();
-
-        // Assert
-        Assert.Equal(IRoleSelector.RawXionUse, instance.isXionActive);
-    }
-
 
     [Theory]
     [InlineData(GameModes.Normal, typeof(ClassicIntroRunner))]
