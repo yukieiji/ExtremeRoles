@@ -31,7 +31,251 @@ public static class MockSetupHelper
         SetupVector3Helpers();
         SetupTimeHelpers();
         SetupRandomHelpers();
+        SetupJsonMocking();
     }
+
+	public sealed class ManagedJObject : Newtonsoft.Json.Linq.JObject
+	{
+		public System.Text.Json.JsonElement Element { get; }
+
+		public ManagedJObject(System.Text.Json.JsonElement element) : base(IntPtr.Zero)
+		{
+			Element = element;
+		}
+
+		public override Newtonsoft.Json.Linq.JToken this[string propertyName]
+		{
+			get
+			{
+				if (Element.TryGetProperty(propertyName, out var child))
+				{
+					if (child.ValueKind == System.Text.Json.JsonValueKind.Array)
+					{
+						return new ManagedJArray(child);
+					}
+					if (child.ValueKind == System.Text.Json.JsonValueKind.Object)
+					{
+						return new ManagedJObject(child);
+					}
+					return new ManagedJToken(child);
+				}
+				return null!;
+			}
+			set { }
+		}
+	}
+
+	public sealed class ManagedJArray : Newtonsoft.Json.Linq.JArray
+	{
+		public System.Text.Json.JsonElement Element { get; }
+
+		public ManagedJArray(System.Text.Json.JsonElement element) : base(IntPtr.Zero)
+		{
+			Element = element;
+		}
+
+		public override int Count => Element.ValueKind == System.Text.Json.JsonValueKind.Array ? Element.GetArrayLength() : 0;
+
+		public override Newtonsoft.Json.Linq.JToken this[int index]
+		{
+			get
+			{
+				if (Element.ValueKind == System.Text.Json.JsonValueKind.Array && index >= 0 && index < Element.GetArrayLength())
+				{
+					var child = Element[index];
+					if (child.ValueKind == System.Text.Json.JsonValueKind.Array)
+					{
+						return new ManagedJArray(child);
+					}
+					if (child.ValueKind == System.Text.Json.JsonValueKind.Object)
+					{
+						return new ManagedJObject(child);
+					}
+					return new ManagedJToken(child);
+				}
+				return null!;
+			}
+			set { }
+		}
+	}
+
+	public sealed class ManagedJToken : Newtonsoft.Json.Linq.JToken
+	{
+		public System.Text.Json.JsonElement Element { get; }
+
+		public ManagedJToken(System.Text.Json.JsonElement element) : base(IntPtr.Zero)
+		{
+			Element = element;
+		}
+
+		public static explicit operator int(ManagedJToken value)
+		{
+			return value != null && value.Element.ValueKind == System.Text.Json.JsonValueKind.Number ? value.Element.GetInt32() : 0;
+		}
+
+		public static explicit operator float(ManagedJToken value)
+		{
+			return value != null && value.Element.ValueKind == System.Text.Json.JsonValueKind.Number ? value.Element.GetSingle() : 0f;
+		}
+	}
+
+	public static void SetupJsonMocking()
+	{
+		foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+		{
+			SetupJsonMockingForAssembly(asm);
+			SetupJTokenOperatorsForAssembly(asm);
+		}
+
+		AppDomain.CurrentDomain.AssemblyLoad += (_, args) =>
+		{
+			SetupJsonMockingForAssembly(args.LoadedAssembly);
+			SetupJTokenOperatorsForAssembly(args.LoadedAssembly);
+		};
+	}
+
+	private static void SetupJTokenOperatorsForAssembly(Assembly asm)
+	{
+		Type[] types;
+		try
+		{
+			types = asm.GetTypes();
+		}
+		catch (ReflectionTypeLoadException ex)
+		{
+			types = ex.Types.Where(t => t != null).ToArray()!;
+		}
+		catch
+		{
+			return;
+		}
+
+		foreach (var type in types)
+		{
+			if (type.Name.StartsWith("MockJTokenop_Explicit") || type.Name.StartsWith("MockJTokenop_Implicit"))
+			{
+				try
+				{
+					var field = type.GetField("Instance", BindingFlags.Public | BindingFlags.Static);
+					if (field == null || field.GetValue(null) != null) continue;
+
+					var invokeMethod = type.GetMethod("Invoke");
+					if (invokeMethod == null || invokeMethod.GetParameters().Length != 1) continue;
+
+					var returnType = invokeMethod.ReturnType;
+					var mockType = typeof(Mock<>).MakeGenericType(type);
+					var mockInstance = Activator.CreateInstance(mockType);
+					if (mockInstance == null) continue;
+
+					var paramType = invokeMethod.GetParameters()[0].ParameterType;
+
+					var miConvert = typeof(MockSetupHelper).GetMethod(nameof(ConvertJToken), BindingFlags.NonPublic | BindingFlags.Static)!;
+
+					var param = System.Linq.Expressions.Expression.Parameter(paramType, "token");
+					var convertCall = System.Linq.Expressions.Expression.Call(miConvert, param, System.Linq.Expressions.Expression.Constant(returnType));
+					var castResult = System.Linq.Expressions.Expression.Convert(convertCall, returnType);
+					var funcType = typeof(Func<,>).MakeGenericType(paramType, returnType);
+					var lambdaDelegate = System.Linq.Expressions.Expression.Lambda(funcType, castResult, param).Compile();
+
+					var setupMethod = mockType.GetMethods().First(m => m.Name == "Setup" && m.IsGenericMethod && m.GetGenericArguments().Length == 1);
+					var genericSetupMethod = setupMethod.MakeGenericMethod(returnType);
+
+					var xParam = System.Linq.Expressions.Expression.Parameter(type, "x");
+					var itIsAnyMethod = typeof(It).GetMethod("IsAny")!.MakeGenericMethod(paramType);
+					var isAnyCall = System.Linq.Expressions.Expression.Call(itIsAnyMethod);
+					var invokeCall = System.Linq.Expressions.Expression.Call(xParam, invokeMethod, isAnyCall);
+					var funcHelperType = typeof(Func<,>).MakeGenericType(type, returnType);
+					var setupExpr = System.Linq.Expressions.Expression.Lambda(funcHelperType, invokeCall, xParam);
+
+					var setupResult = genericSetupMethod.Invoke(mockInstance, new object[] { setupExpr });
+
+					var returnsMethod = setupResult!.GetType().GetMethods().First(m => m.Name == "Returns" && m.IsGenericMethod && m.GetGenericArguments().Length == 1);
+					var genericReturns = returnsMethod.MakeGenericMethod(paramType);
+					genericReturns.Invoke(setupResult, new object[] { lambdaDelegate });
+
+					var objectProp = mockType.GetProperty("Object", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly) ?? mockType.GetProperty("Object");
+					var mockedObject = objectProp?.GetValue(mockInstance);
+
+					field.SetValue(null, mockedObject);
+				}
+				catch { }
+			}
+		}
+	}
+
+	private static object? ConvertJToken(object? tokenObj, Type returnType)
+	{
+		if (tokenObj is ManagedJToken mToken)
+		{
+			var el = mToken.Element;
+			if (returnType == typeof(int)) return el.ValueKind == System.Text.Json.JsonValueKind.Number ? el.GetInt32() : 0;
+			if (returnType == typeof(float)) return el.ValueKind == System.Text.Json.JsonValueKind.Number ? el.GetSingle() : 0f;
+			if (returnType == typeof(double)) return el.ValueKind == System.Text.Json.JsonValueKind.Number ? el.GetDouble() : 0.0;
+			if (returnType == typeof(string)) return el.ToString();
+			if (returnType == typeof(bool)) return el.ValueKind == System.Text.Json.JsonValueKind.True;
+			if (returnType == typeof(long)) return el.ValueKind == System.Text.Json.JsonValueKind.Number ? el.GetInt64() : 0L;
+		}
+		if (returnType.IsValueType) return Activator.CreateInstance(returnType);
+		return null;
+	}
+
+	private static void SetupJsonMockingForAssembly(Assembly asm)
+	{
+		try
+		{
+			var helperType = asm.GetType("Newtonsoft.Json.Linq.MockJObjectParseHelper");
+			if (helperType == null) return;
+
+			var field = helperType.GetField("Instance", BindingFlags.Public | BindingFlags.Static);
+			if (field == null) return;
+
+			var invokeMethod = helperType.GetMethod("Invoke", new[] { typeof(string) });
+			if (invokeMethod == null) return;
+
+			var jObjectType = invokeMethod.ReturnType; // JObject type in this assembly
+
+			var funcType = typeof(Func<,>).MakeGenericType(typeof(string), jObjectType);
+			var mi = typeof(MockSetupHelper).GetMethod(nameof(CreateJObjectForAssembly), BindingFlags.NonPublic | BindingFlags.Static)!;
+			var jsonParam = System.Linq.Expressions.Expression.Parameter(typeof(string), "json");
+			var callExpr = System.Linq.Expressions.Expression.Call(mi, jsonParam);
+			var castExpr = System.Linq.Expressions.Expression.Convert(callExpr, jObjectType);
+			var returnDelegate = System.Linq.Expressions.Expression.Lambda(funcType, castExpr, jsonParam).Compile();
+
+			var mockType = typeof(Mock<>).MakeGenericType(helperType);
+			var mockInstance = Activator.CreateInstance(mockType);
+			if (mockInstance == null) return;
+
+			var param = System.Linq.Expressions.Expression.Parameter(helperType, "x");
+			var itIsAnyMethod = typeof(It).GetMethod("IsAny")!.MakeGenericMethod(typeof(string));
+			var isAnyCall = System.Linq.Expressions.Expression.Call(itIsAnyMethod);
+			var invokeCall = System.Linq.Expressions.Expression.Call(param, invokeMethod, isAnyCall);
+			var funcHelperJObject = typeof(Func<,>).MakeGenericType(helperType, jObjectType);
+			var lambda = System.Linq.Expressions.Expression.Lambda(funcHelperJObject, invokeCall, param);
+
+			var setupMethod = mockType.GetMethods().First(m => m.Name == "Setup" && m.IsGenericMethod && m.GetGenericArguments().Length == 1);
+			var genericSetupMethod = setupMethod.MakeGenericMethod(jObjectType);
+			var setupResult = genericSetupMethod.Invoke(mockInstance, new object[] { lambda });
+
+			var returnsMethod = setupResult!.GetType().GetMethods().First(m => m.Name == "Returns" && m.IsGenericMethod && m.GetGenericArguments().Length == 1);
+			var genericReturns = returnsMethod.MakeGenericMethod(typeof(string));
+			genericReturns.Invoke(setupResult, new object[] { returnDelegate });
+
+			var objectProp = mockType.GetProperty("Object", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly) ?? mockType.GetProperty("Object");
+			var mockedObject = objectProp?.GetValue(mockInstance);
+
+			field.SetValue(null, mockedObject);
+		}
+		catch (Exception ex)
+		{
+			System.Console.WriteLine($"SetupJsonMockingForAssembly failed for {asm.FullName}: {ex}");
+		}
+	}
+
+	private static object CreateJObjectForAssembly(string json)
+	{
+		var doc = System.Text.Json.JsonDocument.Parse(string.IsNullOrEmpty(json) ? "{}" : json);
+		return new ManagedJObject(doc.RootElement);
+	}
 
     public static void SetupRandomHelpers()
     {
@@ -247,6 +491,11 @@ public static class MockSetupHelper
 
     public static void SetupVector2Helpers()
     {
+        var mockAdd = new Mock<MockVector2op_AdditionHelper>();
+        mockAdd.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<Vector2>()))
+            .Returns((Vector2 a, Vector2 b) => new Vector2(a.x + b.x, a.y + b.y));
+        MockVector2op_AdditionHelper.Instance = mockAdd.Object;
+
         var mockRight = new Mock<MockVector2get_rightHelper>();
         mockRight.Setup(x => x.Invoke()).Returns(new Vector2(1f, 0f));
         MockVector2get_rightHelper.Instance = mockRight.Object;

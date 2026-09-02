@@ -510,37 +510,134 @@ public class MapTests : IDisposable
 	{
 		currentMapId = 1; // MiraHQ
 
+		var vent0 = CreateMockVent(0);
+		var vent1 = CreateMockVent(1);
+
 		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
-		mockShip.SetupGet(s => s.AllVents).Returns(new Il2CppReferenceArray<Vent>(IntPtr.Zero));
+		mockShip.SetupGet(s => s.AllVents).Returns(new Il2CppReferenceArray<Vent>([vent0.Object, vent1.Object]));
 
 		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
 		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
-		var exception = Record.Exception(() => Map.RelinkVent());
-		Assert.Null(exception);
+		Map.RelinkVent();
+
+		Assert.Null(vent0.Object.Right);
+		Assert.Null(vent0.Object.Center);
+		Assert.Null(vent0.Object.Left);
+		Assert.Null(vent1.Object.Right);
+		Assert.Null(vent1.Object.Center);
+		Assert.Null(vent1.Object.Left);
+	}
+
+	[Theory]
+	[InlineData((byte)0, Map.SkeldKey)]
+	[InlineData((byte)2, Map.PolusKey)]
+	[InlineData((byte)4, Map.AirShipKey)]
+	[InlineData((byte)5, Map.FungleKey)]
+	public void RelinkVent_VanillaMaps_LinksVentsCorrectly(byte mapId, string mapKey)
+	{
+		currentMapId = mapId;
+		VerifyVentRelinkForMap(mapKey);
 	}
 
 	[Fact]
-	public void RelinkVent_Skeld_LinksVentsCorrectly()
+	public void RelinkVent_SubmergedModMap_LinksVentsCorrectly()
 	{
-		currentMapId = 0; // Skeld
+		var compatManager = CompatModManager.Instance;
+		var mapField = typeof(CompatModManager).GetField("map", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-		var vent0 = new Mock<Vent>(IntPtr.Zero);
-		vent0.SetupGet(v => v.Id).Returns(0);
-		var vent1 = new Mock<Vent>(IntPtr.Zero);
-		vent1.SetupGet(v => v.Id).Returns(1);
+		var mockSubmergedIntegrator = (SubmergedIntegrator)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(SubmergedIntegrator));
+		mapField?.SetValue(compatManager, mockSubmergedIntegrator);
 
-		var ventArray = new Il2CppReferenceArray<Vent>([vent0.Object, vent1.Object]);
+		VerifyVentRelinkForMap(Map.SubmergedKey);
+	}
+
+	private void VerifyVentRelinkForMap(string mapKey)
+	{
+		var expectedPairs = GetExpectedVentLinks(mapKey);
+		Assert.NotEmpty(expectedPairs);
+
+		var ventDict = new Dictionary<int, Mock<Vent>>();
+		foreach (var (id1, id2) in expectedPairs)
+		{
+			if (!ventDict.ContainsKey(id1)) ventDict[id1] = CreateMockVent(id1);
+			if (!ventDict.ContainsKey(id2)) ventDict[id2] = CreateMockVent(id2);
+		}
+
+		var ventList = new List<Vent>();
+		foreach (var kvp in ventDict)
+		{
+			ventList.Add(kvp.Value.Object);
+		}
 
 		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
-		mockShip.SetupGet(s => s.AllVents).Returns(ventArray);
+		mockShip.SetupGet(s => s.AllVents).Returns(new Il2CppReferenceArray<Vent>(ventList.ToArray()));
 
 		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
 		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
-		var exception = Record.Exception(() => Map.RelinkVent());
-		Assert.Null(exception);
+		Map.RelinkVent();
+
+		foreach (var (id1, id2) in expectedPairs)
+		{
+			var vent1 = ventDict[id1].Object;
+			var vent2 = ventDict[id2].Object;
+
+			AssertVentConnected(vent1, vent2);
+			AssertVentConnected(vent2, vent1);
+		}
+	}
+
+	private static Mock<Vent> CreateMockVent(int id)
+	{
+		var mockVent = new Mock<Vent>(IntPtr.Zero);
+		mockVent.SetupGet(v => v.Id).Returns(id);
+
+		Vent? right = null;
+		Vent? center = null;
+		Vent? left = null;
+
+		mockVent.SetupGet(v => v.Right).Returns(() => right);
+		mockVent.SetupSet(v => v.Right = It.IsAny<Vent>()).Callback<Vent>(val => right = val);
+
+		mockVent.SetupGet(v => v.Center).Returns(() => center);
+		mockVent.SetupSet(v => v.Center = It.IsAny<Vent>()).Callback<Vent>(val => center = val);
+
+		mockVent.SetupGet(v => v.Left).Returns(() => left);
+		mockVent.SetupSet(v => v.Left = It.IsAny<Vent>()).Callback<Vent>(val => left = val);
+
+		return mockVent;
+	}
+
+	private static void AssertVentConnected(Vent from, Vent target)
+	{
+		bool isConnected = ReferenceEquals(from.Right, target) ||
+		                   ReferenceEquals(from.Center, target) ||
+		                   ReferenceEquals(from.Left, target);
+		Assert.True(isConnected, $"Vent {from.Id} is not connected to Vent {target.Id}");
+	}
+
+	private static List<(int, int)> GetExpectedVentLinks(string mapKey)
+	{
+		var jObj = JsonParser.GetJObjectFromAssembly("ExtremeRoles.Resources.JsonData.AllVentLinkInfo.json");
+		Assert.NotNull(jObj);
+
+		var jArr = jObj[mapKey] as Newtonsoft.Json.Linq.JArray;
+		Assert.NotNull(jArr);
+
+		var list = new List<(int, int)>();
+		for (int i = 0; i < jArr.Count; i++)
+		{
+			var pair = jArr[i] as Newtonsoft.Json.Linq.JArray;
+			if (pair != null && pair.Count >= 2)
+			{
+				int v1 = pair[0] is MockSetupHelper.ManagedJToken m1 ? (int)m1 : (int)pair[0];
+				int v2 = pair[1] is MockSetupHelper.ManagedJToken m2 ? (int)m2 : (int)pair[1];
+				list.Add((v1, v2));
+			}
+		}
+		return list;
 	}
 }

@@ -20,27 +20,41 @@ public static class JsonParser
     public static JObject? GetJObjectFromAssembly(string path)
     {
 		var assembly = Assembly.GetCallingAssembly();
-		using Stream? stream = assembly.GetManifestResourceStream(path);
+		Stream? stream = assembly.GetManifestResourceStream(path);
+		if (stream is null && assembly != typeof(JsonParser).Assembly)
+		{
+			stream = typeof(JsonParser).Assembly.GetManifestResourceStream(path);
+		}
 
 		if (stream is null) { return null; }
 
-		int length = (int)stream.Length;
-		byte[] byteArray = new byte[length];
-        stream.ReadExactly(byteArray, 0, length);
+		using (stream)
+		{
+			int length = (int)stream.Length;
+			byte[] byteArray = new byte[length];
+			stream.ReadExactly(byteArray, 0, length);
 
-        return JObject.Parse(Encoding.UTF8.GetString(byteArray));
+			return JObject.Parse(Encoding.UTF8.GetString(byteArray));
+		}
     }
 
 	public static T? LoadJsonStructFromAssembly<T>(string path, JsonSerializerOptions? opt=null)
 	{
 		var assembly = Assembly.GetCallingAssembly();
-		using Stream? stream = assembly.GetManifestResourceStream(path);
+		Stream? stream = assembly.GetManifestResourceStream(path);
+		if (stream is null && assembly != typeof(JsonParser).Assembly)
+		{
+			stream = typeof(JsonParser).Assembly.GetManifestResourceStream(path);
+		}
 
 		if (stream is null) { return default(T); }
 
-		var result = JsonSerializer.Deserialize<T>(stream, opt);
+		using (stream)
+		{
+			var result = JsonSerializer.Deserialize<T>(stream, opt);
 
-		return result;
+			return result;
+		}
 	}
 
 	public static async Task<T?> GetRestApiAsync<T>(string targetUrl)

@@ -28,4 +28,11 @@
     <Reference Include="$(MSBuildProjectDirectory)/.mockbuilder/build/output/*.dll" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="..\ExtremeRoles\Resources\JsonData\*.json">
+      <Link>Resources\JsonData\%(Filename)%(Extension)</Link>
+      <LogicalName>ExtremeRoles.Resources.JsonData.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
