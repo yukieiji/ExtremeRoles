@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -225,19 +225,22 @@ public static class Map
 	{
 		var airShipSpawnData = JsonParser.LoadJsonStructFromAssembly<Dictionary<string, float[][]>>(airShipSpawnJson);
 
-		List<Vector2> result = new List<Vector2>();
-
-		if (airShipSpawnData == null || !airShipSpawnData.TryGetValue(airShipRandomSpawnKey, out var airShipSpawn))
+		if (airShipSpawnData == null || 
+			airShipSpawnData == null || 
+			!airShipSpawnData.TryGetValue(airShipRandomSpawnKey, out float[][]? airShipSpawn) ||
+			airShipSpawn == null)
 		{
-			return result;
+			return [];
 		}
 
-		result.Capacity = airShipSpawn.Length;
+		var result = new List<Vector2>(airShipSpawn.Length);
 
-		for (int i = 0; i < airShipSpawn.Length; ++i)
+		foreach (float[] pos in airShipSpawn)
 		{
-			float[] pos = airShipSpawn[i];
-			if (pos == null || pos.Length < 2) { continue; }
+			if (pos == null || pos.Length < 2)
+			{
+				continue;
+			}
 			result.Add(new Vector2(pos[0], pos[1]));
 		}
 
