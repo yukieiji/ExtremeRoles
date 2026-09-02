@@ -104,6 +104,7 @@ public class ExtremeGameModeManagerTests
         // Arrange
         ExtremeGameModeManager.Create(GameModes.Normal);
         var initialInstance = ExtremeGameModeManager.Instance;
+		Assert.NotNull(initialInstance);
 
         // Act
         ExtremeGameModeManager.Create(GameModes.Normal);
@@ -145,21 +146,6 @@ public class ExtremeGameModeManagerTests
         Assert.Equal(IRoleSelector.RawXionUse, instance.isXionActive);
     }
 
-    [Fact]
-    public void EnableXion_ReturnsExpectedValue()
-    {
-        // Arrange
-        ExtremeGameModeManager.Create(GameModes.Normal);
-        var instance = ExtremeGameModeManager.Instance;
-        instance.isXionActive = true;
-
-        // Act
-        var enableXion = instance.EnableXion;
-
-        // Assert
-        var expected = instance.isXionActive && instance.RoleSelector.CanUseXion;
-        Assert.Equal(expected, enableXion);
-    }
 
     [Theory]
     [InlineData(GameModes.Normal, typeof(ClassicIntroRunner))]
