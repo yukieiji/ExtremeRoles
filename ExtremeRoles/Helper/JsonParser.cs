@@ -1,10 +1,10 @@
 ﻿using System.IO;
-using System.Text;
-using System.Text.Json;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 using ExtremeRoles.Extension.System.IO;
@@ -17,20 +17,25 @@ namespace ExtremeRoles.Helper;
 
 public static class JsonParser
 {
-    public static JObject? GetJObjectFromAssembly(string path)
-    {
-		var assembly = typeof(JsonParser).Assembly;
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public static JObject? GetJObjectFromAssembly(string path)
+	{
+		var assembly = Assembly.GetCallingAssembly();
 		using Stream? stream = assembly.GetManifestResourceStream(path);
 
-		if (stream is null) { return null; }
+		if (stream is null)
+		{
+			return null;
+		}
 
 		int length = (int)stream.Length;
 		byte[] byteArray = new byte[length];
-        stream.ReadExactly(byteArray, 0, length);
+		stream.ReadExactly(byteArray, 0, length);
 
-        return JObject.Parse(Encoding.UTF8.GetString(byteArray));
-    }
+		return JObject.Parse(Encoding.UTF8.GetString(byteArray));
+	}
 
+	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static T? LoadJsonStructFromAssembly<T>(string path, JsonSerializerOptions? opt=null)
 	{
 		var assembly = Assembly.GetCallingAssembly();
