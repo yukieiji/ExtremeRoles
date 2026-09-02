@@ -12,6 +12,8 @@ using ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.Solo.Liberal;
+using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Core;
 
 
 namespace ExtremeRoles;
@@ -21,6 +23,9 @@ public partial class ExtremeRolesPlugin
 	public static IServiceProvider BuildProvider()
 	{
 		var collection = new ServiceCollection();
+
+		collection
+			.AddSingleton<IModLogger, BepInExLogger>();
 
 		collection
 			.AddTransient<IRoleAssignee, ExtremeRoleAssignee>()
