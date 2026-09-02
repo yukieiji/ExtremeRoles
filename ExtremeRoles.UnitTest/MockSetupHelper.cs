@@ -20,8 +20,18 @@ public static class MockSetupHelper
 {
 	// UnityEngineの共通Mock
 	// ここにAmongUsのMockは追加しないスコープ違い
+    public static void SetupApplicationHelpers()
+    {
+        var mockVersion = new Mock<MockApplicationget_versionHelper>();
+        mockVersion.Setup(h => h.Invoke()).Returns("2024.3.5");
+        MockApplicationget_versionHelper.Instance = mockVersion.Object;
+    }
+
     public static void SetupUnityCommonMocks()
     {
+        SetupLogger();
+        SetupDebugMode();
+        SetupApplicationHelpers();
         SetupColorHelpers();
         SetupPaletteHelpers();
         SetupMathfHelpers();
@@ -32,6 +42,22 @@ public static class MockSetupHelper
         SetupTimeHelpers();
         SetupRandomHelpers();
         SetupJsonHelpers();
+    }
+
+    public static Mock<GameOptionsManager> SetupGameOptionsManagerMock()
+    {
+        if (MockGameOptionsManagerget_InstanceHelper.Instance == null)
+        {
+            var mockOptions = new Mock<AmongUs.GameOptions.IGameOptions>(IntPtr.Zero);
+            var mockManager = new Mock<GameOptionsManager>(IntPtr.Zero);
+            mockManager.SetupGet(m => m.CurrentGameOptions).Returns(mockOptions.Object);
+
+            var mockHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
+            mockHelper.Setup(h => h.Invoke()).Returns(mockManager.Object);
+            MockGameOptionsManagerget_InstanceHelper.Instance = mockHelper.Object;
+            return mockManager;
+        }
+        return Mock<GameOptionsManager>.Get(GameOptionsManager.Instance);
     }
 
     public static void SetupJsonHelpers()
@@ -349,6 +375,7 @@ public static class MockSetupHelper
     public static void SetupCompatModManager()
     {
         InitializeBepInExPaths();
+        SetupMockExtremeRolePlugin();
         if (CompatModManager.Instance == null)
         {
             CompatModManager.Initialize();
@@ -379,6 +406,13 @@ public static class MockSetupHelper
 			var plugin = (ExtremeRolesPlugin)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeRolesPlugin));
 			var instanceField = typeof(ExtremeRolesPlugin).GetField("<Instance>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
 			instanceField?.SetValue(null, plugin);
+
+			var providerField = typeof(ExtremeRolesPlugin).GetField("<Provider>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (providerField != null && providerField.GetValue(plugin) == null)
+			{
+				var provider = ExtremeRolesPlugin.BuildProvider();
+				providerField.SetValue(plugin, provider);
+			}
 		}
 		return ExtremeRolesPlugin.Instance!;
 	}
