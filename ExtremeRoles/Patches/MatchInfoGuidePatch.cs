@@ -259,12 +259,13 @@ public static class MatchInfoGuideHelper
 	}
 }
 
+// Mod向けの設定は数が多いので一回無効化しておく
 [HarmonyPatch(typeof(MatchInfoGuide), nameof(MatchInfoGuide.CreateNormalModeSettings))]
 public static class MatchInfoGuideCreateNormalModeSettingsPatch
 {
 	public static void Postfix(MatchInfoGuide __instance)
 	{
-		MatchInfoGuideHelper.CreateModSettingEntry(__instance);
+		// MatchInfoGuideHelper.CreateModSettingEntry(__instance);
 		MatchInfoGuideHelper.CreateModRoleEntry(__instance);
 		
 		// 何で公式はインポスターの人数をいちいち数えてるんだ？
@@ -281,7 +282,7 @@ public static class MatchInfoGuideCreateHnSModeSettingsSettingsPatch
 {
 	public static void Postfix(MatchInfoGuide __instance)
 	{
-		MatchInfoGuideHelper.CreateModSettingEntry(__instance);
+		// MatchInfoGuideHelper.CreateModSettingEntry(__instance);
 		MatchInfoGuideHelper.CreateModRoleEntry(__instance);
 
 		if (__instance.rolesEnabledMessage.activeSelf)
