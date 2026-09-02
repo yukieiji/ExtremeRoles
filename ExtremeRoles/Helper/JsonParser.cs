@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -17,7 +16,6 @@ namespace ExtremeRoles.Helper;
 
 public static class JsonParser
 {
-	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static JObject? GetJObjectFromAssembly(string path)
 	{
 		var assembly = Assembly.GetCallingAssembly();
@@ -35,7 +33,6 @@ public static class JsonParser
 		return JObject.Parse(Encoding.UTF8.GetString(byteArray));
 	}
 
-	[MethodImpl(MethodImplOptions.NoInlining)]
 	public static T? LoadJsonStructFromAssembly<T>(string path, JsonSerializerOptions? opt=null)
 	{
 		var assembly = Assembly.GetCallingAssembly();
