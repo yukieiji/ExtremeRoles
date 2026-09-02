@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.UnitTest.GhostRoles;
 
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ExtremeGhostRoleManagerTests
 {
     public ExtremeGhostRoleManagerTests()
@@ -30,26 +31,13 @@ public class ExtremeGhostRoleManagerTests
 
     private static void EnsureGhostRoleOptionsCreated()
     {
-        try
+        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
         {
-            if (ClientOption.Instance == null)
+            try
             {
                 OptionCreator.Create();
             }
-        }
-        catch (ArgumentException) { }
-
-        foreach (var ghost in ExtremeGhostRoleManager.AllGhostRole.Values)
-        {
-            OptionTab tab = ghost.IsCrewmate() ? OptionTab.GhostCrewmateTab : ghost.IsImpostor() ? OptionTab.GhostImpostorTab : OptionTab.GhostNeutralTab;
-            if (!OptionManager.Instance.TryGetCategory(tab, ExtremeGhostRoleManager.GetRoleGroupId(ghost.Id), out _))
-            {
-                try
-                {
-                    ghost.CreateRoleAllOption();
-                }
-                catch (ArgumentException) { }
-            }
+            catch (ArgumentException) { }
         }
     }
 

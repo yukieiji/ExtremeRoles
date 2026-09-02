@@ -10,6 +10,7 @@ using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.UnitTest.GhostRoles;
 
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class IgniterTests
 {
     public IgniterTests()
@@ -33,6 +34,19 @@ public class IgniterTests
             }
         }
         catch (System.ArgumentException) { }
+
+        foreach (var ghost in ExtremeGhostRoleManager.AllGhostRole.Values)
+        {
+            OptionTab tab = ghost.IsCrewmate() ? OptionTab.GhostCrewmateTab : ghost.IsImpostor() ? OptionTab.GhostImpostorTab : OptionTab.GhostNeutralTab;
+            if (!OptionManager.Instance.TryGetCategory(tab, ExtremeGhostRoleManager.GetRoleGroupId(ghost.Id), out _))
+            {
+                try
+                {
+                    ghost.CreateRoleAllOption();
+                }
+                catch (System.ArgumentException) { }
+            }
+        }
     }
 
     [Fact]
@@ -49,11 +63,6 @@ public class IgniterTests
     public void Initialize_ReadsLoaderOptionsWithoutError()
     {
         var igniter = new Igniter();
-
-        if (!OptionManager.Instance.TryGetCategory(OptionTab.GhostImpostorTab, ExtremeGhostRoleManager.GetRoleGroupId(igniter.Id), out _))
-        {
-            try { igniter.CreateRoleAllOption(); } catch (System.ArgumentException) { }
-        }
 
         igniter.Initialize();
         igniter.ResetOnMeetingStart();

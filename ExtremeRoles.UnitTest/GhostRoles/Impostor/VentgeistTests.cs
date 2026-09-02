@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Xunit;
 using ExtremeRoles;
@@ -10,6 +9,7 @@ using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.UnitTest.GhostRoles;
 
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class VentgeistTests
 {
     public VentgeistTests()
@@ -32,7 +32,7 @@ public class VentgeistTests
                 OptionCreator.Create();
             }
         }
-        catch (ArgumentException) { }
+        catch (System.ArgumentException) { }
 
         foreach (var ghost in ExtremeGhostRoleManager.AllGhostRole.Values)
         {
@@ -43,7 +43,7 @@ public class VentgeistTests
                 {
                     ghost.CreateRoleAllOption();
                 }
-                catch (ArgumentException) { }
+                catch (System.ArgumentException) { }
             }
         }
     }

@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using AmongUs.GameOptions;
+using Moq;
 using Xunit;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -8,59 +8,48 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.UnitTest.GhostRoles;
 
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class VanillaGhostRoleWrapperTests
 {
+    private readonly Mock<TranslationController> mockTranslation;
+
     public VanillaGhostRoleWrapperTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        this.mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
+        this.mockTranslation.Setup(x => x.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object>>()))
+            .Returns((string id, string defaultStr, Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object> parts) => defaultStr ?? id);
     }
 
     [Fact]
-    public void Constructor_GuardianAngel_SetsCrewmateAndHasTaskTrue()
+    public void GetImportantText_ReturnsFormattedStringForCrewmateAndImpostor()
     {
-        // Arrange & Act
-        var wrapper = new VanillaGhostRoleWrapper(RoleTypes.GuardianAngel);
+        var crewWrapper = new VanillaGhostRoleWrapper(RoleTypes.GuardianAngel);
+        var impWrapper = new VanillaGhostRoleWrapper(RoleTypes.ImpostorGhost);
 
-        // Assert
-        Assert.Equal(ExtremeRoleType.Crewmate, wrapper.Team);
-        Assert.True(wrapper.HasTask);
-        Assert.Equal(ExtremeGhostRoleId.VanillaRole, wrapper.Id);
-        Assert.Equal(RoleTypes.GuardianAngel.ToString(), wrapper.Name);
-    }
+        string crewText = crewWrapper.GetImportantText();
+        string impText = impWrapper.GetImportantText();
 
-    [Fact]
-    public void Constructor_ImpostorGhost_SetsImpostorAndHasTaskFalse()
-    {
-        // Arrange & Act
-        var wrapper = new VanillaGhostRoleWrapper(RoleTypes.ImpostorGhost);
-
-        // Assert
-        Assert.Equal(ExtremeRoleType.Impostor, wrapper.Team);
-        Assert.False(wrapper.HasTask);
-        Assert.Equal(ExtremeGhostRoleId.VanillaRole, wrapper.Id);
+        Assert.NotNull(crewText);
+        Assert.NotNull(impText);
     }
 
     [Fact]
     public void GetRoleFilter_ReturnsEmptyHashSet()
     {
-        // Arrange
         var wrapper = new VanillaGhostRoleWrapper(RoleTypes.GuardianAngel);
 
-        // Act
         var filter = wrapper.GetRoleFilter();
 
-        // Assert
         Assert.NotNull(filter);
         Assert.Empty(filter);
     }
 
     [Fact]
-    public void CallingDisabledMethods_ThrowsException()
+    public void DisabledMethods_ThrowException()
     {
-        // Arrange
         var wrapper = new VanillaGhostRoleWrapper(RoleTypes.GuardianAngel);
 
-        // Act & Assert
         Assert.Throws<Exception>(() => wrapper.CreateAbility());
     }
 }

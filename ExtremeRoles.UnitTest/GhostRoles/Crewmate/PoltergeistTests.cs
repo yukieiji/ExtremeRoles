@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Xunit;
 using ExtremeRoles;
@@ -10,6 +9,7 @@ using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.UnitTest.GhostRoles;
 
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class PoltergeistTests
 {
     public PoltergeistTests()
@@ -25,26 +25,13 @@ public class PoltergeistTests
 
     private static void EnsureGhostRoleOptionsCreated()
     {
-        try
+        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
         {
-            if (ClientOption.Instance == null)
+            try
             {
                 OptionCreator.Create();
             }
-        }
-        catch (ArgumentException) { }
-
-        foreach (var ghost in ExtremeGhostRoleManager.AllGhostRole.Values)
-        {
-            OptionTab tab = ghost.IsCrewmate() ? OptionTab.GhostCrewmateTab : ghost.IsImpostor() ? OptionTab.GhostImpostorTab : OptionTab.GhostNeutralTab;
-            if (!OptionManager.Instance.TryGetCategory(tab, ExtremeGhostRoleManager.GetRoleGroupId(ghost.Id), out _))
-            {
-                try
-                {
-                    ghost.CreateRoleAllOption();
-                }
-                catch (ArgumentException) { }
-            }
+            catch (System.ArgumentException) { }
         }
     }
 

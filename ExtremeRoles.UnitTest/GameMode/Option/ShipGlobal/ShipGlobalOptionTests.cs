@@ -31,7 +31,11 @@ public class ShipGlobalOptionTests
     {
         if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
         {
-            OptionCreator.Create();
+            try
+            {
+                OptionCreator.Create();
+            }
+            catch (ArgumentException) { }
         }
     }
 

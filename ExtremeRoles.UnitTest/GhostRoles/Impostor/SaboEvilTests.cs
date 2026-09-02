@@ -11,6 +11,7 @@ using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.UnitTest.GhostRoles;
 
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class SaboEvilTests
 {
     public SaboEvilTests()

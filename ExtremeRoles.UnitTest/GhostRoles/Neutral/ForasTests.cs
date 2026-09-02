@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Hazel;
 using Xunit;
@@ -12,6 +11,7 @@ using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.UnitTest.GhostRoles;
 
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ForasTests
 {
     public ForasTests()
@@ -34,7 +34,7 @@ public class ForasTests
                 OptionCreator.Create();
             }
         }
-        catch (ArgumentException) { }
+        catch (System.ArgumentException) { }
 
         foreach (var ghost in ExtremeGhostRoleManager.AllGhostRole.Values)
         {
@@ -45,7 +45,7 @@ public class ForasTests
                 {
                     ghost.CreateRoleAllOption();
                 }
-                catch (ArgumentException) { }
+                catch (System.ArgumentException) { }
             }
         }
     }

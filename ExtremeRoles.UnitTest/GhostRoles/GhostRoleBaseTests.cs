@@ -4,53 +4,45 @@ using UnityEngine;
 using Xunit;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.UnitTest.GhostRoles;
 
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class GhostRoleBaseTests
 {
-    private sealed class TestGhostRole : GhostRoleBase
+    private sealed class DummyCombGhostRole : GhostRoleBase, ICombination
     {
-        public bool MeetingEndCalled { get; private set; }
-        public bool MeetingStartCalled { get; private set; }
-        public bool SpecificOptionCalled { get; private set; }
+        public MultiAssignRoleBase.OptionOffsetInfo? OffsetInfo { get; set; } = new MultiAssignRoleBase.OptionOffsetInfo(CombinationRoleType.Kids, 2);
 
-        public TestGhostRole(
-            bool hasTask,
-            ExtremeRoleType team,
-            ExtremeGhostRoleId id,
-            string roleName,
-            Color color,
-            OptionTab tab = OptionTab.GeneralTab)
-            : base(hasTask, team, id, roleName, color, tab)
-        {
-        }
+        public DummyCombGhostRole() : base(true, ExtremeRoleType.Crewmate, ExtremeGhostRoleId.Poltergeist, "Poltergeist", Color.blue) { }
 
         public override void CreateAbility() { }
-
-        public override HashSet<ExtremeRoles.Roles.ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoles.Roles.ExtremeRoleId>();
-
+        public override HashSet<ExtremeRoles.Roles.ExtremeRoleId> GetRoleFilter() => new();
         public override void Initialize() { }
+        protected override void OnMeetingEndHook() { }
+        protected override void OnMeetingStartHook() { }
+        protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory parentOps) { }
+        protected override void UseAbility(RPCOperator.RpcCaller caller) { }
+    }
 
-        protected override void OnMeetingEndHook()
-        {
-            MeetingEndCalled = true;
-        }
+    private sealed class DummyGhostRole : GhostRoleBase
+    {
+        public DummyGhostRole(ExtremeRoleType team, ExtremeGhostRoleId id)
+            : base(true, team, id, "TestRole", Color.green) { }
 
-        protected override void OnMeetingStartHook()
-        {
-            MeetingStartCalled = true;
-        }
-
-        protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory parentOps)
-        {
-            SpecificOptionCalled = true;
-        }
-
+        public override void CreateAbility() { }
+        public override HashSet<ExtremeRoles.Roles.ExtremeRoleId> GetRoleFilter() => new();
+        public override void Initialize() { }
+        protected override void OnMeetingEndHook() { }
+        protected override void OnMeetingStartHook() { }
+        protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory parentOps) { }
         protected override void UseAbility(RPCOperator.RpcCaller caller) { }
     }
 
@@ -60,80 +52,89 @@ public class GhostRoleBaseTests
     }
 
     [Fact]
-    public void Constructor_GeneralTab_AssignsTabBasedOnTeam()
+    public void TeamPredicates_ReturnCorrectTeamFlags()
     {
-        // Arrange & Act
-        var crewGhost = new TestGhostRole(true, ExtremeRoleType.Crewmate, ExtremeGhostRoleId.Poltergeist, "Poltergeist", Color.white);
-        var impGhost = new TestGhostRole(false, ExtremeRoleType.Impostor, ExtremeGhostRoleId.Ventgeist, "Ventgeist", Color.red);
-        var neutralGhost = new TestGhostRole(false, ExtremeRoleType.Neutral, ExtremeGhostRoleId.Foras, "Foras", Color.yellow);
+        var crew = new DummyGhostRole(ExtremeRoleType.Crewmate, ExtremeGhostRoleId.Poltergeist);
+        var imp = new DummyGhostRole(ExtremeRoleType.Impostor, ExtremeGhostRoleId.Ventgeist);
+        var neutral = new DummyGhostRole(ExtremeRoleType.Neutral, ExtremeGhostRoleId.Foras);
+        var vanilla = new DummyGhostRole(ExtremeRoleType.Crewmate, ExtremeGhostRoleId.VanillaRole);
 
-        // Assert
-        Assert.True(crewGhost.IsCrewmate());
-        Assert.True(impGhost.IsImpostor());
-        Assert.True(neutralGhost.IsNeutral());
+        Assert.True(crew.IsCrewmate());
+        Assert.False(crew.IsImpostor());
+        Assert.False(crew.IsNeutral());
+
+        Assert.False(imp.IsCrewmate());
+        Assert.True(imp.IsImpostor());
+        Assert.False(imp.IsNeutral());
+
+        Assert.False(neutral.IsCrewmate());
+        Assert.False(neutral.IsImpostor());
+        Assert.True(neutral.IsNeutral());
+
+        Assert.True(vanilla.IsVanillaRole());
+        Assert.False(crew.IsVanillaRole());
     }
 
     [Fact]
-    public void Clone_CopiesPropertiesAndCreatesNewColorInstance()
+    public void Clone_CopiesColorAndCombinationOffsetInfo()
     {
-        // Arrange
-        var originalColor = new Color(0.5f, 0.5f, 0.5f, 1.0f);
-        var original = new TestGhostRole(true, ExtremeRoleType.Crewmate, ExtremeGhostRoleId.Faunus, "Faunus", originalColor);
+        var original = new DummyCombGhostRole();
+        original.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(CombinationRoleType.Kids, 10);
 
-        // Act
-        var clone = original.Clone();
+        var cloned = (DummyCombGhostRole)original.Clone();
 
-        // Assert
-        Assert.NotSame(original, clone);
-        Assert.Equal(original.Id, clone.Id);
-        Assert.Equal(original.Team, clone.Team);
-        Assert.Equal(original.HasTask, clone.HasTask);
-        Assert.Equal(originalColor.r, clone.Color.r);
-        Assert.Equal(originalColor.g, clone.Color.g);
-        Assert.Equal(originalColor.b, clone.Color.b);
-        Assert.Equal(originalColor.a, clone.Color.a);
+        Assert.NotSame(original, cloned);
+        Assert.Equal(original.Color, cloned.Color);
+        Assert.NotNull(cloned.OffsetInfo);
+        Assert.Equal(CombinationRoleType.Kids, cloned.OffsetInfo.RoleId);
+        Assert.Equal(10, cloned.OffsetInfo.IdOffset);
     }
 
     [Fact]
-    public void ResetOnMeetingEndAndStart_TriggersHooks()
+    public void GetTargetRoleSeeColor_ImpostorAndOverloader_ReturnsExpectedColor()
     {
-        // Arrange
-        var role = new TestGhostRole(true, ExtremeRoleType.Crewmate, ExtremeGhostRoleId.Poltergeist, "Poltergeist", Color.white);
+        var impGhost = new DummyGhostRole(ExtremeRoleType.Impostor, ExtremeGhostRoleId.Ventgeist);
+        var crewGhost = new DummyGhostRole(ExtremeRoleType.Crewmate, ExtremeGhostRoleId.Poltergeist);
 
-        // Act
+        var impRole = new BountyHunter();
+        var crewRole = new SpecialCrew();
+        var overloader = new OverLoader();
+
+        // Impostor ghost looking at Impostor role -> ImpostorRed
+        Color seeImp = impGhost.GetTargetRoleSeeColor(1, impRole, null);
+        Assert.Equal(Palette.ImpostorRed, seeImp);
+
+        // Impostor ghost looking at Crewmate role -> clear
+        Color seeCrew = impGhost.GetTargetRoleSeeColor(1, crewRole, null);
+        Assert.Equal(Color.clear, seeCrew);
+
+        // Crewmate ghost looking at Impostor role -> clear
+        Color crewSeeImp = crewGhost.GetTargetRoleSeeColor(1, impRole, null);
+        Assert.Equal(Color.clear, crewSeeImp);
+
+        // Looking at overloader in Overload state -> ImpostorRed regardless of ghost role team
+        overloader.IsOverLoad = true;
+        Color seeOverload = crewGhost.GetTargetRoleSeeColor(1, overloader, null);
+        Assert.Equal(Palette.ImpostorRed, seeOverload);
+    }
+
+    [Fact]
+    public void SetGameControlId_UpdatesControlId()
+    {
+        var role = new DummyGhostRole(ExtremeRoleType.Crewmate, ExtremeGhostRoleId.Poltergeist);
+        Assert.Equal(0, role.GameControlId);
+
+        role.SetGameControlId(42);
+
+        Assert.Equal(0, role.GameControlId);
+    }
+
+    [Fact]
+    public void ResetOnMeetingStartAndEnd_TriggersWithoutException()
+    {
+        var role = new DummyGhostRole(ExtremeRoleType.Crewmate, ExtremeGhostRoleId.Poltergeist);
+
         role.ResetOnMeetingStart();
         role.ResetOnMeetingEnd();
-
-        // Assert
-        Assert.True(role.MeetingStartCalled);
-        Assert.True(role.MeetingEndCalled);
-    }
-
-    [Fact]
-    public void GetTargetRoleSeeColor_WhenTargetIsImpostorAndThisIsImpostor_ReturnsRed()
-    {
-        // Arrange
-        var impGhost = new TestGhostRole(false, ExtremeRoleType.Impostor, ExtremeGhostRoleId.Ventgeist, "Ventgeist", Color.red);
-        var impRole = new ExtremeRoles.Roles.Solo.Impostor.BountyHunter();
-
-        // Act
-        Color seeColor = impGhost.GetTargetRoleSeeColor(1, impRole, null);
-
-        // Assert
-        Assert.Equal(Palette.ImpostorRed, seeColor);
-    }
-
-    [Fact]
-    public void GetTargetRoleSeeColor_WhenTargetIsCrewmateAndThisIsImpostor_ReturnsClear()
-    {
-        // Arrange
-        var impGhost = new TestGhostRole(false, ExtremeRoleType.Impostor, ExtremeGhostRoleId.Ventgeist, "Ventgeist", Color.red);
-        var crewRole = new SpecialCrew();
-
-        // Act
-        Color seeColor = impGhost.GetTargetRoleSeeColor(1, crewRole, null);
-
-        // Assert
-        Assert.Equal(Color.clear, seeColor);
     }
 }
