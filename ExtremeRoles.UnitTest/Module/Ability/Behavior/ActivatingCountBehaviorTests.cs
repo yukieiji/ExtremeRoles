@@ -4,12 +4,13 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability.Behavior;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ActivatingCountBehaviorTests
 {
     public ActivatingCountBehaviorTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     [Fact]

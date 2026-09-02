@@ -17,7 +17,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Helper;
 
-[Collection("UnityMock")]
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class GameSystemTests : IDisposable
 {
     private static readonly IGameOptions globalGameOptions;
@@ -43,7 +43,7 @@ public class GameSystemTests : IDisposable
         globalGameData = new Mock<GameData>().Object;
         globalShipStatus = new Mock<ShipStatus>().Object;
 
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     public GameSystemTests()
@@ -60,6 +60,14 @@ public class GameSystemTests : IDisposable
     {
         PlayerCache.RemovePlayerControl(_ => true);
         ExtremeRoleManager.GameRole.Clear();
+
+        Mock.Get(globalGameData).Reset();
+        Mock.Get(globalGameData).Setup(g => g.GetPlayerById(It.IsAny<byte>())).Returns<byte>(id =>
+        {
+            var mockPlayer = new Mock<NetworkedPlayerInfo>();
+            mockPlayer.SetupGet(p => p.PlayerId).Returns(id);
+            return mockPlayer.Object;
+        });
 
         globalGameDataHelper.Setup(h => h.Invoke()).Returns(globalGameData);
         MockGameDataget_InstanceHelper.Instance = globalGameDataHelper.Object;

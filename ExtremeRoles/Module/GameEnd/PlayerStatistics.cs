@@ -160,7 +160,7 @@ public sealed class NeutralSeparateTeamBuilder()
 	}
 }
 
-public sealed class PlayerStatistics()
+public sealed class PlayerStatistics() : IPlayerStatistics
 {
 	public int AllTeamCrewmate { get; private set; }
 	

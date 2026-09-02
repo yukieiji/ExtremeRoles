@@ -9,12 +9,13 @@ using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.Pla
 
 namespace ExtremeRoles.UnitTest.Module.GameResult;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class LiberalMoneyHistoryTests
 {
     public LiberalMoneyHistoryTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         mockTranslation.Setup(t => t.GetString(
             It.IsAny<string>(),

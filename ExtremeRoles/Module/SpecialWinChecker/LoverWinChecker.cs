@@ -50,7 +50,7 @@ internal sealed class LoverWinChecker : IWinChecker
 		this.aliveLover.Add(playerId);
 	}
 
-	public bool IsWin(PlayerStatistics statistics)
+	public bool IsWin(IPlayerStatistics statistics)
 	{
 		int aliveNum = this.aliveLover.Count;
 

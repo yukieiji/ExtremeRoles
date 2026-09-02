@@ -19,7 +19,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ModAnnounceTests : IDisposable
 {
     private readonly string _previousCurrentDir;
@@ -47,7 +48,7 @@ public class ModAnnounceTests : IDisposable
         Directory.CreateDirectory(_tempWorkingDir);
         Directory.SetCurrentDirectory(_tempWorkingDir);
 
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupLogger();
 
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();

@@ -13,7 +13,6 @@ using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.Pla
 
 namespace ExtremeRoles.UnitTest.Module.GameResult.StatusOverrider;
 
-[Collection("UnityMock")]
 public class StatusOverriderTests
 {
     private sealed class DummySingleRole : SingleRoleBase
@@ -28,12 +27,12 @@ public class StatusOverriderTests
         protected override void RoleSpecificInit() { }
     }
 
-    public StatusOverriderTests()
-    {
-        MockSetupHelper.SetupCommonMocks();
-    }
+	public StatusOverriderTests()
+	{
+		MockSetupHelper.SetupColorHelpers();
+	}
 
-    private static NetworkedPlayerInfo CreateMockPlayerInfo(byte playerId, bool isDead = false, bool disconnected = false)
+	private static NetworkedPlayerInfo CreateMockPlayerInfo(byte playerId, bool isDead = false, bool disconnected = false)
     {
         var mockPlayer = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
         mockPlayer.SetupGet(p => p.PlayerId).Returns(playerId);

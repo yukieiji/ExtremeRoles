@@ -13,6 +13,7 @@ using ExtremeRoles.Module.Interface;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>;
+using ExtremeRoles.Extension.Il2Cpp;
 
 
 #nullable enable
@@ -74,16 +75,17 @@ public enum ResetTiming : byte
 }
 
 [Il2CppRegister([ typeof(ISystemType) ])]
-public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemType
+public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemType, IExtremeSystemTypeManager
 {
-	public static ExtremeSystemTypeManager Instance
+	public static IExtremeSystemTypeManager Instance
 	{
 		get
 		{
 			if (instance == null)
 			{
-				instance = new ExtremeSystemTypeManager();
-				instance.initialize();
+				var manager = new ExtremeSystemTypeManager();
+				manager.initialize();
+				instance = manager;
 			}
 			return instance;
 		}
@@ -94,7 +96,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	public bool IsDirty { get; private set; } = false;
 	public bool IsActiveSpecialSabotage => this.sabotageSystem.Any(s => s.IsBlockOtherSabotage);
 
-	private static ExtremeSystemTypeManager? instance = null;
+	private static IExtremeSystemTypeManager? instance = null;
 
 	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> allSystems = new();
 	private readonly Dictionary<ExtremeSystemType, IDirtableSystemType> dirtableSystems = new ();
@@ -299,7 +301,12 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	internal static void AddSystem()
 	{
 		var system = Instance;
-		ShipStatus.Instance.Systems.Add(Type, system.Cast<ISystemType>());
+		if (system is ExtremeSystemTypeManager manager &&
+			ShipStatus.Instance != null &&
+			manager.IsTryCast<ISystemType>(out var iSystem))
+		{
+			ShipStatus.Instance.Systems.Add(Type, iSystem);
+		}
 	}
 
 	private void initialize()

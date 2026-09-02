@@ -25,7 +25,7 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
+public sealed class TeroristTeroSabotageSystem : ITeroristTeroSabotageSystem
 {
 	public readonly record struct Option(
 		float ExplosionTime, int BombNum,
@@ -214,14 +214,15 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 	private JObject? json;
 	private const int TASK_ID = 254;
 
-	public TeroristTeroSabotageSystem(in Option option, bool isBlockOtherSabotage)
+	public TeroristTeroSabotageSystem(in Option option, bool isBlockOtherSabotage, ISoundProvider? soundProvider = null)
 	{
+		soundProvider ??= new DefaultSoundProvider();
 		this.consoleSystem = ExtremeConsoleSystem.Create();
 		this.bombTimer = option.ExplosionTime;
 		this.setNum = option.BombNum;
 		this.minigameOption = option.MinigameOption;
 		this.isBlockOtherSabotage = isBlockOtherSabotage;
-		var audio = Sound.GetAudio(Sound.Type.TeroristSabotageAnnounce);
+		var audio = soundProvider.GetAudio(Sound.Type.TeroristSabotageAnnounce);
 		this.flasher = new FullScreenRepeatFlasherWithAudio(
 			audio, new Color32(255, 25, 25, 50), 2.75f);
 	}

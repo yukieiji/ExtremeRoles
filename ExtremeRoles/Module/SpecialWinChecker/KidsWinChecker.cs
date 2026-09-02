@@ -27,7 +27,7 @@ internal sealed class KidsWinChecker : IWinChecker
 		aliveDelinquent.Add(playerId, (Delinquent)role);
 	}
 
-	public bool IsWin(PlayerStatistics statistics)
+	public bool IsWin(IPlayerStatistics statistics)
 	{
 		byte checkPlayerId = byte.MaxValue;
 		float range = float.MinValue;

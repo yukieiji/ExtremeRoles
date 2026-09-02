@@ -1,6 +1,7 @@
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using HarmonyLib;
@@ -17,7 +18,9 @@ namespace ExtremeRoles.UnitTest;
 
 public static class MockSetupHelper
 {
-    public static void SetupCommonMocks()
+	// UnityEngineの共通Mock
+	// ここにAmongUsのMockは追加しないスコープ違い
+    public static void SetupUnityCommonMocks()
     {
         SetupColorHelpers();
         SetupPaletteHelpers();
@@ -25,6 +28,209 @@ public static class MockSetupHelper
         SetupCompatModManager();
         SetupUnityObjectOperators();
         SetupVector2Helpers();
+        SetupVector3Helpers();
+        SetupTimeHelpers();
+        SetupRandomHelpers();
+    }
+
+    public static void SetupRandomHelpers()
+    {
+        if (UnityEngine.MockRandomRandomRangeIntHelper.Instance == null)
+        {
+            var mock = new Mock<UnityEngine.MockRandomRandomRangeIntHelper>();
+            mock.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>())).Returns((int min, int max) => min);
+            UnityEngine.MockRandomRandomRangeIntHelper.Instance = mock.Object;
+        }
+
+        if (UnityEngine.MockRandomRandomRangeHelper.Instance == null)
+        {
+            var mock = new Mock<UnityEngine.MockRandomRandomRangeHelper>();
+            mock.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>())).Returns((int min, int max) => min);
+            UnityEngine.MockRandomRandomRangeHelper.Instance = mock.Object;
+        }
+
+        if (UnityEngine.MockRandomRandomRangeHelper2.Instance == null)
+        {
+            var mock = new Mock<UnityEngine.MockRandomRandomRangeHelper2>();
+            mock.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>())).Returns((int min, int max) => min);
+            UnityEngine.MockRandomRandomRangeHelper2.Instance = mock.Object;
+        }
+
+        if (UnityEngine.MockRandomRangeHelper.Instance == null)
+        {
+            var mock = new Mock<UnityEngine.MockRandomRangeHelper>();
+            mock.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>())).Returns((int min, int max) => min);
+            UnityEngine.MockRandomRangeHelper.Instance = mock.Object;
+        }
+
+        if (UnityEngine.MockRandomRangeHelper2.Instance == null)
+        {
+            var mock = new Mock<UnityEngine.MockRandomRangeHelper2>();
+            mock.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>())).Returns((int min, int max) => min);
+            UnityEngine.MockRandomRangeHelper2.Instance = mock.Object;
+        }
+    }
+
+    public static void SetupVector3Helpers()
+    {
+        if (MockVector3get_upHelper.Instance == null)
+        {
+            var mockUp = new Mock<MockVector3get_upHelper>();
+            mockUp.Setup(x => x.Invoke()).Returns(new Vector3(0f, 1f, 0f));
+            MockVector3get_upHelper.Instance = mockUp.Object;
+        }
+
+        if (MockVector3get_zeroHelper.Instance == null)
+        {
+            var mockZero = new Mock<MockVector3get_zeroHelper>();
+            mockZero.Setup(x => x.Invoke()).Returns(new Vector3(0f, 0f, 0f));
+            MockVector3get_zeroHelper.Instance = mockZero.Object;
+        }
+
+        if (MockVector3op_AdditionHelper.Instance == null)
+        {
+            var mockAdd = new Mock<MockVector3op_AdditionHelper>();
+            mockAdd.Setup(x => x.Invoke(It.IsAny<Vector3>(), It.IsAny<Vector3>()))
+                .Returns((Vector3 a, Vector3 b) => new Vector3(a.x + b.x, a.y + b.y, a.z + b.z));
+            MockVector3op_AdditionHelper.Instance = mockAdd.Object;
+        }
+
+        if (MockVector3op_MultiplyHelper.Instance == null)
+        {
+            var mockMult = new Mock<MockVector3op_MultiplyHelper>();
+            mockMult.Setup(x => x.Invoke(It.IsAny<Vector3>(), It.IsAny<float>()))
+                .Returns((Vector3 a, float d) => new Vector3(a.x * d, a.y * d, a.z * d));
+            MockVector3op_MultiplyHelper.Instance = mockMult.Object;
+        }
+    }
+
+    public static void SetupObjectImplicitHelpers()
+    {
+        InnerNet.MockPlayerIdop_ImplicitHelper.Instance ??= new Mock<InnerNet.MockPlayerIdop_ImplicitHelper>().Object;
+        InnerNet.MockPlayerIdop_ImplicitHelper2.Instance ??= new Mock<InnerNet.MockPlayerIdop_ImplicitHelper2>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper2.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper2>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper3.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper3>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper4.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper4>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper5.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper5>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper6.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper6>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper7.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper7>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper8.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper8>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper9.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper9>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper10.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper10>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper11.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper11>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper12.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper12>().Object;
+        Il2CppSystem.MockObjectop_ImplicitHelper13.Instance ??= new Mock<Il2CppSystem.MockObjectop_ImplicitHelper13>().Object;
+    }
+
+    public static void SetupPlayerVoteAreaMocks()
+    {
+        if (MockPlayerVoteAreaget_MissedVoteHelper.Instance == null)
+        {
+            var mockMissed = new Mock<MockPlayerVoteAreaget_MissedVoteHelper>();
+            mockMissed.Setup(h => h.Invoke()).Returns((byte)252);
+            MockPlayerVoteAreaget_MissedVoteHelper.Instance = mockMissed.Object;
+        }
+
+        if (MockPlayerVoteAreaget_HasNotVotedHelper.Instance == null)
+        {
+            var mockHasNotVoted = new Mock<MockPlayerVoteAreaget_HasNotVotedHelper>();
+            mockHasNotVoted.Setup(h => h.Invoke()).Returns((byte)253);
+            MockPlayerVoteAreaget_HasNotVotedHelper.Instance = mockHasNotVoted.Object;
+        }
+    }
+
+    public static void SetupTimeHelpers()
+    {
+        var mockDeltaTime = new Mock<MockTimeget_deltaTimeHelper>();
+        mockDeltaTime.Setup(h => h.Invoke()).Returns(0.1f);
+        MockTimeget_deltaTimeHelper.Instance = mockDeltaTime.Object;
+
+        var mockFixedDeltaTime = new Mock<MockTimeget_fixedDeltaTimeHelper>();
+        mockFixedDeltaTime.Setup(h => h.Invoke()).Returns(0.02f);
+        MockTimeget_fixedDeltaTimeHelper.Instance = mockFixedDeltaTime.Object;
+    }
+
+    public static Mock<PlayerControl> SetupPlayerControlMocks()
+    {
+        if (MockPlayerControlget_LocalPlayerHelper.Instance == null)
+        {
+            var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+            var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+            mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
+            MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+            return mockPlayer;
+        }
+        return Mock<PlayerControl>.Get(PlayerControl.LocalPlayer);
+    }
+
+    public static void SetupExtremeSystemTypeManagerMock()
+    {
+        var instanceField = typeof(ExtremeSystemTypeManager).GetField("instance", BindingFlags.NonPublic | BindingFlags.Static);
+        if (instanceField != null)
+        {
+            var systemManager = (ExtremeSystemTypeManager)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeSystemTypeManager));
+            var allSystemsField = typeof(ExtremeSystemTypeManager).GetField("allSystems", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (allSystemsField != null && allSystemsField.GetValue(systemManager) == null)
+            {
+                allSystemsField.SetValue(systemManager, new System.Collections.Generic.Dictionary<ExtremeSystemType, ExtremeRoles.Module.Interface.IExtremeSystemType>());
+            }
+            var dirtableSystemsField = typeof(ExtremeSystemTypeManager).GetField("dirtableSystems", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (dirtableSystemsField != null && dirtableSystemsField.GetValue(systemManager) == null)
+            {
+                dirtableSystemsField.SetValue(systemManager, new System.Collections.Generic.Dictionary<ExtremeSystemType, ExtremeRoles.Module.Interface.IDirtableSystemType>());
+            }
+            var sabotageSystemField = typeof(ExtremeSystemTypeManager).GetField("sabotageSystem", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (sabotageSystemField != null && sabotageSystemField.GetValue(systemManager) == null)
+            {
+                sabotageSystemField.SetValue(systemManager, new System.Collections.Generic.List<ExtremeRoles.Module.Interface.ISabotageExtremeSystemType>());
+            }
+            var dirtySystemField = typeof(ExtremeSystemTypeManager).GetField("dirtySystem", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (dirtySystemField != null && dirtySystemField.GetValue(systemManager) == null)
+            {
+                dirtySystemField.SetValue(systemManager, new System.Collections.Generic.List<ExtremeSystemType>());
+            }
+            instanceField.SetValue(null, systemManager);
+        }
+    }
+
+    public static Mock<AmongUsClient> SetupAmongUsClientMock()
+    {
+        if (MockAmongUsClientget_InstanceHelper.Instance == null)
+        {
+            var mockClient = new Mock<AmongUsClient>(IntPtr.Zero);
+            var mockClientHelper = new Mock<MockAmongUsClientget_InstanceHelper>();
+            mockClientHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
+            MockAmongUsClientget_InstanceHelper.Instance = mockClientHelper.Object;
+            return mockClient;
+        }
+        return Mock<AmongUsClient>.Get(AmongUsClient.Instance);
+    }
+
+    public static Mock<LobbyBehaviour> SetupLobbyMock()
+    {
+        if (MockLobbyBehaviourget_InstanceHelper.Instance == null)
+        {
+            var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
+            var mockLobbyInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
+            mockLobbyInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
+            MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyInstance.Object;
+            return mockLobby;
+        }
+        return Mock<LobbyBehaviour>.Get(LobbyBehaviour.Instance);
+    }
+
+    public static Mock<GameData> SetupGameDataMock()
+    {
+        var mockGameData = new Mock<GameData>(IntPtr.Zero);
+        var mockList = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>>(IntPtr.Zero);
+        mockGameData.SetupGet(g => g.AllPlayers).Returns(mockList.Object);
+
+        var mockGameDataHelper = new Mock<MockGameDataget_InstanceHelper>();
+        mockGameDataHelper.Setup(h => h.Invoke()).Returns(mockGameData.Object);
+        MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
+
+        return mockGameData;
     }
 
     public static void SetupDebugMode()
@@ -111,10 +317,28 @@ public static class MockSetupHelper
 
     public static void SetupCompatModManager()
     {
+        InitializeBepInExPaths();
         if (CompatModManager.Instance == null)
         {
             CompatModManager.Initialize();
         }
+    }
+
+    private static void InitializeBepInExPaths()
+    {
+        try
+        {
+            var tempCfg = Path.Combine(Path.GetTempPath(), "bepinex.cfg");
+            var setBepInExConfigPath = typeof(BepInEx.Paths).GetMethod("set_BepInExConfigPath", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            setBepInExConfigPath?.Invoke(null, new object[] { tempCfg });
+
+            var setConfigPath = typeof(BepInEx.Paths).GetMethod("set_ConfigPath", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            setConfigPath?.Invoke(null, new object[] { tempCfg });
+
+            var setBepInRootPath = typeof(BepInEx.Paths).GetMethod("set_BepInExRootPath", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            setBepInRootPath?.Invoke(null, new object[] { Path.GetTempPath() });
+        }
+        catch { }
     }
 
 	public static ExtremeRolesPlugin SetupMockExtremeRolePlugin()
@@ -139,7 +363,7 @@ public static class MockSetupHelper
 
 	public static void SetupMockConfig(ExtremeRolesPlugin plugin)
 	{
-		var config = new ConfigFile(Path.Combine(Path.GetTempPath(), "test.cfg"), true);
+		var config = new ConfigFile(Path.Combine(Path.GetTempPath(), $"test_{Guid.NewGuid():N}.cfg"), true);
 		var configField = typeof(BasePlugin).GetField("<Config>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
 		configField?.SetValue(plugin, config);
 	}
@@ -155,6 +379,11 @@ public static class MockSetupHelper
 		var mockSingleton = new Mock<MockDestroyableSingletonget_InstanceHelper<T>>();
 		MockDestroyableSingletonget_InstanceHelper<T>.Instance = mockSingleton.Object;
 		mockSingleton.Setup(x => x.Invoke()).Returns(mock.Object);
+
+		var mockExists = new Mock<MockDestroyableSingletonget_InstanceExistsHelper<T>>();
+		MockDestroyableSingletonget_InstanceExistsHelper<T>.Instance = mockExists.Object;
+		mockExists.Setup(x => x.Invoke()).Returns(true);
+
 		return mock;
 	}
 
@@ -167,6 +396,10 @@ public static class MockSetupHelper
         var mockClamp = new Mock<MockMathfClampHelper>();
         mockClamp.Setup(h => h.Invoke(It.IsAny<float>(), It.IsAny<float>(), It.IsAny<float>())).Returns((float v, float min, float max) => Math.Clamp(v, min, max));
         MockMathfClampHelper.Instance = mockClamp.Object;
+
+        var mockClamp2 = new Mock<MockMathfClampHelper2>();
+        mockClamp2.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).Returns((int v, int min, int max) => Math.Clamp(v, min, max));
+        MockMathfClampHelper2.Instance = mockClamp2.Object;
 
         var mockMax = new Mock<MockMathfMaxHelper>();
         mockMax.Setup(h => h.Invoke(It.IsAny<float>(), It.IsAny<float>())).Returns((float a, float b) => Math.Max(a, b));
@@ -187,6 +420,23 @@ public static class MockSetupHelper
 
     public static void SetupColorHelpers()
     {
+        var mockToHtml = new Mock<MockColorUtilityToHtmlStringRGBAHelper>();
+        mockToHtml.Setup(x => x.Invoke(It.IsAny<Color>())).Returns("FFFFFF");
+        MockColorUtilityToHtmlStringRGBAHelper.Instance = mockToHtml.Object;
+
+        var mockColorEq = new Mock<MockColorop_EqualityHelper>();
+        mockColorEq.Setup(x => x.Invoke(It.IsAny<Color>(), It.IsAny<Color>()))
+            .Returns((Color a, Color b) => a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a);
+        MockColorop_EqualityHelper.Instance = mockColorEq.Object;
+
+        var mockColorIneq = new Mock<MockColorop_InequalityHelper>();
+        mockColorIneq.Setup(x => x.Invoke(It.IsAny<Color>(), It.IsAny<Color>()))
+            .Returns((Color a, Color b) => a.r != b.r || a.g != b.g || a.b != b.b || a.a != b.a);
+        MockColorop_InequalityHelper.Instance = mockColorIneq.Object;
+
+        var mockRandomInitState = new Mock<MockRandomInitStateHelper>();
+        MockRandomInitStateHelper.Instance = mockRandomInitState.Object;
+
         MockColor32op_ImplicitHelper.Instance = new Mock<MockColor32op_ImplicitHelper>().Object;
         MockColor32op_ImplicitHelper2.Instance = new Mock<MockColor32op_ImplicitHelper2>().Object;
         MockColorop_ImplicitHelper.Instance = new Mock<MockColorop_ImplicitHelper>().Object;

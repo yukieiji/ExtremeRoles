@@ -13,6 +13,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.Ability;
 
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ExtremeMultiModalAbilityButtonTests
 {
     private Mock<IButtonAutoActivator> mockActivator;
@@ -25,7 +27,7 @@ public class ExtremeMultiModalAbilityButtonTests
 
     public ExtremeMultiModalAbilityButtonTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
 
         var mockVectorOne = new Mock<MockVector3get_oneHelper>();
         mockVectorOne.Setup(x => x.Invoke()).Returns(new Vector3(1f, 1f, 1f));
@@ -113,11 +115,15 @@ public class ExtremeMultiModalAbilityButtonTests
         mockInstHelper5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object orig, Transform parent) =>
             {
+                if (orig is KillButton)
+                {
+                    return mockKillButton.Object;
+                }
                 if (orig is TextMeshPro)
                 {
                     return mockText.Object;
                 }
-                return mockKillButton.Object;
+                return orig;
             });
         MockObjectInstantiateHelper5.Instance = mockInstHelper5.Object;
 
@@ -125,11 +131,15 @@ public class ExtremeMultiModalAbilityButtonTests
         mockInstHelper10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object orig, Transform parent) =>
             {
+                if (orig is KillButton)
+                {
+                    return mockKillButton.Object;
+                }
                 if (orig is TextMeshPro)
                 {
                     return mockText.Object;
                 }
-                return mockKillButton.Object;
+                return orig;
             });
         MockObjectInstantiateHelper10.Instance = mockInstHelper10.Object;
 

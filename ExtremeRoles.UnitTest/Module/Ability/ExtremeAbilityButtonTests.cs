@@ -18,14 +18,16 @@ using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.UnitTest.Module.Ability;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ExtremeAbilityButtonTests
 {
     public ExtremeAbilityButtonTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupMockExtremeRolePlugin();
+        MockSetupHelper.SetupPlayerControlMocks();
     }
 
     private sealed class TestBehavior : BehaviorBase

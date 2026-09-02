@@ -17,7 +17,8 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Module.GameResult.WinnerProcessor;
 
-[Collection("UnityMock")]
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class WinnerProcessorTests
 {
     private sealed class DummySingleRole : SingleRoleBase
@@ -35,7 +36,7 @@ public class WinnerProcessorTests
 
     public WinnerProcessorTests()
     {
-        MockSetupHelper.SetupCommonMocks();
+        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupLogger("WinnerProcessorTests");
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
@@ -50,6 +51,11 @@ public class WinnerProcessorTests
         var debugEntry = debugConfig.Bind("Debug", "DebugMode", false);
         var debugProp = typeof(ExtremeRolesPlugin).GetProperty("DebugMode", BindingFlags.Public | BindingFlags.Static);
         debugProp?.SetValue(null, debugEntry);
+
+        if (ExtremeRoles.GameMode.ExtremeGameModeManager.Instance == null)
+        {
+            ExtremeRoles.GameMode.ExtremeGameModeManager.Create(AmongUs.GameOptions.GameModes.Normal);
+        }
     }
 
     private static NetworkedPlayerInfo CreateMockPlayerInfo(byte playerId, string name = "Player")
