@@ -215,20 +215,66 @@ public class MapTests : IDisposable
 	[InlineData((byte)3, Map.SkeldSecurity)]
 	[InlineData((byte)4, Map.AirShipSecurity)]
 	[InlineData((byte)5, Map.FangleSecurity)]
-	[InlineData((byte)99, "")]
-	public void GetSecuritySystemConsole_VanillaMaps_SearchesCorrectConsole(byte mapId, string expectedNameKey)
+	public void GetSecuritySystemConsole_VanillaMaps_ReturnsMatchingConsole(byte mapId, string expectedNameKey)
 	{
 		currentMapId = mapId;
 
+		var matchedConsoleGo = new Mock<GameObject>(IntPtr.Zero);
+		matchedConsoleGo.SetupGet(g => g.name).Returns($"Prefix_{expectedNameKey}_Suffix");
+
+		var matchedConsole = new Mock<SystemConsole>(IntPtr.Zero);
+		matchedConsole.SetupGet(c => c.gameObject).Returns(matchedConsoleGo.Object);
+
+		var unmatchedConsoleGo = new Mock<GameObject>(IntPtr.Zero);
+		unmatchedConsoleGo.SetupGet(g => g.name).Returns("UnmatchedConsoleName");
+
+		var unmatchedConsole = new Mock<SystemConsole>(IntPtr.Zero);
+		unmatchedConsole.SetupGet(c => c.gameObject).Returns(unmatchedConsoleGo.Object);
+
 		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
-		mockFindObjects.Setup(x => x.Invoke<SystemConsole>()).Returns(new Il2CppReferenceArray<SystemConsole>(IntPtr.Zero));
+		mockFindObjects.Setup(x => x.Invoke<SystemConsole>()).Returns(
+			new Il2CppReferenceArray<SystemConsole>([unmatchedConsole.Object, matchedConsole.Object]));
 		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects.Object;
 
 		var result = Map.GetSecuritySystemConsole();
-		if (string.IsNullOrEmpty(expectedNameKey))
-		{
-			Assert.Null(result);
-		}
+
+		Assert.Same(matchedConsole.Object, result);
+	}
+
+	[Fact]
+	public void GetSecuritySystemConsole_WhenNoMatchingConsole_ReturnsNull()
+	{
+		currentMapId = 0; // Skeld
+
+		var unmatchedConsoleGo = new Mock<GameObject>(IntPtr.Zero);
+		unmatchedConsoleGo.SetupGet(g => g.name).Returns("UnmatchedConsoleName");
+
+		var unmatchedConsole = new Mock<SystemConsole>(IntPtr.Zero);
+		unmatchedConsole.SetupGet(c => c.gameObject).Returns(unmatchedConsoleGo.Object);
+
+		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
+		mockFindObjects.Setup(x => x.Invoke<SystemConsole>()).Returns(
+			new Il2CppReferenceArray<SystemConsole>([unmatchedConsole.Object]));
+		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects.Object;
+
+		var result = Map.GetSecuritySystemConsole();
+
+		Assert.Null(result);
+	}
+
+	[Fact]
+	public void GetSecuritySystemConsole_WhenConsoleListIsEmpty_ReturnsNull()
+	{
+		currentMapId = 0; // Skeld
+
+		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
+		mockFindObjects.Setup(x => x.Invoke<SystemConsole>()).Returns(
+			new Il2CppReferenceArray<SystemConsole>(IntPtr.Zero));
+		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects.Object;
+
+		var result = Map.GetSecuritySystemConsole();
+
+		Assert.Null(result);
 	}
 
 	[Fact]
@@ -248,19 +294,77 @@ public class MapTests : IDisposable
 	}
 
 	[Theory]
-	[InlineData((byte)2)]
-	[InlineData((byte)4)]
-	[InlineData((byte)5)]
-	[InlineData((byte)0)]
-	public void GetVitalSystemConsole_VanillaMaps_ChecksExpectedConsole(byte mapId)
+	[InlineData((byte)2, Map.PolusVital)]
+	[InlineData((byte)4, Map.AirShipVital)]
+	[InlineData((byte)5, Map.FangleVital)]
+	public void GetVitalSystemConsole_VanillaMapsWithVitals_ReturnsMatchingConsole(byte mapId, string expectedNameKey)
 	{
 		currentMapId = mapId;
 
+		var matchedConsoleGo = new Mock<GameObject>(IntPtr.Zero);
+		matchedConsoleGo.SetupGet(g => g.name).Returns($"Prefix_{expectedNameKey}_Suffix");
+
+		var matchedConsole = new Mock<SystemConsole>(IntPtr.Zero);
+		matchedConsole.SetupGet(c => c.gameObject).Returns(matchedConsoleGo.Object);
+
+		var unmatchedConsoleGo = new Mock<GameObject>(IntPtr.Zero);
+		unmatchedConsoleGo.SetupGet(g => g.name).Returns("UnmatchedConsoleName");
+
+		var unmatchedConsole = new Mock<SystemConsole>(IntPtr.Zero);
+		unmatchedConsole.SetupGet(c => c.gameObject).Returns(unmatchedConsoleGo.Object);
+
 		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
-		mockFindObjects.Setup(x => x.Invoke<SystemConsole>()).Returns(new Il2CppReferenceArray<SystemConsole>(IntPtr.Zero));
+		mockFindObjects.Setup(x => x.Invoke<SystemConsole>()).Returns(
+			new Il2CppReferenceArray<SystemConsole>([unmatchedConsole.Object, matchedConsole.Object]));
 		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects.Object;
 
 		var result = Map.GetVitalSystemConsole();
+
+		Assert.Same(matchedConsole.Object, result);
+	}
+
+	[Theory]
+	[InlineData((byte)0)] // Skeld (No vitals console)
+	[InlineData((byte)1)] // MiraHQ (No vitals console)
+	[InlineData((byte)99)] // Unknown Map
+	public void GetVitalSystemConsole_VanillaMapsWithoutVitals_ReturnsNull(byte mapId)
+	{
+		currentMapId = mapId;
+
+		var matchedConsoleGo = new Mock<GameObject>(IntPtr.Zero);
+		matchedConsoleGo.SetupGet(g => g.name).Returns("panel_vitals");
+
+		var matchedConsole = new Mock<SystemConsole>(IntPtr.Zero);
+		matchedConsole.SetupGet(c => c.gameObject).Returns(matchedConsoleGo.Object);
+
+		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
+		mockFindObjects.Setup(x => x.Invoke<SystemConsole>()).Returns(
+			new Il2CppReferenceArray<SystemConsole>([matchedConsole.Object]));
+		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects.Object;
+
+		var result = Map.GetVitalSystemConsole();
+
+		Assert.Null(result);
+	}
+
+	[Fact]
+	public void GetVitalSystemConsole_WhenNoMatchingConsole_ReturnsNull()
+	{
+		currentMapId = 2; // Polus
+
+		var unmatchedConsoleGo = new Mock<GameObject>(IntPtr.Zero);
+		unmatchedConsoleGo.SetupGet(g => g.name).Returns("UnmatchedConsoleName");
+
+		var unmatchedConsole = new Mock<SystemConsole>(IntPtr.Zero);
+		unmatchedConsole.SetupGet(c => c.gameObject).Returns(unmatchedConsoleGo.Object);
+
+		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
+		mockFindObjects.Setup(x => x.Invoke<SystemConsole>()).Returns(
+			new Il2CppReferenceArray<SystemConsole>([unmatchedConsole.Object]));
+		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects.Object;
+
+		var result = Map.GetVitalSystemConsole();
+
 		Assert.Null(result);
 	}
 
