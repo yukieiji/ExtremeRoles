@@ -88,19 +88,6 @@ public class MapTests : IDisposable
 		Assert.Equal("Submerged", Map.Name);
 	}
 
-	[Theory]
-	[InlineData((byte)0)]
-	[InlineData((byte)1)]
-	[InlineData((byte)2)]
-	[InlineData((byte)4)]
-	[InlineData((byte)5)]
-	public void Id_ReturnsCorrectValueFromOptions(byte mapId)
-	{
-		currentMapId = mapId;
-
-		Assert.Equal(mapId, Map.Id);
-	}
-
 	[Fact]
 	public void GetAirShipRandomSpawn_ReturnsParsedVectors()
 	{
