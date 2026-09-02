@@ -275,6 +275,11 @@ public static class Map
 			_ => string.Empty,
 		};
 
+		if (string.IsNullOrEmpty(key))
+		{
+			return null;
+		}
+
 		var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
 
 		return systemConsoleArray.FirstOrDefault(
@@ -309,6 +314,11 @@ public static class Map
 			5 => FangleVital,
 			_ => string.Empty,
 		};
+
+		if (string.IsNullOrEmpty(key))
+		{
+			return null;
+		}
 
 		var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
 
