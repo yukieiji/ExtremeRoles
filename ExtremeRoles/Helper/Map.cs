@@ -223,22 +223,22 @@ public static class Map
 
 	public static List<Vector2> GetAirShipRandomSpawn()
 	{
-		JObject? json = JsonParser.GetJObjectFromAssembly(airShipSpawnJson);
+		var airShipSpawnData = JsonParser.LoadJsonStructFromAssembly<Dictionary<string, float[][]>>(airShipSpawnJson);
 
 		List<Vector2> result = new List<Vector2>();
 
-		if (json == null) { return result; }
-
-		JArray? airShipSpawn = json.Get<JArray>(airShipRandomSpawnKey);
-
-		if (airShipSpawn == null) { return result; }
-		result.Capacity = airShipSpawn.Count;
-
-		for (int i = 0; i < airShipSpawn.Count; ++i)
+		if (airShipSpawnData == null || !airShipSpawnData.TryGetValue(airShipRandomSpawnKey, out var airShipSpawn))
 		{
-			JArray? pos = airShipSpawn.Get<JArray>(i);
-			if (pos == null) { continue; }
-			result.Add(new Vector2((float)pos[0], (float)pos[1]));
+			return result;
+		}
+
+		result.Capacity = airShipSpawn.Length;
+
+		for (int i = 0; i < airShipSpawn.Length; ++i)
+		{
+			float[] pos = airShipSpawn[i];
+			if (pos == null || pos.Length < 2) { continue; }
+			result.Add(new Vector2(pos[0], pos[1]));
 		}
 
 		return result;
@@ -360,20 +360,19 @@ public static class Map
 			ventIdMapping.Add(vent.Id, vent);
 		}
 
-		JObject? linkInfoJson = JsonParser.GetJObjectFromAssembly(ventInfoJson);
 		string key = Name;
-		if (linkInfoJson == null || key == MiraHqKey) { return; }
+		if (key == MiraHqKey) { return; }
 
-		JArray? linkInfo = linkInfoJson.Get<JArray>(key);
-		if (linkInfo == null) { return; }
+		var linkInfoMap = JsonParser.LoadJsonStructFromAssembly<Dictionary<string, int[][]>>(ventInfoJson);
+		if (linkInfoMap == null || !linkInfoMap.TryGetValue(key, out var linkInfo)) { return; }
 
-		for (int i = 0; i < linkInfo.Count; ++i)
+		for (int i = 0; i < linkInfo.Length; ++i)
 		{
-			JArray? ventLinkedId = linkInfo.Get<JArray>(i);
-			if (ventLinkedId == null) { continue; }
+			int[] ventLinkedId = linkInfo[i];
+			if (ventLinkedId == null || ventLinkedId.Length < 2) { continue; }
 
-			if (ventIdMapping.TryGetValue((int)ventLinkedId[0], out Vent? from) &&
-				ventIdMapping.TryGetValue((int)ventLinkedId[1], out Vent? target) &&
+			if (ventIdMapping.TryGetValue(ventLinkedId[0], out Vent? from) &&
+				ventIdMapping.TryGetValue(ventLinkedId[1], out Vent? target) &&
 				from != null && target != null)
 			{
 				linkVent(from, target);

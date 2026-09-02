@@ -19,7 +19,7 @@ public static class JsonParser
 {
     public static JObject? GetJObjectFromAssembly(string path)
     {
-		var assembly = Assembly.GetCallingAssembly();
+		var assembly = typeof(JsonParser).Assembly;
 		using Stream? stream = assembly.GetManifestResourceStream(path);
 
 		if (stream is null) { return null; }
