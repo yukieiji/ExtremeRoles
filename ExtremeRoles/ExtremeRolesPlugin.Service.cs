@@ -31,6 +31,7 @@ public partial class ExtremeRolesPlugin
 
 		collection
 			.AddTransient<IPluginLoader, BepInExPluginLoader>()
+			.AddTransient<IAccessTool, Acc>
 			.AddTransient<IHarmonyPatchProvider, HarmonyPatchProvider>()
 			.AddTransient<IModInitializerFactory, ModInitializerFactory>()
 			.AddSingleton<CompatModManager>();

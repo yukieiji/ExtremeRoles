@@ -113,12 +113,19 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 	{
 		// カスタムサボのタスクタイプ取得
 		Type taskType = init.GetClass("CustomTaskTypes");
-		var retrieveOxigenMaskField = AccessTools.Field(taskType, "RetrieveOxygenMask");
+		var retrieveOxigenMaskField = init.GetField(taskType, "RetrieveOxygenMask");
 		object? taskTypeObj = retrieveOxigenMaskField.GetValue(null);
-		var retrieveOxigenMaskTaskTypeField = AccessTools.Field(taskTypeObj?.GetType(), "taskType");
+		if (taskTypeObj == null)
+		{
+			return;
+		}
+		var retrieveOxigenMaskTaskTypeField = init.GetField(taskTypeObj.GetType(), "taskType");
 
 		object? oxygenTaskType = retrieveOxigenMaskTaskTypeField.GetValue(taskTypeObj);
-		if (oxygenTaskType == null) { return; }
+		if (oxygenTaskType == null)
+		{
+			return;
+		}
 		this.RetrieveOxygenMask = (TaskTypes)oxygenTaskType;
 
 		// サブマージドの酸素妨害の修理用
@@ -138,16 +145,16 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 			floorHandlerType, "RpcRequestChangeFloor", [typeof(bool)]);
 		this.registerFloorOverrideMethod = init.GetMethod(
 			floorHandlerType, "RegisterFloorOverride");
-		this.onUpperField = AccessTools.Field(floorHandlerType, "onUpper");
+		this.onUpperField = init.GetField(floorHandlerType, "onUpper");
 
 		this.submarineStatusType = init.GetClass("SubmarineStatus");
 		this.calculateLightRadiusMethod = init.GetMethod(
 			this.submarineStatusType, "CalculateLightRadius");
-		this.submarineStatusReference = AccessTools.Field(
+		this.submarineStatusReference = init.GetField(
 			this.submarineStatusType, "referenceHolder");
 
 		Type ventMoveToVentPatchType = init.GetClass("VentPatchData");
-		this.inTransitionField = AccessTools.Property(ventMoveToVentPatchType, "InTransition");
+		this.inTransitionField = init.GetProperty(ventMoveToVentPatchType, "InTransition");
 	}
 #pragma warning restore CS8618
 

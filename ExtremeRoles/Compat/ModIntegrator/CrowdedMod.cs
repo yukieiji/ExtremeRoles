@@ -1,4 +1,5 @@
-﻿using ExtremeRoles.Compat.Initializer;
+using ExtremeRoles.Compat.Initializer;
+using ExtremeRoles.Compat.Interface;
 
 #nullable enable
 
