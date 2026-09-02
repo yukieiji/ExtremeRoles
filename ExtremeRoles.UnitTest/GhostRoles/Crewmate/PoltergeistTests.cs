@@ -18,6 +18,7 @@ public class PoltergeistTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -37,6 +38,17 @@ public class PoltergeistTests
     }
 
     [Fact]
+    public void Properties_MatchPoltergeistDefaults()
+    {
+        var poltergeist = new Poltergeist();
+
+        Assert.Equal(ExtremeGhostRoleId.Poltergeist, poltergeist.Id);
+        Assert.Equal(ExtremeRoleType.Crewmate, poltergeist.Team);
+        Assert.True(poltergeist.HasTask);
+        Assert.Equal(ExtremeGhostRoleId.Poltergeist.ToString(), poltergeist.Name);
+    }
+
+    [Fact]
     public void GetRoleFilter_ReturnsEmptySet()
     {
         var poltergeist = new Poltergeist();
@@ -44,6 +56,18 @@ public class PoltergeistTests
         var filter = poltergeist.GetRoleFilter();
 
         Assert.Empty(filter);
+    }
+
+    [Fact]
+    public void InitializeAndMeetingHooks_ExecuteWithoutException()
+    {
+        var poltergeist = new Poltergeist();
+
+        poltergeist.Initialize();
+        poltergeist.ResetOnMeetingStart();
+        poltergeist.ResetOnMeetingEnd();
+
+        Assert.Equal(ExtremeGhostRoleId.Poltergeist, poltergeist.Id);
     }
 
     [Fact]

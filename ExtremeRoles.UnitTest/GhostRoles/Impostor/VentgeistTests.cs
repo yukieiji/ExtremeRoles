@@ -18,6 +18,7 @@ public class VentgeistTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -50,6 +51,17 @@ public class VentgeistTests
     }
 
     [Fact]
+    public void Properties_MatchVentgeistDefaults()
+    {
+        var ventgeist = new Ventgeist();
+
+        Assert.Equal(ExtremeGhostRoleId.Ventgeist, ventgeist.Id);
+        Assert.Equal(ExtremeRoleType.Impostor, ventgeist.Team);
+        Assert.False(ventgeist.HasTask);
+        Assert.Equal(ExtremeGhostRoleId.Ventgeist.ToString(), ventgeist.Name);
+    }
+
+    [Fact]
     public void GetRoleFilter_ReturnsEmptySet()
     {
         var ventgeist = new Ventgeist();
@@ -57,5 +69,17 @@ public class VentgeistTests
         var filter = ventgeist.GetRoleFilter();
 
         Assert.Empty(filter);
+    }
+
+    [Fact]
+    public void InitializeAndMeetingHooks_ExecuteWithoutException()
+    {
+        var ventgeist = new Ventgeist();
+
+        ventgeist.Initialize();
+        ventgeist.ResetOnMeetingStart();
+        ventgeist.ResetOnMeetingEnd();
+
+        Assert.Equal(ExtremeGhostRoleId.Ventgeist, ventgeist.Id);
     }
 }

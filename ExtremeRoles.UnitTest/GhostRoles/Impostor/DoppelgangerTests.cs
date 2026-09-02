@@ -18,6 +18,7 @@ public class DoppelgangerTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -50,6 +51,17 @@ public class DoppelgangerTests
     }
 
     [Fact]
+    public void Properties_MatchDoppelgangerDefaults()
+    {
+        var doppelganger = new Doppelganger();
+
+        Assert.Equal(ExtremeGhostRoleId.Doppelganger, doppelganger.Id);
+        Assert.Equal(ExtremeRoleType.Impostor, doppelganger.Team);
+        Assert.False(doppelganger.HasTask);
+        Assert.Equal(ExtremeGhostRoleId.Doppelganger.ToString(), doppelganger.Name);
+    }
+
+    [Fact]
     public void GetRoleFilter_ReturnsEmptySet()
     {
         var doppelganger = new Doppelganger();
@@ -57,6 +69,18 @@ public class DoppelgangerTests
         var filter = doppelganger.GetRoleFilter();
 
         Assert.Empty(filter);
+    }
+
+    [Fact]
+    public void InitializeAndMeetingHooks_ExecuteWithoutException()
+    {
+        var doppelganger = new Doppelganger();
+
+        doppelganger.Initialize();
+        doppelganger.ResetOnMeetingStart();
+        doppelganger.ResetOnMeetingEnd();
+
+        Assert.Equal(ExtremeGhostRoleId.Doppelganger, doppelganger.Id);
     }
 
     [Fact]

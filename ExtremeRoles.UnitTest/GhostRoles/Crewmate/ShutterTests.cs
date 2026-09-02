@@ -18,6 +18,7 @@ public class ShutterTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         MockSetupHelper.SetupDebugMode();
         MockSetupHelper.SetupLogger();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
@@ -39,6 +40,17 @@ public class ShutterTests
     }
 
     [Fact]
+    public void Properties_MatchShutterDefaults()
+    {
+        var shutter = new Shutter();
+
+        Assert.Equal(ExtremeGhostRoleId.Shutter, shutter.Id);
+        Assert.Equal(ExtremeRoleType.Crewmate, shutter.Team);
+        Assert.True(shutter.HasTask);
+        Assert.Equal(ExtremeGhostRoleId.Shutter.ToString(), shutter.Name);
+    }
+
+    [Fact]
     public void GetRoleFilter_ReturnsExpectedFilter()
     {
         var shutter = new Shutter();
@@ -47,6 +59,18 @@ public class ShutterTests
 
         Assert.Single(filter);
         Assert.Contains(Roles.ExtremeRoleId.Photographer, filter);
+    }
+
+    [Fact]
+    public void InitializeAndMeetingHooks_ExecuteWithoutException()
+    {
+        var shutter = new Shutter();
+
+        shutter.Initialize();
+        shutter.ResetOnMeetingStart();
+        shutter.ResetOnMeetingEnd();
+
+        Assert.Equal(ExtremeGhostRoleId.Shutter, shutter.Id);
     }
 
     [Fact]

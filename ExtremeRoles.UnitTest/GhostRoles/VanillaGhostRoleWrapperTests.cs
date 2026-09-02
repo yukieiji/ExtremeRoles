@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using AmongUs.GameOptions;
 using Moq;
 using Xunit;
@@ -20,6 +20,60 @@ public class VanillaGhostRoleWrapperTests
     }
 
     [Fact]
+    public void Constructor_GuardianAngel_SetsCorrectProperties()
+    {
+        var wrapper = new VanillaGhostRoleWrapper(RoleTypes.GuardianAngel);
+
+        Assert.True(wrapper.HasTask);
+        Assert.Equal(ExtremeRoleType.Crewmate, wrapper.Team);
+        Assert.True(wrapper.IsCrewmate());
+        Assert.False(wrapper.IsImpostor());
+        Assert.False(wrapper.IsNeutral());
+        Assert.True(wrapper.IsVanillaRole());
+        Assert.Equal(RoleTypes.GuardianAngel.ToString(), wrapper.Name);
+    }
+
+    [Fact]
+    public void Constructor_ImpostorGhost_SetsCorrectProperties()
+    {
+        var wrapper = new VanillaGhostRoleWrapper(RoleTypes.ImpostorGhost);
+
+        Assert.False(wrapper.HasTask);
+        Assert.Equal(ExtremeRoleType.Impostor, wrapper.Team);
+        Assert.False(wrapper.IsCrewmate());
+        Assert.True(wrapper.IsImpostor());
+        Assert.False(wrapper.IsNeutral());
+        Assert.True(wrapper.IsVanillaRole());
+        Assert.Equal(RoleTypes.ImpostorGhost.ToString(), wrapper.Name);
+    }
+
+    [Fact]
+    public void Constructor_CrewmateGhost_SetsCorrectProperties()
+    {
+        var wrapper = new VanillaGhostRoleWrapper(RoleTypes.CrewmateGhost);
+
+        Assert.True(wrapper.HasTask);
+        Assert.Equal(ExtremeRoleType.Crewmate, wrapper.Team);
+        Assert.True(wrapper.IsCrewmate());
+        Assert.False(wrapper.IsImpostor());
+        Assert.False(wrapper.IsNeutral());
+        Assert.True(wrapper.IsVanillaRole());
+        Assert.Equal(RoleTypes.CrewmateGhost.ToString(), wrapper.Name);
+    }
+
+    [Fact]
+    public void InitializeAndMeetingHooks_ExecuteWithoutException()
+    {
+        var wrapper = new VanillaGhostRoleWrapper(RoleTypes.GuardianAngel);
+
+        wrapper.Initialize();
+        wrapper.ResetOnMeetingStart();
+        wrapper.ResetOnMeetingEnd();
+
+        Assert.True(wrapper.IsVanillaRole());
+    }
+
+    [Fact]
     public void GetRoleFilter_ReturnsEmptyHashSet()
     {
         var wrapper = new VanillaGhostRoleWrapper(RoleTypes.GuardianAngel);
@@ -30,10 +84,10 @@ public class VanillaGhostRoleWrapperTests
     }
 
     [Fact]
-    public void DisabledMethods_ThrowException()
+    public void CreateAbility_ThrowsException()
     {
         var wrapper = new VanillaGhostRoleWrapper(RoleTypes.GuardianAngel);
 
-        Assert.Throws<System.Exception>(() => wrapper.CreateAbility());
+        Assert.Throws<Exception>(() => wrapper.CreateAbility());
     }
 }
