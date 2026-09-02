@@ -10,6 +10,6 @@ public class HarmonyPatchProvider : IHarmonyPatchProvider
 	public IHarmonyPatch Get(PluginInfo plugin)
 	{
 		var harmony = new Harmony($"ExR.{plugin.Metadata.GUID}.Patch");
-		return new HarmonyPatch(harmony);
+		return new HarmonyPatchWrapper(harmony);
 	}
 }

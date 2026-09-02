@@ -5,7 +5,7 @@ using ExtremeRoles.Compat.Interface;
 
 namespace ExtremeRoles.Compat;
 
-public class HarmonyPatch(Harmony harmony) : IHarmonyPatch
+public class HarmonyPatchWrapper(Harmony harmony) : IHarmonyPatch
 {
 	private readonly Harmony harmony = harmony;
 	public void Patch(MethodBase original, HarmonyMethod prefix = null, HarmonyMethod postfix = null, HarmonyMethod transpiler = null, HarmonyMethod finalizer = null, HarmonyMethod ilmanipulator = null)
