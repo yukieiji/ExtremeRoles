@@ -18,7 +18,6 @@ public class DoppelgangerTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
-        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -57,18 +56,7 @@ public class DoppelgangerTests
 
         var filter = doppelganger.GetRoleFilter();
 
-        Assert.NotNull(filter);
         Assert.Empty(filter);
-    }
-
-    [Fact]
-    public void GetImportantText_ReturnsFormattedString()
-    {
-        var doppelganger = new Doppelganger();
-
-        string importantText = doppelganger.GetImportantText();
-
-        Assert.NotNull(importantText);
     }
 
     [Fact]

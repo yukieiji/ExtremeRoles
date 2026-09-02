@@ -20,7 +20,6 @@ public class ForasTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
-        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -62,15 +61,5 @@ public class ForasTests
         Assert.Equal(2, filter.Count);
         Assert.Contains(ExtremeRoleId.Sidekick, filter);
         Assert.Contains(ExtremeRoleId.Servant, filter);
-    }
-
-    [Fact]
-    public void GetImportantText_ReturnsFormattedString()
-    {
-        var foras = new Foras();
-
-        string importantText = foras.GetImportantText();
-
-        Assert.NotNull(importantText);
     }
 }

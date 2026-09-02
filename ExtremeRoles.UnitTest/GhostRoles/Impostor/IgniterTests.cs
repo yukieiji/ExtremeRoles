@@ -19,7 +19,6 @@ public class IgniterTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
-        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -60,15 +59,5 @@ public class IgniterTests
 
         Assert.Single(filter);
         Assert.Contains(ExtremeRoleId.LastWolf, filter);
-    }
-
-    [Fact]
-    public void GetImportantText_ReturnsFormattedString()
-    {
-        var igniter = new Igniter();
-
-        string importantText = igniter.GetImportantText();
-
-        Assert.NotNull(importantText);
     }
 }

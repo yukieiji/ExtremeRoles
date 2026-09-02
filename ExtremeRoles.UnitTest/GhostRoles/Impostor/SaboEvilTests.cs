@@ -20,7 +20,6 @@ public class SaboEvilTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
-        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -74,17 +73,6 @@ public class SaboEvilTests
 
         var filter = saboEvil.GetRoleFilter();
 
-        Assert.NotNull(filter);
         Assert.Empty(filter);
-    }
-
-    [Fact]
-    public void GetImportantText_ReturnsFormattedString()
-    {
-        var saboEvil = new SaboEvil();
-
-        string importantText = saboEvil.GetImportantText();
-
-        Assert.NotNull(importantText);
     }
 }

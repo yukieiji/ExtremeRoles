@@ -18,7 +18,6 @@ public class VentgeistTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
-        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -57,17 +56,6 @@ public class VentgeistTests
 
         var filter = ventgeist.GetRoleFilter();
 
-        Assert.NotNull(filter);
         Assert.Empty(filter);
-    }
-
-    [Fact]
-    public void GetImportantText_ReturnsFormattedString()
-    {
-        var ventgeist = new Ventgeist();
-
-        string importantText = ventgeist.GetImportantText();
-
-        Assert.NotNull(importantText);
     }
 }

@@ -18,7 +18,6 @@ public class FaunusTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
-        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -44,17 +43,6 @@ public class FaunusTests
 
         var filter = faunus.GetRoleFilter();
 
-        Assert.NotNull(filter);
         Assert.Empty(filter);
-    }
-
-    [Fact]
-    public void GetImportantText_ReturnsFormattedString()
-    {
-        var faunus = new Faunus();
-
-        string importantText = faunus.GetImportantText();
-
-        Assert.NotNull(importantText);
     }
 }

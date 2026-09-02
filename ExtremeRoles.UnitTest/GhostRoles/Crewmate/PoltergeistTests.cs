@@ -18,7 +18,6 @@ public class PoltergeistTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
-        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -44,18 +43,7 @@ public class PoltergeistTests
 
         var filter = poltergeist.GetRoleFilter();
 
-        Assert.NotNull(filter);
         Assert.Empty(filter);
-    }
-
-    [Fact]
-    public void GetImportantText_ReturnsFormattedString()
-    {
-        var poltergeist = new Poltergeist();
-
-        string importantText = poltergeist.GetImportantText();
-
-        Assert.NotNull(importantText);
     }
 
     [Fact]

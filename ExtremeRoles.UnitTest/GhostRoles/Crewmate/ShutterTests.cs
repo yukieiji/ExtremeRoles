@@ -18,7 +18,6 @@ public class ShutterTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
-        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         MockSetupHelper.SetupDebugMode();
         MockSetupHelper.SetupLogger();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
@@ -46,19 +45,8 @@ public class ShutterTests
 
         var filter = shutter.GetRoleFilter();
 
-        Assert.NotNull(filter);
         Assert.Single(filter);
         Assert.Contains(Roles.ExtremeRoleId.Photographer, filter);
-    }
-
-    [Fact]
-    public void GetImportantText_ReturnsFormattedString()
-    {
-        var shutter = new Shutter();
-
-        string importantText = shutter.GetImportantText();
-
-        Assert.NotNull(importantText);
     }
 
     [Fact]

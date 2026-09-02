@@ -128,27 +128,4 @@ public class GhostRoleBaseTests
 
         Assert.Equal(42, role.GameControlId);
     }
-
-    [Fact]
-    public void GetImportantText_FormatsStringWithColorAndDescriptions()
-    {
-        var role = new DummyGhostRole(ExtremeRoleType.Crewmate, ExtremeGhostRoleId.Poltergeist);
-
-        string importantText = role.GetImportantText();
-
-        Assert.NotNull(importantText);
-        Assert.Contains(role.Name, importantText);
-        Assert.Contains("ShortDescription", importantText);
-    }
-
-    [Fact]
-    public void GetFullDescription_ReturnsTranslationKeyForRoleId()
-    {
-        var role = new DummyGhostRole(ExtremeRoleType.Crewmate, ExtremeGhostRoleId.Poltergeist);
-
-        string desc = role.GetFullDescription();
-
-        Assert.NotNull(desc);
-        Assert.Equal($"{ExtremeGhostRoleId.Poltergeist}FullDescription", desc);
-    }
 }

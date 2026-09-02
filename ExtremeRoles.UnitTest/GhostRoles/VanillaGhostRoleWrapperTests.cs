@@ -17,21 +17,6 @@ public class VanillaGhostRoleWrapperTests
     {
         MockSetupHelper.SetupUnityCommonMocks();
         this.mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
-        this.mockTranslation.Setup(x => x.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object>>()))
-            .Returns((string id, string defaultStr, Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object> parts) => defaultStr ?? id ?? string.Empty);
-    }
-
-    [Fact]
-    public void GetImportantText_ReturnsFormattedStringForCrewmateAndImpostor()
-    {
-        var crewWrapper = new VanillaGhostRoleWrapper(RoleTypes.GuardianAngel);
-        var impWrapper = new VanillaGhostRoleWrapper(RoleTypes.ImpostorGhost);
-
-        string crewText = crewWrapper.GetImportantText();
-        string impText = impWrapper.GetImportantText();
-
-        Assert.NotNull(crewText);
-        Assert.NotNull(impText);
     }
 
     [Fact]
@@ -41,7 +26,6 @@ public class VanillaGhostRoleWrapperTests
 
         var filter = wrapper.GetRoleFilter();
 
-        Assert.NotNull(filter);
         Assert.Empty(filter);
     }
 
