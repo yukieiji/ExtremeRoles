@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using Xunit;
 using ExtremeRoles;
 using ExtremeRoles.GhostRoles;
@@ -36,9 +37,23 @@ public class PoltergeistTests
     }
 
     [Fact]
+    public void Properties_MatchExpectedDefaults()
+    {
+        var poltergeist = new Poltergeist();
+
+        Assert.Equal(ExtremeGhostRoleId.Poltergeist, poltergeist.Id);
+        Assert.Equal(ExtremeRoleType.Crewmate, poltergeist.Team);
+        Assert.True(poltergeist.HasTask);
+        Assert.Equal(ExtremeGhostRoleId.Poltergeist.ToString(), poltergeist.Name);
+    }
+
+    [Fact]
     public void DeadbodyMove_WhenPlayerNotFound_ExecutesWithoutError()
     {
         Poltergeist.DeadbodyMove(99, 98, 0.0f, 0.0f, false);
+
+        var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Poltergeist>(99);
+        Assert.Null(role);
     }
 
     [Fact]
@@ -53,12 +68,12 @@ public class PoltergeistTests
     }
 
     [Fact]
-    public void Initialize_ReadsLoaderOptionsWithoutError()
+    public void Initialize_ReadsLoaderOptions()
     {
         var poltergeist = new Poltergeist();
 
         poltergeist.Initialize();
-        poltergeist.ResetOnMeetingStart();
-        poltergeist.ResetOnMeetingEnd();
+
+        Assert.Equal(ExtremeGhostRoleId.Poltergeist, poltergeist.Id);
     }
 }

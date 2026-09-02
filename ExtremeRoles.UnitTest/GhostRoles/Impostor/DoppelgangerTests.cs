@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using Xunit;
 using ExtremeRoles;
 using ExtremeRoles.GhostRoles;
@@ -49,9 +50,23 @@ public class DoppelgangerTests
     }
 
     [Fact]
+    public void Properties_MatchExpectedDefaults()
+    {
+        var doppelganger = new Doppelganger();
+
+        Assert.Equal(ExtremeGhostRoleId.Doppelganger, doppelganger.Id);
+        Assert.Equal(ExtremeRoleType.Impostor, doppelganger.Team);
+        Assert.False(doppelganger.HasTask);
+        Assert.Equal(ExtremeGhostRoleId.Doppelganger.ToString(), doppelganger.Name);
+    }
+
+    [Fact]
     public void Doppl_WhenPlayersMissing_ExecutesWithoutError()
     {
         Doppelganger.Doppl(99, 98);
+
+        var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Doppelganger>(99);
+        Assert.Null(role);
     }
 
     [Fact]
@@ -66,12 +81,14 @@ public class DoppelgangerTests
     }
 
     [Fact]
-    public void InitializeAndHooks_ExecuteWithoutError()
+    public void InitializeAndHooks_ExecuteAndMaintainState()
     {
         var doppelganger = new Doppelganger();
 
         doppelganger.Initialize();
         doppelganger.ResetOnMeetingStart();
         doppelganger.ResetOnMeetingEnd();
+
+        Assert.Equal(ExtremeGhostRoleId.Doppelganger, doppelganger.Id);
     }
 }

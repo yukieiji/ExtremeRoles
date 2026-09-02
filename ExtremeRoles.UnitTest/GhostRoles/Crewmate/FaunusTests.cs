@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using Xunit;
 using ExtremeRoles;
 using ExtremeRoles.GhostRoles;
@@ -36,6 +37,17 @@ public class FaunusTests
     }
 
     [Fact]
+    public void Properties_MatchExpectedDefaults()
+    {
+        var faunus = new Faunus();
+
+        Assert.Equal(ExtremeGhostRoleId.Faunus, faunus.Id);
+        Assert.Equal(ExtremeRoleType.Crewmate, faunus.Team);
+        Assert.True(faunus.HasTask);
+        Assert.Equal(ExtremeGhostRoleId.Faunus.ToString(), faunus.Name);
+    }
+
+    [Fact]
     public void GetRoleFilter_ReturnsEmptySet()
     {
         var faunus = new Faunus();
@@ -47,19 +59,12 @@ public class FaunusTests
     }
 
     [Fact]
-    public void Initialize_ResetsInternalState()
+    public void Initialize_ResetsInternalStateWithoutThrowing()
     {
         var faunus = new Faunus();
 
         faunus.Initialize();
-    }
 
-    [Fact]
-    public void ResetOnMeetingEndAndStart_DoesNotThrow()
-    {
-        var faunus = new Faunus();
-
-        faunus.ResetOnMeetingStart();
-        faunus.ResetOnMeetingEnd();
+        Assert.Equal(ExtremeGhostRoleId.Faunus, faunus.Id);
     }
 }

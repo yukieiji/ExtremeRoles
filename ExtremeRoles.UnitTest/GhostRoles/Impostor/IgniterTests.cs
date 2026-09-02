@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using Xunit;
 using ExtremeRoles;
 using ExtremeRoles.GhostRoles;
@@ -50,22 +51,36 @@ public class IgniterTests
     }
 
     [Fact]
+    public void Properties_MatchExpectedDefaults()
+    {
+        var igniter = new Igniter();
+
+        Assert.Equal(ExtremeGhostRoleId.Igniter, igniter.Id);
+        Assert.Equal(ExtremeRoleType.Impostor, igniter.Team);
+        Assert.False(igniter.HasTask);
+        Assert.Equal(ExtremeGhostRoleId.Igniter.ToString(), igniter.Name);
+    }
+
+    [Fact]
     public void GetRoleFilter_ContainsLastWolf()
     {
         var igniter = new Igniter();
 
         var filter = igniter.GetRoleFilter();
 
+        Assert.Single(filter);
         Assert.Contains(ExtremeRoleId.LastWolf, filter);
     }
 
     [Fact]
-    public void Initialize_ReadsLoaderOptionsWithoutError()
+    public void InitializeAndHooks_ExecuteWithoutError()
     {
         var igniter = new Igniter();
 
         igniter.Initialize();
         igniter.ResetOnMeetingStart();
         igniter.ResetOnMeetingEnd();
+
+        Assert.Equal(ExtremeGhostRoleId.Igniter, igniter.Id);
     }
 }

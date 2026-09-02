@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Moq;
+using UnityEngine;
 using Xunit;
 using ExtremeRoles;
 using ExtremeRoles.GhostRoles;
@@ -51,6 +52,17 @@ public class SaboEvilTests
     }
 
     [Fact]
+    public void Properties_MatchExpectedDefaults()
+    {
+        var saboEvil = new SaboEvil();
+
+        Assert.Equal(ExtremeGhostRoleId.SaboEvil, saboEvil.Id);
+        Assert.Equal(ExtremeRoleType.Impostor, saboEvil.Team);
+        Assert.False(saboEvil.HasTask);
+        Assert.Equal(ExtremeGhostRoleId.SaboEvil.ToString(), saboEvil.Name);
+    }
+
+    [Fact]
     public void ResetCool_ExecutesWithoutError()
     {
         var mockShipStatus = new Mock<ShipStatus>(IntPtr.Zero);
@@ -61,6 +73,8 @@ public class SaboEvilTests
         MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
         SaboEvil.ResetCool();
+
+        Assert.NotNull(ShipStatus.Instance);
     }
 
     [Fact]
@@ -75,12 +89,14 @@ public class SaboEvilTests
     }
 
     [Fact]
-    public void InitializeAndHooks_ExecuteWithoutError()
+    public void InitializeAndHooks_ExecuteAndMaintainState()
     {
         var saboEvil = new SaboEvil();
 
         saboEvil.Initialize();
         saboEvil.ResetOnMeetingStart();
         saboEvil.ResetOnMeetingEnd();
+
+        Assert.Equal(ExtremeGhostRoleId.SaboEvil, saboEvil.Id);
     }
 }

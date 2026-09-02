@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Hazel;
+using UnityEngine;
 using Xunit;
 using ExtremeRoles;
 using ExtremeRoles.GhostRoles;
@@ -51,23 +52,37 @@ public class ForasTests
     }
 
     [Fact]
+    public void Properties_MatchExpectedDefaults()
+    {
+        var foras = new Foras();
+
+        Assert.Equal(ExtremeGhostRoleId.Foras, foras.Id);
+        Assert.Equal(ExtremeRoleType.Neutral, foras.Team);
+        Assert.False(foras.HasTask);
+        Assert.Equal(ExtremeGhostRoleId.Foras.ToString(), foras.Name);
+    }
+
+    [Fact]
     public void GetRoleFilter_ContainsSidekickAndServant()
     {
         var foras = new Foras();
 
         var filter = foras.GetRoleFilter();
 
+        Assert.Equal(2, filter.Count);
         Assert.Contains(ExtremeRoleId.Sidekick, filter);
         Assert.Contains(ExtremeRoleId.Servant, filter);
     }
 
     [Fact]
-    public void Initialize_ReadsLoaderOptionsWithoutError()
+    public void InitializeAndHooks_ExecuteAndMaintainState()
     {
         var foras = new Foras();
 
         foras.Initialize();
         foras.ResetOnMeetingStart();
         foras.ResetOnMeetingEnd();
+
+        Assert.Equal(ExtremeGhostRoleId.Foras, foras.Id);
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using Xunit;
 using ExtremeRoles;
 using ExtremeRoles.GhostRoles;
@@ -49,6 +50,17 @@ public class VentgeistTests
     }
 
     [Fact]
+    public void Properties_MatchExpectedDefaults()
+    {
+        var ventgeist = new Ventgeist();
+
+        Assert.Equal(ExtremeGhostRoleId.Ventgeist, ventgeist.Id);
+        Assert.Equal(ExtremeRoleType.Impostor, ventgeist.Team);
+        Assert.False(ventgeist.HasTask);
+        Assert.Equal(ExtremeGhostRoleId.Ventgeist.ToString(), ventgeist.Name);
+    }
+
+    [Fact]
     public void GetRoleFilter_ReturnsEmptySet()
     {
         var ventgeist = new Ventgeist();
@@ -60,12 +72,14 @@ public class VentgeistTests
     }
 
     [Fact]
-    public void InitializeAndHooks_ExecuteWithoutError()
+    public void InitializeAndHooks_ExecuteAndMaintainState()
     {
         var ventgeist = new Ventgeist();
 
         ventgeist.Initialize();
         ventgeist.ResetOnMeetingStart();
         ventgeist.ResetOnMeetingEnd();
+
+        Assert.Equal(ExtremeGhostRoleId.Ventgeist, ventgeist.Id);
     }
 }
