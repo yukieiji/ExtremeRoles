@@ -30,7 +30,7 @@ public sealed class ExtremeGameModeManager
 
 	public bool EnableXion => this.isXionActive && this.RoleSelector.CanUseXion;
 
-	private bool isXionActive = false;
+	public bool isXionActive = false;
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。'required' 修飾子を追加するか、Null 許容として宣言することを検討してください。
 	public ExtremeGameModeManager(GameModes mode)

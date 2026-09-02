@@ -38,7 +38,7 @@ public class HideNSeekModeUsableLogicTests
         var role = new DummySingleRole(core);
 
         // Act
-        bool canUseVent = logic.CanUseVent(role);
+        var canUseVent = logic.CanUseVent(role);
 
         // Assert
         Assert.True(canUseVent);
@@ -52,8 +52,8 @@ public class HideNSeekModeUsableLogicTests
         var core = new RoleCore(ExtremeRoleId.SpecialImpostor, ExtremeRoleType.Impostor, Color.red, "TestImp");
         var role = new DummySingleRole(core);
 
-		// Act
-		bool canUseVent = logic.CanUseVent(role);
+        // Act
+        var canUseVent = logic.CanUseVent(role);
 
         // Assert
         Assert.False(canUseVent);

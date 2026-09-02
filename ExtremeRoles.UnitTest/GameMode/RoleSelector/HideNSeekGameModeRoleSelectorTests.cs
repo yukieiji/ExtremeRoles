@@ -28,6 +28,39 @@ public class HideNSeekGameModeRoleSelectorTests
     }
 
     [Fact]
+    public void Properties_ReturnExpectedDefaults()
+    {
+        // Arrange & Act
+        var selector = new HideNSeekGameModeRoleSelector();
+
+        // Assert
+        Assert.True(selector.IsAdjustImpostorNum);
+        Assert.True(selector.CanUseXion);
+        Assert.True(selector.IsVanillaRoleToMultiAssign);
+    }
+
+    [Fact]
+    public void Enumerations_ReturnExpectedLists()
+    {
+        // Arrange
+        var selector = new HideNSeekGameModeRoleSelector();
+
+        // Act
+        var normalRoles = selector.UseNormalRoleId.ToList();
+        var combRoles = selector.UseCombRoleType.ToList();
+        var ghostRoles = selector.UseGhostRoleId.ToList();
+
+        // Assert
+        Assert.NotEmpty(normalRoles);
+        Assert.Contains(ExtremeRoleId.SpecialCrew, normalRoles);
+
+        Assert.NotEmpty(combRoles);
+        Assert.Contains(CombinationRoleType.Accelerator, combRoles);
+
+        Assert.Empty(ghostRoles);
+    }
+
+    [Fact]
     public void IsValidCategory_ValidAndInvalidCategoryIds_ReturnsExpected()
     {
         // Arrange

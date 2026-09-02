@@ -34,7 +34,7 @@ public class LiberalSettingCheckTests
         var check = new LiberalSettingCheck(mockOption.Object, num);
 
         // Act
-        bool isActive = check.IsActive;
+        var isActive = check.IsActive;
 
         // Assert
         Assert.Equal(expected, isActive);

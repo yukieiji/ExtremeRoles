@@ -1,3 +1,4 @@
+using System.Reflection;
 using AmongUs.GameOptions;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.IntroRunner;
@@ -27,6 +28,14 @@ public class ExtremeGameModeManagerTests
         {
             OptionCreator.Create();
         }
+
+        ResetInstance();
+    }
+
+    private static void ResetInstance()
+    {
+        var prop = typeof(ExtremeGameModeManager).GetProperty(nameof(ExtremeGameModeManager.Instance), BindingFlags.Public | BindingFlags.Static);
+        prop?.SetValue(null, null);
     }
 
     [Fact]
@@ -39,6 +48,9 @@ public class ExtremeGameModeManagerTests
         var instance = ExtremeGameModeManager.Instance;
         Assert.NotNull(instance);
         Assert.Equal(GameModes.Normal, instance.CurrentGameMode);
+        Assert.NotNull(instance.ShipOption);
+        Assert.NotNull(instance.RoleSelector);
+        Assert.NotNull(instance.Usable);
     }
 
     [Fact]
@@ -51,6 +63,9 @@ public class ExtremeGameModeManagerTests
         var instance = ExtremeGameModeManager.Instance;
         Assert.NotNull(instance);
         Assert.Equal(GameModes.NormalFools, instance.CurrentGameMode);
+        Assert.NotNull(instance.ShipOption);
+        Assert.NotNull(instance.RoleSelector);
+        Assert.NotNull(instance.Usable);
     }
 
     [Fact]
@@ -63,6 +78,9 @@ public class ExtremeGameModeManagerTests
         var instance = ExtremeGameModeManager.Instance;
         Assert.NotNull(instance);
         Assert.Equal(GameModes.HideNSeek, instance.CurrentGameMode);
+        Assert.NotNull(instance.ShipOption);
+        Assert.NotNull(instance.RoleSelector);
+        Assert.NotNull(instance.Usable);
     }
 
     [Fact]
@@ -75,7 +93,10 @@ public class ExtremeGameModeManagerTests
         var instance = ExtremeGameModeManager.Instance;
         Assert.NotNull(instance);
         Assert.Equal(GameModes.SeekFools, instance.CurrentGameMode);
-	}
+        Assert.NotNull(instance.ShipOption);
+        Assert.NotNull(instance.RoleSelector);
+        Assert.NotNull(instance.Usable);
+    }
 
     [Fact]
     public void Create_SameGameMode_DoesNotRecreate()
@@ -95,6 +116,9 @@ public class ExtremeGameModeManagerTests
     [Fact]
     public void Create_UnsupportedGameMode_NullFactoryComponents()
     {
+        // Arrange
+        ExtremeGameModeManager.Create(GameModes.Normal);
+
         // Act
         ExtremeGameModeManager.Create(GameModes.None);
 
@@ -116,5 +140,58 @@ public class ExtremeGameModeManagerTests
 
         // Act
         instance.Load();
+
+        // Assert
+        Assert.Equal(IRoleSelector.RawXionUse, instance.isXionActive);
+    }
+
+    [Fact]
+    public void EnableXion_ReturnsExpectedValue()
+    {
+        // Arrange
+        ExtremeGameModeManager.Create(GameModes.Normal);
+        var instance = ExtremeGameModeManager.Instance;
+        instance.isXionActive = true;
+
+        // Act
+        var enableXion = instance.EnableXion;
+
+        // Assert
+        var expected = instance.isXionActive && instance.RoleSelector.CanUseXion;
+        Assert.Equal(expected, enableXion);
+    }
+
+    [Theory]
+    [InlineData(GameModes.Normal, typeof(ClassicIntroRunner))]
+    [InlineData(GameModes.NormalFools, typeof(ClassicIntroRunner))]
+    [InlineData(GameModes.HideNSeek, typeof(HideNSeekIntroRunner))]
+    [InlineData(GameModes.SeekFools, typeof(HideNSeekIntroRunner))]
+    public void GetIntroRunner_SupportedModes_ReturnsExpectedType(GameModes mode, System.Type expectedType)
+    {
+        // Arrange
+        ExtremeGameModeManager.Create(mode);
+        var instance = ExtremeGameModeManager.Instance;
+
+        // Act
+        var runner = instance.GetIntroRunner();
+
+        // Assert
+        Assert.NotNull(runner);
+        Assert.IsType(expectedType, runner);
+    }
+
+    [Fact]
+    public void GetIntroRunner_UnsupportedMode_ReturnsNull()
+    {
+        // Arrange
+        ExtremeGameModeManager.Create(GameModes.Normal);
+        ExtremeGameModeManager.Create(GameModes.None);
+        var instance = ExtremeGameModeManager.Instance;
+
+        // Act
+        var runner = instance.GetIntroRunner();
+
+        // Assert
+        Assert.Null(runner);
     }
 }
