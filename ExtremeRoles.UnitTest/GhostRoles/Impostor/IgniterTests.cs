@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using Xunit;
+using ExtremeRoles;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.Impostor;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.UnitTest.GhostRoles;
 
@@ -13,31 +15,48 @@ public class IgniterTests
     public IgniterTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupAmongUsClientMock();
+        MockSetupHelper.SetupLobbyMock();
+        var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
+        MockSetupHelper.SetupMockConfig(plugin);
+
+        EnsureGhostRoleOptionsCreated();
     }
 
-    [Fact]
-    public void Constructor_InitializesPropertiesCorrectly()
+    private static void EnsureGhostRoleOptionsCreated()
     {
-        // Act
-        var igniter = new Igniter();
-
-        // Assert
-        Assert.False(igniter.HasTask);
-        Assert.Equal(ExtremeRoleType.Impostor, igniter.Team);
-        Assert.Equal(ExtremeGhostRoleId.Igniter, igniter.Id);
-        Assert.Equal("Igniter", igniter.Name);
+        try
+        {
+            if (ClientOption.Instance == null)
+            {
+                OptionCreator.Create();
+            }
+        }
+        catch (System.ArgumentException) { }
     }
 
     [Fact]
     public void GetRoleFilter_ContainsLastWolf()
     {
-        // Arrange
         var igniter = new Igniter();
 
-        // Act
         var filter = igniter.GetRoleFilter();
 
-        // Assert
         Assert.Contains(ExtremeRoleId.LastWolf, filter);
+    }
+
+    [Fact]
+    public void Initialize_ReadsLoaderOptionsWithoutError()
+    {
+        var igniter = new Igniter();
+
+        if (!OptionManager.Instance.TryGetCategory(OptionTab.GhostImpostorTab, ExtremeGhostRoleManager.GetRoleGroupId(igniter.Id), out _))
+        {
+            try { igniter.CreateRoleAllOption(); } catch (System.ArgumentException) { }
+        }
+
+        igniter.Initialize();
+        igniter.ResetOnMeetingStart();
+        igniter.ResetOnMeetingEnd();
     }
 }

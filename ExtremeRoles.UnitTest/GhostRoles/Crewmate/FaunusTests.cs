@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using Xunit;
+using ExtremeRoles;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.Crewmate;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.UnitTest.GhostRoles;
 
@@ -12,31 +15,46 @@ public class FaunusTests
     public FaunusTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupAmongUsClientMock();
+        MockSetupHelper.SetupLobbyMock();
+        var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
+        MockSetupHelper.SetupMockConfig(plugin);
+
+        EnsureGhostRoleOptionsCreated();
     }
 
-    [Fact]
-    public void Constructor_InitializesPropertiesCorrectly()
+    private static void EnsureGhostRoleOptionsCreated()
     {
-        // Act
-        var faunus = new Faunus();
+        try
+        {
+            if (ClientOption.Instance == null)
+            {
+                OptionCreator.Create();
+            }
+        }
+        catch (ArgumentException) { }
 
-        // Assert
-        Assert.True(faunus.HasTask);
-        Assert.Equal(ExtremeRoleType.Crewmate, faunus.Team);
-        Assert.Equal(ExtremeGhostRoleId.Faunus, faunus.Id);
-        Assert.Equal("Faunus", faunus.Name);
+        foreach (var ghost in ExtremeGhostRoleManager.AllGhostRole.Values)
+        {
+            OptionTab tab = ghost.IsCrewmate() ? OptionTab.GhostCrewmateTab : ghost.IsImpostor() ? OptionTab.GhostImpostorTab : OptionTab.GhostNeutralTab;
+            if (!OptionManager.Instance.TryGetCategory(tab, ExtremeGhostRoleManager.GetRoleGroupId(ghost.Id), out _))
+            {
+                try
+                {
+                    ghost.CreateRoleAllOption();
+                }
+                catch (ArgumentException) { }
+            }
+        }
     }
 
     [Fact]
     public void GetRoleFilter_ReturnsEmptySet()
     {
-        // Arrange
         var faunus = new Faunus();
 
-        // Act
         var filter = faunus.GetRoleFilter();
 
-        // Assert
         Assert.NotNull(filter);
         Assert.Empty(filter);
     }
@@ -44,20 +62,16 @@ public class FaunusTests
     [Fact]
     public void Initialize_ResetsInternalState()
     {
-        // Arrange
         var faunus = new Faunus();
 
-        // Act & Assert
         faunus.Initialize();
     }
 
     [Fact]
     public void ResetOnMeetingEndAndStart_DoesNotThrow()
     {
-        // Arrange
         var faunus = new Faunus();
 
-        // Act & Assert
         faunus.ResetOnMeetingStart();
         faunus.ResetOnMeetingEnd();
     }

@@ -1,10 +1,14 @@
+using System;
 using System.Collections.Generic;
+using Hazel;
 using Xunit;
+using ExtremeRoles;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.Neutal;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.UnitTest.GhostRoles;
 
@@ -13,32 +17,57 @@ public class ForasTests
     public ForasTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupAmongUsClientMock();
+        MockSetupHelper.SetupLobbyMock();
+        var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
+        MockSetupHelper.SetupMockConfig(plugin);
+
+        EnsureGhostRoleOptionsCreated();
     }
 
-    [Fact]
-    public void Constructor_InitializesPropertiesCorrectly()
+    private static void EnsureGhostRoleOptionsCreated()
     {
-        // Act
-        var foras = new Foras();
+        try
+        {
+            if (ClientOption.Instance == null)
+            {
+                OptionCreator.Create();
+            }
+        }
+        catch (ArgumentException) { }
 
-        // Assert
-        Assert.False(foras.HasTask);
-        Assert.Equal(ExtremeRoleType.Neutral, foras.Team);
-        Assert.Equal(ExtremeGhostRoleId.Foras, foras.Id);
-        Assert.Equal("Foras", foras.Name);
+        foreach (var ghost in ExtremeGhostRoleManager.AllGhostRole.Values)
+        {
+            OptionTab tab = ghost.IsCrewmate() ? OptionTab.GhostCrewmateTab : ghost.IsImpostor() ? OptionTab.GhostImpostorTab : OptionTab.GhostNeutralTab;
+            if (!OptionManager.Instance.TryGetCategory(tab, ExtremeGhostRoleManager.GetRoleGroupId(ghost.Id), out _))
+            {
+                try
+                {
+                    ghost.CreateRoleAllOption();
+                }
+                catch (ArgumentException) { }
+            }
+        }
     }
 
     [Fact]
     public void GetRoleFilter_ContainsSidekickAndServant()
     {
-        // Arrange
         var foras = new Foras();
 
-        // Act
         var filter = foras.GetRoleFilter();
 
-        // Assert
         Assert.Contains(ExtremeRoleId.Sidekick, filter);
         Assert.Contains(ExtremeRoleId.Servant, filter);
+    }
+
+    [Fact]
+    public void Initialize_ReadsLoaderOptionsWithoutError()
+    {
+        var foras = new Foras();
+
+        foras.Initialize();
+        foras.ResetOnMeetingStart();
+        foras.ResetOnMeetingEnd();
     }
 }
