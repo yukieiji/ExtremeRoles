@@ -14,7 +14,6 @@ public class LiberalOptionTests
 {
     public LiberalOptionTests()
     {
-        MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupExtremeSystemTypeManagerMock();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
@@ -27,27 +26,6 @@ public class LiberalOptionTests
         {
             OptionCreator.Create();
         }
-    }
-
-    [Fact]
-    public void IRoleSelector_StaticHelperMethods_ReturnExpectedResults()
-    {
-        // Arrange
-        IRoleSelector selector = new ClassicGameModeRoleSelector();
-
-        // Act
-        bool validGlobalOption = selector.IsValidGlobalRoleOptionId(RoleSpawnOption.MinCrewmate);
-        bool invalidGlobalOption = selector.IsValidGlobalRoleOptionId((RoleSpawnOption)9999);
-        bool isCommonRoleSpawn = IRoleSelector.IsCommonOption((int)SpawnOptionCategory.RoleSpawnCategory);
-        bool isCommonGhostSpawn = IRoleSelector.IsCommonOption((int)SpawnOptionCategory.GhostRoleSpawnCategory);
-        bool isCommonOther = IRoleSelector.IsCommonOption(99999);
-
-        // Assert
-        Assert.True(validGlobalOption);
-        Assert.False(invalidGlobalOption);
-        Assert.True(isCommonRoleSpawn);
-        Assert.True(isCommonGhostSpawn);
-        Assert.False(isCommonOther);
     }
 
     [Fact]

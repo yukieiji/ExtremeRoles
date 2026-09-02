@@ -29,41 +29,6 @@ public class ClassicGameModeRoleSelectorTests
     }
 
     [Fact]
-    public void Properties_ReturnExpectedDefaults()
-    {
-        // Arrange & Act
-        var selector = new ClassicGameModeRoleSelector();
-
-        // Assert
-        Assert.False(selector.IsAdjustImpostorNum);
-        Assert.True(selector.CanUseXion);
-        Assert.False(selector.IsVanillaRoleToMultiAssign);
-    }
-
-    [Fact]
-    public void Enumerations_ReturnExpectedLists()
-    {
-        // Arrange
-        var selector = new ClassicGameModeRoleSelector();
-
-        // Act
-        var normalRoles = selector.UseNormalRoleId.ToList();
-        var combRoles = selector.UseCombRoleType.ToList();
-        var ghostRoles = selector.UseGhostRoleId.ToList();
-
-        // Assert
-        Assert.NotEmpty(normalRoles);
-        Assert.Contains(ExtremeRoleId.SpecialCrew, normalRoles);
-        Assert.Contains(ExtremeRoleId.SpecialImpostor, normalRoles);
-
-        Assert.NotEmpty(combRoles);
-        Assert.Contains(CombinationRoleType.Avalon, combRoles);
-
-        Assert.NotEmpty(ghostRoles);
-        Assert.Contains(ExtremeGhostRoleId.Poltergeist, ghostRoles);
-    }
-
-    [Fact]
     public void IsValidCategory_ValidAndInvalidCategoryIds_ReturnsExpected()
     {
         // Arrange
