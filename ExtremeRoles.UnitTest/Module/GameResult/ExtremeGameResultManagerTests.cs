@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -50,11 +51,11 @@ public class ExtremeGameResultManagerTests
         }
     }
 
-    private static NetworkedPlayerInfo CreateMockPlayerInfo(byte playerId, string name = "Player")
+    private static NetworkedPlayerInfo CreateMockPlayerInfo(byte playerId, string name)
     {
         var mockPlayer = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
         mockPlayer.SetupGet(p => p.PlayerId).Returns(playerId);
-        mockPlayer.SetupGet(p => p.PlayerName).Returns($"{name}{playerId}");
+        mockPlayer.SetupGet(p => p.PlayerName).Returns(name);
         return mockPlayer.Object;
     }
 
@@ -65,16 +66,31 @@ public class ExtremeGameResultManagerTests
         return mock.Object;
     }
 
+    private static void SetupMockCachedWinners(CachedPlayerData[] cachedWinnersList)
+    {
+        var mockWinners = new Mock<Il2CppSystem.Collections.Generic.List<CachedPlayerData>>(IntPtr.Zero);
+        mockWinners.SetupGet(w => w.Count).Returns(cachedWinnersList.Length);
+        mockWinners.Setup(w => w[It.IsAny<int>()]).Returns((int i) => cachedWinnersList[i]);
+        mockWinners.Setup(w => w.ToArray()).Returns(new Il2CppReferenceArray<CachedPlayerData>(cachedWinnersList));
+
+        var mockEnum = new Mock<Il2CppSystem.Collections.Generic.List<CachedPlayerData>.Enumerator>(IntPtr.Zero);
+        mockEnum.Setup(e => e.MoveNext()).Returns(false);
+        mockWinners.Setup(w => w.GetEnumerator()).Returns(mockEnum.Object);
+
+        var mockWinnersHelper = new Mock<MockEndGameResultget_CachedWinnersHelper>();
+        mockWinnersHelper.Setup(h => h.Invoke()).Returns(mockWinners.Object);
+        MockEndGameResultget_CachedWinnersHelper.Instance = mockWinnersHelper.Object;
+    }
+
     [Fact]
-    public void CreateTaskInfo_PopulatesPlayerTaskInfoAndWinnerPool()
+    public void CreateTaskInfo_SinglePlayer_PopulatesTaskInfoAndWinnerPoolWithCorrectValues()
     {
         var mockGameData = MockSetupHelper.SetupGameDataMock();
 
-        var player1 = CreateMockPlayerInfo(1, "Player");
-        var player2 = CreateMockPlayerInfo(2, "Player");
+        var player1 = CreateMockPlayerInfo(1, "Alice");
 
         var mockList = new Mock<Il2CppPlayerList>(IntPtr.Zero);
-        var players = new[] { player1, player2 };
+        var players = new[] { player1 };
 
         mockList.SetupGet(l => l.Count).Returns(players.Length);
         mockList.Setup(l => l[It.IsAny<int>()]).Returns((int i) => players[i]);
@@ -88,56 +104,89 @@ public class ExtremeGameResultManagerTests
         var taskInfoField = typeof(ExtremeGameResultManager).GetField("playerTaskInfo", BindingFlags.NonPublic | BindingFlags.Instance);
         var playerTaskInfo = (Dictionary<byte, ExtremeGameResultManager.TaskInfo>)taskInfoField!.GetValue(manager)!;
 
-        Assert.Equal(2, playerTaskInfo.Count);
-        Assert.True(playerTaskInfo.ContainsKey(1));
-        Assert.True(playerTaskInfo.ContainsKey(2));
+        Assert.Single(playerTaskInfo);
+        Assert.True(playerTaskInfo.TryGetValue(1, out var info1));
+        Assert.Equal(0, info1.CompletedTask);
+        Assert.Equal(0, info1.TotalTask);
 
         var winnerField = typeof(ExtremeGameResultManager).GetField("winner", BindingFlags.NonPublic | BindingFlags.Instance);
         var winner = (WinnerContainer)winnerField!.GetValue(manager)!;
         var poolField = typeof(WinnerContainer).GetField("allWinnerPool", BindingFlags.NonPublic | BindingFlags.Instance);
         var pool = (Dictionary<byte, CachedPlayerData>)poolField!.GetValue(winner)!;
 
-        Assert.Equal(2, pool.Count);
+        Assert.Single(pool);
         Assert.True(pool.ContainsKey(1));
-        Assert.True(pool.ContainsKey(2));
-
-        var winnerResult = manager.Winner;
-        Assert.NotNull(winnerResult.Winner);
-        Assert.NotNull(winnerResult.PlusedWinner);
     }
 
     [Fact]
-    public void CreateEndGameManagerResult_SetsWinnerAndBuildsPlayerSummaries()
+    public void CreateTaskInfo_MultiplePlayers_PopulatesTaskInfoAndWinnerPoolForMultiplePlayers()
     {
         var mockGameData = MockSetupHelper.SetupGameDataMock();
 
-        var player1 = CreateMockPlayerInfo(1, "Player");
+        var player1 = CreateMockPlayerInfo(1, "Alice");
+        var player2 = CreateMockPlayerInfo(2, "Bob");
+        var player3 = CreateMockPlayerInfo(3, "Charlie");
+
         var mockList = new Mock<Il2CppPlayerList>(IntPtr.Zero);
-        var players = new[] { player1 };
+        var players = new[] { player1, player2, player3 };
 
         mockList.SetupGet(l => l.Count).Returns(players.Length);
         mockList.Setup(l => l[It.IsAny<int>()]).Returns((int i) => players[i]);
 
         mockGameData.SetupGet(g => g.AllPlayers).Returns(mockList.Object);
 
-        var core = new RoleCore(ExtremeRoleId.Sheriff, ExtremeRoleType.Crewmate, Color.white);
-        var role = new DummySingleRole(core);
+        var manager = new ExtremeGameResultManager();
+
+        manager.CreateTaskInfo();
+
+        var taskInfoField = typeof(ExtremeGameResultManager).GetField("playerTaskInfo", BindingFlags.NonPublic | BindingFlags.Instance);
+        var playerTaskInfo = (Dictionary<byte, ExtremeGameResultManager.TaskInfo>)taskInfoField!.GetValue(manager)!;
+
+        Assert.Equal(3, playerTaskInfo.Count);
+        Assert.True(playerTaskInfo.ContainsKey(1));
+        Assert.True(playerTaskInfo.ContainsKey(2));
+        Assert.True(playerTaskInfo.ContainsKey(3));
+
+        var winnerField = typeof(ExtremeGameResultManager).GetField("winner", BindingFlags.NonPublic | BindingFlags.Instance);
+        var winner = (WinnerContainer)winnerField!.GetValue(manager)!;
+        var poolField = typeof(WinnerContainer).GetField("allWinnerPool", BindingFlags.NonPublic | BindingFlags.Instance);
+        var pool = (Dictionary<byte, CachedPlayerData>)poolField!.GetValue(winner)!;
+
+        Assert.Equal(3, pool.Count);
+        Assert.True(pool.ContainsKey(1));
+        Assert.True(pool.ContainsKey(2));
+        Assert.True(pool.ContainsKey(3));
+    }
+
+    [Fact]
+    public void CreateEndGameManagerResult_MultiplePlayers_BuildsExpectedPlayerSummariesWithDetailedValues()
+    {
+        var mockGameData = MockSetupHelper.SetupGameDataMock();
+
+        var player1 = CreateMockPlayerInfo(1, "Alice");
+        var player2 = CreateMockPlayerInfo(2, "Bob");
+        var player3 = CreateMockPlayerInfo(3, "Charlie");
+
+        var mockList = new Mock<Il2CppPlayerList>(IntPtr.Zero);
+        var players = new[] { player1, player2, player3 };
+
+        mockList.SetupGet(l => l.Count).Returns(players.Length);
+        mockList.Setup(l => l[It.IsAny<int>()]).Returns((int i) => players[i]);
+
+        mockGameData.SetupGet(g => g.AllPlayers).Returns(mockList.Object);
+
+        var role1 = new DummySingleRole(new RoleCore(ExtremeRoleId.Sheriff, ExtremeRoleType.Crewmate, Color.white));
+        var role2 = new DummySingleRole(new RoleCore(ExtremeRoleId.Bait, ExtremeRoleType.Crewmate, Color.yellow));
+        var role3 = new DummySingleRole(new RoleCore(ExtremeRoleId.Inspector, ExtremeRoleType.Crewmate, Color.blue));
+
         ExtremeRoleManager.GameRole.Clear();
-        ExtremeRoleManager.GameRole[1] = role;
+        ExtremeRoleManager.GameRole[1] = role1;
+        ExtremeRoleManager.GameRole[2] = role2;
+        ExtremeRoleManager.GameRole[3] = role3;
 
-        var mockWinners = new Mock<Il2CppSystem.Collections.Generic.List<CachedPlayerData>>(IntPtr.Zero);
-        var cachedWinnersList = new[] { CreateMockCachedPlayerData("Player1") };
-        mockWinners.SetupGet(w => w.Count).Returns(cachedWinnersList.Length);
-        mockWinners.Setup(w => w[It.IsAny<int>()]).Returns((int i) => cachedWinnersList[i]);
-        mockWinners.Setup(w => w.ToArray()).Returns(new Il2CppReferenceArray<CachedPlayerData>(cachedWinnersList));
-
-        var mockEnum = new Mock<Il2CppSystem.Collections.Generic.List<CachedPlayerData>.Enumerator>(IntPtr.Zero);
-        mockEnum.Setup(e => e.MoveNext()).Returns(false);
-        mockWinners.Setup(w => w.GetEnumerator()).Returns(mockEnum.Object);
-
-        var mockWinnersHelper = new Mock<MockEndGameResultget_CachedWinnersHelper>();
-        mockWinnersHelper.Setup(h => h.Invoke()).Returns(mockWinners.Object);
-        MockEndGameResultget_CachedWinnersHelper.Instance = mockWinnersHelper.Object;
+        var cachedWinner1 = CreateMockCachedPlayerData("Alice");
+        var cachedWinner2 = CreateMockCachedPlayerData("Bob");
+        SetupMockCachedWinners(new[] { cachedWinner1, cachedWinner2 });
 
         var manager = new ExtremeGameResultManager();
         manager.CreateTaskInfo();
@@ -145,6 +194,24 @@ public class ExtremeGameResultManagerTests
         manager.CreateEndGameManagerResult();
 
         Assert.NotNull(manager.PlayerSummaries);
-        Assert.NotEmpty(manager.PlayerSummaries);
+        Assert.Equal(3, manager.PlayerSummaries.Count);
+
+        var summary1 = manager.PlayerSummaries.First(s => s.PlayerId == 1);
+        Assert.Equal("Alice", summary1.PlayerName);
+        Assert.Equal(role1, summary1.Role);
+        Assert.Equal(0, summary1.CompletedTask);
+        Assert.Equal(0, summary1.TotalTask);
+
+        var summary2 = manager.PlayerSummaries.First(s => s.PlayerId == 2);
+        Assert.Equal("Bob", summary2.PlayerName);
+        Assert.Equal(role2, summary2.Role);
+        Assert.Equal(0, summary2.CompletedTask);
+        Assert.Equal(0, summary2.TotalTask);
+
+        var summary3 = manager.PlayerSummaries.First(s => s.PlayerId == 3);
+        Assert.Equal("Charlie", summary3.PlayerName);
+        Assert.Equal(role3, summary3.Role);
+        Assert.Equal(0, summary3.CompletedTask);
+        Assert.Equal(0, summary3.TotalTask);
     }
 }
