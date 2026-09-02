@@ -83,4 +83,42 @@ public sealed class SabotageEndCheckerTests
 
         Assert.False(result);
     }
+
+    [Fact]
+    public void CriticalSystemEndChecker_TryCheckGameEnd_ReturnsTrueWhenCountdownNegative()
+    {
+        var mockSystem = new Mock<ICriticalSabotage>(IntPtr.Zero);
+        mockSystem.SetupGet(s => s.Countdown).Returns(-1.0f);
+
+        CriticalSystemEndChecker checker = new CriticalSystemEndChecker(mockSystem.Object);
+
+        bool result = checker.TryCheckGameEnd(out GameOverReason reason);
+
+        Assert.True(result);
+        Assert.Equal(GameOverReason.ImpostorsBySabotage, reason);
+    }
+
+    [Fact]
+    public void CriticalSystemEndChecker_TryCheckGameEnd_ReturnsFalseWhenCountdownNonNegative()
+    {
+        var mockSystem = new Mock<ICriticalSabotage>(IntPtr.Zero);
+        mockSystem.SetupGet(s => s.Countdown).Returns(10.0f);
+
+        CriticalSystemEndChecker checker = new CriticalSystemEndChecker(mockSystem.Object);
+
+        bool result = checker.TryCheckGameEnd(out GameOverReason reason);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void CriticalSystemEndChecker_CleanUp_CallsClearSabotage()
+    {
+        var mockSystem = new Mock<ICriticalSabotage>(IntPtr.Zero);
+
+        CriticalSystemEndChecker checker = new CriticalSystemEndChecker(mockSystem.Object);
+        checker.CleanUp();
+
+        mockSystem.Verify(s => s.ClearSabotage(), Times.Once());
+    }
 }
