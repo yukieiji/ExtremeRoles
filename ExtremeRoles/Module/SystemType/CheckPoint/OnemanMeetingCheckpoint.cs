@@ -12,7 +12,7 @@ public sealed class OnemanMeetingCheckpoint : GlobalCheckpointSystem.CheckpointH
 	public OnemanMeetingCheckpoint(in MessageReader reader)
 	{
 		byte rolePlayerId = reader.ReadByte();
-		this.rolePlayer = Player.GetPlayerControlById(rolePlayerId);
+		Player.TryGetPlayerControl(rolePlayerId, out this.rolePlayer);
 	}
 
 	public static void RpcCheckpoint(byte rolePlayrId)
