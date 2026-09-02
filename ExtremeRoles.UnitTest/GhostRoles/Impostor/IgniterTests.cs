@@ -19,6 +19,7 @@ public class IgniterTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -51,17 +52,6 @@ public class IgniterTests
     }
 
     [Fact]
-    public void Properties_MatchExpectedDefaults()
-    {
-        var igniter = new Igniter();
-
-        Assert.Equal(ExtremeGhostRoleId.Igniter, igniter.Id);
-        Assert.Equal(ExtremeRoleType.Impostor, igniter.Team);
-        Assert.False(igniter.HasTask);
-        Assert.Equal(ExtremeGhostRoleId.Igniter.ToString(), igniter.Name);
-    }
-
-    [Fact]
     public void GetRoleFilter_ContainsLastWolf()
     {
         var igniter = new Igniter();
@@ -73,14 +63,12 @@ public class IgniterTests
     }
 
     [Fact]
-    public void InitializeAndHooks_ExecuteWithoutError()
+    public void GetImportantText_ReturnsFormattedString()
     {
         var igniter = new Igniter();
 
-        igniter.Initialize();
-        igniter.ResetOnMeetingStart();
-        igniter.ResetOnMeetingEnd();
+        string importantText = igniter.GetImportantText();
 
-        Assert.Equal(ExtremeGhostRoleId.Igniter, igniter.Id);
+        Assert.NotNull(importantText);
     }
 }

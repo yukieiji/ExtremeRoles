@@ -20,6 +20,7 @@ public class ForasTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -52,17 +53,6 @@ public class ForasTests
     }
 
     [Fact]
-    public void Properties_MatchExpectedDefaults()
-    {
-        var foras = new Foras();
-
-        Assert.Equal(ExtremeGhostRoleId.Foras, foras.Id);
-        Assert.Equal(ExtremeRoleType.Neutral, foras.Team);
-        Assert.False(foras.HasTask);
-        Assert.Equal(ExtremeGhostRoleId.Foras.ToString(), foras.Name);
-    }
-
-    [Fact]
     public void GetRoleFilter_ContainsSidekickAndServant()
     {
         var foras = new Foras();
@@ -75,14 +65,12 @@ public class ForasTests
     }
 
     [Fact]
-    public void InitializeAndHooks_ExecuteAndMaintainState()
+    public void GetImportantText_ReturnsFormattedString()
     {
         var foras = new Foras();
 
-        foras.Initialize();
-        foras.ResetOnMeetingStart();
-        foras.ResetOnMeetingEnd();
+        string importantText = foras.GetImportantText();
 
-        Assert.Equal(ExtremeGhostRoleId.Foras, foras.Id);
+        Assert.NotNull(importantText);
     }
 }

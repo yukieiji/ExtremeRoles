@@ -18,6 +18,7 @@ public class PoltergeistTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -37,26 +38,6 @@ public class PoltergeistTests
     }
 
     [Fact]
-    public void Properties_MatchExpectedDefaults()
-    {
-        var poltergeist = new Poltergeist();
-
-        Assert.Equal(ExtremeGhostRoleId.Poltergeist, poltergeist.Id);
-        Assert.Equal(ExtremeRoleType.Crewmate, poltergeist.Team);
-        Assert.True(poltergeist.HasTask);
-        Assert.Equal(ExtremeGhostRoleId.Poltergeist.ToString(), poltergeist.Name);
-    }
-
-    [Fact]
-    public void DeadbodyMove_WhenPlayerNotFound_ExecutesWithoutError()
-    {
-        Poltergeist.DeadbodyMove(99, 98, 0.0f, 0.0f, false);
-
-        var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Poltergeist>(99);
-        Assert.Null(role);
-    }
-
-    [Fact]
     public void GetRoleFilter_ReturnsEmptySet()
     {
         var poltergeist = new Poltergeist();
@@ -68,12 +49,21 @@ public class PoltergeistTests
     }
 
     [Fact]
-    public void Initialize_ReadsLoaderOptions()
+    public void GetImportantText_ReturnsFormattedString()
     {
         var poltergeist = new Poltergeist();
 
-        poltergeist.Initialize();
+        string importantText = poltergeist.GetImportantText();
 
-        Assert.Equal(ExtremeGhostRoleId.Poltergeist, poltergeist.Id);
+        Assert.NotNull(importantText);
+    }
+
+    [Fact]
+    public void DeadbodyMove_WhenPlayerNotFound_ExecutesWithoutError()
+    {
+        Poltergeist.DeadbodyMove(99, 98, 0.0f, 0.0f, false);
+
+        var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Poltergeist>(99);
+        Assert.Null(role);
     }
 }

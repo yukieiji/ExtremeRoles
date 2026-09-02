@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using AmongUs.GameOptions;
 using Moq;
 using Xunit;
@@ -18,7 +18,7 @@ public class VanillaGhostRoleWrapperTests
         MockSetupHelper.SetupUnityCommonMocks();
         this.mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         this.mockTranslation.Setup(x => x.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object>>()))
-            .Returns((string id, string defaultStr, Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object> parts) => defaultStr ?? id);
+            .Returns((string id, string defaultStr, Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object> parts) => defaultStr ?? id ?? string.Empty);
     }
 
     [Fact]
@@ -50,6 +50,6 @@ public class VanillaGhostRoleWrapperTests
     {
         var wrapper = new VanillaGhostRoleWrapper(RoleTypes.GuardianAngel);
 
-        Assert.Throws<Exception>(() => wrapper.CreateAbility());
+        Assert.Throws<System.Exception>(() => wrapper.CreateAbility());
     }
 }

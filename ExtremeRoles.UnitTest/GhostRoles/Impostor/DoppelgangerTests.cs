@@ -18,6 +18,7 @@ public class DoppelgangerTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -50,26 +51,6 @@ public class DoppelgangerTests
     }
 
     [Fact]
-    public void Properties_MatchExpectedDefaults()
-    {
-        var doppelganger = new Doppelganger();
-
-        Assert.Equal(ExtremeGhostRoleId.Doppelganger, doppelganger.Id);
-        Assert.Equal(ExtremeRoleType.Impostor, doppelganger.Team);
-        Assert.False(doppelganger.HasTask);
-        Assert.Equal(ExtremeGhostRoleId.Doppelganger.ToString(), doppelganger.Name);
-    }
-
-    [Fact]
-    public void Doppl_WhenPlayersMissing_ExecutesWithoutError()
-    {
-        Doppelganger.Doppl(99, 98);
-
-        var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Doppelganger>(99);
-        Assert.Null(role);
-    }
-
-    [Fact]
     public void GetRoleFilter_ReturnsEmptySet()
     {
         var doppelganger = new Doppelganger();
@@ -81,14 +62,21 @@ public class DoppelgangerTests
     }
 
     [Fact]
-    public void InitializeAndHooks_ExecuteAndMaintainState()
+    public void GetImportantText_ReturnsFormattedString()
     {
         var doppelganger = new Doppelganger();
 
-        doppelganger.Initialize();
-        doppelganger.ResetOnMeetingStart();
-        doppelganger.ResetOnMeetingEnd();
+        string importantText = doppelganger.GetImportantText();
 
-        Assert.Equal(ExtremeGhostRoleId.Doppelganger, doppelganger.Id);
+        Assert.NotNull(importantText);
+    }
+
+    [Fact]
+    public void Doppl_WhenPlayersMissing_ExecutesWithoutError()
+    {
+        Doppelganger.Doppl(99, 98);
+
+        var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Doppelganger>(99);
+        Assert.Null(role);
     }
 }

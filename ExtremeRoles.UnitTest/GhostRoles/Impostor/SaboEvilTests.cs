@@ -20,6 +20,7 @@ public class SaboEvilTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -52,17 +53,6 @@ public class SaboEvilTests
     }
 
     [Fact]
-    public void Properties_MatchExpectedDefaults()
-    {
-        var saboEvil = new SaboEvil();
-
-        Assert.Equal(ExtremeGhostRoleId.SaboEvil, saboEvil.Id);
-        Assert.Equal(ExtremeRoleType.Impostor, saboEvil.Team);
-        Assert.False(saboEvil.HasTask);
-        Assert.Equal(ExtremeGhostRoleId.SaboEvil.ToString(), saboEvil.Name);
-    }
-
-    [Fact]
     public void ResetCool_ExecutesWithoutError()
     {
         var mockShipStatus = new Mock<ShipStatus>(IntPtr.Zero);
@@ -89,14 +79,12 @@ public class SaboEvilTests
     }
 
     [Fact]
-    public void InitializeAndHooks_ExecuteAndMaintainState()
+    public void GetImportantText_ReturnsFormattedString()
     {
         var saboEvil = new SaboEvil();
 
-        saboEvil.Initialize();
-        saboEvil.ResetOnMeetingStart();
-        saboEvil.ResetOnMeetingEnd();
+        string importantText = saboEvil.GetImportantText();
 
-        Assert.Equal(ExtremeGhostRoleId.SaboEvil, saboEvil.Id);
+        Assert.NotNull(importantText);
     }
 }

@@ -52,11 +52,13 @@ public class ShutterTests
     }
 
     [Fact]
-    public void Initialize_ResetsShutterState()
+    public void GetImportantText_ReturnsFormattedString()
     {
         var shutter = new Shutter();
 
-        shutter.Initialize();
+        string importantText = shutter.GetImportantText();
+
+        Assert.NotNull(importantText);
     }
 
     [Fact]

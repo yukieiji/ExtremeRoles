@@ -32,7 +32,7 @@ public abstract class GhostRoleBase
 	public ExtremeRoleType Team { get; protected set; }
 	public ExtremeGhostRoleId Id { get; protected set; }
 
-	public int GameControlId { get; protected set; }
+	public int GameControlId => this.controlId;
 
 	public string Name { get; protected set; }
 	public bool HasTask { get; protected set; }

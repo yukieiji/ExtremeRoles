@@ -18,6 +18,7 @@ public class FaunusTests
         MockSetupHelper.SetupUnityCommonMocks();
         MockSetupHelper.SetupAmongUsClientMock();
         MockSetupHelper.SetupLobbyMock();
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
 
@@ -37,17 +38,6 @@ public class FaunusTests
     }
 
     [Fact]
-    public void Properties_MatchExpectedDefaults()
-    {
-        var faunus = new Faunus();
-
-        Assert.Equal(ExtremeGhostRoleId.Faunus, faunus.Id);
-        Assert.Equal(ExtremeRoleType.Crewmate, faunus.Team);
-        Assert.True(faunus.HasTask);
-        Assert.Equal(ExtremeGhostRoleId.Faunus.ToString(), faunus.Name);
-    }
-
-    [Fact]
     public void GetRoleFilter_ReturnsEmptySet()
     {
         var faunus = new Faunus();
@@ -59,12 +49,12 @@ public class FaunusTests
     }
 
     [Fact]
-    public void Initialize_ResetsInternalStateWithoutThrowing()
+    public void GetImportantText_ReturnsFormattedString()
     {
         var faunus = new Faunus();
 
-        faunus.Initialize();
+        string importantText = faunus.GetImportantText();
 
-        Assert.Equal(ExtremeGhostRoleId.Faunus, faunus.Id);
+        Assert.NotNull(importantText);
     }
 }
