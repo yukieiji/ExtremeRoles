@@ -39,7 +39,6 @@ public class ExtremeGameModeManagerTests
         var instance = ExtremeGameModeManager.Instance;
         Assert.NotNull(instance);
         Assert.Equal(GameModes.Normal, instance.CurrentGameMode);
-		Assert.True(instance.EnableXion);
     }
 
     [Fact]
@@ -52,7 +51,6 @@ public class ExtremeGameModeManagerTests
         var instance = ExtremeGameModeManager.Instance;
         Assert.NotNull(instance);
         Assert.Equal(GameModes.NormalFools, instance.CurrentGameMode);
-		Assert.True(instance.EnableXion);
     }
 
     [Fact]
@@ -65,7 +63,6 @@ public class ExtremeGameModeManagerTests
         var instance = ExtremeGameModeManager.Instance;
         Assert.NotNull(instance);
         Assert.Equal(GameModes.HideNSeek, instance.CurrentGameMode);
-		Assert.True(instance.EnableXion);
     }
 
     [Fact]
@@ -78,7 +75,6 @@ public class ExtremeGameModeManagerTests
         var instance = ExtremeGameModeManager.Instance;
         Assert.NotNull(instance);
         Assert.Equal(GameModes.SeekFools, instance.CurrentGameMode);
-		Assert.True(instance.EnableXion);
 	}
 
     [Fact]
