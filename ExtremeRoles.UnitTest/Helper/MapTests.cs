@@ -82,7 +82,7 @@ public class MapTests : IDisposable
 		var compatManager = CompatModManager.Instance;
 		var mapField = typeof(CompatModManager).GetField("map", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
-		var mockSubmergedIntegrator = (SubmergedIntegrator)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(SubmergedIntegrator));
+		var mockSubmergedIntegrator = (SubmergedIntegrator)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(SubmergedIntegrator));
 		mapField?.SetValue(compatManager, mockSubmergedIntegrator);
 
 		Assert.Equal("Submerged", Map.Name);
