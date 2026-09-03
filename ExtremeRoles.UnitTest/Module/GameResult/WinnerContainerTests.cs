@@ -111,4 +111,69 @@ public class WinnerContainerTests
 
         Assert.DoesNotContain(player, container.PlusedWinner);
     }
+
+    [Fact]
+    public void AddWithPlus_AddsToBothFinalAndPlusWinners()
+    {
+        var container = new WinnerContainer();
+        var player = CreateMockPlayerInfo(1, "Test");
+        AddMockPlayerToPool(container, player);
+
+        container.AddWithPlus(player);
+
+        var result = container.Convert();
+        Assert.Contains(player, result.PlusedWinner);
+        var finalField = typeof(WinnerContainer).GetField("finalWinPlayer", BindingFlags.NonPublic | BindingFlags.Instance);
+        var final = (List<CachedPlayerData>)finalField!.GetValue(container)!;
+        Assert.Single(final);
+    }
+
+    [Fact]
+    public void Add_WhenPlayerNotInPool_LogsErrorAndDoesNotAdd()
+    {
+        var container = new WinnerContainer();
+        var player = CreateMockPlayerInfo(1, "Test");
+
+        container.Add(player);
+
+        var finalField = typeof(WinnerContainer).GetField("finalWinPlayer", BindingFlags.NonPublic | BindingFlags.Instance);
+        var final = (List<CachedPlayerData>)finalField!.GetValue(container)!;
+        Assert.Empty(final);
+    }
+
+    [Fact]
+    public void Contains_ReturnsTrue_WhenPlayerInFinalOrPlusWinner()
+    {
+        var container = new WinnerContainer();
+        var player1 = CreateMockPlayerInfo(1, "Player1");
+        var player2 = CreateMockPlayerInfo(2, "Player2");
+        AddMockPlayerToPool(container, player1);
+        AddMockPlayerToPool(container, player2);
+
+        container.Add(player1);
+        container.AddPlusWinner(player2);
+
+        Assert.True(container.Contains(player1.PlayerName));
+        Assert.True(container.Contains(player2.PlayerName));
+        Assert.False(container.Contains("UnknownPlayer"));
+    }
+
+    [Fact]
+    public void RemoveByCachedPlayerData_RemovesCorrectPlayer()
+    {
+        var container = new WinnerContainer();
+        var player = CreateMockPlayerInfo(1, "Test");
+        AddMockPlayerToPool(container, player);
+        container.Add(player);
+
+        var poolField = typeof(WinnerContainer).GetField("allWinnerPool", BindingFlags.NonPublic | BindingFlags.Instance);
+        var pool = (Dictionary<byte, CachedPlayerData>)poolField!.GetValue(container)!;
+        var cachedData = pool[1];
+
+        container.Remove(cachedData);
+
+        var finalField = typeof(WinnerContainer).GetField("finalWinPlayer", BindingFlags.NonPublic | BindingFlags.Instance);
+        var final = (List<CachedPlayerData>)finalField!.GetValue(container)!;
+        Assert.Empty(final);
+    }
 }

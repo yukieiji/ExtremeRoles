@@ -31,6 +31,21 @@ public static class MockSetupHelper
         SetupVector3Helpers();
         SetupTimeHelpers();
         SetupRandomHelpers();
+        SetupJsonHelpers();
+    }
+
+    public static void SetupJsonHelpers()
+    {
+        if (Newtonsoft.Json.Linq.MockJObjectParseHelper.Instance == null)
+        {
+            var mock = new Mock<Newtonsoft.Json.Linq.MockJObjectParseHelper>();
+            mock.Setup(h => h.Invoke(It.IsAny<string>())).Returns((string json) =>
+            {
+                var mockJObj = new Mock<Newtonsoft.Json.Linq.JObject>(IntPtr.Zero);
+                return mockJObj.Object;
+            });
+            Newtonsoft.Json.Linq.MockJObjectParseHelper.Instance = mock.Object;
+        }
     }
 
     public static void SetupRandomHelpers()
@@ -297,6 +312,11 @@ public static class MockSetupHelper
             .Returns((float f, Vector2 v) => new Vector2(v.x * f, v.y * f));
         MockVector2op_MultiplyHelper3.Instance = mockMultiply3.Object;
 
+        var mockAdd = new Mock<MockVector2op_AdditionHelper>();
+        mockAdd.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<Vector2>()))
+            .Returns((Vector2 a, Vector2 b) => new Vector2(a.x + b.x, a.y + b.y));
+        MockVector2op_AdditionHelper.Instance = mockAdd.Object;
+
         var mockVec2Implicit = new Mock<MockVector2op_ImplicitHelper>();
         mockVec2Implicit.Setup(x => x.Invoke(It.IsAny<Vector3>()))
             .Returns((Vector3 v) => new Vector2(v.x, v.y));
@@ -306,6 +326,17 @@ public static class MockSetupHelper
         mockVec2Implicit2.Setup(x => x.Invoke(It.IsAny<Vector2>()))
             .Returns((Vector2 v) => new Vector3(v.x, v.y, 0f));
         MockVector2op_ImplicitHelper2.Instance = mockVec2Implicit2.Object;
+
+        var mockRotate = new Mock<MockExtensionsRotateHelper>();
+        mockRotate.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<float>()))
+            .Returns((Vector2 v, float degrees) =>
+            {
+                float rad = degrees * ((float)Math.PI / 180f);
+                float cos = (float)Math.Cos(rad);
+                float sin = (float)Math.Sin(rad);
+                return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
+            });
+        MockExtensionsRotateHelper.Instance = mockRotate.Object;
     }
 
     public static void SetupConstantsHelpers()
