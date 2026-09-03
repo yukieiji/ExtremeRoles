@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using AmongUs.GameOptions;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Compat.Initializer;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Core.Abstract;
+using Microsoft.Extensions.DependencyInjection;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -77,30 +79,18 @@ public class MapTests : IDisposable
 		Assert.Equal(expectedKey, Map.Name);
 	}
 
+
+
 	[Fact]
 	public void Name_WhenSubmergedModMapActive_ReturnsSubmerged()
 	{
-		var compatManager = CreateCompatModManager();
+		var compatManager = CompatModManager.Instance;
 		var mapField = typeof(CompatModManager).GetField("map", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
 		var submergedIntegrator = CreateSubmergedIntegrator();
 		mapField?.SetValue(compatManager, submergedIntegrator);
 
-		var instanceField = typeof(CompatModManager).GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-		instanceField?.SetValue(null, compatManager);
-
 		Assert.Equal("Submerged", Map.Name);
-	}
-
-	private static CompatModManager CreateCompatModManager()
-	{
-		var mockLoader = new Mock<IPluginLoader>();
-		mockLoader.Setup(l => l.TryGetPlugin(It.IsAny<string>(), out It.Ref<BepInEx.PluginInfo?>.IsAny!)).Returns(false);
-
-		var mockFactory = new Mock<IModInitializerFactory>();
-		var mockLogger = new Mock<IModLogger>();
-
-		return new CompatModManager(mockLoader.Object, mockFactory.Object, mockLogger.Object);
 	}
 
 	private static SubmergedIntegrator CreateSubmergedIntegrator()
@@ -109,9 +99,9 @@ public class MapTests : IDisposable
 		var metadata = new BepInEx.BepInPlugin("Submerged", "Submerged", "1.0.0");
 
 		var pluginInfo = new BepInEx.PluginInfo();
-		typeof(BepInEx.PluginInfo).GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+		typeof(BepInEx.PluginInfo).GetField("<Instance>k__BackingField", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
 			?.SetValue(pluginInfo, basePlugin);
-		typeof(BepInEx.PluginInfo).GetProperty("Metadata", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+		typeof(BepInEx.PluginInfo).GetField("<Metadata>k__BackingField", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
 			?.SetValue(pluginInfo, metadata);
 
 		var mockAccessTool = new Mock<IAccessTool>();
@@ -120,9 +110,9 @@ public class MapTests : IDisposable
 			.Returns(new[]
 			{
 				typeof(CustomTaskTypes),
-				typeof(ElevatorMover),
+				typeof(ShipStatus),
 				typeof(FloorHandler),
-				typeof(SubmarineStatus),
+				typeof(ShipStatus),
 				typeof(VentPatchData),
 				typeof(SubmarineOxygenSystem)
 			});
@@ -175,12 +165,9 @@ public class MapTests : IDisposable
 		var mockModMap = new Mock<IMapMod>();
 		mockModMap.Setup(m => m.GetSpawnPos(playerId)).Returns(expectedList);
 
-		var compatManager = CreateCompatModManager();
+		var compatManager = CompatModManager.Instance;
 		var mapField = typeof(CompatModManager).GetField("map", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 		mapField?.SetValue(compatManager, mockModMap.Object);
-
-		var instanceField = typeof(CompatModManager).GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-		instanceField?.SetValue(null, compatManager);
 
 		var posList = new List<Vector2>();
 		Map.AddSpawnPoint(posList, playerId);
@@ -270,12 +257,9 @@ public class MapTests : IDisposable
 		var mockModMap = new Mock<IMapMod>();
 		mockModMap.Setup(m => m.GetSystemConsole(SystemConsoleType.SecurityCamera)).Returns(mockConsole.Object);
 
-		var compatManager = CreateCompatModManager();
+		var compatManager = CompatModManager.Instance;
 		var mapField = typeof(CompatModManager).GetField("map", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 		mapField?.SetValue(compatManager, mockModMap.Object);
-
-		var instanceField = typeof(CompatModManager).GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-		instanceField?.SetValue(null, compatManager);
 
 		var result = Map.GetSecuritySystemConsole();
 
@@ -359,12 +343,9 @@ public class MapTests : IDisposable
 		var mockModMap = new Mock<IMapMod>();
 		mockModMap.Setup(m => m.GetSystemConsole(SystemConsoleType.VitalsLabel)).Returns(mockConsole.Object);
 
-		var compatManager = CreateCompatModManager();
+		var compatManager = CompatModManager.Instance;
 		var mapField = typeof(CompatModManager).GetField("map", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 		mapField?.SetValue(compatManager, mockModMap.Object);
-
-		var instanceField = typeof(CompatModManager).GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-		instanceField?.SetValue(null, compatManager);
 
 		var result = Map.GetVitalSystemConsole();
 
@@ -462,12 +443,9 @@ public class MapTests : IDisposable
 		mockModMap.Setup(m => m.GetSystemObjectName(SystemConsoleType.VitalsLabel))
 			.Returns(new HashSet<string> { "CustomVital" });
 
-		var compatManager = CreateCompatModManager();
+		var compatManager = CompatModManager.Instance;
 		var mapField = typeof(CompatModManager).GetField("map", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 		mapField?.SetValue(compatManager, mockModMap.Object);
-
-		var instanceField = typeof(CompatModManager).GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-		instanceField?.SetValue(null, compatManager);
 
 		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
 		mockFindObjects.Setup(x => x.Invoke<SystemConsole>()).Returns(new Il2CppReferenceArray<SystemConsole>(IntPtr.Zero));
@@ -485,12 +463,9 @@ public class MapTests : IDisposable
 		mockModMap.Setup(m => m.GetSystemObjectName(SystemConsoleType.AdminModule))
 			.Returns(new HashSet<string> { "CustomAdmin" });
 
-		var compatManager = CreateCompatModManager();
+		var compatManager = CompatModManager.Instance;
 		var mapField = typeof(CompatModManager).GetField("map", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 		mapField?.SetValue(compatManager, mockModMap.Object);
-
-		var instanceField = typeof(CompatModManager).GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-		instanceField?.SetValue(null, compatManager);
 
 		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
 		mockFindObjects.Setup(x => x.Invoke<MapConsole>()).Returns(new Il2CppReferenceArray<MapConsole>(IntPtr.Zero));
@@ -559,12 +534,9 @@ public class MapTests : IDisposable
 		mockModMap.Setup(m => m.GetSystemObjectName(SystemConsoleType.AdminModule))
 			.Returns(new HashSet<string> { "CustomAdmin" });
 
-		var compatManager = CreateCompatModManager();
+		var compatManager = CompatModManager.Instance;
 		var mapField = typeof(CompatModManager).GetField("map", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 		mapField?.SetValue(compatManager, mockModMap.Object);
-
-		var instanceField = typeof(CompatModManager).GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-		instanceField?.SetValue(null, compatManager);
 
 		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
 		mockFindObjects.Setup(x => x.Invoke<MapConsole>()).Returns(new Il2CppReferenceArray<MapConsole>(IntPtr.Zero));
