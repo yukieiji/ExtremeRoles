@@ -717,7 +717,7 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		mockShip.Verify(s => s.RpcUpdateSystem((SystemTypes)130, 64), Times.Once);
 	}
 
-	/*
+	/* 後でMock方法を考えるため一度無効化
 	[Fact]
 	public void AddCustomComponent_MovableFloorBehaviour_ThrowsArgumentException()
 	{
