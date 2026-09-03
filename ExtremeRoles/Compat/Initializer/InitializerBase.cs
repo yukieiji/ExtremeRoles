@@ -58,7 +58,7 @@ public abstract class InitializerBase<T> : IInitializer
 	public ModIntegratorBase Initialize()
 	{
 		this.PatchAll(this.tool, this.Patch);
-		object? integrator = Activator.CreateInstance(typeof(T), [this, this.tool]);
+		object? integrator = Activator.CreateInstance(typeof(T), [this]);
 		if (integrator is T mod)
 		{
 			return mod;
