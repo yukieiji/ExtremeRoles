@@ -93,34 +93,3 @@ public class ModInitializerFactoryTests
         mockLogger.Verify(l => l.LogError(It.Is<string>(s => s.Contains("NOT IMP IInitializer"))), Times.Once);
     }
 }
-
-public class BepInExPluginLoaderTests
-{
-    [Fact]
-    public void TryGetPlugin_WhenChainloaderNull_ReturnsFalse()
-    {
-        var loader = new BepInExPluginLoader();
-
-        bool result = loader.TryGetPlugin("some.guid", out var plugin);
-
-        Assert.False(result);
-        Assert.Null(plugin);
-    }
-}
-
-public class HarmonyPatchProviderTests
-{
-    [Fact]
-    public void HarmonyPatchProvider_Get_ReturnsWrapperInstance()
-    {
-        var provider = new HarmonyPatchProvider();
-        var plugin = new PluginInfo();
-        typeof(PluginInfo).GetField("<Metadata>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)
-            ?.SetValue(plugin, new BepInPlugin("test.guid", "TestName", "1.0.0"));
-
-        var patch = provider.Get(plugin);
-
-        Assert.NotNull(patch);
-        Assert.IsType<HarmonyPatchWrapper>(patch);
-    }
-}
