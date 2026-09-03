@@ -37,6 +37,11 @@ public sealed class FloorHandler
 	public static bool onUpper = true;
 	public static object? HandlerInstance = null;
 
+	public static bool RpcRequestChangeFloorCalled { get; set; }
+	public static bool RpcRequestChangeFloorArg { get; set; }
+	public static bool RegisterFloorOverrideCalled { get; set; }
+	public static bool RegisterFloorOverrideArg { get; set; }
+
 	public static object? GetFloorHandler(PlayerControl pc)
 	{
 		return HandlerInstance;
@@ -44,10 +49,14 @@ public sealed class FloorHandler
 
 	public void RpcRequestChangeFloor(bool upper)
 	{
+		RpcRequestChangeFloorCalled = true;
+		RpcRequestChangeFloorArg = upper;
 	}
 
 	public void RegisterFloorOverride(bool upper)
 	{
+		RegisterFloorOverrideCalled = true;
+		RegisterFloorOverrideArg = upper;
 	}
 }
 
@@ -177,6 +186,10 @@ public sealed class SubmergedIntegratorTests : IDisposable
 
 		VentPatchData.InTransitionValue = false;
 		FloorHandler.HandlerInstance = null;
+		FloorHandler.RpcRequestChangeFloorCalled = false;
+		FloorHandler.RpcRequestChangeFloorArg = false;
+		FloorHandler.RegisterFloorOverrideCalled = false;
+		FloorHandler.RegisterFloorOverrideArg = false;
 		SubmarineOxygenSystem.RepairedPlayer = null;
 		SubmarineOxygenSystem.RepairedAmount = 0;
 	}
@@ -253,6 +266,9 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		getterField?.SetValue(integrator, typeof(SubmarineOxygenSystem).GetProperty(nameof(SubmarineOxygenSystem.Instance)));
 		methodField?.SetValue(integrator, typeof(SubmarineOxygenSystem).GetMethod(nameof(SubmarineOxygenSystem.RepairDamage)));
 
+		var getFloorHandlerInfoField = typeof(SubmergedIntegrator).GetField("getFloorHandlerInfo", BindingFlags.NonPublic | BindingFlags.Instance);
+		getFloorHandlerInfoField?.SetValue(integrator, typeof(FloorHandler).GetMethod(nameof(FloorHandler.GetFloorHandler)));
+
 		return integrator;
 	}
 
@@ -327,8 +343,12 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		var integrator = CreateSubmergedIntegrator();
 		var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
 
-		// Act & Assert
+		// Act
 		integrator.ChangeFloor(mockPlayer.Object, 2);
+
+		// Assert
+		Assert.False(FloorHandler.RpcRequestChangeFloorCalled);
+		Assert.False(FloorHandler.RegisterFloorOverrideCalled);
 	}
 
 	[Fact]
@@ -339,8 +359,12 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		FloorHandler.HandlerInstance = null;
 		var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
 
-		// Act & Assert
+		// Act
 		integrator.ChangeFloor(mockPlayer.Object, 1);
+
+		// Assert
+		Assert.False(FloorHandler.RpcRequestChangeFloorCalled);
+		Assert.False(FloorHandler.RegisterFloorOverrideCalled);
 	}
 
 	[Fact]
