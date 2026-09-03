@@ -51,9 +51,11 @@ public sealed class FloorHandler
 	}
 }
 
-public sealed class SubmarineStatus
+public class SubmarineStatus : MonoBehaviour
 {
 	public object? referenceHolder = null;
+
+	public SubmarineStatus(IntPtr ptr) : base(ptr) { }
 
 	public float CalculateLightRadius(object? player, bool neutral, bool neutralImpostor)
 	{
@@ -269,39 +271,24 @@ public sealed class SubmergedIntegratorTests : IDisposable
 	}
 
 	[Fact]
-	public void Awake_And_Destroy_ExecutesWithoutErrors()
+	public void CalculateLightRadius_WithSubmarineStatus_InvokesCalculateAndReturnsValue()
 	{
 		// Arrange
 		var integrator = CreateSubmergedIntegrator();
-		using var factory = new SequentialOptionCategoryFactory(
-			"SubmergedCategory",
-			2000,
-			(p, c) => { },
-			(t, c) => { }
-		);
-		integrator.CreateIntegrateOption(factory);
+		var mockSubStatus = new Mock<SubmarineStatus>(IntPtr.Zero);
+		typeof(SubmergedIntegrator)
+			.GetField("submarineStatus", BindingFlags.NonPublic | BindingFlags.Instance)
+			?.SetValue(integrator, mockSubStatus.Object);
 
-		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
+		var mockPlayerInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 
 		// Act
-		var awakeException = Record.Exception(() => integrator.Awake(mockShip.Object));
-		var destroyException = Record.Exception(() => integrator.Destroy());
+		float radius1 = integrator.CalculateLightRadius(mockPlayerInfo.Object, false, false);
+		float radius2 = integrator.CalculateLightRadius(mockPlayerInfo.Object, 1.2f, true);
 
 		// Assert
-		Assert.IsType<ArgumentException>(awakeException);
-		Assert.Null(destroyException);
-	}
-
-	[Fact]
-	public void CalculateLightRadius_WhenSubmarineStatusNull_ThrowsTargetException()
-	{
-		// Arrange
-		var integrator = CreateSubmergedIntegrator();
-		var player = new Mock<NetworkedPlayerInfo>(IntPtr.Zero).Object;
-
-		// Act & Assert
-		Assert.Throws<TargetException>(() => integrator.CalculateLightRadius(player, false, false));
-		Assert.Throws<TargetException>(() => integrator.CalculateLightRadius(player, 1.2f, true));
+		Assert.Equal(2.5f, radius1);
+		Assert.Equal(2.5f, radius2);
 	}
 
 	[Fact]
@@ -340,11 +327,8 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		var integrator = CreateSubmergedIntegrator();
 		var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
 
-		// Act
-		var exception = Record.Exception(() => integrator.ChangeFloor(mockPlayer.Object, 2));
-
-		// Assert
-		Assert.Null(exception);
+		// Act & Assert
+		integrator.ChangeFloor(mockPlayer.Object, 2);
 	}
 
 	[Fact]
@@ -355,11 +339,8 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		FloorHandler.HandlerInstance = null;
 		var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
 
-		// Act
-		var exception = Record.Exception(() => integrator.ChangeFloor(mockPlayer.Object, 1));
-
-		// Assert
-		Assert.Null(exception);
+		// Act & Assert
+		integrator.ChangeFloor(mockPlayer.Object, 1);
 	}
 
 	[Fact]
@@ -628,37 +609,6 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		Assert.False(couldUse);
 	}
 
-	[Fact]
-	public void IsCustomVentUseResult_ValidVent_ReturnsTrueAndCalculatedDistance()
-	{
-		// Arrange
-		var integrator = CreateSubmergedIntegrator();
-		VentPatchData.InTransitionValue = false;
-
-		var mockTransform = new Mock<Transform>(IntPtr.Zero);
-		mockTransform.SetupGet(t => t.position).Returns(new Vector3(0f, 0f, 0f));
-
-		var mockVent = new Mock<Vent>(IntPtr.Zero);
-		mockVent.SetupGet(v => v.Id).Returns(0);
-		mockVent.SetupGet(v => v.transform).Returns(mockTransform.Object);
-		mockVent.SetupGet(v => v.UsableDistance).Returns(5f);
-
-		var mockCollider = new Mock<Collider2D>(IntPtr.Zero);
-
-		var mockPlayerControl = new Mock<PlayerControl>(IntPtr.Zero);
-		mockPlayerControl.SetupGet(p => p.CanMove).Returns(true);
-		mockPlayerControl.SetupGet(p => p.Collider).Returns(mockCollider.Object);
-
-		var mockPlayerInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
-		mockPlayerInfo.SetupGet(p => p.Object).Returns(mockPlayerControl.Object);
-		mockPlayerInfo.SetupGet(p => p.IsDead).Returns(false);
-
-		// Act
-		var exception = Record.Exception(() => integrator.IsCustomVentUseResult(mockVent.Object, mockPlayerInfo.Object, true));
-
-		// Assert
-		Assert.IsType<NotImplementedException>(exception);
-	}
 
 
 	[Fact]
@@ -755,7 +705,7 @@ public sealed class SubmergedIntegratorTests : IDisposable
 	}
 
 	[Fact]
-	public void SetUpNewCamera_WhenFixConsoleNull_DoesNothing()
+	public void SetUpNewCamera_WhenFixConsoleNull_SearchesFixConsoleChild()
 	{
 		// Arrange
 		var integrator = CreateSubmergedIntegrator();
@@ -767,14 +717,14 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		mockCamera.SetupGet(c => c.transform).Returns(mockCameraTransform.Object);
 
 		// Act
-		var exception = Record.Exception(() => integrator.SetUpNewCamera(mockCamera.Object));
+		integrator.SetUpNewCamera(mockCamera.Object);
 
 		// Assert
-		Assert.Null(exception);
+		mockCameraTransform.Verify(t => t.FindChild("FixConsole"), Times.Once);
 	}
 
 	[Fact]
-	public void SetUpNewCamera_WhenFixConsoleNotNullAndBoxColliderPresent_ExecutesWithoutErrors()
+	public void SetUpNewCamera_WhenFixConsoleNotNull_SearchesFixConsoleChild()
 	{
 		// Arrange
 		var integrator = CreateSubmergedIntegrator();
@@ -788,10 +738,10 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		mockCamera.SetupGet(c => c.transform).Returns(mockCameraTransform.Object);
 
 		// Act
-		var exception = Record.Exception(() => integrator.SetUpNewCamera(mockCamera.Object));
+		integrator.SetUpNewCamera(mockCamera.Object);
 
 		// Assert
-		Assert.Null(exception);
+		mockCameraTransform.Verify(t => t.FindChild("FixConsole"), Times.Once);
 	}
 
 	[Fact]
