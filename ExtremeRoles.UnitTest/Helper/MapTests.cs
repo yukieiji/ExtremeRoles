@@ -106,13 +106,12 @@ public class MapTests : IDisposable
 	private static SubmergedIntegrator CreateSubmergedIntegrator()
 	{
 		var basePlugin = MockSetupHelper.SetupMockExtremeRolePlugin();
-		var pluginInfo = (BepInEx.PluginInfo)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(BepInEx.PluginInfo));
-
-		typeof(BepInEx.PluginInfo).GetField("<Instance>k__BackingField", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-			?.SetValue(pluginInfo, basePlugin);
-
 		var metadata = new BepInEx.BepInPlugin("Submerged", "Submerged", "1.0.0");
-		typeof(BepInEx.PluginInfo).GetField("<Metadata>k__BackingField", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+
+		var pluginInfo = new BepInEx.PluginInfo();
+		typeof(BepInEx.PluginInfo).GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+			?.SetValue(pluginInfo, basePlugin);
+		typeof(BepInEx.PluginInfo).GetProperty("Metadata", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
 			?.SetValue(pluginInfo, metadata);
 
 		var mockAccessTool = new Mock<IAccessTool>();
