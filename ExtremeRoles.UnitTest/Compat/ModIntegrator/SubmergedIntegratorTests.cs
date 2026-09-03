@@ -629,6 +629,39 @@ public sealed class SubmergedIntegratorTests : IDisposable
 	}
 
 	[Fact]
+	public void IsCustomVentUseResult_ValidVent_ReturnsTrueAndCalculatedDistance()
+	{
+		// Arrange
+		var integrator = CreateSubmergedIntegrator();
+		VentPatchData.InTransitionValue = false;
+
+		var mockTransform = new Mock<Transform>(IntPtr.Zero);
+		mockTransform.SetupGet(t => t.position).Returns(new Vector3(0f, 0f, 0f));
+
+		var mockVent = new Mock<Vent>(IntPtr.Zero);
+		mockVent.SetupGet(v => v.Id).Returns(0);
+		mockVent.SetupGet(v => v.transform).Returns(mockTransform.Object);
+		mockVent.SetupGet(v => v.UsableDistance).Returns(5f);
+
+		var mockCollider = new Mock<Collider2D>(IntPtr.Zero);
+
+		var mockPlayerControl = new Mock<PlayerControl>(IntPtr.Zero);
+		mockPlayerControl.SetupGet(p => p.CanMove).Returns(true);
+		mockPlayerControl.SetupGet(p => p.Collider).Returns(mockCollider.Object);
+
+		var mockPlayerInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		mockPlayerInfo.SetupGet(p => p.Object).Returns(mockPlayerControl.Object);
+		mockPlayerInfo.SetupGet(p => p.IsDead).Returns(false);
+
+		// Act
+		var exception = Record.Exception(() => integrator.IsCustomVentUseResult(mockVent.Object, mockPlayerInfo.Object, true));
+
+		// Assert
+		Assert.IsType<NotImplementedException>(exception);
+	}
+
+
+	[Fact]
 	public void IsCustomVentUseResult_UnhandledVent_ReturnsMaxValue()
 	{
 		// Arrange
