@@ -6,8 +6,13 @@ using BepInEx;
 using ExtremeRoles.Compat.Initializer;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
+using ExtremeRoles.GameMode.Option.ShipGlobal;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
@@ -16,6 +21,119 @@ using UnityEngine;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Compat.ModIntegrator;
+
+public sealed class CustomTaskTypeObj
+{
+	public object taskType = (TaskTypes)123;
+}
+
+public sealed class CustomTaskTypes
+{
+	public static object? RetrieveOxygenMask = new CustomTaskTypeObj();
+}
+
+public sealed class FloorHandler
+{
+	public static bool onUpper = true;
+	public static object? HandlerInstance = null;
+
+	public static object? GetFloorHandler(PlayerControl pc)
+	{
+		return HandlerInstance;
+	}
+
+	public void RpcRequestChangeFloor(bool upper)
+	{
+	}
+
+	public void RegisterFloorOverride(bool upper)
+	{
+	}
+}
+
+public sealed class SubmarineStatus
+{
+	public object? referenceHolder = null;
+
+	public float CalculateLightRadius(object? player, bool neutral, bool neutralImpostor)
+	{
+		return 2.5f;
+	}
+}
+
+public sealed class VentPatchData
+{
+	public static bool InTransitionValue = false;
+	public static bool InTransition => InTransitionValue;
+}
+
+public sealed class SubmarineOxygenSystem
+{
+	public static SubmarineOxygenSystem SystemInstance { get; } = new SubmarineOxygenSystem();
+	public static SubmarineOxygenSystem Instance => SystemInstance;
+
+	public static PlayerControl? RepairedPlayer { get; set; }
+	public static byte RepairedAmount { get; set; }
+
+	public void RepairDamage(PlayerControl player, byte amount)
+	{
+		RepairedPlayer = player;
+		RepairedAmount = amount;
+	}
+
+	public void Deteriorate()
+	{
+	}
+}
+
+public sealed class SubmergedExileController
+{
+	public static void WrapUpAndSpawn()
+	{
+	}
+}
+
+public sealed class DisplayPrespawnStepPatches
+{
+	public static void CustomPrespawnStep()
+	{
+	}
+}
+
+public sealed class SubmarineSelectSpawn
+{
+	public static void OnDestroy()
+	{
+
+	}
+
+	public static void CoSelectLevel()
+	{
+	}
+}
+
+public sealed class ChangeFloorButtonPatches
+{
+	public static void HudUpdatePatch()
+	{
+	}
+}
+
+public sealed class SubmarineSpawnInSystem
+{
+	public static void Deteriorate()
+	{
+	}
+}
+
+public sealed class SubmarineSurvillanceMinigame
+{
+	public static void Update()
+	{
+	}
+}
+
+public sealed class ElevatorMover { }
 
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class SubmergedIntegratorTests : IDisposable
@@ -57,9 +175,9 @@ public sealed class SubmergedIntegratorTests : IDisposable
 
 		VentPatchData.InTransitionValue = false;
 		FloorHandler.HandlerInstance = null;
+		SubmarineOxygenSystem.RepairedPlayer = null;
+		SubmarineOxygenSystem.RepairedAmount = 0;
 	}
-
-	#region Helper Classes for Reflection Mocks
 
 	private sealed class DummyHarmonyPatch : IHarmonyPatch
 	{
@@ -73,115 +191,6 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		{
 		}
 	}
-
-	private sealed class CustomTaskTypeObj
-	{
-		public object taskType = CustomTaskTypeVal;
-	}
-
-	private sealed class CustomTaskTypes
-	{
-		public static object? RetrieveOxygenMask = new CustomTaskTypeObj();
-	}
-
-	private sealed class ElevatorMover { }
-
-	private sealed class FloorHandler
-	{
-		public static bool onUpper = true;
-		public static object? HandlerInstance = null;
-
-		public static object? GetFloorHandler(PlayerControl pc)
-		{
-			return HandlerInstance;
-		}
-
-		public void RpcRequestChangeFloor(bool upper)
-		{
-		}
-
-		public void RegisterFloorOverride(bool upper)
-		{
-		}
-	}
-
-	private sealed class SubmarineStatus
-	{
-		public object? referenceHolder = null;
-
-		public float CalculateLightRadius(object? player, bool neutral, bool neutralImpostor)
-		{
-			return 2.5f;
-		}
-	}
-
-	private sealed class VentPatchData
-	{
-		public static bool InTransitionValue = false;
-		public static bool InTransition => InTransitionValue;
-	}
-
-	private sealed class SubmarineOxygenSystem
-	{
-		public static SubmarineOxygenSystem SystemInstance { get; } = new SubmarineOxygenSystem();
-		public static object Instance => SystemInstance;
-
-		public void RepairDamage(PlayerControl player, byte amount)
-		{
-		}
-
-		public void Deteriorate()
-		{
-		}
-	}
-
-	private sealed class SubmergedExileController
-	{
-		public static void WrapUpAndSpawn()
-		{
-		}
-	}
-
-	private sealed class DisplayPrespawnStepPatches
-	{
-		public static void CustomPrespawnStep()
-		{
-		}
-	}
-
-	private sealed class SubmarineSelectSpawn
-	{
-		public static void OnDestroy()
-		{
-		}
-
-		public static void CoSelectLevel()
-		{
-		}
-	}
-
-	private sealed class ChangeFloorButtonPatches
-	{
-		public static void HudUpdatePatch()
-		{
-		}
-	}
-
-	private sealed class SubmarineSpawnInSystem
-	{
-		public static void Deteriorate()
-		{
-		}
-	}
-
-	private sealed class SubmarineSurvillanceMinigame
-	{
-		public static void Update()
-		{
-		}
-	}
-
-	#endregion
 
 	private static SubmergedIntegrator CreateSubmergedIntegrator()
 	{
@@ -234,7 +243,15 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		var patch = new DummyHarmonyPatch();
 		var initializer = new SubmergedInitializer(pluginInfo, mockAccessTool.Object, patch);
 
-		return new SubmergedIntegrator(initializer);
+		var integrator = new SubmergedIntegrator(initializer);
+
+		var getterField = typeof(SubmergedIntegrator).GetField("submarineOxygenSystemInstanceGetter", BindingFlags.NonPublic | BindingFlags.Instance);
+		var methodField = typeof(SubmergedIntegrator).GetField("submarineOxygenSystemRepairDamageMethod", BindingFlags.NonPublic | BindingFlags.Instance);
+
+		getterField?.SetValue(integrator, typeof(SubmarineOxygenSystem).GetProperty(nameof(SubmarineOxygenSystem.Instance)));
+		methodField?.SetValue(integrator, typeof(SubmarineOxygenSystem).GetMethod(nameof(SubmarineOxygenSystem.RepairDamage)));
+
+		return integrator;
 	}
 
 	[Fact]
@@ -633,7 +650,7 @@ public sealed class SubmergedIntegratorTests : IDisposable
 	}
 
 	[Fact]
-	public void RepairCustomSabotage_Overloads_ExecuteWithoutErrors()
+	public void RepairCustomSabotage_MatchingTaskType_CallsRepairDamage()
 	{
 		// Arrange
 		var integrator = CreateSubmergedIntegrator();
@@ -645,10 +662,52 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
 		// Act
-		var ex = Record.Exception(() => integrator.RepairCustomSabotage(TaskTypes.FixLights));
+		integrator.RepairCustomSabotage(CustomTaskTypeVal);
 
 		// Assert
-		Assert.Null(ex);
+		Assert.Same(mockPlayer.Object, SubmarineOxygenSystem.RepairedPlayer);
+		Assert.Equal((byte)64, SubmarineOxygenSystem.RepairedAmount);
+		mockShip.Verify(s => s.RpcUpdateSystem((SystemTypes)130, 64), Times.Once);
+	}
+
+	[Fact]
+	public void RepairCustomSabotage_NonMatchingTaskType_DoesNotCallRepairDamage()
+	{
+		// Arrange
+		var integrator = CreateSubmergedIntegrator();
+
+		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
+		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
+
+		// Act
+		integrator.RepairCustomSabotage(TaskTypes.FixLights);
+
+		// Assert
+		Assert.Null(SubmarineOxygenSystem.RepairedPlayer);
+		mockShip.Verify(s => s.RpcUpdateSystem(It.IsAny<SystemTypes>(), It.IsAny<byte>()), Times.Never);
+	}
+
+	[Fact]
+	public void RepairCustomSabotage_NoArgsOverload_CallsRepairDamageForOxygenMask()
+	{
+		// Arrange
+		var integrator = CreateSubmergedIntegrator();
+
+		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
+		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
+		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
+
+		// Act
+		integrator.RepairCustomSabotage();
+
+		// Assert
+		Assert.Same(mockPlayer.Object, SubmarineOxygenSystem.RepairedPlayer);
+		Assert.Equal((byte)64, SubmarineOxygenSystem.RepairedAmount);
+		mockShip.Verify(s => s.RpcUpdateSystem((SystemTypes)130, 64), Times.Once);
 	}
 
 	[Fact]
@@ -703,22 +762,38 @@ public sealed class SubmergedIntegratorTests : IDisposable
 	}
 
 	[Fact]
-	public void CreateIntegrateOption_ExecutesWithoutErrors()
+	public void CreateIntegrateOption_CreatesAndRegistersOptions()
 	{
 		// Arrange
 		var integrator = CreateSubmergedIntegrator();
 
-		using var factory = new SequentialOptionCategoryFactory(
+		OptionCategory? registeredCategory = null;
+
+		using (var factory = new SequentialOptionCategoryFactory(
 			"SubmergedCategory",
 			2000,
 			(p, c) => { },
-			(t, c) => { }
-		);
+			(t, c) => registeredCategory = c
+		))
+		{
+			if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)ShipGlobalOptionCategory.RandomSpawnOption, out _))
+			{
+				OptionPack pack = new OptionPack();
+				var cate = new OptionCategory(OptionTab.GeneralTab, (int)ShipGlobalOptionCategory.RandomSpawnOption, "RandomSpawnCategory", pack);
+				OptionManager.Instance.RegisterOptionGroup(OptionTab.GeneralTab, cate);
+			}
 
-		// Act
-		var exception = Record.Exception(() => integrator.CreateIntegrateOption(factory));
+			integrator.CreateIntegrateOption(factory);
+		}
 
 		// Assert
-		Assert.Null(exception);
+		var elevatorField = typeof(SubmergedIntegrator).GetField("elevatorOption", BindingFlags.NonPublic | BindingFlags.Instance);
+		var doorField = typeof(SubmergedIntegrator).GetField("replaceDoorMinigameOption", BindingFlags.NonPublic | BindingFlags.Instance);
+
+		var elevatorOpt = elevatorField?.GetValue(integrator) as IOption;
+		var doorOpt = doorField?.GetValue(integrator) as IOption;
+
+		Assert.NotNull(elevatorOpt);
+		Assert.NotNull(doorOpt);
 	}
 }
