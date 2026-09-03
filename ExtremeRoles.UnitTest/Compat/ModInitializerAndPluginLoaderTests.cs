@@ -3,6 +3,7 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Compat.Initializer;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Core.Abstract;
@@ -104,5 +105,22 @@ public class BepInExPluginLoaderTests
 
         Assert.False(result);
         Assert.Null(plugin);
+    }
+}
+
+public class HarmonyPatchProviderTests
+{
+    [Fact]
+    public void HarmonyPatchProvider_Get_ReturnsWrapperInstance()
+    {
+        var provider = new HarmonyPatchProvider();
+        var plugin = new PluginInfo();
+        typeof(PluginInfo).GetField("<Metadata>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)
+            ?.SetValue(plugin, new BepInPlugin("test.guid", "TestName", "1.0.0"));
+
+        var patch = provider.Get(plugin);
+
+        Assert.NotNull(patch);
+        Assert.IsType<HarmonyPatchWrapper>(patch);
     }
 }
