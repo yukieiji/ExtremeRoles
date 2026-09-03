@@ -349,6 +349,8 @@ public static class MockSetupHelper
     public static void SetupCompatModManager()
     {
         InitializeBepInExPaths();
+        SetupMockExtremeRolePlugin();
+        SetupApplicationHelpers();
         if (CompatModManager.Instance == null)
         {
             CompatModManager.Initialize();
@@ -379,8 +381,24 @@ public static class MockSetupHelper
 			var plugin = (ExtremeRolesPlugin)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeRolesPlugin));
 			var instanceField = typeof(ExtremeRolesPlugin).GetField("<Instance>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
 			instanceField?.SetValue(null, plugin);
+
+			var providerField = typeof(ExtremeRolesPlugin).GetField("<Provider>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (providerField != null && providerField.GetValue(plugin) == null)
+			{
+				var provider = ExtremeRolesPlugin.BuildProvider();
+				providerField.SetValue(plugin, provider);
+			}
 		}
+		SetupLogger();
+		SetupDebugMode();
 		return ExtremeRolesPlugin.Instance!;
+	}
+
+	public static void SetupApplicationHelpers()
+	{
+		var mockVersion = new Mock<MockApplicationget_versionHelper>();
+		mockVersion.Setup(h => h.Invoke()).Returns("2024.3.5");
+		MockApplicationget_versionHelper.Instance = mockVersion.Object;
 	}
 
 	public static void SetupLogger(string loggerName = "UnitTest")
