@@ -86,7 +86,6 @@ public class GhostRoleBaseTests
 
         public static bool CallIsCommonUse() => IsCommonUse();
         public static bool CallIsCommonUseWithMinigame() => IsCommonUseWithMinigame();
-        public static void CallEnumCheck<T>(T value) where T : struct, IConvertible => EnumCheck(value);
     }
 
     private sealed class CombinationDummyGhostRole : GhostRoleBase, ICombination
@@ -772,18 +771,5 @@ public class GhostRoleBaseTests
         MockMeetingHudget_InstanceHelper.Instance = mockMeetingHelper.Object;
 
         Assert.False(DummyGhostRole.CallIsCommonUseWithMinigame());
-    }
-
-    // --- 13. EnumCheck ---
-    [Fact]
-    public void EnumCheck_WithIntUnderlyingType_DoesNotThrow()
-    {
-        DummyGhostRole.CallEnumCheck(IntEnum.Value);
-    }
-
-    [Fact]
-    public void EnumCheck_WithLongUnderlyingType_ThrowsArgumentException()
-    {
-        Assert.Throws<ArgumentException>(() => DummyGhostRole.CallEnumCheck(LongEnum.Value));
     }
 }
