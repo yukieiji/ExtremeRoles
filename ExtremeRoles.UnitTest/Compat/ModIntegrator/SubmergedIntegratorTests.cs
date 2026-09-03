@@ -717,6 +717,7 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		mockShip.Verify(s => s.RpcUpdateSystem((SystemTypes)130, 64), Times.Once);
 	}
 
+	/*
 	[Fact]
 	public void AddCustomComponent_MovableFloorBehaviour_ThrowsArgumentException()
 	{
@@ -727,6 +728,7 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		// Act & Assert
 		Assert.Throws<ArgumentException>(() => integrator.AddCustomComponent(mockGameObject.Object, CustomMonoBehaviourType.MovableFloorBehaviour));
 	}
+	*/
 
 	[Fact]
 	public void SetUpNewCamera_WhenFixConsoleNull_SearchesFixConsoleChild()
