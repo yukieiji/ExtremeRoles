@@ -18,7 +18,7 @@ public class ModInitializerFactory(IAccessTool accessTool, IModLogger logger, IH
 	public IInitializer? Create(Type initializerType, PluginInfo plugin)
 	{
 		var patch = harmonyPatchProvider.Get(plugin);
-		object? instance = Activator.CreateInstance(initializerType, [plugin, patch, accessTool]);
+		object? instance = Activator.CreateInstance(initializerType, [plugin, accessTool, patch]);
 		if (instance == null)
 		{
 			modLogger.LogError($"{initializerType.FullName} can't create instance");
