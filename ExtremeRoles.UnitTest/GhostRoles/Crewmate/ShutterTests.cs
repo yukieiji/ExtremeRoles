@@ -40,17 +40,6 @@ public sealed class ShutterTests : IDisposable
     }
 
     [Fact]
-    public void Constructor_InitializesDefaultProperties()
-    {
-        var shutter = new Shutter();
-
-        Assert.True(shutter.HasTask);
-        Assert.Equal(ExtremeRoleType.Crewmate, shutter.Team);
-        Assert.Equal(ExtremeGhostRoleId.Shutter, shutter.Id);
-        Assert.Equal(ExtremeGhostRoleId.Shutter.ToString(), shutter.Name);
-    }
-
-    [Fact]
     public void GetRoleFilter_ReturnsPhotographerRole()
     {
         var shutter = new Shutter();

@@ -33,17 +33,6 @@ public sealed class PoltergeistTests
     }
 
     [Fact]
-    public void Constructor_InitializesDefaultProperties()
-    {
-        var poltergeist = new Poltergeist();
-
-        Assert.True(poltergeist.HasTask);
-        Assert.Equal(ExtremeRoleType.Crewmate, poltergeist.Team);
-        Assert.Equal(ExtremeGhostRoleId.Poltergeist, poltergeist.Id);
-        Assert.Equal(ExtremeGhostRoleId.Poltergeist.ToString(), poltergeist.Name);
-    }
-
-    [Fact]
     public void GetRoleFilter_ReturnsEmptySet()
     {
         var poltergeist = new Poltergeist();

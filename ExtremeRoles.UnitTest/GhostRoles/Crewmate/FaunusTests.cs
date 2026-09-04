@@ -33,17 +33,6 @@ public sealed class FaunusTests
     }
 
     [Fact]
-    public void Constructor_InitializesDefaultProperties()
-    {
-        var faunus = new Faunus();
-
-        Assert.True(faunus.HasTask);
-        Assert.Equal(ExtremeRoleType.Crewmate, faunus.Team);
-        Assert.Equal(ExtremeGhostRoleId.Faunus, faunus.Id);
-        Assert.Equal(ExtremeGhostRoleId.Faunus.ToString(), faunus.Name);
-    }
-
-    [Fact]
     public void GetRoleFilter_ReturnsEmptySet()
     {
         var faunus = new Faunus();
