@@ -16,6 +16,15 @@ using UnityEngine.UI;
 
 namespace ExtremeRoles.UnitTest;
 
+[HarmonyPatch(typeof(GameObjectExtensions), nameof(GameObjectExtensions.SetLocalX))]
+internal static class SetLocalXPatch
+{
+	private static bool Prefix()
+	{
+		return false;
+	}
+}
+
 public static class MockSetupHelper
 {
 	// UnityEngineの共通Mock
@@ -25,7 +34,6 @@ public static class MockSetupHelper
         SetupColorHelpers();
         SetupPaletteHelpers();
         SetupMathfHelpers();
-        SetupApplicationHelpers();
         SetupCompatModManager();
         SetupUnityObjectOperators();
         SetupVector2Helpers();
@@ -101,13 +109,6 @@ public static class MockSetupHelper
             var mockZero = new Mock<MockVector3get_zeroHelper>();
             mockZero.Setup(x => x.Invoke()).Returns(new Vector3(0f, 0f, 0f));
             MockVector3get_zeroHelper.Instance = mockZero.Object;
-        }
-
-        if (MockVector3get_oneHelper.Instance == null)
-        {
-            var mockOne = new Mock<MockVector3get_oneHelper>();
-            mockOne.Setup(x => x.Invoke()).Returns(new Vector3(1f, 1f, 1f));
-            MockVector3get_oneHelper.Instance = mockOne.Object;
         }
 
         if (MockVector3op_AdditionHelper.Instance == null)
@@ -404,13 +405,19 @@ public static class MockSetupHelper
 
 	public static void SetupApplicationHelpers()
 	{
-		var mockDataPath = new Mock<MockApplicationget_dataPathHelper>();
-		mockDataPath.Setup(h => h.Invoke()).Returns(Path.Combine(Path.GetTempPath(), "AmongUs_Data"));
-		MockApplicationget_dataPathHelper.Instance = mockDataPath.Object;
+		if (MockApplicationget_dataPathHelper.Instance == null)
+		{
+			var mockDataPath = new Mock<MockApplicationget_dataPathHelper>();
+			mockDataPath.Setup(h => h.Invoke()).Returns(Path.Combine(Path.GetTempPath(), "AmongUs_Data"));
+			MockApplicationget_dataPathHelper.Instance = mockDataPath.Object;
+		}
 
-		var mockVersion = new Mock<MockApplicationget_versionHelper>();
-		mockVersion.Setup(h => h.Invoke()).Returns("2024.3.5");
-		MockApplicationget_versionHelper.Instance = mockVersion.Object;
+		if (MockApplicationget_versionHelper.Instance == null)
+		{
+			var mockVersion = new Mock<MockApplicationget_versionHelper>();
+			mockVersion.Setup(h => h.Invoke()).Returns("2024.3.5");
+			MockApplicationget_versionHelper.Instance = mockVersion.Object;
+		}
 	}
 
 	public static void SetupLogger(string loggerName = "UnitTest")
@@ -537,8 +544,20 @@ public static class MockSetupHelper
         MockPaletteget_DisabledGreyHelper.Instance = mockDisabledGrey.Object;
     }
 
+    private static bool isSetLocalXPatched = false;
+
     public static void SetupUnityObjectOperators()
     {
+        if (!isSetLocalXPatched)
+        {
+            try
+            {
+                Harmony.CreateAndPatchAll(typeof(SetLocalXPatch));
+            }
+            catch { }
+            isSetLocalXPatched = true;
+        }
+
         var mockEq = new Mock<MockObjectop_EqualityHelper>();
         mockEq.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<UnityEngine.Object>()))
             .Returns((UnityEngine.Object x, UnityEngine.Object y) =>

@@ -29,31 +29,34 @@ public sealed class OperatorTests
 		Mock<TextMeshPro> mockTmp = new Mock<TextMeshPro>(IntPtr.Zero);
 		Mock<Transform> mockTmpTransform = new Mock<Transform>(IntPtr.Zero);
 		mockTmpTransform.SetupGet(t => t.transform).Returns(mockTmpTransform.Object);
-		mockTmpTransform.SetupProperty(t => t.localScale, new Vector3(1f, 1f, 1f));
-		mockTmpTransform.SetupProperty(t => t.localPosition, new Vector3(0f, 0f, 0f));
+		mockTmpTransform.SetupGet(t => t.localScale).Returns(new Vector3(1f, 1f, 1f));
+		mockTmpTransform.SetupGet(t => t.localPosition).Returns(new Vector3(0f, 0f, 0f));
 		mockTmp.SetupGet(t => t.transform).Returns(mockTmpTransform.Object);
 		mockPopup.SetupGet(p => p.TextAreaTMP).Returns(mockTmp.Object);
 
 		Mock<GameObject> mockGameObject = new Mock<GameObject>(IntPtr.Zero);
-		mockPopup.SetupGet(p => p.gameObject).Returns(mockGameObject.Object);
 		Mock<Transform> mockTransform = new Mock<Transform>(IntPtr.Zero);
+		mockGameObject.SetupGet(g => g.transform).Returns(mockTransform.Object);
 		mockTransform.SetupGet(t => t.transform).Returns(mockTransform.Object);
-		mockTransform.SetupProperty(t => t.localScale, new Vector3(1f, 1f, 1f));
-		mockTransform.SetupProperty(t => t.localPosition, new Vector3(0f, 0f, 0f));
+		mockTransform.SetupGet(t => t.gameObject).Returns(mockGameObject.Object);
+		mockTransform.SetupGet(t => t.localScale).Returns(new Vector3(1f, 1f, 1f));
+		mockTransform.SetupGet(t => t.localPosition).Returns(new Vector3(0f, 0f, 0f));
+		mockPopup.SetupGet(p => p.gameObject).Returns(mockGameObject.Object);
 		mockPopup.SetupGet(p => p.transform).Returns(mockTransform.Object);
 
 		Mock<Transform> mockExitButton = new Mock<Transform>(IntPtr.Zero);
-		mockExitButton.SetupGet(t => t.transform).Returns(mockExitButton.Object);
-		mockExitButton.SetupProperty(t => t.localScale, new Vector3(1f, 1f, 1f));
-		mockExitButton.SetupProperty(t => t.localPosition, new Vector3(0f, 0f, 0f));
-
 		Mock<GameObject> mockExitButtonGo = new Mock<GameObject>(IntPtr.Zero);
+		mockExitButtonGo.SetupGet(g => g.transform).Returns(mockExitButton.Object);
+		mockExitButton.SetupGet(t => t.transform).Returns(mockExitButton.Object);
 		mockExitButton.SetupGet(t => t.gameObject).Returns(mockExitButtonGo.Object);
+		mockExitButton.SetupGet(t => t.localScale).Returns(new Vector3(1f, 1f, 1f));
+		mockExitButton.SetupGet(t => t.localPosition).Returns(new Vector3(0f, 0f, 0f));
 		mockExitButton.Setup(t => t.GetComponentInChildren<TextTranslatorTMP>()).Returns((TextTranslatorTMP)null!);
 		mockExitButton.Setup(t => t.GetComponentInChildren<TextMeshPro>()).Returns(mockTmp.Object);
 		Mock<PassiveButton> mockButton = new Mock<PassiveButton>(IntPtr.Zero);
-		UnityEngine.UI.Button.ButtonClickedEvent mockOnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
-		mockButton.SetupGet(b => b.OnClick).Returns(mockOnClick);
+		Mock<UnityEngine.UI.Button.ButtonClickedEvent> mockOnClick = new Mock<UnityEngine.UI.Button.ButtonClickedEvent>(IntPtr.Zero);
+		mockOnClick.Setup(e => e.AddListener(It.IsAny<UnityEngine.Events.UnityAction>()));
+		mockButton.SetupGet(b => b.OnClick).Returns(mockOnClick.Object);
 		mockExitButton.Setup(t => t.GetComponent<PassiveButton>()).Returns(mockButton.Object);
 
 		mockTransform.Setup(t => t.FindChild("ExitGame")).Returns(mockExitButton.Object);
@@ -91,15 +94,30 @@ public sealed class OperatorTests
 		MockObjectInstantiateHelper10.Instance = m10.Object;
 	}
 
+	private static FieldInfo? GetFieldInHierarchy(Type type, string fieldName)
+	{
+		Type? current = type;
+		while (current != null)
+		{
+			FieldInfo? field = current.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+			if (field != null)
+			{
+				return field;
+			}
+			current = current.BaseType;
+		}
+		return null;
+	}
+
 	private static string SetupTestModFolder(OperatorBase op)
 	{
 		string tempDir = Path.Combine(Path.GetTempPath(), "TestPlugins_" + Guid.NewGuid().ToString("N"));
 		Directory.CreateDirectory(tempDir);
 
-		FieldInfo? modFolderField = typeof(OperatorBase).GetField("ModFolderPath", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+		FieldInfo? modFolderField = GetFieldInHierarchy(op.GetType(), "ModFolderPath");
 		modFolderField?.SetValue(op, tempDir);
 
-		FieldInfo? modDllPathField = op.GetType().GetField("modDllPath", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+		FieldInfo? modDllPathField = GetFieldInHierarchy(op.GetType(), "modDllPath");
 		if (modDllPathField != null)
 		{
 			string currentPath = (string)modDllPathField.GetValue(op)!;
@@ -156,7 +174,9 @@ public sealed class OperatorTests
 	public void ExRAddonInstaller_Constructor_SetsAddonDll()
 	{
 		ExRAddonInstaller installer = new ExRAddonInstaller(CompatModType.Submerged);
-		string addonDll = (string)installer.GetType().GetField("addonDll", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(installer)!;
+		FieldInfo? field = GetFieldInHierarchy(installer.GetType(), "addonDll");
+		Assert.NotNull(field);
+		string addonDll = (string)field!.GetValue(installer)!;
 		Assert.Equal("Submerged.dll", addonDll);
 	}
 
@@ -166,9 +186,14 @@ public sealed class OperatorTests
 		ExRAddonUninstaller uninstaller = new ExRAddonUninstaller(CompatModType.Submerged);
 		SetupTestModFolder(uninstaller);
 
-		Mock<GenericPopup> mockPopup = Mock.Get((GenericPopup)uninstaller.GetType().GetField("Popup", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(uninstaller)!);
+		FieldInfo? popupField = GetFieldInHierarchy(uninstaller.GetType(), "Popup");
+		Assert.NotNull(popupField);
+		GenericPopup popupObj = (GenericPopup)popupField!.GetValue(uninstaller)!;
+		Mock<GenericPopup> mockPopup = Mock.Get(popupObj);
 
-		string modDllPath = (string)uninstaller.GetType().GetField("modDllPath", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(uninstaller)!;
+		FieldInfo? dllPathField = GetFieldInHierarchy(uninstaller.GetType(), "modDllPath");
+		Assert.NotNull(dllPathField);
+		string modDllPath = (string)dllPathField!.GetValue(uninstaller)!;
 		if (File.Exists(modDllPath))
 		{
 			File.Delete(modDllPath);
@@ -184,7 +209,9 @@ public sealed class OperatorTests
 		ExRAddonUninstaller uninstaller = new ExRAddonUninstaller(CompatModType.Submerged);
 		string tempDir = SetupTestModFolder(uninstaller);
 
-		string modDllPath = (string)uninstaller.GetType().GetField("modDllPath", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(uninstaller)!;
+		FieldInfo? dllPathField = GetFieldInHierarchy(uninstaller.GetType(), "modDllPath");
+		Assert.NotNull(dllPathField);
+		string modDllPath = (string)dllPathField!.GetValue(uninstaller)!;
 		File.WriteAllText(modDllPath, "dummy dll content");
 
 		string oldUninstalledFile = Path.Combine(tempDir, "old.uninstalled");
@@ -214,9 +241,14 @@ public sealed class OperatorTests
 		Uninstaller uninstaller = new Uninstaller(info);
 		SetupTestModFolder(uninstaller);
 
-		Mock<GenericPopup> mockPopup = Mock.Get((GenericPopup)uninstaller.GetType().GetField("Popup", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(uninstaller)!);
+		FieldInfo? popupField = GetFieldInHierarchy(uninstaller.GetType(), "Popup");
+		Assert.NotNull(popupField);
+		GenericPopup popupObj = (GenericPopup)popupField!.GetValue(uninstaller)!;
+		Mock<GenericPopup> mockPopup = Mock.Get(popupObj);
 
-		string modDllPath = (string)uninstaller.GetType().GetField("modDllPath", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(uninstaller)!;
+		FieldInfo? dllPathField = GetFieldInHierarchy(uninstaller.GetType(), "modDllPath");
+		Assert.NotNull(dllPathField);
+		string modDllPath = (string)dllPathField!.GetValue(uninstaller)!;
 		if (File.Exists(modDllPath))
 		{
 			File.Delete(modDllPath);
@@ -233,7 +265,9 @@ public sealed class OperatorTests
 		Uninstaller uninstaller = new Uninstaller(info);
 		string tempDir = SetupTestModFolder(uninstaller);
 
-		string modDllPath = (string)uninstaller.GetType().GetField("modDllPath", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(uninstaller)!;
+		FieldInfo? dllPathField = GetFieldInHierarchy(uninstaller.GetType(), "modDllPath");
+		Assert.NotNull(dllPathField);
+		string modDllPath = (string)dllPathField!.GetValue(uninstaller)!;
 		File.WriteAllText(modDllPath, "dummy dll content");
 
 		string reactorPath = Path.Combine(tempDir, "Reactor.dll");
@@ -264,11 +298,16 @@ public sealed class OperatorTests
 		Installer installer = new Installer(info);
 		string tempDir = SetupTestModFolder(installer);
 
-		string dllName = (string)installer.GetType().GetField("dllName", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(installer)!;
+		FieldInfo? dllNameField = GetFieldInHierarchy(installer.GetType(), "dllName");
+		Assert.NotNull(dllNameField);
+		string dllName = (string)dllNameField!.GetValue(installer)!;
 		string filePath = Path.Combine(tempDir, dllName);
 		File.WriteAllText(filePath, "dummy dll");
 
-		Mock<GenericPopup> mockPopup = Mock.Get((GenericPopup)installer.GetType().GetField("Popup", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(installer)!);
+		FieldInfo? popupField = GetFieldInHierarchy(installer.GetType(), "Popup");
+		Assert.NotNull(popupField);
+		GenericPopup popupObj = (GenericPopup)popupField!.GetValue(installer)!;
+		Mock<GenericPopup> mockPopup = Mock.Get(popupObj);
 
 		try
 		{
@@ -301,7 +340,9 @@ public sealed class OperatorTests
 		{
 			installer.Excute();
 
-			GenericPopup? createdPopup = (GenericPopup?)installer.GetType().GetField("popup", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(installer);
+			FieldInfo? createdPopupField = GetFieldInHierarchy(installer.GetType(), "popup");
+			Assert.NotNull(createdPopupField);
+			GenericPopup? createdPopup = (GenericPopup?)createdPopupField!.GetValue(installer);
 			Assert.NotNull(createdPopup);
 		}
 		finally
@@ -320,14 +361,19 @@ public sealed class OperatorTests
 		Updater updater = new Updater(info);
 		string tempDir = SetupTestModFolder(updater);
 
-		string dllName = (string)updater.GetType().GetField("dllName", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(updater)!;
+		FieldInfo? dllNameField = GetFieldInHierarchy(updater.GetType(), "dllName");
+		Assert.NotNull(dllNameField);
+		string dllName = (string)dllNameField!.GetValue(updater)!;
 		string filePath = Path.Combine(tempDir, dllName);
 		if (File.Exists(filePath))
 		{
 			File.Delete(filePath);
 		}
 
-		Mock<GenericPopup> mockPopup = Mock.Get((GenericPopup)updater.GetType().GetField("Popup", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(updater)!);
+		FieldInfo? popupField = GetFieldInHierarchy(updater.GetType(), "Popup");
+		Assert.NotNull(popupField);
+		GenericPopup popupObj = (GenericPopup)popupField!.GetValue(updater)!;
+		Mock<GenericPopup> mockPopup = Mock.Get(popupObj);
 
 		try
 		{
