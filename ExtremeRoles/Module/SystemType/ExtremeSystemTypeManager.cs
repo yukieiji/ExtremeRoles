@@ -84,7 +84,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 			if (instance == null)
 			{
 				var manager = new ExtremeSystemTypeManager();
-				manager.initialize();
+				initialize(manager);
 				instance = manager;
 			}
 			return instance;
@@ -268,7 +268,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		this.dirtySystem.Clear();
 		this.allSystems.Clear();
 
-		this.initialize();
+		initialize(Instance);
 	}
 
 	public void Serialize(MessageWriter writer, bool initialState)
@@ -309,17 +309,17 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
-	private void initialize()
+	private static void initialize(IExtremeSystemTypeManager mng)
 	{
-		add<GlobalCheckpointSystem>(GlobalCheckpointSystem.Type);
-		add<MeetingCountSystem>(MeetingCountSystem.Type);
-		add<GameProgressSystem>(ExtremeSystemType.GameProgress);
+		add<GlobalCheckpointSystem>(mng, GlobalCheckpointSystem.Type);
+		add<MeetingCountSystem>(mng, MeetingCountSystem.Type);
+		add<GameProgressSystem>(mng, ExtremeSystemType.GameProgress);
 	}
 
-	private void add<T>(ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()
+	private static void add<T>(IExtremeSystemTypeManager mng, ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()
 	{
 		var system = new T();
-		Instance.TryAdd(systemType, system);
+		mng.TryAdd(systemType, system);
 	}
 
 	private static void callRpc(MessageWriter writer, int target)
