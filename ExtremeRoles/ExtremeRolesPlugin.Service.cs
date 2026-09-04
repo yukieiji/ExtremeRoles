@@ -12,6 +12,10 @@ using ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.Solo.Liberal;
+using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Core;
+using ExtremeRoles.Compat.Interface;
+using ExtremeRoles.Compat;
 
 
 namespace ExtremeRoles;
@@ -21,6 +25,16 @@ public partial class ExtremeRolesPlugin
 	public static IServiceProvider BuildProvider()
 	{
 		var collection = new ServiceCollection();
+
+		collection
+			.AddSingleton<IModLogger, BepInExLogger>();
+
+		collection
+			.AddTransient<IPluginLoader, BepInExPluginLoader>()
+			.AddTransient<IAccessTool, AccessToolWrapper>()
+			.AddTransient<IHarmonyPatchProvider, HarmonyPatchProvider>()
+			.AddTransient<IModInitializerFactory, ModInitializerFactory>()
+			.AddSingleton<CompatModManager>();
 
 		collection
 			.AddTransient<IRoleAssignee, ExtremeRoleAssignee>()

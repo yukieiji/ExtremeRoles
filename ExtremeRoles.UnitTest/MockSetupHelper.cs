@@ -16,6 +16,15 @@ using UnityEngine.UI;
 
 namespace ExtremeRoles.UnitTest;
 
+[HarmonyPatch(typeof(GameObjectExtensions), nameof(GameObjectExtensions.SetLocalX))]
+internal static class SetLocalXPatch
+{
+	private static bool Prefix()
+	{
+		return false;
+	}
+}
+
 public static class MockSetupHelper
 {
 	// UnityEngineの共通Mock
@@ -31,6 +40,21 @@ public static class MockSetupHelper
         SetupVector3Helpers();
         SetupTimeHelpers();
         SetupRandomHelpers();
+        SetupJsonHelpers();
+    }
+
+    public static void SetupJsonHelpers()
+    {
+        if (Newtonsoft.Json.Linq.MockJObjectParseHelper.Instance == null)
+        {
+            var mock = new Mock<Newtonsoft.Json.Linq.MockJObjectParseHelper>();
+            mock.Setup(h => h.Invoke(It.IsAny<string>())).Returns((string json) =>
+            {
+                var mockJObj = new Mock<Newtonsoft.Json.Linq.JObject>(IntPtr.Zero);
+                return mockJObj.Object;
+            });
+            Newtonsoft.Json.Linq.MockJObjectParseHelper.Instance = mock.Object;
+        }
     }
 
     public static void SetupRandomHelpers()
@@ -297,6 +321,11 @@ public static class MockSetupHelper
             .Returns((float f, Vector2 v) => new Vector2(v.x * f, v.y * f));
         MockVector2op_MultiplyHelper3.Instance = mockMultiply3.Object;
 
+        var mockAdd = new Mock<MockVector2op_AdditionHelper>();
+        mockAdd.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<Vector2>()))
+            .Returns((Vector2 a, Vector2 b) => new Vector2(a.x + b.x, a.y + b.y));
+        MockVector2op_AdditionHelper.Instance = mockAdd.Object;
+
         var mockVec2Implicit = new Mock<MockVector2op_ImplicitHelper>();
         mockVec2Implicit.Setup(x => x.Invoke(It.IsAny<Vector3>()))
             .Returns((Vector3 v) => new Vector2(v.x, v.y));
@@ -306,6 +335,17 @@ public static class MockSetupHelper
         mockVec2Implicit2.Setup(x => x.Invoke(It.IsAny<Vector2>()))
             .Returns((Vector2 v) => new Vector3(v.x, v.y, 0f));
         MockVector2op_ImplicitHelper2.Instance = mockVec2Implicit2.Object;
+
+        var mockRotate = new Mock<MockExtensionsRotateHelper>();
+        mockRotate.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<float>()))
+            .Returns((Vector2 v, float degrees) =>
+            {
+                float rad = degrees * ((float)Math.PI / 180f);
+                float cos = (float)Math.Cos(rad);
+                float sin = (float)Math.Sin(rad);
+                return new Vector2(v.x * cos - v.y * sin, v.x * sin + v.y * cos);
+            });
+        MockExtensionsRotateHelper.Instance = mockRotate.Object;
     }
 
     public static void SetupConstantsHelpers()
@@ -318,6 +358,8 @@ public static class MockSetupHelper
     public static void SetupCompatModManager()
     {
         InitializeBepInExPaths();
+        SetupMockExtremeRolePlugin();
+        SetupApplicationHelpers();
         if (CompatModManager.Instance == null)
         {
             CompatModManager.Initialize();
@@ -348,8 +390,34 @@ public static class MockSetupHelper
 			var plugin = (ExtremeRolesPlugin)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeRolesPlugin));
 			var instanceField = typeof(ExtremeRolesPlugin).GetField("<Instance>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
 			instanceField?.SetValue(null, plugin);
+
+			var providerField = typeof(ExtremeRolesPlugin).GetField("<Provider>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
+			if (providerField != null && providerField.GetValue(plugin) == null)
+			{
+				var provider = ExtremeRolesPlugin.BuildProvider();
+				providerField.SetValue(plugin, provider);
+			}
 		}
+		SetupLogger();
+		SetupDebugMode();
 		return ExtremeRolesPlugin.Instance!;
+	}
+
+	public static void SetupApplicationHelpers()
+	{
+		if (MockApplicationget_dataPathHelper.Instance == null)
+		{
+			var mockDataPath = new Mock<MockApplicationget_dataPathHelper>();
+			mockDataPath.Setup(h => h.Invoke()).Returns(Path.Combine(Path.GetTempPath(), "AmongUs_Data"));
+			MockApplicationget_dataPathHelper.Instance = mockDataPath.Object;
+		}
+
+		if (MockApplicationget_versionHelper.Instance == null)
+		{
+			var mockVersion = new Mock<MockApplicationget_versionHelper>();
+			mockVersion.Setup(h => h.Invoke()).Returns("2024.3.5");
+			MockApplicationget_versionHelper.Instance = mockVersion.Object;
+		}
 	}
 
 	public static void SetupLogger(string loggerName = "UnitTest")
@@ -476,8 +544,20 @@ public static class MockSetupHelper
         MockPaletteget_DisabledGreyHelper.Instance = mockDisabledGrey.Object;
     }
 
+    private static bool isSetLocalXPatched = false;
+
     public static void SetupUnityObjectOperators()
     {
+        if (!isSetLocalXPatched)
+        {
+            try
+            {
+                Harmony.CreateAndPatchAll(typeof(SetLocalXPatch));
+            }
+            catch { }
+            isSetLocalXPatched = true;
+        }
+
         var mockEq = new Mock<MockObjectop_EqualityHelper>();
         mockEq.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<UnityEngine.Object>()))
             .Returns((UnityEngine.Object x, UnityEngine.Object y) =>
