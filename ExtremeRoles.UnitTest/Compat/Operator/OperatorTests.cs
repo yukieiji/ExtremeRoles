@@ -29,8 +29,8 @@ public sealed class OperatorTests
 		Mock<TextMeshPro> mockTmp = new Mock<TextMeshPro>(IntPtr.Zero);
 		Mock<Transform> mockTmpTransform = new Mock<Transform>(IntPtr.Zero);
 		mockTmpTransform.SetupGet(t => t.transform).Returns(mockTmpTransform.Object);
-		mockTmpTransform.SetupGet(t => t.localPosition).Returns(new Vector3(0f, 0f, 0f));
 		mockTmpTransform.SetupProperty(t => t.localScale, new Vector3(1f, 1f, 1f));
+		mockTmpTransform.SetupProperty(t => t.localPosition, new Vector3(0f, 0f, 0f));
 		mockTmp.SetupGet(t => t.transform).Returns(mockTmpTransform.Object);
 		mockPopup.SetupGet(p => p.TextAreaTMP).Returns(mockTmp.Object);
 
@@ -38,14 +38,14 @@ public sealed class OperatorTests
 		mockPopup.SetupGet(p => p.gameObject).Returns(mockGameObject.Object);
 		Mock<Transform> mockTransform = new Mock<Transform>(IntPtr.Zero);
 		mockTransform.SetupGet(t => t.transform).Returns(mockTransform.Object);
-		mockTransform.SetupGet(t => t.localPosition).Returns(new Vector3(0f, 0f, 0f));
 		mockTransform.SetupProperty(t => t.localScale, new Vector3(1f, 1f, 1f));
+		mockTransform.SetupProperty(t => t.localPosition, new Vector3(0f, 0f, 0f));
 		mockPopup.SetupGet(p => p.transform).Returns(mockTransform.Object);
 
 		Mock<Transform> mockExitButton = new Mock<Transform>(IntPtr.Zero);
 		mockExitButton.SetupGet(t => t.transform).Returns(mockExitButton.Object);
-		mockExitButton.SetupGet(t => t.localPosition).Returns(new Vector3(0f, 0f, 0f));
 		mockExitButton.SetupProperty(t => t.localScale, new Vector3(1f, 1f, 1f));
+		mockExitButton.SetupProperty(t => t.localPosition, new Vector3(0f, 0f, 0f));
 
 		Mock<GameObject> mockExitButtonGo = new Mock<GameObject>(IntPtr.Zero);
 		mockExitButton.SetupGet(t => t.gameObject).Returns(mockExitButtonGo.Object);
