@@ -22,7 +22,7 @@ public class ModInitializerFactoryTests
         public SemanticVersioning.Version Version => throw new NotImplementedException();
         public string Name => throw new NotImplementedException();
 
-        public DummyInitializer(PluginInfo plugin, IHarmonyPatch patch, IAccessTool accessTool)
+        public DummyInitializer(PluginInfo plugin, IAccessTool accessTool, IHarmonyPatch patch)
         {
             Patch = patch;
         }
@@ -50,7 +50,7 @@ public class ModInitializerFactoryTests
 
     private sealed class InvalidInitializer
     {
-        public InvalidInitializer(PluginInfo plugin, IHarmonyPatch patch, IAccessTool accessTool)
+        public InvalidInitializer(PluginInfo plugin, IAccessTool accessTool, IHarmonyPatch patch)
         {
         }
     }
