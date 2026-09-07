@@ -30,7 +30,7 @@ public sealed class BepInExLogger : IModLogger
 	{
 
 #if DEBUG
-		if (ExtremeRolesPlugin.DebugMode.Value)
+		if (this.isDebug)
 		{
 			logger.LogInfo(data);
 		}
