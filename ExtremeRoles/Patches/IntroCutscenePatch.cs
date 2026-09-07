@@ -6,6 +6,8 @@ using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
+using Microsoft.Extensions.DependencyInjection;
+using ExtremeRoles.Core.Abstract;
 
 namespace ExtremeRoles.Patches;
 
@@ -62,6 +64,7 @@ public static class IntroCutsceneCoBeginPatch
         IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
     {
 		GameProgressSystem.Current = GameProgressSystem.Progress.IntroStart;
+		ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGameRuntime>().Start();
 
 		var mod = __instance.gameObject.TryAddComponent<IntroCutsceneModder>();
 		return mod.CoBeginPrefix(__instance, ref __result);
