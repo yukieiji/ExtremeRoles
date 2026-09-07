@@ -37,6 +37,11 @@ public partial class ExtremeRolesPlugin
 			.AddSingleton<CompatModManager>();
 
 		collection
+			.AddSingleton<IGameRuntime, GameRuntime>()
+			.AddSingleton<IGameProgress, GameProgress>()
+			.AddScoped<INomalGameRoleContainer, NormalGameRoleContainer>();
+
+		collection
 			.AddTransient<IRoleAssignee, ExtremeRoleAssignee>()
 			.AddTransient<IVanillaRoleProvider, VanillaRoleProvider>()
 			.AddTransient<ISpawnLimiter, ExtremeSpawnLimiter>()

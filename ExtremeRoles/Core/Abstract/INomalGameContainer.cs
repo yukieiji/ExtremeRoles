@@ -25,7 +25,7 @@ public interface INomalGameRoleContainer : IDisposable
 
 	public T? GetSafeCastedLocalPlayerRole<T>() where T : SingleRoleBase;
 
-	public bool GetRoleCastedStatusFlag<T>(SingleRoleBase role, Func<T, bool> statusFlag);
+	public bool GetRoleCastedStatusFlag<T>(SingleRoleBase role, Func<T, bool> statusFlag) where T : class; 
 
 
 	public bool GetLocalRoleCastedStatusFlag<T>(Func<T, bool> statusFlag)
