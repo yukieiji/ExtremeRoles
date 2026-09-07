@@ -16,6 +16,7 @@ using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.Core;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Patches;
 
 
 namespace ExtremeRoles;
@@ -113,6 +114,8 @@ public partial class ExtremeRolesPlugin
 
 	private static void RegisterPatchService(IServiceCollection collection)
 	{
-
+		collection
+			.AddSingleton<ProgressTrackerFixedUpdatePatchBody>()
+			.AddSingleton<PlayerPhysicsFixedUpdatePatchBody>();
 	}
 }
