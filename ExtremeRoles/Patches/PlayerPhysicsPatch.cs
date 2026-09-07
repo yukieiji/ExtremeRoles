@@ -1,4 +1,5 @@
 using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -12,14 +13,14 @@ using UnityEngine;
 
 namespace ExtremeRoles.Patches;
 
-public class PlayerPhysicsFixedUpdatePatchBody(IGameProgress progress, IGameRuntime runtime)
+public class PlayerPhysicsFixedUpdatePatchBody(IExtremeSystemTypeManager system, IGameProgress progress, IGameRuntime runtime)
 {
 	private readonly IGameProgress _progress = progress;
 	private readonly IGameRuntime _runtime = runtime;
+	private readonly IExtremeSystemTypeManager _system = system;
 
-	private static bool isTimeBreakNow =>
-		ExtremeSystemTypeManager.Instance.TryGet<TimeBreakerTimeBreakSystem>(
-			ExtremeSystemType.TimeBreakerTimeBreakSystem, out var system) &&
+	private bool isTimeBreakNow =>
+		_system.TryGet<TimeBreakerTimeBreakSystem>(ExtremeSystemType.TimeBreakerTimeBreakSystem, out var system) &&
 		system.Active;
 
 	private bool isCanMove(IGameContext ctx, PlayerPhysics __instance)

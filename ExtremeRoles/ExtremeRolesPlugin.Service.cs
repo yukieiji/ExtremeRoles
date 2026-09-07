@@ -109,6 +109,13 @@ public partial class ExtremeRolesPlugin
 
 		RegisterPatchService(collection);
 
+		// シングルトン対策として、ExtremeSystemTypeManagerのインスタンスをシングルトンとして登録(後にDIへ完全移行させる)
+		collection.AddSingleton(x =>
+		{
+			var mng = ExtremeSystemTypeManager.Instance;
+			return mng;
+		});
+
 		return collection.BuildServiceProvider();
 	}
 
