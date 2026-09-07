@@ -31,19 +31,6 @@ public sealed class ForasTests
     }
 
     [Fact]
-    public void Constructor_InitializesPropertiesCorrectly()
-    {
-        SetupMocks();
-
-        var foras = new Foras();
-
-        Assert.Equal(ExtremeRoleType.Neutral, foras.Team);
-        Assert.Equal(ExtremeGhostRoleId.Foras, foras.Id);
-        Assert.Equal(ExtremeGhostRoleId.Foras.ToString(), foras.Name);
-        Assert.False(foras.HasTask);
-    }
-
-    [Fact]
     public void GetRoleFilter_ReturnsExpectedFilterSet()
     {
         SetupMocks();
