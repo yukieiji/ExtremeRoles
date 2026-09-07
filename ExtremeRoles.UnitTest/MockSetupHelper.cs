@@ -484,6 +484,18 @@ public static class MockSetupHelper
         var mockCeilToInt = new Mock<MockMathfCeilToIntHelper>();
         mockCeilToInt.Setup(h => h.Invoke(It.IsAny<float>())).Returns((float f) => (int)Math.Ceiling(f));
         MockMathfCeilToIntHelper.Instance = mockCeilToInt.Object;
+
+        if (UnityEngine.MockMathfLerpHelper.Instance == null)
+        {
+            var mockLerp = new Mock<UnityEngine.MockMathfLerpHelper>();
+            mockLerp.Setup(h => h.Invoke(It.IsAny<float>(), It.IsAny<float>(), It.IsAny<float>()))
+                .Returns((float a, float b, float t) =>
+                {
+                    float clampedT = Math.Clamp(t, 0f, 1f);
+                    return a + (b - a) * clampedT;
+                });
+            UnityEngine.MockMathfLerpHelper.Instance = mockLerp.Object;
+        }
     }
 
     public static void SetupColorHelpers()
