@@ -23,7 +23,7 @@ namespace ExtremeRoles.UnitTest.GhostRoles.Neutral;
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class ForasTests
 {
-    public ForasTests()
+    private static void SetupMocks()
     {
         MockSetupHelper.SetupUnityCommonMocks();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
@@ -33,6 +33,8 @@ public sealed class ForasTests
     [Fact]
     public void Constructor_InitializesPropertiesCorrectly()
     {
+        SetupMocks();
+
         var foras = new Foras();
 
         Assert.Equal(ExtremeRoleType.Neutral, foras.Team);
@@ -44,6 +46,8 @@ public sealed class ForasTests
     [Fact]
     public void GetRoleFilter_ReturnsExpectedFilterSet()
     {
+        SetupMocks();
+
         var foras = new Foras();
         HashSet<ExtremeRoleId> filter = foras.GetRoleFilter();
 
@@ -56,26 +60,46 @@ public sealed class ForasTests
     [Fact]
     public void Initialize_ResetsStateWithoutThrowing()
     {
+        SetupMocks();
+
         var foras = new Foras();
         foras.Initialize();
     }
 
     [Fact]
-    public void CreateSpecificOption_CreatesExpectedOptions()
+    public void CreateSpecificOption_CreatesExpectedOptionsAndCanBeRead()
     {
-        using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+        SetupMocks();
+
+        using (AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
             2001,
             "ForasTestOption",
             OptionTab.GhostNeutralTab,
-            Color.white);
+            Color.white))
+        {
+            var foras = new Foras();
+            foras.CreateRoleSpecificOption(factory);
+        }
 
-        var foras = new Foras();
-        foras.CreateRoleSpecificOption(factory);
+        // Verify options created by factory can be read via OptionManager after factory is disposed
+        Assert.True(OptionManager.Instance.TryGetCategory(OptionTab.GhostNeutralTab, 2001, out var category));
+        Assert.NotNull(category);
+
+        // Read specific option values created by Foras.CreateSpecificOption
+        float range = category.GetValue<Foras.ForasOption, float>(Foras.ForasOption.Range);
+        float delayTime = category.GetValue<Foras.ForasOption, float>(Foras.ForasOption.DelayTime);
+        int rate = category.GetValue<Foras.ForasOption, int>(Foras.ForasOption.MissingTargetRate);
+
+        Assert.Equal(1.0f, range);
+        Assert.Equal(3.0f, delayTime);
+        Assert.Equal(10, rate);
     }
 
     [Fact]
     public void MeetingHooks_ExecutesWithoutError()
     {
+        SetupMocks();
+
         var foras = new Foras();
 
         foras.ResetOnMeetingStart();
@@ -85,6 +109,7 @@ public sealed class ForasTests
     [Fact]
     public void CreateAbility_ConfiguresButtonAndActivatingBehavior()
     {
+        SetupMocks();
         SetupHudManagerMock();
 
         var mockSprite = new Mock<Sprite>(IntPtr.Zero);
@@ -100,6 +125,8 @@ public sealed class ForasTests
     [Fact]
     public void SwitchArrow_ReadsMessageAndCallsHideArrow_WhenIsShowFalse()
     {
+        SetupMocks();
+
         var forasPlayerId = (byte)1;
         ExtremeGhostRoleManager.GameRole.Clear();
         ExtremeGhostRoleManager.GameRole[forasPlayerId] = new Foras();
@@ -120,6 +147,8 @@ public sealed class ForasTests
     [Fact]
     public void SwitchArrow_ReadsMessageAndDoesNotThrow_WhenIsShowTrueAndPlayerNotFound()
     {
+        SetupMocks();
+
         var mockReader = new Mock<MessageReader>(IntPtr.Zero);
         mockReader.SetupSequence(r => r.ReadBoolean()).Returns(true); // isShow = true
         mockReader.SetupSequence(r => r.ReadByte()).Returns((byte)1)  // forasPlayerId = 1
