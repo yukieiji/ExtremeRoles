@@ -35,14 +35,14 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 
 	private static Agency CreateAgency(bool canSeeTaskBar)
 	{
-		var agency = (Agency)RuntimeHelpers.GetUninitializedObject(typeof(Agency));
+		var agency = new Agency();
 		typeof(Agency).GetProperty(nameof(Agency.CanSeeTaskBar))?.SetValue(agency, canSeeTaskBar);
 		return agency;
 	}
 
 	private static SlaveDriver CreateSlaveDriver(bool canSeeTaskBar)
 	{
-		var slaveDriver = (SlaveDriver)RuntimeHelpers.GetUninitializedObject(typeof(SlaveDriver));
+		var slaveDriver = new SlaveDriver();
 		typeof(SlaveDriver).GetProperty(nameof(SlaveDriver.CanSeeTaskBar))?.SetValue(slaveDriver, canSeeTaskBar);
 		return slaveDriver;
 	}
