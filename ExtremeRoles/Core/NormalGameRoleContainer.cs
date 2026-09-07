@@ -15,6 +15,12 @@ public class NormalGameRoleContainer : INomalGameRoleContainer
 	{
 	}
 
+	public (T, T) GetInterfaceCastedLocalRole<T>() where T : class
+		=> ExtremeRoleManager.GetInterfaceCastedLocalRole<T>();
+
+	public (T, T) GetInterfaceCastedRole<T>(byte playerId) where T : class
+		=> ExtremeRoleManager.GetInterfaceCastedRole<T>(playerId);
+
 	public SingleRoleBase GetLocalPlayerRole()
 		=> ExtremeRoleManager.GetLocalPlayerRole();
 

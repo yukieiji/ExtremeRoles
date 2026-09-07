@@ -123,6 +123,10 @@ public partial class ExtremeRolesPlugin
 	{
 		collection
 			.AddSingleton<ProgressTrackerFixedUpdatePatchBody>()
-			.AddSingleton<PlayerPhysicsFixedUpdatePatchBody>();
+			.AddSingleton<PlayerPhysicsFixedUpdatePatchBody>()
+
+			.AddSingleton<IntroCutScenceBeginPatch>()
+			.AddSingleton<IntroCutScenceCoBeginPatchBody>()
+			.AddSingleton<IntroCutScenceShowRolePatchBody>();
 	}
 }

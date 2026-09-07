@@ -29,4 +29,8 @@ public interface INomalGameRoleContainer : IDisposable
 
 	public bool GetLocalRoleCastedStatusFlag<T>(Func<T, bool> statusFlag)
 		where T : class;
+
+	public (T?, T?) GetInterfaceCastedLocalRole<T>() where T : class;
+
+	public (T?, T?) GetInterfaceCastedRole<T>(byte playerId) where T : class;
 }
