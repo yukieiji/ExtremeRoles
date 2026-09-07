@@ -15,8 +15,7 @@ public interface IRoleSpecialReset
 
 	public static void ResetLover(byte targetPlayerId)
 	{
-		var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-		if (!(targetPlayer != null &&
+		if (!(Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer) &&
 			ExtremeRoleManager.TryGetRole(targetPlayerId, out var role)))
 		{
 			return;
@@ -57,7 +56,7 @@ public interface IRoleSpecialReset
 
         // クルーに変更
         RoleManager.Instance.SetRole(
-            Player.GetPlayerControlById(targetPlayerId),
+            resetPlayer,
             RoleTypes.Crewmate);
     }
 

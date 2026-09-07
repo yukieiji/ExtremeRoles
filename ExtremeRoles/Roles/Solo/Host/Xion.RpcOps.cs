@@ -190,12 +190,17 @@ public sealed partial class Xion
         finishWrite(writer);
         replaceToRole(targetPlayerId, intedRoleId);
 
+        string targetPlayerName = "Unknown Player";
+        if (Player.TryGetPlayerControl(targetPlayerId, out var targetPlayerObj) &&
+            targetPlayerObj.Data != null)
+        {
+            targetPlayerName = targetPlayerObj.Data.DefaultOutfit.PlayerName;
+        }
+
         addChat(
             string.Format(
                 Tr.GetString("setRole"),
-                Tr.GetString(
-                    Player.GetPlayerControlById(
-                        targetPlayerId).Data.DefaultOutfit.PlayerName),
+                Tr.GetString(targetPlayerName),
                 Tr.GetString(roleId.ToString())));
     }
 
@@ -253,8 +258,10 @@ public sealed partial class Xion
     private static void hostToXion(byte hostPlayerId)
     {
         xionPlayerToDead(hostPlayerId);
-        resetRole(
-            Player.GetPlayerControlById(hostPlayerId), hostPlayerId);
+        if (Player.TryGetPlayerControl(hostPlayerId, out var hostPlayer))
+        {
+            resetRole(hostPlayer, hostPlayerId);
+        }
         setNewRole(hostPlayerId, xionBuffer);
 
         if (Patches.Manager.HudManagerUpdatePatch.TryGetRoleInfo(
@@ -276,7 +283,7 @@ public sealed partial class Xion
         ExtremeRolesPlugin.Logger.LogInfo(
             $"targetPlayerId:{targetPlayerId}   roleId:{roleId}");
 
-        PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
+        Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer);
 
         // 見つからなかったので探して追加
         if (targetPlayer == null)

@@ -86,14 +86,15 @@ internal sealed class LoverWinChecker : IWinChecker
 				{
 					case ExtremeRoleId.Sidekick:
 						var sidekick = (SidekickRole)lover.AnotherRole;
-						var jackalPlayer = Helper.Player.GetPlayerControlById(sidekick.Parent);
-						if (jackalPlayer == null) { break; }
-						if (!jackalPlayer.Data.IsDead &&
-							!jackalPlayer.Data.Disconnected &&
-							statistics.TeamImpostorAlive <= 0 &&
-							statistics.SeparatedNeutralAlive.Count == 2) // ジャッカルとサイドキックされたニュートラルラバーのみ
+						if (Helper.Player.TryGetPlayerControl(sidekick.Parent, out var jackalPlayer))
 						{
-							return true;
+							if (!jackalPlayer.Data.IsDead &&
+								!jackalPlayer.Data.Disconnected &&
+								statistics.TeamImpostorAlive <= 0 &&
+								statistics.SeparatedNeutralAlive.Count == 2) // ジャッカルとサイドキックされたニュートラルラバーのみ
+							{
+								return true;
+							}
 						}
 						break;
 					case ExtremeRoleId.Jackal:
@@ -119,14 +120,15 @@ internal sealed class LoverWinChecker : IWinChecker
 						{
 							return false;
 						}
-						var queenPlayer = Helper.Player.GetPlayerControlById(servantStatus.Parent);
-						if (queenPlayer == null) { break; }
-						if (!queenPlayer.Data.IsDead &&
-							!queenPlayer.Data.Disconnected &&
-							statistics.TeamImpostorAlive <= 0 &&
-							statistics.SeparatedNeutralAlive.Count == 2) // クイーンとサーヴァント化されたニュートラルラバーのみ
+						if (Helper.Player.TryGetPlayerControl(servantStatus.Parent, out var queenPlayer))
 						{
-							return true;
+							if (!queenPlayer.Data.IsDead &&
+								!queenPlayer.Data.Disconnected &&
+								statistics.TeamImpostorAlive <= 0 &&
+								statistics.SeparatedNeutralAlive.Count == 2) // クイーンとサーヴァント化されたニュートラルラバーのみ
+							{
+								return true;
+							}
 						}
 						break;
 					default:
@@ -146,10 +148,12 @@ internal sealed class LoverWinChecker : IWinChecker
 
 		foreach (byte playerId in this.aliveLover)
 		{
-			var (compTask, totalTask) = Helper.GameSystem.GetTaskInfo(
-				Helper.Player.GetPlayerControlById(playerId).Data);
-			allCompTask += compTask;
-			allTask += totalTask;
+			if (Helper.Player.TryGetPlayerControl(playerId, out var player))
+			{
+				var (compTask, totalTask) = Helper.GameSystem.GetTaskInfo(player.Data);
+				allCompTask += compTask;
+				allTask += totalTask;
+			}
 		}
 
 		return allCompTask >= allTask;
