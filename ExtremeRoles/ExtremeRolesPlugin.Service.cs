@@ -106,6 +106,13 @@ public partial class ExtremeRolesPlugin
 
 		collection.AddTransient<ICustomRegionProvider, DefaultCustomRegionProvider>();
 
+		RegisterPatchService(collection);
+
 		return collection.BuildServiceProvider();
+	}
+
+	private static void RegisterPatchService(IServiceCollection collection)
+	{
+
 	}
 }
