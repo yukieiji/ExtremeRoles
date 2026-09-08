@@ -8,6 +8,8 @@ using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
 using System;
+using System.IO;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -385,19 +387,21 @@ public static class MockSetupHelper
 
 	public static ExtremeRolesPlugin SetupMockExtremeRolePlugin()
 	{
-		if (ExtremeRolesPlugin.Instance == null)
+		var plugin = ExtremeRolesPlugin.Instance;
+		if (plugin == null)
 		{
-			var plugin = (ExtremeRolesPlugin)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeRolesPlugin));
+			plugin = (ExtremeRolesPlugin)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeRolesPlugin));
 			var instanceField = typeof(ExtremeRolesPlugin).GetField("<Instance>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
 			instanceField?.SetValue(null, plugin);
-
-			var providerField = typeof(ExtremeRolesPlugin).GetField("<Provider>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-			if (providerField != null && providerField.GetValue(plugin) == null)
-			{
-				var provider = ExtremeRolesPlugin.BuildProvider();
-				providerField.SetValue(plugin, provider);
-			}
 		}
+
+		var providerField = typeof(ExtremeRolesPlugin).GetField("<Provider>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
+		if (providerField != null && providerField.GetValue(plugin) == null)
+		{
+			var provider = ExtremeRolesPlugin.BuildProvider();
+			providerField.SetValue(plugin, provider);
+		}
+
 		SetupLogger();
 		SetupDebugMode();
 		return ExtremeRolesPlugin.Instance!;
