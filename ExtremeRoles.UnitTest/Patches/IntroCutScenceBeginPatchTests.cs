@@ -49,7 +49,7 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId) => Color.white;
 	}
 
-	private class DummyMultiAssignRole : MultiAssignRoleBase
+	private sealed class DummyMultiAssignRole : MultiAssignRoleBase
 	{
 		public DummyMultiAssignRole(RoleArgs args, SingleRoleBase? anotherRole = null) : base(args)
 		{
@@ -115,6 +115,7 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		MockSetupHelper.SetupPlayerControlMocks();
 		ExtremeRoleManager.GameRole.Clear();
 		PlayerCache.RemovePlayerControl(_ => true);
+		ExtremeGameModeManager.Create(GameModes.Normal);
 
 		if (MockObjectDontDestroyOnLoadHelper.Instance == null)
 		{
@@ -122,6 +123,21 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 			mockDontDestroy.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()));
 			MockObjectDontDestroyOnLoadHelper.Instance = mockDontDestroy.Object;
 		}
+
+		SetupInstantiateMocks();
+	}
+
+	private static void SetupInstantiateMocks()
+	{
+		var m5 = new Mock<MockObjectInstantiateHelper5>();
+		m5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
+			.Returns((UnityEngine.Object orig, Transform parent) => orig);
+		MockObjectInstantiateHelper5.Instance = m5.Object;
+
+		var m10 = new Mock<MockObjectInstantiateHelper10>();
+		m10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
+			.Returns((UnityEngine.Object orig, Transform parent) => orig);
+		MockObjectInstantiateHelper10.Instance = m10.Object;
 	}
 
 	#region IntroCutScenceBeginPatch Tests
@@ -585,9 +601,9 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 
 		var patchBody = new IntroCutScenceCoBeginPatchBody(progress.Object, runtime.Object);
 		var mockIntro = new Mock<IntroCutscene>(IntPtr.Zero);
-		Il2CppIEnumerator? dummyResult = null;
 
-		bool ret = patchBody.CoBeginPrefix(mockIntro.Object, ref dummyResult!);
+		Il2CppIEnumerator? dummyResult = null;
+		bool ret = patchBody.CoBeginPrefix(mockIntro.Object, ref dummyResult);
 
 		Assert.True(ret);
 		runtime.Verify(r => r.Start(), Times.Once);
@@ -609,7 +625,7 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		var mockIntro = new Mock<IntroCutscene>(IntPtr.Zero);
 		Il2CppIEnumerator? result = null;
 
-		bool ret = patchBody.ShowRolePrefix(mockIntro.Object, ref result!);
+		bool ret = patchBody.ShowRolePrefix(mockIntro.Object, ref result);
 
 		Assert.True(ret);
 	}
@@ -634,7 +650,7 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		var mockIntro = new Mock<IntroCutscene>(IntPtr.Zero);
 		Il2CppIEnumerator? result = null;
 
-		bool ret = patchBody.ShowRolePrefix(mockIntro.Object, ref result!);
+		bool ret = patchBody.ShowRolePrefix(mockIntro.Object, ref result);
 
 		Assert.True(ret);
 	}
@@ -659,7 +675,7 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		var mockIntro = new Mock<IntroCutscene>(IntPtr.Zero);
 		Il2CppIEnumerator? result = null;
 
-		bool ret = patchBody.ShowRolePrefix(mockIntro.Object, ref result!);
+		bool ret = patchBody.ShowRolePrefix(mockIntro.Object, ref result);
 
 		Assert.True(ret);
 	}
