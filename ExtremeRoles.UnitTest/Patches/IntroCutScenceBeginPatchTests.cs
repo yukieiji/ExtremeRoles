@@ -134,6 +134,11 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 			.Returns((UnityEngine.Object orig, Transform parent) => orig);
 		MockObjectInstantiateHelper5.Instance = m5.Object;
 
+		var m7 = new Mock<MockObjectInstantiateHelper7>();
+		m7.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()))
+			.Returns((UnityEngine.Object orig) => orig);
+		MockObjectInstantiateHelper7.Instance = m7.Object;
+
 		var m10 = new Mock<MockObjectInstantiateHelper10>();
 		m10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
 			.Returns((UnityEngine.Object orig, Transform parent) => orig);
@@ -142,43 +147,15 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 
 	private static void SetupInstantiateReturn(UnityEngine.Object returnObj)
 	{
-		var asm = typeof(MockObjectInstantiateHelper5).Assembly;
-		string[] helperNames = new[]
-		{
-			"MockObjectInstantiateHelper",
-			"MockObjectInstantiateHelper2",
-			"MockObjectInstantiateHelper3",
-			"MockObjectInstantiateHelper4",
-			"MockObjectInstantiateHelper5",
-			"MockObjectInstantiateHelper6",
-			"MockObjectInstantiateHelper7",
-			"MockObjectInstantiateHelper8",
-			"MockObjectInstantiateHelper9",
-			"MockObjectInstantiateHelper10",
-			"MockObjectInstantiateHelper11"
-		};
-
-		foreach (var name in helperNames)
-		{
-			var t = asm.GetType(name);
-			if (t == null) continue;
-
-			var prop = t.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
-			if (prop == null) continue;
-
-			try
-			{
-				var mockType = typeof(Mock<>).MakeGenericType(t);
-				var mock = (Mock)Activator.CreateInstance(mockType)!;
-				prop.SetValue(null, mock.Object);
-			}
-			catch { }
-		}
-
 		var m5 = new Mock<MockObjectInstantiateHelper5>();
 		m5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
 			.Returns((UnityEngine.Object orig, Transform parent) => returnObj);
 		MockObjectInstantiateHelper5.Instance = m5.Object;
+
+		var m7 = new Mock<MockObjectInstantiateHelper7>();
+		m7.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()))
+			.Returns((UnityEngine.Object orig) => returnObj);
+		MockObjectInstantiateHelper7.Instance = m7.Object;
 
 		var m10 = new Mock<MockObjectInstantiateHelper10>();
 		m10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
