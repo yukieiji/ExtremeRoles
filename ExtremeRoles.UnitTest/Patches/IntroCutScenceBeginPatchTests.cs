@@ -646,6 +646,7 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		bool ret = patchBody.CoBeginPrefix(mockIntro.Object, ref dummyResult!);
 
 		Assert.True(ret);
+		Assert.Null(dummyResult);
 		runtime.Verify(r => r.Start(), Times.Once);
 		progress.VerifySet(p => p.Current = GameProgressSystem.Progress.IntroStart, Times.Once);
 	}
@@ -718,6 +719,7 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		bool ret = patchBody.ShowRolePrefix(mockIntro.Object, ref result!);
 
 		Assert.True(ret);
+		Assert.Null(result);
 	}
 
 	#endregion
