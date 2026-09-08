@@ -49,6 +49,26 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId) => Color.white;
 	}
 
+	private class DummyMultiAssignRole : MultiAssignRoleBase
+	{
+		public DummyMultiAssignRole(RoleArgs args, SingleRoleBase? anotherRole = null) : base(args)
+		{
+			if (anotherRole != null)
+			{
+				this.CanHasAnotherRole = true;
+				SetAnotherRole(anotherRole);
+			}
+		}
+
+		public override Color GetNameColor(bool isDead) => Color.white;
+		public override string GetColoredRoleName(bool isDead = false) => "MultiAssignRole";
+		public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId) => "";
+		public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId) => Color.white;
+
+		protected override void RoleSpecificInit() { }
+		protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory parentOps) { }
+	}
+
 	private sealed class DummySpecialSetUpRole : DummySingleRole, IRoleSpecialSetUp
 	{
 		public bool IntroBeginSetUpCalled { get; private set; }
@@ -191,6 +211,67 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 
 		ExtremeRoleManager.GameRole[(byte)0] = localRole;
 		ExtremeRoleManager.GameRole[(byte)1] = fakeRole;
+
+		PlayerCache.AddPlayerControl(localPlayer.Object);
+		PlayerCache.AddPlayerControl(fakePlayer.Object);
+
+		var mockRoleContainer = new Mock<INomalGameRoleContainer>();
+		mockRoleContainer.Setup(r => r.GetLocalPlayerRole()).Returns(localRole);
+
+		var mockContext = new Mock<IGameContext>();
+		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
+
+		IGameContext? context = mockContext.Object;
+		runtime.Setup(r => r.TryGetGameContext(out context)).Returns(true);
+
+		var mockPlayerPrefab = new Mock<PoolablePlayer>(IntPtr.Zero);
+		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
+		mockPlayerPrefab.SetupGet(p => p.gameObject).Returns(mockGameObject.Object);
+
+		var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
+		mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
+			.Returns((UnityEngine.Object original, Transform parent) => mockPlayerPrefab.Object);
+		MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
+
+		var patch = new IntroCutScenceBeginPatch(logger.Object, runtime.Object);
+		var mockIntro = new Mock<IntroCutscene>(IntPtr.Zero);
+		mockIntro.SetupGet(i => i.PlayerPrefab).Returns(mockPlayerPrefab.Object);
+
+		var mockTeamList = new Mock<PlayerIl2CppList>(IntPtr.Zero);
+		var teamList = mockTeamList.Object;
+
+		patch.BeginImpostorPrefix(mockIntro.Object, ref teamList);
+
+		mockTeamList.Verify(t => t.Add(fakePlayer.Object), Times.Once);
+		logger.Verify(l => l.LogTrace(It.Is<string>(s => s.Contains("Add fake Impostor: 1"))), Times.Once);
+	}
+
+	[Fact]
+	public void BeginImpostorPrefix_WhenMultiAssignRoleAnotherRoleIsFakeIntro_AddsFakeTeam()
+	{
+		var logger = new Mock<IModLogger>();
+		var runtime = new Mock<IGameRuntime>();
+
+		var localPlayer = MockSetupHelper.SetupPlayerControlMocks();
+		localPlayer.SetupGet(p => p.PlayerId).Returns((byte)0);
+
+		var fakePlayer = new Mock<PlayerControl>(IntPtr.Zero);
+		fakePlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
+
+		var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+		mockLocalHelper.Setup(h => h.Invoke()).Returns(localPlayer.Object);
+		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+
+		var mockStatus = new Mock<IRoleFakeIntro>();
+		mockStatus.SetupGet(s => s.FakeTeam).Returns(ExtremeRoleType.Impostor);
+
+		var fakeAnotherRole = new DummySingleRole(RoleCore.BuildCrewmate(ExtremeRoleId.Bait, Color.white), mockStatus.As<IStatusModel>().Object);
+		var fakeMultiRole = new DummyMultiAssignRole(RoleArgs.BuildCrewmate(ExtremeRoleId.Lover, Color.white), fakeAnotherRole);
+
+		var localRole = new DummySingleRole(RoleCore.BuildImpostor(ExtremeRoleId.Bait));
+
+		ExtremeRoleManager.GameRole[(byte)0] = localRole;
+		ExtremeRoleManager.GameRole[(byte)1] = fakeMultiRole;
 
 		PlayerCache.AddPlayerControl(localPlayer.Object);
 		PlayerCache.AddPlayerControl(fakePlayer.Object);
@@ -396,6 +477,32 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 	}
 
 	[Fact]
+	public void CommonBeginPostfix_CallsSpecialSetUpOnMultiAssignAnotherRole()
+	{
+		var logger = new Mock<IModLogger>();
+		var runtime = new Mock<IGameRuntime>();
+
+		var specialAnotherRole = new DummySpecialSetUpRole(RoleCore.BuildCrewmate(ExtremeRoleId.Bait, Color.white));
+		var multiRole = new DummyMultiAssignRole(RoleArgs.BuildCrewmate(ExtremeRoleId.Lover, Color.white), specialAnotherRole);
+
+		var mockRoleContainer = new Mock<INomalGameRoleContainer>();
+		mockRoleContainer.Setup(r => r.GetLocalPlayerRole()).Returns(multiRole);
+
+		var mockContext = new Mock<IGameContext>();
+		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
+
+		IGameContext? context = mockContext.Object;
+		runtime.Setup(r => r.TryGetGameContext(out context)).Returns(true);
+
+		var patch = new IntroCutScenceBeginPatch(logger.Object, runtime.Object);
+		var mockIntro = new Mock<IntroCutscene>(IntPtr.Zero);
+
+		patch.CommonBeginPostfix(mockIntro.Object);
+
+		Assert.True(specialAnotherRole.IntroBeginSetUpCalled);
+	}
+
+	[Fact]
 	public void SetupIntroTeamIcons_WhenRoleIsLiberal_PopulatesTeamWithLiberalPlayers()
 	{
 		var logger = new Mock<IModLogger>();
@@ -462,6 +569,29 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 
 		Assert.Same(mockTeamList.Object, teamList);
 		mockTeamList.Verify(t => t.Clear(), Times.Never);
+	}
+
+	#endregion
+
+	#region IntroCutScenceCoBeginPatchBody Tests
+
+	[Fact]
+	public void CoBeginPrefix_WhenNoIntroRunner_StartsRuntimeAndReturnsTrue()
+	{
+		ExtremeGameModeManager.Create(GameModes.None);
+
+		var progress = new Mock<IGameProgress>();
+		var runtime = new Mock<IGameRuntime>();
+
+		var patchBody = new IntroCutScenceCoBeginPatchBody(progress.Object, runtime.Object);
+		var mockIntro = new Mock<IntroCutscene>(IntPtr.Zero);
+		Il2CppIEnumerator? dummyResult = null;
+
+		bool ret = patchBody.CoBeginPrefix(mockIntro.Object, ref dummyResult!);
+
+		Assert.True(ret);
+		runtime.Verify(r => r.Start(), Times.Once);
+		progress.VerifySet(p => p.Current = GameProgressSystem.Progress.IntroStart, Times.Once);
 	}
 
 	#endregion
