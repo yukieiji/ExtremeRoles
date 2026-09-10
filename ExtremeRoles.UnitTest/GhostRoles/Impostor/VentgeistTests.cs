@@ -47,14 +47,21 @@ public sealed class VentgeistTests
     [Fact]
     public void Initialize_LoadsOptionsFromLoader()
     {
-        var mockLoader = new Mock<IOptionLoader>();
-        mockLoader.Setup(l => l.GetValue<Ventgeist.Option, float>(Ventgeist.Option.Range)).Returns(1.5f);
+        using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+            ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Ventgeist),
+            "Ventgeist",
+            OptionTab.GhostImpostorTab,
+            Color.white);
+        factory.CreateFloatOption(Ventgeist.Option.Range, 2.5f, 0.2f, 3.0f, 0.1f);
 
-        var ventgeist = new DummyVentgeist(mockLoader.Object);
+        var ventgeist = new Ventgeist();
 
         ventgeist.Initialize();
 
-        mockLoader.Verify(l => l.GetValue<Ventgeist.Option, float>(Ventgeist.Option.Range), Times.Once);
+        FieldInfo rangeField = typeof(Ventgeist).GetField("range", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        float rangeVal = (float)rangeField.GetValue(ventgeist)!;
+
+        Assert.Equal(2.5f, rangeVal);
     }
 
     [Fact]
@@ -74,9 +81,6 @@ public sealed class VentgeistTests
     [Fact]
     public void MeetingHooks_ExecutesWithoutError()
     {
-        var mockLoader = new Mock<IOptionLoader>();
-        mockLoader.Setup(l => l.GetValue<Ventgeist.Option, float>(Ventgeist.Option.Range)).Returns(1.5f);
-
         var ventgeist = new Ventgeist();
 
         ventgeist.ResetOnMeetingStart();
@@ -97,36 +101,6 @@ public sealed class VentgeistTests
         ventgeist.CreateAbility();
 
         Assert.NotNull(ventgeist.Button);
-    }
-
-    private sealed class DummyVentgeist : GhostRoleBase
-    {
-        private readonly IOptionLoader loader;
-
-        public override IOptionLoader Loader => loader;
-
-        public DummyVentgeist(IOptionLoader loader) : base(
-            false,
-            ExtremeRoleType.Impostor,
-            ExtremeGhostRoleId.Ventgeist,
-            ExtremeGhostRoleId.Ventgeist.ToString(),
-            Palette.ImpostorRed)
-        {
-            this.loader = loader;
-        }
-
-        public override void CreateAbility() { }
-        public override HashSet<ExtremeRoleId> GetRoleFilter() => new();
-
-        public override void Initialize()
-        {
-            float range = this.Loader.GetValue<Ventgeist.Option, float>(Ventgeist.Option.Range);
-        }
-
-        protected override void OnMeetingEndHook() { }
-        protected override void OnMeetingStartHook() { }
-        protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }
-        protected override void UseAbility(RPCOperator.RpcCaller caller) { }
     }
 
     private static void SetupHudManagerMock()

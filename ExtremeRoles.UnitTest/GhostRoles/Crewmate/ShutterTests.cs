@@ -52,15 +52,22 @@ public sealed class ShutterTests : IDisposable
     [Fact]
     public void Initialize_LoadsOptionsFromLoader()
     {
-        var mockLoader = new Mock<IOptionLoader>();
-        mockLoader.Setup(l => l.GetValue<Shutter.ShutterOption, float>(Shutter.ShutterOption.PhotoRange)).Returns(7.5f);
-        mockLoader.Setup(l => l.GetValue<Shutter.ShutterOption, int>(Shutter.ShutterOption.RightPlayerNameRate)).Returns(50);
+        using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+            ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Shutter),
+            "Shutter",
+            OptionTab.GhostCrewmateTab,
+            Color.white);
+        factory.CreateFloatOption(Shutter.ShutterOption.PhotoRange, 7.5f, 0.5f, 25f, 0.5f);
+        factory.CreateIntOption(Shutter.ShutterOption.RightPlayerNameRate, 50, 25, 100, 5);
 
-        var shutter = new DummyShutter(mockLoader.Object);
+        var shutter = new Shutter();
+
         shutter.Initialize();
 
-        mockLoader.Verify(l => l.GetValue<Shutter.ShutterOption, float>(Shutter.ShutterOption.PhotoRange), Times.Once);
-        mockLoader.Verify(l => l.GetValue<Shutter.ShutterOption, int>(Shutter.ShutterOption.RightPlayerNameRate), Times.Once);
+        FieldInfo cameraField = typeof(Shutter).GetField("photoCreater", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        object cameraObj = cameraField.GetValue(shutter)!;
+
+        Assert.NotNull(cameraObj);
     }
 
     [Fact]
@@ -79,9 +86,13 @@ public sealed class ShutterTests : IDisposable
     [Fact]
     public void MeetingHooks_ExecutesWithoutError()
     {
-        var mockLoader = new Mock<IOptionLoader>();
-        mockLoader.Setup(l => l.GetValue<Shutter.ShutterOption, float>(Shutter.ShutterOption.PhotoRange)).Returns(7.5f);
-        mockLoader.Setup(l => l.GetValue<Shutter.ShutterOption, int>(Shutter.ShutterOption.RightPlayerNameRate)).Returns(50);
+        using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+            ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Shutter),
+            "Shutter",
+            OptionTab.GhostCrewmateTab,
+            Color.white);
+        factory.CreateFloatOption(Shutter.ShutterOption.PhotoRange, 7.5f, 0.5f, 25f, 0.5f);
+        factory.CreateIntOption(Shutter.ShutterOption.RightPlayerNameRate, 50, 25, 100, 5);
 
         var shutter = new Shutter();
         shutter.Initialize();
@@ -116,37 +127,6 @@ public sealed class ShutterTests : IDisposable
         Assert.Equal(StringSerializerType.ShutterPhoto, serializer.Type);
         Assert.True(serializer.IsRpc);
         Assert.Equal(string.Empty, serializer.ToString());
-    }
-
-    private sealed class DummyShutter : GhostRoleBase
-    {
-        private readonly IOptionLoader loader;
-
-        public override IOptionLoader Loader => loader;
-
-        public DummyShutter(IOptionLoader loader) : base(
-            true,
-            ExtremeRoleType.Crewmate,
-            ExtremeGhostRoleId.Shutter,
-            ExtremeGhostRoleId.Shutter.ToString(),
-            ColorPalette.PhotographerVerdeSiena)
-        {
-            this.loader = loader;
-        }
-
-        public override void CreateAbility() { }
-        public override HashSet<ExtremeRoleId> GetRoleFilter() => new();
-
-        public override void Initialize()
-        {
-            float range = this.Loader.GetValue<Shutter.ShutterOption, float>(Shutter.ShutterOption.PhotoRange);
-            int rate = this.Loader.GetValue<Shutter.ShutterOption, int>(Shutter.ShutterOption.RightPlayerNameRate);
-        }
-
-        protected override void OnMeetingEndHook() { }
-        protected override void OnMeetingStartHook() { }
-        protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }
-        protected override void UseAbility(RPCOperator.RpcCaller caller) { }
     }
 
     private static void SetupHudManagerMock()

@@ -45,13 +45,21 @@ public sealed class PoltergeistTests
     [Fact]
     public void Initialize_LoadsOptionsFromLoader()
     {
-        var mockLoader = new Mock<IOptionLoader>();
-        mockLoader.Setup(l => l.GetValue<Poltergeist.Option, float>(Poltergeist.Option.Range)).Returns(2.5f);
+        using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+            ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Poltergeist),
+            "Poltergeist",
+            OptionTab.GhostCrewmateTab,
+            Color.white);
+        factory.CreateFloatOption(Poltergeist.Option.Range, 2.5f, 0.2f, 3.0f, 0.1f);
 
-        var poltergeist = new DummyPoltergeist(mockLoader.Object);
+        var poltergeist = new Poltergeist();
+
         poltergeist.Initialize();
 
-        mockLoader.Verify(l => l.GetValue<Poltergeist.Option, float>(Poltergeist.Option.Range), Times.Once);
+        FieldInfo rangeField = typeof(Poltergeist).GetField("range", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        float rangeVal = (float)rangeField.GetValue(poltergeist)!;
+
+        Assert.Equal(2.5f, rangeVal);
     }
 
     [Fact]
@@ -99,36 +107,6 @@ public sealed class PoltergeistTests
     {
         Poltergeist.DeadbodyMove(255, 1, 0f, 0f, true);
         Poltergeist.DeadbodyMove(255, 1, 0f, 0f, false);
-    }
-
-    private sealed class DummyPoltergeist : GhostRoleBase
-    {
-        private readonly IOptionLoader loader;
-
-        public override IOptionLoader Loader => loader;
-
-        public DummyPoltergeist(IOptionLoader loader) : base(
-            true,
-            ExtremeRoleType.Crewmate,
-            ExtremeGhostRoleId.Poltergeist,
-            ExtremeGhostRoleId.Poltergeist.ToString(),
-            ColorPalette.PoltergeistLightKenpou)
-        {
-            this.loader = loader;
-        }
-
-        public override void CreateAbility() { }
-        public override HashSet<ExtremeRoleId> GetRoleFilter() => new();
-
-        public override void Initialize()
-        {
-            float range = this.Loader.GetValue<Poltergeist.Option, float>(Poltergeist.Option.Range);
-        }
-
-        protected override void OnMeetingEndHook() { }
-        protected override void OnMeetingStartHook() { }
-        protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }
-        protected override void UseAbility(RPCOperator.RpcCaller caller) { }
     }
 
     private static void SetupHudManagerMock()
