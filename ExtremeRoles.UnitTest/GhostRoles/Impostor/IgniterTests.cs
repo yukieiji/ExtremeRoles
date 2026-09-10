@@ -47,16 +47,26 @@ public sealed class IgniterTests
     [Fact]
     public void Initialize_LoadsOptionsFromLoader()
     {
-        var mockLoader = new Mock<IOptionLoader>();
-        mockLoader.Setup(l => l.GetValue<Igniter.IgniterOption, bool>(Igniter.IgniterOption.IsEffectImpostor)).Returns(true);
-        mockLoader.Setup(l => l.GetValue<Igniter.IgniterOption, bool>(Igniter.IgniterOption.IsEffectNeutral)).Returns(true);
+        using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+            ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Igniter),
+            "Igniter",
+            OptionTab.GhostImpostorTab,
+            Color.white);
+        factory.CreateBoolOption(Igniter.IgniterOption.IsEffectImpostor, true);
+        factory.CreateBoolOption(Igniter.IgniterOption.IsEffectNeutral, true);
 
-        var igniter = new DummyIgniter(mockLoader.Object);
+        var igniter = new Igniter();
 
         igniter.Initialize();
 
-        mockLoader.Verify(l => l.GetValue<Igniter.IgniterOption, bool>(Igniter.IgniterOption.IsEffectImpostor), Times.Once);
-        mockLoader.Verify(l => l.GetValue<Igniter.IgniterOption, bool>(Igniter.IgniterOption.IsEffectNeutral), Times.Once);
+        FieldInfo fieldImp = typeof(Igniter).GetField("isEffectImp", BindingFlags.NonPublic | BindingFlags.Static)!;
+        FieldInfo fieldNeut = typeof(Igniter).GetField("isEffectNeut", BindingFlags.NonPublic | BindingFlags.Static)!;
+
+        bool valImp = (bool)fieldImp.GetValue(null)!;
+        bool valNeut = (bool)fieldNeut.GetValue(null)!;
+
+        Assert.True(valImp);
+        Assert.True(valNeut);
     }
 
     [Fact]
@@ -99,37 +109,6 @@ public sealed class IgniterTests
         igniter.CreateAbility();
 
         Assert.NotNull(igniter.Button);
-    }
-
-    private sealed class DummyIgniter : GhostRoleBase
-    {
-        private readonly IOptionLoader loader;
-
-        public override IOptionLoader Loader => loader;
-
-        public DummyIgniter(IOptionLoader loader) : base(
-            false,
-            ExtremeRoleType.Impostor,
-            ExtremeGhostRoleId.Igniter,
-            ExtremeGhostRoleId.Igniter.ToString(),
-            Palette.ImpostorRed)
-        {
-            this.loader = loader;
-        }
-
-        public override void CreateAbility() { }
-        public override HashSet<ExtremeRoleId> GetRoleFilter() => new();
-
-        public override void Initialize()
-        {
-            bool isImp = this.Loader.GetValue<Igniter.IgniterOption, bool>(Igniter.IgniterOption.IsEffectImpostor);
-            bool isNeut = this.Loader.GetValue<Igniter.IgniterOption, bool>(Igniter.IgniterOption.IsEffectNeutral);
-        }
-
-        protected override void OnMeetingEndHook() { }
-        protected override void OnMeetingStartHook() { }
-        protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }
-        protected override void UseAbility(RPCOperator.RpcCaller caller) { }
     }
 
     private static void SetupHudManagerMock()
