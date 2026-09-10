@@ -38,7 +38,7 @@ public static class EndGameManagerSetUpPatch
         setRoleSummary(__instance, gameResult.PlayerSummaries);
         RPCOperator.Initialize();
 
-		ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGameRuntime>().End();
+		ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGameRuntimeEnder>().End();
 	}
 
     private static List<(SingleRoleBase, byte)> setPlayerNameAndRole(

@@ -38,9 +38,14 @@ public partial class ExtremeRolesPlugin
 			.AddSingleton<CompatModManager>();
 
 		collection
-			.AddSingleton<IGameRuntime, GameRuntime>()
 			.AddSingleton<IGameProgress, GameProgress>()
 			.AddScoped<INomalGameRoleContainer, NormalGameRoleContainer>();
+
+		collection
+			.AddSingleton<GameRuntime>()
+			.AddSingleton<IGameRuntime>(x => x.GetRequiredService<GameRuntime>())
+			.AddSingleton<IGameRuntimeStarter>(x => x.GetRequiredService<GameRuntime>())
+			.AddSingleton<IGameRuntimeEnder>(x => x.GetRequiredService<GameRuntime>());
 
 		collection
 			.AddTransient<IRoleAssignee, ExtremeRoleAssignee>()

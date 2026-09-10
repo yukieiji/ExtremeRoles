@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ExtremeRoles.Core;
 
-public sealed class GameRuntime(IServiceScopeFactory factory) : IGameRuntime
+public sealed class GameRuntime(IServiceScopeFactory factory) : IGameRuntime, IGameRuntimeStarter, IGameRuntimeEnder
 {
 	private readonly IServiceScopeFactory _factory = factory;
 	private IGameContext? _current = null;

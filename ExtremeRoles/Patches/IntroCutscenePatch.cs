@@ -218,15 +218,15 @@ public class IntroCutScenceBeginPatch(IModLogger logger, IGameRuntime gameRuntim
 	}
 }
 
-public class IntroCutScenceCoBeginPatchBody(IGameProgress progress, IGameRuntime runtime)
+public class IntroCutScenceCoBeginPatchBody(IGameProgress progress, IGameRuntimeStarter starter)
 {
 	private readonly IGameProgress _progress = progress;
-	private readonly IGameRuntime _runtime = runtime;
+	private readonly IGameRuntimeStarter _starter = starter;
 
 	public bool CoBeginPrefix(
 		IntroCutscene instance, ref Il2CppIEnumerator __result)
 	{
-		_runtime.Start();
+		_starter.Start();
 		_progress.Current = GameProgressSystem.Progress.IntroStart;
 
 		IIntroRunner? runnner = ExtremeGameModeManager.Instance.GetIntroRunner();
