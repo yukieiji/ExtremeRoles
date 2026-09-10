@@ -17,6 +17,7 @@ using ExtremeRoles.Core;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Patches;
+using ExtremeRoles.GameMode;
 
 
 namespace ExtremeRoles;
@@ -120,7 +121,6 @@ public partial class ExtremeRolesPlugin
 			var mng = ExtremeSystemTypeManager.Instance;
 			return mng;
 		});
-
 		return collection.BuildServiceProvider();
 	}
 

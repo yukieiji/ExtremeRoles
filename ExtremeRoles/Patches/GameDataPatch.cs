@@ -1,16 +1,14 @@
-using ExtremeRoles.GameMode;
+using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.GameResult;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Extension.State;
 using HarmonyLib;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtremeRoles.Patches;
 
-[HarmonyPatch(typeof(GameData), nameof(GameData.RecomputeTaskCounts))]
-public static class GameDataRecomputeTaskCountsPatch
+public class GameDataRecomputeTaskCountsPatchBody(IGameProgress progress, IGameRuntime runtime)
 {
 	private const int forceDisableTaskNum = 88659;
 
@@ -18,28 +16,30 @@ public static class GameDataRecomputeTaskCountsPatch
 		GameData.Instance == null ||
 		(GameData.Instance.TotalTasks == forceDisableTaskNum && GameData.Instance.CompletedTasks == 0);
 
-	public static bool Prefix(GameData __instance)
+	public bool Prefix(GameData __instance)
 	{
-		if (!GameProgressSystem.IsGameNow)
+		if (!progress.IsGameNow || !runtime.TryGetGameContext(out var ctx))
 		{
 			return true;
 		}
+		OverridePatch(__instance, ctx);
+		return false;
+	}
+	private void OverridePatch(GameData __instance, IGameContext ctx)
+	{
+		var roles = ctx.Roles.All;
+		var shipOpt = ctx.GlobalOption;
 
-		var roles = Roles.ExtremeRoleManager.GameRole;
-		var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
-
-        if (roles.Count == 0 ||
+		if (roles.Count == 0 ||
 			(shipOpt.DisableTaskWin && shipOpt.DisableTaskWinWhenNoneTaskCrew))
 		{
 			__instance.TotalTasks = forceDisableTaskNum;
 			__instance.CompletedTasks = 0;
-			return false;
+			return;
 		}
-
 		int totalTask = 0;
 		int completedTask = 0;
 		int doTaskCrew = 0;
-
 		foreach (var playerInfo in __instance.AllPlayers.GetFastEnumerator())
 		{
 			if (!(
@@ -50,9 +50,7 @@ public static class GameDataRecomputeTaskCountsPatch
 			{
 				continue;
 			}
-
 			++doTaskCrew;
-
 			foreach (var taskInfo in playerInfo.Tasks.GetFastEnumerator())
 			{
 				++totalTask;
@@ -61,19 +59,30 @@ public static class GameDataRecomputeTaskCountsPatch
 					++completedTask;
 				}
 			}
-
 		}
-
 		if (doTaskCrew == 0 && shipOpt.DisableTaskWinWhenNoneTaskCrew)
-        {
+		{
 			totalTask = forceDisableTaskNum;
 			completedTask = 0;
 		}
-
 		__instance.TotalTasks = totalTask;
 		__instance.CompletedTasks = completedTask;
+	}
+}
 
-		return false;
+
+[HarmonyPatch(typeof(GameData), nameof(GameData.RecomputeTaskCounts))]
+public static class GameDataRecomputeTaskCountsPatch
+{
+	private static GameDataRecomputeTaskCountsPatchBody? _body;
+
+	public static bool Prefix(GameData __instance)
+	{
+		if (_body is null)
+		{
+			_body = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<GameDataRecomputeTaskCountsPatchBody>();
+		}
+		return _body.Prefix(__instance);
 	}
 }
 
