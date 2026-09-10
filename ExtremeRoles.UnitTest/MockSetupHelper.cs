@@ -179,12 +179,12 @@ public static class MockSetupHelper
 
     public static Mock<PlayerControl> SetupPlayerControlMocks()
     {
-        if (MockPlayerControlget_LocalPlayerHelper.Instance == null)
+        if (IMockPlayerControlget_LocalPlayer.Instance == null)
         {
             var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
-            var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+            var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
             mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
-            MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+            IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
             return mockPlayer;
         }
         return Mock<PlayerControl>.Get(PlayerControl.LocalPlayer);
@@ -222,12 +222,12 @@ public static class MockSetupHelper
 
     public static Mock<AmongUsClient> SetupAmongUsClientMock()
     {
-        if (MockAmongUsClientget_InstanceHelper.Instance == null)
+        if (IMockAmongUsClientget_Instance.Instance == null)
         {
             var mockClient = new Mock<AmongUsClient>(IntPtr.Zero);
-            var mockClientHelper = new Mock<MockAmongUsClientget_InstanceHelper>();
+            var mockClientHelper = new Mock<IMockAmongUsClientget_Instance>();
             mockClientHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
-            MockAmongUsClientget_InstanceHelper.Instance = mockClientHelper.Object;
+            IMockAmongUsClientget_Instance.Instance = mockClientHelper.Object;
             return mockClient;
         }
         return Mock<AmongUsClient>.Get(AmongUsClient.Instance);
@@ -235,12 +235,12 @@ public static class MockSetupHelper
 
     public static Mock<LobbyBehaviour> SetupLobbyMock()
     {
-        if (MockLobbyBehaviourget_InstanceHelper.Instance == null)
+        if (IMockLobbyBehaviourget_Instance.Instance == null)
         {
             var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
-            var mockLobbyInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
+            var mockLobbyInstance = new Mock<IMockLobbyBehaviourget_Instance>();
             mockLobbyInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
-            MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyInstance.Object;
+            IMockLobbyBehaviourget_Instance.Instance = mockLobbyInstance.Object;
             return mockLobby;
         }
         return Mock<LobbyBehaviour>.Get(LobbyBehaviour.Instance);
@@ -252,9 +252,9 @@ public static class MockSetupHelper
         var mockList = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>>(IntPtr.Zero);
         mockGameData.SetupGet(g => g.AllPlayers).Returns(mockList.Object);
 
-        var mockGameDataHelper = new Mock<MockGameDataget_InstanceHelper>();
+        var mockGameDataHelper = new Mock<IMockGameDataget_Instance>();
         mockGameDataHelper.Setup(h => h.Invoke()).Returns(mockGameData.Object);
-        MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
+        IMockGameDataget_Instance.Instance = mockGameDataHelper.Object;
 
         return mockGameData;
     }
@@ -448,12 +448,12 @@ public static class MockSetupHelper
 	public static Mock<T> SetupDestroyableSingletonMock<T>() where T : DestroyableSingleton<T>
 	{
 		var mock = new Mock<T>(IntPtr.Zero);
-		var mockSingleton = new Mock<MockDestroyableSingletonget_InstanceHelper<T>>();
-		MockDestroyableSingletonget_InstanceHelper<T>.Instance = mockSingleton.Object;
+		var mockSingleton = new Mock<IMockDestroyableSingletonget_Instance<T>>();
+		IMockDestroyableSingletonget_Instance<T>.Instance = mockSingleton.Object;
 		mockSingleton.Setup(x => x.Invoke()).Returns(mock.Object);
 
-		var mockExists = new Mock<MockDestroyableSingletonget_InstanceExistsHelper<T>>();
-		MockDestroyableSingletonget_InstanceExistsHelper<T>.Instance = mockExists.Object;
+		var mockExists = new Mock<IMockDestroyableSingletonget_InstanceExists<T>>();
+		IMockDestroyableSingletonget_InstanceExists<T>.Instance = mockExists.Object;
 		mockExists.Setup(x => x.Invoke()).Returns(true);
 
 		return mock;
@@ -616,13 +616,13 @@ public static class MockSetupHelper
             .Returns((Action act) => act != null ? new UnityEngine.Events.UnityAction(IntPtr.Zero) : null!);
         MockUnityActionop_ImplicitHelper.Instance = mockUnityActionImplicit.Object;
 
-        var mockDestroy = new Mock<MockObjectDestroyHelper>();
+        var mockDestroy = new Mock<IMockObjectDestroy>();
         mockDestroy.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<float>()));
-        MockObjectDestroyHelper.Instance = mockDestroy.Object;
+        IMockObjectDestroy.Instance = mockDestroy.Object;
 
-        var mockDestroy2 = new Mock<MockObjectDestroyHelper2>();
+        var mockDestroy2 = new Mock<IMockObjectDestroy>();
         mockDestroy2.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()));
-        MockObjectDestroyHelper2.Instance = mockDestroy2.Object;
+        IMockObjectDestroy.Instance = mockDestroy2.Object;
 
         var mockMiscDestroy = new Mock<MockMiscDestroyHelper>();
         mockMiscDestroy.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()));

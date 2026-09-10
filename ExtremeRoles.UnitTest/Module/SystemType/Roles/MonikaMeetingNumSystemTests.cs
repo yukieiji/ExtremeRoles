@@ -21,9 +21,9 @@ public class MonikaMeetingNumSystemTests
 		var mockOptionsMgr = new Mock<GameOptionsManager>(System.IntPtr.Zero);
 		mockOptionsMgr.SetupGet(m => m.currentNormalGameOptions).Returns(mockNormalOptions.Object);
 
-		var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
+		var mockOptionsMgrHelper = new Mock<IMockGameOptionsManagerget_Instance>();
 		mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockOptionsMgr.Object);
-		MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
+		IMockGameOptionsManagerget_Instance.Instance = mockOptionsMgrHelper.Object;
 	}
 
 	[Fact]

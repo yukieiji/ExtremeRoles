@@ -52,15 +52,15 @@ public class PlayerVoteAreaButtonContainerTests
         SpriteRenderer rendererObj = mockRenderer.Object;
         mockCacheBtn.Setup(c => c.TryGetComponent<SpriteRenderer>(out rendererObj)).Returns(true);
 
-        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
+        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns(mockCacheBtn.Object);
-        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
+        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
 
-        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
+        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns(mockCacheBtn.Object);
-        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
+        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
 
         return (mockPva.Object, mockCacheBtn, mockGameObject, mockPassiveBtn, mockRenderer);
     }

@@ -26,9 +26,9 @@ public class RoleAssignCheckpointTests : IDisposable
 		MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 
-		var mockIntroHelper = new Mock<MockIntroCutsceneget_InstanceHelper>();
+		var mockIntroHelper = new Mock<IMockIntroCutsceneget_Instance>();
 		mockIntroHelper.Setup(x => x.Invoke()).Returns((IntroCutscene)null!);
-		MockIntroCutsceneget_InstanceHelper.Instance = mockIntroHelper.Object;
+		IMockIntroCutsceneget_Instance.Instance = mockIntroHelper.Object;
 	}
 
 	[Fact]

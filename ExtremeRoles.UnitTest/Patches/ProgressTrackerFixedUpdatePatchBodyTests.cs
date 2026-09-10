@@ -54,9 +54,9 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		var mockGameManager = new Mock<GameManager>(IntPtr.Zero);
 		mockGameManager.SetupGet(g => g.LogicOptions).Returns(mockLogicOptions.Object);
 
-		var mockGameManagerHelper = new Mock<MockGameManagerget_InstanceHelper>();
+		var mockGameManagerHelper = new Mock<IMockGameManagerget_Instance>();
 		mockGameManagerHelper.Setup(h => h.Invoke()).Returns(mockGameManager.Object);
-		MockGameManagerget_InstanceHelper.Instance = mockGameManagerHelper.Object;
+		IMockGameManagerget_Instance.Instance = mockGameManagerHelper.Object;
 
 		MockSetupHelper.SetupPlayerControlMocks();
 
@@ -76,9 +76,9 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 	[Fact]
 	public void Prefix_WhenGameManagerInstanceNull_ReturnsFalse()
 	{
-		var mockGameManagerHelper = new Mock<MockGameManagerget_InstanceHelper>();
+		var mockGameManagerHelper = new Mock<IMockGameManagerget_Instance>();
 		mockGameManagerHelper.Setup(h => h.Invoke()).Returns((GameManager)null!);
-		MockGameManagerget_InstanceHelper.Instance = mockGameManagerHelper.Object;
+		IMockGameManagerget_Instance.Instance = mockGameManagerHelper.Object;
 
 		MockSetupHelper.SetupPlayerControlMocks();
 
@@ -101,9 +101,9 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		var mockGameManager = new Mock<GameManager>(IntPtr.Zero);
 		mockGameManager.SetupGet(g => g.LogicOptions).Returns((LogicOptions)null!);
 
-		var mockGameManagerHelper = new Mock<MockGameManagerget_InstanceHelper>();
+		var mockGameManagerHelper = new Mock<IMockGameManagerget_Instance>();
 		mockGameManagerHelper.Setup(h => h.Invoke()).Returns(mockGameManager.Object);
-		MockGameManagerget_InstanceHelper.Instance = mockGameManagerHelper.Object;
+		IMockGameManagerget_Instance.Instance = mockGameManagerHelper.Object;
 
 		MockSetupHelper.SetupPlayerControlMocks();
 
@@ -127,9 +127,9 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		var mockGameManager = new Mock<GameManager>(IntPtr.Zero);
 		mockGameManager.SetupGet(g => g.LogicOptions).Returns(mockLogicOptions.Object);
 
-		var mockGameManagerHelper = new Mock<MockGameManagerget_InstanceHelper>();
+		var mockGameManagerHelper = new Mock<IMockGameManagerget_Instance>();
 		mockGameManagerHelper.Setup(h => h.Invoke()).Returns(mockGameManager.Object);
-		MockGameManagerget_InstanceHelper.Instance = mockGameManagerHelper.Object;
+		IMockGameManagerget_Instance.Instance = mockGameManagerHelper.Object;
 
 		MockSetupHelper.SetupPlayerControlMocks();
 
@@ -152,13 +152,13 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		var mockGameManager = new Mock<GameManager>(IntPtr.Zero);
 		mockGameManager.SetupGet(g => g.LogicOptions).Returns(mockLogicOptions.Object);
 
-		var mockGameManagerHelper = new Mock<MockGameManagerget_InstanceHelper>();
+		var mockGameManagerHelper = new Mock<IMockGameManagerget_Instance>();
 		mockGameManagerHelper.Setup(h => h.Invoke()).Returns(mockGameManager.Object);
-		MockGameManagerget_InstanceHelper.Instance = mockGameManagerHelper.Object;
+		IMockGameManagerget_Instance.Instance = mockGameManagerHelper.Object;
 
-		var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+		var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
 		mockLocalHelper.Setup(h => h.Invoke()).Returns((PlayerControl)null!);
-		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+		IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
 		var mockProgressTracker = new Mock<ProgressTracker>(IntPtr.Zero);
 		var mockTileParent = new Mock<MeshRenderer>(IntPtr.Zero);
@@ -175,7 +175,7 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		}
 		finally
 		{
-			MockPlayerControlget_LocalPlayerHelper.Instance = null;
+			IMockPlayerControlget_LocalPlayer.Instance = null;
 			MockSetupHelper.SetupPlayerControlMocks();
 		}
 	}
@@ -331,9 +331,9 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		mockTileParent.SetupGet(t => t.enabled).Returns(false);
 		mockProgressTracker.SetupGet(p => p.TileParent).Returns(mockTileParent.Object);
 
-		var mockGameDataHelper = new Mock<MockGameDataget_InstanceHelper>();
+		var mockGameDataHelper = new Mock<IMockGameDataget_Instance>();
 		mockGameDataHelper.Setup(h => h.Invoke()).Returns((GameData)null!);
-		MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
+		IMockGameDataget_Instance.Instance = mockGameDataHelper.Object;
 
 		var patchBody = new ProgressTrackerFixedUpdatePatchBody(mockProgress.Object, mockRuntime.Object);
 		patchBody.Postfix(mockProgressTracker.Object);
@@ -367,9 +367,9 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		var mockGameData = new Mock<GameData>(IntPtr.Zero);
 		mockGameData.SetupGet(g => g.TotalTasks).Returns(0);
 
-		var mockGameDataHelper = new Mock<MockGameDataget_InstanceHelper>();
+		var mockGameDataHelper = new Mock<IMockGameDataget_Instance>();
 		mockGameDataHelper.Setup(h => h.Invoke()).Returns(mockGameData.Object);
-		MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
+		IMockGameDataget_Instance.Instance = mockGameDataHelper.Object;
 
 		var patchBody = new ProgressTrackerFixedUpdatePatchBody(mockProgress.Object, mockRuntime.Object);
 		patchBody.Postfix(mockProgressTracker.Object);
@@ -410,9 +410,9 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		mockProgressTracker.SetupGet(p => p.gameObject).Returns(mockGameObject.Object);
 
 		// TutorialManager Setup (false)
-		var mockTutorialExists = new Mock<MockDestroyableSingletonget_InstanceExistsHelper<TutorialManager>>();
+		var mockTutorialExists = new Mock<IMockDestroyableSingletonget_InstanceExists<TutorialManager>>();
 		mockTutorialExists.Setup(h => h.Invoke()).Returns(false);
-		MockDestroyableSingletonget_InstanceExistsHelper<TutorialManager>.Instance = mockTutorialExists.Object;
+		IMockDestroyableSingletonget_InstanceExists<TutorialManager>.Instance = mockTutorialExists.Object;
 
 		// GameOptionsManager Setup (NumImpostors = 2)
 		var mockGameOptions = new Mock<IGameOptions>(IntPtr.Zero);
@@ -421,9 +421,9 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		var mockGameOptionsManager = new Mock<GameOptionsManager>(IntPtr.Zero);
 		mockGameOptionsManager.SetupGet(g => g.CurrentGameOptions).Returns(mockGameOptions.Object);
 
-		var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
+		var mockOptionsMgrHelper = new Mock<IMockGameOptionsManagerget_Instance>();
 		mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockGameOptionsManager.Object);
-		MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
+		IMockGameOptionsManagerget_Instance.Instance = mockOptionsMgrHelper.Object;
 
 		// GameData Setup
 		// PlayerCount = 10, TotalTasks = 20, CompletedTasks = 10
@@ -444,9 +444,9 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		mockPlayerList.Setup(l => l.ToArray()).Returns(new Il2CppReferenceArray<NetworkedPlayerInfo>(playerArray));
 		mockGameData.SetupGet(g => g.AllPlayers).Returns(mockPlayerList.Object);
 
-		var mockGameDataHelper = new Mock<MockGameDataget_InstanceHelper>();
+		var mockGameDataHelper = new Mock<IMockGameDataget_Instance>();
 		mockGameDataHelper.Setup(h => h.Invoke()).Returns(mockGameData.Object);
-		MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
+		IMockGameDataget_Instance.Instance = mockGameDataHelper.Object;
 
 		var patchBody = new ProgressTrackerFixedUpdatePatchBody(mockProgress.Object, mockRuntime.Object);
 		patchBody.Postfix(mockProgressTracker.Object);
@@ -491,9 +491,9 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		mockProgressTracker.SetupGet(p => p.gameObject).Returns(mockGameObject.Object);
 
 		// TutorialManager Setup (true)
-		var mockTutorialExists = new Mock<MockDestroyableSingletonget_InstanceExistsHelper<TutorialManager>>();
+		var mockTutorialExists = new Mock<IMockDestroyableSingletonget_InstanceExists<TutorialManager>>();
 		mockTutorialExists.Setup(h => h.Invoke()).Returns(true);
-		MockDestroyableSingletonget_InstanceExistsHelper<TutorialManager>.Instance = mockTutorialExists.Object;
+		IMockDestroyableSingletonget_InstanceExists<TutorialManager>.Instance = mockTutorialExists.Object;
 
 		// GameData Setup
 		// PlayerCount = 1, TotalTasks = 10, CompletedTasks = 5
@@ -511,9 +511,9 @@ public class ProgressTrackerFixedUpdatePatchBodyTests : IDisposable
 		mockPlayerList.Setup(l => l.ToArray()).Returns(new Il2CppReferenceArray<NetworkedPlayerInfo>(playerArray));
 		mockGameData.SetupGet(g => g.AllPlayers).Returns(mockPlayerList.Object);
 
-		var mockGameDataHelper = new Mock<MockGameDataget_InstanceHelper>();
+		var mockGameDataHelper = new Mock<IMockGameDataget_Instance>();
 		mockGameDataHelper.Setup(h => h.Invoke()).Returns(mockGameData.Object);
-		MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
+		IMockGameDataget_Instance.Instance = mockGameDataHelper.Object;
 
 		var patchBody = new ProgressTrackerFixedUpdatePatchBody(mockProgress.Object, mockRuntime.Object);
 		patchBody.Postfix(mockProgressTracker.Object);

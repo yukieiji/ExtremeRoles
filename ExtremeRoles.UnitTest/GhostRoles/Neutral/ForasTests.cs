@@ -226,15 +226,15 @@ public sealed class ForasTests
         mockUseButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
         mockUseButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
 
-        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
+        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
+        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
 
-        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
+        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
+        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
 
         var mockUnityActionImplicit = new Mock<MockUnityActionop_ImplicitHelper>();
         mockUnityActionImplicit.Setup(x => x.Invoke(It.IsAny<Action>()))

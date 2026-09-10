@@ -29,17 +29,17 @@ public sealed class SpecialRoleWinCheckerTests
         }
 
         var mockClient = new Mock<AmongUsClient>();
-        var mockHelper = new Mock<MockAmongUsClientget_InstanceHelper>();
+        var mockHelper = new Mock<IMockAmongUsClientget_Instance>();
         mockHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
-        MockAmongUsClientget_InstanceHelper.Instance = mockHelper.Object;
+        IMockAmongUsClientget_Instance.Instance = mockHelper.Object;
 
         var mockWriter = new Mock<Hazel.MessageWriter>(IntPtr.Zero);
         mockClient.Setup(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<Hazel.SendOption>(), It.IsAny<int>())).Returns(mockWriter.Object);
 
         var mockLocalPlayer = new Mock<PlayerControl>();
         mockLocalPlayer.SetupGet(p => p.NetId).Returns(1u);
-        var mockPlayerHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
-        MockPlayerControlget_LocalPlayerHelper.Instance = mockPlayerHelper.Object;
+        var mockPlayerHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
+        IMockPlayerControlget_LocalPlayer.Instance = mockPlayerHelper.Object;
         mockPlayerHelper.Setup(x => x.Invoke()).Returns(mockLocalPlayer.Object);
     }
 
