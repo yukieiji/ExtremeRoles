@@ -142,9 +142,9 @@ public class MeetingReporterTests : IDisposable
         var mockPlayer = new Mock<PlayerControl>();
         mockPlayer.SetupGet(p => p.PlayerId).Returns(localId);
 
-        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
+        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
         mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
-        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
+        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
 
         var mockSerializer = new Mock<IStringSerializer>();
 
@@ -187,9 +187,9 @@ public class MeetingReporterTests : IDisposable
         var mockPlayer = new Mock<PlayerControl>();
         mockPlayer.SetupGet(p => p.PlayerId).Returns(localId);
 
-        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
+        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
         mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
-        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
+        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
 
         var mockReader = new Mock<MessageReader>();
         int readByteCall = 0;
@@ -231,9 +231,9 @@ public class MeetingReporterTests : IDisposable
         var mockPlayer = new Mock<PlayerControl>();
         mockPlayer.SetupGet(p => p.PlayerId).Returns(localId);
 
-        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
+        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
         mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
-        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
+        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
 
         var mockReader = new Mock<MessageReader>();
         int readByteCall = 0;

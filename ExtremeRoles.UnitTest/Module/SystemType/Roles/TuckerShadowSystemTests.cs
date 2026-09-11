@@ -13,13 +13,13 @@ public class TuckerShadowSystemTests
 	{
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 
-		var mockMeetingHudHelper = new Mock<IMockMeetingHudget_Instance>();
+		var mockMeetingHudHelper = new Mock<MockMeetingHudget_InstanceHelper>();
 		mockMeetingHudHelper.Setup(x => x.Invoke()).Returns((MeetingHud)null!);
-		IMockMeetingHudget_Instance.Instance = mockMeetingHudHelper.Object;
+		MockMeetingHudget_InstanceHelper.Instance = mockMeetingHudHelper.Object;
 
-		var mockExileHelper = new Mock<IMockExileControllerget_Instance>();
+		var mockExileHelper = new Mock<MockExileControllerget_InstanceHelper>();
 		mockExileHelper.Setup(x => x.Invoke()).Returns((ExileController)null!);
-		IMockExileControllerget_Instance.Instance = mockExileHelper.Object;
+		MockExileControllerget_InstanceHelper.Instance = mockExileHelper.Object;
 	}
 
 	[Fact]

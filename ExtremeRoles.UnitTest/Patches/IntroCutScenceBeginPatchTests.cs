@@ -129,38 +129,38 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 
 	private static void SetupInstantiateMocks()
 	{
-		var m5 = new Mock<IMockObjectInstantiate>();
+		var m5 = new Mock<MockObjectInstantiateHelper5>();
 		m5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
 			.Returns((UnityEngine.Object orig, Transform parent) => orig);
-		IMockObjectInstantiate.Instance = m5.Object;
+		MockObjectInstantiateHelper5.Instance = m5.Object;
 
-		var m7 = new Mock<IMockObjectInstantiate>();
+		var m7 = new Mock<MockObjectInstantiateHelper7>();
 		m7.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()))
 			.Returns((UnityEngine.Object orig) => orig);
-		IMockObjectInstantiate.Instance = m7.Object;
+		MockObjectInstantiateHelper7.Instance = m7.Object;
 
-		var m10 = new Mock<IMockObjectInstantiate>();
+		var m10 = new Mock<MockObjectInstantiateHelper10>();
 		m10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
 			.Returns((UnityEngine.Object orig, Transform parent) => orig);
-		IMockObjectInstantiate.Instance = m10.Object;
+		MockObjectInstantiateHelper10.Instance = m10.Object;
 	}
 
 	private static void SetupInstantiateReturn(UnityEngine.Object returnObj)
 	{
-		var m5 = new Mock<IMockObjectInstantiate>();
+		var m5 = new Mock<MockObjectInstantiateHelper5>();
 		m5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
 			.Returns((UnityEngine.Object orig, Transform parent) => returnObj);
-		IMockObjectInstantiate.Instance = m5.Object;
+		MockObjectInstantiateHelper5.Instance = m5.Object;
 
-		var m7 = new Mock<IMockObjectInstantiate>();
+		var m7 = new Mock<MockObjectInstantiateHelper7>();
 		m7.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()))
 			.Returns((UnityEngine.Object orig) => returnObj);
-		IMockObjectInstantiate.Instance = m7.Object;
+		MockObjectInstantiateHelper7.Instance = m7.Object;
 
-		var m10 = new Mock<IMockObjectInstantiate>();
+		var m10 = new Mock<MockObjectInstantiateHelper10>();
 		m10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
 			.Returns((UnityEngine.Object orig, Transform parent) => returnObj);
-		IMockObjectInstantiate.Instance = m10.Object;
+		MockObjectInstantiateHelper10.Instance = m10.Object;
 	}
 
 	#region IntroCutScenceBeginPatch Tests
@@ -237,9 +237,9 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		var fakePlayer = new Mock<PlayerControl>(IntPtr.Zero);
 		fakePlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
 
-		var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
+		var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
 		mockLocalHelper.Setup(h => h.Invoke()).Returns(localPlayer.Object);
-		IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
+		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
 
 		// Setup role with IRoleFakeIntro status
 		var mockStatus = new Mock<IRoleFakeIntro>();
@@ -294,9 +294,9 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		var fakePlayer = new Mock<PlayerControl>(IntPtr.Zero);
 		fakePlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
 
-		var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
+		var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
 		mockLocalHelper.Setup(h => h.Invoke()).Returns(localPlayer.Object);
-		IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
+		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
 
 		var mockStatus = new Mock<IRoleFakeIntro>();
 		mockStatus.SetupGet(s => s.FakeTeam).Returns(ExtremeRoleType.Impostor);
@@ -614,7 +614,7 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		ExtremeGameModeManager.Create(GameModes.None);
 
 		var progress = new Mock<IGameProgress>();
-		var runtime = new Mock<IGameRuntime>();
+		var runtime = new Mock<IGameRuntimeStarter>();
 
 		var patchBody = new IntroCutScenceCoBeginPatchBody(progress.Object, runtime.Object);
 		var mockIntro = new Mock<IntroCutscene>(IntPtr.Zero);

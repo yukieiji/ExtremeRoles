@@ -58,8 +58,8 @@ public class PlayerVoteAreaButtonPostionComputerTests
         var mockUiElement = new Mock<UiElement>(IntPtr.Zero);
         mockUiElement.SetupGet(x => x.name).Returns("TestElement");
 
-        var mockLerpHelper = new Mock<IMockEffectsLerp>();
-        IMockEffectsLerp.Instance = mockLerpHelper.Object;
+        var mockLerpHelper = new Mock<MockEffectsLerpHelper>();
+        MockEffectsLerpHelper.Instance = mockLerpHelper.Object;
 
         var computer = new PlayerVoteAreaButtonPostionComputer(0.5f, mockUiElement.Object, 0.65f);
 

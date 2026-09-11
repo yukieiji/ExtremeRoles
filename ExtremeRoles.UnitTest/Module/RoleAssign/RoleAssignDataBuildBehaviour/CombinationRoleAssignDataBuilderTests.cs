@@ -38,9 +38,9 @@ public class CombinationRoleAssignDataBuilderTests
         mockOptionsMgr.SetupGet(m => m.currentGameOptions).Returns(mockOptions.Object);
         mockOptionsMgr.SetupGet(m => m.CurrentGameOptions).Returns(mockOptions.Object);
 
-        var mockOptionsMgrHelper = new Mock<IMockGameOptionsManagerget_Instance>();
+        var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
         mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockOptionsMgr.Object);
-        IMockGameOptionsManagerget_Instance.Instance = mockOptionsMgrHelper.Object;
+        MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
 
         if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
         {

@@ -60,9 +60,9 @@ public class FullScreenFlasherTests
     [Fact]
     public void Flash_WhenHudManagerInstanceIsNull_DoesNotThrow()
     {
-        var mockSingleton = new Mock<IMockDestroyableSingletonget_Instance<HudManager>>();
+        var mockSingleton = new Mock<MockDestroyableSingletonget_InstanceHelper<HudManager>>();
         mockSingleton.Setup(x => x.Invoke()).Returns((HudManager)null!);
-        IMockDestroyableSingletonget_Instance<HudManager>.Instance = mockSingleton.Object;
+        MockDestroyableSingletonget_InstanceHelper<HudManager>.Instance = mockSingleton.Object;
 
         var flasher = new FullScreenFlasher(Color.red);
         flasher.Flash();
@@ -87,21 +87,21 @@ public class FullScreenFlasherTests
         hudMock.SetupGet(h => h.transform).Returns(mockTransform.Object);
 
         float passedDuration = 0f;
-        var mockLerpHelper = new Mock<IMockEffectsLerp>();
+        var mockLerpHelper = new Mock<MockEffectsLerpHelper>();
         mockLerpHelper.Setup(x => x.Invoke(It.IsAny<float>(), It.IsAny<Il2CppSystem.Action<float>>()))
             .Callback<float, Il2CppSystem.Action<float>>((d, _) => passedDuration = d)
             .Returns((Il2CppSystem.Collections.IEnumerator)null!);
-        IMockEffectsLerp.Instance = mockLerpHelper.Object;
+        MockEffectsLerpHelper.Instance = mockLerpHelper.Object;
 
-        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => mockRenderer.Object);
-        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
+        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
 
-        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => mockRenderer.Object);
-        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
+        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
 
         var flasher = new FullScreenFlasher(Color.red, 1.0f, 0.5f, 0.5f, 0.5f);
 
@@ -136,20 +136,20 @@ public class FullScreenFlasherTests
         hudMock.SetupGet(h => h.FullScreen).Returns(mockRenderer.Object);
         hudMock.SetupGet(h => h.transform).Returns(mockTransform.Object);
 
-        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => mockRenderer.Object);
-        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
+        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
 
-        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => mockRenderer.Object);
-        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
+        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
 
-        var mockLerpHelper = new Mock<IMockEffectsLerp>();
+        var mockLerpHelper = new Mock<MockEffectsLerpHelper>();
         mockLerpHelper.Setup(x => x.Invoke(It.IsAny<float>(), It.IsAny<Il2CppSystem.Action<float>>()))
             .Returns((Il2CppSystem.Collections.IEnumerator)null!);
-        IMockEffectsLerp.Instance = mockLerpHelper.Object;
+        MockEffectsLerpHelper.Instance = mockLerpHelper.Object;
 
         var flasher = new FullScreenFlasher(Color.red, 1.0f, 0.5f, 0.5f, 0.5f);
         flasher.Flash();
@@ -201,20 +201,20 @@ public class FullScreenFlasherTests
         hudMock.SetupGet(h => h.FullScreen).Returns(mockRenderer.Object);
         hudMock.SetupGet(h => h.transform).Returns(mockTransform.Object);
 
-        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => mockRenderer.Object);
-        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
+        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
 
-        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => mockRenderer.Object);
-        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
+        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
 
-        var mockLerpHelper = new Mock<IMockEffectsLerp>();
+        var mockLerpHelper = new Mock<MockEffectsLerpHelper>();
         mockLerpHelper.Setup(x => x.Invoke(It.IsAny<float>(), It.IsAny<Il2CppSystem.Action<float>>()))
             .Returns((Il2CppSystem.Collections.IEnumerator)null!);
-        IMockEffectsLerp.Instance = mockLerpHelper.Object;
+        MockEffectsLerpHelper.Instance = mockLerpHelper.Object;
 
         var flasher = new FullScreenFlasher(Color.red);
         flasher.Flash();
@@ -248,24 +248,24 @@ public class FullScreenFlasherTests
         hudMock.SetupGet(h => h.FullScreen).Returns(mockRenderer.Object);
         hudMock.SetupGet(h => h.transform).Returns(mockTransform.Object);
 
-        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => mockRenderer.Object);
-        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
+        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
 
-        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => mockRenderer.Object);
-        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
+        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
 
-        var mockLerpHelper = new Mock<IMockEffectsLerp>();
+        var mockLerpHelper = new Mock<MockEffectsLerpHelper>();
         mockLerpHelper.Setup(x => x.Invoke(It.IsAny<float>(), It.IsAny<Il2CppSystem.Action<float>>()))
             .Returns((Il2CppSystem.Collections.IEnumerator)null!);
-        IMockEffectsLerp.Instance = mockLerpHelper.Object;
+        MockEffectsLerpHelper.Instance = mockLerpHelper.Object;
 
-        var mockDestroy = new Mock<IMockObjectDestroy>();
+        var mockDestroy = new Mock<MockObjectDestroyHelper2>();
         mockDestroy.Setup(d => d.Invoke(It.IsAny<UnityEngine.Object>()));
-        IMockObjectDestroy.Instance = mockDestroy.Object;
+        MockObjectDestroyHelper2.Instance = mockDestroy.Object;
 
         var flasher = new FullScreenFlasher(Color.red);
         flasher.Flash();
@@ -285,9 +285,9 @@ public class FullScreenFlasherTests
     [Fact]
     public void FullScreenRepeatFlasherWithAudio_SetActive_WhenHudNull_DoesNothing()
     {
-        var mockSingleton = new Mock<IMockDestroyableSingletonget_Instance<HudManager>>();
+        var mockSingleton = new Mock<MockDestroyableSingletonget_InstanceHelper<HudManager>>();
         mockSingleton.Setup(x => x.Invoke()).Returns((HudManager)null!);
-        IMockDestroyableSingletonget_Instance<HudManager>.Instance = mockSingleton.Object;
+        MockDestroyableSingletonget_InstanceHelper<HudManager>.Instance = mockSingleton.Object;
 
         var flasher = new FullScreenRepeatFlasherWithAudio(null, Color.yellow);
         flasher.SetActive(true);
@@ -337,9 +337,9 @@ public class FullScreenFlasherTests
         var hudMock = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
 
         var mockSoundManager = new Mock<SoundManager>(IntPtr.Zero);
-        var mockSoundInstanceHelper = new Mock<IMockSoundManagerget_Instance>();
+        var mockSoundInstanceHelper = new Mock<MockSoundManagerget_InstanceHelper>();
         mockSoundInstanceHelper.Setup(x => x.Invoke()).Returns(mockSoundManager.Object);
-        IMockSoundManagerget_Instance.Instance = mockSoundInstanceHelper.Object;
+        MockSoundManagerget_InstanceHelper.Instance = mockSoundInstanceHelper.Object;
 
         var mockTransform = new Mock<Transform>(IntPtr.Zero);
         var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
@@ -353,15 +353,15 @@ public class FullScreenFlasherTests
         hudMock.SetupGet(h => h.FullScreen).Returns(mockRenderer.Object);
         hudMock.SetupGet(h => h.transform).Returns(mockTransform.Object);
 
-        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => mockRenderer.Object);
-        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
+        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
 
-        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => mockRenderer.Object);
-        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
+        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
 
         var flasher = new FullScreenRepeatFlasherWithAudio(null, Color.yellow);
 
