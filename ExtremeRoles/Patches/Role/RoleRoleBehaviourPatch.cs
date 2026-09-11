@@ -8,6 +8,8 @@ using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Core.Abstract;
 using Microsoft.Extensions.DependencyInjection;
 
+#nullable enable
+
 namespace ExtremeRoles.Patches.Role;
 
 public class RoleBehaviourGetAbilityDistancePatchBody(IGameProgress progress, IGameRuntime runtime)
@@ -114,7 +116,6 @@ public static class RoleBehaviourGetAbilityDistancePatch
 		{
 			_body = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<RoleBehaviourGetAbilityDistancePatchBody>();
 		}
-
 		return _body.Prefix(__instance, ref __result);
 	}
 }

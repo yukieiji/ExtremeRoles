@@ -19,6 +19,7 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.Patches;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches.Ship;
+using ExtremeRoles.Patches.Role;
 
 
 namespace ExtremeRoles;
@@ -133,6 +134,9 @@ public partial class ExtremeRolesPlugin
 
 			.AddSingleton<ShipStatusOnEnablePatchBody>()
 			.AddSingleton<ShipStatusPrespawnStepPatchBody>()
+
+			.AddSingleton<RoleBehaviourGetAbilityDistancePatchBody>()
+			.AddSingleton<RoleBehaviourIsValidTargetPatchBody>()
 
 			.AddSingleton<IntroCutScenceBeginPatch>()
 			.AddSingleton<IntroCutScenceCoBeginPatchBody>()
