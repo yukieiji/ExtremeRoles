@@ -20,6 +20,7 @@ using ExtremeRoles.Patches;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches.Ship;
 using ExtremeRoles.Patches.Role;
+using ExtremeRoles.Patches.Player;
 
 
 namespace ExtremeRoles;
@@ -131,6 +132,8 @@ public partial class ExtremeRolesPlugin
 		collection
 			.AddSingleton<ProgressTrackerFixedUpdatePatchBody>()
 			.AddSingleton<PlayerPhysicsFixedUpdatePatchBody>()
+
+			.AddSingleton<PlayerControlShapeshiftPatchBody>()
 
 			.AddSingleton<ShipStatusOnEnablePatchBody>()
 			.AddSingleton<ShipStatusPrespawnStepPatchBody>()
