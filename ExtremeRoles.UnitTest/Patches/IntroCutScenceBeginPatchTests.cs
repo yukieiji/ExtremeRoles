@@ -30,14 +30,12 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 {
 	private class DummySingleRole : SingleRoleBase
 	{
+		public override IStatusModel? Status { get; }
+
 		public DummySingleRole(RoleCore core, IStatusModel? status = null)
 			: base(new RoleArgs(core, RoleProp.None))
 		{
-			if (status != null)
-			{
-				var statusField = typeof(SingleRoleBase).GetField("<Status>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-				statusField?.SetValue(this, status);
-			}
+			this.Status = status;
 		}
 
 		protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }
