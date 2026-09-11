@@ -151,7 +151,7 @@ public sealed class SubmergedIntegratorTests : IDisposable
 {
 	private static readonly IGameOptions globalGameOptions;
 	private static readonly GameOptionsManager globalGameOptionsManager;
-	private static readonly Mock<IMockGameOptionsManagerget_Instance> globalOptionsHelper = new();
+	private static readonly Mock<MockGameOptionsManagerget_InstanceHelper> globalOptionsHelper = new();
 
 	private const TaskTypes CustomTaskTypeVal = (TaskTypes)123;
 
@@ -182,7 +182,7 @@ public sealed class SubmergedIntegratorTests : IDisposable
 	private void ResetState()
 	{
 		globalOptionsHelper.Setup(h => h.Invoke()).Returns(globalGameOptionsManager);
-		IMockGameOptionsManagerget_Instance.Instance = globalOptionsHelper.Object;
+		MockGameOptionsManagerget_InstanceHelper.Instance = globalOptionsHelper.Object;
 
 		VentPatchData.InTransitionValue = false;
 		FloorHandler.HandlerInstance = null;
@@ -452,9 +452,9 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		mockShip.SetupGet(s => s.SpawnRadius).Returns(2.0f);
 		mockShip.SetupGet(s => s.InitialSpawnCenter).Returns(new Vector2(0f, 0f));
 
-		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
-		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
 		var mockGameData = MockSetupHelper.SetupGameDataMock();
 		mockGameData.SetupGet(g => g.PlayerCount).Returns(5);
@@ -664,9 +664,9 @@ public sealed class SubmergedIntegratorTests : IDisposable
 
 		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
-		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
-		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
 		// Act
 		integrator.RepairCustomSabotage(CustomTaskTypeVal);
@@ -684,9 +684,9 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		var integrator = CreateSubmergedIntegrator();
 
 		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
-		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
-		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
 		// Act
 		integrator.RepairCustomSabotage(TaskTypes.FixLights);
@@ -704,9 +704,9 @@ public sealed class SubmergedIntegratorTests : IDisposable
 
 		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
-		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
-		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
 		// Act
 		integrator.RepairCustomSabotage();

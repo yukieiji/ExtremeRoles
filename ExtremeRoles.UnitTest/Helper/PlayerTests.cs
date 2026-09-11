@@ -29,10 +29,10 @@ public class PlayerTests : IDisposable
     private static readonly GameData globalGameData;
     private static readonly ShipStatus globalShipStatus;
 
-    private static readonly Mock<IMockGameDataget_Instance> globalGameDataHelper = new();
-    private static readonly Mock<IMockShipStatusget_Instance> globalShipHelper = new();
-    private static readonly Mock<IMockGameOptionsManagerget_Instance> globalOptionsHelper = new();
-    private static readonly Mock<IMockRoleBehaviourGetTempPlayerList> globalGetTempHelper = new();
+    private static readonly Mock<MockGameDataget_InstanceHelper> globalGameDataHelper = new();
+    private static readonly Mock<MockShipStatusget_InstanceHelper> globalShipHelper = new();
+    private static readonly Mock<MockGameOptionsManagerget_InstanceHelper> globalOptionsHelper = new();
+    private static readonly Mock<MockRoleBehaviourGetTempPlayerListHelper> globalGetTempHelper = new();
 
     static PlayerTests()
     {
@@ -68,18 +68,18 @@ public class PlayerTests : IDisposable
         ExtremeRoles.GameMode.ExtremeGameModeManager.Create(AmongUs.GameOptions.GameModes.Normal);
 
         globalGameDataHelper.Setup(h => h.Invoke()).Returns(globalGameData);
-        IMockGameDataget_Instance.Instance = globalGameDataHelper.Object;
+        MockGameDataget_InstanceHelper.Instance = globalGameDataHelper.Object;
 
         globalShipHelper.Setup(h => h.Invoke()).Returns(globalShipStatus);
-        IMockShipStatusget_Instance.Instance = globalShipHelper.Object;
+        MockShipStatusget_InstanceHelper.Instance = globalShipHelper.Object;
 
         globalOptionsHelper.Setup(h => h.Invoke()).Returns(globalGameOptionsManager);
-        IMockGameOptionsManagerget_Instance.Instance = globalOptionsHelper.Object;
+        MockGameOptionsManagerget_InstanceHelper.Instance = globalOptionsHelper.Object;
 
         var emptyList = new Mock<Il2CppSystem.Collections.Generic.List<PlayerControl>>(IntPtr.Zero);
         emptyList.SetupGet(l => l.Count).Returns(0);
         globalGetTempHelper.Setup(h => h.Invoke()).Returns(emptyList.Object);
-        IMockRoleBehaviourGetTempPlayerList.Instance = globalGetTempHelper.Object;
+        MockRoleBehaviourGetTempPlayerListHelper.Instance = globalGetTempHelper.Object;
     }
 
 
@@ -140,9 +140,9 @@ public class PlayerTests : IDisposable
     [Fact]
     public void TryGetPlayerInfo_WhenGameDataNull_ReturnsFalseAndNull()
     {
-        var mockHelper = new Mock<IMockGameDataget_Instance>();
+        var mockHelper = new Mock<MockGameDataget_InstanceHelper>();
         mockHelper.Setup(h => h.Invoke()).Returns((GameData)null!);
-        IMockGameDataget_Instance.Instance = mockHelper.Object;
+        MockGameDataget_InstanceHelper.Instance = mockHelper.Object;
 
         bool result = Player.TryGetPlayerInfo(1, out var info);
 
@@ -157,9 +157,9 @@ public class PlayerTests : IDisposable
         var mockInfo = new Mock<NetworkedPlayerInfo>();
         mockGameData.Setup(g => g.GetPlayerById(1)).Returns(mockInfo.Object);
 
-        var mockHelper = new Mock<IMockGameDataget_Instance>();
+        var mockHelper = new Mock<MockGameDataget_InstanceHelper>();
         mockHelper.Setup(h => h.Invoke()).Returns(mockGameData.Object);
-        IMockGameDataget_Instance.Instance = mockHelper.Object;
+        MockGameDataget_InstanceHelper.Instance = mockHelper.Object;
 
         bool result = Player.TryGetPlayerInfo(1, out var info);
 
@@ -251,9 +251,9 @@ public class PlayerTests : IDisposable
         var mockLocalPlayer = new Mock<PlayerControl>();
         mockLocalPlayer.SetupGet(p => p.Data).Returns(mockInfo.Object);
 
-        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
+        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
         mockLocalHelper.Setup(h => h.Invoke()).Returns(mockLocalPlayer.Object);
-        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
+        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
 
         var target = Player.GetClosestPlayerInKillRange();
 
@@ -523,9 +523,9 @@ public class PlayerTests : IDisposable
         var mockSourcePlayer = new Mock<PlayerControl>();
         var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
-        var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+        var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
         mockShipHelper.Setup(h => h.Invoke()).Returns((ShipStatus)null!);
-        IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+        MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
         var result = Player.GetAllPlayerInRange(mockSourcePlayer.Object, sourceRole, 5.0f);
 
@@ -539,9 +539,9 @@ public class PlayerTests : IDisposable
         var mockSourcePlayer = new Mock<PlayerControl>();
         var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
-        var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+        var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
         mockShipHelper.Setup(h => h.Invoke()).Returns((ShipStatus)null!);
-        IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+        MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
         bool found = Player.TryGetClosestPlayerInRange(mockSourcePlayer.Object, sourceRole, 5.0f, out var targetPlayer);
 
@@ -555,13 +555,13 @@ public class PlayerTests : IDisposable
         var mockLocalPlayer = new Mock<PlayerControl>();
         var sourceRole = new ExtremeRoles.Roles.Solo.Neutral.Jester();
 
-        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
+        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
         mockLocalHelper.Setup(h => h.Invoke()).Returns(mockLocalPlayer.Object);
-        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
+        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
 
-        var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+        var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
         mockShipHelper.Setup(h => h.Invoke()).Returns((ShipStatus)null!);
-        IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+        MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
         bool found = Player.TryGetClosestPlayerInRange(sourceRole, 5.0f, out var targetPlayer);
 

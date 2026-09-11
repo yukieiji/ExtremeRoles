@@ -298,9 +298,9 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 
 		mockProgress.SetupGet(p => p.IsTaskPhase).Returns(true);
 
-		var mockGameDataHelper = new Mock<IMockGameDataget_Instance>();
+		var mockGameDataHelper = new Mock<MockGameDataget_InstanceHelper>();
 		mockGameDataHelper.Setup(h => h.Invoke()).Returns((GameData)null!);
-		IMockGameDataget_Instance.Instance = mockGameDataHelper.Object;
+		MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
 
 		var patchBody = new PlayerPhysicsFixedUpdatePatchBody(mockSystem.Object, mockProgress.Object, mockRuntime.Object);
 		var mockPhysics = CreateMockPhysics(out var mockBody, out var mockPlayer);
@@ -325,9 +325,9 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 		mockProgress.SetupGet(p => p.IsTaskPhase).Returns(true);
 
 		var mockGameData = new Mock<GameData>(IntPtr.Zero);
-		var mockGameDataHelper = new Mock<IMockGameDataget_Instance>();
+		var mockGameDataHelper = new Mock<MockGameDataget_InstanceHelper>();
 		mockGameDataHelper.Setup(h => h.Invoke()).Returns(mockGameData.Object);
-		IMockGameDataget_Instance.Instance = mockGameDataHelper.Object;
+		MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
 
 		IGameContext? ctx = null;
 		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(false);
@@ -355,9 +355,9 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 		mockProgress.SetupGet(p => p.IsTaskPhase).Returns(true);
 
 		var mockGameData = new Mock<GameData>(IntPtr.Zero);
-		var mockGameDataHelper = new Mock<IMockGameDataget_Instance>();
+		var mockGameDataHelper = new Mock<MockGameDataget_InstanceHelper>();
 		mockGameDataHelper.Setup(h => h.Invoke()).Returns(mockGameData.Object);
-		IMockGameDataget_Instance.Instance = mockGameDataHelper.Object;
+		MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
 
 		var role = new SpecialCrew();
 		role.IsBoost = true;

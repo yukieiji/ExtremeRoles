@@ -20,17 +20,17 @@ public sealed class ExtremeGameEndCheckerTests
     private static void SetupMocks()
     {
         var mockShipStatus = new Mock<ShipStatus>();
-        var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+        var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
         mockShipHelper.Setup(h => h.Invoke()).Returns(mockShipStatus.Object);
-        IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+        MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
         var dict = new Mock<Il2CppSystem.Collections.Generic.Dictionary<SystemTypes, ISystemType>>(System.IntPtr.Zero);
         mockShipStatus.SetupGet(s => s.Systems).Returns(dict.Object);
 
         var mockData = new Mock<GameData>();
-        var mockDataHelper = new Mock<IMockGameDataget_Instance>();
+        var mockDataHelper = new Mock<MockGameDataget_InstanceHelper>();
         mockDataHelper.Setup(h => h.Invoke()).Returns(mockData.Object);
-        IMockGameDataget_Instance.Instance = mockDataHelper.Object;
+        MockGameDataget_InstanceHelper.Instance = mockDataHelper.Object;
 
         if (ExtremeGameModeManager.Instance == null)
         {

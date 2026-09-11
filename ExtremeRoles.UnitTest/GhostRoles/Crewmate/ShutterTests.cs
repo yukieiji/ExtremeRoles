@@ -52,13 +52,15 @@ public sealed class ShutterTests : IDisposable
     [Fact]
     public void Initialize_LoadsOptionsFromLoader()
     {
-        using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+        using (AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
             ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Shutter),
             "Shutter",
             OptionTab.GhostCrewmateTab,
-            Color.white);
-        factory.CreateFloatOption(Shutter.ShutterOption.PhotoRange, 7.5f, 0.5f, 25f, 0.5f);
-        factory.CreateIntOption(Shutter.ShutterOption.RightPlayerNameRate, 50, 25, 100, 5);
+            Color.white))
+        {
+            factory.CreateFloatOption(Shutter.ShutterOption.PhotoRange, 7.5f, 0.5f, 25f, 0.5f);
+            factory.CreateIntOption(Shutter.ShutterOption.RightPlayerNameRate, 50, 25, 100, 5);
+        }
 
         var shutter = new Shutter();
 
@@ -86,13 +88,15 @@ public sealed class ShutterTests : IDisposable
     [Fact]
     public void MeetingHooks_ExecutesWithoutError()
     {
-        using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+        using (AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
             ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Shutter),
             "Shutter",
             OptionTab.GhostCrewmateTab,
-            Color.white);
-        factory.CreateFloatOption(Shutter.ShutterOption.PhotoRange, 7.5f, 0.5f, 25f, 0.5f);
-        factory.CreateIntOption(Shutter.ShutterOption.RightPlayerNameRate, 50, 25, 100, 5);
+            Color.white))
+        {
+            factory.CreateFloatOption(Shutter.ShutterOption.PhotoRange, 7.5f, 0.5f, 25f, 0.5f);
+            factory.CreateIntOption(Shutter.ShutterOption.RightPlayerNameRate, 50, 25, 100, 5);
+        }
 
         var shutter = new Shutter();
         shutter.Initialize();
@@ -109,9 +113,15 @@ public sealed class ShutterTests : IDisposable
         var mockSprite = new Mock<Sprite>(IntPtr.Zero);
         LruCache<string, Sprite>.Add($"{ObjectPath.PhotographerPhotoCamera}115", mockSprite.Object);
 
-        var mockLoader = new Mock<IOptionLoader>();
-        mockLoader.Setup(l => l.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)).Returns(10f);
-        mockLoader.Setup(l => l.GetValue<GhostRoleOption, bool>(GhostRoleOption.IsReportAbility)).Returns(false);
+        using (AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+            ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Shutter),
+            "Shutter",
+            OptionTab.GhostCrewmateTab,
+            Color.white))
+        {
+            var testShutter = new Shutter();
+            testShutter.CreateRoleSpecificOption(factory);
+        }
 
         var shutter = new Shutter();
         shutter.CreateAbility();
@@ -207,15 +217,15 @@ public sealed class ShutterTests : IDisposable
         mockUseButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
         mockUseButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
 
-        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
+        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
 
-        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
+        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
 
         var mockUnityActionImplicit = new Mock<MockUnityActionop_ImplicitHelper>();
         mockUnityActionImplicit.Setup(x => x.Invoke(It.IsAny<Action>()))

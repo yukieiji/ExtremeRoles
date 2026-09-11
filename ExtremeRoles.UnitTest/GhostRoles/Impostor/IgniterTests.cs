@@ -47,13 +47,15 @@ public sealed class IgniterTests
     [Fact]
     public void Initialize_LoadsOptionsFromLoader()
     {
-        using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+        using (AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
             ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Igniter),
             "Igniter",
             OptionTab.GhostImpostorTab,
-            Color.white);
-        factory.CreateBoolOption(Igniter.IgniterOption.IsEffectImpostor, true);
-        factory.CreateBoolOption(Igniter.IgniterOption.IsEffectNeutral, true);
+            Color.white))
+        {
+            factory.CreateBoolOption(Igniter.IgniterOption.IsEffectImpostor, true);
+            factory.CreateBoolOption(Igniter.IgniterOption.IsEffectNeutral, true);
+        }
 
         var igniter = new Igniter();
 
@@ -100,9 +102,15 @@ public sealed class IgniterTests
         var mockSprite = new Mock<Sprite>(IntPtr.Zero);
         LruCache<string, Sprite>.Add($"{ObjectPath.LastWolfLightOff}115", mockSprite.Object);
 
-        var mockLoader = new Mock<IOptionLoader>();
-        mockLoader.Setup(l => l.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)).Returns(10f);
-        mockLoader.Setup(l => l.GetValue<GhostRoleOption, bool>(GhostRoleOption.IsReportAbility)).Returns(false);
+        using (AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+            ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Igniter),
+            "Igniter",
+            OptionTab.GhostImpostorTab,
+            Color.white))
+        {
+            var testIgniter = new Igniter();
+            testIgniter.CreateRoleSpecificOption(factory);
+        }
 
         var igniter = new Igniter();
 
@@ -189,15 +197,15 @@ public sealed class IgniterTests
         mockUseButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
         mockUseButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
 
-        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
+        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
 
-        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
+        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
 
         var mockUnityActionImplicit = new Mock<MockUnityActionop_ImplicitHelper>();
         mockUnityActionImplicit.Setup(x => x.Invoke(It.IsAny<Action>()))

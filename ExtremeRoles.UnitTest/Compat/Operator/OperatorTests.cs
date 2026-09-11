@@ -63,7 +63,7 @@ public sealed class OperatorTests
 
 		ExtremeRoles.Module.Prefab.Prop = mockPopup.Object;
 
-		Mock<IMockObjectInstantiate> m7 = new Mock<IMockObjectInstantiate>();
+		Mock<MockObjectInstantiateHelper7> m7 = new Mock<MockObjectInstantiateHelper7>();
 		m7.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>())).Returns((UnityEngine.Object orig) =>
 		{
 			if (orig is GenericPopup)
@@ -76,9 +76,9 @@ public sealed class OperatorTests
 			}
 			return orig;
 		});
-		IMockObjectInstantiate.Instance = m7.Object;
+		MockObjectInstantiateHelper7.Instance = m7.Object;
 
-		Mock<IMockObjectInstantiate> m10 = new Mock<IMockObjectInstantiate>();
+		Mock<MockObjectInstantiateHelper10> m10 = new Mock<MockObjectInstantiateHelper10>();
 		m10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>())).Returns((UnityEngine.Object orig, Transform parent) =>
 		{
 			if (orig is GenericPopup)
@@ -91,7 +91,7 @@ public sealed class OperatorTests
 			}
 			return orig;
 		});
-		IMockObjectInstantiate.Instance = m10.Object;
+		MockObjectInstantiateHelper10.Instance = m10.Object;
 	}
 
 	private static FieldInfo? GetFieldInHierarchy(Type type, string fieldName)

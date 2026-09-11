@@ -47,12 +47,14 @@ public sealed class VentgeistTests
     [Fact]
     public void Initialize_LoadsOptionsFromLoader()
     {
-        using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+        using (AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
             ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Ventgeist),
             "Ventgeist",
             OptionTab.GhostImpostorTab,
-            Color.white);
-        factory.CreateFloatOption(Ventgeist.Option.Range, 2.5f, 0.2f, 3.0f, 0.1f);
+            Color.white))
+        {
+            factory.CreateFloatOption(Ventgeist.Option.Range, 2.5f, 0.2f, 3.0f, 0.1f);
+        }
 
         var ventgeist = new Ventgeist();
 
@@ -92,9 +94,15 @@ public sealed class VentgeistTests
     {
         SetupHudManagerMock();
 
-        var mockLoader = new Mock<IOptionLoader>();
-        mockLoader.Setup(l => l.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)).Returns(10f);
-        mockLoader.Setup(l => l.GetValue<GhostRoleOption, bool>(GhostRoleOption.IsReportAbility)).Returns(false);
+        using (AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+            ExtremeGhostRoleManager.GetRoleGroupId(ExtremeGhostRoleId.Ventgeist),
+            "Ventgeist",
+            OptionTab.GhostImpostorTab,
+            Color.white))
+        {
+            var testVentgeist = new Ventgeist();
+            testVentgeist.CreateRoleSpecificOption(factory);
+        }
 
         var ventgeist = new Ventgeist();
 
@@ -184,15 +192,15 @@ public sealed class VentgeistTests
         mockUseButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
         mockUseButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
 
-        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
+        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
 
-        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
+        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
+        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
 
         var mockUnityActionImplicit = new Mock<MockUnityActionop_ImplicitHelper>();
         mockUnityActionImplicit.Setup(x => x.Invoke(It.IsAny<Action>()))

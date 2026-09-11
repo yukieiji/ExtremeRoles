@@ -38,9 +38,9 @@ public class VanillaRolePlayerAssignDataProviderSelectorTests
         var mockOptionsMgr = new Mock<GameOptionsManager>(System.IntPtr.Zero);
         mockOptionsMgr.SetupGet(m => m.currentGameOptions).Returns(mockOptions.Object);
 
-        var mockOptionsMgrHelper = new Mock<IMockGameOptionsManagerget_Instance>();
+        var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
         mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockOptionsMgr.Object);
-        IMockGameOptionsManagerget_Instance.Instance = mockOptionsMgrHelper.Object;
+        MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
     }
 
     private static NetworkedPlayerInfo CreateMockPlayerInfo(byte playerId, string name, RoleTypes roleType = RoleTypes.Crewmate)

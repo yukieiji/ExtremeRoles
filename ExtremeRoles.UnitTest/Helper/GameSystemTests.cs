@@ -25,11 +25,11 @@ public class GameSystemTests : IDisposable
     private static readonly GameData globalGameData;
     private static readonly ShipStatus globalShipStatus;
 
-    private static readonly Mock<IMockGameDataget_Instance> globalGameDataHelper = new();
-    private static readonly Mock<IMockShipStatusget_Instance> globalShipHelper = new();
-    private static readonly Mock<IMockGameOptionsManagerget_Instance> globalOptionsHelper = new();
-    private static readonly Mock<IMockAmongUsClientget_Instance> globalAmongUsClientHelper = new();
-    private static readonly Mock<IMockGameManagerget_Instance> globalGameManagerHelper = new();
+    private static readonly Mock<MockGameDataget_InstanceHelper> globalGameDataHelper = new();
+    private static readonly Mock<MockShipStatusget_InstanceHelper> globalShipHelper = new();
+    private static readonly Mock<MockGameOptionsManagerget_InstanceHelper> globalOptionsHelper = new();
+    private static readonly Mock<MockAmongUsClientget_InstanceHelper> globalAmongUsClientHelper = new();
+    private static readonly Mock<MockGameManagerget_InstanceHelper> globalGameManagerHelper = new();
 
     static GameSystemTests()
     {
@@ -70,21 +70,21 @@ public class GameSystemTests : IDisposable
         });
 
         globalGameDataHelper.Setup(h => h.Invoke()).Returns(globalGameData);
-        IMockGameDataget_Instance.Instance = globalGameDataHelper.Object;
+        MockGameDataget_InstanceHelper.Instance = globalGameDataHelper.Object;
 
         globalShipHelper.Setup(h => h.Invoke()).Returns(globalShipStatus);
-        IMockShipStatusget_Instance.Instance = globalShipHelper.Object;
+        MockShipStatusget_InstanceHelper.Instance = globalShipHelper.Object;
 
         globalOptionsHelper.Setup(h => h.Invoke()).Returns(globalGameOptionsManager);
-        IMockGameOptionsManagerget_Instance.Instance = globalOptionsHelper.Object;
+        MockGameOptionsManagerget_InstanceHelper.Instance = globalOptionsHelper.Object;
 
         var mockAmongUsClient = new Mock<AmongUsClient>();
         globalAmongUsClientHelper.Setup(h => h.Invoke()).Returns(mockAmongUsClient.Object);
-        IMockAmongUsClientget_Instance.Instance = globalAmongUsClientHelper.Object;
+        MockAmongUsClientget_InstanceHelper.Instance = globalAmongUsClientHelper.Object;
 
         var mockGameManager = new Mock<GameManager>();
         globalGameManagerHelper.Setup(h => h.Invoke()).Returns(mockGameManager.Object);
-        IMockGameManagerget_Instance.Instance = globalGameManagerHelper.Object;
+        MockGameManagerget_InstanceHelper.Instance = globalGameManagerHelper.Object;
     }
 
     [Theory]

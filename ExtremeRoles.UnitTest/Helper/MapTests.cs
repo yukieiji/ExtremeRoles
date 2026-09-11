@@ -22,7 +22,7 @@ public class MapTests : IDisposable
 {
 	private static readonly IGameOptions globalGameOptions;
 	private static readonly GameOptionsManager globalGameOptionsManager;
-	private static readonly Mock<IMockGameOptionsManagerget_Instance> globalOptionsHelper = new();
+	private static readonly Mock<MockGameOptionsManagerget_InstanceHelper> globalOptionsHelper = new();
 
 	private byte currentMapId = 0;
 
@@ -58,7 +58,7 @@ public class MapTests : IDisposable
 			.Returns(() => currentMapId);
 
 		globalOptionsHelper.Setup(h => h.Invoke()).Returns(globalGameOptionsManager);
-		IMockGameOptionsManagerget_Instance.Instance = globalOptionsHelper.Object;
+		MockGameOptionsManagerget_InstanceHelper.Instance = globalOptionsHelper.Object;
 
 		CompatModManager.Instance.RemoveMap();
 		PlayerCache.RemovePlayerControl(_ => true);
@@ -183,9 +183,9 @@ public class MapTests : IDisposable
 		byte playerId = 1;
 
 		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
-		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
-		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
 		var posList = new List<Vector2>();
 
@@ -205,9 +205,9 @@ public class MapTests : IDisposable
 		mockShip.SetupGet(s => s.InitialSpawnCenter).Returns(new Vector2(0f, 0f));
 		mockShip.SetupGet(s => s.MeetingSpawnCenter).Returns(new Vector2(5f, 5f));
 
-		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
-		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
 		var mockPc = new Mock<PlayerControl>(IntPtr.Zero);
 		PlayerCache.AddPlayerControl(mockPc.Object);
@@ -226,9 +226,9 @@ public class MapTests : IDisposable
 		byte playerId = 1;
 
 		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
-		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
-		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
 		var initialList = new List<Vector2> { new Vector2(1f, 1f) };
 
@@ -572,9 +572,9 @@ public class MapTests : IDisposable
 		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
 		mockShip.SetupGet(s => s.AllVents).Returns(new Il2CppReferenceArray<Vent>(IntPtr.Zero));
 
-		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
-		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
 		var exception = Record.Exception(() => Map.RelinkVent());
 		Assert.Null(exception);
@@ -595,9 +595,9 @@ public class MapTests : IDisposable
 		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
 		mockShip.SetupGet(s => s.AllVents).Returns(ventArray);
 
-		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
-		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
 		var exception = Record.Exception(() => Map.RelinkVent());
 		Assert.Null(exception);

@@ -30,9 +30,9 @@ public class GlobalCheckpointSystemTests : IDisposable
 		MockSetupHelper.SetupLogger();
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 
-		var mockIntroHelper = new Mock<IMockIntroCutsceneget_Instance>();
+		var mockIntroHelper = new Mock<MockIntroCutsceneget_InstanceHelper>();
 		mockIntroHelper.Setup(x => x.Invoke()).Returns((IntroCutscene)null!);
-		IMockIntroCutsceneget_Instance.Instance = mockIntroHelper.Object;
+		MockIntroCutsceneget_InstanceHelper.Instance = mockIntroHelper.Object;
 	}
 
 	[Fact]

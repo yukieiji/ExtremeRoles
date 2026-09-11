@@ -111,7 +111,7 @@ public class ExtremeMultiModalAbilityButtonTests
         mockHudManager.SetupGet(h => h.KillButton).Returns(mockKillButton.Object);
         mockHudManager.SetupGet(h => h.UseButton).Returns(mockUseButton.Object);
 
-        var mockInstHelper5 = new Mock<IMockObjectInstantiate>();
+        var mockInstHelper5 = new Mock<MockObjectInstantiateHelper5>();
         mockInstHelper5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object orig, Transform parent) =>
             {
@@ -125,9 +125,9 @@ public class ExtremeMultiModalAbilityButtonTests
                 }
                 return orig;
             });
-        IMockObjectInstantiate.Instance = mockInstHelper5.Object;
+        MockObjectInstantiateHelper5.Instance = mockInstHelper5.Object;
 
-        var mockInstHelper10 = new Mock<IMockObjectInstantiate>();
+        var mockInstHelper10 = new Mock<MockObjectInstantiateHelper10>();
         mockInstHelper10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object orig, Transform parent) =>
             {
@@ -141,17 +141,17 @@ public class ExtremeMultiModalAbilityButtonTests
                 }
                 return orig;
             });
-        IMockObjectInstantiate.Instance = mockInstHelper10.Object;
+        MockObjectInstantiateHelper10.Instance = mockInstHelper10.Object;
 
-        var mockInstHelper7 = new Mock<IMockObjectInstantiate>();
+        var mockInstHelper7 = new Mock<MockObjectInstantiateHelper7>();
         mockInstHelper7.Setup(x => x.Invoke(It.IsAny<Material>()))
             .Returns(mockMaterial.Object);
-        IMockObjectInstantiate.Instance = mockInstHelper7.Object;
+        MockObjectInstantiateHelper7.Instance = mockInstHelper7.Object;
 
-        var mockInstHelper = new Mock<IMockObjectInstantiate>();
+        var mockInstHelper = new Mock<MockObjectInstantiateHelper>();
         mockInstHelper.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Vector3>(), It.IsAny<Quaternion>()))
             .Returns(mockText.Object);
-        IMockObjectInstantiate.Instance = mockInstHelper.Object;
+        MockObjectInstantiateHelper.Instance = mockInstHelper.Object;
 
         var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         mockTranslation.Setup(t => t.GetString(
