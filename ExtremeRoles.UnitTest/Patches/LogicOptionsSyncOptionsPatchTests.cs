@@ -1,4 +1,5 @@
 using System;
+using AmongUs.GameOptions;
 using ExtremeRoles.Patches;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using Moq;
@@ -7,6 +8,7 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Patches;
 
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class LogicOptionsSyncOptionsPatchTests
 {
 	[Fact]
@@ -108,7 +110,10 @@ public sealed class LogicOptionsSyncOptionsPatchTests
 		mockClientHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
 		MockAmongUsClientget_InstanceHelper.Instance = mockClientHelper.Object;
 
+		var mockGameOptionsFactory = new Mock<GameOptionsFactory>(IntPtr.Zero);
 		var mockLogicOptions = new Mock<LogicOptions>(IntPtr.Zero);
+		mockLogicOptions.SetupGet(l => l.gameOptionsFactory).Returns(mockGameOptionsFactory.Object);
+
 		var mockGameManager = new Mock<GameManager>(IntPtr.Zero);
 		mockGameManager.SetupGet(g => g.LogicOptions).Returns(mockLogicOptions.Object);
 
