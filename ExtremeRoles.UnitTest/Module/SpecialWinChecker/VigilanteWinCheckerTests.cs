@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Reflection;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Module.Interface;
@@ -17,10 +16,8 @@ public sealed class VigilanteWinCheckerTests
     private sealed class DummySingleRole : SingleRoleBase
     {
         public DummySingleRole(ExtremeRoleId roleId, ExtremeRoleType team = ExtremeRoleType.Neutral)
+            : base(new RoleArgs(new RoleCore(roleId, team, Color.white, roleId.ToString()), RoleProp.None))
         {
-            var core = new RoleCore(roleId, team, Color.white, roleId.ToString());
-            var field = typeof(SingleRoleBase).GetField("<Core>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-            field?.SetValue(this, core);
         }
 
         protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Reflection;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameEnd;
 using ExtremeRoles.Module.Interface;
@@ -17,13 +16,8 @@ public sealed class LoverWinCheckerTests
     private sealed class DummySingleRole : SingleRoleBase
     {
         public DummySingleRole(ExtremeRoleId roleId, ExtremeRoleType team, bool hasTask = true)
+            : base(new RoleArgs(new RoleCore(roleId, team, Color.white, roleId.ToString()), hasTask ? RoleProp.HasTask : RoleProp.None))
         {
-            var core = new RoleCore(roleId, team, Color.white, roleId.ToString());
-            var field = typeof(SingleRoleBase).GetField("<Core>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-            field?.SetValue(this, core);
-
-            var taskField = typeof(SingleRoleBase).GetField("<HasTask>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-            taskField?.SetValue(this, hasTask);
         }
 
         protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }

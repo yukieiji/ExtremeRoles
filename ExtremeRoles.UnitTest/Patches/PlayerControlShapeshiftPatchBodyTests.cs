@@ -20,9 +20,8 @@ public class PlayerControlShapeshiftPatchBodyTests : IDisposable
 	private sealed class DummySingleRole : SingleRoleBase
 	{
 		public DummySingleRole(RoleCore core)
+			: base(new RoleArgs(core, RoleProp.None))
 		{
-			var coreField = typeof(SingleRoleBase).GetField("<Core>k__BackingField", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-			coreField?.SetValue(this, core);
 		}
 
 		protected override void CreateSpecificOption(ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory factory) { }

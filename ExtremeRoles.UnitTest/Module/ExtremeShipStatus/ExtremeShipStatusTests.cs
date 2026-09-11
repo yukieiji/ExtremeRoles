@@ -17,10 +17,8 @@ public sealed class ExtremeShipStatusTests
 	private sealed class DummySingleRole : SingleRoleBase
 	{
 		public DummySingleRole(ExtremeRoleId roleId)
+			: base(new RoleArgs(new RoleCore(roleId, ExtremeRoleType.Crewmate, default, "Dummy"), RoleProp.None))
 		{
-			var core = new RoleCore(roleId, ExtremeRoleType.Crewmate, default, "Dummy");
-			var field = typeof(SingleRoleBase).GetField("<Core>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-			field?.SetValue(this, core);
 		}
 
 		protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }
