@@ -31,10 +31,8 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 	private class DummySingleRole : SingleRoleBase
 	{
 		public DummySingleRole(RoleCore core, IStatusModel? status = null)
+			: base(new RoleArgs(core, RoleProp.None))
 		{
-			var coreField = typeof(SingleRoleBase).GetField("<Core>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-			coreField?.SetValue(this, core);
-
 			if (status != null)
 			{
 				var statusField = typeof(SingleRoleBase).GetField("<Status>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
