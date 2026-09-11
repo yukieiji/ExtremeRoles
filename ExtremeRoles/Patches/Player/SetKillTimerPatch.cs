@@ -1,25 +1,27 @@
 using HarmonyLib;
 using UnityEngine;
 
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-
+using ExtremeRoles.Core.Abstract;
+using Microsoft.Extensions.DependencyInjection;
 using PlayerHelper = ExtremeRoles.Helper.Player;
 
 namespace ExtremeRoles.Patches.Player;
 
 #nullable enable
 
-[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
-public static class PlayerControlSetKillTimernPatch
+
+public class PlayerControlSetKillTimerPatchBody(IGameProgress progress, IGameRuntime runtime)
 {
-	public static bool Prefix(
-		PlayerControl __instance, [HarmonyArgument(0)] float time)
+	private readonly IGameProgress _progress = progress;
+	private readonly IGameRuntime _runtime = runtime;
+
+	public bool Prefix(PlayerControl __instance, float time)
 	{
 		if (!(
-				GameProgressSystem.IsRoleSetUpEnd &&
-				ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var role)
+				_progress.IsTaskPhase && 
+				_runtime.TryGetGameContext(out var ctx) && 
+				ctx.Roles.TryGetRole(__instance.PlayerId, out var role)
 			))
 		{
 			return true;
@@ -32,13 +34,28 @@ public static class PlayerControlSetKillTimernPatch
 		}
 
 		float maxTime = role.TryGetKillCool(out float otherKillCool) ? otherKillCool : killCool;
-
 		__instance.killTimer = Mathf.Clamp(
 			time, 0f, maxTime);
-		HudManager.Instance.KillButton.SetCoolDown(
-			__instance.killTimer, maxTime);
-
+		HudManager.Instance.KillButton.SetCoolDown(__instance.killTimer, maxTime);
+		
 		return false;
+	}
+}
 
+
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
+public static class PlayerControlSetKillTimernPatch
+{
+	private static PlayerControlSetKillTimerPatchBody? _body;
+
+	public static bool Prefix(
+		PlayerControl __instance, [HarmonyArgument(0)] float time)
+	{
+		if (_body is null)
+		{
+			_body = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<PlayerControlSetKillTimerPatchBody>();
+		}
+		return _body.Prefix(__instance, time);
 	}
 }
