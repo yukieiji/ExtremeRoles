@@ -246,11 +246,11 @@ public class MapCountOverlayUpdatePatchBody(IModLogger logger, IGameRuntime runt
 	{
 		if (system.TryGet(counterArea.RoomType, out var overrideDummyColor))
 		{
-			counterArea.UpdateCount(overrideDummyColor.Count);
 			if (isSupervisorEnhance)
 			{
 				_playerColors.Add(counterArea.RoomType, overrideDummyColor);
 			}
+			counterArea.UpdateCount(overrideDummyColor.Count);
 		}
 		else
 		{
