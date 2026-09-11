@@ -9,10 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtremeRoles.Patches.MapOverlay;
 
-public class CounterAreaUpdatePatchBody(IGameRuntime runtime, MapCountOverlayUpdatePatchBoidy countOverlayUpdatePatchBoidy)
+public class CounterAreaUpdatePatchBody(IGameRuntime runtime, MapCountOverlayUpdatePatchBody countOverlayUpdatePatchBoidy)
 {
 	private readonly IGameRuntime _runtime = runtime;
-	private readonly MapCountOverlayUpdatePatchBoidy _countOverlayUpdatePatchBoidy = countOverlayUpdatePatchBoidy;
+	private readonly MapCountOverlayUpdatePatchBody _countOverlayUpdatePatchBoidy = countOverlayUpdatePatchBoidy;
 
 	public void Postfix(CounterArea __instance)
 	{

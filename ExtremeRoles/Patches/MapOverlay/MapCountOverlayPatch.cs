@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Patches.MapOverlay;
 
-public class MapCountOverlayUpdatePatchBoidy(IModLogger logger, IGameRuntime runtime)
+public class MapCountOverlayUpdatePatchBody(IModLogger logger, IGameRuntime runtime)
 {
 	private readonly IModLogger _logger = logger;
 	private readonly IGameRuntime _runtime = runtime;
@@ -34,18 +34,18 @@ public class MapCountOverlayUpdatePatchBoidy(IModLogger logger, IGameRuntime run
 		ExtremeRoleId.Doll
 	};
 
-	public static MapCountOverlayUpdatePatchBoidy Instance
+	public static MapCountOverlayUpdatePatchBody Instance
 	{
 		get
 		{
 			if (_instance is null)
 			{
-				_instance = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<MapCountOverlayUpdatePatchBoidy>();
+				_instance = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<MapCountOverlayUpdatePatchBody>();
 			}
 			return _instance;
 		}
 	}
-	private static MapCountOverlayUpdatePatchBoidy? _instance;
+	private static MapCountOverlayUpdatePatchBody? _instance;
 
 	public bool IsAbilityUse()
 		=> IRoleAbility.IsLocalPlayerAbilityUse(adminUseRole);
@@ -271,18 +271,18 @@ public class MapCountOverlayUpdatePatchBoidy(IModLogger logger, IGameRuntime run
 [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
 public static class MapCountOverlayUpdatePatch
 {
-	public static IReadOnlyDictionary<SystemTypes, IReadOnlyList<int>> PlayerColor => MapCountOverlayUpdatePatchBoidy.Instance.PlayerColors;
+	public static IReadOnlyDictionary<SystemTypes, IReadOnlyList<int>> PlayerColor => MapCountOverlayUpdatePatchBody.Instance.PlayerColors;
 
 	public static bool Prefix(MapCountOverlay __instance)
-		=> MapCountOverlayUpdatePatchBoidy.Instance.Prefix(__instance);
+		=> MapCountOverlayUpdatePatchBody.Instance.Prefix(__instance);
 
 
 	public static void Postfix(MapCountOverlay __instance)
-		=> MapCountOverlayUpdatePatchBoidy.Instance.Postfix(__instance);
+		=> MapCountOverlayUpdatePatchBody.Instance.Postfix(__instance);
 
 	public static bool IsAbilityUse()
-		=> MapCountOverlayUpdatePatchBoidy.Instance.IsAbilityUse();
+		=> MapCountOverlayUpdatePatchBody.Instance.IsAbilityUse();
 
 	public static void LoadOptionValue()
-		=> MapCountOverlayUpdatePatchBoidy.Instance.Initialize();
+		=> MapCountOverlayUpdatePatchBody.Instance.Initialize();
 }

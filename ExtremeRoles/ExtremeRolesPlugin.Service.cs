@@ -137,7 +137,7 @@ public partial class ExtremeRolesPlugin
 			.AddSingleton<PlayerControlSetKillTimerPatchBody>()
 			.AddSingleton<PlayerControlShapeshiftPatchBody>()
 
-			.AddSingleton<MapCountOverlayUpdatePatchBoidy>()
+			.AddSingleton<MapCountOverlayUpdatePatchBody>()
 			.AddSingleton<CounterAreaUpdatePatchBody>()
 
 			.AddSingleton<ShipStatusOnEnablePatchBody>()
