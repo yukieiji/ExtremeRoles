@@ -133,6 +133,7 @@ public partial class ExtremeRolesPlugin
 			.AddSingleton<ProgressTrackerFixedUpdatePatchBody>()
 			.AddSingleton<PlayerPhysicsFixedUpdatePatchBody>()
 
+			.AddSingleton<PlayerControlSetKillTimerPatchBody>()
 			.AddSingleton<PlayerControlShapeshiftPatchBody>()
 
 			.AddSingleton<ShipStatusOnEnablePatchBody>()
