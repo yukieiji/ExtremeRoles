@@ -557,8 +557,8 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		var liberalRole1 = new DummySingleRole(RoleCore.BuildLiberal(ExtremeRoleId.Leader));
 		var otherRole = new DummySingleRole(RoleCore.BuildCrewmate(ExtremeRoleId.Bait, Color.white));
 
-		SingleRoleBase outRole1 = liberalRole1;
-		SingleRoleBase outRole2 = otherRole;
+		SingleRoleBase? outRole1 = liberalRole1;
+		SingleRoleBase? outRole2 = otherRole;
 		mockRoleContainer.Setup(r => r.TryGetRole((byte)1, out outRole1)).Returns(true);
 		mockRoleContainer.Setup(r => r.TryGetRole((byte)2, out outRole2)).Returns(true);
 
