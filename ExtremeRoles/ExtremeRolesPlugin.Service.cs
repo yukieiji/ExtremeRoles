@@ -21,6 +21,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches.Ship;
 using ExtremeRoles.Patches.Role;
 using ExtremeRoles.Patches.Player;
+using ExtremeRoles.Patches.MapOverlay;
 
 
 namespace ExtremeRoles;
@@ -135,6 +136,9 @@ public partial class ExtremeRolesPlugin
 
 			.AddSingleton<PlayerControlSetKillTimerPatchBody>()
 			.AddSingleton<PlayerControlShapeshiftPatchBody>()
+
+			.AddSingleton<MapCountOverlayUpdatePatchBoidy>()
+			.AddSingleton<CounterAreaUpdatePatchBody>()
 
 			.AddSingleton<ShipStatusOnEnablePatchBody>()
 			.AddSingleton<ShipStatusPrespawnStepPatchBody>()
