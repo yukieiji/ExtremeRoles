@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 using Moq;
 using TMPro;
@@ -111,10 +110,6 @@ public sealed class SaboEvilTests
 
         var mockParentTransform = new Mock<Transform>(IntPtr.Zero);
         mockParentTransform.SetupGet(t => t.gameObject).Returns(mockParentGameObject.Object);
-
-        typeof(HudManagerExtension)
-            .GetField("cachedArrange", BindingFlags.NonPublic | BindingFlags.Static)?
-            .SetValue(null, mockGridArrange.Object);
 
         var mockTransform = new Mock<Transform>(IntPtr.Zero);
         mockTransform.SetupGet(t => t.parent).Returns(mockParentTransform.Object);

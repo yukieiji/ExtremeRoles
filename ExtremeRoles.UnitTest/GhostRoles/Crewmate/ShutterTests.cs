@@ -160,10 +160,6 @@ public sealed class ShutterTests : IDisposable
         var mockParentTransform = new Mock<Transform>(IntPtr.Zero);
         mockParentTransform.SetupGet(t => t.gameObject).Returns(mockParentGameObject.Object);
 
-        typeof(HudManagerExtension)
-            .GetField("cachedArrange", BindingFlags.NonPublic | BindingFlags.Static)?
-            .SetValue(null, mockGridArrange.Object);
-
         var mockTransform = new Mock<Transform>(IntPtr.Zero);
         mockTransform.SetupGet(t => t.parent).Returns(mockParentTransform.Object);
         mockTransform.Setup(t => t.FindChild(It.IsAny<string>())).Returns((Transform)null!);
