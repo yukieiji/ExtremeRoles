@@ -129,38 +129,38 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 
 	private static void SetupInstantiateMocks()
 	{
-		var m5 = new Mock<MockObjectInstantiateHelper5>();
+		var m5 = new Mock<IMockObjectInstantiate>();
 		m5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
 			.Returns((UnityEngine.Object orig, Transform parent) => orig);
-		MockObjectInstantiateHelper5.Instance = m5.Object;
+		IMockObjectInstantiate.Instance = m5.Object;
 
-		var m7 = new Mock<MockObjectInstantiateHelper7>();
+		var m7 = new Mock<IMockObjectInstantiate>();
 		m7.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()))
 			.Returns((UnityEngine.Object orig) => orig);
-		MockObjectInstantiateHelper7.Instance = m7.Object;
+		IMockObjectInstantiate.Instance = m7.Object;
 
-		var m10 = new Mock<MockObjectInstantiateHelper10>();
+		var m10 = new Mock<IMockObjectInstantiate>();
 		m10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
 			.Returns((UnityEngine.Object orig, Transform parent) => orig);
-		MockObjectInstantiateHelper10.Instance = m10.Object;
+		IMockObjectInstantiate.Instance = m10.Object;
 	}
 
 	private static void SetupInstantiateReturn(UnityEngine.Object returnObj)
 	{
-		var m5 = new Mock<MockObjectInstantiateHelper5>();
+		var m5 = new Mock<IMockObjectInstantiate>();
 		m5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
 			.Returns((UnityEngine.Object orig, Transform parent) => returnObj);
-		MockObjectInstantiateHelper5.Instance = m5.Object;
+		IMockObjectInstantiate.Instance = m5.Object;
 
-		var m7 = new Mock<MockObjectInstantiateHelper7>();
+		var m7 = new Mock<IMockObjectInstantiate>();
 		m7.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>()))
 			.Returns((UnityEngine.Object orig) => returnObj);
-		MockObjectInstantiateHelper7.Instance = m7.Object;
+		IMockObjectInstantiate.Instance = m7.Object;
 
-		var m10 = new Mock<MockObjectInstantiateHelper10>();
+		var m10 = new Mock<IMockObjectInstantiate>();
 		m10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
 			.Returns((UnityEngine.Object orig, Transform parent) => returnObj);
-		MockObjectInstantiateHelper10.Instance = m10.Object;
+		IMockObjectInstantiate.Instance = m10.Object;
 	}
 
 	#region IntroCutScenceBeginPatch Tests
@@ -237,9 +237,9 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		var fakePlayer = new Mock<PlayerControl>(IntPtr.Zero);
 		fakePlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
 
-		var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+		var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
 		mockLocalHelper.Setup(h => h.Invoke()).Returns(localPlayer.Object);
-		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+		IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
 		// Setup role with IRoleFakeIntro status
 		var mockStatus = new Mock<IRoleFakeIntro>();
@@ -294,9 +294,9 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 		var fakePlayer = new Mock<PlayerControl>(IntPtr.Zero);
 		fakePlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
 
-		var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+		var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
 		mockLocalHelper.Setup(h => h.Invoke()).Returns(localPlayer.Object);
-		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+		IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
 		var mockStatus = new Mock<IRoleFakeIntro>();
 		mockStatus.SetupGet(s => s.FakeTeam).Returns(ExtremeRoleType.Impostor);

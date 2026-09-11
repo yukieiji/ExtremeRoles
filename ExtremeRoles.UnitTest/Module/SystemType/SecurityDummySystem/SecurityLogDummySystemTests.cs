@@ -25,7 +25,7 @@ public class SecurityLogDummySystemTests : IDisposable
 	private static void ResetState()
 	{
 		PlayerCache.RemovePlayerControl(_ => true);
-		MockShipStatusget_InstanceHelper.Instance = null;
+		IMockShipStatusget_Instance.Instance = null;
 		MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupLogger();
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
@@ -72,9 +72,9 @@ public class SecurityLogDummySystemTests : IDisposable
 		var mockShipStatus = new Mock<ShipStatus>(IntPtr.Zero);
 		mockShipStatus.Setup(s => s.TryGetComponent(out loggerObj)).Returns(true);
 
-		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
+		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShipStatus.Object);
-		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
+		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
 
 		// Act - Add 1 and 2, then remove 1
 		system.Add(1, 2);
@@ -97,9 +97,9 @@ public class SecurityLogDummySystemTests : IDisposable
 		SecurityLogBehaviour? outLogger = null;
 		mockShipStatus.Setup(s => s.TryGetComponent(out outLogger)).Returns(false);
 
-		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
+		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShipStatus.Object);
-		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
+		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
 
 		// Act
 		system.Begin();
@@ -133,9 +133,9 @@ public class SecurityLogDummySystemTests : IDisposable
 		var mockShipStatus = new Mock<ShipStatus>(IntPtr.Zero);
 		mockShipStatus.Setup(s => s.TryGetComponent(out loggerObj)).Returns(true);
 
-		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
+		var mockShipHelper = new Mock<IMockShipStatusget_Instance>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShipStatus.Object);
-		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
+		IMockShipStatusget_Instance.Instance = mockShipHelper.Object;
 
 		// Act
 		system.Begin();

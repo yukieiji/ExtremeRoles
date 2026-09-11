@@ -59,9 +59,9 @@ public class RemoveMeetingNumCheckpointTests : IDisposable
 		mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)5);
 		mockLocalPlayer.SetupProperty(p => p.RemainingEmergencies, 3);
 
-		var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+		var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
 		mockLocalHelper.Setup(h => h.Invoke()).Returns(mockLocalPlayer.Object);
-		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+		IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
 		var mockClient = MockSetupHelper.SetupAmongUsClientMock();
 		mockClient.SetupGet(c => c.AmHost).Returns(false);
@@ -89,9 +89,9 @@ public class RemoveMeetingNumCheckpointTests : IDisposable
 		mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
 		mockLocalPlayer.SetupProperty(p => p.RemainingEmergencies, 3);
 
-		var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+		var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
 		mockLocalHelper.Setup(h => h.Invoke()).Returns(mockLocalPlayer.Object);
-		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+		IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
 		var mockClient = MockSetupHelper.SetupAmongUsClientMock();
 		mockClient.SetupGet(c => c.AmHost).Returns(false);
@@ -119,9 +119,9 @@ public class RemoveMeetingNumCheckpointTests : IDisposable
 		mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)5);
 		mockLocalPlayer.SetupProperty(p => p.RemainingEmergencies, 0);
 
-		var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+		var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
 		mockLocalHelper.Setup(h => h.Invoke()).Returns(mockLocalPlayer.Object);
-		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+		IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
 		var mockClient = MockSetupHelper.SetupAmongUsClientMock();
 		mockClient.SetupGet(c => c.AmHost).Returns(false);

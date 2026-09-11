@@ -118,13 +118,13 @@ public class MeetingVisualUpdateEventTests
 
     private static void SetupInstantiateFor(UnityEngine.Object source, UnityEngine.Object result)
     {
-        var m5 = new Mock<MockObjectInstantiateHelper5>();
+        var m5 = new Mock<IMockObjectInstantiate>();
         m5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>())).Returns(result);
-        MockObjectInstantiateHelper5.Instance = m5.Object;
+        IMockObjectInstantiate.Instance = m5.Object;
 
-        var m10 = new Mock<MockObjectInstantiateHelper10>();
+        var m10 = new Mock<IMockObjectInstantiate>();
         m10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>())).Returns(result);
-        MockObjectInstantiateHelper10.Instance = m10.Object;
+        IMockObjectInstantiate.Instance = m10.Object;
     }
 
     private static void SetupVector3Mocks()
@@ -213,17 +213,17 @@ public class MeetingVisualUpdateEventTests
         var mockLocalPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockLocalPlayer.SetupGet(p => p.Data).Returns(mockLocalData);
 
-        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
         mockLocalHelper.Setup(x => x.Invoke()).Returns(mockLocalPlayer.Object);
-        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
         var (pva, _, _) = CreateMockPlayerVoteArea();
         var status = new MeetingStatus(pva, false);
         var ev = new LocalPlayerMeetingVisualUpdateEvent(status);
 
-        var mockMeetingHudHelper = new Mock<MockMeetingHudget_InstanceHelper>();
+        var mockMeetingHudHelper = new Mock<IMockMeetingHudget_Instance>();
         mockMeetingHudHelper.Setup(x => x.Invoke()).Returns((MeetingHud)null!);
-        MockMeetingHudget_InstanceHelper.Instance = mockMeetingHudHelper.Object;
+        IMockMeetingHudget_Instance.Instance = mockMeetingHudHelper.Object;
 
         bool result = ev.Invoke();
 
@@ -237,9 +237,9 @@ public class MeetingVisualUpdateEventTests
         var mockLocalPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockLocalPlayer.SetupGet(p => p.Data).Returns(mockLocalData);
 
-        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
         mockLocalHelper.Setup(x => x.Invoke()).Returns(mockLocalPlayer.Object);
-        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
         var (pva, mockNameText, mockInfoText) = CreateMockPlayerVoteArea();
         var status = new MeetingStatus(pva, false);
@@ -247,9 +247,9 @@ public class MeetingVisualUpdateEventTests
 
         var mockMeetingHud = new Mock<MeetingHud>(IntPtr.Zero);
         mockMeetingHud.SetupGet(m => m.state).Returns(MeetingHud.MeetingStates.Discussion);
-        var mockMeetingHudHelper = new Mock<MockMeetingHudget_InstanceHelper>();
+        var mockMeetingHudHelper = new Mock<IMockMeetingHudget_Instance>();
         mockMeetingHudHelper.Setup(x => x.Invoke()).Returns(mockMeetingHud.Object);
-        MockMeetingHudget_InstanceHelper.Instance = mockMeetingHudHelper.Object;
+        IMockMeetingHudget_Instance.Instance = mockMeetingHudHelper.Object;
 
         var localRole = new DummySingleRole(
             RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white),
@@ -273,9 +273,9 @@ public class MeetingVisualUpdateEventTests
         var mockLocalPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockLocalPlayer.SetupGet(p => p.Data).Returns(mockLocalData);
 
-        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
         mockLocalHelper.Setup(x => x.Invoke()).Returns(mockLocalPlayer.Object);
-        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
         var (pva, _, mockInfoText) = CreateMockPlayerVoteArea();
         var status = new MeetingStatus(pva, isCommActive: true);
@@ -283,9 +283,9 @@ public class MeetingVisualUpdateEventTests
 
         var mockMeetingHud = new Mock<MeetingHud>(IntPtr.Zero);
         mockMeetingHud.SetupGet(m => m.state).Returns(MeetingHud.MeetingStates.Discussion);
-        var mockMeetingHudHelper = new Mock<MockMeetingHudget_InstanceHelper>();
+        var mockMeetingHudHelper = new Mock<IMockMeetingHudget_Instance>();
         mockMeetingHudHelper.Setup(x => x.Invoke()).Returns(mockMeetingHud.Object);
-        MockMeetingHudget_InstanceHelper.Instance = mockMeetingHudHelper.Object;
+        IMockMeetingHudget_Instance.Instance = mockMeetingHudHelper.Object;
 
         var localRole = new DummySingleRole(
             RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white),
@@ -312,9 +312,9 @@ public class MeetingVisualUpdateEventTests
         var mockLocalPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockLocalPlayer.SetupGet(p => p.Data).Returns(mockLocalData);
 
-        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
         mockLocalHelper.Setup(x => x.Invoke()).Returns(mockLocalPlayer.Object);
-        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
         var (pva, _, mockInfoText) = CreateMockPlayerVoteArea();
         var status = new MeetingStatus(pva, isCommActive: false);
@@ -322,9 +322,9 @@ public class MeetingVisualUpdateEventTests
 
         var mockMeetingHud = new Mock<MeetingHud>(IntPtr.Zero);
         mockMeetingHud.SetupGet(m => m.state).Returns(MeetingHud.MeetingStates.Results);
-        var mockMeetingHudHelper = new Mock<MockMeetingHudget_InstanceHelper>();
+        var mockMeetingHudHelper = new Mock<IMockMeetingHudget_Instance>();
         mockMeetingHudHelper.Setup(x => x.Invoke()).Returns(mockMeetingHud.Object);
-        MockMeetingHudget_InstanceHelper.Instance = mockMeetingHudHelper.Object;
+        IMockMeetingHudget_Instance.Instance = mockMeetingHudHelper.Object;
 
         var localRole = new DummySingleRole(
             RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white),
@@ -347,9 +347,9 @@ public class MeetingVisualUpdateEventTests
         var mockLocalPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockLocalPlayer.SetupGet(p => p.Data).Returns(mockLocalData);
 
-        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
         mockLocalHelper.Setup(x => x.Invoke()).Returns(mockLocalPlayer.Object);
-        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
         var (pva, _, _) = CreateMockPlayerVoteArea();
         var status = new MeetingStatus(pva, false);
@@ -358,9 +358,9 @@ public class MeetingVisualUpdateEventTests
         var ev = new OtherPlayerMeetingVisualUpdateEvent(targetData, status);
 
         var mockMeetingHud = new Mock<MeetingHud>(IntPtr.Zero);
-        var mockMeetingHudHelper = new Mock<MockMeetingHudget_InstanceHelper>();
+        var mockMeetingHudHelper = new Mock<IMockMeetingHudget_Instance>();
         mockMeetingHudHelper.Setup(x => x.Invoke()).Returns(mockMeetingHud.Object);
-        MockMeetingHudget_InstanceHelper.Instance = mockMeetingHudHelper.Object;
+        IMockMeetingHudget_Instance.Instance = mockMeetingHudHelper.Object;
 
         ExtremeRoleManager.GameRole.Clear(); // Target (id 1) not in GameRole
 
@@ -376,9 +376,9 @@ public class MeetingVisualUpdateEventTests
         var mockLocalPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockLocalPlayer.SetupGet(p => p.Data).Returns(mockLocalData);
 
-        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
         mockLocalHelper.Setup(x => x.Invoke()).Returns(mockLocalPlayer.Object);
-        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
         var (pva, mockNameText, _) = CreateMockPlayerVoteArea();
         var status = new MeetingStatus(pva, false);
@@ -388,9 +388,9 @@ public class MeetingVisualUpdateEventTests
 
         var mockMeetingHud = new Mock<MeetingHud>(IntPtr.Zero);
         mockMeetingHud.SetupGet(m => m.state).Returns(MeetingHud.MeetingStates.Discussion);
-        var mockMeetingHudHelper = new Mock<MockMeetingHudget_InstanceHelper>();
+        var mockMeetingHudHelper = new Mock<IMockMeetingHudget_Instance>();
         mockMeetingHudHelper.Setup(x => x.Invoke()).Returns(mockMeetingHud.Object);
-        MockMeetingHudget_InstanceHelper.Instance = mockMeetingHudHelper.Object;
+        IMockMeetingHudget_Instance.Instance = mockMeetingHudHelper.Object;
 
         var localRole = new DummySingleRole(
             RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white),
@@ -418,9 +418,9 @@ public class MeetingVisualUpdateEventTests
         var mockLocalPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockLocalPlayer.SetupGet(p => p.Data).Returns(mockLocalData);
 
-        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
         mockLocalHelper.Setup(x => x.Invoke()).Returns(mockLocalPlayer.Object);
-        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
         var (pva, mockNameText, _) = CreateMockPlayerVoteArea();
         var status = new MeetingStatus(pva, false);
@@ -430,9 +430,9 @@ public class MeetingVisualUpdateEventTests
 
         var mockMeetingHud = new Mock<MeetingHud>(IntPtr.Zero);
         mockMeetingHud.SetupGet(m => m.state).Returns(MeetingHud.MeetingStates.Discussion);
-        var mockMeetingHudHelper = new Mock<MockMeetingHudget_InstanceHelper>();
+        var mockMeetingHudHelper = new Mock<IMockMeetingHudget_Instance>();
         mockMeetingHudHelper.Setup(x => x.Invoke()).Returns(mockMeetingHud.Object);
-        MockMeetingHudget_InstanceHelper.Instance = mockMeetingHudHelper.Object;
+        IMockMeetingHudget_Instance.Instance = mockMeetingHudHelper.Object;
 
         var localRole = new DummySingleRole(
             RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white),
@@ -460,9 +460,9 @@ public class MeetingVisualUpdateEventTests
         var mockLocalPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockLocalPlayer.SetupGet(p => p.Data).Returns(mockLocalData);
 
-        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        var mockLocalHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
         mockLocalHelper.Setup(x => x.Invoke()).Returns(mockLocalPlayer.Object);
-        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+        IMockPlayerControlget_LocalPlayer.Instance = mockLocalHelper.Object;
 
         var (pva, _, mockInfoText) = CreateMockPlayerVoteArea();
         var status = new MeetingStatus(pva, false);
@@ -472,9 +472,9 @@ public class MeetingVisualUpdateEventTests
 
         var mockMeetingHud = new Mock<MeetingHud>(IntPtr.Zero);
         mockMeetingHud.SetupGet(m => m.state).Returns(MeetingHud.MeetingStates.Discussion);
-        var mockMeetingHudHelper = new Mock<MockMeetingHudget_InstanceHelper>();
+        var mockMeetingHudHelper = new Mock<IMockMeetingHudget_Instance>();
         mockMeetingHudHelper.Setup(x => x.Invoke()).Returns(mockMeetingHud.Object);
-        MockMeetingHudget_InstanceHelper.Instance = mockMeetingHudHelper.Object;
+        IMockMeetingHudget_Instance.Instance = mockMeetingHudHelper.Object;
 
         var localRole = new DummySingleRole(
             RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white),

@@ -266,15 +266,15 @@ public class GhostRoleBaseTests
         mockUseButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
         mockUseButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
 
-        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
+        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
+        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
 
-        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
+        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
+        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
 
         var mockUnityActionImplicit = new Mock<MockUnityActionop_ImplicitHelper>();
         mockUnityActionImplicit.Setup(x => x.Invoke(It.IsAny<Action>()))
@@ -713,25 +713,25 @@ public class GhostRoleBaseTests
         mockHud.SetupGet(h => h.GameMenu).Returns(mockGameMenu.Object);
         mockHud.SetupGet(h => h.IsIntroDisplayed).Returns(false);
 
-        var mockMeetingHelper = new Mock<MockMeetingHudget_InstanceHelper>();
+        var mockMeetingHelper = new Mock<IMockMeetingHudget_Instance>();
         mockMeetingHelper.Setup(x => x.Invoke()).Returns((MeetingHud)null!);
-        MockMeetingHudget_InstanceHelper.Instance = mockMeetingHelper.Object;
+        IMockMeetingHudget_Instance.Instance = mockMeetingHelper.Object;
 
-        var mockCustomizationHelper = new Mock<MockPlayerCustomizationMenuget_InstanceHelper>();
+        var mockCustomizationHelper = new Mock<IMockPlayerCustomizationMenuget_Instance>();
         mockCustomizationHelper.Setup(x => x.Invoke()).Returns((PlayerCustomizationMenu)null!);
-        MockPlayerCustomizationMenuget_InstanceHelper.Instance = mockCustomizationHelper.Object;
+        IMockPlayerCustomizationMenuget_Instance.Instance = mockCustomizationHelper.Object;
 
-        var mockExileHelper = new Mock<MockExileControllerget_InstanceHelper>();
+        var mockExileHelper = new Mock<IMockExileControllerget_Instance>();
         mockExileHelper.Setup(x => x.Invoke()).Returns((ExileController)null!);
-        MockExileControllerget_InstanceHelper.Instance = mockExileHelper.Object;
+        IMockExileControllerget_Instance.Instance = mockExileHelper.Object;
 
-        var mockIntroHelper = new Mock<MockIntroCutsceneget_InstanceHelper>();
+        var mockIntroHelper = new Mock<IMockIntroCutsceneget_Instance>();
         mockIntroHelper.Setup(x => x.Invoke()).Returns((IntroCutscene)null!);
-        MockIntroCutsceneget_InstanceHelper.Instance = mockIntroHelper.Object;
+        IMockIntroCutsceneget_Instance.Instance = mockIntroHelper.Object;
 
-        var mockMapHelper = new Mock<MockMapBehaviourget_InstanceHelper>();
+        var mockMapHelper = new Mock<IMockMapBehaviourget_Instance>();
         mockMapHelper.Setup(x => x.Invoke()).Returns((MapBehaviour)null!);
-        MockMapBehaviourget_InstanceHelper.Instance = mockMapHelper.Object;
+        IMockMapBehaviourget_Instance.Instance = mockMapHelper.Object;
 
         Assert.True(DummyGhostRole.CallIsCommonUseWithMinigame());
     }
@@ -746,9 +746,9 @@ public class GhostRoleBaseTests
         mockPlayer.SetupGet(p => p.Data).Returns(mockData);
         mockPlayer.SetupGet(p => p.MyPhysics).Returns(mockPhysics.Object);
 
-        var mockSingleton = new Mock<MockDestroyableSingletonget_InstanceHelper<HudManager>>();
+        var mockSingleton = new Mock<IMockDestroyableSingletonget_Instance<HudManager>>();
         mockSingleton.Setup(x => x.Invoke()).Returns((HudManager)null!);
-        MockDestroyableSingletonget_InstanceHelper<HudManager>.Instance = mockSingleton.Object;
+        IMockDestroyableSingletonget_Instance<HudManager>.Instance = mockSingleton.Object;
 
         Assert.False(DummyGhostRole.CallIsCommonUseWithMinigame());
     }
@@ -766,9 +766,9 @@ public class GhostRoleBaseTests
         var mockHud = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
 
         var mockMeeting = new Mock<MeetingHud>(IntPtr.Zero);
-        var mockMeetingHelper = new Mock<MockMeetingHudget_InstanceHelper>();
+        var mockMeetingHelper = new Mock<IMockMeetingHudget_Instance>();
         mockMeetingHelper.Setup(x => x.Invoke()).Returns(mockMeeting.Object);
-        MockMeetingHudget_InstanceHelper.Instance = mockMeetingHelper.Object;
+        IMockMeetingHudget_Instance.Instance = mockMeetingHelper.Object;
 
         Assert.False(DummyGhostRole.CallIsCommonUseWithMinigame());
     }

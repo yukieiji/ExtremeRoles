@@ -21,9 +21,9 @@ public sealed class TaskEndCheckerTests
         mockData.SetupGet(d => d.TotalTasks).Returns(10);
         mockData.SetupGet(d => d.CompletedTasks).Returns(10);
 
-        var mockHelper = new Mock<MockGameDataget_InstanceHelper>();
+        var mockHelper = new Mock<IMockGameDataget_Instance>();
         mockHelper.Setup(h => h.Invoke()).Returns(mockData.Object);
-        MockGameDataget_InstanceHelper.Instance = mockHelper.Object;
+        IMockGameDataget_Instance.Instance = mockHelper.Object;
 
         TaskEndChecker checker = new TaskEndChecker();
 
@@ -40,9 +40,9 @@ public sealed class TaskEndCheckerTests
         mockData.SetupGet(d => d.TotalTasks).Returns(10);
         mockData.SetupGet(d => d.CompletedTasks).Returns(5);
 
-        var mockHelper = new Mock<MockGameDataget_InstanceHelper>();
+        var mockHelper = new Mock<IMockGameDataget_Instance>();
         mockHelper.Setup(h => h.Invoke()).Returns(mockData.Object);
-        MockGameDataget_InstanceHelper.Instance = mockHelper.Object;
+        IMockGameDataget_Instance.Instance = mockHelper.Object;
 
         TaskEndChecker checker = new TaskEndChecker();
 

@@ -142,17 +142,17 @@ public class ExtremeAbilityButtonTests
             .SetValue(null, systemManager);
 
         // Reset IntroCutscene.Instance helper to return null by default
-        var mockIntroHelper = new Mock<MockIntroCutsceneget_InstanceHelper>();
+        var mockIntroHelper = new Mock<IMockIntroCutsceneget_Instance>();
         mockIntroHelper.Setup(x => x.Invoke()).Returns((IntroCutscene)null!);
-        MockIntroCutsceneget_InstanceHelper.Instance = mockIntroHelper.Object;
+        IMockIntroCutsceneget_Instance.Instance = mockIntroHelper.Object;
 
-        var mockGetKeyDown = new Mock<MockInputGetKeyDownHelper>();
+        var mockGetKeyDown = new Mock<IMockInputGetKeyDown>();
         mockGetKeyDown.Setup(x => x.Invoke(It.IsAny<KeyCode>())).Returns(false);
-        MockInputGetKeyDownHelper.Instance = mockGetKeyDown.Object;
+        IMockInputGetKeyDown.Instance = mockGetKeyDown.Object;
 
-        var mockGetKeyDownInt = new Mock<MockInputGetKeyDownIntHelper>();
+        var mockGetKeyDownInt = new Mock<IMockInputGetKeyDownInt>();
         mockGetKeyDownInt.Setup(x => x.Invoke(It.IsAny<KeyCode>())).Returns(false);
-        MockInputGetKeyDownIntHelper.Instance = mockGetKeyDownInt.Object;
+        IMockInputGetKeyDownInt.Instance = mockGetKeyDownInt.Object;
 
         var mockObjectImplicitInt = new Mock<Il2CppSystem.MockObjectop_ImplicitHelper6>();
         mockObjectImplicitInt.Setup(x => x.Invoke(It.IsAny<int>())).Returns(new Mock<Il2CppSystem.Object>(IntPtr.Zero).Object);
@@ -233,15 +233,15 @@ public class ExtremeAbilityButtonTests
         hudMock.SetupGet(h => h.KillButton).Returns(mockKillButton.Object);
         hudMock.SetupGet(h => h.UseButton).Returns(mockUseButton.Object);
 
-        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
+        var mockInstantiate5 = new Mock<IMockObjectInstantiate>();
         mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
+        IMockObjectInstantiate.Instance = mockInstantiate5.Object;
 
-        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
+        var mockInstantiate10 = new Mock<IMockObjectInstantiate>();
         mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
             .Returns((UnityEngine.Object original, Transform parent) => original);
-        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
+        IMockObjectInstantiate.Instance = mockInstantiate10.Object;
 
         var mockUnityActionImplicit = new Mock<MockUnityActionop_ImplicitHelper>();
         mockUnityActionImplicit.Setup(x => x.Invoke(It.IsAny<Action>()))
@@ -339,9 +339,9 @@ public class ExtremeAbilityButtonTests
     {
         var (button, mockKillButton, _, _, _) = CreateTestButton<TestBehavior>();
 
-        var mockDestroy = new Mock<MockObjectDestroyHelper2>();
+        var mockDestroy = new Mock<IMockObjectDestroy>();
         mockDestroy.Setup(d => d.Invoke(It.IsAny<UnityEngine.Object>()));
-        MockObjectDestroyHelper2.Instance = mockDestroy.Object;
+        IMockObjectDestroy.Instance = mockDestroy.Object;
 
         button.SetLabelToCrewmate();
 
@@ -354,9 +354,9 @@ public class ExtremeAbilityButtonTests
         var (button, mockKillButton, _, behavior, _) = CreateTestButton<TestBehavior>();
 
         var mockIntroCutscene = new Mock<IntroCutscene>(IntPtr.Zero);
-        var mockIntroHelper = new Mock<MockIntroCutsceneget_InstanceHelper>();
+        var mockIntroHelper = new Mock<IMockIntroCutsceneget_Instance>();
         mockIntroHelper.Setup(x => x.Invoke()).Returns(mockIntroCutscene.Object);
-        MockIntroCutsceneget_InstanceHelper.Instance = mockIntroHelper.Object;
+        IMockIntroCutsceneget_Instance.Instance = mockIntroHelper.Object;
 
         SetPrivateState(button, AbilityState.CoolDown);
         SetPrivateTimer(button, 5.0f);

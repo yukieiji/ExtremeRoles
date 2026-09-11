@@ -30,14 +30,14 @@ public sealed class RngSelectorTests
 		MockRandomInitStateHelper.Instance = mockRandomInitState.Object;
 
 		var mockLobby = new Mock<LobbyBehaviour>();
-		var mockLobbyHelper = new Mock<MockLobbyBehaviourget_InstanceHelper>();
+		var mockLobbyHelper = new Mock<IMockLobbyBehaviourget_Instance>();
 		mockLobbyHelper.Setup(h => h.Invoke()).Returns(mockLobby.Object);
-		MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyHelper.Object;
+		IMockLobbyBehaviourget_Instance.Instance = mockLobbyHelper.Object;
 
 		var mockClient = new Mock<AmongUsClient>();
-		var mockClientHelper = new Mock<MockAmongUsClientget_InstanceHelper>();
+		var mockClientHelper = new Mock<IMockAmongUsClientget_Instance>();
 		mockClientHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
-		MockAmongUsClientget_InstanceHelper.Instance = mockClientHelper.Object;
+		IMockAmongUsClientget_Instance.Instance = mockClientHelper.Object;
 
 		var mockClampInt = new Mock<MockMathfClampHelper2>();
 		mockClampInt.Setup(h => h.Invoke(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()))

@@ -35,9 +35,9 @@ public class SecurityDummySystemManagerTests : IDisposable
 		var mockGameOptions = new Mock<IGameOptions>(IntPtr.Zero);
 		mockGameOptionsManager.SetupGet(g => g.CurrentGameOptions).Returns(mockGameOptions.Object);
 
-		var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
+		var mockOptionsMgrHelper = new Mock<IMockGameOptionsManagerget_Instance>();
 		mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockGameOptionsManager.Object);
-		MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
+		IMockGameOptionsManagerget_Instance.Instance = mockOptionsMgrHelper.Object;
 	}
 
 	[Fact]

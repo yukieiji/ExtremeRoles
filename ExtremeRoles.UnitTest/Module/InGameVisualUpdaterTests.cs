@@ -209,13 +209,13 @@ public class InGameVisualUpdaterTests
 
 	private static void SetupInstantiateFor(UnityEngine.Object source, UnityEngine.Object result)
 	{
-		var m5 = new Mock<MockObjectInstantiateHelper5>();
+		var m5 = new Mock<IMockObjectInstantiate>();
 		m5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>())).Returns(result);
-		MockObjectInstantiateHelper5.Instance = m5.Object;
+		IMockObjectInstantiate.Instance = m5.Object;
 
-		var m10 = new Mock<MockObjectInstantiateHelper10>();
+		var m10 = new Mock<IMockObjectInstantiate>();
 		m10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>())).Returns(result);
-		MockObjectInstantiateHelper10.Instance = m10.Object;
+		IMockObjectInstantiate.Instance = m10.Object;
 	}
 
 	private static (Mock<PlayerControl> playerMock, Mock<TextMeshPro> nameTextMock, Mock<TextMeshPro> infoTextMock, Mock<GameObject> infoGoMock) CreateMockPlayer(
@@ -294,9 +294,9 @@ public class InGameVisualUpdaterTests
 
 		if (playerId == 0)
 		{
-			var localPlayerHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+			var localPlayerHelper = new Mock<IMockPlayerControlget_LocalPlayer>();
 			localPlayerHelper.Setup(h => h.Invoke()).Returns(playerMock.Object);
-			MockPlayerControlget_LocalPlayerHelper.Instance = localPlayerHelper.Object;
+			IMockPlayerControlget_LocalPlayer.Instance = localPlayerHelper.Object;
 		}
 
 		return (playerMock, nameTextMock, infoTextMock, infoGoMock);
