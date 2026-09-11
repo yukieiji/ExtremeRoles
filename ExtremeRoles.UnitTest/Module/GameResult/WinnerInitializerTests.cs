@@ -22,9 +22,8 @@ public class WinnerInitializerTests
     private sealed class DummySingleRole : SingleRoleBase
     {
         public DummySingleRole(RoleCore core)
+            : base(new RoleArgs(core, RoleProp.None))
         {
-            var field = typeof(SingleRoleBase).GetField("<Core>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-            field?.SetValue(this, core);
         }
 
         protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }
