@@ -258,18 +258,7 @@ public sealed class SubmergedIntegratorTests : IDisposable
 		var patch = new DummyHarmonyPatch();
 		var initializer = new SubmergedInitializer(pluginInfo, mockAccessTool.Object, patch);
 
-		var integrator = new SubmergedIntegrator(initializer);
-
-		var getterField = typeof(SubmergedIntegrator).GetField("submarineOxygenSystemInstanceGetter", BindingFlags.NonPublic | BindingFlags.Instance);
-		var methodField = typeof(SubmergedIntegrator).GetField("submarineOxygenSystemRepairDamageMethod", BindingFlags.NonPublic | BindingFlags.Instance);
-
-		getterField?.SetValue(integrator, typeof(SubmarineOxygenSystem).GetProperty(nameof(SubmarineOxygenSystem.Instance)));
-		methodField?.SetValue(integrator, typeof(SubmarineOxygenSystem).GetMethod(nameof(SubmarineOxygenSystem.RepairDamage)));
-
-		var getFloorHandlerInfoField = typeof(SubmergedIntegrator).GetField("getFloorHandlerInfo", BindingFlags.NonPublic | BindingFlags.Instance);
-		getFloorHandlerInfoField?.SetValue(integrator, typeof(FloorHandler).GetMethod(nameof(FloorHandler.GetFloorHandler)));
-
-		return integrator;
+		return (SubmergedIntegrator)initializer.Initialize();
 	}
 
 	[Fact]
