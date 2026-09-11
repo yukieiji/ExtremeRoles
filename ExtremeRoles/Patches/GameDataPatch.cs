@@ -6,6 +6,8 @@ using ExtremeRoles.Roles.API.Extension.State;
 using HarmonyLib;
 using Microsoft.Extensions.DependencyInjection;
 
+#nullable enable
+
 namespace ExtremeRoles.Patches;
 
 public class GameDataRecomputeTaskCountsPatchBody(IGameProgress progress, IGameRuntime runtime)
