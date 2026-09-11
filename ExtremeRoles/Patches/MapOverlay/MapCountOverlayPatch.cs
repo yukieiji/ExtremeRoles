@@ -1,188 +1,149 @@
+using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Interface;
+using HarmonyLib;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
-
 using UnityEngine;
 
-using HarmonyLib;
-
-using ExtremeRoles.Helper;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.SystemType.Roles;
 
 #nullable enable
 
 namespace ExtremeRoles.Patches.MapOverlay;
 
-[HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
-public static class MapCountOverlayUpdatePatch
+public class MapCountOverlayUpdatePatchBoidy(IModLogger logger, IGameRuntime runtime)
 {
-    public static Dictionary<SystemTypes, IReadOnlyList<int>> PlayerColor =
-        new Dictionary<SystemTypes, IReadOnlyList<int>>();
+	private readonly IModLogger _logger = logger;
+	private readonly IGameRuntime _runtime = runtime;
 
-    private static float adminTimer = 0.0f;
-    private static TMPro.TextMeshPro? timerText;
 
-    private static readonly IReadOnlySet<ExtremeRoleId> adminUseRole = new HashSet<ExtremeRoleId>()
-    {
-        ExtremeRoleId.Supervisor,
-        ExtremeRoleId.Traitor,
-        ExtremeRoleId.Doll
-    };
+	public IReadOnlyDictionary<SystemTypes, IReadOnlyList<int>> PlayerColors => _playerColors;
+	private readonly Dictionary<SystemTypes, IReadOnlyList<int>> _playerColors = [];
 
-    public static bool Prefix(MapCountOverlay __instance)
-    {
-        if (ExtremeRoleManager.GameRole.Count == 0)
-        {
-            return true;
-        }
 
-        var supervisor = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
-            Roles.Solo.Crewmate.Supervisor>();
+	private float _adminTimer = 0.0f;
+	private TMPro.TextMeshPro? _timerText;
 
+	private readonly IReadOnlySet<ExtremeRoleId> adminUseRole = new HashSet<ExtremeRoleId>()
+	{
+		ExtremeRoleId.Supervisor,
+		ExtremeRoleId.Traitor,
+		ExtremeRoleId.Doll
+	};
+
+	public static MapCountOverlayUpdatePatchBoidy Instance
+	{
+		get
+		{
+			if (_instance is null)
+			{
+				_instance = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<MapCountOverlayUpdatePatchBoidy>();
+			}
+			return _instance;
+		}
+	}
+	private static MapCountOverlayUpdatePatchBoidy? _instance;
+
+	public bool IsAbilityUse()
+		=> IRoleAbility.IsLocalPlayerAbilityUse(adminUseRole);
+
+	public void Initialize()
+	{
+		if (_timerText != null)
+		{
+			Object.Destroy(_timerText);
+		}
+		
+		if (!_runtime.TryGetGameContext(out var ctx))
+		{
+			return;
+		}
+
+		var adminOpt = ctx.GlobalOption.Admin;
+
+		_adminTimer = adminOpt.LimitTime;
+
+		_logger.LogTrace("---- AdminCondition ----");
+		_logger.LogTrace($"IsRemoveAdmin:{adminOpt.Disable}");
+		_logger.LogTrace($"EnableAdminLimit:{adminOpt.EnableLimit}");
+		_logger.LogTrace($"AdminTime:{_adminTimer}");
+	}
+
+	public bool Prefix(MapCountOverlay __instance)
+	{
+		if (!_runtime.TryGetGameContext(out var ctx) || 
+			ctx.Roles.All.Count == 0) // <= ここは後でRoleAssignStateに置き換える
+		{
+			return true;
+		}
+		Override(__instance, ctx);
+		return false;
+	}
+
+	private void Override(MapCountOverlay __instance, IGameContext ctx)
+	{
+		var supervisor = ctx.Roles.GetSafeCastedLocalPlayerRole<Roles.Solo.Crewmate.Supervisor>();
 		bool isSupervisorEnhance = supervisor is not null && supervisor.Boosted && supervisor.IsAbilityActive;
-
-        __instance.timer += Time.deltaTime;
+		__instance.timer += Time.deltaTime;
 		if (__instance.timer < 0.1f)
 		{
-			return false;
+			return;
 		}
-		__instance.timer = 0f;
 
-		PlayerColor.Clear();
+		__instance.timer = 0f;
+		_playerColors.Clear();
 
 		bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
-            PlayerControl.LocalPlayer);
-
-        if (!__instance.isSab && isHudOverrideTaskActive)
+			PlayerControl.LocalPlayer);
+		if (!__instance.isSab && isHudOverrideTaskActive)
 		{
-			__instance.isSab = true;
-			__instance.BackgroundColor.SetColor(Palette.DisabledGrey);
-			__instance.SabotageText.gameObject.SetActive(true);
-			return false;
+			ActivateSabotageMapOvelay(__instance, true, Palette.DisabledGrey);
+			return;
 		}
 
 		if (__instance.isSab && !isHudOverrideTaskActive)
 		{
-			__instance.isSab = false;
-			__instance.BackgroundColor.SetColor(Color.green);
-			__instance.SabotageText.gameObject.SetActive(false);
+			ActivateSabotageMapOvelay(__instance, false, Color.green);
 		}
 
 		bool containFake = AdminDummySystem.TryGet(out var system);
 
-		for (int i = 0; i < __instance.CountAreas.Length; i++)
+		foreach (var counterArea in __instance.CountAreas)
 		{
-			CounterArea counterArea = __instance.CountAreas[i];
-
 			if (counterArea.DetectiveExclusiveLocation)
 			{
 				continue;
 			}
 
 			if (isHudOverrideTaskActive)
-            {
-                counterArea.UpdateCount(0);
-                continue;
-            }
+			{
+				counterArea.UpdateCount(0);
+				continue;
+			}
 
 			if (containFake &&
 				system!.Mode is AdminDummySystem.DummyMode.Override)
 			{
-				if (system!.TryGet(counterArea.RoomType, out var overrideDummyColor))
-				{
-					counterArea.UpdateCount(overrideDummyColor.Count);
-					if (isSupervisorEnhance)
-					{
-						PlayerColor.Add(counterArea.RoomType, overrideDummyColor);
-					}
-				}
-				else
-				{
-					counterArea.UpdateCount(0);
-				}
+				AddFakePlayerCount(__instance, counterArea, system!, isSupervisorEnhance);
 				continue;
 			}
-
-            if (ShipStatusCache.KeyedRoom.TryGetValue(
-                    counterArea.RoomType,
-                    out PlainShipRoom? plainShipRoom) &&
-				plainShipRoom != null &&
-                plainShipRoom.roomArea != null)
-            {
-                int hitNum = plainShipRoom.roomArea.OverlapCollider(
-                    __instance.filter, __instance.buffer);
-                int showNum = 0;
-
-				HashSet<byte> alreadyShowPlayerIds = new HashSet<byte>(hitNum);
-				List<int> addColor = new List<int>(hitNum);
-
-                for (int j = 0; j < hitNum; j++)
-                {
-                    Collider2D collider2D = __instance.buffer[j];
-                    if (collider2D.CompareTag("DeadBody") && __instance.includeDeadBodies)
-                    {
-                        DeadBody component = collider2D.GetComponent<DeadBody>();
-                        if (component != null &&
-							alreadyShowPlayerIds.Add(component.ParentId))
-                        {
-							showNum++;
-
-							NetworkedPlayerInfo playerInfo = GameData.Instance.GetPlayerById(
-                                component.ParentId);
-                            if (playerInfo != null)
-                            {
-								addColor.Add(playerInfo.DefaultOutfit.ColorId);
-                            }
-                        }
-                    }
-                    else if (!collider2D.isTrigger)
-                    {
-                        PlayerControl component = collider2D.GetComponent<PlayerControl>();
-
-                        if (component &&
-                            component.Data != null &&
-                            !component.Data.Disconnected &&
-                            !component.Data.IsDead &&
-                            (__instance.showLivePlayerPosition || !component.AmOwner) &&
-                            alreadyShowPlayerIds.Add(component.PlayerId))
-                        {
-                            showNum++;
-							addColor.Add(component.Data.DefaultOutfit.ColorId);
-                        }
-                    }
-                }
-				if (containFake &&
-					system!.TryGet(counterArea.RoomType, out var dummyColor) &&
-					dummyColor.Count != 0)
-				{
-					addColor.AddRange(dummyColor);
-					showNum += dummyColor.Count;
-				}
-
-				if (isSupervisorEnhance)
-				{
-					PlayerColor.Add(counterArea.RoomType, addColor);
-				}
-				counterArea.UpdateCount(showNum);
-            }
-            else
-            {
-                Logging.Debug($"Couldn't find counter for: {counterArea.RoomType}");
-            }
-        }
-		return false;
+			OverrideNomalCountOverlay(__instance, counterArea, system, isSupervisorEnhance);
+		}
 	}
 
-    public static void Postfix(MapCountOverlay __instance)
+	public void Postfix(MapCountOverlay __instance)
     {
 
-        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+		if (!_runtime.TryGetGameContext(out var ctx) ||
+			ctx.Roles.All.Count == 0) // <= ここは後でRoleAssignStateに置き換える
+		{
+			return;
+		}
 
-		var adminOpt = ExtremeGameModeManager.Instance.ShipOption.Admin;
+		var adminOpt = ctx.GlobalOption.Admin;
 
 		if (adminOpt.Disable || // アドミン無効化してる
             !adminOpt.EnableLimit || //アドミン制限あるか
@@ -191,48 +152,137 @@ public static class MapCountOverlayUpdatePatch
             return;
         }
 
-        if (timerText == null)
+        if (_timerText == null)
         {
-            timerText = Object.Instantiate(
+            _timerText = Object.Instantiate(
                 HudManager.Instance.KillButton.cooldownTimerText,
                 __instance.transform);
-            timerText.transform.localPosition = new Vector3(3.4f, 2.7f, -9.0f);
-            timerText.name = "vitalTimer";
+            _timerText.transform.localPosition = new Vector3(3.4f, 2.7f, -9.0f);
+            _timerText.name = "vitalTimer";
         }
 
-        if (adminTimer > 0.0f)
+        if (_adminTimer > 0.0f)
         {
-            adminTimer -= Time.deltaTime;
+            _adminTimer -= Time.deltaTime;
         }
 
-        timerText.text = $"{Mathf.CeilToInt(adminTimer)}";
-        timerText.gameObject.SetActive(true);
+        _timerText.text = $"{Mathf.CeilToInt(_adminTimer)}";
+        _timerText.gameObject.SetActive(true);
 
-        if (adminTimer <= 0.0f)
+        if (_adminTimer <= 0.0f)
         {
 			Map.DisableAdmin();
             MapBehaviour.Instance.Close();
         }
     }
 
+	private void OverrideNomalCountOverlay(
+		MapCountOverlay __instance, CounterArea counterArea, AdminDummySystem? system, bool isSupervisorEnhance)
+	{
+		if (!(ShipStatusCache.KeyedRoom.TryGetValue(
+					counterArea.RoomType,
+					out PlainShipRoom? plainShipRoom) &&
+				plainShipRoom != null &&
+				plainShipRoom.roomArea != null
+			))
+		{
+			_logger.LogTrace($"Couldn't find counter for: {counterArea.RoomType}");
+			return;
+		}
+
+		int hitNum = plainShipRoom.roomArea.OverlapCollider(__instance.filter, __instance.buffer);
+		int showNum = 0;
+
+		HashSet<byte> alreadyShowPlayerIds = new HashSet<byte>(hitNum);
+		List<int> addColor = new List<int>(hitNum);
+
+		for (int j = 0; j < hitNum; j++)
+		{
+			Collider2D collider2D = __instance.buffer[j];
+			if (collider2D.CompareTag("DeadBody") && __instance.includeDeadBodies)
+			{
+				if (collider2D.TryGetComponent<DeadBody>(out var deadBody) &&
+					alreadyShowPlayerIds.Add(deadBody.ParentId))
+				{
+					showNum++;
+
+					NetworkedPlayerInfo playerInfo = GameData.Instance.GetPlayerById(deadBody.ParentId);
+					if (playerInfo != null)
+					{
+						addColor.Add(playerInfo.DefaultOutfit.ColorId);
+					}
+				}
+			}
+			else if (!collider2D.isTrigger)
+			{
+				if (collider2D.TryGetComponent<PlayerControl>(out var playerControl) &&
+					playerControl.Data != null &&
+					!playerControl.Data.Disconnected &&
+					!playerControl.Data.IsDead &&
+					(__instance.showLivePlayerPosition || !playerControl.AmOwner) &&
+					alreadyShowPlayerIds.Add(playerControl.PlayerId))
+				{
+					showNum++;
+					addColor.Add(playerControl.Data.DefaultOutfit.ColorId);
+				}
+			}
+		}
+		if (system is not null &&
+			system.TryGet(counterArea.RoomType, out var dummyColor) &&
+			dummyColor.Count != 0)
+		{
+			addColor.AddRange(dummyColor);
+			showNum += dummyColor.Count;
+		}
+
+		if (isSupervisorEnhance)
+		{
+			_playerColors.Add(counterArea.RoomType, addColor);
+		}
+		counterArea.UpdateCount(showNum);
+	}
+
+	private void AddFakePlayerCount(MapCountOverlay __instance, CounterArea counterArea, AdminDummySystem system, bool isSupervisorEnhance)
+	{
+		if (system.TryGet(counterArea.RoomType, out var overrideDummyColor))
+		{
+			counterArea.UpdateCount(overrideDummyColor.Count);
+			if (isSupervisorEnhance)
+			{
+				_playerColors.Add(counterArea.RoomType, overrideDummyColor);
+			}
+		}
+		else
+		{
+			counterArea.UpdateCount(0);
+		}
+	}
+
+	private static void ActivateSabotageMapOvelay(MapCountOverlay __instance, bool isActive, Color color)
+	{
+		__instance.isSab = isActive;
+		__instance.BackgroundColor.SetColor(color);
+		__instance.SabotageText.gameObject.SetActive(isActive);
+	}
+}
+
+
+
+[HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
+public static class MapCountOverlayUpdatePatch
+{
+	public static IReadOnlyDictionary<SystemTypes, IReadOnlyList<int>> PlayerColor => MapCountOverlayUpdatePatchBoidy.Instance.PlayerColors;
+
+	public static bool Prefix(MapCountOverlay __instance)
+		=> MapCountOverlayUpdatePatchBoidy.Instance.Prefix(__instance);
+
+
+	public static void Postfix(MapCountOverlay __instance)
+		=> MapCountOverlayUpdatePatchBoidy.Instance.Postfix(__instance);
+
 	public static bool IsAbilityUse()
-		=> IRoleAbility.IsLocalPlayerAbilityUse(adminUseRole);
+		=> MapCountOverlayUpdatePatchBoidy.Instance.IsAbilityUse();
 
-	public static void Initialize()
-    {
-        Object.Destroy(timerText);
-    }
-
-
-    public static void LoadOptionValue()
-    {
-        var adminOpt = ExtremeGameModeManager.Instance.ShipOption.Admin;
-
-        adminTimer = adminOpt.LimitTime;
-
-        Logging.Debug("---- AdminCondition ----");
-        Logging.Debug($"IsRemoveAdmin:{adminOpt.Disable}");
-        Logging.Debug($"EnableAdminLimit:{adminOpt.EnableLimit}");
-        Logging.Debug($"AdminTime:{adminTimer}");
-    }
+	public static void LoadOptionValue()
+		=> MapCountOverlayUpdatePatchBoidy.Instance.Initialize();
 }
