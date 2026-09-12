@@ -43,7 +43,6 @@ public sealed class Assassin : MultiAssignRoleBase
         CanSeeVote,
     }
 
-    public bool IsFirstMeeting = false;
     public bool CanSeeRoleBeforeFirstMeeting = false;
     public bool CanSeeVote = false;
 
@@ -99,7 +98,7 @@ public sealed class Assassin : MultiAssignRoleBase
 			return;
 		}
 
-		this.IsFirstMeeting = false;
+		this.status?.UseMeeting();
 		assassinMeetingTriggerOn(rolePlayer);
 	}
 
@@ -118,26 +117,31 @@ public sealed class Assassin : MultiAssignRoleBase
             return;
         }
 
-		this.IsFirstMeeting = false;
+		this.status?.UseMeeting();
 
 		assassinMeetingTriggerOn(rolePlayer, killerPlayer);
 	}
 
     public override bool IsBlockShowPlayingRoleInfo()
     {
-        return !this.IsFirstMeeting && !this.CanSeeRoleBeforeFirstMeeting;
+        return this.status is not null && !this.status.IsFirstMeeting && !this.status.IsSeeRoleBeforeFirstMeeting;
     }
 
     public override bool IsBlockShowMeetingRoleInfo()
     {
+		if (this.status is null)
+		{
+			return false;
+		}
+
         if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
 			system.IsActiveMeeting<AssassinAssassinateTargetMeeting>())
         {
             return true;
         }
-        else if (this.CanSeeRoleBeforeFirstMeeting)
+        else if (this.status.IsSeeRoleBeforeFirstMeeting)
         {
-            return this.IsFirstMeeting;
+            return this.status is not null && !this.status.IsFirstMeeting;
         }
 
         return false;
@@ -150,7 +154,8 @@ public sealed class Assassin : MultiAssignRoleBase
             loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilled),
             loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromCrew),
             loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromNeutral),
-			loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromLiberal)
+			loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromLiberal),
+			loader.GetValue<AssassinOption, bool>(AssassinOption.CanSeeRoleBeforeFirstMeeting)
 		);
 		this.AbilityClass = new AssassinAbilityHandler(status);
 
@@ -161,9 +166,6 @@ public sealed class Assassin : MultiAssignRoleBase
 
 		this.isDeadForceMeeting = loader.GetValue<AssassinOption, bool>(
             AssassinOption.IsDeadForceMeeting);
-		this.CanSeeRoleBeforeFirstMeeting = loader.GetValue<AssassinOption, bool>(
-            AssassinOption.CanSeeRoleBeforeFirstMeeting);
-		this.IsFirstMeeting = true;
 		_ = OnemanMeetingSystemManager.CreateOrGet();
     }
 
