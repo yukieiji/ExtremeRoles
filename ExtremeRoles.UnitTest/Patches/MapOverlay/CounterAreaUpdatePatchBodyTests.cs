@@ -28,9 +28,10 @@ public class CounterAreaUpdatePatchBodyTests : IDisposable
 	}
 
 	[Fact]
-	public void Postfix_WhenTryGetGameContextReturnsFalse_PlayerColorsUnchanged()
+	public void Postfix_WhenTryGetGameContextReturnsFalse_DoesNotAccessRoles()
 	{
 		// Arrange
+		var mockContext = new Mock<IGameContext>();
 		var mockRuntime = new Mock<IGameRuntime>();
 		IGameContext? ctx = null;
 		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(false);
@@ -45,11 +46,12 @@ public class CounterAreaUpdatePatchBodyTests : IDisposable
 		patchBody.Postfix(counterArea);
 
 		// Assert
+		mockContext.VerifyGet(c => c.Roles, Times.Never);
 		Assert.Empty(mapCountOverlayPatchBody.PlayerColors);
 	}
 
 	[Fact]
-	public void Postfix_WhenRolesAllIsEmpty_PlayerColorsUnchanged()
+	public void Postfix_WhenRolesAllIsEmpty_DoesNotGetLocalPlayerSupervisorRole()
 	{
 		// Arrange
 		var mockRoles = new Mock<INomalGameRoleContainer>();
@@ -72,11 +74,12 @@ public class CounterAreaUpdatePatchBodyTests : IDisposable
 		patchBody.Postfix(counterArea);
 
 		// Assert
+		mockRoles.Verify(r => r.GetSafeCastedLocalPlayerRole<Supervisor>(), Times.Never);
 		Assert.Empty(mapCountOverlayPatchBody.PlayerColors);
 	}
 
 	[Fact]
-	public void Postfix_WhenLocalPlayerIsNotSupervisor_PlayerColorsUnchanged()
+	public void Postfix_WhenLocalPlayerIsNotSupervisor_QueriesSupervisorRoleAndReturnsEarly()
 	{
 		// Arrange
 		var mockRoles = new Mock<INomalGameRoleContainer>();
@@ -101,6 +104,7 @@ public class CounterAreaUpdatePatchBodyTests : IDisposable
 		patchBody.Postfix(counterArea);
 
 		// Assert
+		mockRoles.Verify(r => r.GetSafeCastedLocalPlayerRole<Supervisor>(), Times.Once);
 		Assert.Empty(mapCountOverlayPatchBody.PlayerColors);
 	}
 }

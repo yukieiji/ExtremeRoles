@@ -30,6 +30,31 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 	}
 
 	[Fact]
+	public void PlayerColors_Initially_IsEmpty()
+	{
+		// Arrange
+		var mockRuntime = new Mock<IGameRuntime>();
+		var mockLogger = new Mock<IModLogger>();
+		var patchBody = new MapCountOverlayUpdatePatchBody(mockLogger.Object, mockRuntime.Object);
+
+		// Act & Assert
+		Assert.NotNull(patchBody.PlayerColors);
+		Assert.Empty(patchBody.PlayerColors);
+	}
+
+	[Fact]
+	public void IsAbilityUse_WhenNoLocalPlayerRole_ThrowsArgumentNullException()
+	{
+		// Arrange
+		var mockRuntime = new Mock<IGameRuntime>();
+		var mockLogger = new Mock<IModLogger>();
+		var patchBody = new MapCountOverlayUpdatePatchBody(mockLogger.Object, mockRuntime.Object);
+
+		// Act & Assert
+		Assert.Throws<ArgumentNullException>(() => patchBody.IsAbilityUse());
+	}
+
+	[Fact]
 	public void Initialize_WhenTryGetGameContextReturnsFalse_LogsNothing()
 	{
 		// Arrange
@@ -77,9 +102,10 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 	}
 
 	[Fact]
-	public void Prefix_WhenTryGetGameContextReturnsFalse_ReturnsTrue()
+	public void Prefix_WhenTryGetGameContextReturnsFalse_ReturnsTrueAndDoesNotAccessRoles()
 	{
 		// Arrange
+		var mockContext = new Mock<IGameContext>();
 		var mockRuntime = new Mock<IGameRuntime>();
 		IGameContext? ctx = null;
 		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(false);
@@ -94,6 +120,7 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 
 		// Assert
 		Assert.True(result);
+		mockContext.VerifyGet(c => c.Roles, Times.Never);
 	}
 
 	[Fact]
@@ -120,6 +147,7 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 
 		// Assert
 		Assert.True(result);
+		mockRoles.VerifyGet(r => r.All, Times.Once);
 	}
 
 	[Fact]
