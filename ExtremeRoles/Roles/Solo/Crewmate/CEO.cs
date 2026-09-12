@@ -16,7 +16,6 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
-using ExtremeRoles.Extension.Player;
 
 
 #nullable enable
@@ -32,6 +31,25 @@ public sealed class CEOAbilityHandler(CEOStatus status) : IAbility, IExiledAnima
 public sealed class CEOStatus : IStatusModel
 {
 	public bool IsAwake { get; set; }
+
+	private readonly PlayerReviver reviver = new PlayerReviver(5.0f);
+
+	public bool IsReviving => this.reviver.IsReviving;
+
+	public void StartRevive(PlayerControl player)
+	{
+		this.reviver.Start(player);
+	}
+
+	public void Update()
+	{
+		this.reviver.Update();
+	}
+
+	public void ResetRevive()
+	{
+		this.reviver.Reset();
+	}
 }
 
 public sealed class CEO : SingleRoleBase,
@@ -80,7 +98,6 @@ public sealed class CEO : SingleRoleBase,
 
 	private bool isMonikaMeeting = false;
 	private bool isMeExiled = false;
-    private PlayerReviver? playerReviver;
 
 	public CEO() : base(
 		RoleArgs.BuildCrewmate(
@@ -146,7 +163,7 @@ public sealed class CEO : SingleRoleBase,
 
 		if (rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
 		{
-			playerReviver?.Start(rolePlayer);
+			this.status?.StartRevive(rolePlayer);
 		}
 		
 		if (OnemanMeetingSystemManager.IsActive ||
@@ -280,7 +297,7 @@ public sealed class CEO : SingleRoleBase,
 			OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
 			system.TryGetOnemanMeeting<MonikaLoveTargetMeeting>(out _);
 
-        playerReviver?.Reset();
+		this.status?.ResetRevive();
 	}
 
 	public void ResetModifier()
@@ -292,9 +309,9 @@ public sealed class CEO : SingleRoleBase,
 	{
 		if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting))
 		{
-			if (playerReviver?.IsReviving ?? false)
+			if (this.status?.IsReviving ?? false)
 			{
-				playerReviver?.Reset();
+				this.status?.ResetRevive();
 			}
 			return;
 		}
@@ -306,7 +323,7 @@ public sealed class CEO : SingleRoleBase,
 
 		if (this.IsAwake)
 		{
-			playerReviver?.Update();
+			this.status?.Update();
 			return;
 		}
 
@@ -327,9 +344,9 @@ public sealed class CEO : SingleRoleBase,
 	}
 
 	public override bool IsBlockShowMeetingRoleInfo()
-		=> playerReviver?.IsReviving ?? false;
+		=> this.status?.IsReviving ?? false;
 	public override bool IsBlockShowPlayingRoleInfo()
-		=> playerReviver?.IsReviving ?? false;
+		=> this.status?.IsReviving ?? false;
 
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -345,9 +362,6 @@ public sealed class CEO : SingleRoleBase,
 
 		this.status = new CEOStatus();
 		this.AbilityClass = new CEOAbilityHandler(this.status);
-
-		this.playerReviver = new PlayerReviver(5.0f);
-
 
 		this.isShowRolePlayerVote = this.Loader.GetValue<Option, bool>(Option.IsShowRolePlayerVote);
 		this.useCEOMeeting = this.Loader.GetValue<Option, bool>(Option.IsUseCEOMeeting);
