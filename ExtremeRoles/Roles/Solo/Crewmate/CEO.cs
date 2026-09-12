@@ -32,24 +32,7 @@ public sealed class CEOStatus : IStatusModel
 {
 	public bool IsAwake { get; set; }
 
-	private readonly PlayerReviver reviver = new PlayerReviver(5.0f);
-
-	public bool IsReviving => this.reviver.IsReviving;
-
-	public void StartRevive(PlayerControl player)
-	{
-		this.reviver.Start(player);
-	}
-
-	public void Update()
-	{
-		this.reviver.Update();
-	}
-
-	public void ResetRevive()
-	{
-		this.reviver.Reset();
-	}
+	public PlayerReviver Reviver { get; } = new PlayerReviver(5.0f);
 }
 
 public sealed class CEO : SingleRoleBase,
@@ -163,7 +146,7 @@ public sealed class CEO : SingleRoleBase,
 
 		if (rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
 		{
-			this.status?.StartRevive(rolePlayer);
+			this.status?.Reviver.Start(rolePlayer);
 		}
 		
 		if (OnemanMeetingSystemManager.IsActive ||
@@ -297,7 +280,7 @@ public sealed class CEO : SingleRoleBase,
 			OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
 			system.TryGetOnemanMeeting<MonikaLoveTargetMeeting>(out _);
 
-		this.status?.ResetRevive();
+		this.status?.Reviver.Reset();
 	}
 
 	public void ResetModifier()
@@ -309,9 +292,9 @@ public sealed class CEO : SingleRoleBase,
 	{
 		if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting))
 		{
-			if (this.status?.IsReviving ?? false)
+			if (this.status?.Reviver.IsReviving ?? false)
 			{
-				this.status?.ResetRevive();
+				this.status?.Reviver.Reset();
 			}
 			return;
 		}
@@ -323,7 +306,7 @@ public sealed class CEO : SingleRoleBase,
 
 		if (this.IsAwake)
 		{
-			this.status?.Update();
+			this.status?.Reviver.Update();
 			return;
 		}
 
@@ -344,9 +327,9 @@ public sealed class CEO : SingleRoleBase,
 	}
 
 	public override bool IsBlockShowMeetingRoleInfo()
-		=> this.status?.IsReviving ?? false;
+		=> this.status?.Reviver.IsReviving ?? false;
 	public override bool IsBlockShowPlayingRoleInfo()
-		=> this.status?.IsReviving ?? false;
+		=> this.status?.Reviver.IsReviving ?? false;
 
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
