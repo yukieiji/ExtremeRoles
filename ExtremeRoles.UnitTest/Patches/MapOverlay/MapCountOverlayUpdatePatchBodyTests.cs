@@ -613,6 +613,59 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 	}
 
 	[Fact]
+	public void Prefix_OverrideNormalCountOverlay_WhenSupervisorNotEnhanced_DoesNotStorePlayerColors()
+	{
+		var supervisor = CreateSupervisor(boosted: false, isAbilityActive: false);
+		var mockRoleContainer = new Mock<INomalGameRoleContainer>();
+		var rolesDict = new Dictionary<byte, SingleRoleBase> { { 0, supervisor } };
+		mockRoleContainer.SetupGet(r => r.All).Returns(rolesDict);
+		mockRoleContainer.Setup(r => r.GetSafeCastedLocalPlayerRole<Supervisor>()).Returns(supervisor);
+
+		var mockContext = new Mock<IGameContext>();
+		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
+
+		var mockRuntime = new Mock<IGameRuntime>();
+		IGameContext? context = mockContext.Object;
+		mockRuntime.Setup(r => r.TryGetGameContext(out context)).Returns(true);
+
+		var mockHasTask = new Mock<MockPlayerTaskPlayerHasTaskOfTypeHelper>();
+		mockHasTask.Setup(x => x.Invoke<IHudOverrideTask>(It.IsAny<PlayerControl>())).Returns(false);
+		MockPlayerTaskPlayerHasTaskOfTypeHelper.Instance = mockHasTask.Object;
+
+		var dummySystem = AdminDummySystem.Get();
+		dummySystem.Mode = AdminDummySystem.DummyMode.Add;
+		dummySystem.Add(SystemTypes.Cafeteria, 3, 4);
+
+		var mockRoomArea = new Mock<Collider2D>(IntPtr.Zero);
+		mockRoomArea.Setup(r => r.OverlapCollider(It.IsAny<ContactFilter2D>(), It.IsAny<Il2CppReferenceArray<Collider2D>>()))
+			.Returns(0);
+
+		var mockPlainShipRoom = new Mock<PlainShipRoom>(IntPtr.Zero);
+		mockPlainShipRoom.SetupGet(r => r.roomArea).Returns(mockRoomArea.Object);
+		ShipStatusCache.KeyedRoom[SystemTypes.Cafeteria] = mockPlainShipRoom.Object;
+
+		var mockCounterArea = new Mock<CounterArea>(IntPtr.Zero);
+		mockCounterArea.SetupGet(c => c.DetectiveExclusiveLocation).Returns(false);
+		mockCounterArea.SetupGet(c => c.RoomType).Returns(SystemTypes.Cafeteria);
+
+		var countAreas = new Il2CppReferenceArray<CounterArea>([mockCounterArea.Object]);
+
+		var mockOverlay = new Mock<MapCountOverlay>(IntPtr.Zero);
+		mockOverlay.SetupProperty(o => o.timer, 0.5f);
+		mockOverlay.SetupProperty(o => o.isSab, false);
+		mockOverlay.SetupGet(o => o.CountAreas).Returns(countAreas);
+
+		var mockLogger = new Mock<IModLogger>();
+		var patchBody = new MapCountOverlayUpdatePatchBody(mockLogger.Object, mockRuntime.Object);
+
+		bool result = patchBody.Prefix(mockOverlay.Object);
+
+		Assert.False(result);
+		mockCounterArea.Verify(c => c.UpdateCount(2), Times.Once);
+		Assert.False(patchBody.PlayerColors.ContainsKey(SystemTypes.Cafeteria));
+	}
+
+	[Fact]
 	public void Postfix_WhenTryGetGameContextReturnsFalse_ReturnsEarly()
 	{
 		var mockLogger = new Mock<IModLogger>();
