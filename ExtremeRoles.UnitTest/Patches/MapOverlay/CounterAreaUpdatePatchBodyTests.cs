@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.Patches.MapOverlay;
 using ExtremeRoles.Roles.API;
@@ -29,7 +28,7 @@ public class CounterAreaUpdatePatchBodyTests : IDisposable
 	}
 
 	[Fact]
-	public void Postfix_WhenTryGetGameContextReturnsFalse_ReturnsEarly()
+	public void Postfix_WhenTryGetGameContextReturnsFalse_PlayerColorsUnchanged()
 	{
 		// Arrange
 		var mockRuntime = new Mock<IGameRuntime>();
@@ -42,12 +41,15 @@ public class CounterAreaUpdatePatchBodyTests : IDisposable
 
 		var counterArea = new CounterArea();
 
-		// Act & Assert (Should not throw)
+		// Act
 		patchBody.Postfix(counterArea);
+
+		// Assert
+		Assert.Empty(mapCountOverlayPatchBody.PlayerColors);
 	}
 
 	[Fact]
-	public void Postfix_WhenRolesAllIsEmpty_ReturnsEarly()
+	public void Postfix_WhenRolesAllIsEmpty_PlayerColorsUnchanged()
 	{
 		// Arrange
 		var mockRoles = new Mock<INomalGameRoleContainer>();
@@ -66,16 +68,19 @@ public class CounterAreaUpdatePatchBodyTests : IDisposable
 
 		var counterArea = new CounterArea();
 
-		// Act & Assert
+		// Act
 		patchBody.Postfix(counterArea);
+
+		// Assert
+		Assert.Empty(mapCountOverlayPatchBody.PlayerColors);
 	}
 
 	[Fact]
-	public void Postfix_WhenLocalPlayerIsNotSupervisor_ReturnsEarly()
+	public void Postfix_WhenLocalPlayerIsNotSupervisor_PlayerColorsUnchanged()
 	{
 		// Arrange
 		var mockRoles = new Mock<INomalGameRoleContainer>();
-		var dummyRole = (Supervisor)RuntimeHelpers.GetUninitializedObject(typeof(Supervisor));
+		var dummyRole = new Supervisor();
 		mockRoles.SetupGet(r => r.All).Returns(new Dictionary<byte, SingleRoleBase> { { 0, dummyRole } });
 		mockRoles.Setup(r => r.GetSafeCastedLocalPlayerRole<Supervisor>()).Returns((Supervisor?)null);
 
@@ -92,7 +97,10 @@ public class CounterAreaUpdatePatchBodyTests : IDisposable
 
 		var counterArea = new CounterArea();
 
-		// Act & Assert
+		// Act
 		patchBody.Postfix(counterArea);
+
+		// Assert
+		Assert.Empty(mapCountOverlayPatchBody.PlayerColors);
 	}
 }

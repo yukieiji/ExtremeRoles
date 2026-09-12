@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
@@ -30,23 +29,8 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 		MockSetupHelper.SetupUnityCommonMocks();
 	}
 
-	private static AdminDeviceOption CreateAdminDeviceOption(bool disable, bool enableLimit, float limitTime)
-	{
-		var adminOpt = (AdminDeviceOption)RuntimeHelpers.GetUninitializedObject(typeof(AdminDeviceOption));
-		var disableField = typeof(AdminDeviceOption).GetField("<Disable>k__BackingField", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-		disableField?.SetValue(adminOpt, disable);
-
-		var enableLimitField = typeof(AdminDeviceOption).GetField("<EnableLimit>k__BackingField", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-		enableLimitField?.SetValue(adminOpt, enableLimit);
-
-		var limitTimeField = typeof(AdminDeviceOption).GetField("<LimitTime>k__BackingField", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-		limitTimeField?.SetValue(adminOpt, limitTime);
-
-		return adminOpt;
-	}
-
 	[Fact]
-	public void Initialize_WhenTryGetGameContextReturnsFalse_DoesNotThrow()
+	public void Initialize_WhenTryGetGameContextReturnsFalse_LogsNothing()
 	{
 		// Arrange
 		var mockRuntime = new Mock<IGameRuntime>();
@@ -56,15 +40,18 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 		var mockLogger = new Mock<IModLogger>();
 		var patchBody = new MapCountOverlayUpdatePatchBody(mockLogger.Object, mockRuntime.Object);
 
-		// Act & Assert
+		// Act
 		patchBody.Initialize();
+
+		// Assert
+		mockLogger.Verify(l => l.LogTrace(It.IsAny<string>()), Times.Never);
 	}
 
 	[Fact]
-	public void Initialize_WhenTryGetGameContextReturnsTrue_SetsTimerAndLogs()
+	public void Initialize_WhenTryGetGameContextReturnsTrue_LogsAdminConditionDetails()
 	{
 		// Arrange
-		var adminOpt = CreateAdminDeviceOption(disable: false, enableLimit: true, limitTime: 30.0f);
+		var adminOpt = new AdminDeviceOption();
 
 		var mockGlobalOption = new Mock<IShipGlobalOption>();
 		mockGlobalOption.SetupGet(g => g.Admin).Returns(adminOpt);
@@ -83,7 +70,10 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 		patchBody.Initialize();
 
 		// Assert
-		mockLogger.Verify(l => l.LogTrace(It.IsAny<string>()), Times.AtLeastOnce);
+		mockLogger.Verify(l => l.LogTrace("---- AdminCondition ----"), Times.Once);
+		mockLogger.Verify(l => l.LogTrace(It.Is<string>(s => s.StartsWith("IsRemoveAdmin:"))), Times.Once);
+		mockLogger.Verify(l => l.LogTrace(It.Is<string>(s => s.StartsWith("EnableAdminLimit:"))), Times.Once);
+		mockLogger.Verify(l => l.LogTrace(It.Is<string>(s => s.StartsWith("AdminTime:"))), Times.Once);
 	}
 
 	[Fact]
@@ -133,9 +123,14 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 	}
 
 	[Fact]
-	public void Postfix_WhenTryGetGameContextReturnsFalse_ReturnsEarly()
+	public void Postfix_WhenTryGetGameContextReturnsFalse_DoesNotQueryGlobalOption()
 	{
 		// Arrange
+		var mockGlobalOption = new Mock<IShipGlobalOption>();
+
+		var mockContext = new Mock<IGameContext>();
+		mockContext.SetupGet(c => c.GlobalOption).Returns(mockGlobalOption.Object);
+
 		var mockRuntime = new Mock<IGameRuntime>();
 		IGameContext? ctx = null;
 		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(false);
@@ -145,21 +140,53 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 
 		var overlay = new MapCountOverlay();
 
-		// Act & Assert
+		// Act
 		patchBody.Postfix(overlay);
+
+		// Assert
+		mockGlobalOption.VerifyGet(g => g.Admin, Times.Never);
 	}
 
 	[Fact]
-	public void Postfix_WhenAdminDisabled_ReturnsEarly()
+	public void Postfix_WhenRolesAllIsEmpty_DoesNotQueryGlobalOption()
 	{
 		// Arrange
-		var adminOpt = CreateAdminDeviceOption(disable: true, enableLimit: true, limitTime: 30.0f);
+		var mockRoles = new Mock<INomalGameRoleContainer>();
+		mockRoles.SetupGet(r => r.All).Returns(new Dictionary<byte, SingleRoleBase>());
+
+		var mockGlobalOption = new Mock<IShipGlobalOption>();
+
+		var mockContext = new Mock<IGameContext>();
+		mockContext.SetupGet(c => c.Roles).Returns(mockRoles.Object);
+		mockContext.SetupGet(c => c.GlobalOption).Returns(mockGlobalOption.Object);
+
+		var mockRuntime = new Mock<IGameRuntime>();
+		IGameContext? ctx = mockContext.Object;
+		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(true);
+
+		var mockLogger = new Mock<IModLogger>();
+		var patchBody = new MapCountOverlayUpdatePatchBody(mockLogger.Object, mockRuntime.Object);
+
+		var overlay = new MapCountOverlay();
+
+		// Act
+		patchBody.Postfix(overlay);
+
+		// Assert
+		mockGlobalOption.VerifyGet(g => g.Admin, Times.Never);
+	}
+
+	[Fact]
+	public void Postfix_WhenAdminDisabled_QueriesGlobalOptionOnce()
+	{
+		// Arrange
+		var adminOpt = new AdminDeviceOption();
 
 		var mockGlobalOption = new Mock<IShipGlobalOption>();
 		mockGlobalOption.SetupGet(g => g.Admin).Returns(adminOpt);
 
 		var mockRoles = new Mock<INomalGameRoleContainer>();
-		var dummyRole = (Supervisor)RuntimeHelpers.GetUninitializedObject(typeof(Supervisor));
+		var dummyRole = new Supervisor();
 		mockRoles.SetupGet(r => r.All).Returns(new Dictionary<byte, SingleRoleBase> { { 0, dummyRole } });
 
 		var mockContext = new Mock<IGameContext>();
@@ -175,7 +202,10 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 
 		var overlay = new MapCountOverlay();
 
-		// Act & Assert
+		// Act
 		patchBody.Postfix(overlay);
+
+		// Assert
+		mockGlobalOption.VerifyGet(g => g.Admin, Times.Once);
 	}
 }
