@@ -1,0 +1,243 @@
+using System;
+using System.Collections.Generic;
+using ExtremeRoles.Extension.Manager;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.Neutal;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using Hazel;
+using Moq;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Events;
+using Xunit;
+
+namespace ExtremeRoles.UnitTest.GhostRoles.Neutral;
+
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
+public sealed class ForasTests
+{
+    private static void SetupMocks()
+    {
+        MockSetupHelper.SetupUnityCommonMocks();
+        var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
+        MockSetupHelper.SetupMockConfig(plugin);
+    }
+
+    [Fact]
+    public void GetRoleFilter_ReturnsExpectedFilterSet()
+    {
+        SetupMocks();
+
+        var foras = new Foras();
+        HashSet<ExtremeRoleId> filter = foras.GetRoleFilter();
+
+        Assert.NotNull(filter);
+        Assert.Contains(ExtremeRoleId.Sidekick, filter);
+        Assert.Contains(ExtremeRoleId.Servant, filter);
+        Assert.Equal(2, filter.Count);
+    }
+
+    [Fact]
+    public void Initialize_ResetsStateWithoutThrowing()
+    {
+        SetupMocks();
+
+        var foras = new Foras();
+        foras.Initialize();
+    }
+
+    [Fact]
+    public void CreateSpecificOption_CreatesExpectedOptionsAndCanBeRead()
+    {
+        SetupMocks();
+
+        using (AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
+            2001,
+            "ForasTestOption",
+            OptionTab.GhostNeutralTab,
+            Color.white))
+        {
+            var foras = new Foras();
+            foras.CreateRoleSpecificOption(factory);
+        }
+
+        // Verify options created by factory can be read via OptionManager after factory is disposed
+        Assert.True(OptionManager.Instance.TryGetCategory(OptionTab.GhostNeutralTab, 2001, out var category));
+        Assert.NotNull(category);
+
+        // Read specific option values created by Foras.CreateSpecificOption
+        float range = category.GetValue<Foras.ForasOption, float>(Foras.ForasOption.Range);
+        float delayTime = category.GetValue<Foras.ForasOption, float>(Foras.ForasOption.DelayTime);
+        int rate = category.GetValue<Foras.ForasOption, int>(Foras.ForasOption.MissingTargetRate);
+
+        Assert.Equal(1.0f, range);
+        Assert.Equal(3.0f, delayTime);
+        Assert.Equal(10, rate);
+    }
+
+    [Fact]
+    public void MeetingHooks_ExecutesWithoutError()
+    {
+        SetupMocks();
+
+        var foras = new Foras();
+
+        foras.ResetOnMeetingStart();
+        foras.ResetOnMeetingEnd();
+    }
+
+    [Fact]
+    public void CreateAbility_ConfiguresButtonAndActivatingBehavior()
+    {
+        SetupMocks();
+        SetupHudManagerMock();
+
+        var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+        LruCache<string, Sprite>.Add($"{ObjectPath.ForasShowArrow}115", mockSprite.Object);
+
+        var foras = new Foras();
+        foras.Initialize();
+        foras.CreateAbility();
+
+        Assert.NotNull(foras.Button);
+    }
+
+    [Fact]
+    public void SwitchArrow_ReadsMessageAndCallsHideArrow_WhenIsShowFalse()
+    {
+        SetupMocks();
+
+        var forasPlayerId = (byte)1;
+        ExtremeGhostRoleManager.GameRole.Clear();
+        ExtremeGhostRoleManager.GameRole[forasPlayerId] = new Foras();
+
+        var mockReader = new Mock<MessageReader>(IntPtr.Zero);
+        mockReader.SetupSequence(r => r.ReadBoolean()).Returns(false); // isShow = false
+        mockReader.SetupSequence(r => r.ReadByte()).Returns(forasPlayerId);
+
+        var reader = mockReader.Object;
+        Foras.SwitchArrow(ref reader);
+
+        mockReader.Verify(r => r.ReadBoolean(), Times.Once);
+        mockReader.Verify(r => r.ReadByte(), Times.Once);
+
+        ExtremeGhostRoleManager.GameRole.Clear();
+    }
+
+    [Fact]
+    public void SwitchArrow_ReadsMessageAndDoesNotThrow_WhenIsShowTrueAndPlayerNotFound()
+    {
+        SetupMocks();
+
+        var mockReader = new Mock<MessageReader>(IntPtr.Zero);
+        mockReader.SetupSequence(r => r.ReadBoolean()).Returns(true); // isShow = true
+        mockReader.SetupSequence(r => r.ReadByte()).Returns((byte)1)  // forasPlayerId = 1
+            .Returns((byte)2);                                        // arrowTargetPlayerId = 2
+
+        var reader = mockReader.Object;
+        Foras.SwitchArrow(ref reader);
+
+        mockReader.Verify(r => r.ReadBoolean(), Times.Once);
+        mockReader.Verify(r => r.ReadByte(), Times.Exactly(2));
+    }
+
+    private static void SetupHudManagerMock()
+    {
+        if (MockVector3get_oneHelper.Instance == null)
+        {
+            var mockOne = new Mock<MockVector3get_oneHelper>();
+            mockOne.Setup(x => x.Invoke()).Returns(new Vector3(1f, 1f, 1f));
+            MockVector3get_oneHelper.Instance = mockOne.Object;
+        }
+
+        var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
+        mockGameObject.Setup(g => g.SetActive(It.IsAny<bool>()));
+
+        var mockGridArrange = new Mock<GridArrange>(IntPtr.Zero);
+        mockGridArrange.Setup(g => g.ArrangeChilds());
+
+        var mockParentGameObject = new Mock<GameObject>(IntPtr.Zero);
+        mockParentGameObject.Setup(g => g.GetComponent<GridArrange>()).Returns(mockGridArrange.Object);
+
+        var mockParentTransform = new Mock<Transform>(IntPtr.Zero);
+        mockParentTransform.SetupGet(t => t.gameObject).Returns(mockParentGameObject.Object);
+
+        var mockTransform = new Mock<Transform>(IntPtr.Zero);
+        mockTransform.SetupGet(t => t.parent).Returns(mockParentTransform.Object);
+        mockTransform.Setup(t => t.FindChild(It.IsAny<string>())).Returns((Transform)null!);
+
+        var mockMaterial = new Mock<Material>(IntPtr.Zero);
+        mockMaterial.Setup(m => m.SetFloat(It.IsAny<string>(), It.IsAny<float>()));
+
+        var mockSpriteRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+        mockSpriteRenderer.SetupProperty(s => s.sprite);
+        mockSpriteRenderer.SetupProperty(s => s.color);
+        mockSpriteRenderer.SetupProperty(s => s.enabled);
+        mockSpriteRenderer.SetupGet(s => s.material).Returns(mockMaterial.Object);
+
+        var mockLabelText = new Mock<TextMeshPro>(IntPtr.Zero);
+        mockLabelText.SetupProperty(t => t.color);
+        mockLabelText.SetupProperty(t => t.fontMaterial);
+        mockLabelText.SetupProperty(t => t.text);
+        mockLabelText.SetupGet(t => t.transform).Returns(mockTransform.Object);
+
+        var mockCoolText = new Mock<TextMeshPro>(IntPtr.Zero);
+        mockCoolText.SetupProperty(t => t.color);
+        mockCoolText.SetupProperty(t => t.enableWordWrapping);
+        mockCoolText.SetupProperty(t => t.text);
+        mockCoolText.SetupGet(t => t.gameObject).Returns(mockGameObject.Object);
+        mockCoolText.SetupGet(t => t.transform).Returns(mockTransform.Object);
+
+        var mockPersistentCallGroup = new Mock<PersistentCallGroup>(IntPtr.Zero);
+        mockPersistentCallGroup.Setup(p => p.Clear());
+
+        var mockOnClick = new Mock<UnityEngine.UI.Button.ButtonClickedEvent>(IntPtr.Zero);
+        mockOnClick.Setup(e => e.RemoveAllListeners());
+        mockOnClick.Setup(e => e.AddListener(It.IsAny<UnityAction>()));
+        mockOnClick.SetupGet(e => e.m_PersistentCalls).Returns(mockPersistentCallGroup.Object);
+
+        var mockPassiveButton = new Mock<PassiveButton>(IntPtr.Zero);
+        mockPassiveButton.SetupGet(p => p.OnClick).Returns(mockOnClick.Object);
+
+        var mockKillButton = new Mock<KillButton>(IntPtr.Zero);
+        mockKillButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
+        mockKillButton.SetupGet(b => b.gameObject).Returns(mockGameObject.Object);
+        mockKillButton.SetupGet(b => b.graphic).Returns(mockSpriteRenderer.Object);
+        mockKillButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
+        mockKillButton.SetupGet(b => b.cooldownTimerText).Returns(mockCoolText.Object);
+        mockKillButton.Setup(b => b.GetComponent<PassiveButton>()).Returns(mockPassiveButton.Object);
+        mockKillButton.SetupGet(b => b.isActiveAndEnabled).Returns(true);
+        mockKillButton.Setup(b => b.OverrideText(It.IsAny<string>()));
+        mockKillButton.Setup(b => b.SetCoolDown(It.IsAny<float>(), It.IsAny<float>()));
+        mockKillButton.Setup(b => b.SetCooldownFill(It.IsAny<float>()));
+
+        var mockUseButton = new Mock<UseButton>(IntPtr.Zero);
+        mockUseButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
+        mockUseButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
+
+        var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
+        mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
+            .Returns((UnityEngine.Object original, Transform parent) => original);
+        MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
+
+        var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
+        mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
+            .Returns((UnityEngine.Object original, Transform parent) => original);
+        MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
+
+        var mockUnityActionImplicit = new Mock<MockUnityActionop_ImplicitHelper>();
+        mockUnityActionImplicit.Setup(x => x.Invoke(It.IsAny<Action>()))
+            .Returns((Action action) => action != null ? new UnityAction(IntPtr.Zero) : null!);
+        MockUnityActionop_ImplicitHelper.Instance = mockUnityActionImplicit.Object;
+
+        var mockHud = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
+        mockHud.SetupGet(h => h.KillButton).Returns(mockKillButton.Object);
+        mockHud.SetupGet(h => h.UseButton).Returns(mockUseButton.Object);
+    }
+}

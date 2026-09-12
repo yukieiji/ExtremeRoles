@@ -12,6 +12,8 @@ using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat.Initializer;
 using ExtremeRoles.Module.CustomOption.Factory;
+using Microsoft.Extensions.DependencyInjection;
+using ExtremeRoles.Core.Abstract;
 
 
 namespace ExtremeRoles.Compat;
@@ -69,47 +71,35 @@ public sealed class CompatModManager
 
 	public static void Initialize()
 	{
-		Instance = new CompatModManager();
+		Instance = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<CompatModManager>();
 	}
 
-	internal CompatModManager()
+	public CompatModManager(
+		IPluginLoader loader,
+		IModInitializerFactory factory,
+		IModLogger logger)
 	{
 		RemoveMap();
-		var logger = ExtremeRolesPlugin.Logger;
-		if (logger == null || IL2CPPChainloader.Instance == null)
-		{
-			return;
-		}
 
 		logger.LogInfo(
 			$"---------- CompatModManager Initialize Start with AmongUs ver.{UnityEngine.Application.version} ----------");
 
 		foreach (var (modType, modInfo) in ModInfo)
 		{
-			PluginInfo? plugin;
-
 			string guid = modInfo.Guid;
 
-			if (!IL2CPPChainloader.Instance.Plugins.TryGetValue(guid, out plugin))
-			{ continue; }
+			if (!loader.TryGetPlugin(guid, out var plugin))
+			{
+				continue;
+			}
 
 
 			logger.LogInfo(
 				$"---- CompatMod:{guid} integrater Start!! ----");
 
-			object? instance = Activator.CreateInstance(
-				modInfo.ModIntegratorType, [ plugin ]);
-			if (instance == null)
+			var initializer = factory.Create(modInfo.ModIntegratorType, plugin);
+			if (initializer == null)
 			{
-				logger.LogError(
-					$"{modInfo.ModIntegratorType.FullName} can't create instance");
-				continue;
-			}
-
-			if (instance is not IInitializer initializer)
-			{
-				logger.LogError(
-					$"ModIntegratorType '{modInfo.ModIntegratorType.FullName}' : NOT IMP IInitializer!!");
 				continue;
 			}
 

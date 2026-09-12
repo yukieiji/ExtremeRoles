@@ -33,4 +33,12 @@ public class JsonParserTests
 
         Assert.Null(result);
     }
+
+    [Fact]
+    public void GetJObjectFromAssembly_WithInvalidResourcePath_ShouldReturnNull()
+    {
+        var result = JsonParser.GetJObjectFromAssembly("Invalid.Resource.Path.json");
+
+        Assert.Null(result);
+    }
 }

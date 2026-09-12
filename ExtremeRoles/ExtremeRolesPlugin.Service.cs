@@ -12,6 +12,15 @@ using ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.Solo.Liberal;
+using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.Core;
+using ExtremeRoles.Compat.Interface;
+using ExtremeRoles.Compat;
+using ExtremeRoles.Patches;
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Patches.Ship;
+using ExtremeRoles.Patches.Role;
+using ExtremeRoles.Patches.Player;
 
 
 namespace ExtremeRoles;
@@ -21,6 +30,26 @@ public partial class ExtremeRolesPlugin
 	public static IServiceProvider BuildProvider()
 	{
 		var collection = new ServiceCollection();
+
+		collection
+			.AddSingleton<IModLogger, BepInExLogger>();
+
+		collection
+			.AddTransient<IPluginLoader, BepInExPluginLoader>()
+			.AddTransient<IAccessTool, AccessToolWrapper>()
+			.AddTransient<IHarmonyPatchProvider, HarmonyPatchProvider>()
+			.AddTransient<IModInitializerFactory, ModInitializerFactory>()
+			.AddSingleton<CompatModManager>();
+
+		collection
+			.AddSingleton<IGameProgress, GameProgress>()
+			.AddScoped<INomalGameRoleContainer, NormalGameRoleContainer>();
+
+		collection
+			.AddSingleton<GameRuntime>()
+			.AddSingleton<IGameRuntime>(x => x.GetRequiredService<GameRuntime>())
+			.AddSingleton<IGameRuntimeStarter>(x => x.GetRequiredService<GameRuntime>())
+			.AddSingleton<IGameRuntimeEnder>(x => x.GetRequiredService<GameRuntime>());
 
 		collection
 			.AddTransient<IRoleAssignee, ExtremeRoleAssignee>()
@@ -87,6 +116,34 @@ public partial class ExtremeRolesPlugin
 
 		collection.AddTransient<ICustomRegionProvider, DefaultCustomRegionProvider>();
 
+		RegisterPatchService(collection);
+
+		// シングルトン対策として、ExtremeSystemTypeManagerのインスタンスをシングルトンとして登録(後にDIへ完全移行させる)
+		collection.AddSingleton(x =>
+		{
+			var mng = ExtremeSystemTypeManager.Instance;
+			return mng;
+		});
 		return collection.BuildServiceProvider();
+	}
+
+	private static void RegisterPatchService(IServiceCollection collection)
+	{
+		collection
+			.AddSingleton<ProgressTrackerFixedUpdatePatchBody>()
+			.AddSingleton<PlayerPhysicsFixedUpdatePatchBody>()
+
+			.AddSingleton<PlayerControlSetKillTimerPatchBody>()
+			.AddSingleton<PlayerControlShapeshiftPatchBody>()
+
+			.AddSingleton<ShipStatusOnEnablePatchBody>()
+			.AddSingleton<ShipStatusPrespawnStepPatchBody>()
+
+			.AddSingleton<RoleBehaviourGetAbilityDistancePatchBody>()
+			.AddSingleton<RoleBehaviourIsValidTargetPatchBody>()
+
+			.AddSingleton<IntroCutScenceBeginPatch>()
+			.AddSingleton<IntroCutScenceCoBeginPatchBody>()
+			.AddSingleton<IntroCutScenceShowRolePatchBody>();
 	}
 }

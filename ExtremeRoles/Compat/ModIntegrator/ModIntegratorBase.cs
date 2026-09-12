@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.Compat.Interface;
 
@@ -12,7 +12,7 @@ public abstract class ModIntegratorBase
 	public string Name { get; }
 // Harmonyクラスは消されるとパッチ周りが消えるのでとりあえずメンバ変数として保持
 #pragma warning disable IDE0052 // 読み取られていないプライベート メンバーを削除
-	private readonly Harmony patch;
+	private readonly IHarmonyPatch patch;
 #pragma warning restore IDE0052 // 読み取られていないプライベート メンバーを削除
 
 	internal ModIntegratorBase(IInitializer initializer)

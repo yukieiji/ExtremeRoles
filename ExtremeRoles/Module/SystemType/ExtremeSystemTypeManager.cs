@@ -75,7 +75,7 @@ public enum ResetTiming : byte
 }
 
 [Il2CppRegister([ typeof(ISystemType) ])]
-public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemType, IExtremeSystemTypeManager
+public sealed class ExtremeSystemTypeManager : Il2CppObject, IExtremeSystemTypeManager
 {
 	public static IExtremeSystemTypeManager Instance
 	{

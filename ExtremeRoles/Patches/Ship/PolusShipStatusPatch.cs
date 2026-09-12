@@ -1,15 +1,13 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
-using ExtremeRoles.GameMode;
-
-namespace ExtremeRoles.Patches;
+namespace ExtremeRoles.Patches.Ship;
 
 [HarmonyPatch(typeof(PolusShipStatus), nameof(PolusShipStatus.OnEnable))]
 public static class PolusShipStatusOnEnablePatch
 {
 	public static void Postfix(PolusShipStatus __instance)
 	{
-		ExtremeGameModeManager.Instance.ShipOption.Emergency.ChangeTime(__instance);
+		ShipStatusOnEnablePatchBody.StaticPostfix(__instance);
 	}
 }
 

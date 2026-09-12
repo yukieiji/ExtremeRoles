@@ -92,6 +92,7 @@ public sealed class LeaderStatus : IStatusModel
 			return result;
 		}
 	}
+	public PlayerReviver Reviver { get; } = new PlayerReviver(3.0f);
 }
 
 public sealed class LeaderAbilityHandler(
@@ -131,7 +132,6 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	private readonly ReviveSetting revive;
 
 	private readonly record struct ReviveSetting(bool IsAutoExit, bool IsAutoRevive);
-	private readonly PlayerReviver reviver;
 
 	private readonly KillSetting killSetting;
 	// リベラルがキルしたロジックはリーダーが全部引き受けるため
@@ -152,7 +152,6 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		this.abilityHandler = new LeaderAbilityHandler(leaderCoreOption, status);
 		this.revive = new ReviveSetting(leaderCoreOption.IsAutoExit, leaderCoreOption.IsAutoRevive);
 		this.killSetting = new KillSetting(leaderCoreOption.KillMoney, leaderCoreOption.LeaderKillMoney, leaderCoreOption.LeaderKillBoostDelta);
-		this.reviver = new PlayerReviver(3.0f);
 		this.AbilityClass = this.abilityHandler;
 
 		LiberalSettingOverrider.OverrideDefault(this, option);
@@ -248,16 +247,16 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	}
 
 	public override bool IsBlockShowMeetingRoleInfo()
-		=> this.reviver.IsReviving;
+		=> this.status.Reviver.IsReviving;
 
 	public override bool IsBlockShowPlayingRoleInfo()
-		=> this.reviver.IsReviving;
+		=> this.status.Reviver.IsReviving;
 
 	public void Update(PlayerControl rolePlayer)
 	{
 		if (!GameProgressSystem.IsGameNow)
 		{
-			this.reviver.Reset();
+			this.status.Reviver.Reset();
 			return;
 		}
 
@@ -283,7 +282,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		{
 			return;
 		}
-		this.reviver.Update();
+		this.status.Reviver.Update();
 	}
 
 	public void HookMurderPlayer(PlayerControl source, PlayerControl target)
@@ -311,7 +310,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 			this.revive.IsAutoRevive &&
 			(!this.revive.IsAutoExit || this.status.OtherLiberal > 0))
 		{
-			this.reviver.Start(rolePlayer);
+			this.status.Reviver.Start(rolePlayer);
 		}
 		else
 		{

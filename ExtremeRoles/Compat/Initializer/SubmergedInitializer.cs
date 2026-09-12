@@ -1,20 +1,19 @@
-﻿using System;
-
 using BepInEx;
-using HarmonyLib;
-
-
+using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
+using HarmonyLib;
+using System;
+
 
 #nullable enable
 
 namespace ExtremeRoles.Compat.Initializer;
 
-public sealed class SubmergedInitializer(PluginInfo plugin) : InitializerBase<SubmergedIntegrator>(plugin)
+public sealed class SubmergedInitializer(PluginInfo plugin, IAccessTool accessTool, IHarmonyPatch patch) : InitializerBase<SubmergedIntegrator>(plugin, accessTool, patch)
 {
 	public Type? SubmarineOxygenSystem { get; private set; }
 
-	protected override void PatchAll(Harmony harmony)
+	protected override void PatchAll(IAccessTool accessTool, IHarmonyPatch patch)
 	{
 		var wrapUpAndSpawn = GetMethod("SubmergedExileController", "WrapUpAndSpawn");
 		ExileController? controller = null;
@@ -72,37 +71,37 @@ public sealed class SubmergedInitializer(PluginInfo plugin) : InitializerBase<Su
 			() => Patches.SubmarineSelectSpawnCoSelectLevelPatch.Prefix(ref upperSelected));
 
 		// 会議終了時のリセット処理を呼び出せるように
-		harmony.Patch(wrapUpAndSpawn,
+		patch.Patch(wrapUpAndSpawn,
 			new HarmonyMethod(wrapUpAndSpawnPrefix),
 			new HarmonyMethod(wrapUpAndSpawnPostfix));
 
 		// アサシン会議発動するとスポーン画面が出ないように
-		harmony.Patch(displayPrespawnStepPatchesPostfix,
+		patch.Patch(displayPrespawnStepPatchesPostfix,
 			new HarmonyMethod(displayPrespawnStepPatchesPostfixPrefix));
 
 		// キルクール周りが上書きされているのでそれの調整
-		harmony.Patch(onDestroy,
+		patch.Patch(onDestroy,
 			new HarmonyMethod(onDestroyPrefix));
 
 		// フロアの階層変更ボタンの位置を変えるパッチ
-		harmony.Patch(hudManagerUpdatePatchPostfix,
+		patch.Patch(hudManagerUpdatePatchPostfix,
 			postfix: new HarmonyMethod(hubManagerUpdatePatchPostfixPatch));
 
 		// 酸素枯渇発動時アサシンは常にマスクを持つパッチ
-		harmony.Patch(submarineOxygenSystemDetoriorate,
+		patch.Patch(submarineOxygenSystemDetoriorate,
 			postfix: new HarmonyMethod(submarineOxygenSystemDetorioratePostfixPatch));
 
 		// アサシン会議時の暗転を防ぐパッチ
-		harmony.Patch(submarineSpawnInSystemDetoriorate,
+		patch.Patch(submarineSpawnInSystemDetoriorate,
 			postfix: new HarmonyMethod(submarineSpawnInSystemDetorioratePostfixPatch));
 
 		// サブマージドのセキュリティカメラの制限をつけるパッチ
-		harmony.Patch(submarineSurvillanceMinigameSystemUpdate,
+		patch.Patch(submarineSurvillanceMinigameSystemUpdate,
 			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePrefixPatch),
 			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
 
 		// ランダムスポーンを無効化する用
-		harmony.Patch(submarineSelectSpawnCoSelectLevel,
+		patch.Patch(submarineSelectSpawnCoSelectLevel,
 			new HarmonyMethod(submarineSelectSpawnCoSelectLevelPatch));
 	}
 }

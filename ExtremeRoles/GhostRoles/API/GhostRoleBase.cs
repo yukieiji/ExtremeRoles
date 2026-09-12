@@ -40,7 +40,6 @@ public abstract class GhostRoleBase
 	public ExtremeAbilityButton? Button { get; protected set; }
 
     protected readonly OptionTab Tab = OptionTab.GeneralTab;
-    private int controlId;
 
 	public virtual IOptionLoader Loader
 	{
@@ -182,7 +181,7 @@ public abstract class GhostRoleBase
 
     public void SetGameControlId(int newId)
     {
-        this.controlId = newId;
+        this.GameControlId = newId;
     }
 
     public void ResetOnMeetingEnd()

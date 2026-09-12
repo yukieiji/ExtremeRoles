@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using System.Linq;
+using ExtremeRoles.Patches;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
@@ -70,7 +71,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
 			impostor.Data.PlayerName : "???";
 
 		// HnSではイントロの初期化周りが呼ばれないのでここで呼ぶ
-		IntroCutsceneModder.CommonBeginPostfix(instance);
+		IntroCutScenceBeginPatch.Instance.CommonBeginPostfix(instance);
 
 		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
         TextMeshPro roleText = Object.Instantiate(
