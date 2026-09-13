@@ -15,6 +15,7 @@ $testArgs = @(
     "--",
     "--coverage",
     "--coverage-output-format", "cobertura",
+    "--coverage-output", "coverage.cobertura.xml",
     "--coverage-settings", $configPath
 ) + $args
 
