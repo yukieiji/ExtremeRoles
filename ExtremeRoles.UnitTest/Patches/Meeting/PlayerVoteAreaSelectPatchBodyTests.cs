@@ -20,6 +20,15 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Patches.Meeting;
 
+[HarmonyLib.HarmonyPatch(typeof(Il2CppSystem.Collections.Generic.List<UiElement>), nameof(Il2CppSystem.Collections.Generic.List<UiElement>.Add))]
+internal static class ListUiElementAddPatch
+{
+	private static bool Prefix()
+	{
+		return false;
+	}
+}
+
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 {
@@ -106,6 +115,22 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 
 		var mockLerpHelper = new Mock<MockEffectsLerpHelper>();
 		MockEffectsLerpHelper.Instance = mockLerpHelper.Object;
+
+		var mockAllHelper = new Mock<MockEffectsAllHelper>();
+		mockAllHelper.Setup(x => x.Invoke(It.Is<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Collections.IEnumerator>>(_ => true)))
+			.Returns((Il2CppSystem.Collections.IEnumerator)null!);
+		MockEffectsAllHelper.Instance = mockAllHelper.Object;
+
+		var mockAllHelper2 = new Mock<MockEffectsAllHelper2>();
+		mockAllHelper2.Setup(x => x.Invoke(It.Is<Il2CppSystem.Collections.IEnumerator[]>(_ => true)))
+			.Returns((Il2CppSystem.Collections.IEnumerator)null!);
+		MockEffectsAllHelper2.Instance = mockAllHelper2.Object;
+
+		try
+		{
+			HarmonyLib.Harmony.CreateAndPatchAll(typeof(ListUiElementAddPatch));
+		}
+		catch { }
 
 		MockPlayerControlget_LocalPlayerHelper.Instance = null;
 		PlayerCache.RemovePlayerControl(_ => true);
@@ -374,6 +399,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Assert
 		Assert.True(result);
 	}
+
 
 	[Fact]
 	public void Prefix_WhenValidButtonEnumerable_ActivatesButtonsAndOpensOverlayAndReturnsFalse()
