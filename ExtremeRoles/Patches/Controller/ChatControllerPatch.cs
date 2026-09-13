@@ -133,7 +133,7 @@ public class ChatControllerAddChatPatchBody(IModLogger logger, IGameProgress pro
 			local.Role.GetNameColor(local.IsDead) :
 			local.Role.GetTargetRoleSeeColor(source.Role, source.Id);
 
-		bool didVote = MeetingHud.Instance && MeetingHud.Instance.DidVote(source.Id);
+		bool didVote = MeetingHud.Instance != null && MeetingHud.Instance.DidVote(source.Id);
 
 		chatBubble.SetCosmetics(source.Data);
 
