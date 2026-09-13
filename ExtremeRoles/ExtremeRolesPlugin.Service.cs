@@ -1,7 +1,8 @@
-using System;
-
-using Microsoft.Extensions.DependencyInjection;
-
+using ExtremeRoles.Compat;
+using ExtremeRoles.Compat.Interface;
+using ExtremeRoles.Core;
+using ExtremeRoles.Core.Abstract;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.GameEnd;
@@ -11,16 +12,14 @@ using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Roles.Solo.Liberal;
-using ExtremeRoles.Core.Abstract;
-using ExtremeRoles.Core;
-using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Compat;
 using ExtremeRoles.Patches;
-using ExtremeRoles.GameMode;
-using ExtremeRoles.Patches.Ship;
-using ExtremeRoles.Patches.Role;
+using ExtremeRoles.Patches.Meeting;
 using ExtremeRoles.Patches.Player;
+using ExtremeRoles.Patches.Role;
+using ExtremeRoles.Patches.Ship;
+using ExtremeRoles.Roles.Solo.Liberal;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 
 namespace ExtremeRoles;
@@ -141,6 +140,8 @@ public partial class ExtremeRolesPlugin
 
 			.AddSingleton<RoleBehaviourGetAbilityDistancePatchBody>()
 			.AddSingleton<RoleBehaviourIsValidTargetPatchBody>()
+
+			.AddSingleton<PlayerVoteAreaSelectPatchBody>()
 
 			.AddSingleton<IntroCutScenceBeginPatch>()
 			.AddSingleton<IntroCutScenceCoBeginPatchBody>()
