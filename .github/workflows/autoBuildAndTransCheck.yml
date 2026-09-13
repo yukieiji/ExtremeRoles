@@ -19,7 +19,7 @@ jobs:
         id: gen_token
         uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ secrets.APP_ID }}
+          client-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
       - uses: actions/checkout@v7
         with:
@@ -56,8 +56,8 @@ jobs:
         run: python createtransdatareport.py ${{ steps.build.outcome }}
       - name: PostComment
         if: always() && steps.build.outcome != 'skipped'
-        uses: thollander/actions-comment-pull-request@v3
+        uses: peter-evans/create-or-update-comment@v4
         with:
-            github-token: ${{ steps.gen_token.outputs.token }}
-            pr-number: ${{ github.event.number }}
-            file-path: .github/workflows/comment.md
+          token: ${{ steps.gen_token.outputs.token }}
+          issue-number: ${{ github.event.number }}
+          body-path: .github/workflows/comment.md
