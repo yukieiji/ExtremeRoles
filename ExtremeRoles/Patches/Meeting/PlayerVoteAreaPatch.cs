@@ -20,6 +20,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 
+#nullable enable
+
 
 namespace ExtremeRoles.Patches.Meeting;
 
