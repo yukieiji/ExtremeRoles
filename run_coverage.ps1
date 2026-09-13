@@ -20,3 +20,7 @@ $testArgs = @(
 ) + $args
 
 & dotnet $testArgs
+
+if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
+}
