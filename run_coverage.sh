@@ -12,5 +12,7 @@ PROJ_PATH="$SCRIPT_DIR/ExtremeRoles.UnitTest/ExtremeRoles.UnitTest.csproj"
 
 dotnet test --project "$PROJ_PATH" -- \
   --coverage \
+  --coverage-output-format cobertura \
+  --coverage-output coverage.cobertura.xml \
   --coverage-settings "$COVERAGE_CONFIG" \
   "$@"

@@ -47,7 +47,16 @@ jobs:
       - name: RunTests
         env:
           TestableAmongUsAccess: ${{ secrets.TESTABLEAMONGUSACCESS }}
-        run: powershell ./run_tests.ps1
+        run: powershell ./run_coverage.ps1
+      - name: Install ReportGenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+      - name: Generate Coverage Report
+        run: reportgenerator -reports:"**/*.cobertura.xml;**/coverage.cobertura.xml;**/*.xml;**/*.cov" -targetdir:"CoverageReport" -reporttypes:Html
+      - name: Upload Coverage Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: CoverageReport
       - name: RunBuild
         id: build
         run: msbuild ExtremeRoles.sln -t:restore,build -p:Configuration=Release -p:RestorePackagesConfig=true
