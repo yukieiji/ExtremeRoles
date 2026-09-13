@@ -20,8 +20,6 @@ using ExtremeRoles.Patches.Ship;
 using ExtremeRoles.Roles.Solo.Liberal;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using ExtremeRoles.Patches.Role;
-using ExtremeRoles.Patches.Player;
 using ExtremeRoles.Patches.MapOverlay;
 
 
