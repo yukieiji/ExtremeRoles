@@ -502,7 +502,7 @@ public class ChatControllerAddChatPatchBodyTests : IDisposable
 		// Assert
 		Assert.False(result);
 		mockLogger.Verify(l => l.LogError(It.IsAny<InvalidOperationException>()), Times.Once);
-		mockChatController.Object.chatBubblePool.Reclaim(mockBubble.Object);
+		Mock.Get(mockChatController.Object.chatBubblePool).Verify(p => p.Reclaim(mockBubble.Object), Times.Once);
 	}
 
 	[Fact]
@@ -579,7 +579,7 @@ public class ChatControllerAddChatPatchBodyTests : IDisposable
 		mockBubble.Verify(b => b.SetCosmetics(sourceData.Object), Times.Once);
 		mockChatController.Verify(c => c.SetChatBubbleName(mockBubble.Object, sourceData.Object, false, false, seeColor, null), Times.Once);
 		mockBubble.Verify(b => b.SetText("other text"), Times.Once);
-		mockChatController.Object.chatNotification.SetUp(sourcePlayer.Object, "other text");
+		Mock.Get(mockChatController.Object.chatNotification).Verify(n => n.SetUp(sourcePlayer.Object, "other text"), Times.Once);
 	}
 
 	[Theory]
