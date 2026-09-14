@@ -32,6 +32,8 @@ internal static class ListUiElementAddPatch
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 {
+	private readonly HarmonyLib.Harmony _harmony;
+
 	private sealed class DummySingleRole : SingleRoleBase
 	{
 		public DummySingleRole(RoleCore core)
@@ -92,10 +94,12 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 	public PlayerVoteAreaSelectPatchBodyTests()
 	{
 		ResetState();
+		_harmony = HarmonyLib.Harmony.CreateAndPatchAll(typeof(ListUiElementAddPatch));
 	}
 
 	public void Dispose()
 	{
+		_harmony.UnpatchSelf();
 		ResetState();
 	}
 
@@ -125,12 +129,6 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		mockAllHelper2.Setup(x => x.Invoke(It.Is<Il2CppSystem.Collections.IEnumerator[]>(_ => true)))
 			.Returns((Il2CppSystem.Collections.IEnumerator)null!);
 		MockEffectsAllHelper2.Instance = mockAllHelper2.Object;
-
-		try
-		{
-			HarmonyLib.Harmony.CreateAndPatchAll(typeof(ListUiElementAddPatch));
-		}
-		catch { }
 
 		MockPlayerControlget_LocalPlayerHelper.Instance = null;
 		PlayerCache.RemovePlayerControl(_ => true);
