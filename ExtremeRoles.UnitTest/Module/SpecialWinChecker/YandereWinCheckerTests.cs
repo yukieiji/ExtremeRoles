@@ -21,13 +21,8 @@ public sealed class YandereWinCheckerTests
     private sealed class DummySingleRole : SingleRoleBase
     {
         public DummySingleRole(ExtremeRoleId roleId, ExtremeRoleType team, bool canKill = false)
+            : base(new RoleArgs(new RoleCore(roleId, team, Color.white, roleId.ToString()), canKill ? RoleProp.CanKill : RoleProp.None))
         {
-            var core = new RoleCore(roleId, team, Color.white, roleId.ToString());
-            var field = typeof(SingleRoleBase).GetField("<Core>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-            field?.SetValue(this, core);
-
-            var canKillField = typeof(SingleRoleBase).GetField("<CanKillRole>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-            canKillField?.SetValue(this, canKill);
         }
 
         protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }

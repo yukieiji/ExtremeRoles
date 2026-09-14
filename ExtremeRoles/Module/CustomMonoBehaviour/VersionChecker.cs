@@ -302,11 +302,8 @@ public sealed class VersionChecker : MonoBehaviour
 		this.display = this.mng.StartButtonGlyph;
 		this.button = this.mng.StartButton;
 		var go = HudManager.Instance.transform.Find("AnalyticsRecordingGO");
-		if (go == null)
-		{
-			return;
-		}
-		if (!go.TryGetComponent<TextMeshPro>(out this.text))
+		if (go == null ||
+			!go.TryGetComponent<TextMeshPro>(out this.text))
 		{
 			return;
 		}

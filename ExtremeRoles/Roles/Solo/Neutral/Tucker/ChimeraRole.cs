@@ -34,8 +34,6 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	private readonly float tuckerDeathKillCoolOffset;
 	private readonly float initCoolTime;
 
-	private bool isTuckerDead;
-
 	public byte Parent { get; }
 	public override IOptionLoader Loader { get; }
 	public override IStatusModel Status => status;
@@ -70,7 +68,6 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		this.Vision = vision.Vision;
 		this.IsApplyEnvironmentVision = vision.ApplyEffect;
 
-		this.isTuckerDead = tuckerPlayer.IsDead;
 		this.playerReviver = new PlayerReviver(option.ResurrectTime, revive);
 	}
 
@@ -110,10 +107,10 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			return;
 		}
 
-		if (!isTuckerDead)
+		if (!this.status.IsTuckerDead)
 		{
-			isTuckerDead = tuckerPlayer.IsInValid();
-			if (isTuckerDead)
+			this.status.IsTuckerDead = tuckerPlayer.IsInValid();
+			if (this.status.IsTuckerDead)
 			{
 				updateKillCoolTime(tuckerDeathKillCoolOffset);
 			}
@@ -178,7 +175,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	}
 
 	private bool infoBlock()
-		=> !this.isTuckerDead;
+		=> !this.status.IsTuckerDead;
 
 	private void revive(PlayerControl rolePlayer)
 	{
