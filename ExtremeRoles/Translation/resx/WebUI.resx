@@ -193,4 +193,34 @@
   <data name="SIMULATE_SETTING_PLAYER_NAME" xml:space="preserve">
     <value>役職割り当てシュミレート時のダミープレイヤー名</value>
   </data>
+  <data name="DISABLED_CONTROL_TOOLTIP" xml:space="preserve">
+    <value>前提となるオプションや役職が設定されていません</value>
+  </data>
+  <data name="DISPLAY_MODE" xml:space="preserve">
+    <value>表示モード</value>
+  </data>
+  <data name="DISPLAY_MODE_HIDDEN" xml:space="preserve">
+    <value>非表示</value>
+  </data>
+  <data name="DISPLAY_MODE_DISABLED" xml:space="preserve">
+    <value>操作だけ無効</value>
+  </data>
+  <data name="DISPLAY_MODE_ENABLED" xml:space="preserve">
+    <value>操作可能</value>
+  </data>
+  <data name="THEME_SYSTEM" xml:space="preserve">
+    <value>システム</value>
+  </data>
+  <data name="THEME_LIGHT" xml:space="preserve">
+    <value>ライト</value>
+  </data>
+  <data name="THEME_DARK" xml:space="preserve">
+    <value>ダーク</value>
+  </data>
+  <data name="THEME_SETTING_TITLE" xml:space="preserve">
+    <value>テーマ設定</value>
+  </data>
+  <data name="INACTIVE_OPTION_DISPLAY_TITLE" xml:space="preserve">
+    <value>非アクティブのオプション表示</value>
+  </data>
 </root>
