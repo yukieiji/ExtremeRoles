@@ -11,8 +11,8 @@ WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
 EXTREMERORLS_FILE = os.path.join(WORKING_DIR, "ExtremeRoles", "Translation", "resx")
 EXTREMESKIN_IN_FILE = os.path.join(WORKING_DIR, "ExtremeSkinsTransData.xlsx")
 
-SUPPORT_LANG = {0:'English', 11:'Japanese', 13: 'SChinese', 14: "TChinese"}
-SUPPORT_RESX_LANG = {'en-US':'English', "zh-Hans": 'SChinese', "zh-Hant": "TChinese"}
+SUPPORT_LANG = {0:'English', 8:'French', 11:'Japanese', 13: 'SChinese', 14: "TChinese"}
+SUPPORT_RESX_LANG = {'en-US':'English', 'fr-FR':'French', "zh-Hans": 'SChinese', "zh-Hant": "TChinese"}
 TAG = 'report'
 
 RESX_KEY_TAG = "data"
