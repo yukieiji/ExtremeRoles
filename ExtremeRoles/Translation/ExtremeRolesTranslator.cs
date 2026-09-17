@@ -30,5 +30,13 @@ internal sealed class Translator : ITranslator
 		};
 
 	public bool IsSupport(SupportedLangs languageId)
-		=> true;
+		=> languageId switch
+		{
+			SupportedLangs.English => true,
+			SupportedLangs.French => true,
+			SupportedLangs.Japanese => true,
+			SupportedLangs.SChinese => true,
+			SupportedLangs.TChinese => true,
+			_ => false,
+		};
 }
