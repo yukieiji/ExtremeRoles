@@ -229,6 +229,7 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 
 |  Language Name/Languages  |  Status | Translator/Translator(Thank you!!) |
 | ---- | ---- | --- |
+|  French/French  |  Fully Translated  | - |
 |  English/English  |   Mostly Translated  | [yuhgao](https://github.com/yuhgao) |
 |  Japanese/Japanese  |  Fully Translated  | - |
 |  简体中文/SChinese  |   Fully Translated  | [ZeMingoh233](https://github.com/ZeMingoh233)<br>四个憨批汉化组([fivefirex](https://github.com/fivefirex), 123，乱线Namdam_096，氢氧则名)<br>[小鹿SAMA](https://github.com/ADeerWhoLovesEveryone) |
