@@ -530,7 +530,27 @@ player's emergency meeting</value>
     <value>Investigate the scene and solve the case</value>
   </data>
   <data name="InvestigatorFullDescription" xml:space="preserve">
-    <value> </value>
+    <value> A CREWMATE role who can gather various information from the location of reported dead bodies!
+
+Map Location "CRIME SCENE":
+  - The location of the reported kill is saved as the "CRIME SCENE".
+  - Remains active for a set number of meetings after the meeting when reported.
+  - An arrow points toward the "CRIME SCENE".
+  - You can perform "INVESTIGATE" by staying near the "CRIME SCENE" for a set duration.
+
+Passive Ability "INVESTIGATE":
+  - Triggers by staying near the "CRIME SCENE" for a certain amount of time.
+  - Each "INVESTIGATE" takes a set duration, and once completed, information appears on the bottom right.
+  - Information revealed by "INVESTIGATE":
+      1st time: Time of the kill
+      2nd time: Time elapsed between the kill and meeting
+      3rd time: Faction of the killer
+      4th time: Role of the killer
+      5th time (if enabled in settings): Identity of the killer
+  - If the "CRIME SCENE" is from a body reported by the "Assistant", the time required for "INVESTIGATE" is reduced.
+  - If the option "Can continue investigation" is OFF, leaving the crime scene during investigation resets the progress.
+
+- If the "Investigator" dies or is eliminated, the "Assistant" becomes an "Apprentice".</value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
     <value>Investigator, let me help you too!</value>
