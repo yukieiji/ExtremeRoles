@@ -55,12 +55,21 @@ EXISTING_FR_COMBINATION_KEYS = {
     "scribble",
 }
 
+EXISTING_FR_IMPOSTOR_KEYS = {
+    "Mery",
+    "liightOff",
+    "Slime",
+    "Zombie",
+    "Raider",
+}
+
 WHITELIST = {
     "Text": EXISTING_FR_TEXT_KEYS,
     "Combination": EXISTING_FR_COMBINATION_KEYS,
     "WebUI": {"ROLE_FILTER_SHORT_LABEL"},
     "Crewmate": {"CEO"},
     "GhostCrewmate": {"Poltergeist", "Faunus", "Shutter", "ShutterTakePhotoButton"},
+    "Impostor": EXISTING_FR_IMPOSTOR_KEYS,
 }
 
 
