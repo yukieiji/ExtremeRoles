@@ -72,13 +72,13 @@ players, including other impostors and dead players.
     <value>Imposteur Spécial</value>
   </data>
   <data name="SpecialImpostorIntroDescription" xml:space="preserve">
-    <value>An IMPOSTOR with modified settings</value>
+    <value>Un imposteur avec des paramètres personnalisés</value>
   </data>
   <data name="SpecialImpostorShortDescription" xml:space="preserve">
-    <value>An "Extreme-styled" impostor</value>
+    <value>Un imposteur au style Extrême</value>
   </data>
   <data name="SpecialImpostorFullDescription" xml:space="preserve">
-    <value> A IMPOSTOR role which can be modified with Extreme roles' common settings
+    <value> A Imposteur role which can be modified with Extreme roles' common settings
  (i.e. vision)
  Check the settings below:</value>
   </data>
@@ -89,10 +89,10 @@ players, including other impostors and dead players.
     <value>Does animate on evolution</value>
   </data>
   <data name="EvolverIsEatingEndCleanBody" xml:space="preserve">
-    <value>Does erase corpse on evolution</value>
+    <value>Effacer le cadavre après l'évolution</value>
   </data>
   <data name="EvolverEatingRange" xml:space="preserve">
-    <value>"EAT": Ability Distance</value>
+    <value>Portée de la capacité</value>
   </data>
   <data name="EvolverKillCoolReduceRate" xml:space="preserve">
     <value>"EVOLVE" : KILL c.d. reduction rate</value>
@@ -368,7 +368,7 @@ This can be reset by using "DEACTIVATE" or entering an meeting.</value>
     <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="CrackerCanCrackDistance" xml:space="preserve">
-    <value>”CRACK” : Ability Distance</value>
+    <value>Portée de la capacité</value>
   </data>
   <data name="CrackerRemoveDeadBody" xml:space="preserve">
     <value>”CRACK” : Does erase corpse</value>
@@ -493,7 +493,7 @@ the Merlin, with or without activation.</value>
     <value>"HARASS" : Tasks rewinding on use</value>
   </data>
   <data name="SlaveDriverRange" xml:space="preserve">
-    <value>"HARASS" : Ability Distance</value>
+    <value>Portée de la capacité</value>
   </data>
   <data name="SlaveDriverIntroDescription" xml:space="preserve">
     <value>Smite those LAZY CREWMATES!</value>
@@ -527,7 +527,7 @@ the Merlin, with or without activation.</value>
 "ASSAULT"/ KILL during "Fix lights" sabotage  </value>
   </data>
   <data name="SandWormAssaultRange" xml:space="preserve">
-    <value>"ASSAULT" : Kill Distance</value>
+    <value>Portée de la capacité</value>
   </data>
   <data name="SandWormAbilityCoolTime" xml:space="preserve">
     <value>"ASSAULT" : Temps de recharge</value>
@@ -536,7 +536,7 @@ the Merlin, with or without activation.</value>
     <value>I consider living in the dark.</value>
   </data>
   <data name="SandWormShortDescription" xml:space="preserve">
-    <value>ASSAULT crewmates from the VENTs</value>
+    <value>ASSAULT équipiers from the VENTs</value>
   </data>
   <data name="SandWormFullDescription" xml:space="preserve">
     <value> Un rôle d'IMPOSTEUR with the ability to ASSAULT from VENTs.
@@ -772,7 +772,7 @@ elimination.</value>
     <value>"COMMAND" : Base Kill Temps de recharge reduction</value>
   </data>
   <data name="CommanderKillCoolReduceImpBonus" xml:space="preserve">
-    <value>"COMMAND" : Bonus reduction per dead Impostor</value>
+    <value>"COMMAND" : Bonus reduction per dead Imposteur</value>
   </data>
   <data name="CommanderIncreaseKillNum" xml:space="preserve">
     <value>"COMMAND" : Kills required for additional ability charge</value>
@@ -812,7 +812,7 @@ Temps de recharges of the team.
     <value>Role reveal : (3) Kills by player</value>
   </data>
   <data name="HypnotistRange" xml:space="preserve">
-    <value>"HYPNO" : Ability Distance</value>
+    <value>Portée de la capacité</value>
   </data>
   <data name="HypnotistAbilityCoolTime" xml:space="preserve">
     <value>"HYPNO" : Ability Temps de recharge</value>
@@ -821,10 +821,10 @@ Temps de recharges of the team.
     <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="HypnotistHideArrowRange" xml:space="preserve">
-    <value>Hypnotist: Distance from FRAGS for arrows to be shown</value>
+    <value>Hypnotiseur: Distance from FRAGS for arrows to be shown</value>
   </data>
   <data name="HypnotistDefaultRedAbilityPart" xml:space="preserve">
-    <value>Hypnotist: Base RED FRAGS </value>
+    <value>Hypnotiseur: Base RED FRAGS </value>
   </data>
   <data name="HypnotistHideKillButtonTime" xml:space="preserve">
     <value>Doll: Durée of temporal Kill Ability
@@ -878,8 +878,8 @@ was.</value>
     <value>You're Hypnotized!</value>
   </data>
   <data name="DollFullDescription" xml:space="preserve">
-    <value> You're now HYPNOTIZED by a Hypnotist!
- MISSION: To achive IMPOSTOR victory.
+    <value> You're now HYPNOTIZED by a Hypnotiseur!
+ MISSION: To achive Imposteur victory.
  Your master can buff you by gathering "FRAGMENTS".
   - Your Master: {0}
   - You can use these map modules: {1}
@@ -913,7 +913,7 @@ was.</value>
     <value>Can use VENTs beyond walls</value>
   </data>
   <data name="UnderWarperRange" xml:space="preserve">
-    <value>VENT Ability Distance after role revealation</value>
+    <value>Portée de la capacité</value>
   </data>
   <data name="UnderWarperIntroDescription" xml:space="preserve">
     <value>There is no boundaries for me</value>
@@ -938,7 +938,7 @@ was.</value>
     <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="MagicianTeleportTargetRate" xml:space="preserve">
-    <value>"JUGGLE" : Players targeted by ability</value>
+    <value>Taux d'apparition</value>
   </data>
   <data name="MagicianDupeTeleportTargetTo" xml:space="preserve">
     <value>"JUGGLE" : Does teleport multiple players to the same positions</value>
@@ -1054,7 +1054,7 @@ changing options.</value>
     <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ThiefRange" xml:space="preserve">
-    <value>"ALTAR" : Ability Distance</value>
+    <value>Portée de la capacité</value>
   </data>
   <data name="ThiefSetNum" xml:space="preserve">
     <value>"STEAL" : TIME FRAGS spawning per use</value>
@@ -1119,7 +1119,7 @@ changing options.</value>
     <value>FUNGI</value>
   </data>
   <data name="Terorist" xml:space="preserve">
-    <value>Terrorist</value>
+    <value>Terroriste</value>
   </data>
   <data name="TeroristAbilityCoolTime" xml:space="preserve">
     <value>"THREAT" : Ability Temps de recharge </value>
@@ -1215,7 +1215,7 @@ While invisible, you cannot touch anything except vents!!</value>
     <value>Share weapon acquisition status with all players</value>
   </data>
   <data name="ScavengerHandGunCount" xml:space="preserve">
-    <value>"HANDGUN" : Ability Charges</value>
+    <value>"HANDGUN" : Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ScavengerHandGunSpeed" xml:space="preserve">
     <value>"HANDGUN" : Bullet speed</value>
@@ -1224,7 +1224,7 @@ While invisible, you cannot touch anything except vents!!</value>
     <value>"HANDGUN" : Bullet travel distance limit</value>
   </data>
   <data name="ScavengerFlameCount" xml:space="preserve">
-    <value>"FLAMETHROWER" : Ability Charges</value>
+    <value>"FLAMETHROWER" : Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ScavengerFlameChargeTime" xml:space="preserve">
     <value>"FLAMETHROWER" : Charge time</value>
@@ -1239,7 +1239,7 @@ While invisible, you cannot touch anything except vents!!</value>
     <value>"FLAMETHROWER" : Time from "FIRE" ignition to kill</value>
   </data>
   <data name="ScavengerSwordCount" xml:space="preserve">
-    <value>"SWORD" : Ability Charges</value>
+    <value>"SWORD" : Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ScavengerSwordChargeTime" xml:space="preserve">
     <value>"SWORD" : Charge time</value>
@@ -1251,13 +1251,13 @@ While invisible, you cannot touch anything except vents!!</value>
     <value>"SWORD" : Spawn position</value>
   </data>
   <data name="ScavengerSniperRifleCount" xml:space="preserve">
-    <value>"SNIPER RIFLE" : Ability Charges</value>
+    <value>"SNIPER RIFLE" : Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ScavengerSniperRifleSpeed" xml:space="preserve">
     <value>"SNIPER RIFLE" : Bullet speed</value>
   </data>
   <data name="ScavengerBeamRifleCount" xml:space="preserve">
-    <value>"BEAM RIFLE" : Ability Charges</value>
+    <value>"BEAM RIFLE" : Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ScavengerBeamRifleSpeed" xml:space="preserve">
     <value>"BEAM RIFLE" : Beam speed</value>
@@ -1266,7 +1266,7 @@ While invisible, you cannot touch anything except vents!!</value>
     <value>"BEAM RIFLE" : Beam travel distance limit</value>
   </data>
   <data name="ScavengerBeamSaberCount" xml:space="preserve">
-    <value>"BEAM SABER" : Ability Charges</value>
+    <value>"BEAM SABER" : Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ScavengerBeamSaberChargeTime" xml:space="preserve">
     <value>"BEAM SABER" : Charge time</value>
@@ -1438,7 +1438,7 @@ UI "BOMBING MODE":
     <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="GlitchRange" xml:space="preserve">
-    <value>"GLITCH" : Activation range</value>
+    <value>Portée de la capacité</value>
   </data>
   <data name="GlitchEffectOnImpo" xml:space="preserve">
     <value>"GLITCH" : Are Impostors affect</value>
@@ -1555,7 +1555,7 @@ Button ability "TIME BREAK":
     <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="BoxerFullDescription" xml:space="preserve">
-    <value>An Impostor who can kill Crewmates by launching them with "STRAIGHT".
+    <value>An Imposteur who can kill Crewmates by launching them with "STRAIGHT".
 
 Button Ability "STRAIGHT":
 - When activated, charging begins.
@@ -1571,13 +1571,13 @@ Button Ability "STRAIGHT":
     <value>Launch Crewmates with "STRAIGHT" to kill them</value>
   </data>
   <data name="BoxerStraightAcceleration" xml:space="preserve">
-    <value>Launched Crewmate's acceleration</value>
+    <value>Launched Équipier's acceleration</value>
   </data>
   <data name="BoxerStraightChargeTime" xml:space="preserve">
     <value>"STRAIGHT" : Charging time</value>
   </data>
   <data name="BoxerStraightFirstSpeed" xml:space="preserve">
-    <value>Launched Crewmate's initial speed</value>
+    <value>Launched Équipier's initial speed</value>
   </data>
   <data name="BoxerStraightKillSpeed" xml:space="preserve">
     <value>Speed at which death occurs on wall impact</value>
@@ -1604,7 +1604,7 @@ Button Ability "STRAIGHT":
     <value>Default number of negative votes</value>
   </data>
   <data name="LegislatorFullDescription" xml:space="preserve">
-    <value>An Impostor who accumulates others' votes and can cancel out the target's votes.
+    <value>An Imposteur who accumulates others' votes and can cancel out the target's votes.
 
 Meeting Ability: "Negative Vote"
 - Activate by selecting a player during a meeting.

@@ -62,7 +62,7 @@
     <value>Foras</value>
   </data>
   <data name="ForasRange" xml:space="preserve">
-    <value>"LEAK" : Ability range</value>
+    <value>"LEAK" : Portée de la capacité</value>
   </data>
   <data name="ForasMissingTargetRate" xml:space="preserve">
     <value>"LEAK" : Ability target accuration</value>
