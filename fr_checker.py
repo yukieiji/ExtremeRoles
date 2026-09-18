@@ -60,6 +60,7 @@ WHITELIST = {
     "Combination": EXISTING_FR_COMBINATION_KEYS,
     "WebUI": {"ROLE_FILTER_SHORT_LABEL"},
     "Crewmate": {"CEO"},
+    "GhostCrewmate": {"Poltergeist", "Faunus", "Shutter", "ShutterTakePhotoButton"},
 }
 
 

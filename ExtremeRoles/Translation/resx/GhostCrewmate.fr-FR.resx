@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="GuardianAngelFullDescription" xml:space="preserve">
+    <value>Un rôle de Fantôme Coéquipier.
+Compétence « PROTÉGER » :
+- S'active en ciblant un joueur.
+- Confère un bouclier à ce joueur pendant une certaine durée.
+- Si ce joueur subit une tentative d'élimination alors qu'il a un bouclier, l'élimination est annulée (l'élimination du Villain traverse le bouclier).</value>
+  </data>
+  <data name="Poltergeist" xml:space="preserve">
+    <value>Poltergeist</value>
+  </data>
+  <data name="PoltergeistRange" xml:space="preserve">
+    <value>« TAPAGE » : Portée de détection des cadavres</value>
+  </data>
+  <data name="PoltergeistAbilityCoolTime" xml:space="preserve">
+    <value>« TAPAGE » : Temps de recharge</value>
+  </data>
+  <data name="PoltergeistAbilityActiveTime" xml:space="preserve">
+    <value>« TAPAGE » : Durée pendant laquelle le cadavre peut être déplacé</value>
+  </data>
+  <data name="PoltergeistIsReportAbility" xml:space="preserve">
+    <value>« TAPAGE » : Signaler l'utilisation de la compétence lors des réunions</value>
+  </data>
+  <data name="PoltergeistAbilityCount" xml:space="preserve">
+    <value>« TAPAGE » : Nombre d'utilisations</value>
+  </data>
+  <data name="PoltergeistShortDescription" xml:space="preserve">
+    <value>Utilisez « TAPAGE » pour déplacer les cadavres vers des endroits faciles à signaler</value>
+  </data>
+  <data name="PoltergeistFullDescription" xml:space="preserve">
+    <value>Un rôle de Fantôme Coéquipier capable de déplacer les cadavres.
+Compétence « TAPAGE » :
+- Après activation, vous pouvez déplacer librement un cadavre à proximité pendant une certaine durée.
+- Vous ne pouvez pas voler un cadavre tenu par un autre joueur (ex. Porteur), mais votre cadavre peut vous être pris.</value>
+  </data>
+  <data name="PoltergeistMoveDeadbodyButton" xml:space="preserve">
+    <value>TAPAGE</value>
+  </data>
+  <data name="PoltergeistMoveDeadbody" xml:space="preserve">
+    <value>Un Poltergeist a déplacé un cadavre !</value>
+  </data>
+  <data name="Faunus" xml:space="preserve">
+    <value>Faunus</value>
+  </data>
+  <data name="FaunusAbilityCoolTime" xml:space="preserve">
+    <value>« BÉNÉDICTION » : Temps de recharge</value>
+  </data>
+  <data name="FaunusAbilityActiveTime" xml:space="preserve">
+    <value>« BÉNÉDICTION » : Durée d'ouverture de l'écran de réparation du sabotage</value>
+  </data>
+  <data name="FaunusIsReportAbility" xml:space="preserve">
+    <value>« BÉNÉDICTION » : Signaler l'utilisation de la compétence lors des réunions</value>
+  </data>
+  <data name="FaunusAbilityCount" xml:space="preserve">
+    <value>« BÉNÉDICTION » : Nombre d'utilisations</value>
+  </data>
+  <data name="FaunusShortDescription" xml:space="preserve">
+    <value>Utilisez « BÉNÉDICTION » pour aider à réparer les sabotages</value>
+  </data>
+  <data name="FaunusFullDescription" xml:space="preserve">
+    <value>Un rôle de Fantôme Coéquipier capable d'interférer avec les sabotages depuis le monde des esprits.
+Compétence « BÉNÉDICTION » :
+- Lors de l'activation, permet d'ouvrir l'écran de réparation des sabotages (sauf le brouillage des communications).
+- Pour les sabotages nécessitant plusieurs personnes, une console est choisie au hasard.
+- L'écran de réparation se ferme automatiquement après un certain temps.</value>
+  </data>
+  <data name="FaunusOpenSaboConsoleButton" xml:space="preserve">
+    <value>BÉNÉDICTION</value>
+  </data>
+  <data name="FaunusOpenSaboConsole" xml:space="preserve">
+    <value>Un Faunus a interféré avec le sabotage !</value>
+  </data>
+  <data name="Shutter" xml:space="preserve">
+    <value>Shutter</value>
+  </data>
+  <data name="ShutterPhotoRange" xml:space="preserve">
+    <value>« CAPTURE » : Portée de la compétence</value>
+  </data>
+  <data name="ShutterRightPlayerNameRate" xml:space="preserve">
+    <value>« CAPTURE » : Probabilité que les noms des joueurs ne soient pas flous</value>
+  </data>
+  <data name="ShutterAbilityCoolTime" xml:space="preserve">
+    <value>« CAPTURE » : Temps de recharge</value>
+  </data>
+  <data name="ShutterIsReportAbility" xml:space="preserve">
+    <value>« CAPTURE » : Signaler l'utilisation de la compétence lors des réunions</value>
+  </data>
+  <data name="ShutterAbilityCount" xml:space="preserve">
+    <value>« CAPTURE » : Nombre d'utilisations</value>
+  </data>
+  <data name="ShutterShortDescription" xml:space="preserve">
+    <value>Immortalisez le moment critique avec « CAPTURE »</value>
+  </data>
+  <data name="ShutterFullDescription" xml:space="preserve">
+    <value>Un rôle de Fantôme Coéquipier capable de partager des photos prises depuis le monde des esprits.
+Ce rôle de fantôme ne peut être attribué qu'au Photographe.
+Compétence « CAPTURE » :
+- En appuyant sur le bouton, vous pouvez prendre une « photo » enregistrant la position des joueurs à portée.
+- Les détails de la photo prise seront révélés dans le chat au début de la réunion suivante.
+- Selon la « Probabilité que les noms soient correctement affichés », certains noms peuvent ne pas apparaître.
+- Le titre de la photo est déterminé aléatoirement.</value>
+  </data>
+  <data name="ShutterTakePhotoButton" xml:space="preserve">
+    <value>CAPTURE</value>
+  </data>
+  <data name="ShutterTakePhoto" xml:space="preserve">
+    <value>Une photo prise par un Shutter a été déposée dans la salle de réunion !</value>
+  </data>
+  <data name="smokingThisName" xml:space="preserve">
+    <value>Ce joueur était trop flou pour être identifié...</value>
+  </data>
+  <data name="ShutterTakePhotoReport" xml:space="preserve">
+    <value>Détails de la photo déposée :
+{0}</value>
+  </data>
+</root>
