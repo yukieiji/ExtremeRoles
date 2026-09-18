@@ -90,6 +90,7 @@ WHITELIST = {
     "Neutral": EXISTING_FR_NEUTRAL_KEYS,
     "GhostCrewmate": {"Poltergeist", "Faunus", "Shutter", "ShutterTakePhotoButton"},
     "Impostor": EXISTING_FR_IMPOSTOR_KEYS,
+    "GhostImpostor": {"Ventgeist", "SaboEvil", "Igniter", "Doppelganger"},
 }
 
 
