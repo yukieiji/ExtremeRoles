@@ -1,0 +1,1216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Alice" xml:space="preserve">
+    <value>Alice</value>
+  </data>
+  <data name="AliceCanUseSabotage" xml:space="preserve">
+    <value>Peut utiliser les sabotages</value>
+  </data>
+  <data name="AliceAbilityCoolTime" xml:space="preserve">
+    <value>« SABOTAGE » : Temps de recharge</value>
+  </data>
+  <data name="AliceAbilityCount" xml:space="preserve">
+    <value>« SABOTAGE » : Nombre d'utilisations</value>
+  </data>
+  <data name="AliceRevartCommonTaskNum" xml:space="preserve">
+    <value>« SABOTAGE » : Nombre de tâches communes réinitialisées</value>
+  </data>
+  <data name="AliceRevartLongTaskNum" xml:space="preserve">
+    <value>« SABOTAGE » : Nombre de tâches longues réinitialisées</value>
+  </data>
+  <data name="AliceRevartNormalTaskNum" xml:space="preserve">
+    <value>« SABOTAGE » : Nombre de tâches courtes réinitialisées</value>
+  </data>
+  <data name="AliceIntroDescription" xml:space="preserve">
+    <value>L'incarnation du caprice, prête à tout réduire en pièces !</value>
+  </data>
+  <data name="AliceShortDescription" xml:space="preserve">
+    <value>Faites-vous éliminer par un Imposteur ou détruisez tout</value>
+  </data>
+  <data name="AliceFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE 1 : Être éliminé par un Imposteur.
+CONDITION DE VICTOIRE 2 : Être le dernier survivant avec un seul autre joueur qui est un Coéquipier ou un Imposteur.
+Être expulsé lors d'une réunion entraîne une défaite.
+La compétence « SABOTAGE » remplace les tâches terminées de tous les joueurs par les tâches spécifiées dans les options.
+Attention : ce rôle puissant attirera l'attention des Imposteurs comme des Coéquipiers !</value>
+  </data>
+  <data name="shipBroken" xml:space="preserve">
+    <value>SABOTAGE</value>
+  </data>
+  <data name="Jackal" xml:space="preserve">
+    <value>Jackal</value>
+  </data>
+  <data name="Sidekick" xml:space="preserve">
+    <value>Sidekick</value>
+  </data>
+  <data name="JackalAbilityCoolTime" xml:space="preserve">
+    <value>« SIDEKICK » : Temps de recharge</value>
+  </data>
+  <data name="JackalAbilityCount" xml:space="preserve">
+    <value>« SIDEKICK » : Nombre de Sidekicks pouvant être créés</value>
+  </data>
+  <data name="JackalRangeSidekickTarget" xml:space="preserve">
+    <value>« SIDEKICK » : Portée de la compétence</value>
+  </data>
+  <data name="JackalCanLoverSidekick" xml:space="preserve">
+    <value>« SIDEKICK » : Peut cibler les Amants</value>
+  </data>
+  <data name="JackalForceReplaceLover" xml:space="preserve">
+    <value>« SIDEKICK » : Remplace le rôle des Amants lors de l'utilisation</value>
+  </data>
+  <data name="JackalUpgradeSidekickNum" xml:space="preserve">
+    <value>Nombre de Sidekicks promus à la mort du Jackal</value>
+  </data>
+  <data name="JackalSidekickJackalCanMakeSidekick" xml:space="preserve">
+    <value>Les Jackals promus peuvent-ils créer des Sidekicks</value>
+  </data>
+  <data name="JackalSidekickLimitNum" xml:space="preserve">
+    <value>Limite de récurrence pour la création de Sidekicks par un Jackal promu</value>
+  </data>
+  <data name="JackalCanSetImpostorToSidekick" xml:space="preserve">
+    <value>« SIDEKICK » : Peut cibler les Imposteurs</value>
+  </data>
+  <data name="JackalCanSeeImpostorToSidekickImpostor" xml:space="preserve">
+    <value>Afficher les Imposteurs devenus Sidekicks comme Imposteurs</value>
+  </data>
+  <data name="SidekickUseSabotage" xml:space="preserve">
+    <value>Les Sidekicks peuvent-ils utiliser les sabotages</value>
+  </data>
+  <data name="SidekickUseVent" xml:space="preserve">
+    <value>Les Sidekicks peuvent-ils utiliser les conduits</value>
+  </data>
+  <data name="SidekickCanKill" xml:space="preserve">
+    <value>Les Sidekicks peuvent-ils éliminer</value>
+  </data>
+  <data name="SidekickHasOtherKillCool" xml:space="preserve">
+    <value>Sidekicks : A un temps de recharge d'élimination spécifique</value>
+  </data>
+  <data name="SidekickKillCoolDown" xml:space="preserve">
+    <value>Sidekicks : Temps de recharge d'élimination</value>
+  </data>
+  <data name="SidekickHasOtherKillRange" xml:space="preserve">
+    <value>Sidekicks : A une portée d'élimination spécifique</value>
+  </data>
+  <data name="SidekickKillRange" xml:space="preserve">
+    <value>Sidekicks : Portée d'élimination</value>
+  </data>
+  <data name="SidekickHasOtherVision" xml:space="preserve">
+    <value>Sidekicks : Paramètres de vision spécifiques</value>
+  </data>
+  <data name="SidekickVision" xml:space="preserve">
+    <value>Sidekicks : Vision</value>
+  </data>
+  <data name="SidekickApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Sidekicks : Est affecté par les effets de vision</value>
+  </data>
+  <data name="JackalIntroDescription" xml:space="preserve">
+    <value>Créez un Sidekick et emparez-vous du vaisseau !</value>
+  </data>
+  <data name="JackalShortDescription" xml:space="preserve">
+    <value>Éliminez tout le monde aux côtés de votre Sidekick</value>
+  </data>
+  <data name="JackalFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Les Imposteurs et les Neutres dotés de compétences d'élimination sont éliminés, et plus de la moitié des survivants appartiennent à votre camp.
+L'utilisation de la compétence « SIDEKICK » permet de rallier le joueur ciblé à votre camp.
+Le joueur ciblé prendra le rôle de « Sidekick ».</value>
+  </data>
+  <data name="curSidekick" xml:space="preserve">
+    <value>Sidekick actuel</value>
+  </data>
+  <data name="SidekickShortDescription" xml:space="preserve">
+    <value>Aidez le Jackal à remporter la victoire</value>
+  </data>
+  <data name="SidekickFullDescription" xml:space="preserve">
+    <value>Rôle Neutre assistant le Jackal.
+CONDITION DE VICTOIRE : Les Imposteurs et les Neutres dotés de compétences d'élimination sont éliminés, et plus de la moitié des survivants appartiennent à votre camp.
+Jackal actuel : {0}</value>
+  </data>
+  <data name="TaskMaster" xml:space="preserve">
+    <value>Maître des Tâches</value>
+  </data>
+  <data name="TaskMasterCanUseSabotage" xml:space="preserve">
+    <value>Peut utiliser les sabotages</value>
+  </data>
+  <data name="TaskMasterAddCommonTaskNum" xml:space="preserve">
+    <value>Tâches communes supplémentaires</value>
+  </data>
+  <data name="TaskMasterAddLongTaskNum" xml:space="preserve">
+    <value>Tâches longues supplémentaires</value>
+  </data>
+  <data name="TaskMasterAddNormalTaskNum" xml:space="preserve">
+    <value>Tâches courtes supplémentaires</value>
+  </data>
+  <data name="TaskMasterIntroDescription" xml:space="preserve">
+    <value>Accomplissez toutes vos tâches et fuyez le vaisseau !</value>
+  </data>
+  <data name="TaskMasterShortDescription" xml:space="preserve">
+    <value>Survivrez et accomplissez toutes vos tâches</value>
+  </data>
+  <data name="TaskMasterFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Accomplir toutes les tâches en restant en vie.
+Les tâches supplémentaires configurées s'ajoutent au fur et à mesure que vous progressez.
+En cas de mort, la victoire ne pourra pas être obtenue.</value>
+  </data>
+  <data name="Missionary" xml:space="preserve">
+    <value>Missionnaire</value>
+  </data>
+  <data name="MissionaryTellDeparture" xml:space="preserve">
+    <value>Savoir si le joueur se suicide après la prédication</value>
+  </data>
+  <data name="MissionaryDepartureMinTime" xml:space="preserve">
+    <value>Délai minimal avant le suicide après prédication</value>
+  </data>
+  <data name="MissionaryDepartureMaxTime" xml:space="preserve">
+    <value>Délai maximal avant le suicide après prédication</value>
+  </data>
+  <data name="MissionaryPropagateRange" xml:space="preserve">
+    <value>« PRÉDICATION » : Portée de la compétence</value>
+  </data>
+  <data name="MissionaryAbilityCoolTime" xml:space="preserve">
+    <value>« PRÉDICATION » : Temps de recharge</value>
+  </data>
+  <data name="MissionaryIsUseSolemnJudgment" xml:space="preserve">
+    <value>Activer la compétence « JUGEMENT DIVIN »</value>
+  </data>
+  <data name="MissionaryMaxJudgementNum" xml:space="preserve">
+    <value>« JUGEMENT DIVIN » : Nombre maximal de cibles</value>
+  </data>
+  <data name="MissionaryIntroDescription" xml:space="preserve">
+    <value>Enseignez aux membres du vaisseau la beauté du royaume céleste (de la mort)</value>
+  </data>
+  <data name="MissionaryShortDescription" xml:space="preserve">
+    <value>Menez des activités de prédication</value>
+  </data>
+  <data name="MissionaryFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Les Imposteurs et les Neutres dotés de compétences d'élimination sont éliminés, et plus de la moitié des survivants appartiennent à votre camp.
+Compétence « PRÉDICATION » :
+  S'active lorsqu'un joueur est à portée. Après un certain délai, ce joueur se suicide (si la cible fait partie du « JUGEMENT DIVIN », le suicide est immédiat).
+  Le délai est déterminé aléatoirement entre le minimum et le maximum configurés.
+  Le suicide peut survenir même pendant une réunion.
+Compétence « JUGEMENT DIVIN » :
+  Disponible si l'option est activée.
+  Cible le joueur sur lequel vous votez pendant les réunions.
+  Si ce joueur subit la « PRÉDICATION », il se suicide immédiatement.
+  Le nombre de cibles est limité par l'option dédiée.</value>
+  </data>
+  <data name="propagate" xml:space="preserve">
+    <value>PRÉDICATION</value>
+  </data>
+  <data name="departureText" xml:space="preserve">
+    <value>Un pauvre agneau a de nouveau rejoint le royaume divin</value>
+  </data>
+  <data name="Jester" xml:space="preserve">
+    <value>Bouffon</value>
+  </data>
+  <data name="JesterUseSabotage" xml:space="preserve">
+    <value>Peut utiliser les sabotages</value>
+  </data>
+  <data name="JesterOutburstDistance" xml:space="preserve">
+    <value>« EMBALLEMENT » : Portée de la compétence</value>
+  </data>
+  <data name="JesterAbilityCoolTime" xml:space="preserve">
+    <value>« EMBALLEMENT » : Temps de recharge</value>
+  </data>
+  <data name="JesterAbilityActiveTime" xml:space="preserve">
+    <value>« EMBALLEMENT » : Délai avant le déclenchement de l'élimination</value>
+  </data>
+  <data name="JesterAbilityCount" xml:space="preserve">
+    <value>« EMBALLEMENT » : Nombre d'utilisations</value>
+  </data>
+  <data name="JesterIntroDescription" xml:space="preserve">
+    <value>La réunion ne parle que de moi !!</value>
+  </data>
+  <data name="JesterShortDescription" xml:space="preserve">
+    <value>Devenez la vedette de la réunion et faites-vous expulser</value>
+  </data>
+  <data name="JesterFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Être expulsé lors d'une réunion.
+Compétence « EMBALLEMENT » :
+Forces la compétence d'élimination du joueur ciblé à se déclencher automatiquement après un certain délai.
+L'élimination échoue si le joueur n'a pas de compétence d'élimination, si personne n'est à sa portée, ou si la cible de l'élimination est le Bouffon lui-même.</value>
+  </data>
+  <data name="outburst" xml:space="preserve">
+    <value>EMBALLEMENT</value>
+  </data>
+  <data name="Yandere" xml:space="preserve">
+    <value>Yandere</value>
+  </data>
+  <data name="YandereTargetKilledKillCoolReduceRate" xml:space="preserve">
+    <value>Réduction du temps de recharge d'élimination en tuant un « Obstacle »</value>
+  </data>
+  <data name="YandereNoneTargetKilledKillCoolMultiplier" xml:space="preserve">
+    <value>Pénalité de temps de recharge d'élimination en tuant un non-Obstacle</value>
+  </data>
+  <data name="YandereBlockTargetTime" xml:space="preserve">
+    <value>Temps de début de partie avant l'enregistrement des Obstacles</value>
+  </data>
+  <data name="YandereSetTargetRange" xml:space="preserve">
+    <value>Portée de détection d'Obstacle autour du « Coup de cœur »</value>
+  </data>
+  <data name="YandereSetTargetTime" xml:space="preserve">
+    <value>Temps requis près du Coup de cœur pour devenir un Obstacle</value>
+  </data>
+  <data name="YandereMaxTargetNum" xml:space="preserve">
+    <value>Nombre maximal d'Obstacles</value>
+  </data>
+  <data name="YandereRunawayTime" xml:space="preserve">
+    <value>Temps sans Obstacle avant de passer en mode « Énervé »</value>
+  </data>
+  <data name="YandereHasOneSidedArrow" xml:space="preserve">
+    <value>Afficher une flèche vers le Coup de cœur</value>
+  </data>
+  <data name="YandereHasTargetArrow" xml:space="preserve">
+    <value>Afficher des flèches vers les Obstacles</value>
+  </data>
+  <data name="YandereIntroDescription" xml:space="preserve">
+    <value>« {0} » m'appartient</value>
+  </data>
+  <data name="YandereShortDescription" xml:space="preserve">
+    <value>Massacrez tous les rivaux qui s'approchent de « {0} »</value>
+  </data>
+  <data name="YandereFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE 1 : Remporter la victoire aux côtés du Coup de cœur en éliminant tous les rivaux et menaces.
+CONDITION DE VICTOIRE 2 : Être les 2 seuls survivants avec un joueur inoffensif.
+Un « Coup de cœur » est désigné au début du jeu. Les joueurs restant trop longtemps près de votre Coup de cœur deviennent des « Obstacles ». Éliminer un Obstacle réduit fortement votre temps de recharge d'élimination.</value>
+  </data>
+  <data name="YandereShipJustForTwo" xml:space="preserve">
+    <value>L'amour de la Yandere a triomphé, seule avec son Coup de cœur</value>
+  </data>
+  <data name="Yoko" xml:space="preserve">
+    <value>Youko</value>
+  </data>
+  <data name="YokoCanRepairSabo" xml:space="preserve">
+    <value>Peut réparer les sabotages</value>
+  </data>
+  <data name="YokoCanUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="YokoSearchRange" xml:space="preserve">
+    <value>« DÉTECTION » : Portée de la compétence</value>
+  </data>
+  <data name="YokoSearchTime" xml:space="preserve">
+    <value>« DÉTECTION » : Intervalle d'activation</value>
+  </data>
+  <data name="YokoTrueInfoRate" xml:space="preserve">
+    <value>« DÉTECTION » : Probabilité de donner l'information exacte</value>
+  </data>
+  <data name="YokoUseYashiro" xml:space="preserve">
+    <value>Activer les compétences liées aux « Sanctuaires »</value>
+  </data>
+  <data name="YokoAbilityCoolTime" xml:space="preserve">
+    <value>« CONSTRUIRE SANCTUAIRE » : Temps de recharge</value>
+  </data>
+  <data name="YokoAbilityActiveTime" xml:space="preserve">
+    <value>« CONSTRUIRE SANCTUAIRE » : Temps requis</value>
+  </data>
+  <data name="YokoAbilityCount" xml:space="preserve">
+    <value>« CONSTRUIRE SANCTUAIRE » : Nombre d'utilisations</value>
+  </data>
+  <data name="YokoYashiroActiveTime" xml:space="preserve">
+    <value>« SANCTUAIRE » : Durée de l'état « Activé »</value>
+  </data>
+  <data name="YokoYashiroSeelTime" xml:space="preserve">
+    <value>« SANCTUAIRE » : Durée de l'état « Scellé »</value>
+  </data>
+  <data name="YokoYashiroProtectRange" xml:space="preserve">
+    <value>« PROTECTION DU SANCTUAIRE » : Portée</value>
+  </data>
+  <data name="YokoYashiroUpdateWithMeeting" xml:space="preserve">
+    <value>L'état du Sanctuaire change-t-il pendant les réunions</value>
+  </data>
+  <data name="YokoIntroDescription" xml:space="preserve">
+    <value>Trompez tout le monde et dérobez la victoire</value>
+  </data>
+  <data name="YokoShortDescription" xml:space="preserve">
+    <value>Survivez et dérobez la victoire à tous les camps</value>
+  </data>
+  <data name="YokoFullDescription" xml:space="preserve">
+    <value>Rôle Neutre capable de dérober la victoire à presque tous les camps.
+CONDITION DE VICTOIRE : Rester en vie au moment où les conditions de victoire d'une autre équipe sont remplies.
+Compétence passive « DÉTECTION » :
+  Détecte si un « Ennemi » (joueur avec compétence d'élimination) est présent à proximité.
+Compétence « CONSTRUIRE SANCTUAIRE » :
+  Construit un sanctuaire offrant une protection contre les éliminations directes lorsqu'il est actif.</value>
+  </data>
+  <data name="notFindEnemy" xml:space="preserve">
+    <value>Rien de suspect ne semble se trouver aux alentours</value>
+  </data>
+  <data name="findEnemy" xml:space="preserve">
+    <value>Vous ressentez une intention meurtrière...</value>
+  </data>
+  <data name="yokoYashiro" xml:space="preserve">
+    <value>Construire un sanctuaire</value>
+  </data>
+  <data name="yokoYashiroStatusText" xml:space="preserve">
+    <value>État actuel du sanctuaire : {0}</value>
+  </data>
+  <data name="yokoYashiroNextStatusText" xml:space="preserve">
+    <value>{2} secondes avant la transition vers « {1} »</value>
+  </data>
+  <data name="yokoYashiroCloseText" xml:space="preserve">
+    <value>Passage à l'état « {0} » !!</value>
+  </data>
+  <data name="YashiroDeactive" xml:space="preserve">
+    <value>Inactif</value>
+  </data>
+  <data name="YashiroActive" xml:space="preserve">
+    <value>Activé</value>
+  </data>
+  <data name="YashiroSeal" xml:space="preserve">
+    <value>Scellé</value>
+  </data>
+  <data name="Totocalcio" xml:space="preserve">
+    <value>Totocalcio</value>
+  </data>
+  <data name="TotocalcioRange" xml:space="preserve">
+    <value>« PARIER » : Portée de la compétence</value>
+  </data>
+  <data name="TotocalcioAbilityCoolTime" xml:space="preserve">
+    <value>« PARIER » : Temps de recharge initial</value>
+  </data>
+  <data name="TotocalcioAbilityCount" xml:space="preserve">
+    <value>« PARIER » : Nombre d'utilisations</value>
+  </data>
+  <data name="TotocalcioFinalCoolTime" xml:space="preserve">
+    <value>« PARIER » : Temps de recharge final</value>
+  </data>
+  <data name="TotocalcioIntroDescription" xml:space="preserve">
+    <value>Pariez sur la victoire des autres</value>
+  </data>
+  <data name="TotocalcioShortDescription" xml:space="preserve">
+    <value>Menez le joueur sur lequel vous avez parié à la victoire</value>
+  </data>
+  <data name="TotocalcioFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Le joueur ciblé par « PARIER » emporte la partie.
+Compétence « PARIER » :
+  Cible un joueur pour parier sur lui. Un marqueur s'affiche sur ce joueur.
+  Le temps de recharge s'allonge à mesure que le nombre de survivants diminue.</value>
+  </data>
+  <data name="betPlayer" xml:space="preserve">
+    <value>PARIER</value>
+  </data>
+  <data name="loseNow" xml:space="preserve">
+    <value>À ce rythme, c'est la défaite assurée...</value>
+  </data>
+  <data name="Miner" xml:space="preserve">
+    <value>Mineur</value>
+  </data>
+  <data name="MinerLinkingAllVent" xml:space="preserve">
+    <value>Activer les conduits globaux</value>
+  </data>
+  <data name="MinerAbilityCoolTime" xml:space="preserve">
+    <value>« MINE » : Temps de recharge</value>
+  </data>
+  <data name="MinerAbilityActiveTime" xml:space="preserve">
+    <value>« MINE » : Temps avant l'activation de la mine</value>
+  </data>
+  <data name="MinerMineKillRange" xml:space="preserve">
+    <value>« MINE » : Portée de détection de la mine</value>
+  </data>
+  <data name="MinerNoneActiveTime" xml:space="preserve">
+    <value>« MINE » : Temps d'inactivation après le début de partie / les réunions</value>
+  </data>
+  <data name="MinerCanShowMine" xml:space="preserve">
+    <value>Les mines sont-elles visibles</value>
+  </data>
+  <data name="MinerRolePlayerShowMode" xml:space="preserve">
+    <value>Visibilité des mines pour le Mineur :</value>
+  </data>
+  <data name="MinerAnotherPlayerShowMode" xml:space="preserve">
+    <value>Visibilité des mines pour les autres joueurs :</value>
+  </data>
+  <data name="MinerCanShowNoneActiveAnotherPlayer" xml:space="preserve">
+    <value>Les autres joueurs peuvent-ils voir la mine avant son activation</value>
+  </data>
+  <data name="MinerShowKillLog" xml:space="preserve">
+    <value>Afficher une alerte lors des éliminations par mine</value>
+  </data>
+  <data name="MinerIntroDescription" xml:space="preserve">
+    <value>Faites sauter les équipiers avec vos mines</value>
+  </data>
+  <data name="MinerShortDescription" xml:space="preserve">
+    <value>Remplissez le vaisseau de mines</value>
+  </data>
+  <data name="MinerFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Les Imposteurs et les Neutres dotés de compétences d'élimination sont éliminés, et plus de la moitié des survivants appartiennent à votre camp.
+Compétence « PLACER UNE MINE » :
+  Pose une mine à votre position. Après un délai, la mine devient active et élimine le premier joueur s'en approchant.</value>
+  </data>
+  <data name="MineSeeNone" xml:space="preserve">
+    <value>Masqué</value>
+  </data>
+  <data name="MineSeeOnlySe" xml:space="preserve">
+    <value>Son uniquement</value>
+  </data>
+  <data name="MineSeeOnlyImg" xml:space="preserve">
+    <value>Icône uniquement</value>
+  </data>
+  <data name="MineSeeBoth" xml:space="preserve">
+    <value>Son et icône</value>
+  </data>
+  <data name="setMine" xml:space="preserve">
+    <value>PLACER UNE MINE</value>
+  </data>
+  <data name="Eater" xml:space="preserve">
+    <value>Dévoreur</value>
+  </data>
+  <data name="EaterCanUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="EaterAbilityCoolTime" xml:space="preserve">
+    <value>« DÉVORER / ENGLOUTIR » : Temps de recharge</value>
+  </data>
+  <data name="EaterAbilityActiveTime" xml:space="preserve">
+    <value>« ENGLOUTIR » : Temps requis</value>
+  </data>
+  <data name="EaterAbilityCount" xml:space="preserve">
+    <value>« DÉVORER / ENGLOUTIR » : Nombre de dévorations pour gagner</value>
+  </data>
+  <data name="EaterEatRange" xml:space="preserve">
+    <value>« DÉVORER / ENGLOUTIR » : Portée de la compétence</value>
+  </data>
+  <data name="EaterDeadBodyEatActiveCoolTimePenalty" xml:space="preserve">
+    <value>« DÉVORER » : Augmentation du temps requis pour « ENGLOUTIR »</value>
+  </data>
+  <data name="EaterKillEatCoolTimePenalty" xml:space="preserve">
+    <value>« ENGLOUTIR » : Taux d'augmentation du temps de recharge</value>
+  </data>
+  <data name="EaterKillEatActiveCoolTimeReduceRate" xml:space="preserve">
+    <value>Réduction du temps requis pour « ENGLOUTIR » après une réunion sans action</value>
+  </data>
+  <data name="EaterIsResetCoolTimeWhenMeeting" xml:space="preserve">
+    <value>Réinitialiser le temps de recharge au début des réunions</value>
+  </data>
+  <data name="EaterIsShowArrowForDeadBody" xml:space="preserve">
+    <value>Afficher des flèches vers les cadavres</value>
+  </data>
+  <data name="EaterIntroDescription" xml:space="preserve">
+    <value>Dévorez tout sur votre passage</value>
+  </data>
+  <data name="EaterShortDescription" xml:space="preserve">
+    <value>Dévorez non seulement les cadavres mais aussi les équipiers</value>
+  </data>
+  <data name="EaterFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Utiliser « DÉVORER » et « ENGLOUTIR » un nombre de fois défini.
+Compétence « DÉVORER » : Consomme et fait disparaître un cadavre à proximité.
+Compétence « ENGLOUTIR » : Élimine un joueur proche en ignorant les boucliers et fait disparaître son corps.</value>
+  </data>
+  <data name="eaterWinNum" xml:space="preserve">
+    <value>Encore {0} fois avant la victoire</value>
+  </data>
+  <data name="deadBodyEat" xml:space="preserve">
+    <value>DÉVORER</value>
+  </data>
+  <data name="eatKill" xml:space="preserve">
+    <value>ENGLOUTIR</value>
+  </data>
+  <data name="Queen" xml:space="preserve">
+    <value>Reine</value>
+  </data>
+  <data name="Servant" xml:space="preserve">
+    <value>Serviteur</value>
+  </data>
+  <data name="QueenCanUseVent" xml:space="preserve">
+    <value>Reine : Peut utiliser les conduits</value>
+  </data>
+  <data name="QueenAbilityCoolTime" xml:space="preserve">
+    <value>« CHARMER » : Temps de recharge</value>
+  </data>
+  <data name="QueenAbilityCount" xml:space="preserve">
+    <value>« CHARMER » : Nombre d'utilisations</value>
+  </data>
+  <data name="QueenRange" xml:space="preserve">
+    <value>« CHARMER » : Portée de la compétence</value>
+  </data>
+  <data name="QueenServantKillKillCoolReduceRate" xml:space="preserve">
+    <value>Reine : Réduction du temps de recharge d'élimination par élimination du Serviteur</value>
+  </data>
+  <data name="QueenServantTaskKillCoolReduceRate" xml:space="preserve">
+    <value>Reine : Réduction du temps de recharge par tâche du Serviteur</value>
+  </data>
+  <data name="QueenServantTaskCompKillCoolReduceRate" xml:space="preserve">
+    <value>Reine : Réduction permanente du temps de recharge si toutes les tâches du Serviteur sont accomplies</value>
+  </data>
+  <data name="QueenServantSucideWithQueenWhenHasKill" xml:space="preserve">
+    <value>Serviteur : Le Serviteur avec élimination se suicide-t-il à la mort de la Reine</value>
+  </data>
+  <data name="QueenServantSelfKillCool" xml:space="preserve">
+    <value>« SE SUICIDER » : Temps de recharge</value>
+  </data>
+  <data name="QueenIntroDescription" xml:space="preserve">
+    <value>Bâtissez votre propre royaume</value>
+  </data>
+  <data name="QueenShortDescription" xml:space="preserve">
+    <value>Charmez des joueurs pour créer des Serviteurs et l'emporter</value>
+  </data>
+  <data name="QueenFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Les Imposteurs et Neutres avec compétences d'élimination sont éliminés, et plus de la moitié des survivants appartiennent à votre camp.
+Compétence « CHARMER » : Transforme un joueur en votre Serviteur.
+À la mort de la Reine, ses Serviteurs meurent également.</value>
+  </data>
+  <data name="ServantShortDescription" xml:space="preserve">
+    <value>Devenez un serviteur fidèle à la Reine</value>
+  </data>
+  <data name="ServantFullDescription" xml:space="preserve">
+    <value>Rôle Neutre assistant la Reine.
+Reine actuelle : {0}
+Si la Reine meurt, vous vous suiciderez.
+Compétence « SE SUICIDER » : Permet de se suicider à tout moment.</value>
+  </data>
+  <data name="queenCharm" xml:space="preserve">
+    <value>CHARMER</value>
+  </data>
+  <data name="selfKill" xml:space="preserve">
+    <value>SE SUICIDER</value>
+  </data>
+  <data name="Madmate" xml:space="preserve">
+    <value>Madmate</value>
+  </data>
+  <data name="MadmateCanFixSabotage" xml:space="preserve">
+    <value>Peut réparer les sabotages</value>
+  </data>
+  <data name="MadmateCanUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="MadmateHasTask" xml:space="preserve">
+    <value>Activer les paramètres liés aux tâches</value>
+  </data>
+  <data name="MadmateSeeImpostorTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour que le Madmate identifie les Imposteurs</value>
+  </data>
+  <data name="MadmateCanSeeFromImpostor" xml:space="preserve">
+    <value>Les Imposteurs peuvent-ils reconnaître le Madmate</value>
+  </data>
+  <data name="MadmateCanSeeFromImpostorTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour que les Imposteurs reconnaissent le Madmate</value>
+  </data>
+  <data name="MadmateAbilityCoolTime" xml:space="preserve">
+    <value>« SE SUICIDER » : Temps de recharge</value>
+  </data>
+  <data name="MadmateIsDontCountAliveCrew" xml:space="preserve">
+    <value>Ne pas compter le Madmate comme un Coéquipier vivant</value>
+  </data>
+  <data name="MadmateIntroDescription" xml:space="preserve">
+    <value>Les Imposteurs sont mes seuls maîtres !</value>
+  </data>
+  <data name="MadmateShortDescription" xml:space="preserve">
+    <value>Aidez les Imposteurs à gagner</value>
+  </data>
+  <data name="MadmateFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Victoire des Imposteurs.
+Compétence « SE SUICIDER » : Permet de se suicider.</value>
+  </data>
+  <data name="Umbrer" xml:space="preserve">
+    <value>Umbreyer</value>
+  </data>
+  <data name="UmbrerRange" xml:space="preserve">
+    <value>« INJECTION » : Portée de la compétence</value>
+  </data>
+  <data name="UmbrerAbilityCoolTime" xml:space="preserve">
+    <value>« INJECTION » : Temps de recharge</value>
+  </data>
+  <data name="UmbrerAbilityActiveTime" xml:space="preserve">
+    <value>« INJECTION » : Temps requis</value>
+  </data>
+  <data name="UmbrerInfectRange" xml:space="preserve">
+    <value>« VITALISER » : Portée de l'infection</value>
+  </data>
+  <data name="UmbrerUpgradeVirusTime" xml:space="preserve">
+    <value>« VITALISER » : Temps requis</value>
+  </data>
+  <data name="UmbrerKeepUpgradedVirus" xml:space="preserve">
+    <value>« VITALISER » : Durée de propagation du virus</value>
+  </data>
+  <data name="UmbrerIntroDescription" xml:space="preserve">
+    <value>C'est l'heure de l'expérience sur les équipiers !</value>
+  </data>
+  <data name="UmbrerShortDescription" xml:space="preserve">
+    <value>Infectez tous les joueurs avec le « VIRUS »</value>
+  </data>
+  <data name="UmbrerFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Infecter l'ensemble des joueurs.
+Compétence « INJECTION » : Infecte le joueur ciblé après un contact prolongé.
+Compétence « VITALISER » : Active la propagation virale sur un joueur infecté.</value>
+  </data>
+  <data name="featVirus" xml:space="preserve">
+    <value>INJECTION</value>
+  </data>
+  <data name="upgradeVirus" xml:space="preserve">
+    <value>VITALISER</value>
+  </data>
+  <data name="Hatter" xml:space="preserve">
+    <value>Chapelier</value>
+  </data>
+  <data name="HatterCanRepairSabotage" xml:space="preserve">
+    <value>Peut réparer les sabotages</value>
+  </data>
+  <data name="HatterWinCount" xml:space="preserve">
+    <value>Nombre de réunions sautées requis pour la victoire</value>
+  </data>
+  <data name="HatterAbilityCoolTime" xml:space="preserve">
+    <value>« PASSER LE TEMPS » : Temps de recharge</value>
+  </data>
+  <data name="HatterAbilityCount" xml:space="preserve">
+    <value>« PASSER LE TEMPS » : Nombre d'utilisations</value>
+  </data>
+  <data name="HatterHideMeetingTimer" xml:space="preserve">
+    <value>Masquer le minuteur de réunion avec « PASSER LE TEMPS »</value>
+  </data>
+  <data name="HatterMeetingTimerDecreaseLower" xml:space="preserve">
+    <value>Taux minimal de réduction de la durée de réunion</value>
+  </data>
+  <data name="HatterMeetingTimerDecreaseUpper" xml:space="preserve">
+    <value>Taux maximal de réduction de la durée de réunion</value>
+  </data>
+  <data name="HatterIncreaseTaskGage" xml:space="preserve">
+    <value>Taux de tâches requis pour recharger la compétence</value>
+  </data>
+  <data name="HatterIncreseNum" xml:space="preserve">
+    <value>Nombre d'utilisations supplémentaires ajoutées</value>
+  </data>
+  <data name="HatterIntroDescription" xml:space="preserve">
+    <value>L'heure du thé sans fin commence</value>
+  </data>
+  <data name="HatterShortDescription" xml:space="preserve">
+    <value>Faites sauter les réunions pour gagner</value>
+  </data>
+  <data name="HatterFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE 1 : Sauter les réunions un nombre de fois défini.
+CONDITION DE VICTOIRE 2 : Égaliser le nombre de survivants de chaque faction.
+Compétence « PASSER LE TEMPS » : Réduit immédiatement le temps imparti de la réunion.</value>
+  </data>
+  <data name="timeKill" xml:space="preserve">
+    <value>PASSER LE TEMPS</value>
+  </data>
+  <data name="Artist" xml:space="preserve">
+    <value>Artiste</value>
+  </data>
+  <data name="ArtistCanUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="ArtistWinAreaSize" xml:space="preserve">
+    <value>Surface peinte requise pour gagner</value>
+  </data>
+  <data name="ArtistAbilityCoolTime" xml:space="preserve">
+    <value>« PEINDRE » : Temps de recharge</value>
+  </data>
+  <data name="ArtistAbilityActiveTime" xml:space="preserve">
+    <value>Temps avant de pouvoir annuler la peinture</value>
+  </data>
+  <data name="ArtistIntroDescription" xml:space="preserve">
+    <value>L'art est ce qu'il y a de plus magnifique au monde !!</value>
+  </data>
+  <data name="ArtistShortDescription" xml:space="preserve">
+    <value>Exhibez votre art à la vue de tous</value>
+  </data>
+  <data name="ArtistFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Recouvrir une surface définie de la carte avec de la peinture.
+Compétence « PEINDRE » : Laisse une traînée de peinture colorée derrière vous lorsque vous vous déplacez.</value>
+  </data>
+  <data name="ArtistArtOn" xml:space="preserve">
+    <value>PEINDRE</value>
+  </data>
+  <data name="ArtistArtOff" xml:space="preserve">
+    <value>ARRÊTER DE PEINDRE</value>
+  </data>
+  <data name="Tucker" xml:space="preserve">
+    <value>Tucker</value>
+  </data>
+  <data name="Chimera" xml:space="preserve">
+    <value>Chimère</value>
+  </data>
+  <data name="TuckerAbilityCoolTime" xml:space="preserve">
+    <value>« CRÉER CHIMÈRE » et « EFFACER OMBRE » : Temps de recharge</value>
+  </data>
+  <data name="TuckerAbilityCount" xml:space="preserve">
+    <value>« CRÉER CHIMÈRE » : Nombre d'utilisations</value>
+  </data>
+  <data name="TuckerRange" xml:space="preserve">
+    <value>« CRÉER CHIMÈRE » et « EFFACER OMBRE » : Portée de la compétence</value>
+  </data>
+  <data name="TuckerShadowTimer" xml:space="preserve">
+    <value>Durée d'affichage de l'« OMBRE »</value>
+  </data>
+  <data name="TuckerShadowOffset" xml:space="preserve">
+    <value>Décalage de position de l'« OMBRE »</value>
+  </data>
+  <data name="TuckerRemoveShadowTime" xml:space="preserve">
+    <value>« EFFACER OMBRE » : Temps requis</value>
+  </data>
+  <data name="TuckerIsKillCoolReduceOnRemove" xml:space="preserve">
+    <value>« EFFACER OMBRE » réduit-il le temps de recharge d'élimination de la Chimère</value>
+  </data>
+  <data name="TuckerKillCoolReduceOnRemoveShadow" xml:space="preserve">
+    <value>Réduction du temps de recharge d'élimination</value>
+  </data>
+  <data name="TuckerIsReduceInitKillCoolOnRemove" xml:space="preserve">
+    <value>Réduire en dessous du temps de recharge initial</value>
+  </data>
+  <data name="TuckerHasOtherKillCool" xml:space="preserve">
+    <value>La Chimère a-t-elle un temps de recharge d'élimination spécifique</value>
+  </data>
+  <data name="TuckerKillCoolDown" xml:space="preserve">
+    <value>Temps de recharge d'élimination de la Chimère</value>
+  </data>
+  <data name="TuckerHasOtherKillRange" xml:space="preserve">
+    <value>La Chimère a-t-elle une portée d'élimination spécifique</value>
+  </data>
+  <data name="TuckerKillRange" xml:space="preserve">
+    <value>Portée d'élimination de la Chimère</value>
+  </data>
+  <data name="TuckerChimeraHasOtherVision" xml:space="preserve">
+    <value>La Chimère a-t-elle des paramètres de vision spécifiques</value>
+  </data>
+  <data name="TuckerChimeraVision" xml:space="preserve">
+    <value>Vision de la Chimère</value>
+  </data>
+  <data name="TuckerChimeraApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>La Chimère est-elle affectée par les effets de vision</value>
+  </data>
+  <data name="TuckerChimeraCanUseVent" xml:space="preserve">
+    <value>La Chimère peut-elle utiliser les conduits</value>
+  </data>
+  <data name="TuckerChimeraReviveTime" xml:space="preserve">
+    <value>Temps de réapparition de la Chimère</value>
+  </data>
+  <data name="TuckerChimeraDeathKillCoolOffset" xml:space="preserve">
+    <value>Variation du temps de recharge par réapparition de la Chimère</value>
+  </data>
+  <data name="TuckerTuckerDeathKillCoolOffset" xml:space="preserve">
+    <value>Variation du temps de recharge de la Chimère à la mort de Tucker</value>
+  </data>
+  <data name="TuckerIntroDescription" xml:space="preserve">
+    <value>Transformons les équipiers perspicaces en Chimères</value>
+  </data>
+  <data name="TuckerShortDescription" xml:space="preserve">
+    <value>Créez des Chimères, effacez vos ombres et gagnez</value>
+  </data>
+  <data name="TuckerFullDescription" xml:space="preserve">
+    <value>Rôle Neutre capable de créer une Chimère quasi-immortelle.
+CONDITION DE VICTOIRE : Les Imposteurs et Neutres avec compétences d'élimination sont éliminés, et plus de la moitié des survivants appartiennent à votre camp.
+Compétence « CRÉER CHIMÈRE » : Transforme un joueur en Chimère.
+Compétence « EFFACER OMBRE » : Efface les ombres laissées sur la carte pour réduire le temps de recharge d'élimination de la Chimère.</value>
+  </data>
+  <data name="ChimeraShortDescription" xml:space="preserve">
+    <value>Remportez la victoire grâce au pouvoir de l'immortalité</value>
+  </data>
+  <data name="ChimeraFullDescription" xml:space="preserve">
+    <value>Rôle Neutre ressuscitant indéfiniment tant que le Tucker est en vie.
+Tucker actuel : {0}</value>
+  </data>
+  <data name="removeShadow" xml:space="preserve">
+    <value>EFFACER OMBRE</value>
+  </data>
+  <data name="createChimera" xml:space="preserve">
+    <value>CRÉER CHIMÈRE</value>
+  </data>
+  <data name="TuckerTuckerDeathWithChimera" xml:space="preserve">
+    <value>La Chimère meurt-elle si Tucker meurt</value>
+  </data>
+  <data name="IronMate" xml:space="preserve">
+    <value>Iron Mate</value>
+  </data>
+  <data name="IronMateBlockNum" xml:space="preserve">
+    <value>Nombre d'éliminations pouvant être bloquées</value>
+  </data>
+  <data name="IronMateSlowTime" xml:space="preserve">
+    <value>Durée de la réduction de vitesse après blocage</value>
+  </data>
+  <data name="IronMateSlowMod" xml:space="preserve">
+    <value>Multiplicateur de vitesse après blocage</value>
+  </data>
+  <data name="IronMatePlayerShowTime" xml:space="preserve">
+    <value>Durée d'affichage du leurre sur le cadavre</value>
+  </data>
+  <data name="IronMateDeadBodyShowTimeOnAfterPlayer" xml:space="preserve">
+    <value>Durée d'affichage du cadavre après le leurre</value>
+  </data>
+  <data name="IronMateShortDescription" xml:space="preserve">
+    <value>Un Coéquipier doté d'un corps d'acier</value>
+  </data>
+  <data name="IronMateFullDescription" xml:space="preserve">
+    <value>Rôle Neutre semblable à un Coéquipier.
+CONDITION DE VICTOIRE : Victoire des Coéquipiers.
+Peut bloquer un certain nombre de tentatives d'élimination. Après un blocage, la vitesse de déplacement d'Iron Mate est temporairement réduite.</value>
+  </data>
+  <data name="Monika" xml:space="preserve">
+    <value>Monika</value>
+  </data>
+  <data name="MonikaAbilityCoolTime" xml:space="preserve">
+    <value>« EFFACER » : Temps de recharge</value>
+  </data>
+  <data name="MonikaRange" xml:space="preserve">
+    <value>« EFFACER » : Portée de la compétence</value>
+  </data>
+  <data name="MonikaIntroDescription" xml:space="preserve">
+    <value>7fee81971a1be79192a88bdaeb47b2e4bd81416ccd5b9bfc4b5b44bca597f2ee</value>
+  </data>
+  <data name="MonikaShortDescription" xml:space="preserve">
+    <value>Pour mon être cher </value>
+  </data>
+  <data name="MonikaFullDescription" xml:space="preserve">
+    <value>Rôle Neutre éliminant les joueurs de la réalité avec « EFFACER ».
+CONDITION DE VICTOIRE : Être 3 survivants ou moins non-effacés (y compris Monika).
+Compétence « EFFACER » : Envoie un joueur dans la « Corbeille ».</value>
+  </data>
+  <data name="MonikaMeetingSelectLover" xml:space="preserve">
+    <value>Choisissez la personne que vous aimiez&lt;br&gt;(Vous gagnerez avec elle)</value>
+  </data>
+  <data name="MonikaMeetingSelectTarget" xml:space="preserve">
+    <value>Es-tu un réceptacle digne&lt;br&gt;de mon amour ?</value>
+  </data>
+  <data name="MonikaMeetingOther" xml:space="preserve">
+    <value>Que les spectateurs observent&lt;br&gt;le "Destin" en silence</value>
+  </data>
+  <data name="MonikaMeetingExiled" xml:space="preserve">
+    <value>« {0} » aimait « {1} »&lt;br&gt;(« {2} » a été exclu(e))</value>
+  </data>
+  <data name="monikaPlayerTrash" xml:space="preserve">
+    <value>EFFACER</value>
+  </data>
+  <data name="MonikaUseOtherButton" xml:space="preserve">
+    <value>Consommer le bouton de quelqu'un d'autre lorsque Monika provoque une réunion</value>
+  </data>
+  <data name="MonikaCanUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="MonikaCanUseSabotage" xml:space="preserve">
+    <value>Peut utiliser les sabotages</value>
+  </data>
+  <data name="MonikaIsSoloTeam" xml:space="preserve">
+    <value>La partie continue-t-elle si Monika est seule</value>
+  </data>
+  <data name="MonikaCanSeeTrash" xml:space="preserve">
+    <value>Monika peut-elle voir les joueurs dans la Corbeille</value>
+  </data>
+  <data name="Heretic" xml:space="preserve">
+    <value>Hérétique</value>
+  </data>
+  <data name="HereticHasTask" xml:space="preserve">
+    <value>A des tâches</value>
+  </data>
+  <data name="HereticSeeImpostorTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour voir les Imposteurs</value>
+  </data>
+  <data name="HereticKillMode" xml:space="preserve">
+    <value>Mode de « MALÉDICTION DE MORT »</value>
+  </data>
+  <data name="HereticAbilityCoolTime" xml:space="preserve">
+    <value>« MALÉDICTION DE MORT » : Temps de recharge</value>
+  </data>
+  <data name="HereticRange" xml:space="preserve">
+    <value>« MALÉDICTION DE MORT » : Portée de la compétence</value>
+  </data>
+  <data name="HereticCanKillImpostor" xml:space="preserve">
+    <value>Les Imposteurs peuvent-ils être ciblés par la « MALÉDICTION DE MORT »</value>
+  </data>
+  <data name="HereticIntroDescription" xml:space="preserve">
+    <value>Imposteur-sama, accordez-moi votre bénédiction...</value>
+  </data>
+  <data name="HereticShortDescription" xml:space="preserve">
+    <value>Tuez ceux qui s'opposent à Imposteur-sama avec la « MALÉDICTION DE MORT »</value>
+  </data>
+  <data name="HereticFullDescription" xml:space="preserve">
+    <value>Rôle Neutre.
+CONDITION DE VICTOIRE : Victoire des Imposteurs.
+Compétence « MALÉDICTION DE MORT » :
+  Sacrifie sa propre vie pour éliminer un joueur selon le mode sélectionné.</value>
+  </data>
+  <data name="HereticAbility" xml:space="preserve">
+    <value>MALÉDICTION DE MORT</value>
+  </data>
+  <data name="Shepherd" xml:space="preserve">
+    <value>Berger</value>
+  </data>
+  <data name="ShepherdCanKill" xml:space="preserve">
+    <value>Peut éliminer</value>
+  </data>
+  <data name="ShepherdIsSubTeam" xml:space="preserve">
+    <value>Est dans l'équipe secondaire du Jackal</value>
+  </data>
+  <data name="ShepherdUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="ShepherdHasTask" xml:space="preserve">
+    <value>A des tâches</value>
+  </data>
+  <data name="ShepherdSeeJackalTaskRate" xml:space="preserve">
+    <value>Taux de tâches pour voir le Jackal</value>
+  </data>
+  <data name="ShepherdIntroDescription" xml:space="preserve">
+    <value>Le guide du Jackal</value>
+  </data>
+  <data name="ShepherdShortDescription" xml:space="preserve">
+    <value>Menez le Jackal à la victoire</value>
+  </data>
+  <data name="ShepherdFullDescription" xml:space="preserve">
+    <value>Rôle Neutre de secours d'équipe secondaire.
+CONDITION DE VICTOIRE : Victoire du Jackal.</value>
+  </data>
+  <data name="Furry" xml:space="preserve">
+    <value>Furry</value>
+  </data>
+  <data name="FurryUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="FurryHasTask" xml:space="preserve">
+    <value>A des tâches</value>
+  </data>
+  <data name="FurrySeeJackalTaskRate" xml:space="preserve">
+    <value>Taux de tâches pour voir le Jackal</value>
+  </data>
+  <data name="FurryIntroDescription" xml:space="preserve">
+    <value>Un Coéquipier dans les veines duquel coule le sang du Jackal (?)</value>
+  </data>
+  <data name="FurryShortDescription" xml:space="preserve">
+    <value>Survivez en tant que troisième Jackal</value>
+  </data>
+  <data name="FurryFullDescription" xml:space="preserve">
+    <value>Rôle Neutre de secours.
+Devient le nouveau Jackal si le Jackal d'origine meurt alors que son Sidekick est déjà mort.</value>
+  </data>
+  <data name="Intimate" xml:space="preserve">
+    <value>Intime</value>
+  </data>
+  <data name="IntimateCanKill" xml:space="preserve">
+    <value>Peut éliminer</value>
+  </data>
+  <data name="IntimateIsSubTeam" xml:space="preserve">
+    <value>Est dans l'équipe secondaire de la Yandere</value>
+  </data>
+  <data name="IntimateUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="IntimateHasTask" xml:space="preserve">
+    <value>A des tâches</value>
+  </data>
+  <data name="IntimateSeeYandereTaskRate" xml:space="preserve">
+    <value>Taux de tâches pour voir la Yandere</value>
+  </data>
+  <data name="IntimateFullDescription" xml:space="preserve">
+    <value>Rôle Neutre d'équipe secondaire de la Yandere.
+CONDITION DE VICTOIRE : Victoire de la Yandere.</value>
+  </data>
+  <data name="IntimateShortDescription" xml:space="preserve">
+    <value>Je me salirai les mains pour Yandere-chan</value>
+  </data>
+  <data name="IntimateIntroDescription" xml:space="preserve">
+    <value>Yandere-chan est ma plus chère amie !!</value>
+  </data>
+  <data name="Surrogator" xml:space="preserve">
+    <value>Substitut</value>
+  </data>
+  <data name="SurrogatorUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="SurrogatorHasTask" xml:space="preserve">
+    <value>A des tâches</value>
+  </data>
+  <data name="SurrogatorSeeYandereTaskRate" xml:space="preserve">
+    <value>Taux de tâches pour voir la Yandere</value>
+  </data>
+  <data name="SurrogatorAbilityCoolTime" xml:space="preserve">
+    <value>« REVÊTIR CADAVRE » : Temps de recharge</value>
+  </data>
+  <data name="SurrogatorAbilityActiveTime" xml:space="preserve">
+    <value>« REVÊTIR CADAVRE » : Temps requis</value>
+  </data>
+  <data name="SurrogatorAbilityCount" xml:space="preserve">
+    <value>« REVÊTIR CADAVRE » : Nombre d'utilisations</value>
+  </data>
+  <data name="SurrogatorRange" xml:space="preserve">
+    <value>« REVÊTIR CADAVRE » : Distance du cadavre</value>
+  </data>
+  <data name="SurrogatorPreventNum" xml:space="preserve">
+    <value>« PROTECTION DE L'OMBRE » : Nombre de blocages initiaux</value>
+  </data>
+  <data name="SurrogatorPreventKillTime" xml:space="preserve">
+    <value>« PROTECTION DE L'OMBRE » : Temps de recharge lors d'un blocage</value>
+  </data>
+  <data name="SurrogatorAbility" xml:space="preserve">
+    <value>Revêtir cadavre</value>
+  </data>
+  <data name="SurrogatorIntroDescription" xml:space="preserve">
+    <value>Soutien de la Yandere depuis l'ombre</value>
+  </data>
+  <data name="SurrogatorFullDescription" xml:space="preserve">
+    <value>Rôle Neutre de secours.
+Protège le Coup de cœur contre un certain nombre d'attaques d'élimination.</value>
+  </data>
+  <data name="SurrogatorTask" xml:space="preserve">
+    <value>Utilisez « REVÊTIR CADAVRE » pour protéger l'être cher de votre personne précieuse</value>
+  </data>
+  <data name="Knight" xml:space="preserve">
+    <value>Chevalier</value>
+  </data>
+  <data name="KnightIsSubTeam" xml:space="preserve">
+    <value>Est dans l'équipe secondaire de la Reine</value>
+  </data>
+  <data name="KnightUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="KnightHasTask" xml:space="preserve">
+    <value>A des tâches</value>
+  </data>
+  <data name="KnightSeeQueenTaskRate" xml:space="preserve">
+    <value>Taux de tâches pour voir la Reine</value>
+  </data>
+  <data name="KnightIntroDescription" xml:space="preserve">
+    <value>Le capitaine d'avant-garde de la garde royale de la Reine</value>
+  </data>
+  <data name="KnightFullDescription" xml:space="preserve">
+    <value>Rôle Neutre d'équipe secondaire de la Reine.
+CONDITION DE VICTOIRE : Victoire de la Reine.</value>
+  </data>
+  <data name="KnightShortDescription" xml:space="preserve">
+    <value>Éliminez vos cibles à la place de la Reine</value>
+  </data>
+  <data name="Pawn" xml:space="preserve">
+    <value>Pion</value>
+  </data>
+  <data name="PawnUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="PawnHasTask" xml:space="preserve">
+    <value>A des tâches</value>
+  </data>
+  <data name="PawnSeeQueenTaskRate" xml:space="preserve">
+    <value>Taux de tâches pour voir la Reine</value>
+  </data>
+  <data name="PawnIntroDescription" xml:space="preserve">
+    <value>L'avant-garde de la Reine</value>
+  </data>
+  <data name="PawnShortDescription" xml:space="preserve">
+    <value>Aidez la Reine à décrocher la victoire</value>
+  </data>
+  <data name="PawnFullDescription" xml:space="preserve">
+    <value>Rôle Neutre de secours.
+CONDITION DE VICTOIRE : Victoire de la Reine.</value>
+  </data>
+  <data name="AbilityOnTaskPhase" xml:space="preserve">
+    <value>Pendant la phase de tâches</value>
+  </data>
+  <data name="AbilityOnTaskPhaseTarget" xml:space="preserve">
+    <value>Cible spécifiée&lt;br&gt;(Pendant la phase de tâches)</value>
+  </data>
+  <data name="AbilityOnMeeting" xml:space="preserve">
+    <value>Pendant la réunion</value>
+  </data>
+  <data name="AbilityOnMeetingTarget" xml:space="preserve">
+    <value>Cible spécifiée&lt;br&gt;(Pendant la réunion)</value>
+  </data>
+  <data name="AbilityOnExiled" xml:space="preserve">
+    <value>Lors de l'expulsion</value>
+  </data>
+  <data name="AliceWinTaskRate" xml:space="preserve">
+    <value>Taux de tâches requis pour la victoire</value>
+  </data>
+  <data name="AliceWinKillNum" xml:space="preserve">
+    <value>Nombre d'éliminations requises pour la victoire</value>
+  </data>
+  <data name="AllJackalWin" xml:space="preserve">
+    <value>Grâce à l'action du Berger, victoire de l'ensemble de l'équipe Jackal</value>
+  </data>
+  <data name="AllYandereWin" xml:space="preserve">
+    <value>Grâce à l'action de l'Intime, victoire de l'ensemble de l'équipe Yandere</value>
+  </data>
+  <data name="AllQueenWin" xml:space="preserve">
+    <value>Grâce à l'action du Chevalier, victoire de l'ensemble de l'équipe Reine</value>
+  </data>
+  <data name="ShepherdCanKillJackal" xml:space="preserve">
+    <value>Peut éliminer le « Jackal »&lt;br&gt;lorsqu'il est visible</value>
+  </data>
+  <data name="ShepherdCanKillSidekick" xml:space="preserve">
+    <value>Peut éliminer le « Sidekick »&lt;br&gt;lorsque le Jackal est visible</value>
+  </data>
+  <data name="IntimateCanKillYandere" xml:space="preserve">
+    <value>Peut éliminer la « Yandere »&lt;br&gt;lorsqu'elle est visible</value>
+  </data>
+  <data name="IntimateCanKillOneSideLover" xml:space="preserve">
+    <value>Peut éliminer le « Coup de cœur »&lt;br&gt;lorsque la Yandere est visible</value>
+  </data>
+  <data name="KnightCanKillQueen" xml:space="preserve">
+    <value>Peut éliminer la « Reine »&lt;br&gt;lorsqu'elle est visible</value>
+  </data>
+  <data name="KnightCanKillServant" xml:space="preserve">
+    <value>Peut éliminer le « Serviteur »&lt;br&gt;lorsque la Reine est visible</value>
+  </data>
+  <data name="HereticUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="HereticMeetingButtonTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour activer le bouton&lt;br&gt;« Réunion d'urgence »</value>
+  </data>
+</root>

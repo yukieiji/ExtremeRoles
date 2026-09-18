@@ -55,11 +55,29 @@ EXISTING_FR_COMBINATION_KEYS = {
     "scribble",
 }
 
+EXISTING_FR_NEUTRAL_KEYS = {
+    "Alice",
+    "Jackal",
+    "Sidekick",
+    "Yandere",
+    "Yoko",
+    "Totocalcio",
+    "Madmate",
+    "Umbrer",
+    "featVirus",
+    "Tucker",
+    "IronMate",
+    "Monika",
+    "MonikaIntroDescription",
+    "Furry",
+}
+
 WHITELIST = {
     "Text": EXISTING_FR_TEXT_KEYS,
     "Combination": EXISTING_FR_COMBINATION_KEYS,
     "WebUI": {"ROLE_FILTER_SHORT_LABEL"},
     "Crewmate": {"CEO"},
+    "Neutral": EXISTING_FR_NEUTRAL_KEYS,
 }
 
 
