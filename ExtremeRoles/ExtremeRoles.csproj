@@ -70,6 +70,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="Translation\resx\Text.fr-FR.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ExtremeRoles.Analyzers\ExtremeRoles.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\ExtremeRoles.Generator\ExtremeRoles.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
