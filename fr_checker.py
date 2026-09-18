@@ -47,8 +47,17 @@ EXISTING_FR_TEXT_KEYS = {
     "ThreeToThree",
 }
 
+EXISTING_FR_COMBINATION_KEYS = {
+    "Marlin",
+    "Vigilante",
+    "Assistant",
+    "DelinquentVision",
+    "scribble",
+}
+
 WHITELIST = {
     "Text": EXISTING_FR_TEXT_KEYS,
+    "Combination": EXISTING_FR_COMBINATION_KEYS,
     "WebUI": {"ROLE_FILTER_SHORT_LABEL"},
     "Crewmate": {"CEO"},
 }
