@@ -70,6 +70,7 @@ WHITELIST = {
     "Crewmate": {"CEO"},
     "GhostCrewmate": {"Poltergeist", "Faunus", "Shutter", "ShutterTakePhotoButton"},
     "Impostor": EXISTING_FR_IMPOSTOR_KEYS,
+    "GhostImpostor": {"Ventgeist", "SaboEvil", "Igniter", "Doppelganger"},
 }
 
 
