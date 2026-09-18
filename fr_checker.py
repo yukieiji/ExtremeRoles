@@ -27,6 +27,24 @@ EXISTING_FR_TEXT_KEYS = {
     "Xorshiro256StarStar",
     "Xorshiro512StarStar",
     "MODNAME_TRANS",
+    "Xion",
+    "Suicide",
+    "Vision",
+    "LiberalSettingLiberalVison",
+    "LiberalSettingLeaderVison",
+    "roleHistoryCause",
+    "Leader",
+    "Militant",
+    "sabotageKey",
+    "OneToOne",
+    "TwoToOne",
+    "OneToTwo",
+    "TwoToTwo",
+    "OneToThree",
+    "ThreeToOne",
+    "ThreeToTwo",
+    "TwoToThree",
+    "ThreeToThree",
 }
 
 EXISTING_FR_COMBINATION_KEYS = {
@@ -40,6 +58,8 @@ EXISTING_FR_COMBINATION_KEYS = {
 WHITELIST = {
     "Text": EXISTING_FR_TEXT_KEYS,
     "Combination": EXISTING_FR_COMBINATION_KEYS,
+    "WebUI": {"ROLE_FILTER_SHORT_LABEL"},
+    "Crewmate": {"CEO"},
 }
 
 
