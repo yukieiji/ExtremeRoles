@@ -124,7 +124,7 @@ Attention : ce rôle puissant attirera l'attention des Imposteurs comme des Coé
     <value>Les Jackals promus peuvent-ils créer des Sidekicks</value>
   </data>
   <data name="JackalSidekickLimitNum" xml:space="preserve">
-    <value>Limite de récurrence pour la création de Sidekicks par un Jackal promu</value>
+    <value>Limite de Sidekicks par Jackal promu</value>
   </data>
   <data name="JackalCanSetImpostorToSidekick" xml:space="preserve">
     <value>« SIDEKICK » : Peut cibler les Imposteurs</value>
@@ -186,7 +186,7 @@ CONDITION DE VICTOIRE : Les Imposteurs et les Neutres dotés de compétences d'�
 Jackal actuel : {0}</value>
   </data>
   <data name="TaskMaster" xml:space="preserve">
-    <value>Maître des Tâches</value>
+    <value>Task Master</value>
   </data>
   <data name="TaskMasterCanUseSabotage" xml:space="preserve">
     <value>Peut utiliser les sabotages</value>
@@ -1042,7 +1042,7 @@ CONDITION DE VICTOIRE : Victoire du Jackal.</value>
 Devient le nouveau Jackal si le Jackal d'origine meurt alors que son Sidekick est déjà mort.</value>
   </data>
   <data name="Intimate" xml:space="preserve">
-    <value>Intime</value>
+    <value>Intimate</value>
   </data>
   <data name="IntimateCanKill" xml:space="preserve">
     <value>Peut éliminer</value>
@@ -1184,7 +1184,7 @@ CONDITION DE VICTOIRE : Victoire de la Reine.</value>
     <value>Grâce à l'action du Berger, victoire de l'ensemble de l'équipe Jackal</value>
   </data>
   <data name="AllYandereWin" xml:space="preserve">
-    <value>Grâce à l'action de l'Intime, victoire de l'ensemble de l'équipe Yandere</value>
+    <value>Grâce à l'action de l'Intimate, victoire de l'ensemble de l'équipe Yandere</value>
   </data>
   <data name="AllQueenWin" xml:space="preserve">
     <value>Grâce à l'action du Chevalier, victoire de l'ensemble de l'équipe Reine</value>

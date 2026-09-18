@@ -59,17 +59,19 @@ EXISTING_FR_NEUTRAL_KEYS = {
     "Alice",
     "Jackal",
     "Sidekick",
+    "TaskMaster",
     "Yandere",
     "Yoko",
     "Totocalcio",
     "Madmate",
     "Umbrer",
-    "featVirus",
     "Tucker",
     "IronMate",
     "Monika",
     "MonikaIntroDescription",
     "Furry",
+    "Intimate",
+    "featVirus",
 }
 
 WHITELIST = {
