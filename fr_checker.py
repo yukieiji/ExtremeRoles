@@ -55,6 +55,25 @@ EXISTING_FR_COMBINATION_KEYS = {
     "scribble",
 }
 
+EXISTING_FR_NEUTRAL_KEYS = {
+    "Alice",
+    "Jackal",
+    "Sidekick",
+    "TaskMaster",
+    "Yandere",
+    "Yoko",
+    "Totocalcio",
+    "Madmate",
+    "Umbrer",
+    "Tucker",
+    "IronMate",
+    "Monika",
+    "MonikaIntroDescription",
+    "Furry",
+    "Intimate",
+    "featVirus",
+}
+
 EXISTING_FR_IMPOSTOR_KEYS = {
     "Mery",
     "liightOff",
@@ -68,6 +87,7 @@ WHITELIST = {
     "Combination": EXISTING_FR_COMBINATION_KEYS,
     "WebUI": {"ROLE_FILTER_SHORT_LABEL"},
     "Crewmate": {"CEO"},
+    "Neutral": EXISTING_FR_NEUTRAL_KEYS,
     "GhostCrewmate": {"Poltergeist", "Faunus", "Shutter", "ShutterTakePhotoButton"},
     "Impostor": EXISTING_FR_IMPOSTOR_KEYS,
 }
