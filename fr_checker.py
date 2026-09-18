@@ -29,8 +29,17 @@ EXISTING_FR_TEXT_KEYS = {
     "MODNAME_TRANS",
 }
 
+EXISTING_FR_COMBINATION_KEYS = {
+    "Marlin",
+    "Vigilante",
+    "Assistant",
+    "DelinquentVision",
+    "scribble",
+}
+
 WHITELIST = {
     "Text": EXISTING_FR_TEXT_KEYS,
+    "Combination": EXISTING_FR_COMBINATION_KEYS,
 }
 
 
