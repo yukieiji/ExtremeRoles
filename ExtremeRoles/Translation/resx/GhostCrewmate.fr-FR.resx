@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:schema id="root">
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -101,7 +101,7 @@ abilities.</value>
     <value>A Poltergeist moved a corpse!</value>
   </data>
   <data name="Faunus" xml:space="preserve">
-    <value>Faunus</value>
+    <value>Faune</value>
   </data>
   <data name="FaunusAbilityCoolTime" xml:space="preserve">
     <value>"SUPPORT" : Ability Temps de recharge</value>
@@ -110,13 +110,13 @@ abilities.</value>
     <value>"SUPPORT" : Ability Durée</value>
   </data>
   <data name="FaunusIsReportAbility" xml:space="preserve">
-    <value>"SUPPORT" : Does alert ability use on meetings</value>
+    <value>Signaler l'activation de la capacité lors des réunions</value>
   </data>
   <data name="FaunusAbilityCount" xml:space="preserve">
-    <value>"SUPPORT" : Ability Charges</value>
+    <value>Nombre d'utilisations de « Bénédiction »</value>
   </data>
   <data name="FaunusShortDescription" xml:space="preserve">
-    <value>Repair Sabotages and SUPPORT your mates</value>
+    <value>Réparez les sabotages à distance pour soutenir vos coéquipiers</value>
   </data>
   <data name="FaunusFullDescription" xml:space="preserve">
     <value> Un FANTÔME ÉQUIPIER with the ability to interact SABOTAGES.
@@ -128,16 +128,16 @@ one will be randomly selected
 ability.</value>
   </data>
   <data name="FaunusOpenSaboConsoleButton" xml:space="preserve">
-    <value>SUPPORT</value>
+    <value>Bénédiction</value>
   </data>
   <data name="FaunusOpenSaboConsole" xml:space="preserve">
-    <value>A Faunus helped with the Sabotage!</value>
+    <value>Un Faune est intervenu sur le sabotage !</value>
   </data>
   <data name="Shutter" xml:space="preserve">
-    <value>Shutter</value>
+    <value>Photographe</value>
   </data>
   <data name="ShutterPhotoRange" xml:space="preserve">
-    <value>"CAPTURE" : Ability Range</value>
+    <value>Portée de « Photo spectrale »</value>
   </data>
   <data name="ShutterRightPlayerNameRate" xml:space="preserve">
     <value>"CAPTURE" : Chances of player names not to be blurred</value>
@@ -146,13 +146,13 @@ ability.</value>
     <value>"CAPTURE" : Ability Temps de recharge</value>
   </data>
   <data name="ShutterIsReportAbility" xml:space="preserve">
-    <value>"CAPTURE" : Does alert ability use on meetings </value>
+    <value>Signaler l'activation de la capacité lors des réunions</value>
   </data>
   <data name="ShutterAbilityCount" xml:space="preserve">
-    <value>"CAPTURE" : Ability Charges </value>
+    <value>Nombre d'utilisations de « Photo spectrale »</value>
   </data>
   <data name="ShutterShortDescription" xml:space="preserve">
-    <value>CAPTURE the crime scene!</value>
+    <value>Capturez l'instant décisif avec « Photo spectrale »</value>
   </data>
   <data name="ShutterFullDescription" xml:space="preserve">
     <value>Un FANTÔME ÉQUIPIER with the ability to take photos.
@@ -165,15 +165,16 @@ ability.</value>
     anything!</value>
   </data>
   <data name="ShutterTakePhotoButton" xml:space="preserve">
-    <value>CAPTURE</value>
+    <value>Photo spectrale</value>
   </data>
   <data name="ShutterTakePhoto" xml:space="preserve">
-    <value>A Shutter left a photo for the meeting!</value>
+    <value>Une photo prise par un Photographe a été déposée dans la salle de réunion !</value>
   </data>
   <data name="smokingThisName" xml:space="preserve">
-    <value>This player is too blurry to tell who it is…</value>
+    <value>Ce joueur était trop flou pour être identifié...</value>
   </data>
   <data name="ShutterTakePhotoReport" xml:space="preserve">
-    <value>The photo was showing : ¥n{0}</value>
+    <value>Détails de la photo déposée :
+{0}</value>
   </data>
 </root>

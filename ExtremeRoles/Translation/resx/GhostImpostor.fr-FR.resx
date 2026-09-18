@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:schema id="root">
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,22 +59,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Ventgeist" xml:space="preserve">
-    <value>Vent-geist</value>
+    <value>Ventgeist</value>
   </data>
   <data name="VentgeistRange" xml:space="preserve">
-    <value>"RATTLE" : Ability Range</value>
+    <value>Portée de détection des vents</value>
   </data>
   <data name="VentgeistAbilityCoolTime" xml:space="preserve">
     <value>"RATTLE" : Ability Temps de recharge</value>
   </data>
   <data name="VentgeistAbilityCount" xml:space="preserve">
-    <value>"RATTLE" : Ability Charges</value>
+    <value>Nombre d'utilisations d'« Actionnement de vent »</value>
   </data>
   <data name="VentgeistIsReportAbility" xml:space="preserve">
-    <value>"RATTLE" : Does alert ability use on meetings</value>
+    <value>Signaler l'activation de la capacité lors des réunions</value>
   </data>
   <data name="VentgeistShortDescription" xml:space="preserve">
-    <value>RATTLE Vents and mischief the crews</value>
+    <value>Ouvrez et fermez les vents pour effrayer l'équipage</value>
   </data>
   <data name="VentgeistFullDescription" xml:space="preserve">
     <value> Un FANTÔME IMPOSTEUR with the ability to rattle the
@@ -83,25 +83,25 @@ VENT!
 animation.</value>
   </data>
   <data name="VentgeistVentAnimeButton" xml:space="preserve">
-    <value>RATTLE</value>
+    <value>Actionner vent</value>
   </data>
   <data name="VentgeistVentAnime" xml:space="preserve">
-    <value>A Vent-geist rattled a vent!</value>
+    <value>Un Ventgeist semble avoir manipulé un vent !</value>
   </data>
   <data name="SaboEvil" xml:space="preserve">
-    <value>Sabota-geist</value>
+    <value>Esprit Saboteur</value>
   </data>
   <data name="SaboEvilAbilityCoolTime" xml:space="preserve">
     <value>"SABOLISH" : Ability Temps de recharge</value>
   </data>
   <data name="SaboEvilAbilityCount" xml:space="preserve">
-    <value>"SABOLISH" : Ability Charges</value>
+    <value>Nombre d'utilisations de « Sabotage éclair »</value>
   </data>
   <data name="SaboEvilIsReportAbility" xml:space="preserve">
-    <value>"SABOLISH" : Does alert ability use on meetings</value>
+    <value>Signaler l'activation de la capacité lors des réunions</value>
   </data>
   <data name="SaboEvilShortDescription" xml:space="preserve">
-    <value>Support with Sabotages by nullifying cooldowns</value>
+    <value>Réduisez le temps de recharge du sabotage pour prendre l'avantage</value>
   </data>
   <data name="SaboEvilFullDescription" xml:space="preserve">
     <value> Un FANTÔME IMPOSTEUR with the ability to help
@@ -110,13 +110,13 @@ IMPOSTORS.
    - This only affects IMPOSTORS.</value>
   </data>
   <data name="SaboEvilResetSabotageCoolButton" xml:space="preserve">
-    <value>SABOLISH</value>
+    <value>Sabotage éclair</value>
   </data>
   <data name="SaboEvilResetSabotageCool" xml:space="preserve">
-    <value>A Sabota-geist helped the Impostor!</value>
+    <value>Un Esprit Saboteur a accéléré le déclenchement d'un sabotage !</value>
   </data>
   <data name="Igniter" xml:space="preserve">
-    <value>Igniter</value>
+    <value>Pyromane Spectral</value>
   </data>
   <data name="IgniterAbilityCoolTime" xml:space="preserve">
     <value>"LIGHTS OFF" : Ability Temps de recharge</value>
@@ -125,19 +125,19 @@ IMPOSTORS.
     <value>"LIGHTS OFF" : Ability Durée</value>
   </data>
   <data name="IgniterIsReportAbility" xml:space="preserve">
-    <value>"LIGHTS OFF" : Does alert ability use on meetings</value>
+    <value>Signaler l'activation de la capacité lors des réunions</value>
   </data>
   <data name="IgniterAbilityCount" xml:space="preserve">
-    <value>"LIGHTS OFF" : Ability Charges</value>
+    <value>Nombre d'utilisations de « Panne spectrale »</value>
   </data>
   <data name="IgniterIsEffectImpostor" xml:space="preserve">
-    <value>"LIGHTS OFF" : Does affect IMPOSTORS </value>
+    <value>Les Imposteurs sont-ils affectés par « Panne spectrale »</value>
   </data>
   <data name="IgniterIsEffectNeutral" xml:space="preserve">
-    <value>"LIGHTS OFF" : Does affect NEUTRALS </value>
+    <value>Les Neutres sont-ils affectés par « Panne spectrale »</value>
   </data>
   <data name="IgniterShortDescription" xml:space="preserve">
-    <value>Support IMPOSTORS by </value>
+    <value>Provoquez une « Panne spectrale » pour soutenir les Imposteurs</value>
   </data>
   <data name="IgniterFullDescription" xml:space="preserve">
     <value>Un FANTÔME IMPOSTEUR with the ability to turn the LIGHTS OFF.
@@ -150,13 +150,13 @@ IMPOSTORS.
     off" sabotage. </value>
   </data>
   <data name="IgniterSwitchLightButton" xml:space="preserve">
-    <value>LIGHTS OFF</value>
+    <value>Panne spectrale</value>
   </data>
   <data name="IgniterSwitchLight" xml:space="preserve">
-    <value>An Igniter turned off the lights!</value>
+    <value>Un Pyromane Spectral a éteint les lumières !</value>
   </data>
   <data name="Doppelganger" xml:space="preserve">
-    <value>Doppelganger</value>
+    <value>Doppelgänger</value>
   </data>
   <data name="DoppelgangerAbilityCoolTime" xml:space="preserve">
     <value>"DOPPEL" : Ability Temps de recharge</value>
@@ -165,16 +165,16 @@ IMPOSTORS.
     <value>"DOPPEL" : Durée for dummy to be visible</value>
   </data>
   <data name="DoppelgangerIsReportAbility" xml:space="preserve">
-    <value>"DOPPEL" : Does alert ability use on meetings</value>
+    <value>Signaler l'activation de la capacité lors des réunions</value>
   </data>
   <data name="DoppelgangerAbilityCount" xml:space="preserve">
-    <value>"DOPPEL" : Ability Charges</value>
+    <value>Nombre d'utilisations de « Doppel »</value>
   </data>
   <data name="DoppelgangerDoppel" xml:space="preserve">
-    <value>Someone's doppelganger was found</value>
+    <value>Le Doppelgänger de quelqu'un a été découvert !</value>
   </data>
   <data name="DoppelgangerDoppelButton" xml:space="preserve">
-    <value>DOPPEL</value>
+    <value>Doppel</value>
   </data>
   <data name="DoppelgangerFullDescription" xml:space="preserve">
     <value>Un FANTÔME IMPOSTEUR who can show a player's dummy to survivors.
@@ -182,6 +182,6 @@ Button ability "DOPPEL":
 After pressing the button, you can show a dummy of the selected player to survivors.</value>
   </data>
   <data name="DoppelgangerShortDescription" xml:space="preserve">
-    <value>Surprise everyone with "DOPPEL"</value>
+    <value>Surprenez tout le monde avec « Doppel »</value>
   </data>
 </root>

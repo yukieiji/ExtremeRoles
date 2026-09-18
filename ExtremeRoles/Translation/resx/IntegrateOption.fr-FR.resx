@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:schema id="root">
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,42 +59,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SubmergedCategoryEnableElevator" xml:space="preserve">
-    <value>Submerged : Activé Elevators</value>
+    <value>Submerged : Ascenseurs activés</value>
   </data>
   <data name="AllElevator" xml:space="preserve">
-    <value>All</value>
+    <value>Tous</value>
   </data>
   <data name="OnlyCentralElevator" xml:space="preserve">
-    <value>Activély Central</value>
+    <value>Uniquement Central</value>
   </data>
   <data name="OnlyLobbyElevator" xml:space="preserve">
-    <value>Activély Lobby</value>
+    <value>Uniquement Lobby</value>
   </data>
   <data name="OnlyServiceElevator" xml:space="preserve">
-    <value>Activély Service</value>
+    <value>Uniquement Service</value>
   </data>
   <data name="CentralAndLobbyElevator" xml:space="preserve">
-    <value>Central and Lobby</value>
+    <value>Central et Lobby</value>
   </data>
   <data name="CentralAndServiceElevator" xml:space="preserve">
-    <value>Central and Service</value>
+    <value>Central et Service</value>
   </data>
   <data name="LobbyAndServiceElevator" xml:space="preserve">
-    <value>Lobby and Service</value>
+    <value>Lobby et Service</value>
   </data>
   <data name="SubmergedCategoryReplaceDoorMinigame" xml:space="preserve">
-    <value>Submerged : Chage Door minigame</value>
+    <value>Submerged : Modifier le mini-jeu des portes</value>
   </data>
   <data name="SubmergedCategorySubmergedSpawnSetting" xml:space="preserve">
-    <value>Submerged : Advanced spawn settings</value>
+    <value>Submerged : Paramètres d'apparition avancés</value>
   </data>
   <data name="LowerCentralOnly" xml:space="preserve">
-    <value>Activély Upper Central</value>
+    <value>Uniquement Central Supérieur</value>
   </data>
   <data name="UpperCentralOnly" xml:space="preserve">
-    <value>Activély Lower Central</value>
+    <value>Uniquement Central Inférieur</value>
   </data>
   <data name="SubmergedCategory" xml:space="preserve">
-    <value>Submerged Integration Options</value>
+    <value>Options d'intégration Submerged</value>
   </data>
 </root>
