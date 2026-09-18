@@ -59,19 +59,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SubmergedCategoryEnableElevator" xml:space="preserve">
-    <value>Submerged : Activé Elevators</value>
+    <value>Submerged : Ascenseurs activés</value>
   </data>
   <data name="AllElevator" xml:space="preserve">
     <value>Tous</value>
   </data>
   <data name="OnlyCentralElevator" xml:space="preserve">
-    <value>Activély Central</value>
+    <value>Uniquement Central</value>
   </data>
   <data name="OnlyLobbyElevator" xml:space="preserve">
-    <value>Activély Lobby</value>
+    <value>Uniquement Lobby</value>
   </data>
   <data name="OnlyServiceElevator" xml:space="preserve">
-    <value>Activély Service</value>
+    <value>Uniquement Service</value>
   </data>
   <data name="CentralAndLobbyElevator" xml:space="preserve">
     <value>Central et Lobby</value>
@@ -89,10 +89,10 @@
     <value>Submerged : Paramètres d'apparition avancés</value>
   </data>
   <data name="LowerCentralOnly" xml:space="preserve">
-    <value>Activély Upper Central</value>
+    <value>Uniquement Central Supérieur</value>
   </data>
   <data name="UpperCentralOnly" xml:space="preserve">
-    <value>Activély Lower Central</value>
+    <value>Uniquement Central Inférieur</value>
   </data>
   <data name="SubmergedCategory" xml:space="preserve">
     <value>Options d'intégration Submerged</value>

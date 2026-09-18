@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:schema id="root">
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -62,16 +62,16 @@
     <value>&lt;color=#FF1919FF&gt;Assasin&lt;/color&gt;&amp;amp;&lt;color=#00ffff&gt;Merlin&lt;/color&gt;</value>
   </data>
   <data name="Assassin" xml:space="preserve">
-    <value>Assassin</value>
+    <value>Assasin</value>
   </data>
   <data name="Marlin" xml:space="preserve">
     <value>Merlin</value>
   </data>
   <data name="AssassinHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Assasin: Has special vision settings</value>
   </data>
   <data name="AssassinVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Assasin: Vision</value>
   </data>
   <data name="AssassinApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Assasin: Does sabotage effect their vision</value>
@@ -83,10 +83,10 @@
     <value>Assasin: Kill Temps de recharge</value>
   </data>
   <data name="AssassinHasOtherKillRange" xml:space="preserve">
-    <value>Portée d'élimination</value>
+    <value>Assasin: Does have a modified Kill Distance</value>
   </data>
   <data name="AssassinKillRange" xml:space="preserve">
-    <value>Portée d'élimination</value>
+    <value>Assasin: Kill Distance</value>
   </data>
   <data name="AssassinHasTask" xml:space="preserve">
     <value>Assasin: Does have tasks</value>
@@ -95,10 +95,10 @@
     <value>Assasin: Can be Killed</value>
   </data>
   <data name="AssassinCanKilledFromCrew" xml:space="preserve">
-    <value>Peut éliminer l'Assassin</value>
+    <value>Assasin: Can be Killed by CREWMATES</value>
   </data>
   <data name="AssassinCanKilledFromNeutral" xml:space="preserve">
-    <value>Peut éliminer l'Assassin</value>
+    <value>Assasin: Can be Killed by NEUTRALS</value>
   </data>
   <data name="AssassinCanSeeVote" xml:space="preserve">
     <value>Assasin: Can see votes</value>
@@ -111,10 +111,10 @@
 after Assasin's death</value>
   </data>
   <data name="MarlinHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Merlin: Has special vision settings</value>
   </data>
   <data name="MarlinVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Merlin: Vision</value>
   </data>
   <data name="MarlinApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Merlin: Does sabotage effect their vision</value>
@@ -190,10 +190,10 @@ not, the Assasin will be exiled and the game continues on.</value>
     <value>Vigilante</value>
   </data>
   <data name="HeroHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Hero: Has special vision settings</value>
   </data>
   <data name="HeroVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Hero: Vision</value>
   </data>
   <data name="HeroApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Hero: Does sabotage effect their vision</value>
@@ -211,10 +211,10 @@ not, the Assasin will be exiled and the game continues on.</value>
     <value>Hero: Percentage of dead players for "Activée for All(III)" advance</value>
   </data>
   <data name="VillainHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Villain: Has special vision settings</value>
   </data>
   <data name="VillainVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Villain: Vision</value>
   </data>
   <data name="VillainApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Villain: Does sabotage effect their vision</value>
@@ -226,10 +226,10 @@ not, the Assasin will be exiled and the game continues on.</value>
     <value>Villain: Kill Temps de recharge</value>
   </data>
   <data name="VillainHasOtherKillRange" xml:space="preserve">
-    <value>Portée d'élimination</value>
+    <value>Villain: Does have a modified Kill Distance</value>
   </data>
   <data name="VillainKillRange" xml:space="preserve">
-    <value>Portée d'élimination</value>
+    <value>Villain: Kill Distance</value>
   </data>
   <data name="VillainAbilityCoolTime" xml:space="preserve">
     <value>Villain: "SEARCH" : Ability Temps de recharge</value>
@@ -242,10 +242,10 @@ not, the Assasin will be exiled and the game continues on.</value>
 after they use their ability</value>
   </data>
   <data name="VigilanteHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Vigilante: Has special vision settings</value>
   </data>
   <data name="VigilanteVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Vigilante: Vision</value>
   </data>
   <data name="VigilanteApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Vigilante: Does sabotage effect their vision</value>
@@ -257,10 +257,10 @@ after they use their ability</value>
     <value>Vigilante: "SOS" : Ability Durée</value>
   </data>
   <data name="VigilanteAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>Vigilante: "SOS" : Ability Charges</value>
   </data>
   <data name="VigilanteRange" xml:space="preserve">
-    <value>Vigilante: "SOS" : Portée de la capacité</value>
+    <value>Vigilante: "SOS" : Ability Range</value>
   </data>
   <data name="HeroIntroDescription" xml:space="preserve">
     <value>It's fine now, because I AM HERE!</value>
@@ -287,7 +287,7 @@ abilities (i.e. Shooter's "SHOOT", Missionary's "PROPAGATE")
 the Villain will die.</value>
   </data>
   <data name="VillainIntroDescription" xml:space="preserve">
-    <value>The GREATEST DEMON Imposteur of all</value>
+    <value>The GREATEST DEMON IMPOSTOR of all</value>
   </data>
   <data name="VillainShortDescription" xml:space="preserve">
     <value>Make the ship suffur in despair!</value>
@@ -397,10 +397,10 @@ Your ROLE status: You're the New Neutral!
     <value>SOS</value>
   </data>
   <data name="InvestigatorOffice" xml:space="preserve">
-    <value>&lt;color=#9E5C46&gt;Enquêteur&lt;/color&gt;&amp;amp;&lt;color=#008A99&gt;Assistant&lt;/color&gt;</value>
+    <value>&lt;color=#9E5C46&gt;Investigator&lt;/color&gt;&amp;amp;&lt;color=#008A99&gt;Assistant&lt;/color&gt;</value>
   </data>
   <data name="Investigator" xml:space="preserve">
-    <value>Enquêteur</value>
+    <value>Investigator</value>
   </data>
   <data name="Assistant" xml:space="preserve">
     <value>Assistant</value>
@@ -409,16 +409,16 @@ Your ROLE status: You're the New Neutral!
     <value>Apprentice</value>
   </data>
   <data name="InvestigatorHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Investigator: Has special vision settings</value>
   </data>
   <data name="InvestigatorVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Investigator: Vision</value>
   </data>
   <data name="InvestigatorApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>Enquêteur: Does sabotage effect their vision</value>
+    <value>Investigator: Does sabotage effect their vision</value>
   </data>
   <data name="InvestigatorSearchRange" xml:space="preserve">
-    <value>Enquêteur: "INVESTIGATE" : Portée de la capacité</value>
+    <value>Investigator: "INVESTIGATE" : Ability Range</value>
   </data>
   <data name="InvestigatorSearchTime" xml:space="preserve">
     <value>Investigator: "INVESTIGATE" : Ability Durée</value>
@@ -431,25 +431,25 @@ supported by Assistant</value>
     <value>Investigator: Durée of Investigation stats</value>
   </data>
   <data name="AssistantHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Assistant: Has special vision settings</value>
   </data>
   <data name="AssistantVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Assistant: Vision</value>
   </data>
   <data name="AssistantApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Assistant: Does sabotage effect their vision</value>
   </data>
   <data name="InvestigatorApprenticeHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Apprentice: Has special vision settings</value>
   </data>
   <data name="InvestigatorApprenticeVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Apprentice: Vision</value>
   </data>
   <data name="InvestigatorApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Apprentice: Does sabotage effect their vision</value>
   </data>
   <data name="InvestigatorApprenticeAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>Apprentice: "MEETING" : Ability Charges</value>
   </data>
   <data name="InvestigatorApprenticeAbilityCoolTime" xml:space="preserve">
     <value>Apprentice: "MEETING" : Ability Temps de recharge</value>
@@ -471,7 +471,7 @@ player's emergency meeting</value>
     <value>Investigate the scene and solve the case</value>
   </data>
   <data name="InvestigatorFullDescription" xml:space="preserve">
-    <value> A Équipier role who can gather various information from the location of reported dead bodies!
+    <value> A CREWMATE role who can gather various information from the location of reported dead bodies!
 
 Map Location "CRIME SCENE":
   - The location of the reported kill is saved as the "CRIME SCENE".
@@ -491,13 +491,13 @@ Passive Ability "INVESTIGATE":
   - If the "CRIME SCENE" is from a body reported by the "Assistant", the time required for "INVESTIGATE" is reduced.
   - If the option "Can continue investigation" is OFF, leaving the crime scene during investigation resets the progress.
 
-- If the "Enquêteur" dies or is eliminated, the "Assistant" becomes an "Apprentice".</value>
+- If the "Investigator" dies or is eliminated, the "Assistant" becomes an "Apprentice".</value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
-    <value>Enquêteur, let me help you too!</value>
+    <value>Investigator, let me help you too!</value>
   </data>
   <data name="AssistantShortDescription" xml:space="preserve">
-    <value>Help the Enquêteur to solve the case</value>
+    <value>Help the Investigator to solve the case</value>
   </data>
   <data name="AssistantFullDescription" xml:space="preserve">
     <value> A CREWMATE role with the ability to help your Investigator!
@@ -508,7 +508,7 @@ bodies.
 "Apprentice".</value>
   </data>
   <data name="InvestigatorApprenticeShortDescription" xml:space="preserve">
-    <value>You're the only "Enquêteur" left on the ship</value>
+    <value>You're the only "Investigator" left on the ship</value>
   </data>
   <data name="InvestigatorApprenticeFullDescription" xml:space="preserve">
     <value> A CREWMATE role who failed to guard their sidekick.
@@ -548,10 +548,10 @@ to push the button after the cost reaches 0).</value>
     <value>Lovers</value>
   </data>
   <data name="LoverIsNeutral" xml:space="preserve">
-    <value>Are they a Neutre</value>
+    <value>Are they a NEUTRAL</value>
   </data>
   <data name="LoverBecomNeutral" xml:space="preserve">
-    <value>Can they become a Neutre</value>
+    <value>Can they become a NEUTRAL</value>
   </data>
   <data name="LoverDethWhenUnderAlive" xml:space="preserve">
     <value>Number of players to trigger suicide</value>
@@ -563,19 +563,19 @@ to push the button after the cost reaches 0).</value>
     <value>Kill Temps de recharge</value>
   </data>
   <data name="LoverHasOtherKillRange" xml:space="preserve">
-    <value>Portée d'élimination</value>
+    <value>Does have a modified Kill Distance</value>
   </data>
   <data name="LoverKillRange" xml:space="preserve">
     <value>Kill Distance</value>
   </data>
   <data name="LoverBecomeNeutralLoverHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>As NEUTRAL: Has special vision settings</value>
   </data>
   <data name="LoverBecomeNeutralLoverVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>As NEUTRAL: Vision</value>
   </data>
   <data name="LoverBecomeNeutralLoverApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>As Neutre: Does sabotage effect their vision</value>
+    <value>As NEUTRAL: Does sabotage effect their vision</value>
   </data>
   <data name="LoverBecomeNeutralLoverCanUseVent" xml:space="preserve">
     <value>Can use VENT</value>
@@ -639,7 +639,7 @@ When players get eliminated from the pair, the remaining players
 may suicide. This threshold can be changed by configurations.</value>
   </data>
   <data name="LoverNeutralKillerFullDescription" xml:space="preserve">
-    <value> An Neutre role raging in vengance for their late crush.
+    <value> An NEUTRAL role raging in vengance for their late crush.
  MISSION: Eliminate them all!</value>
   </data>
   <data name="LoverKillerShortDescription" xml:space="preserve">
@@ -728,7 +728,7 @@ able to know your position and KILL.</value>
     <value>Was a "{0}", now a Traitor</value>
   </data>
   <data name="TraitorShortDescription" xml:space="preserve">
-    <value>KILL them all as a Traitor of Équipier</value>
+    <value>KILL them all as a Traitor of CREWMATE</value>
   </data>
   <data name="TraitorFullDescription" xml:space="preserve">
     <value>*THIS ROLE OCCUPIES 1 ASSIGNING SLOT FROM BOTH
@@ -762,10 +762,10 @@ map (i.e. VITALS in the Skeld and Mira-HQ).</value>
     <value>Wisp</value>
   </data>
   <data name="DelinquentHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Has special vision settings</value>
   </data>
   <data name="DelinquentVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Vision</value>
   </data>
   <data name="DelinquentApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Does sabotage effect their vision</value>
@@ -774,22 +774,22 @@ map (i.e. VITALS in the Skeld and Mira-HQ).</value>
     <value>"DETONATE" : Ability Distance</value>
   </data>
   <data name="DelinquentAbilityCoolTime" xml:space="preserve">
-    <value>Temps de recharge de la capacité</value>
+    <value>"DETONATE/GRAFFITI" : Ability cooldown</value>
   </data>
   <data name="DelinquentAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"DETONATE" : Graffities needed to unlock Ability</value>
   </data>
   <data name="WispTorchAbilityNum" xml:space="preserve">
-    <value>"TORCH" : Default Nombre d'utilisations de la capacité</value>
+    <value>"TORCH" : Default Ability Charges</value>
   </data>
   <data name="WispWinNum" xml:space="preserve">
     <value>"TORCH" : Players affected to achive victory</value>
   </data>
   <data name="WispTorchNum" xml:space="preserve">
-    <value>"TORCH" : Nombre d'utilisations de la capacité</value>
+    <value>"TORCH" : Ability Charges</value>
   </data>
   <data name="WispTorchRange" xml:space="preserve">
-    <value>Portée de la capacité</value>
+    <value>"TORCH" : Range of light for players alive </value>
   </data>
   <data name="WispTorchActiveTime" xml:space="preserve">
     <value>"TORCH" : Timer to extinguish torches</value>
@@ -801,7 +801,7 @@ map (i.e. VITALS in the Skeld and Mira-HQ).</value>
     <value>"BLACKOUT" : Ability Temps de recharge</value>
   </data>
   <data name="WispIsReportAbility" xml:space="preserve">
-    <value>Signaler l'activation de la capacité lors des réunions</value>
+    <value>"BLACKOUT" : Does alert ability usage on meetings</value>
   </data>
   <data name="DelinquentIntroDescription" xml:space="preserve">
     <value>Life is but a dream</value>
@@ -884,22 +884,22 @@ Lights out Sabotage for a while
 Jackal's "SIDEKICK")</value>
   </data>
   <data name="Guesser" xml:space="preserve">
-    <value>Devin</value>
+    <value>Guesser</value>
   </data>
   <data name="NiceGuesser" xml:space="preserve">
-    <value>Nice Devin</value>
+    <value>Nice Guesser</value>
   </data>
   <data name="EvilGuesser" xml:space="preserve">
-    <value>Evil Devin</value>
+    <value>Evil Guesser</value>
   </data>
   <data name="GuesserCanCallMeeting" xml:space="preserve">
     <value>Can call an Emergency meeting</value>
   </data>
   <data name="GuesserGuessNum" xml:space="preserve">
-    <value>"GUESS" : Nombre d'utilisations de la capacité</value>
+    <value>"GUESS" : Ability Charges</value>
   </data>
   <data name="GuesserMaxGuessNumWhenMeeting" xml:space="preserve">
-    <value>"GUESS" : Nombre d'utilisations de la capacité per meeting</value>
+    <value>"GUESS" : Ability Charges per meeting</value>
   </data>
   <data name="BothGuesser" xml:space="preserve">
     <value>BOTH Nice and Evil</value>
@@ -954,7 +954,7 @@ abilities or role revelation</value>
     <value>"MOVE" : Ability Durée</value>
   </data>
   <data name="MoverAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"MOVE" : Ability Charges</value>
   </data>
   <data name="MoverIntroDescription" xml:space="preserve">
     <value>[301]: Moving permanently</value>
@@ -988,7 +988,7 @@ abilities or role revelation</value>
     <value>"PANEL" : Ability Durée </value>
   </data>
   <data name="AcceleratorAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"PANEL" : Ability Charges </value>
   </data>
   <data name="AcceleratorSpeed" xml:space="preserve">
     <value>"PANEL" : Acceleration </value>
@@ -1003,7 +1003,7 @@ abilities or role revelation</value>
     <value>Set Acceleration Panels to move faster</value>
   </data>
   <data name="AcceleratorFullDescription" xml:space="preserve">
-    <value>An Équipier / Imposteur role with the ability to place Acceleration Panels.
+    <value>An CREWMATE / IMPOSTOR role with the ability to place Acceleration Panels.
 
 "PANEL" : This way…
  - Places "Acceleration Panels" while activated
@@ -1028,7 +1028,7 @@ abilities or role revelation</value>
     <value>"SKATE" : Time until can be cancelled</value>
   </data>
   <data name="SkaterAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"SKATE" : Ability Charges</value>
   </data>
   <data name="SkaterAcceleration" xml:space="preserve">
     <value>"SKATE" : Acceleration</value>
@@ -1089,7 +1089,7 @@ Button ability "SKATE":
     <value>Show notification on Castling</value>
   </data>
   <data name="BarterCastlingNum" xml:space="preserve">
-    <value>"CASTLING" : Nombre d'utilisations de la capacité</value>
+    <value>"CASTLING" : Ability Charges</value>
   </data>
   <data name="BarterFullDescription" xml:space="preserve">
     <value>A role with the ability to exchange positions with others.
@@ -1121,13 +1121,13 @@ After awakening, the KILL button changes to "CASTLING" and can be used a specifi
     <value>Evil Barter</value>
   </data>
   <data name="GuesserCanCrewmate" xml:space="preserve">
-    <value>Can guess Équipier roles</value>
+    <value>Can guess Crewmate roles</value>
   </data>
   <data name="GuesserCanDove" xml:space="preserve">
     <value>Can guess Dove roles</value>
   </data>
   <data name="GuesserCanImpostor" xml:space="preserve">
-    <value>Can guess Imposteur roles</value>
+    <value>Can guess Impostor roles</value>
   </data>
   <data name="GuesserCanMilitant" xml:space="preserve">
     <value>Can guess Militant roles</value>

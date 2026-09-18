@@ -62,7 +62,7 @@
     <value>Extreme Roles</value>
   </data>
   <data name="GeneralTab" xml:space="preserve">
-    <value>Paramètre global</value>
+    <value>Paramètres généraux</value>
   </data>
   <data name="CrewmateTab" xml:space="preserve">
     <value>&lt;color=#8CFFFFFF&gt;Paramètres des rôles Équipier&lt;/color&gt;</value>
@@ -95,40 +95,40 @@
     <value>Algorithme de génération aléatoire</value>
   </data>
   <data name="RoleSpawnCategoryMinCrewmate" xml:space="preserve">
-    <value>Nombre minimum de rôles Équipier</value>
+    <value>Minimum CREWMATE Roles</value>
   </data>
   <data name="RoleSpawnCategoryMaxCrewmate" xml:space="preserve">
-    <value>Nombre maximum de rôles Équipier</value>
+    <value>Maximum CREWMATE Roles</value>
   </data>
   <data name="RoleSpawnCategoryMinNeutral" xml:space="preserve">
-    <value>Nombre minimum de rôles Neutre</value>
+    <value>Minimum NEUTRAL Roles</value>
   </data>
   <data name="RoleSpawnCategoryMaxNeutral" xml:space="preserve">
-    <value>Nombre maximum de rôles Neutre</value>
+    <value>Maximum NEUTRAL Roles</value>
   </data>
   <data name="RoleSpawnCategoryMinImpostor" xml:space="preserve">
-    <value>Nombre minimum de rôles Imposteur</value>
+    <value>Minimum IMPOSTOR Roles</value>
   </data>
   <data name="RoleSpawnCategoryMaxImpostor" xml:space="preserve">
-    <value>Nombre maximum de rôles Imposteur</value>
+    <value>Maximum IMPOSTOR Roles</value>
   </data>
   <data name="GhostRoleSpawnCategoryMinCrewmate" xml:space="preserve">
-    <value>Minimum Équipier GhostRoles</value>
+    <value>Minimum CREWMATE GhostRoles</value>
   </data>
   <data name="GhostRoleSpawnCategoryMaxCrewmate" xml:space="preserve">
-    <value>Maximum Équipier GhostRoles</value>
+    <value>Maximum CREWMATE GhostRoles</value>
   </data>
   <data name="GhostRoleSpawnCategoryMinNeutral" xml:space="preserve">
-    <value>Minimum Neutre GhostRoles</value>
+    <value>Minimum NEUTRAL GhostRoles</value>
   </data>
   <data name="GhostRoleSpawnCategoryMaxNeutral" xml:space="preserve">
-    <value>Maximum Neutre GhostRoles</value>
+    <value>Maximum NEUTRAL GhostRoles</value>
   </data>
   <data name="GhostRoleSpawnCategoryMinImpostor" xml:space="preserve">
-    <value>Minimum Imposteur  GhostRoles</value>
+    <value>Minimum IMPOSTOR  GhostRoles</value>
   </data>
   <data name="GhostRoleSpawnCategoryMaxImpostor" xml:space="preserve">
-    <value>Maximum Imposteur GhostRoles</value>
+    <value>Maximum IMPOSTOR GhostRoles</value>
   </data>
   <data name="MeetingOptionNumMeating" xml:space="preserve">
     <value>Total Meetings</value>
@@ -158,7 +158,7 @@
     <value>Can KILL players in the VENT</value>
   </data>
   <data name="VentOptionEngineerUseImpostor" xml:space="preserve">
-    <value>Disable cooldown for Ingénieur's VENT</value>
+    <value>Disable cooldown for Engineer's VENT</value>
   </data>
   <data name="VentOptionAnimationModeInVison" xml:space="preserve">
     <value>Range of VENT animation to be played</value>
@@ -260,13 +260,13 @@
     <value>Disable task completetion victory</value>
   </data>
   <data name="NeutralWinOptionIsSame" xml:space="preserve">
-    <value>Team all same Neutre role players</value>
+    <value>Team all same NEUTRAL role players</value>
   </data>
   <data name="NeutralWinOptionDisableSpecialEnd" xml:space="preserve">
-    <value>Disable game ending by Neutre roles' special victories</value>
+    <value>Disable game ending by NEUTRAL roles' special victories</value>
   </data>
   <data name="GhostRoleGlobalOptionIsAssignNeutralToVanillaCrewGhostRole" xml:space="preserve">
-    <value>Does Neutre roles get vanilla Fantôme roles</value>
+    <value>Does NEUTRAL roles get vanilla Ghost roles</value>
   </data>
   <data name="GhostRoleGlobalOptionIsBlockGAAbilityReport" xml:space="preserve">
     <value>Disable Guardian angel's ability report</value>
@@ -361,22 +361,22 @@ Please delete option.csv and try again.</value>
     <value>&lt;color=#ff3366&gt;OFF&lt;/color&gt;</value>
   </data>
   <data name="crewmateRoles" xml:space="preserve">
-    <value>Équipier Roles</value>
+    <value>CREWMATE Roles</value>
   </data>
   <data name="neutralRoles" xml:space="preserve">
-    <value>Neutre Roles</value>
+    <value>NEUTRAL Roles</value>
   </data>
   <data name="impostorRoles" xml:space="preserve">
-    <value>Imposteur Roles</value>
+    <value>IMPOSTOR Roles</value>
   </data>
   <data name="crewmateGhostRoles" xml:space="preserve">
-    <value>Équipier GhostRoles</value>
+    <value>CREWMATE GhostRoles</value>
   </data>
   <data name="neutralGhostRoles" xml:space="preserve">
-    <value>Neutre GhostRoles</value>
+    <value>NEUTRAL GhostRoles</value>
   </data>
   <data name="impostorGhostRoles" xml:space="preserve">
-    <value>Imposteur GhostRoles</value>
+    <value>IMPOSTOR GhostRoles</value>
   </data>
   <data name="pressTabForMore" xml:space="preserve">
     <value>Press tab for more...</value>
@@ -503,7 +503,7 @@ For LOCAL Games:
     <value>Player name&lt;pos=16.5%&gt;Tasks&lt;pos=25%&gt;Final Status&lt;pos=38%&gt;ROLE</value>
   </data>
   <data name="ghostRoleSummaryInfo" xml:space="preserve">
-    <value>Player name&lt;pos=16.5%&gt;Tasks&lt;pos=25%&gt;Final Status&lt;pos=38%&gt;Fantôme ROLE</value>
+    <value>Player name&lt;pos=16.5%&gt;Tasks&lt;pos=25%&gt;Final Status&lt;pos=38%&gt;GHOST ROLE</value>
   </data>
   <data name="noGhostRole" xml:space="preserve">
     <value> - </value>
@@ -575,7 +575,7 @@ For LOCAL Games:
     <value>Custom server PORT</value>
   </data>
   <data name="Neutral" xml:space="preserve">
-    <value>Neutre</value>
+    <value>NEUTRAL</value>
   </data>
   <data name="neutralIntro" xml:space="preserve">
     <value>Achive your own MISSION</value>
@@ -590,7 +590,7 @@ For LOCAL Games:
     <value>Shapeshifter</value>
   </data>
   <data name="Engineer" xml:space="preserve">
-    <value>Ingénieur</value>
+    <value>Enginneer</value>
   </data>
   <data name="Scientist" xml:space="preserve">
     <value>Scientist</value>
@@ -599,10 +599,10 @@ For LOCAL Games:
     <value>Guardian Angel</value>
   </data>
   <data name="Noisemaker" xml:space="preserve">
-    <value>Bruiteur</value>
+    <value>Noisemaker</value>
   </data>
   <data name="Tracker" xml:space="preserve">
-    <value>Traqueur</value>
+    <value>Tracker</value>
   </data>
   <data name="Phantom" xml:space="preserve">
     <value>Phantom</value>
@@ -623,13 +623,13 @@ For LOCAL Games:
     <value>Role</value>
   </data>
   <data name="YourGhostRolePanel" xml:space="preserve">
-    <value>Your Fantôme role</value>
+    <value>Your Ghost role</value>
   </data>
   <data name="AllRolePanel" xml:space="preserve">
     <value>ROLE description</value>
   </data>
   <data name="AllGhostRolePanel" xml:space="preserve">
-    <value>Fantôme ROLE description</value>
+    <value>GHOST ROLE description</value>
   </data>
   <data name="GlobalSettingPanel" xml:space="preserve">
     <value>Paramètre globals</value>
@@ -647,7 +647,7 @@ For LOCAL Games:
     <value>You're alive</value>
   </data>
   <data name="yourNoAssignGhostRole" xml:space="preserve">
-    <value>You have no Fantôme roles</value>
+    <value>You have no Ghost roles</value>
   </data>
   <data name="vanilaOptions" xml:space="preserve">
     <value>Vanilla settings</value>
@@ -769,52 +769,52 @@ Do you want to continue Installing?</value>
     <value>An different version of Extreme Roles with the host is detected</value>
   </data>
   <data name="ExileTextSPCrew" xml:space="preserve">
-    <value>{0} was a Équipier.</value>
+    <value>{0} was a Crewmate.</value>
   </data>
   <data name="ExileTextSNCrew" xml:space="preserve">
-    <value>{0} was not a Équipier.</value>
+    <value>{0} was not a Crewmate.</value>
   </data>
   <data name="ExileTextPPCrew" xml:space="preserve">
-    <value>{0} was a Équipier.</value>
+    <value>{0} was a Crewmate.</value>
   </data>
   <data name="ExileTextPNCrew" xml:space="preserve">
-    <value>{0} was not a Équipier.</value>
+    <value>{0} was not a Crewmate.</value>
   </data>
   <data name="ExileTextSPNeut" xml:space="preserve">
-    <value>{0} was a Neutre.</value>
+    <value>{0} was a Neutral.</value>
   </data>
   <data name="ExileTextSNNeut" xml:space="preserve">
-    <value>{0} was not a Neutre.</value>
+    <value>{0} was not a Neutral.</value>
   </data>
   <data name="ExileTextPPNeut" xml:space="preserve">
-    <value>{0} was a Neutre.</value>
+    <value>{0} was a Neutral.</value>
   </data>
   <data name="ExileTextPNNeut" xml:space="preserve">
-    <value>{0} was not a Neutre.</value>
+    <value>{0} was not a Neutral.</value>
   </data>
   <data name="ExileTextSPCrewWithRole" xml:space="preserve">
     <value>{0} was the "{1}" of the Crewmates.</value>
   </data>
   <data name="ExileTextSNCrewWithRole" xml:space="preserve">
-    <value>{0} was not a Équipier.</value>
+    <value>{0} was not a Crewmate.</value>
   </data>
   <data name="ExileTextPPCrewWithRole" xml:space="preserve">
     <value>{0} was the "{1}" of the Crewmates.</value>
   </data>
   <data name="ExileTextPNCrewWithRole" xml:space="preserve">
-    <value>{0} was not a Équipier.</value>
+    <value>{0} was not a Crewmate.</value>
   </data>
   <data name="ExileTextSPNeutWithRole" xml:space="preserve">
-    <value>{0} was a "{1}" as a Neutre.</value>
+    <value>{0} was a "{1}" as a Neutral.</value>
   </data>
   <data name="ExileTextSNNeutWithRole" xml:space="preserve">
-    <value>{0} was not a Neutre.</value>
+    <value>{0} was not a Neutral.</value>
   </data>
   <data name="ExileTextPPNeutWithRole" xml:space="preserve">
-    <value>{0} was a "{1}" as a Neutre.</value>
+    <value>{0} was a "{1}" as a Neutral.</value>
   </data>
   <data name="ExileTextPNNeutWithRole" xml:space="preserve">
-    <value>{0} was not a Neutre.</value>
+    <value>{0} was not a Neutral.</value>
   </data>
   <data name="ExileTextAllTeam" xml:space="preserve">
     <value>{0} was the {1}.</value>
@@ -949,10 +949,10 @@ Do you want to continue Installing?</value>
     <value>No. of assigned players</value>
   </data>
   <data name="HasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Has special vision settings</value>
   </data>
   <data name="Vision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Vision</value>
   </data>
   <data name="ApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Does sabotage effect their vision</value>
@@ -964,7 +964,7 @@ Do you want to continue Installing?</value>
     <value>Kill Temps de recharge</value>
   </data>
   <data name="HasOtherKillRange" xml:space="preserve">
-    <value>Portée d'élimination</value>
+    <value>Does have a modified Kill Distance</value>
   </data>
   <data name="KillRange" xml:space="preserve">
     <value>Kill Distance</value>
@@ -973,7 +973,7 @@ Do you want to continue Installing?</value>
     <value>Does IMPOSTORS allowed to assign</value>
   </data>
   <data name="ImposterSelectedRate" xml:space="preserve">
-    <value>Imposteur Assign Rate</value>
+    <value>Impostor Assign Rate</value>
   </data>
   <data name="IsMultiAssign" xml:space="preserve">
     <value>Has other role</value>
@@ -1006,10 +1006,10 @@ Do you want to continue Installing?</value>
     <value>Meeting Settings</value>
   </data>
   <data name="Judge" xml:space="preserve">
-    <value>Juge</value>
+    <value>Judge</value>
   </data>
   <data name="MeetingOptionOverruleSuccessIsNeutral" xml:space="preserve">
-    <value>Whether the Juge's ability succeeds on Neutrals</value>
+    <value>Whether the Judge's ability succeeds on Neutrals</value>
   </data>
   <data name="MeetingOptionUseRaiseHand" xml:space="preserve">
     <value>Use "Raise Hand" button</value>
@@ -1045,10 +1045,10 @@ Do you want to continue Installing?</value>
     <value>Task Victory Settings</value>
   </data>
   <data name="NeutralWinOption" xml:space="preserve">
-    <value>Neutre Team Victory Settings</value>
+    <value>Neutral Team Victory Settings</value>
   </data>
   <data name="GhostRoleGlobalOption" xml:space="preserve">
-    <value>General Fantôme Role Settings</value>
+    <value>General Ghost Role Settings</value>
   </data>
   <data name="OptionCategory" xml:space="preserve">
     <value>Category</value>
@@ -1087,7 +1087,7 @@ Do you want to continue Installing?</value>
     <value>Disable</value>
   </data>
   <data name="BothImpostorAndNautral" xml:space="preserve">
-    <value>Both Imposteur and Neutre</value>
+    <value>Both Impostor and Neutral</value>
   </data>
   <data name="SkipSettingUsingTab" xml:space="preserve">
     <value>(Tab/Shift + Tab to change page)</value>
@@ -1180,7 +1180,7 @@ Do you want to continue Installing?</value>
     <value>3:3</value>
   </data>
   <data name="SpawnRate" xml:space="preserve">
-    <value>Taux d'apparition</value>
+    <value>Spawn Rate</value>
   </data>
   <data name="Detective" xml:space="preserve">
     <value>Detective</value>
@@ -1241,11 +1241,12 @@ Fund Bonus per Kill</value>
 Has modified Kill Temps de recharge</value>
   </data>
   <data name="LiberalSettingLeaderHasOtherKillRange" xml:space="preserve">
-    <value>Portée d'élimination</value>
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
+Has modified Kill Distance</value>
   </data>
   <data name="LiberalSettingLeaderHasOtherVisonSize" xml:space="preserve">
     <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
-Dispose de paramètres de vision particuliers</value>
+Has special vision settings</value>
   </data>
   <data name="LiberalSettingLeaderKillBoost" xml:space="preserve">
     <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
@@ -1292,7 +1293,8 @@ Minimum number of roles</value>
 Has modified Kill Temps de recharge</value>
   </data>
   <data name="LiberalSettingMilitantHasOtherKillRange" xml:space="preserve">
-    <value>Portée d'élimination</value>
+    <value>&lt;color=#F9F06F&gt;Militant&lt;/color&gt;
+Has modified Kill Distance</value>
   </data>
   <data name="LiberalSettingMilitantKillCool" xml:space="preserve">
     <value>Kill Temps de recharge</value>

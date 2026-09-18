@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:schema id="root">
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -62,28 +62,28 @@
     <value>Alice</value>
   </data>
   <data name="AliceCanUseSabotage" xml:space="preserve">
-    <value>Peut exécuter des sabotages</value>
+    <value>Can use Sabotages</value>
   </data>
   <data name="AliceAbilityCoolTime" xml:space="preserve">
-    <value>Temps de recharge de la capacité</value>
+    <value>"MISCHIEF" : Ability cooldown</value>
   </data>
   <data name="AliceAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"MISCHIEF" : Ability Charges</value>
   </data>
   <data name="AliceRevartCommonTaskNum" xml:space="preserve">
-    <value>Nombre de tâches courtes réinitialisées</value>
+    <value>"MISCHIEF" : Rewinds Common tasks by</value>
   </data>
   <data name="AliceRevartLongTaskNum" xml:space="preserve">
-    <value>Nombre de tâches longues réinitialisées</value>
+    <value>"MISCHIEF" : Rewinds Long tasks by</value>
   </data>
   <data name="AliceRevartNormalTaskNum" xml:space="preserve">
-    <value>Nombre de tâches normales réinitialisées</value>
+    <value>"MISCHIEF" : Rewinds Short tasks by</value>
   </data>
   <data name="AliceIntroDescription" xml:space="preserve">
     <value>The key of the puzzle is to be like a trouble!</value>
   </data>
   <data name="AliceShortDescription" xml:space="preserve">
-    <value>Be KILLED by an Imposteur or be the last stand</value>
+    <value>Be KILLED by an IMPOSTOR or be the last stand</value>
   </data>
   <data name="AliceFullDescription" xml:space="preserve">
     <value> Un rôle NEUTRE with a unique mission to achive victory.
@@ -102,16 +102,16 @@ Beware for both IMPOSTORS and CREWMATES because you're a strong role!</value>
     <value>MISCHIEF</value>
   </data>
   <data name="Jackal" xml:space="preserve">
-    <value>Chacal</value>
+    <value>Jackal</value>
   </data>
   <data name="Sidekick" xml:space="preserve">
-    <value>Complice</value>
+    <value>Sidekick</value>
   </data>
   <data name="JackalAbilityCoolTime" xml:space="preserve">
-    <value>Temps de recharge de la capacité</value>
+    <value>"SIDEKICK" : Ability cooldown</value>
   </data>
   <data name="JackalAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"SIDEKICK" : Maximum Sidekicks per Jackal</value>
   </data>
   <data name="JackalRangeSidekickTarget" xml:space="preserve">
     <value>"SIDEKICK" : Ability Distance</value>
@@ -123,19 +123,19 @@ Beware for both IMPOSTORS and CREWMATES because you're a strong role!</value>
     <value>"SIDEKICK" : Does replace LOVERS on usage</value>
   </data>
   <data name="JackalUpgradeSidekickNum" xml:space="preserve">
-    <value>No. of Sidekicks promoting on Chacal's death</value>
+    <value>No. of Sidekicks promoting on Jackal's death</value>
   </data>
   <data name="JackalSidekickJackalCanMakeSidekick" xml:space="preserve">
     <value>Can promoted Jackals make Sidekicks</value>
   </data>
   <data name="JackalSidekickLimitNum" xml:space="preserve">
-    <value>Maximum Sidekicks per promoted Chacal</value>
+    <value>Maximum Sidekicks per promoted Jackal</value>
   </data>
   <data name="JackalCanSetImpostorToSidekick" xml:space="preserve">
     <value>"SIDEKICK" : Can use on IMPOSTORS</value>
   </data>
   <data name="JackalCanSeeImpostorToSidekickImpostor" xml:space="preserve">
-    <value>Does show Sidekicked-Impostors as an Imposteur</value>
+    <value>Does show Sidekicked-Impostors as an Impostor</value>
   </data>
   <data name="SidekickUseSabotage" xml:space="preserve">
     <value>Can Sidekicks use Sabotages</value>
@@ -153,16 +153,16 @@ Beware for both IMPOSTORS and CREWMATES because you're a strong role!</value>
     <value>Sidekicks: Kill Temps de recharge</value>
   </data>
   <data name="SidekickHasOtherKillRange" xml:space="preserve">
-    <value>Portée d'élimination</value>
+    <value>Sidekicks: Does have a modified Kill Distance</value>
   </data>
   <data name="SidekickKillRange" xml:space="preserve">
-    <value>Portée d'élimination</value>
+    <value>Sidekicks: Kill Distance</value>
   </data>
   <data name="SidekickHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Sidekicks: Has special vision settings</value>
   </data>
   <data name="SidekickVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Sidekicks: Vision</value>
   </data>
   <data name="SidekickApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Sidekicks: Does sabotage effect their vision</value>
@@ -171,7 +171,7 @@ Beware for both IMPOSTORS and CREWMATES because you're a strong role!</value>
     <value>It's OUR time to take over this ship!</value>
   </data>
   <data name="JackalShortDescription" xml:space="preserve">
-    <value>Be the last stand with your Complice</value>
+    <value>Be the last stand with your Sidekick</value>
   </data>
   <data name="JackalFullDescription" xml:space="preserve">
     <value> Un rôle NEUTRE with a unique mission to achive victory.
@@ -183,10 +183,10 @@ Beware for both IMPOSTORS and CREWMATES because you're a strong role!</value>
 please check your game configuration</value>
   </data>
   <data name="curSidekick" xml:space="preserve">
-    <value>Your Complice</value>
+    <value>Your Sidekick</value>
   </data>
   <data name="SidekickShortDescription" xml:space="preserve">
-    <value>Assist your Chacal and achive victory</value>
+    <value>Assist your Jackal and achive victory</value>
   </data>
   <data name="SidekickFullDescription" xml:space="preserve">
     <value> Your Jackal: "{0}"
@@ -198,7 +198,7 @@ eliminate all other IMPOSTORS / NEUTRALS with the KILL ability.
 promote and may change to a new Jackal. </value>
   </data>
   <data name="TaskMaster" xml:space="preserve">
-    <value>Maître des tâches</value>
+    <value>Task Master</value>
   </data>
   <data name="TaskMasterCanUseSabotage" xml:space="preserve">
     <value>Can use sabotage</value>
@@ -239,10 +239,10 @@ the set global tasks.</value>
     <value>Death timer : maximum</value>
   </data>
   <data name="MissionaryPropagateRange" xml:space="preserve">
-    <value>Portée de la capacité</value>
+    <value>"PROPAGATE" : Ability Distance</value>
   </data>
   <data name="MissionaryAbilityCoolTime" xml:space="preserve">
-    <value>Temps de recharge de la capacité</value>
+    <value>"PROPAGATE" : Ability cooldown</value>
   </data>
   <data name="MissionaryIsUseSolemnJudgment" xml:space="preserve">
     <value>Enable ability "CONDUCT"</value>
@@ -284,7 +284,7 @@ eliminate all other IMPOSTORS / NEUTRALS with the KILL ability.
     <value>Another wanderer found the heavens' ladder.</value>
   </data>
   <data name="Jester" xml:space="preserve">
-    <value>Joker</value>
+    <value>Jester</value>
   </data>
   <data name="JesterUseSabotage" xml:space="preserve">
     <value>Can use sabotage</value>
@@ -293,13 +293,13 @@ eliminate all other IMPOSTORS / NEUTRALS with the KILL ability.
     <value>"OUTBURST" : Ability Distance</value>
   </data>
   <data name="JesterAbilityCoolTime" xml:space="preserve">
-    <value>Temps de recharge de la capacité</value>
+    <value>"OUTBURST" : Ability cooldown</value>
   </data>
   <data name="JesterAbilityActiveTime" xml:space="preserve">
     <value>"OUTBURST" : Triggered KILL occurs after</value>
   </data>
   <data name="JesterAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"OUTBURST" : Maximum usage</value>
   </data>
   <data name="JesterIntroDescription" xml:space="preserve">
     <value>HIPPITY HOPPITY THE MEETING IS MY PROPERTY!</value>
@@ -400,7 +400,7 @@ mode, not regarding OBSTACLEs alive.
     <value>The Yandere wins with true love....</value>
   </data>
   <data name="Yoko" xml:space="preserve">
-    <value>Yoko</value>
+    <value>Youko</value>
   </data>
   <data name="YokoCanRepairSabo" xml:space="preserve">
     <value>Can repair Sabotages</value>
@@ -409,7 +409,7 @@ mode, not regarding OBSTACLEs alive.
     <value>Can use VENTs</value>
   </data>
   <data name="YokoSearchRange" xml:space="preserve">
-    <value>"SENCE" : Portée de la capacité</value>
+    <value>"SENCE" : Ability Range</value>
   </data>
   <data name="YokoSearchTime" xml:space="preserve">
     <value>"SENCE" : Ability activates by each</value>
@@ -436,13 +436,13 @@ mode, not regarding OBSTACLEs alive.
     <value>"BET" : Ability Distance</value>
   </data>
   <data name="TotocalcioAbilityCoolTime" xml:space="preserve">
-    <value>Temps de recharge de la capacité</value>
+    <value>"BET" : Initial ability cooldown</value>
   </data>
   <data name="TotocalcioAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"BET" : Ability Charges</value>
   </data>
   <data name="TotocalcioFinalCoolTime" xml:space="preserve">
-    <value>Temps de recharge</value>
+    <value>"BET" : Final ability cooldown</value>
   </data>
   <data name="TotocalcioIntroDescription" xml:space="preserve">
     <value>Life should be a GAMBLE</value>
@@ -477,7 +477,7 @@ remaining players
     <value>Enable global VENTs</value>
   </data>
   <data name="MinerAbilityCoolTime" xml:space="preserve">
-    <value>Temps de recharge de la capacité</value>
+    <value>"LANDMINE" : Ability cooldown</value>
   </data>
   <data name="MinerAbilityActiveTime" xml:space="preserve">
     <value>"LANDMINE" : Temps de recharge until Landmine activates</value>
@@ -542,13 +542,13 @@ MISSION: Halve the remaining players with your own team, and eliminate all other
     <value>Can use VENTs</value>
   </data>
   <data name="EaterAbilityCoolTime" xml:space="preserve">
-    <value>Temps de recharge de la capacité</value>
+    <value>"EAT/VORE" : Ability cooldown</value>
   </data>
   <data name="EaterAbilityActiveTime" xml:space="preserve">
     <value>"VORE" : Ability duration</value>
   </data>
   <data name="EaterAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"EAT/VORE" : Players/dead bodies eaten to win</value>
   </data>
   <data name="EaterEatRange" xml:space="preserve">
     <value>"EAT/VORE": Ability Distance</value>
@@ -557,7 +557,7 @@ MISSION: Halve the remaining players with your own team, and eliminate all other
     <value>"EAT" : Ability duration penalty for "VORE"</value>
   </data>
   <data name="EaterKillEatCoolTimePenalty" xml:space="preserve">
-    <value>"VORE" : Temps de recharge de la capacité penalty rate</value>
+    <value>"VORE" : Ability cooldown penalty rate</value>
   </data>
   <data name="EaterKillEatActiveCoolTimeReduceRate" xml:space="preserve">
     <value>"EAT/VORE" : Reduction rate of cooldown
@@ -610,10 +610,10 @@ time in the turn.</value>
     <value>Queen : Can use VENTs</value>
   </data>
   <data name="QueenAbilityCoolTime" xml:space="preserve">
-    <value>Temps de recharge de la capacité</value>
+    <value>"CHARM" : Ability cooldown</value>
   </data>
   <data name="QueenAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"CHARM" : Ability Charges</value>
   </data>
   <data name="QueenRange" xml:space="preserve">
     <value>"CHARM" : Ability Distance</value>
@@ -629,7 +629,7 @@ time in the turn.</value>
 Servants' tasks full completion</value>
   </data>
   <data name="QueenServantSelfKillCool" xml:space="preserve">
-    <value>"SUICIDE" : Temps de recharge de la capacité</value>
+    <value>"SUICIDE" : Ability cooldown</value>
   </data>
   <data name="QueenIntroDescription" xml:space="preserve">
     <value>It's the time to make our Kingdom!</value>
@@ -706,7 +706,7 @@ flash.
     <value>"SUICIDE" : Ability Temps de recharge</value>
   </data>
   <data name="MadmateIsDontCountAliveCrew" xml:space="preserve">
-    <value>Does not count Madmates as "Alive" équipiers</value>
+    <value>Does not count Madmates as "Alive" crewmates</value>
   </data>
   <data name="MadmateIntroDescription" xml:space="preserve">
     <value>IMPOSTORS are my LORDS!</value>
@@ -725,10 +725,10 @@ when "Can Impostors know Madmates" is on.</value>
     <value>Umbreyer</value>
   </data>
   <data name="UmbrerRange" xml:space="preserve">
-    <value>Portée de la capacité</value>
+    <value>"INJECTION" : Ability Distance</value>
   </data>
   <data name="UmbrerAbilityCoolTime" xml:space="preserve">
-    <value>Temps de recharge de la capacité</value>
+    <value>"INJECTION" : Ability cooldown</value>
   </data>
   <data name="UmbrerAbilityActiveTime" xml:space="preserve">
     <value>"INJECTION" : Ability duration</value>
@@ -780,7 +780,7 @@ spreading" mode deactivates.</value>
     <value>"BUILD SHRINE" : Time required</value>
   </data>
   <data name="YokoAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"BUILD SHRINE" : Ability Charges</value>
   </data>
   <data name="YokoYashiroActiveTime" xml:space="preserve">
     <value>"SHRINE" : Durée of "ACTIVATED" state</value>
@@ -853,7 +853,7 @@ Passive Ability "SENSE PRESENCE":
     <value>"KILL TIME" : Ability Temps de recharge</value>
   </data>
   <data name="HatterAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"KILL TIME" : Ability Charges</value>
   </data>
   <data name="HatterHideMeetingTimer" xml:space="preserve">
     <value>Hide meeting timer with "KILL TIME"</value>
@@ -930,16 +930,16 @@ Button Ability "PAINT"
     <value>Tucker</value>
   </data>
   <data name="Chimera" xml:space="preserve">
-    <value>Chimère</value>
+    <value>Chimera</value>
   </data>
   <data name="TuckerAbilityCoolTime" xml:space="preserve">
     <value>"CREATE CHIMERA" and "ERASE SHADOW" : Temps de recharge</value>
   </data>
   <data name="TuckerAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"CREATE CHIMERA" : Ability Charges</value>
   </data>
   <data name="TuckerRange" xml:space="preserve">
-    <value>Portée de la capacité</value>
+    <value>"CREATE CHIMERA" and "ERASE SHADOW" : Activation range</value>
   </data>
   <data name="TuckerShadowTimer" xml:space="preserve">
     <value>Time for "SHADOW" to be placed</value>
@@ -966,25 +966,25 @@ Button Ability "PAINT"
     <value>Chimera's Kill Temps de recharge</value>
   </data>
   <data name="TuckerHasOtherKillRange" xml:space="preserve">
-    <value>Does Chimère have different Kill Range settings</value>
+    <value>Does Chimera have different Kill Range settings</value>
   </data>
   <data name="TuckerKillRange" xml:space="preserve">
-    <value>Chimère's Kill Range</value>
+    <value>Chimera's Kill Range</value>
   </data>
   <data name="TuckerChimeraHasOtherVision" xml:space="preserve">
-    <value>Dispose de paramètres de vision particuliers</value>
+    <value>Does Chimera have different vision settings</value>
   </data>
   <data name="TuckerChimeraVision" xml:space="preserve">
-    <value>Paramètres de vision</value>
+    <value>Chimera's Vision</value>
   </data>
   <data name="TuckerChimeraApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>Is Chimère affected by vision effects</value>
+    <value>Is Chimera affected by vision effects</value>
   </data>
   <data name="TuckerChimeraCanUseVent" xml:space="preserve">
-    <value>Can Chimère use Vents</value>
+    <value>Can Chimera use Vents</value>
   </data>
   <data name="TuckerChimeraReviveTime" xml:space="preserve">
-    <value>Chimère's revival time</value>
+    <value>Chimera's revival time</value>
   </data>
   <data name="TuckerChimeraDeathKillCoolOffset" xml:space="preserve">
     <value>Kill Temps de recharge increase/decrease amount per Chimera revival</value>
@@ -993,7 +993,7 @@ Button Ability "PAINT"
     <value>Chimera's Kill Temps de recharge increase/decrease amount on Tucker's death</value>
   </data>
   <data name="TuckerIntroDescription" xml:space="preserve">
-    <value>Let's turn the sharp équipiers into Chimeras</value>
+    <value>Let's turn the sharp crewmates into Chimeras</value>
   </data>
   <data name="TuckerShortDescription" xml:space="preserve">
     <value>Create Chimeras, erase your "SHADOWS", and win</value>
@@ -1033,10 +1033,10 @@ Each time you revive, your Kill Temps de recharge value is permanently changed b
     <value>Erase Shadow</value>
   </data>
   <data name="createChimera" xml:space="preserve">
-    <value>Create Chimère</value>
+    <value>Create Chimera</value>
   </data>
   <data name="TuckerTuckerDeathWithChimera" xml:space="preserve">
-    <value>Does Chimère die when Tucker dies</value>
+    <value>Does Chimera die when Tucker dies</value>
   </data>
   <data name="IronMate" xml:space="preserve">
     <value>Iron Mate</value>
@@ -1057,13 +1057,13 @@ Each time you revive, your Kill Temps de recharge value is permanently changed b
     <value>Seconds corpse is displayed after player is displayed</value>
   </data>
   <data name="IronMateShortDescription" xml:space="preserve">
-    <value>Équipier with an iron body</value>
+    <value>Crewmate with an iron body</value>
   </data>
   <data name="IronMateFullDescription" xml:space="preserve">
-    <value>A Équipier-like Neutre role.
-In-game display is exactly the same as a regular Équipier.
+    <value>A Crewmate-like NEUTRAL role.
+In-game display is exactly the same as a regular Crewmate.
 Victory Condition: Crewmates win.
-- Almost the same as Équipier and has tasks.
+- Almost the same as Crewmate and has tasks.
 However, does not affect task victory conditions.
 - Cannot report corpses. A player dummy is displayed at the corpse location for a certain time.
 - After the player dummy is displayed, the corpse can be seen for a certain time.
@@ -1077,7 +1077,7 @@ However, does not affect task victory conditions.
     <value>"ERASE" : Ability Temps de recharge</value>
   </data>
   <data name="MonikaRange" xml:space="preserve">
-    <value>Portée de la capacité</value>
+    <value>"ERASE" : Activation range</value>
   </data>
   <data name="MonikaIntroDescription" xml:space="preserve">
     <value>7fee81971a1be79192a88bdaeb47b2e4bd81416ccd5b9bfc4b5b44bca597f2ee</value>
@@ -1124,7 +1124,7 @@ New Layer "TRASH BIN":
     <value>Can use Vents</value>
   </data>
   <data name="MonikaCanUseSabotage" xml:space="preserve">
-    <value>Peut exécuter des sabotages</value>
+    <value>Can use Sabotages</value>
   </data>
   <data name="MonikaIsSoloTeam" xml:space="preserve">
     <value>Does the game continue if Monika survives alone</value>
@@ -1148,16 +1148,16 @@ New Layer "TRASH BIN":
     <value>"CURSE KILL" : Temps de recharge</value>
   </data>
   <data name="HereticRange" xml:space="preserve">
-    <value>Portée de la capacité</value>
+    <value>"CURSE KILL" : Activation range</value>
   </data>
   <data name="HereticCanKillImpostor" xml:space="preserve">
     <value>Can Impostors be targeted by "CURSE KILL"</value>
   </data>
   <data name="HereticIntroDescription" xml:space="preserve">
-    <value>Imposteur-sama, please bless me...</value>
+    <value>Impostor-sama, please bless me...</value>
   </data>
   <data name="HereticShortDescription" xml:space="preserve">
-    <value>Kill those who oppose Imposteur-sama with "CURSE KILL"</value>
+    <value>Kill those who oppose Impostor-sama with "CURSE KILL"</value>
   </data>
   <data name="HereticFullDescription" xml:space="preserve">
     <value>Un rôle NEUTRE.
@@ -1188,7 +1188,7 @@ Ability "CURSE KILL":
     <value>Can kill</value>
   </data>
   <data name="ShepherdIsSubTeam" xml:space="preserve">
-    <value>Is Chacal's sub-team</value>
+    <value>Is Jackal's sub-team</value>
   </data>
   <data name="ShepherdUseVent" xml:space="preserve">
     <value>Can use Vents</value>
@@ -1197,26 +1197,26 @@ Ability "CURSE KILL":
     <value>Has tasks</value>
   </data>
   <data name="ShepherdSeeJackalTaskRate" xml:space="preserve">
-    <value>Task completion rate to see Chacal</value>
+    <value>Task completion rate to see Jackal</value>
   </data>
   <data name="ShepherdIntroDescription" xml:space="preserve">
-    <value>Chacal's leader</value>
+    <value>Jackal's leader</value>
   </data>
   <data name="ShepherdShortDescription" xml:space="preserve">
-    <value>Lead Chacal to victory</value>
+    <value>Lead Jackal to victory</value>
   </data>
   <data name="ShepherdFullDescription" xml:space="preserve">
-    <value>A Neutre fallback sub-team role.
-Victory Condition: Chacal's victory (including special victories).
-If has kill button and is sub-team, this role becomes Chacal's sub-team role.
-- When Chacal and Complice are alive:
-- Not counted as Chacal team.
-- When Chacal and Complice are not alive:
-- Special Chacal team victory if the following are met:
-1. Impostors and Neutre roles with kill abilities are eliminated.
+    <value>A NEUTRAL fallback sub-team role.
+Victory Condition: Jackal's victory (including special victories).
+If has kill button and is sub-team, this role becomes Jackal's sub-team role.
+- When Jackal and Sidekick are alive:
+- Not counted as Jackal team.
+- When Jackal and Sidekick are not alive:
+- Special Jackal team victory if the following are met:
+1. Impostors and Neutral roles with kill abilities are eliminated.
 2. More than half of the survivors are on the same team.
 If sub-team is off or does not have kill button, this role becomes a fallback role.
-- As a fallback role, this role is not assigned if Chacal is not assigned.</value>
+- As a fallback role, this role is not assigned if Jackal is not assigned.</value>
   </data>
   <data name="Furry" xml:space="preserve">
     <value>Furry</value>
@@ -1228,21 +1228,21 @@ If sub-team is off or does not have kill button, this role becomes a fallback ro
     <value>Has tasks</value>
   </data>
   <data name="FurrySeeJackalTaskRate" xml:space="preserve">
-    <value>Task completion rate to see Chacal</value>
+    <value>Task completion rate to see Jackal</value>
   </data>
   <data name="FurryIntroDescription" xml:space="preserve">
-    <value>A crew with Chacal's blood flowing (?) in them</value>
+    <value>A crew with Jackal's blood flowing (?) in them</value>
   </data>
   <data name="FurryShortDescription" xml:space="preserve">
-    <value>Survive as the third Chacal</value>
+    <value>Survive as the third Jackal</value>
   </data>
   <data name="FurryFullDescription" xml:space="preserve">
-    <value>A Neutre fallback role.
-This role is not assigned if Chacal is not assigned.
-Victory Condition: Chacal's victory (including special victories).
+    <value>A NEUTRAL fallback role.
+This role is not assigned if Jackal is not assigned.
+Victory Condition: Jackal's victory (including special victories).
 Passive Ability "BLOOD AWAKENING":
-- If a Chacal whose Complice died first dies (exiled, killed, etc.), becomes the Chacal of that group.
-- When changing to Chacal, ability usage counts, etc. become 0 and cannot create new Sidekicks.</value>
+- If a Jackal whose Sidekick died first dies (exiled, killed, etc.), becomes the Jackal of that group.
+- When changing to Jackal, ability usage counts, etc. become 0 and cannot create new Sidekicks.</value>
   </data>
   <data name="Intimate" xml:space="preserve">
     <value>Intimate</value>
@@ -1263,14 +1263,14 @@ Passive Ability "BLOOD AWAKENING":
     <value>Task completion rate to see Yandere</value>
   </data>
   <data name="IntimateFullDescription" xml:space="preserve">
-    <value>A Neutre fallback sub-team role.
+    <value>A NEUTRAL fallback sub-team role.
 Victory Condition: Yandere's victory (including special victories).
 If has kill button and is sub-team, this role becomes Yandere's sub-team role.
 - When Yandere is alive:
 - Not counted as Yandere team.
 - When Yandere is not alive:
 - Special Yandere team victory if the following are met:
-1. Impostors and Neutre roles with kill abilities are eliminated.
+1. Impostors and Neutral roles with kill abilities are eliminated.
 2. More than half of the survivors are on the same team.
 If sub-team is off or does not have kill button, this role becomes a fallback role.
 - As a fallback role, this role is not assigned if Yandere is not assigned.</value>
@@ -1300,7 +1300,7 @@ If sub-team is off or does not have kill button, this role becomes a fallback ro
     <value>"WEAR CORPSE" : Time to complete</value>
   </data>
   <data name="SurrogatorAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>"WEAR CORPSE" : Ability Charges</value>
   </data>
   <data name="SurrogatorRange" xml:space="preserve">
     <value>"WEAR CORPSE" : Range from corpse</value>
@@ -1351,14 +1351,14 @@ Button Ability "WEAR CORPSE":
     <value>Queen's Guard cutting edge captain</value>
   </data>
   <data name="KnightFullDescription" xml:space="preserve">
-    <value>A Neutre fallback sub-team role.
+    <value>A NEUTRAL fallback sub-team role.
 Victory Condition: Queen's victory (including special victories).
 If has kill button and is sub-team, this role becomes Queen's sub-team role.
 - When Queen and Servant are alive:
 - Not counted as Queen team.
 - When Queen and Servant are not alive:
 - Special Queen team victory if the following are met:
-1. Impostors and Neutre roles with kill abilities are eliminated.
+1. Impostors and Neutral roles with kill abilities are eliminated.
 2. More than half of the survivors are on the same team.
 If sub-team is off, this role becomes a fallback role.
 - As a fallback role, this role is not assigned if Queen is not assigned.</value>
@@ -1385,7 +1385,7 @@ If sub-team is off, this role becomes a fallback role.
     <value>Help Queen to victory</value>
   </data>
   <data name="PawnFullDescription" xml:space="preserve">
-    <value>A Neutre fallback role.
+    <value>A NEUTRAL fallback role.
 This role is not assigned if Queen is not assigned.
 Victory Condition: Queen's victory (including special victories).</value>
   </data>
@@ -1411,7 +1411,7 @@ Victory Condition: Queen's victory (including special victories).</value>
     <value>Number of kills required for victory</value>
   </data>
   <data name="AllJackalWin" xml:space="preserve">
-    <value>Thanks to Shepherd's efforts, all Chacal team</value>
+    <value>Thanks to Shepherd's efforts, all Jackal team</value>
   </data>
   <data name="AllYandereWin" xml:space="preserve">
     <value>Thanks to Intimate's efforts, all Yandere team</value>

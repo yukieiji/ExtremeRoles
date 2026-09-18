@@ -62,10 +62,10 @@
     <value>Foras</value>
   </data>
   <data name="ForasRange" xml:space="preserve">
-    <value>"LEAK" : Portée de la capacité</value>
+    <value>Portée de « Fuite »</value>
   </data>
   <data name="ForasMissingTargetRate" xml:space="preserve">
-    <value>"LEAK" : Ability target accuration</value>
+    <value>Probabilité de cibler un autre joueur lors de « Fuite »</value>
   </data>
   <data name="ForasDelayTime" xml:space="preserve">
     <value>"LEAK" : Nombres to show arrow</value>
@@ -80,10 +80,10 @@
     <value>Signaler l'activation de la capacité lors des réunions</value>
   </data>
   <data name="ForasAbilityCount" xml:space="preserve">
-    <value>Nombre d'utilisations de la capacité</value>
+    <value>Nombre d'utilisations de « Fuite »</value>
   </data>
   <data name="ForasShortDescription" xml:space="preserve">
-    <value>Support your master by LEAKING positions</value>
+    <value>Soutenez votre maître en révélant la position des joueurs</value>
   </data>
   <data name="ForasFullDescription" xml:space="preserve">
     <value>Un FANTÔME NEUTRE with the ability to show a player's position to the
@@ -97,9 +97,9 @@
  - The arrow shows up after a set count.</value>
   </data>
   <data name="ForasShowArrowButton" xml:space="preserve">
-    <value>LEAK</value>
+    <value>Fuite</value>
   </data>
   <data name="ForasShowArrow" xml:space="preserve">
-    <value>A Forus leaked a player's position!</value>
+    <value>Un Foras a révélé la position d'un joueur !</value>
   </data>
 </root>

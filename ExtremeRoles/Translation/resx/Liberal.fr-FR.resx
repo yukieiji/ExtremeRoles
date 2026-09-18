@@ -1,13 +1,23 @@
 <?xml version='1.0' encoding='utf-8'?>
 <root>
   <data name="LeaderFullDescription" xml:space="preserve">
-    <value>Type : Colombe / Militant (selon les paramètres)
+    <value>Type : Colombe/Militant (selon les paramètres)
 Considéré comme Colombe si des tâches sont assignées, et comme Militant si un bouton d'élimination est attribué.
 
 Les fonds actuels sont affichés à côté du nom du joueur.
 Ce rôle existe toujours lorsque la faction Libérale est présente.
 Ce rôle ne peut sous aucun prétexte être ciblé par des capacités.
-Si « Autoriser l'élimination du Leader » est DÉSACTIVÉ, toutes les éliminations contre le Leader sont annulées.</value>
+Si « Autoriser l'élimination du Leader » est DÉSACTIVÉ, toutes les éliminations contre le Leader sont annulées.
+Le comportement varie selon les paramètres suivants :
+    - Si « Autoriser l'élimination lorsque la faction Libérale ne compte que le Leader » est ACTIVÉ, le Leader peut être éliminé lorsqu'il est le dernier membre restant de la faction Libérale.
+    - Si « Élimination automatique lorsque la faction Libérale ne compte que le Leader » est ACTIVÉ, le Leader meurt automatiquement lorsqu'il est le dernier membre restant de la faction Libérale. Aucune réapparition automatique n'aura lieu dans ce cas.
+
+Les paramètres intitulés « Augmentation du taux d'accroissement des fonds » augmentent de façon permanente le multiplicateur des fonds gagnés par tous les membres de la faction Libérale lorsque le Leader remplit certaines conditions.
+Exemple : « Militant - Augmentation du taux par élimination » : 5
+« Leader - Augmentation du taux par élimination » : 10
+« Leader - Bonus de fonds par élimination » : 10%
+1. Lorsque le Leader commence à éliminer, le taux d'accroissement des fonds augmente de 10%, et les fonds augmentent de 11 (10 * 1,1).
+2. Ensuite, lorsqu'un Militant Libéral élimine, les fonds augmentent de 5,5 (5 * 1,1).</value>
   </data>
   <data name="LeaderShortDescription" xml:space="preserve">
     <value>Symbole de la révolution</value>

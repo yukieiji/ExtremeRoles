@@ -95,7 +95,7 @@ Voulez-vous continuer ?</value>
     <value>Synchronisation en cours...</value>
   </data>
   <data name="RIGHT_PANEL_TITLE" xml:space="preserve">
-    <value>Vue rapide des paramètres</value>
+    <value>Vue de configuration rapide</value>
   </data>
   <data name="ROLE_FILTER_SHORT_LABEL" xml:space="preserve">
     <value>R</value>
@@ -164,7 +164,7 @@ Voulez-vous continuer ?</value>
     <value>Nombre de joueurs</value>
   </data>
   <data name="EMPTY_SIMULATE_MESSAGE" xml:space="preserve">
-    <value>Appuyez sur « Exécuter » pour simuler l'attribution des rôles</value>
+    <value>Cliquez sur « Exécuter » pour simuler l'attribution des rôles</value>
   </data>
   <data name="SERVER_TITLE" xml:space="preserve">
     <value>Serveur</value>
@@ -176,10 +176,10 @@ Voulez-vous continuer ?</value>
     <value>Paramètres de la vue rapide</value>
   </data>
   <data name="LEFT_SIDEBAR_SETTING" xml:space="preserve">
-    <value>Paramètres de la barre de navigation gauche</value>
+    <value>Paramètres de la barre latérale gauche</value>
   </data>
   <data name="SAVE_STATE_TO_BROWSER" xml:space="preserve">
-    <value>Mémoriser l'état développé/réduit</value>
+    <value>Conserver l'état ouvert/fermé</value>
   </data>
   <data name="INITIAL_SIDEBAR_STATE" xml:space="preserve">
     <value>État initial</value>
