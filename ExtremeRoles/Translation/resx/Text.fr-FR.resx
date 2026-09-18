@@ -153,4 +153,7 @@
   <data name="Xorshiro512StarStar" xml:space="preserve">
     <value>xorshiro512**</value>
   </data>
+  <data name="MODNAME_TRANS" xml:space="preserve">
+    <value>Extreme Roles</value>
+  </data>
 </root>
