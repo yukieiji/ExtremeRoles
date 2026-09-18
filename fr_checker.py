@@ -1,6 +1,7 @@
+import argparse
+import glob
 import os
 import sys
-import glob
 from xml.etree import ElementTree as ET
 
 WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -54,15 +55,27 @@ def parse_resx(file_path: str) -> dict[str, str]:
     return entries
 
 
-def check_french_translations(resx_dir: str) -> bool:
+def check_french_translations(resx_dir: str, target_file: str | None = None) -> bool:
     has_error = False
 
-    # Find all base resx files (Japanese base files, e.g., Crewmate.resx)
-    all_resx = glob.glob(os.path.join(resx_dir, "*.resx"))
-    base_resx_files = [
-        f for f in all_resx
-        if len(os.path.basename(f).split(".")) == 2
-    ]
+    if target_file:
+        fr_file_path = os.path.join(resx_dir, target_file)
+        if not os.path.exists(fr_file_path):
+            print(f"Error: Target file '{target_file}' not found in {resx_dir}", file=sys.stderr)
+            return False
+
+        if target_file.endswith(".fr-FR.resx"):
+            base_name = target_file[:-len(".fr-FR.resx")]
+        else:
+            base_name = target_file.split(".")[0]
+        base_resx_files = [os.path.join(resx_dir, f"{base_name}.resx")]
+    else:
+        # Find all base resx files (Japanese base files, e.g., Crewmate.resx)
+        all_resx = glob.glob(os.path.join(resx_dir, "*.resx"))
+        base_resx_files = [
+            f for f in all_resx
+            if len(os.path.basename(f).split(".")) == 2
+        ]
 
     missing_fr_files = []
     untranslated_entries = []  # tuple: (file_name, key, value, matched_lang)
@@ -122,7 +135,11 @@ def check_french_translations(resx_dir: str) -> bool:
 
 
 def main():
-    success = check_french_translations(RESX_DIR)
+    parser = argparse.ArgumentParser(description="Check French resx translations.")
+    parser.add_argument("--target", help="Specific target French resx file to check (e.g. Text.fr-FR.resx)")
+    args = parser.parse_args()
+
+    success = check_french_translations(RESX_DIR, target_file=args.target)
     if not success:
         sys.exit(1)
 
