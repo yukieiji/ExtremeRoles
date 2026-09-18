@@ -50,6 +50,7 @@ EXISTING_FR_TEXT_KEYS = {
 WHITELIST = {
     "Text": EXISTING_FR_TEXT_KEYS,
     "WebUI": {"ROLE_FILTER_SHORT_LABEL"},
+    "Crewmate": {"CEO"},
 }
 
 
