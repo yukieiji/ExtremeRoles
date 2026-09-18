@@ -78,10 +78,10 @@
     <value>"MOVE" : Ability Durée</value>
   </data>
   <data name="PoltergeistIsReportAbility" xml:space="preserve">
-    <value>"MOVE" : Does alert ability use on meetings</value>
+    <value>Signaler l'activation de la capacité lors des réunions</value>
   </data>
   <data name="PoltergeistAbilityCount" xml:space="preserve">
-    <value>"MOVE" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="PoltergeistShortDescription" xml:space="preserve">
     <value>Move corpses for your mates to know</value>
@@ -174,7 +174,6 @@ ability.</value>
     <value>Ce joueur était trop flou pour être identifié...</value>
   </data>
   <data name="ShutterTakePhotoReport" xml:space="preserve">
-    <value>Détails de la photo déposée :
-{0}</value>
+    <value>The photo was showing : ¥n{0}</value>
   </data>
 </root>

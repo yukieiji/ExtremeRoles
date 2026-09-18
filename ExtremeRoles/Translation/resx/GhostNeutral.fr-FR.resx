@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:schema id="root">
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -59,7 +59,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Foras" xml:space="preserve">
-    <value>Forus</value>
+    <value>Foras</value>
   </data>
   <data name="ForasRange" xml:space="preserve">
     <value>"LEAK" : Ability range</value>
@@ -77,10 +77,10 @@
     <value>"LEAK" : Ability Durée</value>
   </data>
   <data name="ForasIsReportAbility" xml:space="preserve">
-    <value>"LEAK" : Does alert ability use on meeting</value>
+    <value>Signaler l'activation de la capacité lors des réunions</value>
   </data>
   <data name="ForasAbilityCount" xml:space="preserve">
-    <value>"LEAK" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ForasShortDescription" xml:space="preserve">
     <value>Support your master by LEAKING positions</value>

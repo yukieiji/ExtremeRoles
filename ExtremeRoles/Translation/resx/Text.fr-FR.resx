@@ -62,7 +62,7 @@
     <value>Extreme Roles</value>
   </data>
   <data name="GeneralTab" xml:space="preserve">
-    <value>Paramètres généraux</value>
+    <value>Paramètre global</value>
   </data>
   <data name="CrewmateTab" xml:space="preserve">
     <value>&lt;color=#8CFFFFFF&gt;Paramètres des rôles Équipier&lt;/color&gt;</value>
@@ -89,10 +89,10 @@
     <value>Préréglage</value>
   </data>
   <data name="RandomOptionUseStrong" xml:space="preserve">
-    <value>Use strong randomizer</value>
+    <value>Utiliser un mélange renforcé</value>
   </data>
   <data name="RandomOptionAlgorithm" xml:space="preserve">
-    <value>Radomizer</value>
+    <value>Algorithme de génération aléatoire</value>
   </data>
   <data name="RoleSpawnCategoryMinCrewmate" xml:space="preserve">
     <value>Minimum CREWMATE Roles</value>
@@ -590,7 +590,7 @@ For LOCAL Games:
     <value>Shapeshifter</value>
   </data>
   <data name="Engineer" xml:space="preserve">
-    <value>Enginneer</value>
+    <value>Ingénieur</value>
   </data>
   <data name="Scientist" xml:space="preserve">
     <value>Scientist</value>
@@ -599,10 +599,10 @@ For LOCAL Games:
     <value>Guardian Angel</value>
   </data>
   <data name="Noisemaker" xml:space="preserve">
-    <value>Noisemaker</value>
+    <value>Bruiteur</value>
   </data>
   <data name="Tracker" xml:space="preserve">
-    <value>Tracker</value>
+    <value>Traqueur</value>
   </data>
   <data name="Phantom" xml:space="preserve">
     <value>Phantom</value>
@@ -949,10 +949,10 @@ Do you want to continue Installing?</value>
     <value>No. of assigned players</value>
   </data>
   <data name="HasOtherVision" xml:space="preserve">
-    <value>Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="Vision" xml:space="preserve">
-    <value>Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="ApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Does sabotage effect their vision</value>
@@ -985,16 +985,16 @@ Do you want to continue Installing?</value>
     <value>Default</value>
   </data>
   <data name="ExR_SettingsDescription" xml:space="preserve">
-    <value>Configure ExtremeRoles settings</value>
+    <value>Configurer les paramètres d'ExtremeRoles</value>
   </data>
   <data name="OptionSettingChange" xml:space="preserve">
     <value>[{0}-{1}] « {2} » a été mis à jour à « {3} »</value>
   </data>
   <data name="PresetOptionSelection" xml:space="preserve">
-    <value>Preset to use</value>
+    <value>Préréglage à utiliser</value>
   </data>
   <data name="RandomOption" xml:space="preserve">
-    <value>Random Number Settings</value>
+    <value>Paramètres de génération aléatoire</value>
   </data>
   <data name="RoleSpawnCategory" xml:space="preserve">
     <value>Role Spawn Nombre</value>
@@ -1006,7 +1006,7 @@ Do you want to continue Installing?</value>
     <value>Meeting Settings</value>
   </data>
   <data name="Judge" xml:space="preserve">
-    <value>Judge</value>
+    <value>Juge</value>
   </data>
   <data name="MeetingOptionOverruleSuccessIsNeutral" xml:space="preserve">
     <value>Whether the Judge's ability succeeds on Neutrals</value>
@@ -1180,7 +1180,7 @@ Do you want to continue Installing?</value>
     <value>3:3</value>
   </data>
   <data name="SpawnRate" xml:space="preserve">
-    <value>Spawn Rate</value>
+    <value>Taux d'apparition</value>
   </data>
   <data name="Detective" xml:space="preserve">
     <value>Detective</value>

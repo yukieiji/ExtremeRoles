@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:schema id="root">
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -69,7 +69,7 @@ players, including other impostors and dead players.
 </value>
   </data>
   <data name="SpecialImpostor" xml:space="preserve">
-    <value>Special Impostor</value>
+    <value>Imposteur Spécial</value>
   </data>
   <data name="SpecialImpostorIntroDescription" xml:space="preserve">
     <value>An IMPOSTOR with modified settings</value>
@@ -83,7 +83,7 @@ players, including other impostors and dead players.
  Check the settings below:</value>
   </data>
   <data name="Evolver" xml:space="preserve">
-    <value>Evolver</value>
+    <value>Évolueur</value>
   </data>
   <data name="EvolverIsEvolvedAnimation" xml:space="preserve">
     <value>Does animate on evolution</value>
@@ -101,13 +101,13 @@ players, including other impostors and dead players.
     <value>"EVOLVE" : KILL c.d. reduction multiplier</value>
   </data>
   <data name="EvolverAbilityCoolTime" xml:space="preserve">
-    <value>"EVOLVE" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="EvolverAbilityActiveTime" xml:space="preserve">
     <value>"EAT" : Ability duration</value>
   </data>
   <data name="EvolverAbilityCount" xml:space="preserve">
-    <value>"EVOLVE" : Evolvable times</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="EvolverIntroDescription" xml:space="preserve">
     <value>EAT, EVOLVE, KILL THEM ALL</value>
@@ -133,7 +133,7 @@ evolution.</value>
     <value>Carrier</value>
   </data>
   <data name="CarrierAbilityCoolTime" xml:space="preserve">
-    <value>"CARRY" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="CarrierAbilityActiveTime" xml:space="preserve">
     <value>"CARRY" : Durée of carrying</value>
@@ -216,7 +216,7 @@ Suicide timer : You are now starving to death!
     <value>Suicides in </value>
   </data>
   <data name="BountyHunter" xml:space="preserve">
-    <value>Bounty Hunter</value>
+    <value>Chasseur de primes</value>
   </data>
   <data name="BountyHunterTargetUpdateTime" xml:space="preserve">
     <value>Kill target updates in</value>
@@ -279,7 +279,7 @@ that the body CAN be reported).</value>
     <value>Faker</value>
   </data>
   <data name="FakerAbilityCoolTime" xml:space="preserve">
-    <value>"DUMMY" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="FakerIntroDescription" xml:space="preserve">
     <value>FAKE or REAL? Let me try…</value>
@@ -325,7 +325,7 @@ selected as the Dummy's design.
     <value>"OVERLOAD" : KILLs to reveal role</value>
   </data>
   <data name="OverLoaderAbilityCoolTime" xml:space="preserve">
-    <value>"OVERLOAD" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="OverLoaderAbilityActiveTime" xml:space="preserve">
     <value>"OVERLOAD" : Temps de recharge after activation</value>
@@ -362,10 +362,10 @@ This can be reset by using "DEACTIVATE" or entering an meeting.</value>
     <value>Cracker</value>
   </data>
   <data name="CrackerAbilityCoolTime" xml:space="preserve">
-    <value>”CRACK” : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="CrackerAbilityCount" xml:space="preserve">
-    <value>”CRACK” : Maximum charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="CrackerCanCrackDistance" xml:space="preserve">
     <value>”CRACK” : Ability Distance</value>
@@ -392,16 +392,16 @@ meetings.</value>
     <value>CRACK</value>
   </data>
   <data name="Bomber" xml:space="preserve">
-    <value>Bomber</value>
+    <value>Bombardier</value>
   </data>
   <data name="BomberAbilityCoolTime" xml:space="preserve">
-    <value>"FUSE" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="BomberAbilityActiveTime" xml:space="preserve">
     <value>"FUSE" : Ability duration</value>
   </data>
   <data name="BomberAbilityCount" xml:space="preserve">
-    <value>"FUSE" : Maximum charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="BomberExplosionRange" xml:space="preserve">
     <value>"FUSE" : Explosion range of fused player</value>
@@ -446,10 +446,10 @@ will be nullified(will not explode).</value>
     <value>Merry</value>
   </data>
   <data name="MeryAbilityCoolTime" xml:space="preserve">
-    <value>"PORTAL" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="MeryAbilityCount" xml:space="preserve">
-    <value>"PORTAL" : Maximum ability uses</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="MeryActiveNum" xml:space="preserve">
     <value>"PORTAL" : Number of Players for PORTAL to be usable</value>
@@ -487,7 +487,7 @@ the Merlin, with or without activation.</value>
     <value>"HARASS" : Ability Temps de recharge</value>
   </data>
   <data name="SlaveDriverAbilityCount" xml:space="preserve">
-    <value>"HARASS" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="SlaveDriverRevartTaskNum" xml:space="preserve">
     <value>"HARASS" : Tasks rewinding on use</value>
@@ -566,7 +566,7 @@ will be charged.</value>
     <value>"SMASH" : Temps de recharge</value>
   </data>
   <data name="SmasherAbilityCount" xml:space="preserve">
-    <value>"SMASH" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="SmasherSmashPenaltyKillCool" xml:space="preserve">
     <value>"SMASH" : Kill Temps de recharge penalty</value>
@@ -719,7 +719,7 @@ Can shoot {2} times now</value>
 Next bullet in</value>
   </data>
   <data name="LastWolf" xml:space="preserve">
-    <value>Last Wolf</value>
+    <value>Dernier Loup</value>
   </data>
   <data name="LastWolfAwakeImpostorNum" xml:space="preserve">
     <value>No. of remaining Impostors to reveal role</value>
@@ -734,7 +734,7 @@ Next bullet in</value>
     <value>"BLACKOUT" : Ability Temps de recharge</value>
   </data>
   <data name="LastWolfLightOffVision" xml:space="preserve">
-    <value>"BLACKOUT" : Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="LastWolfAbilityActiveTime" xml:space="preserve">
     <value>"BLACKOUT" : Ability Durée</value>
@@ -781,7 +781,7 @@ elimination.</value>
     <value>"COMMAND" : Ability Temps de recharge</value>
   </data>
   <data name="CommanderAbilityCount" xml:space="preserve">
-    <value>"COMMAND" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="CommanderIntroDescription" xml:space="preserve">
     <value>HQ COMMANDS FULL ATTACK!</value>
@@ -800,7 +800,7 @@ Temps de recharges of the team.
     <value>COMMAND</value>
   </data>
   <data name="Hypnotist" xml:space="preserve">
-    <value>Hypnotist</value>
+    <value>Hypnotiseur</value>
   </data>
   <data name="HypnotistAwakeCheckImpostorNum" xml:space="preserve">
     <value>Role reveal : (1) Impostors remaining </value>
@@ -818,7 +818,7 @@ Temps de recharges of the team.
     <value>"HYPNO" : Ability Temps de recharge</value>
   </data>
   <data name="HypnotistAbilityCount" xml:space="preserve">
-    <value>"HYPNO" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="HypnotistHideArrowRange" xml:space="preserve">
     <value>Hypnotist: Distance from FRAGS for arrows to be shown</value>
@@ -935,7 +935,7 @@ was.</value>
     <value>"JUGGLE" : Ability Temps de recharge</value>
   </data>
   <data name="MagicianAbilityCount" xml:space="preserve">
-    <value>"JUGGLE" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="MagicianTeleportTargetRate" xml:space="preserve">
     <value>"JUGGLE" : Players targeted by ability</value>
@@ -1008,7 +1008,7 @@ changing options.</value>
     <value>"ALTAR" : Ability Durée</value>
   </data>
   <data name="ZombieAbilityCount" xml:space="preserve">
-    <value>"ALTAR" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ZombieShowMagicCircleTime" xml:space="preserve">
     <value>"ALTAR" : Timer to reveal Altar to other players</value>
@@ -1042,7 +1042,7 @@ changing options.</value>
     <value>ALTAR</value>
   </data>
   <data name="Thief" xml:space="preserve">
-    <value>Theif</value>
+    <value>Voleur</value>
   </data>
   <data name="ThiefAbilityCoolTime" xml:space="preserve">
     <value>"STEAL" : Ability Temps de recharge</value>
@@ -1051,7 +1051,7 @@ changing options.</value>
     <value>"STEAL" : Ability Durée</value>
   </data>
   <data name="ThiefAbilityCount" xml:space="preserve">
-    <value>"ALTAR" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ThiefRange" xml:space="preserve">
     <value>"ALTAR" : Ability Distance</value>
@@ -1094,7 +1094,7 @@ changing options.</value>
     <value>"FUNGI" : Ability Temps de recharge</value>
   </data>
   <data name="CrewshroomAbilityCount" xml:space="preserve">
-    <value>"FUNGI" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="CrewshroomDelaySecond" xml:space="preserve">
     <value>"FUNGI" : Timer until spores activated</value>
@@ -1125,7 +1125,7 @@ changing options.</value>
     <value>"THREAT" : Ability Temps de recharge </value>
   </data>
   <data name="TeroristAbilityCount" xml:space="preserve">
-    <value>"THREAT" : Ability Charges </value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="TeroristCanActiveOtherSabotage" xml:space="preserve">
     <value>"THREAT" : Can be used with other Sabotages </value>
@@ -1191,7 +1191,7 @@ While invisible, you cannot touch anything except vents!!</value>
     <value>"DUMMY (PLAYER)" : Can Merlin see through</value>
   </data>
   <data name="Scavenger" xml:space="preserve">
-    <value>Scavenger</value>
+    <value>Récupérateur</value>
   </data>
   <data name="ScavengerAbilityCoolTime" xml:space="preserve">
     <value>Temps de recharge for various abilities</value>
@@ -1356,7 +1356,7 @@ Lv2 Ability "BEAM SABER"
     <value>"BOMBING MODE" : Ability Temps de recharge</value>
   </data>
   <data name="RaiderAbilityCount" xml:space="preserve">
-    <value>"BOMBING" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="RaiderAbilityActiveTime" xml:space="preserve">
     <value>"BOMBING MODE" : Display duration</value>
@@ -1435,7 +1435,7 @@ UI "BOMBING MODE":
     <value>"GLITCH" : Ability Temps de recharge</value>
   </data>
   <data name="GlitchAbilityCount" xml:space="preserve">
-    <value>"GLITCH" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="GlitchRange" xml:space="preserve">
     <value>"GLITCH" : Activation range</value>
@@ -1479,7 +1479,7 @@ Button ability "GLITCH":
     <value>GLITCH</value>
   </data>
   <data name="Hijacker" xml:space="preserve">
-    <value>Hijacker</value>
+    <value>Pirate</value>
   </data>
   <data name="HijackerAbilityCoolTime" xml:space="preserve">
     <value>"HIJACK" : Ability Temps de recharge</value>
@@ -1488,7 +1488,7 @@ Button ability "GLITCH":
     <value>"HIJACK" : Durée</value>
   </data>
   <data name="HijackerAbilityCount" xml:space="preserve">
-    <value>"HIJACK" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="HijackerIsRandomPlayer" xml:space="preserve">
     <value>"HIJACK" : Dose target player random</value>
@@ -1515,7 +1515,7 @@ Button ability "HIJACK":
     <value>"TIME BREAK" : Ability Temps de recharge</value>
   </data>
   <data name="TimeBreakerAbilityCount" xml:space="preserve">
-    <value>"TIME BREAK" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="TimeBreakerActiveTime" xml:space="preserve">
     <value>"TIME BREAK" : Activation duration</value>
@@ -1552,7 +1552,7 @@ Button ability "TIME BREAK":
     <value>"STRAIGHT" : Ability Temps de recharge</value>
   </data>
   <data name="BoxerAbilityCount" xml:space="preserve">
-    <value>"STRAIGHT" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="BoxerFullDescription" xml:space="preserve">
     <value>An Impostor who can kill Crewmates by launching them with "STRAIGHT".

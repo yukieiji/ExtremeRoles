@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:schema id="root">
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -62,16 +62,16 @@
     <value>&lt;color=#FF1919FF&gt;Assasin&lt;/color&gt;&amp;amp;&lt;color=#00ffff&gt;Merlin&lt;/color&gt;</value>
   </data>
   <data name="Assassin" xml:space="preserve">
-    <value>Assasin</value>
+    <value>Assassin</value>
   </data>
   <data name="Marlin" xml:space="preserve">
     <value>Merlin</value>
   </data>
   <data name="AssassinHasOtherVision" xml:space="preserve">
-    <value>Assasin: Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="AssassinVision" xml:space="preserve">
-    <value>Assasin: Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="AssassinApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Assasin: Does sabotage effect their vision</value>
@@ -111,10 +111,10 @@
 after Assasin's death</value>
   </data>
   <data name="MarlinHasOtherVision" xml:space="preserve">
-    <value>Merlin: Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="MarlinVision" xml:space="preserve">
-    <value>Merlin: Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="MarlinApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Merlin: Does sabotage effect their vision</value>
@@ -190,10 +190,10 @@ not, the Assasin will be exiled and the game continues on.</value>
     <value>Vigilante</value>
   </data>
   <data name="HeroHasOtherVision" xml:space="preserve">
-    <value>Hero: Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="HeroVision" xml:space="preserve">
-    <value>Hero: Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="HeroApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Hero: Does sabotage effect their vision</value>
@@ -211,10 +211,10 @@ not, the Assasin will be exiled and the game continues on.</value>
     <value>Hero: Percentage of dead players for "Activée for All(III)" advance</value>
   </data>
   <data name="VillainHasOtherVision" xml:space="preserve">
-    <value>Villain: Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="VillainVision" xml:space="preserve">
-    <value>Villain: Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="VillainApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Villain: Does sabotage effect their vision</value>
@@ -242,10 +242,10 @@ not, the Assasin will be exiled and the game continues on.</value>
 after they use their ability</value>
   </data>
   <data name="VigilanteHasOtherVision" xml:space="preserve">
-    <value>Vigilante: Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="VigilanteVision" xml:space="preserve">
-    <value>Vigilante: Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="VigilanteApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Vigilante: Does sabotage effect their vision</value>
@@ -257,7 +257,7 @@ after they use their ability</value>
     <value>Vigilante: "SOS" : Ability Durée</value>
   </data>
   <data name="VigilanteAbilityCount" xml:space="preserve">
-    <value>Vigilante: "SOS" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="VigilanteRange" xml:space="preserve">
     <value>Vigilante: "SOS" : Ability Range</value>
@@ -400,7 +400,7 @@ Your ROLE status: You're the New Neutral!
     <value>&lt;color=#9E5C46&gt;Investigator&lt;/color&gt;&amp;amp;&lt;color=#008A99&gt;Assistant&lt;/color&gt;</value>
   </data>
   <data name="Investigator" xml:space="preserve">
-    <value>Investigator</value>
+    <value>Enquêteur</value>
   </data>
   <data name="Assistant" xml:space="preserve">
     <value>Assistant</value>
@@ -409,10 +409,10 @@ Your ROLE status: You're the New Neutral!
     <value>Apprentice</value>
   </data>
   <data name="InvestigatorHasOtherVision" xml:space="preserve">
-    <value>Investigator: Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="InvestigatorVision" xml:space="preserve">
-    <value>Investigator: Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="InvestigatorApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Investigator: Does sabotage effect their vision</value>
@@ -431,25 +431,25 @@ supported by Assistant</value>
     <value>Investigator: Durée of Investigation stats</value>
   </data>
   <data name="AssistantHasOtherVision" xml:space="preserve">
-    <value>Assistant: Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="AssistantVision" xml:space="preserve">
-    <value>Assistant: Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="AssistantApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Assistant: Does sabotage effect their vision</value>
   </data>
   <data name="InvestigatorApprenticeHasOtherVision" xml:space="preserve">
-    <value>Apprentice: Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="InvestigatorApprenticeVision" xml:space="preserve">
-    <value>Apprentice: Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="InvestigatorApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Apprentice: Does sabotage effect their vision</value>
   </data>
   <data name="InvestigatorApprenticeAbilityCount" xml:space="preserve">
-    <value>Apprentice: "MEETING" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="InvestigatorApprenticeAbilityCoolTime" xml:space="preserve">
     <value>Apprentice: "MEETING" : Ability Temps de recharge</value>
@@ -569,10 +569,10 @@ to push the button after the cost reaches 0).</value>
     <value>Kill Distance</value>
   </data>
   <data name="LoverBecomeNeutralLoverHasOtherVision" xml:space="preserve">
-    <value>As NEUTRAL: Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="LoverBecomeNeutralLoverVision" xml:space="preserve">
-    <value>As NEUTRAL: Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="LoverBecomeNeutralLoverApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>As NEUTRAL: Does sabotage effect their vision</value>
@@ -762,10 +762,10 @@ map (i.e. VITALS in the Skeld and Mira-HQ).</value>
     <value>Wisp</value>
   </data>
   <data name="DelinquentHasOtherVision" xml:space="preserve">
-    <value>Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="DelinquentVision" xml:space="preserve">
-    <value>Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="DelinquentApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Does sabotage effect their vision</value>
@@ -774,10 +774,10 @@ map (i.e. VITALS in the Skeld and Mira-HQ).</value>
     <value>"DETONATE" : Ability Distance</value>
   </data>
   <data name="DelinquentAbilityCoolTime" xml:space="preserve">
-    <value>"DETONATE/GRAFFITI" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="DelinquentAbilityCount" xml:space="preserve">
-    <value>"DETONATE" : Graffities needed to unlock Ability</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="WispTorchAbilityNum" xml:space="preserve">
     <value>"TORCH" : Default Ability Charges</value>
@@ -801,7 +801,7 @@ map (i.e. VITALS in the Skeld and Mira-HQ).</value>
     <value>"BLACKOUT" : Ability Temps de recharge</value>
   </data>
   <data name="WispIsReportAbility" xml:space="preserve">
-    <value>"BLACKOUT" : Does alert ability usage on meetings</value>
+    <value>Signaler l'activation de la capacité lors des réunions</value>
   </data>
   <data name="DelinquentIntroDescription" xml:space="preserve">
     <value>Life is but a dream</value>
@@ -884,7 +884,7 @@ Lights out Sabotage for a while
 Jackal's "SIDEKICK")</value>
   </data>
   <data name="Guesser" xml:space="preserve">
-    <value>Guesser</value>
+    <value>Devin</value>
   </data>
   <data name="NiceGuesser" xml:space="preserve">
     <value>Nice Guesser</value>
@@ -954,7 +954,7 @@ abilities or role revelation</value>
     <value>"MOVE" : Ability Durée</value>
   </data>
   <data name="MoverAbilityCount" xml:space="preserve">
-    <value>"MOVE" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="MoverIntroDescription" xml:space="preserve">
     <value>[301]: Moving permanently</value>
@@ -988,7 +988,7 @@ abilities or role revelation</value>
     <value>"PANEL" : Ability Durée </value>
   </data>
   <data name="AcceleratorAbilityCount" xml:space="preserve">
-    <value>"PANEL" : Ability Charges </value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="AcceleratorSpeed" xml:space="preserve">
     <value>"PANEL" : Acceleration </value>
@@ -1028,7 +1028,7 @@ abilities or role revelation</value>
     <value>"SKATE" : Time until can be cancelled</value>
   </data>
   <data name="SkaterAbilityCount" xml:space="preserve">
-    <value>"SKATE" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="SkaterAcceleration" xml:space="preserve">
     <value>"SKATE" : Acceleration</value>

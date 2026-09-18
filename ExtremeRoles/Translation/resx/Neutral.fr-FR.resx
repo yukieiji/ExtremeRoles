@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:schema id="root">
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -65,10 +65,10 @@
     <value>Can use Sabotages</value>
   </data>
   <data name="AliceAbilityCoolTime" xml:space="preserve">
-    <value>"MISCHIEF" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="AliceAbilityCount" xml:space="preserve">
-    <value>"MISCHIEF" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="AliceRevartCommonTaskNum" xml:space="preserve">
     <value>"MISCHIEF" : Rewinds Common tasks by</value>
@@ -102,16 +102,16 @@ Beware for both IMPOSTORS and CREWMATES because you're a strong role!</value>
     <value>MISCHIEF</value>
   </data>
   <data name="Jackal" xml:space="preserve">
-    <value>Jackal</value>
+    <value>Chacal</value>
   </data>
   <data name="Sidekick" xml:space="preserve">
-    <value>Sidekick</value>
+    <value>Complice</value>
   </data>
   <data name="JackalAbilityCoolTime" xml:space="preserve">
-    <value>"SIDEKICK" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="JackalAbilityCount" xml:space="preserve">
-    <value>"SIDEKICK" : Maximum Sidekicks per Jackal</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="JackalRangeSidekickTarget" xml:space="preserve">
     <value>"SIDEKICK" : Ability Distance</value>
@@ -159,10 +159,10 @@ Beware for both IMPOSTORS and CREWMATES because you're a strong role!</value>
     <value>Sidekicks: Kill Distance</value>
   </data>
   <data name="SidekickHasOtherVision" xml:space="preserve">
-    <value>Sidekicks: Has special vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="SidekickVision" xml:space="preserve">
-    <value>Sidekicks: Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="SidekickApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Sidekicks: Does sabotage effect their vision</value>
@@ -198,7 +198,7 @@ eliminate all other IMPOSTORS / NEUTRALS with the KILL ability.
 promote and may change to a new Jackal. </value>
   </data>
   <data name="TaskMaster" xml:space="preserve">
-    <value>Task Master</value>
+    <value>Maître des tâches</value>
   </data>
   <data name="TaskMasterCanUseSabotage" xml:space="preserve">
     <value>Can use sabotage</value>
@@ -242,7 +242,7 @@ the set global tasks.</value>
     <value>"PROPAGATE" : Ability Distance</value>
   </data>
   <data name="MissionaryAbilityCoolTime" xml:space="preserve">
-    <value>"PROPAGATE" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="MissionaryIsUseSolemnJudgment" xml:space="preserve">
     <value>Enable ability "CONDUCT"</value>
@@ -284,7 +284,7 @@ eliminate all other IMPOSTORS / NEUTRALS with the KILL ability.
     <value>Another wanderer found the heavens' ladder.</value>
   </data>
   <data name="Jester" xml:space="preserve">
-    <value>Jester</value>
+    <value>Joker</value>
   </data>
   <data name="JesterUseSabotage" xml:space="preserve">
     <value>Can use sabotage</value>
@@ -293,13 +293,13 @@ eliminate all other IMPOSTORS / NEUTRALS with the KILL ability.
     <value>"OUTBURST" : Ability Distance</value>
   </data>
   <data name="JesterAbilityCoolTime" xml:space="preserve">
-    <value>"OUTBURST" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="JesterAbilityActiveTime" xml:space="preserve">
     <value>"OUTBURST" : Triggered KILL occurs after</value>
   </data>
   <data name="JesterAbilityCount" xml:space="preserve">
-    <value>"OUTBURST" : Maximum usage</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="JesterIntroDescription" xml:space="preserve">
     <value>HIPPITY HOPPITY THE MEETING IS MY PROPERTY!</value>
@@ -400,7 +400,7 @@ mode, not regarding OBSTACLEs alive.
     <value>The Yandere wins with true love....</value>
   </data>
   <data name="Yoko" xml:space="preserve">
-    <value>Youko</value>
+    <value>Yoko</value>
   </data>
   <data name="YokoCanRepairSabo" xml:space="preserve">
     <value>Can repair Sabotages</value>
@@ -436,13 +436,13 @@ mode, not regarding OBSTACLEs alive.
     <value>"BET" : Ability Distance</value>
   </data>
   <data name="TotocalcioAbilityCoolTime" xml:space="preserve">
-    <value>"BET" : Initial ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="TotocalcioAbilityCount" xml:space="preserve">
-    <value>"BET" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="TotocalcioFinalCoolTime" xml:space="preserve">
-    <value>"BET" : Final ability cooldown</value>
+    <value>Temps de recharge</value>
   </data>
   <data name="TotocalcioIntroDescription" xml:space="preserve">
     <value>Life should be a GAMBLE</value>
@@ -477,7 +477,7 @@ remaining players
     <value>Enable global VENTs</value>
   </data>
   <data name="MinerAbilityCoolTime" xml:space="preserve">
-    <value>"LANDMINE" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="MinerAbilityActiveTime" xml:space="preserve">
     <value>"LANDMINE" : Temps de recharge until Landmine activates</value>
@@ -542,13 +542,13 @@ MISSION: Halve the remaining players with your own team, and eliminate all other
     <value>Can use VENTs</value>
   </data>
   <data name="EaterAbilityCoolTime" xml:space="preserve">
-    <value>"EAT/VORE" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="EaterAbilityActiveTime" xml:space="preserve">
     <value>"VORE" : Ability duration</value>
   </data>
   <data name="EaterAbilityCount" xml:space="preserve">
-    <value>"EAT/VORE" : Players/dead bodies eaten to win</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="EaterEatRange" xml:space="preserve">
     <value>"EAT/VORE": Ability Distance</value>
@@ -610,10 +610,10 @@ time in the turn.</value>
     <value>Queen : Can use VENTs</value>
   </data>
   <data name="QueenAbilityCoolTime" xml:space="preserve">
-    <value>"CHARM" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="QueenAbilityCount" xml:space="preserve">
-    <value>"CHARM" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="QueenRange" xml:space="preserve">
     <value>"CHARM" : Ability Distance</value>
@@ -728,7 +728,7 @@ when "Can Impostors know Madmates" is on.</value>
     <value>"INJECTION" : Ability Distance</value>
   </data>
   <data name="UmbrerAbilityCoolTime" xml:space="preserve">
-    <value>"INJECTION" : Ability cooldown</value>
+    <value>Temps de recharge de la capacité</value>
   </data>
   <data name="UmbrerAbilityActiveTime" xml:space="preserve">
     <value>"INJECTION" : Ability duration</value>
@@ -780,7 +780,7 @@ spreading" mode deactivates.</value>
     <value>"BUILD SHRINE" : Time required</value>
   </data>
   <data name="YokoAbilityCount" xml:space="preserve">
-    <value>"BUILD SHRINE" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="YokoYashiroActiveTime" xml:space="preserve">
     <value>"SHRINE" : Durée of "ACTIVATED" state</value>
@@ -853,7 +853,7 @@ Passive Ability "SENSE PRESENCE":
     <value>"KILL TIME" : Ability Temps de recharge</value>
   </data>
   <data name="HatterAbilityCount" xml:space="preserve">
-    <value>"KILL TIME" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="HatterHideMeetingTimer" xml:space="preserve">
     <value>Hide meeting timer with "KILL TIME"</value>
@@ -930,13 +930,13 @@ Button Ability "PAINT"
     <value>Tucker</value>
   </data>
   <data name="Chimera" xml:space="preserve">
-    <value>Chimera</value>
+    <value>Chimère</value>
   </data>
   <data name="TuckerAbilityCoolTime" xml:space="preserve">
     <value>"CREATE CHIMERA" and "ERASE SHADOW" : Temps de recharge</value>
   </data>
   <data name="TuckerAbilityCount" xml:space="preserve">
-    <value>"CREATE CHIMERA" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="TuckerRange" xml:space="preserve">
     <value>"CREATE CHIMERA" and "ERASE SHADOW" : Activation range</value>
@@ -972,10 +972,10 @@ Button Ability "PAINT"
     <value>Chimera's Kill Range</value>
   </data>
   <data name="TuckerChimeraHasOtherVision" xml:space="preserve">
-    <value>Does Chimera have different vision settings</value>
+    <value>Dispose de paramètres de vision particuliers</value>
   </data>
   <data name="TuckerChimeraVision" xml:space="preserve">
-    <value>Chimera's Vision</value>
+    <value>Paramètres de vision</value>
   </data>
   <data name="TuckerChimeraApplyEnvironmentVisionEffect" xml:space="preserve">
     <value>Is Chimera affected by vision effects</value>
@@ -1300,7 +1300,7 @@ If sub-team is off or does not have kill button, this role becomes a fallback ro
     <value>"WEAR CORPSE" : Time to complete</value>
   </data>
   <data name="SurrogatorAbilityCount" xml:space="preserve">
-    <value>"WEAR CORPSE" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="SurrogatorRange" xml:space="preserve">
     <value>"WEAR CORPSE" : Range from corpse</value>

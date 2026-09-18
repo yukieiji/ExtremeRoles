@@ -1,13 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <root>
   <data name="LeaderFullDescription" xml:space="preserve">
-    <value>Type : Colombe / Militant (selon les paramètres)
-Considéré comme Colombe si des tâches sont assignées, et comme Militant si un bouton d'élimination est attribué.
+    <value>Type: Dove/Militant (depending on settings)
+Considered a Dove if tasks are assigned, and a Militant if a kill button is assigned.
 
-Les fonds actuels sont affichés à côté du nom du joueur.
-Ce rôle existe toujours lorsque la faction Libérale est présente.
-Ce rôle ne peut sous aucun prétexte être ciblé par des capacités.
-Si « Autoriser l'élimination du Leader » est DÉSACTIVÉ, toutes les éliminations contre le Leader sont annulées.</value>
+Current funds are displayed next to the player's name.
+This role always exists when the Liberal faction is assigned.
+This role cannot be targeted by abilities under any circumstances.
+If "Allow Kills on Leader" is OFF, all kills against the Leader are invalidated.
+Behavior changes with the following settings:
+- If "Allow Kills when Liberal faction is only the Leader" is ON, the Leader can be killed when they are the last remaining member of the Liberal faction.
+- If "Auto-Eliminate when Liberal faction is only the Leader" is ON, the Leader automatically dies when they are the last remaining member of the Liberal faction. Auto-revival will not occur in this case.
+
+Settings labeled "Fund Increase Rate Increase" permanently increase the multiplier for funds gained by all Liberal faction members when the Leader enters specific situations.
+Example:
+"Militant - Fund Increase Rate Increase per Kill": 5
+"Leader - Fund Increase Rate Increase per Kill": 10
+"Leader - Fund Bonus per Kill": 10%
+1. When the Leader starts killing, the fund increase rate increases by 10%, and funds increase by 11 (10 * 1.1).
+2. Subsequently, when a Liberal Militant kills, funds increase by 5.5 (5 * 1.1).</value>
   </data>
   <data name="LeaderShortDescription" xml:space="preserve">
     <value>Symbole de la révolution</value>
@@ -16,10 +27,10 @@ Si « Autoriser l'élimination du Leader » est DÉSACTIVÉ, toutes les élimina
     <value>Menez la faction Libérale en tant que Leader</value>
   </data>
   <data name="DoveFullDescription" xml:space="preserve">
-    <value>Type : Colombe
+    <value>Type: Dove
 
-Gagne des fonds en accomplissant des tâches.
-Les tâches s'ajoutent indéfiniment.</value>
+Gains funds by completing tasks.
+Tasks are added indefinitely.</value>
   </data>
   <data name="DoveShortDescription" xml:space="preserve">
     <value>Accomplissez la révolution par les tâches</value>
@@ -28,9 +39,9 @@ Les tâches s'ajoutent indéfiniment.</value>
     <value>La révolution nécessite le « dialogue »</value>
   </data>
   <data name="MilitantFullDescription" xml:space="preserve">
-    <value>Type : Militant
+    <value>Type: Militant
 
-Gagne des fonds pour les activités en effectuant des éliminations.</value>
+Gains funds for activities by killing.</value>
   </data>
   <data name="MilitantShortDescription" xml:space="preserve">
     <value>Accomplissez la révolution par les éliminations</value>

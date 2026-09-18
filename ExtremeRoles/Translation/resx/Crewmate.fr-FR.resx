@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:schema id="root">
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -70,7 +70,7 @@ Charge your batteries by time or complete tasks to access
 your mobile vitals monitor.</value>
   </data>
   <data name="SpecialCrew" xml:space="preserve">
-    <value>Special Crew</value>
+    <value>Équipier Spécial</value>
   </data>
   <data name="SpecialCrewIntroDescription" xml:space="preserve">
     <value>An CREWMATE with modified settings</value>
@@ -83,7 +83,7 @@ your mobile vitals monitor.</value>
 Check the settings below:</value>
   </data>
   <data name="Sheriff" xml:space="preserve">
-    <value>Sheriff</value>
+    <value>Chérif</value>
   </data>
   <data name="SheriffShootNum" xml:space="preserve">
     <value>Maximum bullets to shoot</value>
@@ -131,7 +131,7 @@ complete a task (up to the number of "Maximum bullets to shoot").</value>
     <value>"REPAIR" : Ability Temps de recharge</value>
   </data>
   <data name="MaintainerAbilityCount" xml:space="preserve">
-    <value>"REPAIR" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="MaintainerIntroDescription" xml:space="preserve">
     <value>Sabotage? I'm the garage!</value>
@@ -178,7 +178,7 @@ Maybe you can waste your time chasing others?</value>
  Maybe you can waste your time chasing others?</value>
   </data>
   <data name="Watchdog" xml:space="preserve">
-    <value>Watchdog</value>
+    <value>Chien de garde</value>
   </data>
   <data name="WatchdogAbilityCoolTime" xml:space="preserve">
     <value>"CAMERA/LOG" : Ability Temps de recharge</value>
@@ -206,7 +206,7 @@ the cooldown or completing tasks.</value>
     <value>LOGS</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
-    <value>Supervisor</value>
+    <value>Superviseur</value>
   </data>
   <data name="SupervisorAbilityCoolTime" xml:space="preserve">
     <value>"ADMIN" : Ability Temps de recharge</value>
@@ -248,7 +248,7 @@ ADMIN opened by your ability.</value>
     <value>"GUARD" : Ability Temps de recharge</value>
   </data>
   <data name="BodyGuardAbilityCount" xml:space="preserve">
-    <value>"GUARD" : Max usage</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="BodyGuardFeatMeetingAbilityTaskGage" xml:space="preserve">
     <value>"GUARD" : Task completion rate to use in meetings</value>
@@ -401,7 +401,7 @@ setting.</value>
     <value>"TAKE OVER" : Ability Temps de recharge</value>
   </data>
   <data name="AgencyAbilityCount" xml:space="preserve">
-    <value>"TAKE OVER" : Maximum ability uses</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="AgencyIntroDescription" xml:space="preserve">
     <value>May I help you, sir?</value>
@@ -473,7 +473,7 @@ changes to something else.
     <value>"CURSE" : Seconds to use ability</value>
   </data>
   <data name="CurseMakerAbilityCount" xml:space="preserve">
-    <value>"CURSE" : Maximum ability uses</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="CurseMakerTaskCurseTimeReduceRate" xml:space="preserve">
     <value>Reduction rate of ability duration on task completion</value>
@@ -536,7 +536,7 @@ the corpse will show up after a few seconds, which is set by the
     <value>"COUNTER" : Durée</value>
   </data>
   <data name="FencerAbilityCount" xml:space="preserve">
-    <value>"COUNTER" : Maximum ability uses</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="FencerResetTime" xml:space="preserve">
     <value>"COUNTER" : Temporary KILL duration</value>
@@ -568,7 +568,7 @@ propagation).</value>
     <value>"OPEN" : Ability Temps de recharge</value>
   </data>
   <data name="OpenerAbilityCount" xml:space="preserve">
-    <value>"OPEN" : Default Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="OpenerRange" xml:space="preserve">
     <value>"OPEN" : Ability Distance</value>
@@ -596,7 +596,7 @@ settings.</value>
     <value>OPEN</value>
   </data>
   <data name="Carpenter" xml:space="preserve">
-    <value>Carpenter</value>
+    <value>Charpentier</value>
   </data>
   <data name="CarpenterAwakeTaskGage" xml:space="preserve">
     <value>Task completion rate to reveal role</value>
@@ -605,7 +605,7 @@ settings.</value>
     <value>"SEAL/CAMERA" : Ability Temps de recharge</value>
   </data>
   <data name="CarpenterAbilityCount" xml:space="preserve">
-    <value>"SEAL/CAMERA" : Maximum counts of "SCREWS"</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="CarpenterRemoveVentScrew" xml:space="preserve">
     <value>"SEAL" : "SCREWS" used</value>
@@ -674,7 +674,7 @@ CREWMATE's task victory requirements.
 CREWMATE victory with your mates.</value>
   </data>
   <data name="Captain" xml:space="preserve">
-    <value>Captain</value>
+    <value>Capitaine</value>
   </data>
   <data name="CaptainAwakeTaskGage" xml:space="preserve">
     <value>Task completion rate to reveal role</value>
@@ -731,7 +731,7 @@ for ability buff</value>
     <value>"CAPTURE" : Ability Temps de recharge</value>
   </data>
   <data name="PhotographerAbilityCount" xml:space="preserve">
-    <value>"CAPTURE" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="PhotographerIntroDescription" xml:space="preserve">
     <value>Shoot a nice shot!</value>
@@ -783,7 +783,7 @@ any hints!</value>
     <value>"DEFLECT" : Ability Temps de recharge</value>
   </data>
   <data name="DelusionerAbilityCount" xml:space="preserve">
-    <value>"DEFLECT" : Maximum charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="DelusionerVoteCoolTimeReduceRate" xml:space="preserve">
     <value>"DEFLECT" : Temps de recharge reduction per self-vote</value>
@@ -875,7 +875,7 @@ The Ressurecter will not be assigned to a ghost role.</value>
     <value>Randomly multiplies votes</value>
   </data>
   <data name="Teleporter" xml:space="preserve">
-    <value>Teleporter</value>
+    <value>Téléporteur</value>
   </data>
   <data name="TeleporterCanUseOtherPlayer" xml:space="preserve">
     <value>"PORTAL" : Can other players use the portal</value>
@@ -884,7 +884,7 @@ The Ressurecter will not be assigned to a ghost role.</value>
     <value>"PORTAL" : Ability Temps de recharge</value>
   </data>
   <data name="TeleporterAbilityCount" xml:space="preserve">
-    <value>Amount of FRAGS spawned</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="TeleporterIntroDescription" xml:space="preserve">
     <value>Are you still there?</value>
@@ -915,7 +915,7 @@ The Ressurecter will not be assigned to a ghost role.</value>
     <value>"MODERATE" : Ability Temps de recharge</value>
   </data>
   <data name="ModeratorAbilityCount" xml:space="preserve">
-    <value>"MODERATE" ; Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ModeratorMeetingTimerOffset" xml:space="preserve">
     <value>"MODERATE" : Extends meeting timer by</value>
@@ -953,7 +953,7 @@ The Ressurecter will not be assigned to a ghost role.</value>
     <value>"CALL" : Ability Durée</value>
   </data>
   <data name="PsychicAbilityCount" xml:space="preserve">
-    <value>"CALL" : Abilty Charge</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="PsychicIsUpgradeAbility" xml:space="preserve">
     <value>"CALL" : Does ability gain buffs in game</value>
@@ -1015,7 +1015,7 @@ Button ability "DEFLECT":
 If the option "Does need to match revealing means every meeting" is ON, if the awakening condition is not met in the next meeting after awakening, the Delusioner will return to the unawakened state.</value>
   </data>
   <data name="Jailer" xml:space="preserve">
-    <value>Jailer</value>
+    <value>Geôlier</value>
   </data>
   <data name="Lawbreaker" xml:space="preserve">
     <value>Lawbreaker</value>
@@ -1044,7 +1044,7 @@ If the option "Does need to match revealing means every meeting" is ON, if the a
     <value>"IMPRISON" : Ability Temps de recharge</value>
   </data>
   <data name="JailerAbilityCount" xml:space="preserve">
-    <value>"IMPRISON" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="JailerTargetMode" xml:space="preserve">
     <value>"IMPRISON" : Team that succeeds on</value>
@@ -1182,7 +1182,7 @@ Button ability "SUMMON":
     <value>SUMMON</value>
   </data>
   <data name="Bait" xml:space="preserve">
-    <value>Bait</value>
+    <value>Appât</value>
   </data>
   <data name="BaitAwakeTaskGage" xml:space="preserve">
     <value>Task completion rate to awaken as Bait</value>
@@ -1284,7 +1284,7 @@ When exiled, you take the person who voted for you with you.</value>
     <value>"ECHOLOCATION" : Ability Temps de recharge</value>
   </data>
   <data name="EchoAbilityCount" xml:space="preserve">
-    <value>"ECHOLOCATION" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="EchoAttentionMode" xml:space="preserve">
     <value>"ECHOLOCATION" : Notification mode</value>
@@ -1336,7 +1336,7 @@ Button Ability "ECHOLOCATION":
     <value>"EXORCISM" : Ability Temps de recharge</value>
   </data>
   <data name="ExorcistAbilityCount" xml:space="preserve">
-    <value>"EXORCISM" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="ExorcistAwakeTaskGage" xml:space="preserve">
     <value>Task completion rate to be misrecognized as an Impostor</value>
@@ -1388,7 +1388,7 @@ If the chance hits, the vote count changes randomly between the maximum and mini
     <value>Minimum vote count</value>
   </data>
   <data name="Inspector" xml:space="preserve">
-    <value>Inspector</value>
+    <value>Inspecteur</value>
   </data>
   <data name="InspectorAbilityActiveTime" xml:space="preserve">
     <value>"INSPECT" : Ability Durée</value>
@@ -1397,7 +1397,7 @@ If the chance hits, the vote count changes randomly between the maximum and mini
     <value>"INSPECT" : Ability Temps de recharge</value>
   </data>
   <data name="InspectorAbilityCount" xml:space="preserve">
-    <value>"INSPECT" : Ability Charges</value>
+    <value>Nombre d'utilisations de la capacité</value>
   </data>
   <data name="InspectorFullDescription" xml:space="preserve">
     <value>A Crewmate who detects specified actions.
