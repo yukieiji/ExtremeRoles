@@ -1,0 +1,1030 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    Microsoft ResX Schema
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AvalonsRoles" xml:space="preserve">
+    <value>&lt;color=#FF1919FF&gt;Assassin&lt;/color&gt;&amp;amp;&lt;color=#00ffff&gt;Merlin&lt;/color&gt;</value>
+  </data>
+  <data name="Assassin" xml:space="preserve">
+    <value>Assassin</value>
+  </data>
+  <data name="Marlin" xml:space="preserve">
+    <value>Merlin</value>
+  </data>
+  <data name="AssassinHasOtherVision" xml:space="preserve">
+    <value>Assassin : Paramètres de vision spéciaux</value>
+  </data>
+  <data name="AssassinVision" xml:space="preserve">
+    <value>Assassin : Vision</value>
+  </data>
+  <data name="AssassinApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Assassin : Est affecté par les effets de vision</value>
+  </data>
+  <data name="AssassinHasOtherKillCool" xml:space="preserve">
+    <value>Assassin : A un délai de recharge d'élimination modifié</value>
+  </data>
+  <data name="AssassinKillCoolDown" xml:space="preserve">
+    <value>Assassin : Recharge d'élimination</value>
+  </data>
+  <data name="AssassinHasOtherKillRange" xml:space="preserve">
+    <value>Assassin : A une portée d'élimination modifiée</value>
+  </data>
+  <data name="AssassinKillRange" xml:space="preserve">
+    <value>Assassin : Portée d'élimination</value>
+  </data>
+  <data name="AssassinHasTask" xml:space="preserve">
+    <value>Assassin : A des tâches</value>
+  </data>
+  <data name="AssassinCanKilled" xml:space="preserve">
+    <value>Assassin : Peut être tué</value>
+  </data>
+  <data name="AssassinCanKilledFromCrew" xml:space="preserve">
+    <value>Assassin : Peut être tué par les COÉQUIPIERS</value>
+  </data>
+  <data name="AssassinCanKilledFromNeutral" xml:space="preserve">
+    <value>Assassin : Peut être tué par les NEUTRES</value>
+  </data>
+  <data name="AssassinCanSeeVote" xml:space="preserve">
+    <value>Assassin : Peut voir les votes</value>
+  </data>
+  <data name="AssassinIsDeadForceMeeting" xml:space="preserve">
+    <value>Déclenche une réunion forcée à la mort de l'Assassin</value>
+  </data>
+  <data name="AssassinCanSeeRoleBeforeFirstMeeting" xml:space="preserve">
+    <value>Peut voir les rôles avant la première réunion
+après la mort de l'Assassin</value>
+  </data>
+  <data name="MarlinHasOtherVision" xml:space="preserve">
+    <value>Merlin : Paramètres de vision spéciaux</value>
+  </data>
+  <data name="MarlinVision" xml:space="preserve">
+    <value>Merlin : Vision</value>
+  </data>
+  <data name="MarlinApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Merlin : Est affecté par les effets de vision</value>
+  </data>
+  <data name="MarlinHasTask" xml:space="preserve">
+    <value>Merlin : A des tâches</value>
+  </data>
+  <data name="MarlinCanSeeAssassin" xml:space="preserve">
+    <value>Merlin : Peut voir l'Assassin</value>
+  </data>
+  <data name="MarlinCanSeeVote" xml:space="preserve">
+    <value>Merlin : Peut voir les votes</value>
+  </data>
+  <data name="MarlinCanSeeNeutral" xml:space="preserve">
+    <value>Merlin : Peut voir les NEUTRES</value>
+  </data>
+  <data name="MarlinCanUseVent" xml:space="preserve">
+    <value>Merlin : Peut utiliser les conduits</value>
+  </data>
+  <data name="MarlinIntroDescription" xml:space="preserve">
+    <value>Découvrez la VÉRITÉ, mais ne vous faites pas assassiner</value>
+  </data>
+  <data name="MarlinShortDescription" xml:space="preserve">
+    <value>Menez l'ÉQUIPAGE à la victoire sans vous faire assassiner</value>
+  </data>
+  <data name="MarlinFullDescription" xml:space="preserve">
+    <value>Un rôle d'ÉQUIPAGE qui connaît l'identité des imposteurs.
+Peut savoir qui sont les IMPOSTEURS (et les NEUTRES lorsque la configuration est activée).
+Ne sera attribué que si un Assassin-Imposteur existe.
+Menez votre ÉQUIPAGE à la victoire en les éliminant, mais ne les laissez pas deviner que vous êtes Merlin, sinon vous perdrez !</value>
+  </data>
+  <data name="AssassinIntroDescription" xml:space="preserve">
+    <value>Assassinez celui qui tire les ficelles dans l'ombre</value>
+  </data>
+  <data name="AssassinShortDescription" xml:space="preserve">
+    <value>Trouvez MERLIN et ASSASSINEZ-LE</value>
+  </data>
+  <data name="AssassinFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR avec une toute nouvelle occasion d'obtenir la victoire !
+Ne sera attribué que si un Merlin-Équipage existe.
+VICTOIRE SUPPLÉMENTAIRE : Devinez qui est Merlin.
+« QUI EST MERLIN ? » : Une réunion spéciale réservée à l'Assassin.
+  - Se produit lorsqu'un Assassin est éjecté.
+  - Seul l'Assassin peut choisir/voter.
+  - Seuls les Imposteurs peuvent utiliser le tchat (y compris les Imposteurs morts/fantômes).
+  - Peut voter pour les joueurs morts.
+  - S'il vote pour Merlin, les Imposteurs remportent la victoire. Sinon, l'Assassin est éjecté et la partie continue.</value>
+  </data>
+  <data name="whoIsMarine" xml:space="preserve">
+    <value>QUI EST MERLIN ?</value>
+  </data>
+  <data name="assassinateMarinSucsess" xml:space="preserve">
+    <value>était Merlin.</value>
+  </data>
+  <data name="assassinateMarinFail" xml:space="preserve">
+    <value>n'était pas Merlin.</value>
+  </data>
+  <data name="HeroAca" xml:space="preserve">
+    <value>&lt;color=#0086CC&gt;Héros&lt;/color&gt;&amp;amp;&lt;color=#FF1919FF&gt;Vilain&lt;/color&gt;&amp;amp;&lt;color=#BAA7CC&gt;Vigilante&lt;/color&gt;</value>
+  </data>
+  <data name="Hero" xml:space="preserve">
+    <value>Héros</value>
+  </data>
+  <data name="Villain" xml:space="preserve">
+    <value>Vilain</value>
+  </data>
+  <data name="Vigilante" xml:space="preserve">
+    <value>Vigilante</value>
+  </data>
+  <data name="HeroHasOtherVision" xml:space="preserve">
+    <value>Héros : Paramètres de vision spéciaux</value>
+  </data>
+  <data name="HeroVision" xml:space="preserve">
+    <value>Héros : Vision</value>
+  </data>
+  <data name="HeroApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Héros : Est affecté par les effets de vision</value>
+  </data>
+  <data name="HeroAbilityCoolTime" xml:space="preserve">
+    <value>Héros : "RECHERCHE" : Recharge de capacité</value>
+  </data>
+  <data name="HeroAbilityActiveTime" xml:space="preserve">
+    <value>Héros : "RECHERCHE" : Durée de capacité</value>
+  </data>
+  <data name="HeroFeatKillPercentage" xml:space="preserve">
+    <value>Héros : Pourcentage de joueurs morts pour débloquer "One for All (II)"</value>
+  </data>
+  <data name="HeroFeatButtonAbilityPercentage" xml:space="preserve">
+    <value>Héros : Pourcentage de joueurs morts pour débloquer "One for All (III)"</value>
+  </data>
+  <data name="VillainHasOtherVision" xml:space="preserve">
+    <value>Vilain : Paramètres de vision spéciaux</value>
+  </data>
+  <data name="VillainVision" xml:space="preserve">
+    <value>Vilain : Vision</value>
+  </data>
+  <data name="VillainApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Vilain : Est affecté par les effets de vision</value>
+  </data>
+  <data name="VillainHasOtherKillCool" xml:space="preserve">
+    <value>Vilain : A un délai de recharge d'élimination modifié</value>
+  </data>
+  <data name="VillainKillCoolDown" xml:space="preserve">
+    <value>Vilain : Recharge d'élimination</value>
+  </data>
+  <data name="VillainHasOtherKillRange" xml:space="preserve">
+    <value>Vilain : A une portée d'élimination modifiée</value>
+  </data>
+  <data name="VillainKillRange" xml:space="preserve">
+    <value>Vilain : Portée d'élimination</value>
+  </data>
+  <data name="VillainAbilityCoolTime" xml:space="preserve">
+    <value>Vilain : "RECHERCHE" : Recharge de capacité</value>
+  </data>
+  <data name="VillainAbilityActiveTime" xml:space="preserve">
+    <value>Vilain : "RECHERCHE" : Durée de capacité</value>
+  </data>
+  <data name="VillainVigilanteSeeTime" xml:space="preserve">
+    <value>Vilain : Durée d'affichage de la position du Vigilante lorsqu'il utilise sa capacité</value>
+  </data>
+  <data name="VigilanteHasOtherVision" xml:space="preserve">
+    <value>Vigilante : Paramètres de vision spéciaux</value>
+  </data>
+  <data name="VigilanteVision" xml:space="preserve">
+    <value>Vigilante : Vision</value>
+  </data>
+  <data name="VigilanteApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Vigilante : Est affecté par les effets de vision</value>
+  </data>
+  <data name="VigilanteAbilityCoolTime" xml:space="preserve">
+    <value>Vigilante : "APPEL D'URGENCE" : Recharge de capacité</value>
+  </data>
+  <data name="VigilanteAbilityActiveTime" xml:space="preserve">
+    <value>Vigilante : "APPEL D'URGENCE" : Durée de capacité</value>
+  </data>
+  <data name="VigilanteAbilityCount" xml:space="preserve">
+    <value>Vigilante : "APPEL D'URGENCE" : Nombre d'utilisations</value>
+  </data>
+  <data name="VigilanteRange" xml:space="preserve">
+    <value>Vigilante : "APPEL D'URGENCE" : Portée de capacité</value>
+  </data>
+  <data name="HeroIntroDescription" xml:space="preserve">
+    <value>Tout va bien maintenant, car JE SUIS LÀ !</value>
+  </data>
+  <data name="HeroShortDescription" xml:space="preserve">
+    <value>Éliminez le mal et sauvez le vaisseau</value>
+  </data>
+  <data name="HeroFullDescription" xml:space="preserve">
+    <value>Un rôle d'ÉQUIPAGE possédant l'Alter de la paix.
+"ONE FOR ALL" : Votre Alter pour vaincre le mal.
+  - Accumule progressivement de la puissance après l'élimination de joueurs.
+********************************
+  NIVEAU 1 - Annule les éliminations des Imposteurs.
+     - Débloqué lorsqu'un joueur est mort.
+     - N'annule pas les éliminations des NEUTRES ni les capacités d'élimination d'autres joueurs.
+  NIVEAU 2 - Obtient la capacité d'élimination.
+     - Débloqué lorsqu'un nombre défini de joueurs est mort.
+  NIVEAU 3 - Obtient la capacité "RECHERCHE".
+     - Débloqué lorsqu'un nombre défini de joueurs est mort.
+********************************
+"RECHERCHE" : Révèle la position de chaque joueur pendant un certain temps.
+*En éliminant ou en étant éliminé par le Vilain, le Héros et le Vilain mourront tous les deux.</value>
+  </data>
+  <data name="VillainIntroDescription" xml:space="preserve">
+    <value>Le plus grand démon parmi les Imposteurs</value>
+  </data>
+  <data name="VillainShortDescription" xml:space="preserve">
+    <value>Plongez le vaisseau dans le désespoir !</value>
+  </data>
+  <data name="VillainFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR possédant un Alter dévastateur.
+Vos éliminations ne peuvent pas être annulées par des boucliers ou des protections (ex. Anges gardiens, Maîtres du temps, Gardes du corps).
+Vous ne pouvez jamais être tué par un rôle d'ÉQUIPAGE.
+"RECHERCHE" : Révèle la position de tous les joueurs pendant un moment.
+*En éliminant ou en étant éliminé par le Héros, le Héros et le Vilain mourront tous les deux.</value>
+  </data>
+  <data name="VigilanteIntroDescription" xml:space="preserve">
+    <value>Apportez un nouvel ordre au vaisseau</value>
+  </data>
+  <data name="VigilanteShortDescription" xml:space="preserve">
+    <value>Montrez aux membres de l'équipage la vraie justice et le vrai mal</value>
+  </data>
+  <data name="VigilanteNewHeroForTheShipShortDescription" xml:space="preserve">
+    <value>Remplacez cette justice corrompue</value>
+  </data>
+  <data name="VigilanteNewVillainForTheShipShortDescription" xml:space="preserve">
+    <value>Montrez un mal véritable à ce mal corrompu</value>
+  </data>
+  <data name="VigilanteNewEnemyNeutralForTheShipShortDescription" xml:space="preserve">
+    <value>Mettez fin à ce vaisseau sans direction</value>
+  </data>
+  <data name="VigilanteFullDescription" xml:space="preserve">
+    <value>Un rôle NEUTRE apportant un nouvel ordre.
+Objectif principal 1 : Faire en sorte qu'il ne reste que le Héros, le Vilain et le Vigilante.
+Objectif principal 2 : Faire en sorte que le Vilain et le Héros s'entretuent (vous permet de gagner avec n'importe quel camp).
+Votre état change selon la survie du Héros et du Vilain.
+Tant que cet état est affiché, vous ne pouvez pas être tué par le Héros ou le Vilain.
+"APPEL D'URGENCE" :
+  - Informe le Héros de la position d'un joueur dans le rayon d'action.
+  - Informe le Vilain de la position du Vigilante lors de l'activation.</value>
+  </data>
+  <data name="VigilanteCrewDescription" xml:space="preserve">
+    <value>Un rôle NEUTRE devenu l'allié de l'Équipage suite à la disparition du Héros.
+Objectif supplémentaire : Faire gagner l'Équipage.
+"APPEL D'URGENCE" :
+  - Informe le Héros de la position d'un joueur dans le rayon d'action.
+  - Informe le Vilain de la position du Vigilante lors de l'activation.
+Tant que cet état est affiché, vous ne pouvez pas être tué par le Héros ou le Vilain.</value>
+  </data>
+  <data name="VigilanteImpDescription" xml:space="preserve">
+    <value>Un rôle NEUTRE devenu l'allié des Imposteurs suite à la disparition du Vilain.
+Vous pouvez désormais utiliser le sabotage et les conduits.
+Objectif supplémentaire : Faire gagner les Imposteurs.
+"APPEL D'URGENCE" :
+  - Informe le Héros de la position d'un joueur dans le rayon d'action.
+  - Informe le Vilain de la position du Vigilante lors de l'activation.
+Tant que cet état est affiché, vous ne pouvez pas être tué par le Héros ou le Vilain.</value>
+  </data>
+  <data name="VigilanteNeutDescription" xml:space="preserve">
+    <value>Un rôle NEUTRE doté d'un bouton d'élimination.
+Condition de transition : Lorsque la défaite d'un camp est quasi certaine en raison de la disparition du Héros ou du Vilain.
+Objectif supplémentaire : Massacrer tout le monde sauf vous-même.
+"APPEL D'URGENCE" :
+  - Informe le Héros de la position d'un joueur dans le rayon d'action.
+  - Informe le Vilain de la position du Vigilante lors de l'activation.
+Tant que cet état est affiché, toutes les éliminations contre vous fonctionneront.</value>
+  </data>
+  <data name="search" xml:space="preserve">
+    <value>RECHERCHE</value>
+  </data>
+  <data name="call" xml:space="preserve">
+    <value>APPEL D'URGENCE</value>
+  </data>
+  <data name="InvestigatorOffice" xml:space="preserve">
+    <value>&lt;color=#9E5C46&gt;Enquêteur&lt;/color&gt;&amp;amp;&lt;color=#008A99&gt;Assistant&lt;/color&gt;</value>
+  </data>
+  <data name="Investigator" xml:space="preserve">
+    <value>Enquêteur</value>
+  </data>
+  <data name="Assistant" xml:space="preserve">
+    <value>Assistant</value>
+  </data>
+  <data name="InvestigatorApprentice" xml:space="preserve">
+    <value>Apprenti Enquêteur</value>
+  </data>
+  <data name="InvestigatorHasOtherVision" xml:space="preserve">
+    <value>Enquêteur : Paramètres de vision spéciaux</value>
+  </data>
+  <data name="InvestigatorVision" xml:space="preserve">
+    <value>Enquêteur : Vision</value>
+  </data>
+  <data name="InvestigatorApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Enquêteur : Est affecté par les effets de vision</value>
+  </data>
+  <data name="InvestigatorSearchRange" xml:space="preserve">
+    <value>Enquêteur : "ENQUÊTER" : Portée de capacité</value>
+  </data>
+  <data name="InvestigatorSearchTime" xml:space="preserve">
+    <value>Enquêteur : "ENQUÊTER" : Temps requis pour l'enquête</value>
+  </data>
+  <data name="InvestigatorSearchAssistantTime" xml:space="preserve">
+    <value>Enquêteur : "ENQUÊTER" : Temps d'enquête avec le soutien de l'Assistant</value>
+  </data>
+  <data name="InvestigatorTextShowTime" xml:space="preserve">
+    <value>Enquêteur : Durée d'affichage des résultats d'enquête</value>
+  </data>
+  <data name="AssistantHasOtherVision" xml:space="preserve">
+    <value>Assistant : Paramètres de vision spéciaux</value>
+  </data>
+  <data name="AssistantVision" xml:space="preserve">
+    <value>Assistant : Vision</value>
+  </data>
+  <data name="AssistantApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Assistant : Est affecté par les effets de vision</value>
+  </data>
+  <data name="InvestigatorApprenticeHasOtherVision" xml:space="preserve">
+    <value>Apprenti Enquêteur : Paramètres de vision spéciaux</value>
+  </data>
+  <data name="InvestigatorApprenticeVision" xml:space="preserve">
+    <value>Apprenti Enquêteur : Vision</value>
+  </data>
+  <data name="InvestigatorApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Apprenti Enquêteur : Est affecté par les effets de vision</value>
+  </data>
+  <data name="InvestigatorApprenticeAbilityCount" xml:space="preserve">
+    <value>Apprenti Enquêteur : "RÉUNION" : Nombre d'utilisations</value>
+  </data>
+  <data name="InvestigatorApprenticeAbilityCoolTime" xml:space="preserve">
+    <value>Apprenti Enquêteur : "RÉUNION" : Recharge de capacité</value>
+  </data>
+  <data name="InvestigatorApprenticeAbilityActiveTime" xml:space="preserve">
+    <value>Apprenti Enquêteur : "RÉUNION" : Temps disponible pour appuyer sur le bouton</value>
+  </data>
+  <data name="InvestigatorApprenticeHasOtherButton" xml:space="preserve">
+    <value>Apprenti Enquêteur : "RÉUNION" : Ne consomme pas le bouton de réunion d'urgence</value>
+  </data>
+  <data name="InvestigatorApprenticeHasOtherButtonNum" xml:space="preserve">
+    <value>Nombre d'utilisations sans consommation</value>
+  </data>
+  <data name="InvestigatorIntroDescription" xml:space="preserve">
+    <value>Confiez n'importe quelle affaire difficile à cet Enquêteur !</value>
+  </data>
+  <data name="InvestigatorShortDescription" xml:space="preserve">
+    <value>Ne manquez aucun indice sur la scène du crime</value>
+  </data>
+  <data name="InvestigatorFullDescription" xml:space="preserve">
+    <value>Un rôle d'ÉQUIPAGE capable d'obtenir diverses informations à partir de la scène du crime.
+Capacité passive "ENQUÊTER" :
+  - Restez près de la scène du crime pour mener l'enquête.
+  - Informations révélées :
+      1re fois : Heure du meurtre
+      2e fois : Temps écoulé entre le meurtre et le signalement
+      3e fois : Camp du meurtrier
+      4e fois : Rôle du meurtrier
+      5e fois (si activé) : Identité du meurtrier
+  - Si le cadavre a été signalé par l'Assistant, le temps d'enquête est réduit.
+Si l'Enquêteur meurt, l'Assistant devient un Apprenti Enquêteur.</value>
+  </data>
+  <data name="AssistantIntroDescription" xml:space="preserve">
+    <value>Travaillons dur pour devenir un grand enquêteur !</value>
+  </data>
+  <data name="AssistantShortDescription" xml:space="preserve">
+    <value>Aidez l'Enquêteur à résoudre l'affaire</value>
+  </data>
+  <data name="AssistantFullDescription" xml:space="preserve">
+    <value>Un rôle d'ÉQUIPAGE possédant une capacité cachée pour soutenir l'Enquêteur.
+En signalant un cadavre, vous connaîtrez l'heure exacte du décès dans le tchat de la réunion (UTC).
+À la mort de l'Enquêteur, vous devenez un Apprenti Enquêteur.</value>
+  </data>
+  <data name="InvestigatorApprenticeShortDescription" xml:space="preserve">
+    <value>Faites de votre mieux en tant qu'Apprenti Enquêteur</value>
+  </data>
+  <data name="InvestigatorApprenticeFullDescription" xml:space="preserve">
+    <value>Un rôle d'ÉQUIPAGE obtenu lorsque l'Enquêteur ou l'Assistant disparaît.
+Connaît l'heure exacte du décès des cadavres qu'il signale.
+Bouton "RÉUNION" :
+  - Permet d'ouvrir l'écran du bouton de réunion d'urgence n'importe où.</value>
+  </data>
+  <data name="FindKillTime" xml:space="preserve">
+    <value>La victime semble avoir été tuée à « {0} » (UTC)…</value>
+  </data>
+  <data name="FindReportTime" xml:space="preserve">
+    <value>Il a fallu « {0} secondes » pour découvrir le corps…</value>
+  </data>
+  <data name="FindTeam" xml:space="preserve">
+    <value>D'après les traces, c'est « {0} » qui a commis le crime !</value>
+  </data>
+  <data name="FindRole" xml:space="preserve">
+    <value>Les traces suggèrent que la victime a été attaquée par un « {0} »</value>
+  </data>
+  <data name="searchStrBase" xml:space="preserve">
+    <value>Enquête sur la scène du crime... reste {0}s</value>
+  </data>
+  <data name="reportedDeadBodyInfo" xml:space="preserve">
+    <value>Le cadavre semble avoir été tué à « {0} » (UTC)…</value>
+  </data>
+  <data name="emergencyMeeting" xml:space="preserve">
+    <value>RÉUNION D'URGENCE</value>
+  </data>
+  <data name="Lover" xml:space="preserve">
+    <value>Amants</value>
+  </data>
+  <data name="LoverIsNeutral" xml:space="preserve">
+    <value>Sont-ils des NEUTRES</value>
+  </data>
+  <data name="LoverBecomNeutral" xml:space="preserve">
+    <value>Peuvent-ils devenir des NEUTRES</value>
+  </data>
+  <data name="LoverDethWhenUnderAlive" xml:space="preserve">
+    <value>Nombre de joueurs pour déclencher le suicide</value>
+  </data>
+  <data name="LoverHasOtherKillCool" xml:space="preserve">
+    <value>A un délai de recharge d'élimination modifié</value>
+  </data>
+  <data name="LoverKillCoolDown" xml:space="preserve">
+    <value>Recharge d'élimination</value>
+  </data>
+  <data name="LoverHasOtherKillRange" xml:space="preserve">
+    <value>A une portée d'élimination modifiée</value>
+  </data>
+  <data name="LoverKillRange" xml:space="preserve">
+    <value>Portée d'élimination</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverHasOtherVision" xml:space="preserve">
+    <value>En tant que NEUTRE : Paramètres de vision spéciaux</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverVision" xml:space="preserve">
+    <value>En tant que NEUTRE : Vision</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>En tant que NEUTRE : Est affecté par les effets de vision</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverCanUseVent" xml:space="preserve">
+    <value>Peut utiliser les conduits</value>
+  </data>
+  <data name="LoverIntroDescription" xml:space="preserve">
+    <value>Rendez-vous avec l'Amour</value>
+  </data>
+  <data name="LoverShortDescription" xml:space="preserve">
+    <value>SURVIVEZ avec votre ÂME SŒUR</value>
+  </data>
+  <data name="LoverFullDescription" xml:space="preserve">
+    <value>Un rôle d'ÉQUIPAGE formant un couple.
+SURVIVEZ avec votre bien-aimé(e) et accomplissez vos objectifs pour remporter la victoire ensemble.</value>
+  </data>
+  <data name="LoverImposterFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR formant un couple.
+SURVIVEZ avec votre bien-aimé(e) et accomplissez vos objectifs pour remporter la victoire ensemble.</value>
+  </data>
+  <data name="LoverNeutralFullDescription" xml:space="preserve">
+    <value>Un rôle NEUTRE formant un couple.
+SURVIVEZ avec votre bien-aimé(e) et accomplissez vos objectifs pour remporter la victoire ensemble.</value>
+  </data>
+  <data name="LoverNeutralKillerFullDescription" xml:space="preserve">
+    <value>Un rôle NEUTRE enragé par la vengeance suite à la mort de son âme sœur.
+OBJECTIF : Éliminez-les tous !</value>
+  </data>
+  <data name="LoverKillerShortDescription" xml:space="preserve">
+    <value>Éliminez tout le monde pour venger votre amour</value>
+  </data>
+  <data name="curLover" xml:space="preserve">
+    <value>Âme sœur</value>
+  </data>
+  <data name="LoverIntoPlus" xml:space="preserve">
+    <value> est votre âme sœur</value>
+  </data>
+  <data name="Supporter" xml:space="preserve">
+    <value>Supporteur</value>
+  </data>
+  <data name="EvilSupporter" xml:space="preserve">
+    <value>Vilain Supporteur</value>
+  </data>
+  <data name="NiceSupporter" xml:space="preserve">
+    <value>Gentil Supporteur</value>
+  </data>
+  <data name="SupporterIntroDescription" xml:space="preserve">
+    <value>{0} est un {1}, menez-le à la victoire</value>
+  </data>
+  <data name="SupporterShortDescription" xml:space="preserve">
+    <value>Soutenez votre cible et gagnez la partie</value>
+  </data>
+  <data name="SupporterFullDescription" xml:space="preserve">
+    <value>Un rôle d'ÉQUIPAGE qui connaît le rôle d'un joueur à soutenir.
+Soutient actuellement :
+  - Joueur : "{0}"
+  - Rôle : "{1}"</value>
+  </data>
+  <data name="SupporterImposterFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR qui connaît le rôle d'un joueur à soutenir.
+Soutient actuellement :
+  - Joueur : "{0}"
+  - Rôle : "{1}"</value>
+  </data>
+  <data name="Sharer" xml:space="preserve">
+    <value>Partageurs</value>
+  </data>
+  <data name="SharerSharerTellKill" xml:space="preserve">
+    <value>Informe des éliminations effectuées par les autres Partageurs</value>
+  </data>
+  <data name="SharerIntroDescription" xml:space="preserve">
+    <value>Pas besoin de mots pour se comprendre</value>
+  </data>
+  <data name="SharerShortDescription" xml:space="preserve">
+    <value>Coopérez avec votre partenaire</value>
+  </data>
+  <data name="SharerFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de connaître en permanence la position de son partenaire.</value>
+  </data>
+  <data name="curSharer" xml:space="preserve">
+    <value>Vos Partageurs</value>
+  </data>
+  <data name="SharerIntoPlus" xml:space="preserve">
+    <value> est votre partenaire</value>
+  </data>
+  <data name="sharerKill" xml:space="preserve">
+    <value>Partageurs : {0} a éliminé quelqu'un</value>
+  </data>
+  <data name="Traitor" xml:space="preserve">
+    <value>Traître</value>
+  </data>
+  <data name="TraitorAbilityCoolTime" xml:space="preserve">
+    <value>"PIRATAGE" : Recharge de capacité</value>
+  </data>
+  <data name="TraitorAbilityActiveTime" xml:space="preserve">
+    <value>"PIRATAGE" : Durée de capacité</value>
+  </data>
+  <data name="TraitorIntroDescription" xml:space="preserve">
+    <value>Était un « {0} », maintenant un Traître</value>
+  </data>
+  <data name="TraitorShortDescription" xml:space="preserve">
+    <value>Éliminez tout le monde en tant que traître à l'Équipage</value>
+  </data>
+  <data name="TraitorFullDescription" xml:space="preserve">
+    <value>Un rôle NEUTRE qui a trahi l'Équipage.
+"PIRATAGE" : Accédez à distance aux terminaux d'information.</value>
+  </data>
+  <data name="traitorCracking" xml:space="preserve">
+    <value>PIRATAGE</value>
+  </data>
+  <data name="Kids" xml:space="preserve">
+    <value>Délinquant</value>
+  </data>
+  <data name="Delinquent" xml:space="preserve">
+    <value>Délinquant</value>
+  </data>
+  <data name="Wisp" xml:space="preserve">
+    <value>Feu Follet</value>
+  </data>
+  <data name="DelinquentHasOtherVision" xml:space="preserve">
+    <value>Paramètres de vision spéciaux</value>
+  </data>
+  <data name="DelinquentVision" xml:space="preserve">
+    <value>Vision</value>
+  </data>
+  <data name="DelinquentApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Est affecté par les effets de vision</value>
+  </data>
+  <data name="DelinquentRange" xml:space="preserve">
+    <value>"EXPLOSION" : Portée de capacité</value>
+  </data>
+  <data name="DelinquentAbilityCoolTime" xml:space="preserve">
+    <value>"EXPLOSION/GRAFFITI" : Recharge de capacité</value>
+  </data>
+  <data name="DelinquentAbilityCount" xml:space="preserve">
+    <value>"EXPLOSION" : Nombre de graffitis requis pour débloquer</value>
+  </data>
+  <data name="WispTorchAbilityNum" xml:space="preserve">
+    <value>"TORCHE" : Nombre par défaut d'utilisations</value>
+  </data>
+  <data name="WispWinNum" xml:space="preserve">
+    <value>"TORCHE" : Nombre de joueurs à affecter pour gagner</value>
+  </data>
+  <data name="WispTorchNum" xml:space="preserve">
+    <value>"TORCHE" : Nombre d'utilisations</value>
+  </data>
+  <data name="WispTorchRange" xml:space="preserve">
+    <value>"TORCHE" : Portée de la lumière</value>
+  </data>
+  <data name="WispTorchActiveTime" xml:space="preserve">
+    <value>"TORCHE" : Temps avant l'extinction</value>
+  </data>
+  <data name="WispBlackOutTime" xml:space="preserve">
+    <value>"BLACKOUT" : Durée de capacité</value>
+  </data>
+  <data name="WispAbilityCoolTime" xml:space="preserve">
+    <value>"BLACKOUT" : Recharge de capacité</value>
+  </data>
+  <data name="WispIsReportAbility" xml:space="preserve">
+    <value>"BLACKOUT" : Alerte lors des réunions en cas d'utilisation</value>
+  </data>
+  <data name="DelinquentIntroDescription" xml:space="preserve">
+    <value>Un petit voyou adepte des farces</value>
+  </data>
+  <data name="DelinquentShortDescription" xml:space="preserve">
+    <value>Sème le chaos avec "GRAFFITI" et "EXPLOSION" !</value>
+  </data>
+  <data name="DelinquentFullDescription" xml:space="preserve">
+    <value>Un rôle NEUTRE associé au Feu Follet.
+"GRAFFITI" : Place des marques étranges.
+"EXPLOSION" : Se fait sauter et élimine les joueurs à proximité.</value>
+  </data>
+  <data name="scribble" xml:space="preserve">
+    <value>GRAFFITI</value>
+  </data>
+  <data name="selfBomb" xml:space="preserve">
+    <value>EXPLOSION</value>
+  </data>
+  <data name="WispShortDescription" xml:space="preserve">
+    <value>Plongez-les dans le BLACKOUT pour l'emporter</value>
+  </data>
+  <data name="WispFullDescription" xml:space="preserve">
+    <value>Un FANTÔME NEUTRE qui était auparavant un Délinquant.
+"TORCHE" : Place une torche au point d'apparition.
+"BLACKOUT" : Réduit la vision des joueurs.</value>
+  </data>
+  <data name="WispSetTorchButton" xml:space="preserve">
+    <value>TORCHE</value>
+  </data>
+  <data name="WispSetTorch" xml:space="preserve">
+    <value>Un Feu Follet a joué un tour avec les lumières !</value>
+  </data>
+  <data name="scribeText" xml:space="preserve">
+    <value>Encore {0} fois avant l'EXPLOSION</value>
+  </data>
+  <data name="Buddy" xml:space="preserve">
+    <value>Copains</value>
+  </data>
+  <data name="BuddyAwakeTaskGage" xml:space="preserve">
+    <value>Taux d'accomplissement des tâches pour révéler le rôle</value>
+  </data>
+  <data name="BuddyIntroDescription" xml:space="preserve">
+    <value>Soyez les meilleurs copains du monde !
+{0} est votre copain</value>
+  </data>
+  <data name="BuddyShortDescription" xml:space="preserve">
+    <value>Faites confiance à votre copain et décrochez la victoire !</value>
+  </data>
+  <data name="BuddyFullDescription" xml:space="preserve">
+    <value>Un rôle d'ÉQUIPAGE fonctionnant par deux.
+Votre copain : {0}</value>
+  </data>
+  <data name="Guesser" xml:space="preserve">
+    <value>Devineur</value>
+  </data>
+  <data name="NiceGuesser" xml:space="preserve">
+    <value>Gentil Devineur</value>
+  </data>
+  <data name="EvilGuesser" xml:space="preserve">
+    <value>Vilain Devineur</value>
+  </data>
+  <data name="GuesserCanCallMeeting" xml:space="preserve">
+    <value>Peut convoquer une réunion d'urgence</value>
+  </data>
+  <data name="GuesserGuessNum" xml:space="preserve">
+    <value>"DEVINER" : Nombre d'utilisations</value>
+  </data>
+  <data name="GuesserMaxGuessNumWhenMeeting" xml:space="preserve">
+    <value>"DEVINER" : Utilisations par réunion</value>
+  </data>
+  <data name="BothGuesser" xml:space="preserve">
+    <value>À la fois Gentil et Vilain</value>
+  </data>
+  <data name="NiceGuesserOnly" xml:space="preserve">
+    <value>Gentil Devineur uniquement</value>
+  </data>
+  <data name="EvilGuesserOnly" xml:space="preserve">
+    <value>Vilain Devineur uniquement</value>
+  </data>
+  <data name="GuesserIntroDescription" xml:space="preserve">
+    <value>DEVINEZ et TIREZ !</value>
+  </data>
+  <data name="GuesserShortDescription" xml:space="preserve">
+    <value>Devinez le rôle des autres joueurs et TIREZ !</value>
+  </data>
+  <data name="GuesserFullDescription" xml:space="preserve">
+    <value>Un rôle capable d'éliminer un joueur en devinant son rôle pendant les réunions !
+"DEVINER" : Devinez un rôle et tirez.
+  - Si la prédiction est correcte, la cible est éliminée.
+  - Si la prédiction est incorrecte, le Devineur meurt.</value>
+  </data>
+  <data name="guesserUiTitle" xml:space="preserve">
+    <value>DEVINEZ LE RÔLE DE {0} !</value>
+  </data>
+  <data name="guesserUiInfo" xml:space="preserve">
+    <value>BALLES : {0}/{1} restantes</value>
+  </data>
+  <data name="guesserConfirmMenu" xml:space="preserve">
+    <value>Deviner {0} en tant que « {1} ». Confirmer ?</value>
+  </data>
+  <data name="Mover" xml:space="preserve">
+    <value>Déménageur</value>
+  </data>
+  <data name="NiceMover" xml:space="preserve">
+    <value>Gentil Déménageur</value>
+  </data>
+  <data name="EvilMover" xml:space="preserve">
+    <value>Vilain Déménageur</value>
+  </data>
+  <data name="MoverAbilityCoolTime" xml:space="preserve">
+    <value>"DÉPLACER" : Recharge de capacité</value>
+  </data>
+  <data name="MoverAbilityActiveTime" xml:space="preserve">
+    <value>"DÉPLACER" : Durée de capacité</value>
+  </data>
+  <data name="MoverAbilityCount" xml:space="preserve">
+    <value>"DÉPLACER" : Nombre d'utilisations</value>
+  </data>
+  <data name="MoverIntroDescription" xml:space="preserve">
+    <value>Un déménageur capable de déplacer presque tout</value>
+  </data>
+  <data name="MoverShortDescription" xml:space="preserve">
+    <value>Déplacez des tâches, des conduits et obtenez l'avantage !</value>
+  </data>
+  <data name="MoverFullDescription" xml:space="preserve">
+    <value>Un rôle capable de déplacer des objets de la carte grâce à sa capacité.
+"DÉPLACER" : Déplace littéralement des objets.</value>
+  </data>
+  <data name="Moving" xml:space="preserve">
+    <value>DÉPLACER</value>
+  </data>
+  <data name="Accelerator" xml:space="preserve">
+    <value>Accélérateur</value>
+  </data>
+  <data name="NiceAccelerator" xml:space="preserve">
+    <value>Gentil Accélérateur</value>
+  </data>
+  <data name="EvilAccelerator" xml:space="preserve">
+    <value>Vilain Accélérateur</value>
+  </data>
+  <data name="AcceleratorAbilityCoolTime" xml:space="preserve">
+    <value>"PANNEAU" : Recharge de capacité</value>
+  </data>
+  <data name="AcceleratorAbilityActiveTime" xml:space="preserve">
+    <value>"PANNEAU" : Durée de capacité</value>
+  </data>
+  <data name="AcceleratorAbilityCount" xml:space="preserve">
+    <value>"PANNEAU" : Nombre d'utilisations</value>
+  </data>
+  <data name="AcceleratorSpeed" xml:space="preserve">
+    <value>"PANNEAU" : Accélération</value>
+  </data>
+  <data name="AcceleratorUseOtherPlayer" xml:space="preserve">
+    <value>"PANNEAU" : Peut accélérer les autres joueurs</value>
+  </data>
+  <data name="AcceleratorIntroDescription" xml:space="preserve">
+    <value>La voie à suivre est un sens unique !!</value>
+  </data>
+  <data name="AcceleratorShortDescription" xml:space="preserve">
+    <value>Placez des panneaux d'accélération pour semer vos ennemis</value>
+  </data>
+  <data name="AcceleratorFullDescription" xml:space="preserve">
+    <value>Un rôle capable de placer des panneaux d'accélération.
+"PANNEAU" : Place des panneaux d'accélération sur la carte.</value>
+  </data>
+  <data name="AccelerateSet" xml:space="preserve">
+    <value>PANNEAU</value>
+  </data>
+  <data name="Skater" xml:space="preserve">
+    <value>Patineur</value>
+  </data>
+  <data name="NiceSkater" xml:space="preserve">
+    <value>Gentil Patineur</value>
+  </data>
+  <data name="EvilSkater" xml:space="preserve">
+    <value>Vilain Patineur</value>
+  </data>
+  <data name="SkaterAbilityCoolTime" xml:space="preserve">
+    <value>"PATINER" : Recharge de capacité</value>
+  </data>
+  <data name="SkaterAbilityActiveTime" xml:space="preserve">
+    <value>"PATINER" : Temps avant de pouvoir annuler</value>
+  </data>
+  <data name="SkaterAbilityCount" xml:space="preserve">
+    <value>"PATINER" : Nombre d'utilisations</value>
+  </data>
+  <data name="SkaterAcceleration" xml:space="preserve">
+    <value>"PATINER" : Accélération</value>
+  </data>
+  <data name="SkaterMaxSpeed" xml:space="preserve">
+    <value>"PATINER" : Vitesse maximale</value>
+  </data>
+  <data name="SkaterFriction" xml:space="preserve">
+    <value>"PATINER" : Coefficient de frottement</value>
+  </data>
+  <data name="SkaterUseE" xml:space="preserve">
+    <value>"PATINER" : Rebondissement contre les murs</value>
+  </data>
+  <data name="SkaterEValue" xml:space="preserve">
+    <value>"PATINER" : Coefficient de restitution</value>
+  </data>
+  <data name="SkaterCanUseSpeed" xml:space="preserve">
+    <value>"PATINER" : Vitesse max permettant l'utilisation des boutons</value>
+  </data>
+  <data name="SkaterIntroDescription" xml:space="preserve">
+    <value>Le vaisseau est ma patinoire</value>
+  </data>
+  <data name="SkaterShortDescription" xml:space="preserve">
+    <value>Utilisez "PATINER" pour devancer vos rivaux</value>
+  </data>
+  <data name="SkaterFullDescription" xml:space="preserve">
+    <value>Un rôle capable d'accélérer avec la capacité "PATINER".
+Glissez comme sur de la glace et prenez de la vitesse !</value>
+  </data>
+  <data name="SkaterSkateOn" xml:space="preserve">
+    <value>PATINER</value>
+  </data>
+  <data name="SkaterSkateOff" xml:space="preserve">
+    <value>Annuler PATINER</value>
+  </data>
+  <data name="AssassinCanKilledFromLiberal" xml:space="preserve">
+    <value>Assassin : Peut être tué par les LIBÉRAUX</value>
+  </data>
+  <data name="Barter" xml:space="preserve">
+    <value>Trocanteur</value>
+  </data>
+  <data name="BarterAwakeDeadPlayerNum" xml:space="preserve">
+    <value>"ÉVEIL" : Nombre de joueurs morts requis</value>
+  </data>
+  <data name="BarterAwakeKillNum" xml:space="preserve">
+    <value>"ÉVEIL" : Éliminations requises</value>
+  </data>
+  <data name="BarterAwakeTaskRate" xml:space="preserve">
+    <value>"ÉVEIL" : Taux d'accomplissement des tâches requis</value>
+  </data>
+  <data name="BarterCanCallMeeting" xml:space="preserve">
+    <value>Peut convoquer une réunion d'urgence</value>
+  </data>
+  <data name="BarterCastlingInfo" xml:space="preserve">
+    <value>Afficher la notification lors du roque</value>
+  </data>
+  <data name="BarterCastlingNum" xml:space="preserve">
+    <value>"ROQUE" : Nombre d'utilisations</value>
+  </data>
+  <data name="BarterFullDescription" xml:space="preserve">
+    <value>Un rôle capable d'échanger les votes ou les positions avec d'autres joueurs grâce au "ROQUE".</value>
+  </data>
+  <data name="BarterIntroDescription" xml:space="preserve">
+    <value>Échange équivalent.</value>
+  </data>
+  <data name="BarterMaxCastlingNumWhenMeeting" xml:space="preserve">
+    <value>"ROQUE" : Utilisations max par réunion</value>
+  </data>
+  <data name="BarterOneCastlingNum" xml:space="preserve">
+    <value>"ROQUE" : Nombre de charges consommées par utilisation</value>
+  </data>
+  <data name="BarterRandomCastling" xml:space="preserve">
+    <value>Roque aléatoire si aucune cible n'est à proximité</value>
+  </data>
+  <data name="BarterRandomCastlingLabel" xml:space="preserve">
+    <value>Non spécifié</value>
+  </data>
+  <data name="BarterShortDescription" xml:space="preserve">
+    <value>Échangez vos positions avec d'autres joueurs</value>
+  </data>
+  <data name="BarterShowCastlingOther" xml:space="preserve">
+    <value>Notifier la cible de l'échange</value>
+  </data>
+  <data name="EvilBarter" xml:space="preserve">
+    <value>Vilain Trocanteur</value>
+  </data>
+  <data name="GuesserCanCrewmate" xml:space="preserve">
+    <value>Peut deviner les rôles d'Équipage</value>
+  </data>
+  <data name="GuesserCanDove" xml:space="preserve">
+    <value>Peut deviner les rôles de Colombe</value>
+  </data>
+  <data name="GuesserCanImpostor" xml:space="preserve">
+    <value>Peut deviner les rôles d'Imposteur</value>
+  </data>
+  <data name="GuesserCanMilitant" xml:space="preserve">
+    <value>Peut deviner les rôles de Militant</value>
+  </data>
+  <data name="GuesserGuessDefaultRoleMode" xml:space="preserve">
+    <value>Méthode par défaut pour deviner les rôles</value>
+  </data>
+  <data name="InvestigatorContinueSearch" xml:space="preserve">
+    <value>Continuer "ENQUÊTER" après la réunion</value>
+  </data>
+  <data name="InvestigatorForceMeetingOnSearchEnd" xml:space="preserve">
+    <value>Forcer une réunion lorsque "ENQUÊTER" est terminé</value>
+  </data>
+  <data name="InvestigatorSearchCanContineMeetingNum" xml:space="preserve">
+    <value>Nombre max de réunions pour continuer "ENQUÊTER"</value>
+  </data>
+  <data name="InvestigatorSearchCanFindName" xml:space="preserve">
+    <value>Inclure le nom du joueur dans la cause du décès quand "ENQUÊTER" est terminé</value>
+  </data>
+  <data name="MarlinCanSeeLiberal" xml:space="preserve">
+    <value>Merlin : Peut voir la faction Libérale</value>
+  </data>
+  <data name="NiceBarter" xml:space="preserve">
+    <value>Gentil Trocanteur</value>
+  </data>
+</root>

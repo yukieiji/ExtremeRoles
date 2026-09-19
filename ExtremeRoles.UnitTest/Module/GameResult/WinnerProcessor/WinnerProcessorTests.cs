@@ -24,9 +24,8 @@ public class WinnerProcessorTests
     private sealed class DummySingleRole : SingleRoleBase
     {
         public DummySingleRole(RoleCore core, int gameControlId = 0)
+            : base(new RoleArgs(core, RoleProp.None))
         {
-            var field = typeof(SingleRoleBase).GetField("<Core>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-            field?.SetValue(this, core);
             this.SetControlId(gameControlId);
         }
 

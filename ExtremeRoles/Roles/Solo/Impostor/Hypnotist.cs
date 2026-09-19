@@ -819,7 +819,7 @@ public sealed class Hypnotist :
 		this.canAwakeNow = (
 			this.awakeCheckImpNum >= impNum &&
 			(
-				GameDataRecomputeTaskCountsPatch.IsDisableTaskWin ||
+				GameDataRecomputeTaskCountsPatchBody.IsDisableTaskWin ||
 				this.awakeCheckTaskGage <= ((float)compTask / (float)totalTask)
 			)
 		);

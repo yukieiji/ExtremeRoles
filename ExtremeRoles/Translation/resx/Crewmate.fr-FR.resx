@@ -1,0 +1,1339 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddJail" xml:space="preserve">
+    <value>Emprisonner</value>
+  </data>
+  <data name="Agency" xml:space="preserve">
+    <value>Agence</value>
+  </data>
+  <data name="AgencyAbilityCoolTime" xml:space="preserve">
+    <value>« PRENDRE EN CHARGE » : Temps de recharge</value>
+  </data>
+  <data name="AgencyAbilityCount" xml:space="preserve">
+    <value>« PRENDRE EN CHARGE » : Nombre d'utilisations</value>
+  </data>
+  <data name="AgencyCanSeeTaskBar" xml:space="preserve">
+    <value>Peut voir la barre de tâches du joueur pris en charge</value>
+  </data>
+  <data name="AgencyFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable d'effectuer les tâches d'autres joueurs à leur place.
+Compétence « PRENDRE EN CHARGE » :
+- S'active en ciblant un joueur à proximité.
+- Prend en charge une tâche du joueur ciblé et l'accomplit à sa place.
+- La tâche accomplie est créditée au joueur d'origine.</value>
+  </data>
+  <data name="AgencyIntroDescription" xml:space="preserve">
+    <value>Laissez-moi m'occuper de vos tâches !</value>
+  </data>
+  <data name="AgencyMaxTaskNum" xml:space="preserve">
+    <value>Nombre maximal de tâches pouvant être prises en charge</value>
+  </data>
+  <data name="AgencyShortDescription" xml:space="preserve">
+    <value>Prenez en charge les tâches des autres pour faire progresser l'équipage</value>
+  </data>
+  <data name="AgencyTakeTaskRange" xml:space="preserve">
+    <value>« PRENDRE EN CHARGE » : Portée de la compétence</value>
+  </data>
+  <data name="Bait" xml:space="preserve">
+    <value>Appât</value>
+  </data>
+  <data name="BaitAwakeTaskGage" xml:space="preserve">
+    <value>Taux d'accomplissement des tâches pour s'éveiller</value>
+  </data>
+  <data name="BaitDelayUntilForceReport" xml:space="preserve">
+    <value>Délai avant le signalement forcé</value>
+  </data>
+  <data name="BaitEnableBaitBenefit" xml:space="preserve">
+    <value>Activer le bonus de rechargement d'élimination après signalement forcé</value>
+  </data>
+  <data name="BaitFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER qui force un signalement de son propre corps après un certain délai lorsqu'il est éliminé.
+Compétence « Signalement forcé » :
+- Lorsqu'il est éliminé, déclenche un signalement forcé après le « Délai avant le signalement forcé ».
+- Si l'option « Activer le bonus de rechargement d'élimination après signalement forcé » est ACTIVÉE, la vitesse de rechargement du bouton d'élimination des tueurs est augmentée pendant une certaine durée après sa mort.</value>
+  </data>
+  <data name="BaitIntroDescription" xml:space="preserve">
+    <value>Je suis un délicieux appât</value>
+  </data>
+  <data name="BaitKillCoolReduceMulti" xml:space="preserve">
+    <value>Multiplicateur de vitesse de rechargement d'élimination</value>
+  </data>
+  <data name="BaitReduceTimer" xml:space="preserve">
+    <value>Durée du bonus</value>
+  </data>
+  <data name="BaitShortDescription" xml:space="preserve">
+    <value>Servez d'appât pour piéger les imposteurs et neutres</value>
+  </data>
+  <data name="Bakary" xml:space="preserve">
+    <value>Boulanger</value>
+  </data>
+  <data name="BakaryBadBakeTime" xml:space="preserve">
+    <value>Temps de cuisson pour du pain brûlé</value>
+  </data>
+  <data name="BakaryChangeCooking" xml:space="preserve">
+    <value>Possibilité de modifier la cuisson du pain</value>
+  </data>
+  <data name="BakaryFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable d'offrir du pain aux autres joueurs.
+Compétence « PAIN » :
+- S'active en ciblant un joueur à proximité.
+- Offrez du pain pour modifier temporairement la vitesse de déplacement du joueur.</value>
+  </data>
+  <data name="BakaryGoodBakeTime" xml:space="preserve">
+    <value>Temps de cuisson pour du bon pain</value>
+  </data>
+  <data name="BakaryIntroDescription" xml:space="preserve">
+    <value>Du pain frais pour tout le monde !</value>
+  </data>
+  <data name="BakaryShortDescription" xml:space="preserve">
+    <value>Offrez du pain aux autres joueurs pour modifier leur vitesse</value>
+  </data>
+  <data name="BlockModeAbilityAndKillButton" xml:space="preserve">
+    <value>Interdire les compétences et les éliminations</value>
+  </data>
+  <data name="BlockModeAbilityAndReportButton" xml:space="preserve">
+    <value>Interdire les compétences et les signalements</value>
+  </data>
+  <data name="BlockModeAbilityButton" xml:space="preserve">
+    <value>Interdire le bouton de compétence</value>
+  </data>
+  <data name="BlockModeAll" xml:space="preserve">
+    <value>Interdire les compétences, les signalements et les éliminations</value>
+  </data>
+  <data name="BlockModeKillAndReportButton" xml:space="preserve">
+    <value>Interdire les éliminations et les signalements</value>
+  </data>
+  <data name="BlockModeKillButton" xml:space="preserve">
+    <value>Interdire le bouton d'élimination</value>
+  </data>
+  <data name="BlockModeNone" xml:space="preserve">
+    <value>Aucun désavantage</value>
+  </data>
+  <data name="BlockModeReportButton" xml:space="preserve">
+    <value>Interdire le bouton de signalement</value>
+  </data>
+  <data name="BodyGuard" xml:space="preserve">
+    <value>Garde du corps</value>
+  </data>
+  <data name="BodyGuardAbilityCoolTime" xml:space="preserve">
+    <value>« PROTÉGER » : Temps de recharge</value>
+  </data>
+  <data name="BodyGuardAbilityCount" xml:space="preserve">
+    <value>« PROTÉGER » : Nombre d'utilisations</value>
+  </data>
+  <data name="BodyGuardFeatMeetingAbilityTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour débloquer la compétence en réunion</value>
+  </data>
+  <data name="BodyGuardFeatMeetingReportTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour débloquer l'annonce en réunion</value>
+  </data>
+  <data name="BodyGuardFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable d'accorder une « Protection » à d'autres joueurs.
+Compétence « PROTÉGER » :
+- S'active en ciblant un joueur à proximité pour lui appliquer une protection.
+- Si un joueur protégé subit une tentative d'élimination par bouton d'élimination, l'attaque est bloquée et le Garde du corps meurt à sa place (Mort par martyre).
+- Le Garde du corps peut également se protéger lui-même une fois.</value>
+  </data>
+  <data name="BodyGuardIntroDescription" xml:space="preserve">
+    <value>Je protégerai tout le monde, au péril de ma vie</value>
+  </data>
+  <data name="BodyGuardIsBlockMeetingKill" xml:space="preserve">
+    <value>Bloquer les éliminations pendant les réunions</value>
+  </data>
+  <data name="BodyGuardIsReportPlayerName" xml:space="preserve">
+    <value>Rapporter les noms des joueurs protégés dans la réunion</value>
+  </data>
+  <data name="BodyGuardPlayerNameOnly" xml:space="preserve">
+    <value>Nom du Garde du corps uniquement</value>
+  </data>
+  <data name="BodyGuardReportPlayerMode" xml:space="preserve">
+    <value>Mode d'annonce des noms dans le rapport</value>
+  </data>
+  <data name="BodyGuardShieldRange" xml:space="preserve">
+    <value>« PROTÉGER » : Portée de la compétence</value>
+  </data>
+  <data name="BodyGuardShortDescription" xml:space="preserve">
+    <value>Protégez vos alliés contre les attaques</value>
+  </data>
+  <data name="BothPlayerName" xml:space="preserve">
+    <value>Noms des deux joueurs</value>
+  </data>
+  <data name="CEO" xml:space="preserve">
+    <value>C.E.O</value>
+  </data>
+  <data name="CEOAwakeTaskGage" xml:space="preserve">
+    <value>« ÉVEIL » : Taux d'accomplissement des tâches requis</value>
+  </data>
+  <data name="CEOExiledOverride" xml:space="preserve">
+    <value>Le vote a été annulé par l'autorité du C.E.O</value>
+  </data>
+  <data name="CEOFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER qui ressuscite toujours lorsqu'il est éliminé par vote en réunion.
+- Si ce rôle est éliminé par vote, il ressuscite automatiquement après 5 secondes sans aucun désavantage.
+- Si l'option « Afficher les votes contre ce rôle » est DÉSACTIVÉE, les votes ne seront affichés que si le nombre de votes est suffisant pour l'éliminer.
+
+Réunion spéciale « Réunion C.E.O » :
+- Lorsque l'option est activée, se déclenche lorsque le C.E.O est éliminé par vote.
+- Une réunion où le C.E.O détient tous les pouvoirs (passer, éliminer). Les autres joueurs peuvent participer aux discussions mais n'ont pas le droit de voter.
+- Le C.E.O ne peut pas se cibler lui-même.</value>
+  </data>
+  <data name="CEOIntroDescription" xml:space="preserve">
+    <value>C'est moi, et moi seul, le C.E.O</value>
+  </data>
+  <data name="CEOIsShowRolePlayerVote" xml:space="preserve">
+    <value>Afficher les votes contre ce rôle</value>
+  </data>
+  <data name="CEOIsUseCEOMeeting" xml:space="preserve">
+    <value>Réunion spéciale « Réunion C.E.O »</value>
+  </data>
+  <data name="CEOMeetingCEO" xml:space="preserve">
+    <value>Réunion C.E.O
+(Vous détenez tous les pouvoirs)</value>
+  </data>
+  <data name="CEOMeetingOther" xml:space="preserve">
+    <value>Réunion C.E.O
+(Conseillez le C.E.O)</value>
+  </data>
+  <data name="CEOMeetingSelect" xml:space="preserve">
+    <value>Par l'autorité du C.E.O, « {0} » a été expulsé(e)</value>
+  </data>
+  <data name="CEOMeetingSkip" xml:space="preserve">
+    <value>Le C.E.O a choisi de passer le vote</value>
+  </data>
+  <data name="CEOShortDescription" xml:space="preserve">
+    <value>Voter contre moi lors d'une réunion est inutile</value>
+  </data>
+  <data name="Captain" xml:space="preserve">
+    <value>Capitaine</value>
+  </data>
+  <data name="CaptainAwakeTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour s'éveiller comme Capitaine</value>
+  </data>
+  <data name="CaptainAwakedDefaultVoteNum" xml:space="preserve">
+    <value>« VOTE SPÉCIAL » : Nombre de votes par défaut</value>
+  </data>
+  <data name="CaptainChargeVoteWhenSkip" xml:space="preserve">
+    <value>« VOTE SPÉCIAL » : Votes accumulés par passer/non-vote</value>
+  </data>
+  <data name="CaptainFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable de voter plusieurs fois pendant une réunion.
+« VOTE SPÉCIAL » :
+- Lors de son utilisation, ajoute plusieurs votes au vote du joueur pendant les réunions.
+- Peut être utilisé si vous avez accumulé plus de 1 vote. Les votes sont accumulés en passant ou en ne votant pas (compte aussi avant la révélation du rôle).
+- Affiche une icône sur le nom du joueur lorsqu'il est utilisé. Changer de cible en réutilisant la compétence.
+- À l'utilisation, consomme tous les votes accumulés et réinitialise la charge.</value>
+  </data>
+  <data name="CaptainIntroDescription" xml:space="preserve">
+    <value>Un grand pouvoir implique de grandes responsabilités</value>
+  </data>
+  <data name="CaptainShortDescription" xml:space="preserve">
+    <value>Accumulez des votes pour faire pencher la balance en réunion</value>
+  </data>
+  <data name="Carpenter" xml:space="preserve">
+    <value>Charpentier</value>
+  </data>
+  <data name="CarpenterAbilityCoolTime" xml:space="preserve">
+    <value>« CAMÉRA / SCELLER » : Temps de recharge</value>
+  </data>
+  <data name="CarpenterAbilityCount" xml:space="preserve">
+    <value>Nombre total d'utilisations de compétences</value>
+  </data>
+  <data name="CarpenterAwakeTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour s'éveiller comme Charpentier</value>
+  </data>
+  <data name="CarpenterFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable d'installer des « CAMÉRAS » ou de « SCELLER » des conduits.
+- Peut basculer entre « Installer une caméra » et « Sceller un conduit » via la molette de la souris.
+- « CAMÉRA » : Place une caméra de surveillance à la position du joueur, accessible depuis un moniteur de sécurité.
+- « SCELLER » : Scelle un conduit et bloque l'accès des joueurs (n'annule pas la tâche de nettoyage de conduit).</value>
+  </data>
+  <data name="CarpenterIntroDescription" xml:space="preserve">
+    <value>Laissez-moi m'occuper des réparations du vaisseau</value>
+  </data>
+  <data name="CarpenterRemoveVentScrew" xml:space="preserve">
+    <value>« SCELLER » : Nombre de « vis » consommées</value>
+  </data>
+  <data name="CarpenterRemoveVentStopTime" xml:space="preserve">
+    <value>« SCELLER » : Durée de la compétence</value>
+  </data>
+  <data name="CarpenterSetCameraScrew" xml:space="preserve">
+    <value>« CAMÉRA » : Nombre de « vis » consommées</value>
+  </data>
+  <data name="CarpenterSetCameraStopTime" xml:space="preserve">
+    <value>« CAMÉRA » : Durée de la compétence</value>
+  </data>
+  <data name="CarpenterShortDescription" xml:space="preserve">
+    <value>Placez des caméras et scellez des conduits</value>
+  </data>
+  <data name="CrewmateFullDescription" xml:space="preserve">
+    <value>Rôle de Coéquipier.
+Accomplissez vos tâches tout en expulsant tous les Imposteurs du vaisseau !</value>
+  </data>
+  <data name="CurseMaker" xml:space="preserve">
+    <value>Maître des Malédictions</value>
+  </data>
+  <data name="CurseMakerAbilityActiveTime" xml:space="preserve">
+    <value>« MALÉDICTION » : Secondes pour utiliser la compétence</value>
+  </data>
+  <data name="CurseMakerAbilityCoolTime" xml:space="preserve">
+    <value>« MALÉDICTION » : Temps de recharge</value>
+  </data>
+  <data name="CurseMakerAbilityCount" xml:space="preserve">
+    <value>« MALÉDICTION » : Nombre maximal d'utilisations</value>
+  </data>
+  <data name="CurseMakerAdditionalKillCool" xml:space="preserve">
+    <value>« MALÉDICTION » : Pénalité de temps de recharge d'élimination infligée</value>
+  </data>
+  <data name="CurseMakerCursingRange" xml:space="preserve">
+    <value>« MALÉDICTION » : Portée par rapport au cadavre</value>
+  </data>
+  <data name="CurseMakerFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable de maudire le tueur en consommant un cadavre.
+En utilisant « MALÉDICTION » sur un cadavre, vous infligez une pénalité au temps de recharge du tueur et réinitialisez son temps de recharge. Le cadavre disparaît selon les paramètres.
+L'augmentation du temps de recharge est permanente.</value>
+  </data>
+  <data name="CurseMakerIntroDescription" xml:space="preserve">
+    <value>Maudissez l'imposteur avec la rancœur des cadavres !</value>
+  </data>
+  <data name="CurseMakerIsDeadBodySearch" xml:space="preserve">
+    <value>Afficher des flèches vers les cadavres</value>
+  </data>
+  <data name="CurseMakerIsMultiDeadBodySearch" xml:space="preserve">
+    <value>Afficher plusieurs flèches vers les cadavres</value>
+  </data>
+  <data name="CurseMakerIsNotRemoveDeadBodyByTask" xml:space="preserve">
+    <value>« MALÉDICTION » : Ne consomme pas le cadavre</value>
+  </data>
+  <data name="CurseMakerIsReduceSearchForTask" xml:space="preserve">
+    <value>L'accomplissement des tâches accélère l'apparition des flèches</value>
+  </data>
+  <data name="CurseMakerNotRemoveDeadBodyTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour ne pas consommer le cadavre</value>
+  </data>
+  <data name="CurseMakerReduceSearchDeadBodyTime" xml:space="preserve">
+    <value>Réduction du temps d'apparition des flèches</value>
+  </data>
+  <data name="CurseMakerReduceSearchTaskGage" xml:space="preserve">
+    <value>Taux de tâches requis</value>
+  </data>
+  <data name="CurseMakerSearchDeadBodyTime" xml:space="preserve">
+    <value>Secondes après la mort pour activer les flèches vers le cadavre</value>
+  </data>
+  <data name="CurseMakerShortDescription" xml:space="preserve">
+    <value>Maudissez vos ennemis pour venger vos camarades</value>
+  </data>
+  <data name="CurseMakerTaskCurseTimeReduceRate" xml:space="preserve">
+    <value>Taux de réduction de la durée de compétence par tâche accomplie</value>
+  </data>
+  <data name="Delusioner" xml:space="preserve">
+    <value>Illusionniste</value>
+  </data>
+  <data name="DelusionerAbilityCoolTime" xml:space="preserve">
+    <value>« DÉVIER » : Temps de recharge</value>
+  </data>
+  <data name="DelusionerAbilityCount" xml:space="preserve">
+    <value>« DÉVIER » : Nombre maximal d'utilisations</value>
+  </data>
+  <data name="DelusionerAwakeVoteNum" xml:space="preserve">
+    <value>Nombre d'auto-votes pour révéler le rôle</value>
+  </data>
+  <data name="DelusionerDeflectDamagePenaltyRate" xml:space="preserve">
+    <value>« DÉVIER » : Pénalité de temps de recharge par utilisation</value>
+  </data>
+  <data name="DelusionerEnableCounter" xml:space="preserve">
+    <value>« DÉVIER » : Activer le déclenchement intempestif</value>
+  </data>
+  <data name="DelusionerFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable de téléporter des joueurs avec « DÉVIER ».
+Compétence « DÉVIER » :
+- S'active en ciblant un joueur à proximité.
+- Téléporte ce joueur vers un autre joueur aléatoire (y compris l'Illusionniste).
+- Si l'option « Inclure le point d'apparition de la carte » est ACTIVÉE, les points d'apparition sont inclus comme destinations.
+- Si l'option « Activer le déclenchement intempestif » est ACTIVÉE, que le temps de recharge est écoulé et qu'il reste des charges, lorsqu'une tentative d'élimination vise l'Illusionniste, la compétence se déclenche automatiquement et téléporte les joueurs à portée autant de fois qu'il reste de charges.
+Si l'option « Nécessite de remplir la condition d'éveil à chaque réunion » est ACTIVÉE, si la condition d'éveil n'est pas remplie lors de la réunion suivante, l'Illusionniste redevient non éveillé.</value>
+  </data>
+  <data name="DelusionerIntroDescription" xml:space="preserve">
+    <value>Est-ce une illusion ou la réalité ?</value>
+  </data>
+  <data name="DelusionerIsIncludeLocalPlayer" xml:space="preserve">
+    <value>« DÉVIER » : S'inclure soi-même comme destination</value>
+  </data>
+  <data name="DelusionerIsIncludeSpawnPoint" xml:space="preserve">
+    <value>« DÉVIER » : Inclure le point d'apparition de la carte</value>
+  </data>
+  <data name="DelusionerIsOnetimeAwake" xml:space="preserve">
+    <value>Nécessite de remplir la condition d'éveil à chaque réunion</value>
+  </data>
+  <data name="DelusionerRange" xml:space="preserve">
+    <value>« DÉVIER » : Portée de la compétence</value>
+  </data>
+  <data name="DelusionerShortDescription" xml:space="preserve">
+    <value>Utilisez « DÉVIER » pour semer la confusion parmi les joueurs</value>
+  </data>
+  <data name="DelusionerVoteCoolTimeReduceRate" xml:space="preserve">
+    <value>« DÉVIER » : Réduction du temps de recharge par auto-vote</value>
+  </data>
+  <data name="Echo" xml:space="preserve">
+    <value>Écho</value>
+  </data>
+  <data name="EchoAbilityCoolTime" xml:space="preserve">
+    <value>« ÉCHOLOCATION » : Temps de recharge</value>
+  </data>
+  <data name="EchoAbilityCount" xml:space="preserve">
+    <value>« ÉCHOLOCATION » : Nombre d'utilisations</value>
+  </data>
+  <data name="EchoAttentionMode" xml:space="preserve">
+    <value>« ÉCHOLOCATION » : Mode de notification</value>
+  </data>
+  <data name="EchoCanSeparatePlayer" xml:space="preserve">
+    <value>Séparer les notifications des joueurs et des cadavres</value>
+  </data>
+  <data name="EchoFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER capable de repérer les joueurs grâce au son.
+Compétence « ÉCHOLOCATION » :
+- Détecte les joueurs dans une certaine zone.
+- Les notifications varient selon la distance au joueur le plus proche.
+- Visualise la position avec une icône.
+- Peut aussi détecter les cadavres selon les paramètres.
+  - Si les notifications sont séparées, l'icône d'un cadavre détecté sera rouge.</value>
+  </data>
+  <data name="EchoIntroDescription" xml:space="preserve">
+    <value>D'où vient votre bruit ?</value>
+  </data>
+  <data name="EchoIsDetectDeadBody" xml:space="preserve">
+    <value>« ÉCHOLOCATION » : Peut détecter les cadavres</value>
+  </data>
+  <data name="EchoRange" xml:space="preserve">
+    <value>« ÉCHOLOCATION » : Portée de la compétence</value>
+  </data>
+  <data name="EchoShortDescription" xml:space="preserve">
+    <value>Vérifiez la position des joueurs avec « ÉCHOLOCATION »</value>
+  </data>
+  <data name="EchoShowTime" xml:space="preserve">
+    <value>« ÉCHOLOCATION » : Durée de la notification</value>
+  </data>
+  <data name="EmitAll" xml:space="preserve">
+    <value>Notifier tous les joueurs</value>
+  </data>
+  <data name="EmitNotCrewmate" xml:space="preserve">
+    <value>Notifier tous les joueurs sauf les Coéquipiers</value>
+  </data>
+  <data name="EngineerFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER capable d'utiliser les conduits de ventilation.</value>
+  </data>
+  <data name="Exorcist" xml:space="preserve">
+    <value>Exorciste</value>
+  </data>
+  <data name="ExorcistAbility" xml:space="preserve">
+    <value>Exorcisme</value>
+  </data>
+  <data name="ExorcistAbilityActiveTime" xml:space="preserve">
+    <value>« EXORCISME » : Durée requise</value>
+  </data>
+  <data name="ExorcistAbilityCoolTime" xml:space="preserve">
+    <value>« EXORCISME » : Temps de recharge</value>
+  </data>
+  <data name="ExorcistAbilityCount" xml:space="preserve">
+    <value>« EXORCISME » : Nombre d'utilisations</value>
+  </data>
+  <data name="ExorcistAwakeTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour être perçu comme Imposteur</value>
+  </data>
+  <data name="ExorcistCrewBlockSystemType" xml:space="preserve">
+    <value>Désavantage pendant l'activation d'« EXORCISME »</value>
+  </data>
+  <data name="ExorcistFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER perçu comme Imposteur par les Imposteurs dès qu'il atteint le taux de tâches requis.
+Ne peut pas utiliser le bouton de signalement.
+Compétence « EXORCISME » :
+- S'active en ciblant un cadavre à proximité.
+- Après un délai, un signalement automatique se déclenche et les informations sur le cadavre sont affichées dans le chat.
+- Pendant l'activation, un désavantage s'applique à tous les Coéquipiers.</value>
+  </data>
+  <data name="ExorcistIntroDescription" xml:space="preserve">
+    <value>Chassez les Imposteurs avec la puissance sacrée</value>
+  </data>
+  <data name="ExorcistRange" xml:space="preserve">
+    <value>« EXORCISME » : Distance du cadavre pour activer</value>
+  </data>
+  <data name="ExorcistReport" xml:space="preserve">
+    <value>« {0} » semble être mort(e) à cause de « {1} », le coupable était « {2} »</value>
+  </data>
+  <data name="ExorcistReportWithName" xml:space="preserve">
+    <value>« {0} » a été tué(e) par {1}, la cause est « {2} »</value>
+  </data>
+  <data name="ExorcistShortDescription" xml:space="preserve">
+    <value>Obtenez des informations précieuses grâce à l'« EXORCISME »</value>
+  </data>
+  <data name="ExorcistWithName" xml:space="preserve">
+    <value>Inclure le nom du tueur dans les informations d'« EXORCISME »</value>
+  </data>
+  <data name="Fencer" xml:space="preserve">
+    <value>Escrimeur</value>
+  </data>
+  <data name="FencerAbilityActiveTime" xml:space="preserve">
+    <value>« CONTRE-ATTAQUE » : Durée</value>
+  </data>
+  <data name="FencerAbilityCoolTime" xml:space="preserve">
+    <value>« CONTRE-ATTAQUE » : Temps de recharge</value>
+  </data>
+  <data name="FencerAbilityCount" xml:space="preserve">
+    <value>« CONTRE-ATTAQUE » : Nombre maximal d'utilisations</value>
+  </data>
+  <data name="FencerFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable de riposter contre les ennemis grâce à la « CONTRE-ATTAQUE ».
+Si vous êtes ciblé par une élimination pendant que la compétence est active, l'attaque est annulée et vous pouvez utiliser un bouton d'élimination temporaire sans temps de recharge.</value>
+  </data>
+  <data name="FencerIntroDescription" xml:space="preserve">
+    <value>Ripostez contre ceux qui attaquent avec une « CONTRE-ATTAQUE » !</value>
+  </data>
+  <data name="FencerResetTime" xml:space="preserve">
+    <value>« CONTRE-ATTAQUE » : Durée de l'élimination temporaire</value>
+  </data>
+  <data name="FencerShortDescription" xml:space="preserve">
+    <value>Contrez et éliminez vos ennemis</value>
+  </data>
+  <data name="Gambler" xml:space="preserve">
+    <value>Joueur</value>
+  </data>
+  <data name="GamblerChangeVoteChance" xml:space="preserve">
+    <value>Probabilité de modification du nombre de votes</value>
+  </data>
+  <data name="GamblerFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER dont le nombre de votes varie aléatoirement entre le minimum et le maximum.
+Ce changement n'est pas visible à l'écran : un seul vote est toujours affiché visuellement, mais le calcul interne prend en compte la valeur réelle.</value>
+  </data>
+  <data name="GamblerIntroDescription" xml:space="preserve">
+    <value>Que vos votes augmentent ou non, tout est question de chance</value>
+  </data>
+  <data name="GamblerMaxVoteNum" xml:space="preserve">
+    <value>Nombre maximal de votes</value>
+  </data>
+  <data name="GamblerMinVoteNum" xml:space="preserve">
+    <value>Nombre minimal de votes</value>
+  </data>
+  <data name="GamblerShortDescription" xml:space="preserve">
+    <value>Le nombre de votes varie aléatoirement pendant les réunions</value>
+  </data>
+  <data name="GuardedPlayerNameOnly" xml:space="preserve">
+    <value>Nom du joueur protégé uniquement</value>
+  </data>
+  <data name="Inspector" xml:space="preserve">
+    <value>Inspecteur</value>
+  </data>
+  <data name="InspectorAbilityActiveTime" xml:space="preserve">
+    <value>« INSPECTER » : Durée d'activation</value>
+  </data>
+  <data name="InspectorAbilityCoolTime" xml:space="preserve">
+    <value>« INSPECTER » : Temps de recharge</value>
+  </data>
+  <data name="InspectorAbilityCount" xml:space="preserve">
+    <value>« INSPECTER » : Nombre d'utilisations</value>
+  </data>
+  <data name="InspectorFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER qui détecte des actions spécifiques.
+Compétence « INSPECTER » :
+- S'active en appuyant sur le bouton.
+- Détecte les joueurs effectuant des actions spécifiques pendant la durée d'activation.
+- Affiche une flèche pointant vers ces joueurs.
+- Les flèches ne sont visibles que pendant la durée d'activation.</value>
+  </data>
+  <data name="InspectorInspectAbility" xml:space="preserve">
+    <value>Détection de compétences</value>
+  </data>
+  <data name="InspectorInspectSabotage" xml:space="preserve">
+    <value>Détection de sabotages</value>
+  </data>
+  <data name="InspectorInspectVent" xml:space="preserve">
+    <value>Détection de conduits</value>
+  </data>
+  <data name="InspectorIntroDescription" xml:space="preserve">
+    <value>Toutes les actions sont visibles, révélez la vérité</value>
+  </data>
+  <data name="InspectorShortDescription" xml:space="preserve">
+    <value>Démasquez ceux qui effectuent des actions spécifiques</value>
+  </data>
+  <data name="Jailer" xml:space="preserve">
+    <value>Geôlier</value>
+  </data>
+  <data name="JailerAbilityCoolTime" xml:space="preserve">
+    <value>« EMPRISONNER » : Temps de recharge</value>
+  </data>
+  <data name="JailerAbilityCount" xml:space="preserve">
+    <value>« EMPRISONNER » : Nombre d'utilisations</value>
+  </data>
+  <data name="JailerAwakeDeadPlayerNum" xml:space="preserve">
+    <value>Nombre de morts pour s'éveiller (Condition 2)</value>
+  </data>
+  <data name="JailerAwakeTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour s'éveiller (Condition 1)</value>
+  </data>
+  <data name="JailerCanReplaceAssassin" xml:space="preserve">
+    <value>« EMPRISONNER » : Peut cibler l'Assassin</value>
+  </data>
+  <data name="JailerFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable de convertir un joueur non-Coéquipier dans le camp des Coéquipiers.
+Compétence « EMPRISONNER » :
+- S'active en ciblant un joueur à proximité.
+- Si le joueur appartient à l'équipe ciblée par l'emprisonnement, il devient un « Détenu converti » chez les Coéquipiers.
+- En cas d'échec, si le suicide est désactivé, le Geôlier devient un « Hors-la-loi » (Rôle Neutre cherchant la défaite des Coéquipiers).</value>
+  </data>
+  <data name="JailerHasOtherKillCool" xml:space="preserve">
+    <value>Le Hors-la-loi a un temps de recharge d'élimination spécifique</value>
+  </data>
+  <data name="JailerHasOtherKillRange" xml:space="preserve">
+    <value>Le Hors-la-loi a une portée d'élimination spécifique</value>
+  </data>
+  <data name="JailerIntroDescription" xml:space="preserve">
+    <value>Emprisonnez les criminels et réhabillitez-les</value>
+  </data>
+  <data name="JailerIsDeadAbilityZero" xml:space="preserve">
+    <value>Se suicider en cas de succès si les charges atteignent 0</value>
+  </data>
+  <data name="JailerIsMissingToDead" xml:space="preserve">
+    <value>« EMPRISONNER » : Se suicider en cas d'échec</value>
+  </data>
+  <data name="JailerKillCoolDown" xml:space="preserve">
+    <value>Temps de recharge d'élimination du Hors-la-loi</value>
+  </data>
+  <data name="JailerKillRange" xml:space="preserve">
+    <value>Portée d'élimination du Hors-la-loi</value>
+  </data>
+  <data name="JailerLawbreakerCanKill" xml:space="preserve">
+    <value>Le Hors-la-loi peut éliminer</value>
+  </data>
+  <data name="JailerLawbreakerUseSab" xml:space="preserve">
+    <value>Le Hors-la-loi peut utiliser les sabotages</value>
+  </data>
+  <data name="JailerLawbreakerUseVent" xml:space="preserve">
+    <value>Le Hors-la-loi peut utiliser les conduits</value>
+  </data>
+  <data name="JailerRange" xml:space="preserve">
+    <value>« EMPRISONNER » : Portée de la compétence</value>
+  </data>
+  <data name="JailerShortDescription" xml:space="preserve">
+    <value>Trouvez les coupables et emprisonnez-les</value>
+  </data>
+  <data name="JailerTargetMode" xml:space="preserve">
+    <value>« EMPRISONNER » : Équipe ciblée par le succès</value>
+  </data>
+  <data name="JailerUseAdmin" xml:space="preserve">
+    <value>Le Geôlier peut utiliser l'administrateur</value>
+  </data>
+  <data name="JailerUseSecurity" xml:space="preserve">
+    <value>Le Geôlier peut utiliser les caméras / registres</value>
+  </data>
+  <data name="JailerUseVital" xml:space="preserve">
+    <value>Le Geôlier peut utiliser les vitaux</value>
+  </data>
+  <data name="JailerYardbirdAddCommonTask" xml:space="preserve">
+    <value>Tâches communes supplémentaires du Détenu converti</value>
+  </data>
+  <data name="JailerYardbirdAddLongTask" xml:space="preserve">
+    <value>Tâches longues supplémentaires du Détenu converti</value>
+  </data>
+  <data name="JailerYardbirdAddNormalTask" xml:space="preserve">
+    <value>Tâches courtes supplémentaires du Détenu converti</value>
+  </data>
+  <data name="JailerYardbirdSpeedMod" xml:space="preserve">
+    <value>Multiplicateur de vitesse du Détenu converti</value>
+  </data>
+  <data name="JailerYardbirdUseAdmin" xml:space="preserve">
+    <value>Le Détenu converti peut utiliser l'administrateur</value>
+  </data>
+  <data name="JailerYardbirdUseSab" xml:space="preserve">
+    <value>Le Détenu converti peut utiliser les sabotages</value>
+  </data>
+  <data name="JailerYardbirdUseSecurity" xml:space="preserve">
+    <value>Le Détenu converti peut utiliser les caméras / registres</value>
+  </data>
+  <data name="JailerYardbirdUseVent" xml:space="preserve">
+    <value>Le Détenu converti peut utiliser les conduits</value>
+  </data>
+  <data name="JailerYardbirdUseVital" xml:space="preserve">
+    <value>Le Détenu converti peut utiliser les vitaux</value>
+  </data>
+  <data name="Lawbreaker" xml:space="preserve">
+    <value>Hors-la-loi</value>
+  </data>
+  <data name="LawbreakerFullDescription" xml:space="preserve">
+    <value>Un rôle créé suite à l'échec de l'« EMPRISONNEMENT » du Geôlier.
+Condition de victoire : Défaite des Coéquipiers.
+(Victoire partagée si une autre équipe gagne)
+Hérite des paramètres du Geôlier au moment du changement, sauf pour les éliminations, sabotages et conduits.</value>
+  </data>
+  <data name="LawbreakerShortDescription" xml:space="preserve">
+    <value>Éliminez les Coéquipiers avant que votre erreur ne soit découverte</value>
+  </data>
+  <data name="Loner" xml:space="preserve">
+    <value>Solitaire</value>
+  </data>
+  <data name="LonerArrowNum" xml:space="preserve">
+    <value>Nombre de flèches affichées</value>
+  </data>
+  <data name="LonerArrowShowVentPlayer" xml:space="preserve">
+    <value>Afficher les flèches pour les joueurs dans les conduits</value>
+  </data>
+  <data name="LonerFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER dont le « Niveau de stress » augmente lorsque des joueurs sont à proximité, et qui se suicide s'il dépasse une certaine valeur.
+
+Niveau de stress : {0}/{1}
+
+Compétence passive « Stress » :
+- Le niveau de stress augmente lorsque des joueurs sont à portée (+1 stress/seconde/personne).
+- Le niveau de stress diminue de 1 par seconde quand personne n'est à portée.</value>
+  </data>
+  <data name="LonerIntroDescription" xml:space="preserve">
+    <value>Solitaire mais parfois mélancolique</value>
+  </data>
+  <data name="LonerIsShowArrow" xml:space="preserve">
+    <value>Afficher des flèches vers les joueurs proches</value>
+  </data>
+  <data name="LonerShortDescription" xml:space="preserve">
+    <value>Ne laissez pas votre niveau de stress monter trop haut</value>
+  </data>
+  <data name="LonerStressIgnoreTime" xml:space="preserve">
+    <value>Temps sans augmentation de stress après l'apparition</value>
+  </data>
+  <data name="LonerStressMaxGage" xml:space="preserve">
+    <value>Niveau de stress provoquant le suicide</value>
+  </data>
+  <data name="LonerStressProgressOnMovingPlatPlayer" xml:space="preserve">
+    <value>Augmenter le stress pour les joueurs sur les échelles/plateformes</value>
+  </data>
+  <data name="LonerStressProgressOnTask" xml:space="preserve">
+    <value>Augmenter le stress pendant l'accomplissement des tâches</value>
+  </data>
+  <data name="LonerStressProgressOnVentPlayer" xml:space="preserve">
+    <value>Augmenter le stress pour les joueurs dans les conduits</value>
+  </data>
+  <data name="LonerStressRange" xml:space="preserve">
+    <value>Portée d'augmentation du stress</value>
+  </data>
+  <data name="Maintainer" xml:space="preserve">
+    <value>Agent de maintenance</value>
+  </data>
+  <data name="MaintainerAbilityCoolTime" xml:space="preserve">
+    <value>« RÉPARATION » : Temps de recharge</value>
+  </data>
+  <data name="MaintainerAbilityCount" xml:space="preserve">
+    <value>« RÉPARATION » : Nombre d'utilisations</value>
+  </data>
+  <data name="MaintainerFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable d'effectuer des réparations d'urgence.
+La réparation d'urgence peut être utilisée lors de sabotages pour résoudre immédiatement la crise et ouvrir toutes les portes de la carte.</value>
+  </data>
+  <data name="MaintainerIntroDescription" xml:space="preserve">
+    <value>Un problème sur le vaisseau ? Laissez-moi gérer !</value>
+  </data>
+  <data name="MaintainerShortDescription" xml:space="preserve">
+    <value>Réglez les tâches d'urgence instantanément !</value>
+  </data>
+  <data name="Marking" xml:space="preserve">
+    <value>MARQUER</value>
+  </data>
+  <data name="Moderator" xml:space="preserve">
+    <value>Modérateur</value>
+  </data>
+  <data name="ModeratorAbilityCoolTime" xml:space="preserve">
+    <value>« MODÉRER » : Temps de recharge</value>
+  </data>
+  <data name="ModeratorAbilityCount" xml:space="preserve">
+    <value>« MODÉRER » : Nombre d'utilisations</value>
+  </data>
+  <data name="ModeratorAwakeTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour s'éveiller</value>
+  </data>
+  <data name="ModeratorFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER capable de rallonger la durée de la prochaine réunion une fois par partie.
+Compétence « MODÉRER » :
+- Rallonge la durée de la prochaine réunion du nombre de secondes configuré.</value>
+  </data>
+  <data name="ModeratorIntroDescription" xml:space="preserve">
+    <value>C'est moi qui vais gérer cette réunion !</value>
+  </data>
+  <data name="ModeratorMeetingTimerOffset" xml:space="preserve">
+    <value>Rallonge la durée de la réunion de</value>
+  </data>
+  <data name="ModeratorShortDescription" xml:space="preserve">
+    <value>Rallongez la réunion pour démasquer les coupables</value>
+  </data>
+  <data name="Neet" xml:space="preserve">
+    <value>Inactif</value>
+  </data>
+  <data name="NeetCanCallMeeting" xml:space="preserve">
+    <value>Peut convoquer une réunion d'urgence</value>
+  </data>
+  <data name="NeetCanRepairSabotage" xml:space="preserve">
+    <value>Peut réparer les sabotages</value>
+  </data>
+  <data name="NeetFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER qui ne peut rien faire.
+Puisque vous n'avez rien à faire, vous feriez un bon observateur ?</value>
+  </data>
+  <data name="NeetHasTask" xml:space="preserve">
+    <value>A des tâches</value>
+  </data>
+  <data name="NeetIntroDescription" xml:space="preserve">
+    <value>Laissez les autres tout faire et profitez du voyage</value>
+  </data>
+  <data name="NeetIsNeutral" xml:space="preserve">
+    <value>Est un rôle neutre</value>
+  </data>
+  <data name="NeetNeutralFullDescription" xml:space="preserve">
+    <value>Un rôle NEUTRE qui ne peut rien faire.
+Condition de victoire : Survivre jusqu'à la fin du jeu.</value>
+  </data>
+  <data name="NeetShortDescription" xml:space="preserve">
+    <value>Profitez d'un agréable voyage dans l'espace</value>
+  </data>
+  <data name="NoisemakerFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER qui, lorsqu'il est éliminé, signale sa position à tous les joueurs pendant une certaine durée.</value>
+  </data>
+  <data name="Opener" xml:space="preserve">
+    <value>Ouvreur</value>
+  </data>
+  <data name="OpenerAbilityCoolTime" xml:space="preserve">
+    <value>« OUVRIR » : Temps de recharge</value>
+  </data>
+  <data name="OpenerAbilityCount" xml:space="preserve">
+    <value>« OUVRIR » : Charges de base</value>
+  </data>
+  <data name="OpenerFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable d'ouvrir les portes avec « OUVRIR ».
+En accomplissant des tâches, vous augmentez le nombre d'utilisations et réduisez le temps de recharge.</value>
+  </data>
+  <data name="OpenerIntroDescription" xml:space="preserve">
+    <value>Aucune porte ne me résiste !</value>
+  </data>
+  <data name="OpenerPlusAbility" xml:space="preserve">
+    <value>« OUVRIR » : Charges supplémentaires</value>
+  </data>
+  <data name="OpenerRange" xml:space="preserve">
+    <value>« OUVRIR » : Portée de la compétence</value>
+  </data>
+  <data name="OpenerReduceRate" xml:space="preserve">
+    <value>« OUVRIR » : Réduction du temps de recharge</value>
+  </data>
+  <data name="OpenerShortDescription" xml:space="preserve">
+    <value>Ouvrez les portes pour conserver une position avantageuse</value>
+  </data>
+  <data name="Photographer" xml:space="preserve">
+    <value>Photographe</value>
+  </data>
+  <data name="PhotographerAbilityCoolTime" xml:space="preserve">
+    <value>« CAPTURER » : Temps de recharge</value>
+  </data>
+  <data name="PhotographerAbilityCount" xml:space="preserve">
+    <value>« CAPTURER » : Nombre d'utilisations</value>
+  </data>
+  <data name="PhotographerAwakeTaskGage" xml:space="preserve">
+    <value>Taux d'accomplissement des tâches pour s'éveiller</value>
+  </data>
+  <data name="PhotographerEnableAllSendChat" xml:space="preserve">
+    <value>« CAPTURER » : Partager les informations dans le chat général</value>
+  </data>
+  <data name="PhotographerFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER capable de prendre des photographies.
+Compétence « CAPTURER » :
+- Prenez une photo qui enregistre les joueurs présents à proximité.
+- Les informations de la photo s'affichent dans le chat au début de la réunion suivante.
+- Les détails de la photo deviennent plus précis à mesure que vous complétez vos tâches.</value>
+  </data>
+  <data name="PhotographerIntroDescription" xml:space="preserve">
+    <value>Sourire ! Vous êtes photographié(e)</value>
+  </data>
+  <data name="PhotographerPhotoRange" xml:space="preserve">
+    <value>« CAPTURER » : Portée de la compétence</value>
+  </data>
+  <data name="PhotographerShortDescription" xml:space="preserve">
+    <value>Prenez des photos pour enregistrer la position des joueurs</value>
+  </data>
+  <data name="PhotographerUpgradeAllSendChatTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour partager les informations dans le chat</value>
+  </data>
+  <data name="PhotographerUpgradePhotoTaskGage" xml:space="preserve">
+    <value>« CAPTURER » : Taux de tâches pour améliorer les photos</value>
+  </data>
+  <data name="Psychic" xml:space="preserve">
+    <value>Médium</value>
+  </data>
+  <data name="PsychicAbilityActiveTime" xml:space="preserve">
+    <value>« INVOCATION » : Durée d'activation</value>
+  </data>
+  <data name="PsychicAbilityCoolTime" xml:space="preserve">
+    <value>« INVOCATION » : Temps de recharge</value>
+  </data>
+  <data name="PsychicAbilityCount" xml:space="preserve">
+    <value>« INVOCATION » : Nombre d'utilisations</value>
+  </data>
+  <data name="PsychicAwakeDeadPlayerNum" xml:space="preserve">
+    <value>Nombre de morts pour s'éveiller (Condition 2)</value>
+  </data>
+  <data name="PsychicAwakeTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour s'éveiller (Condition 1)</value>
+  </data>
+  <data name="PsychicFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER capable d'obtenir des informations sur les vivants auprès des esprits.
+Compétence « INVOCATION » :
+- Obtenez des informations en restant immobile pendant une certaine durée.
+- Les informations sur les survivants des autres équipes seront partagées dans le chat de la réunion suivante.</value>
+  </data>
+  <data name="PsychicIntroDescription" xml:space="preserve">
+    <value>Écoutez la voix des esprits</value>
+  </data>
+  <data name="PsychicIsUpgradeAbility" xml:space="preserve">
+    <value>« INVOCATION » : Améliorer la compétence en cours de partie</value>
+  </data>
+  <data name="PsychicPsychic" xml:space="preserve">
+    <value>Invocation</value>
+  </data>
+  <data name="PsychicPsychicEnd" xml:space="preserve">
+    <value>Informations obtenues auprès des esprits ! Résumons-les pour la prochaine réunion...</value>
+  </data>
+  <data name="PsychicPsychicResult" xml:space="preserve">
+    <value>Résultat de l'invocation</value>
+  </data>
+  <data name="PsychicPsychicStart" xml:space="preserve">
+    <value>Invocation commencée</value>
+  </data>
+  <data name="PsychicPsychicStrAliveRole" xml:space="preserve">
+    <value>  Rôles en vie :</value>
+  </data>
+  <data name="PsychicPsychicStrForAliveNum" xml:space="preserve">
+    <value>  Joueurs restants : {0}</value>
+  </data>
+  <data name="PsychicPsychicStrTeam" xml:space="preserve">
+    <value>  Équipe :</value>
+  </data>
+  <data name="PsychicShortDescription" xml:space="preserve">
+    <value>Utilisez l'« INVOCATION » pour obtenir des informations sur les survivants</value>
+  </data>
+  <data name="PsychicUpgradeDeadPlayerNum" xml:space="preserve">
+    <value>Nombre de morts requis pour l'amélioration (Condition 2)</value>
+  </data>
+  <data name="PsychicUpgradeTaskGage" xml:space="preserve">
+    <value>Taux de tâches requis pour l'amélioration (Condition 1)</value>
+  </data>
+  <data name="Resurrecter" xml:space="preserve">
+    <value>Résurrecteur</value>
+  </data>
+  <data name="ResurrecterAwakeTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour s'éveiller comme Résurrecteur</value>
+  </data>
+  <data name="ResurrecterCanResurrectAfterDeath" xml:space="preserve">
+    <value>Peut ressusciter si l'état devenait prêt après la mort</value>
+  </data>
+  <data name="ResurrecterCanResurrectOnExil" xml:space="preserve">
+    <value>Peut ressusciter même en cas d'expulsion par vote</value>
+  </data>
+  <data name="ResurrecterFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER capable de ressusciter une fois.
+- En accomplissant suffisamment de tâches, il passe en « État prêt à ressusciter ».
+- S'il est éliminé dans cet état, il ressuscite après un court délai au point d'apparition de la carte.
+- Les rôles avec bouton d'élimination reçoivent une notification lors de la résurrection.</value>
+  </data>
+  <data name="ResurrecterIntroDescription" xml:space="preserve">
+    <value>Tel un phénix, renaissez de vos cendres</value>
+  </data>
+  <data name="ResurrecterIsMeetingCoolResetOnResurrect" xml:space="preserve">
+    <value>Réinitialiser le rechargement de réunion de tous lors de la résurrection</value>
+  </data>
+  <data name="ResurrecterResurrectDelayTime" xml:space="preserve">
+    <value>Délai entre la mort et la résurrection</value>
+  </data>
+  <data name="ResurrecterResurrectMeetingCooltime" xml:space="preserve">
+    <value>Temps de recharge de réunion après résurrection</value>
+  </data>
+  <data name="ResurrecterResurrectTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour devenir prêt à ressusciter</value>
+  </data>
+  <data name="ResurrecterResurrectTaskResetGage" xml:space="preserve">
+    <value>Taux de réinitialisation des tâches</value>
+  </data>
+  <data name="ResurrecterResurrectTaskResetMeetingNum" xml:space="preserve">
+    <value>Nombre de réunions avant le recul des tâches</value>
+  </data>
+  <data name="ResurrecterShortDescription" xml:space="preserve">
+    <value>Utilisez le pouvoir de résurrection pour prendre l'avantage</value>
+  </data>
+  <data name="ScientistFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER disposant d'un moniteur de vitaux portable.
+Rechargez sa batterie avec le temps ou en effectuant vos tâches.</value>
+  </data>
+  <data name="SetPortal" xml:space="preserve">
+    <value>CRÉER UN PORTAIL</value>
+  </data>
+  <data name="Sheriff" xml:space="preserve">
+    <value>Shérif</value>
+  </data>
+  <data name="SheriffCanShootAssassin" xml:space="preserve">
+    <value>Peut éliminer l'Assassin</value>
+  </data>
+  <data name="SheriffCanShootLiberal" xml:space="preserve">
+    <value>Peut éliminer le « Libéral »</value>
+  </data>
+  <data name="SheriffCanShootNeutral" xml:space="preserve">
+    <value>Peut éliminer les rôles neutres</value>
+  </data>
+  <data name="SheriffEnableTaskRelated" xml:space="preserve">
+    <value>Activer les paramètres liés aux tâches</value>
+  </data>
+  <data name="SheriffFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER disposant d'un bouton d'élimination avec des munitions limitées.
+L'élimination peut se retourner contre vous et vous tuer si vous tirez sur un Coéquipier.</value>
+  </data>
+  <data name="SheriffIntroDescription" xml:space="preserve">
+    <value>Abattez vos ennemis pour le bien de l'équipage</value>
+  </data>
+  <data name="SheriffIsPerm" xml:space="preserve">
+    <value>La réduction du temps de recharge d'élimination est-elle permanente</value>
+  </data>
+  <data name="SheriffIsSyncTaskAndShootNum" xml:space="preserve">
+    <value>Les tâches rechargent-elles les munitions</value>
+  </data>
+  <data name="SheriffReduceCurKillCool" xml:space="preserve">
+    <value>Réduction du temps de recharge d'élimination par tâche</value>
+  </data>
+  <data name="SheriffShootNum" xml:space="preserve">
+    <value>Nombre maximal de munitions</value>
+  </data>
+  <data name="SheriffShortDescription" xml:space="preserve">
+    <value>Faites subir le châtiment de la justice aux coupables</value>
+  </data>
+  <data name="SheriffSyncShootTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour recharger une munition</value>
+  </data>
+  <data name="SpecialCrew" xml:space="preserve">
+    <value>Coéquipier Spécial</value>
+  </data>
+  <data name="SpecialCrewFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER personnalisable avec les paramètres communs d'Extreme Roles.</value>
+  </data>
+  <data name="SpecialCrewIntroDescription" xml:space="preserve">
+    <value>Un Coéquipier avec des paramètres modifiés</value>
+  </data>
+  <data name="SpecialCrewShortDescription" xml:space="preserve">
+    <value>Un Coéquipier de style « Extreme »</value>
+  </data>
+  <data name="Summon" xml:space="preserve">
+    <value>INVOQUER</value>
+  </data>
+  <data name="Summoner" xml:space="preserve">
+    <value>Invocateur</value>
+  </data>
+  <data name="SummonerAbilityCoolTime" xml:space="preserve">
+    <value>« MARQUER » et « INVOQUER » : Temps de recharge</value>
+  </data>
+  <data name="SummonerFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER capable de téléporter un joueur « MARQUÉ » à sa position.
+Compétence « MARQUER » : Marque un joueur à proximité.
+Compétence « INVOQUER » : Téléporte le joueur marqué (ou son cadavre) à vos coordonnées.</value>
+  </data>
+  <data name="SummonerIntroDescription" xml:space="preserve">
+    <value>Passez un contrat et devenez mon serviteur !</value>
+  </data>
+  <data name="SummonerMarkingCount" xml:space="preserve">
+    <value>« MARQUER » : Nombre d'utilisations</value>
+  </data>
+  <data name="SummonerRange" xml:space="preserve">
+    <value>« MARQUER » : Portée de la compétence</value>
+  </data>
+  <data name="SummonerShortDescription" xml:space="preserve">
+    <value>Invoquez des joueurs pour faire face aux situations critiques</value>
+  </data>
+  <data name="SummonerSummonCount" xml:space="preserve">
+    <value>« INVOQUER » : Nombre d'utilisations</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Superviseur</value>
+  </data>
+  <data name="SupervisorAbilityActiveTime" xml:space="preserve">
+    <value>Charge maximale de la batterie</value>
+  </data>
+  <data name="SupervisorAbilityCoolTime" xml:space="preserve">
+    <value>« ADMINISTRATEUR » : Temps de recharge</value>
+  </data>
+  <data name="SupervisorFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER disposant d'un « ADMINISTRATEUR » portable.
+Consomme de la batterie lorsqu'il est ouvert. Se recharge en attendant le temps de recharge ou en accomplissant des tâches.
+Si l'amélioration par tâches est activée, les icônes de l'administrateur affichent les couleurs des joueurs.</value>
+  </data>
+  <data name="SupervisorIntroDescription" xml:space="preserve">
+    <value>Surveillez la position de vos coéquipiers à tout moment</value>
+  </data>
+  <data name="SupervisorIsBoostTask" xml:space="preserve">
+    <value>« ADMINISTRATEUR » : Améliorer avec l'accomplissement des tâches</value>
+  </data>
+  <data name="SupervisorShortDescription" xml:space="preserve">
+    <value>Surveillez les positions et démasquez vos ennemis</value>
+  </data>
+  <data name="SupervisorTaskGage" xml:space="preserve">
+    <value>Pourcentage de tâches pour améliorer l'administrateur</value>
+  </data>
+  <data name="Survivor" xml:space="preserve">
+    <value>Survivant</value>
+  </data>
+  <data name="SurvivorAwakeTaskGage" xml:space="preserve">
+    <value>Taux de tâches pour révéler le rôle</value>
+  </data>
+  <data name="SurvivorDeadWinTaskGage" xml:space="preserve">
+    <value>Pourcentage de tâches requis avant la mort pour gagner</value>
+  </data>
+  <data name="SurvivorFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER qui doit accomplir un certain pourcentage de tâches avant de mourir pour pouvoir l'emporter avec l'équipe des Coéquipiers.</value>
+  </data>
+  <data name="SurvivorIntroDescription" xml:space="preserve">
+    <value>Je veux juste vivre un peu plus longtemps</value>
+  </data>
+  <data name="SurvivorNoWinSurvivorAssignGhostRole" xml:space="preserve">
+    <value>Attribuer un rôle de Fantôme si le Survivant ne peut plus gagner</value>
+  </data>
+  <data name="SurvivorShortDescription" xml:space="preserve">
+    <value>Accomplissez vos tâches pour assurer votre victoire</value>
+  </data>
+  <data name="Teleporter" xml:space="preserve">
+    <value>Téléporteur</value>
+  </data>
+  <data name="TeleporterAbilityCoolTime" xml:space="preserve">
+    <value>« PORTAIL » : Temps de recharge</value>
+  </data>
+  <data name="TeleporterAbilityCount" xml:space="preserve">
+    <value>Nombre de FRAGMENTS générés</value>
+  </data>
+  <data name="TeleporterCanUseOtherPlayer" xml:space="preserve">
+    <value>« PORTAIL » : Les autres joueurs peuvent-ils l'utiliser</value>
+  </data>
+  <data name="TeleporterFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER capable d'ouvrir des Portails de téléportation.
+Récoltez des FRAGMENTS dispersés sur la carte pour charger la compétence.</value>
+  </data>
+  <data name="TeleporterInitAbilityNum" xml:space="preserve">
+    <value>« CRÉER UN PORTAIL » : Charges initiales</value>
+  </data>
+  <data name="TeleporterIntroDescription" xml:space="preserve">
+    <value>Oups, un portail !</value>
+  </data>
+  <data name="TeleporterShortDescription" xml:space="preserve">
+    <value>Rassemblez des FRAGMENTS pour ouvrir des PORTAILS</value>
+  </data>
+  <data name="TimeMaster" xml:space="preserve">
+    <value>Maître du Temps</value>
+  </data>
+  <data name="TimeMasterAbilityActiveTime" xml:space="preserve">
+    <value>« BOUCLIER » : Durée</value>
+  </data>
+  <data name="TimeMasterAbilityCoolTime" xml:space="preserve">
+    <value>« BOUCLIER » : Temps de recharge</value>
+  </data>
+  <data name="TimeMasterFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER doté de la compétence « BOUCLIER ».
+Lorsqu'il est ciblé par une élimination alors que le bouclier est actif, le temps remonte et les mouvements des autres joueurs sont rembobinés.</value>
+  </data>
+  <data name="TimeMasterIntroDescription" xml:space="preserve">
+    <value>Contrôlez le temps grâce à votre BOUCLIER</value>
+  </data>
+  <data name="TimeMasterRewindTime" xml:space="preserve">
+    <value>« BOUCLIER » : Temps de rembobinage</value>
+  </data>
+  <data name="TimeMasterShortDescription" xml:space="preserve">
+    <value>Devenez le maître du temps</value>
+  </data>
+  <data name="TrackerFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER capable de voir la position d'un autre coéquipier sur la carte.</value>
+  </data>
+  <data name="Watchdog" xml:space="preserve">
+    <value>Chien de garde</value>
+  </data>
+  <data name="WatchdogAbilityActiveTime" xml:space="preserve">
+    <value>Charge maximale de la batterie</value>
+  </data>
+  <data name="WatchdogAbilityCoolTime" xml:space="preserve">
+    <value>« CAMÉRA / REGISTRE » : Temps de recharge</value>
+  </data>
+  <data name="WatchdogFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER ayant accès aux caméras de sécurité et registres de portes portables.</value>
+  </data>
+  <data name="WatchdogIntroDescription" xml:space="preserve">
+    <value>Traquez-les et démasquez vos ennemis</value>
+  </data>
+  <data name="WatchdogShortDescription" xml:space="preserve">
+    <value>Accédez aux caméras et registres pour tout surveiller</value>
+  </data>
+  <data name="Whisper" xml:space="preserve">
+    <value>Chuchoteur</value>
+  </data>
+  <data name="WhisperAbilityOffTime" xml:space="preserve">
+    <value>« ÉCOUTER » : Temps d'immobilité requis</value>
+  </data>
+  <data name="WhisperAbilityOnTime" xml:space="preserve">
+    <value>« ÉCOUTER » : Durée</value>
+  </data>
+  <data name="WhisperAbilityTaskGage" xml:space="preserve">
+    <value>Pourcentage de tâches pour améliorer la compétence</value>
+  </data>
+  <data name="WhisperEnableAwakeAbility" xml:space="preserve">
+    <value>« ÉCOUTER » : Améliorer avec l'accomplissement des tâches</value>
+  </data>
+  <data name="WhisperFullDescription" xml:space="preserve">
+    <value>Un COÉQUIPIER capable de ressentir toutes les éliminations en restant immobile.</value>
+  </data>
+  <data name="WhisperIntroDescription" xml:space="preserve">
+    <value>Aiguisez vos sens et écoutez les murmures</value>
+  </data>
+  <data name="WhisperMaxTellText" xml:space="preserve">
+    <value>« ÉCOUTER » : Nombre maximal de messages de mort affichés</value>
+  </data>
+  <data name="WhisperShortDescription" xml:space="preserve">
+    <value>Ressentez chaque mort grâce à votre ouïe</value>
+  </data>
+  <data name="WhisperTellTextTime" xml:space="preserve">
+    <value>« ÉCOUTER » : Durée des messages de mort</value>
+  </data>
+  <data name="Yardbird" xml:space="preserve">
+    <value>Détenu converti</value>
+  </data>
+  <data name="YardbirdFullDescription" xml:space="preserve">
+    <value>Un rôle de COÉQUIPIER créé par le « Geôlier ».
+Peut avoir plus de tâches, une vitesse réduite ou ne pas pouvoir utiliser certains équipements selon les réglages.
+Hérite sinon des paramètres de base du Coéquipier.</value>
+  </data>
+  <data name="YardbirdShortDescription" xml:space="preserve">
+    <value>Rachetez vos fautes passées et réhabilitez-vous</value>
+  </data>
+  <data name="admin" xml:space="preserve">
+    <value>ADMINISTRATEUR</value>
+  </data>
+  <data name="badBread" xml:space="preserve">
+    <value>Le BOULANGER a laissé brûler le pain dans le four</value>
+  </data>
+  <data name="cameraSet" xml:space="preserve">
+    <value>CAMÉRA</value>
+  </data>
+  <data name="captainVoteStatus" xml:space="preserve">
+    <value>VOTE SPÉCIAL : {0}
+Votes : {1}</value>
+  </data>
+  <data name="carpenterScrewNum" xml:space="preserve">
+    <value>Utilisation : {1}, {0} restants</value>
+  </data>
+  <data name="changeMeetingTime" xml:space="preserve">
+    <value>La durée de la prochaine réunion a été augmentée de {0} s</value>
+  </data>
+  <data name="counter" xml:space="preserve">
+    <value>CONTRE-ATTAQUE</value>
+  </data>
+  <data name="curse" xml:space="preserve">
+    <value>MALÉDICTION</value>
+  </data>
+  <data name="cursing" xml:space="preserve">
+    <value>ENCHANTEMENT</value>
+  </data>
+  <data name="deflectDamage" xml:space="preserve">
+    <value>DÉVIER</value>
+  </data>
+  <data name="doorLog" xml:space="preserve">
+    <value>REGISTRE DES PORTES</value>
+  </data>
+  <data name="echoLocation" xml:space="preserve">
+    <value>ÉCHOLOCATION</value>
+  </data>
+  <data name="forceReportUntil" xml:space="preserve">
+    <value>Rapport forcé dans {0} secondes</value>
+  </data>
+  <data name="goodBread" xml:space="preserve">
+    <value>Le BOULANGER a cuit de délicieux pains !</value>
+  </data>
+  <data name="inspect" xml:space="preserve">
+    <value>INSPECTER</value>
+  </data>
+  <data name="inspectArrowWarning" xml:space="preserve">
+    <value>L'« INSPECTEUR » a découvert votre position !</value>
+  </data>
+  <data name="inspectSystem" xml:space="preserve">
+    <value>L'utilisation de est surveillée...</value>
+  </data>
+  <data name="killedText" xml:space="preserve">
+    <value>Vous avez entendu une mort vers {0} ({1}).</value>
+  </data>
+  <data name="killedTextWithRoom" xml:space="preserve">
+    <value>Vous avez entendu une mort dans {1}, vers {0} ({2}).</value>
+  </data>
+  <data name="maintenance" xml:space="preserve">
+    <value>RÉPARATION</value>
+  </data>
+  <data name="martyrdomReport" xml:space="preserve">
+    <value>Un Garde du corps a sauvé quelqu'un...</value>
+  </data>
+  <data name="martyrdomReportWithBodyGurdPlayer" xml:space="preserve">
+    <value>Le Garde du corps « {0} » a sauvé quelqu'un...</value>
+  </data>
+  <data name="martyrdomReportWithBoth" xml:space="preserve">
+    <value>Le Garde du corps « {0} » a sauvé la vie de « {1} » !</value>
+  </data>
+  <data name="martyrdomReportWithGurdedPlayer" xml:space="preserve">
+    <value>Un Garde du corps a sauvé la vie de « {0} » !</value>
+  </data>
+  <data name="meetingShieldState" xml:space="preserve">
+    <value>Vous pouvez protéger {0} fois
+pendant cette réunion</value>
+  </data>
+  <data name="moderate" xml:space="preserve">
+    <value>MODÉRER</value>
+  </data>
+  <data name="onlyMeOnPhoto" xml:space="preserve">
+    <value>Il n'y avait que moi sur la photo...</value>
+  </data>
+  <data name="openDoor" xml:space="preserve">
+    <value>OUVRIR</value>
+  </data>
+  <data name="photoChat" xml:space="preserve">
+    <value>Photo développée !
+{0}</value>
+  </data>
+  <data name="photoName" xml:space="preserve">
+    <value>TITRE</value>
+  </data>
+  <data name="rawBread" xml:space="preserve">
+    <value>Le BOULANGER n'était pas prêt à servir le pain</value>
+  </data>
+  <data name="resetShield" xml:space="preserve">
+    <value>RÉINITIALISER LA PROTECTION</value>
+  </data>
+  <data name="resurrectText" xml:space="preserve">
+    <value>Résurrection dans {0} s</value>
+  </data>
+  <data name="securityCamera" xml:space="preserve">
+    <value>CAMÉRA</value>
+  </data>
+  <data name="shield" xml:space="preserve">
+    <value>PROTÉGER</value>
+  </data>
+  <data name="takePhoto" xml:space="preserve">
+    <value>CAPTURER</value>
+  </data>
+  <data name="takePhotoTime" xml:space="preserve">
+    <value>DATE DE PRISE</value>
+  </data>
+  <data name="takeTask" xml:space="preserve">
+    <value>PRENDRE EN CHARGE</value>
+  </data>
+  <data name="timeShield" xml:space="preserve">
+    <value>BOUCLIER TEMPOREL</value>
+  </data>
+  <data name="ventSeal" xml:space="preserve">
+    <value>SCELLER</value>
+  </data>
+</root>

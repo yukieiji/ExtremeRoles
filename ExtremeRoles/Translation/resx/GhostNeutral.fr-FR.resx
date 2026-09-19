@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Foras" xml:space="preserve">
+    <value>Foras</value>
+  </data>
+  <data name="ForasRange" xml:space="preserve">
+    <value>« FUITE » : Portée de la compétence</value>
+  </data>
+  <data name="ForasMissingTargetRate" xml:space="preserve">
+    <value>« FUITE » : Probabilité de cibler un autre joueur</value>
+  </data>
+  <data name="ForasDelayTime" xml:space="preserve">
+    <value>« FUITE » : Délai avant l'affichage de la flèche</value>
+  </data>
+  <data name="ForasAbilityCoolTime" xml:space="preserve">
+    <value>« FUITE » : Temps de recharge</value>
+  </data>
+  <data name="ForasAbilityActiveTime" xml:space="preserve">
+    <value>« FUITE » : Durée d'affichage de la flèche</value>
+  </data>
+  <data name="ForasIsReportAbility" xml:space="preserve">
+    <value>« FUITE » : Signaler l'utilisation de la compétence lors des réunions</value>
+  </data>
+  <data name="ForasAbilityCount" xml:space="preserve">
+    <value>« FUITE » : Nombre d'utilisations</value>
+  </data>
+  <data name="ForasShortDescription" xml:space="preserve">
+    <value>Soutenez votre maître en révélant la position des joueurs avec « FUITE »</value>
+  </data>
+  <data name="ForasFullDescription" xml:space="preserve">
+    <value>Un rôle de Fantôme Neutre capable d'indiquer la position d'un joueur depuis le monde des esprits.
+Ce rôle de fantôme ne peut être attribué qu'à un ancien Serviteur ou Acolyte.
+Compétence « FUITE » :
+- S'active lorsqu'un joueur vivant se trouve à proximité.
+- Affiche une flèche indiquant la position de ce joueur pour ce rôle et son rôle maître.
+- Si la « Probabilité de cibler un autre joueur » est supérieure à 0 %, la flèche peut pointer vers un tout autre joueur selon cette probabilité.
+- Si le « Délai avant l'affichage de la flèche » est supérieur à 0 seconde, la flèche apparaîtra après ce délai.</value>
+  </data>
+  <data name="ForasShowArrowButton" xml:space="preserve">
+    <value>FUITE</value>
+  </data>
+  <data name="ForasShowArrow" xml:space="preserve">
+    <value>Un Foras a révélé la position de quelqu'un !</value>
+  </data>
+</root>

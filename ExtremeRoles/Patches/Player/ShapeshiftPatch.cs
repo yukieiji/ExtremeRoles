@@ -4,37 +4,46 @@ using HarmonyLib;
 using AmongUs.GameOptions;
 using UnityEngine;
 
-using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Core.Abstract;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtremeRoles.Patches.Player;
 
 #nullable enable
 
-
-[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Shapeshift))]
-public static class PlayerControlShapeshiftPatch
+public class PlayerControlShapeshiftPatchBody(IGameProgress progress, IGameRuntime runtime)
 {
-	public static bool Prefix(
+	private readonly IGameProgress _progress = progress;
+	private readonly IGameRuntime _runtime = runtime;
+
+	public bool Prefix(
 		PlayerControl __instance,
-		[HarmonyArgument(0)] PlayerControl targetPlayer,
-		[HarmonyArgument(1)] bool animate)
+		PlayerControl targetPlayer,
+		bool animate)
 	{
-        if ((
-				!GameProgressSystem.IsGameNow ||
-				!ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var role) ||
+		if ((
+				!_progress.IsGameNow ||
+				!_runtime.TryGetGameContext(out var ctx) ||
+				!ctx.Roles.TryGetRole(__instance.PlayerId, out var role) ||
 				(role.TryGetVanillaRoleId(out RoleTypes roleId) && roleId is RoleTypes.Shapeshifter)
 			))
-        {
-            return true;
-        }
+		{
+			return true;
+		}
+		Override(__instance, targetPlayer, animate);
+		return false;
+	}
 
+	private void Override(
+		PlayerControl __instance,
+		PlayerControl targetPlayer,
+		bool animate)
+	{
 		if (__instance.CurrentOutfitType == PlayerOutfitType.MushroomMixup)
 		{
-			return false;
+			return;
 		}
-
 
 		NetworkedPlayerInfo targetPlayerInfo = targetPlayer.Data;
 
@@ -42,15 +51,21 @@ public static class PlayerControlShapeshiftPatch
 
 		var outfits = __instance.Data.Outfits;
 
-		NetworkedPlayerInfo.PlayerOutfit instancePlayerOutfit = outfits[PlayerOutfitType.Default];
-		NetworkedPlayerInfo.PlayerOutfit newOutfit = instancePlayerOutfit;
+		if (!outfits.TryGetValue(PlayerOutfitType.Default, out var instancePlayerOutfit))
+		{
+			return;
+		}
+		var newOutfit = instancePlayerOutfit;
 
 		if (!isSame)
 		{
-			newOutfit = targetPlayerInfo.Outfits[PlayerOutfitType.Default];
+			if (!targetPlayerInfo.Outfits.TryGetValue(PlayerOutfitType.Default, out newOutfit))
+			{
+				return;
+			}
 		}
 
-		Action changeOutfit = delegate ()
+		Action changeOutfit = () => 
 		{
 			if (isSame)
 			{
@@ -69,68 +84,89 @@ public static class PlayerControlShapeshiftPatch
 				__instance.shapeshiftTargetPlayerId = targetPlayer.PlayerId;
 			}
 		};
-		if (animate)
+
+		if (!animate)
 		{
-			__instance.shapeshifting = true;
+			changeOutfit.Invoke();
+			return;
+		}
 
-			var myPhysics = __instance.MyPhysics;
-			var anim = myPhysics.Animations;
+		__instance.shapeshifting = true;
 
-			myPhysics.SetNormalizedVelocity(Vector2.zero);
-			bool amOwner = __instance.AmOwner;
-			if (amOwner && Minigame.Instance == null)
-			{
-				PlayerControl.HideCursorTemporarily();
-			}
-			RoleEffectAnimation roleEffectAnimation = UnityEngine.Object.Instantiate(
-				RoleManager.Instance.shapeshiftAnim,
-				__instance.gameObject.transform);
-			roleEffectAnimation.SetMaskLayerBasedOnWhoShouldSee(amOwner);
-			roleEffectAnimation.SetMaterialColor(instancePlayerOutfit.ColorId);
-			if (__instance.cosmetics.FlipX)
-			{
-				roleEffectAnimation.transform.position -= new Vector3(0.14f, 0f, 0f);
-			}
+		var myPhysics = __instance.MyPhysics;
+		var anim = myPhysics.Animations;
 
-			Action changeAction = () =>
-			{
-				changeOutfit.Invoke();
-				__instance.cosmetics.SetScale(
-					anim.DefaultPlayerScale,
-					__instance.defaultCosmeticsScale);
-			};
+		myPhysics.SetNormalizedVelocity(Vector2.zero);
+		bool amOwner = __instance.AmOwner;
+		
+		if (amOwner && Minigame.Instance == null)
+		{
+			PlayerControl.HideCursorTemporarily();
+		}
 
-			roleEffectAnimation.MidAnimCB = changeAction;
+		RoleEffectAnimation roleEffectAnimation = UnityEngine.Object.Instantiate(
+			RoleManager.Instance.shapeshiftAnim,
+			__instance.gameObject.transform);
+		roleEffectAnimation.SetMaskLayerBasedOnWhoShouldSee(amOwner);
+		roleEffectAnimation.SetMaterialColor(instancePlayerOutfit.ColorId);
+		if (__instance.cosmetics.FlipX)
+		{
+			roleEffectAnimation.transform.position -= new Vector3(0.14f, 0f, 0f);
+		}
 
-			bool shoudLongAround = AprilFoolsMode.ShouldLongAround();
+		Action changeAction = () =>
+		{
+			changeOutfit.Invoke();
+			__instance.cosmetics.SetScale(
+				anim.DefaultPlayerScale,
+				__instance.defaultCosmeticsScale);
+		};
 
+		roleEffectAnimation.MidAnimCB = changeAction;
+
+		bool shoudLongAround = AprilFoolsMode.ShouldLongAround();
+
+		if (shoudLongAround)
+		{
+			__instance.cosmetics.ShowLongModeParts(false);
+			__instance.cosmetics.SetHatVisorVisible(false);
+		}
+
+		__instance.StartCoroutine(
+			__instance.ScalePlayer(anim.ShapeshiftScale, 0.25f));
+
+		Action roleAnimation = () =>
+		{
+			__instance.shapeshifting = false;
 			if (shoudLongAround)
 			{
-				__instance.cosmetics.ShowLongModeParts(false);
-				__instance.cosmetics.SetHatVisorVisible(false);
+				__instance.cosmetics.ShowLongModeParts(true);
+				__instance.cosmetics.SetHatVisorVisible(true);
 			}
+		};
 
-			__instance.StartCoroutine(
-				__instance.ScalePlayer(anim.ShapeshiftScale, 0.25f));
+		roleEffectAnimation.Play(
+			__instance, roleAnimation,
+			PlayerControl.LocalPlayer.cosmetics.FlipX,
+			RoleEffectAnimation.SoundType.Local, 0f);
+	}
+}
 
-			Action roleAnimation = () =>
-			{
-				__instance.shapeshifting = false;
-				if (shoudLongAround)
-				{
-					__instance.cosmetics.ShowLongModeParts(true);
-					__instance.cosmetics.SetHatVisorVisible(true);
-				}
-			};
 
-			roleEffectAnimation.Play(
-				__instance, roleAnimation,
-				PlayerControl.LocalPlayer.cosmetics.FlipX,
-				RoleEffectAnimation.SoundType.Local, 0f);
-			return false;
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Shapeshift))]
+public static class PlayerControlShapeshiftPatch
+{
+	private static PlayerControlShapeshiftPatchBody? _body;
+
+	public static bool Prefix(
+		PlayerControl __instance,
+		[HarmonyArgument(0)] PlayerControl targetPlayer,
+		[HarmonyArgument(1)] bool animate)
+	{
+		if (_body is null)
+		{
+			_body = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<PlayerControlShapeshiftPatchBody>();
 		}
-		changeOutfit.Invoke();
-		return false;
-
+		return _body.Prefix(__instance, targetPlayer, animate);
 	}
 }

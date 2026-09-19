@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Ventgeist" xml:space="preserve">
+    <value>Vent-geist</value>
+  </data>
+  <data name="VentgeistRange" xml:space="preserve">
+    <value>« SECOUER » : Portée de détection des conduits</value>
+  </data>
+  <data name="VentgeistAbilityCoolTime" xml:space="preserve">
+    <value>« SECOUER » : Temps de recharge</value>
+  </data>
+  <data name="VentgeistAbilityCount" xml:space="preserve">
+    <value>« SECOUER » : Nombre d'utilisations</value>
+  </data>
+  <data name="VentgeistIsReportAbility" xml:space="preserve">
+    <value>« SECOUER » : Signaler l'utilisation de la compétence lors des réunions</value>
+  </data>
+  <data name="VentgeistShortDescription" xml:space="preserve">
+    <value>Secouez les conduits pour surprendre l'équipage</value>
+  </data>
+  <data name="VentgeistFullDescription" xml:space="preserve">
+    <value>Un rôle de Fantôme Imposteur capable de secouer les conduits.
+Compétence « SECOUER » :
+- Déclenche l'animation d'ouverture/fermeture d'un conduit.</value>
+  </data>
+  <data name="VentgeistVentAnimeButton" xml:space="preserve">
+    <value>SECOUER</value>
+  </data>
+  <data name="VentgeistVentAnime" xml:space="preserve">
+    <value>Un Vent-geist a secoué un conduit !</value>
+  </data>
+  <data name="SaboEvil" xml:space="preserve">
+    <value>Sabota-geist</value>
+  </data>
+  <data name="SaboEvilAbilityCoolTime" xml:space="preserve">
+    <value>« RÉINITIALISER » : Temps de recharge</value>
+  </data>
+  <data name="SaboEvilAbilityCount" xml:space="preserve">
+    <value>« RÉINITIALISER » : Nombre d'utilisations</value>
+  </data>
+  <data name="SaboEvilIsReportAbility" xml:space="preserve">
+    <value>« RÉINITIALISER » : Signaler l'utilisation de la compétence lors des réunions</value>
+  </data>
+  <data name="SaboEvilShortDescription" xml:space="preserve">
+    <value>Soutenez vos alliés en annulant le temps de recharge des sabotages</value>
+  </data>
+  <data name="SaboEvilFullDescription" xml:space="preserve">
+    <value>Un rôle de Fantôme Imposteur capable d'aider les Imposteurs.
+Compétence « RÉINITIALISER » :
+- Annule immédiatement le temps de recharge des sabotages à l'utilisation.
+- Cela n'affecte que le camp des Imposteurs.</value>
+  </data>
+  <data name="SaboEvilResetSabotageCoolButton" xml:space="preserve">
+    <value>RÉINITIALISER</value>
+  </data>
+  <data name="SaboEvilResetSabotageCool" xml:space="preserve">
+    <value>Un Sabota-geist a réinitialisé le rechargement des sabotages !</value>
+  </data>
+  <data name="Igniter" xml:space="preserve">
+    <value>Igniter</value>
+  </data>
+  <data name="IgniterAbilityCoolTime" xml:space="preserve">
+    <value>« EXTINCTION » : Temps de recharge</value>
+  </data>
+  <data name="IgniterAbilityActiveTime" xml:space="preserve">
+    <value>« EXTINCTION » : Durée de la compétence</value>
+  </data>
+  <data name="IgniterIsReportAbility" xml:space="preserve">
+    <value>« EXTINCTION » : Signaler l'utilisation de la compétence lors des réunions</value>
+  </data>
+  <data name="IgniterAbilityCount" xml:space="preserve">
+    <value>« EXTINCTION » : Nombre d'utilisations</value>
+  </data>
+  <data name="IgniterIsEffectImpostor" xml:space="preserve">
+    <value>« EXTINCTION » : Affecte les IMPOSTEURS</value>
+  </data>
+  <data name="IgniterIsEffectNeutral" xml:space="preserve">
+    <value>« EXTINCTION » : Affecte les NEUTRES</value>
+  </data>
+  <data name="IgniterShortDescription" xml:space="preserve">
+    <value>Soutenez les Imposteurs en provoquant une obscurité spéciale</value>
+  </data>
+  <data name="IgniterFullDescription" xml:space="preserve">
+    <value>Un rôle de Fantôme Imposteur capable de réduire la vision des joueurs.
+*Ne peut être attribué qu'à un ancien Dernier Loup (Last Wolf)
+Compétence « EXTINCTION » :
+- Réduit la vision des joueurs vivants comme lors d'une panne de lumière.
+- Il s'agit d'une compétence et non d'un sabotage (ne peut pas être réparé).
+- N'affecte pas les joueurs insensibles aux pannes de lumière.</value>
+  </data>
+  <data name="IgniterSwitchLightButton" xml:space="preserve">
+    <value>EXTINCTION</value>
+  </data>
+  <data name="IgniterSwitchLight" xml:space="preserve">
+    <value>Un Igniter a plongé le vaisseau dans l'obscurité !</value>
+  </data>
+  <data name="Doppelganger" xml:space="preserve">
+    <value>Doppelganger</value>
+  </data>
+  <data name="DoppelgangerAbilityCoolTime" xml:space="preserve">
+    <value>« SOSIE » : Temps de recharge</value>
+  </data>
+  <data name="DoppelgangerAbilityActiveTime" xml:space="preserve">
+    <value>« SOSIE » : Durée d'affichage du sosie</value>
+  </data>
+  <data name="DoppelgangerIsReportAbility" xml:space="preserve">
+    <value>« SOSIE » : Signaler l'utilisation de la compétence lors des réunions</value>
+  </data>
+  <data name="DoppelgangerAbilityCount" xml:space="preserve">
+    <value>« SOSIE » : Nombre d'utilisations</value>
+  </data>
+  <data name="DoppelgangerDoppel" xml:space="preserve">
+    <value>Le sosie de quelqu'un a été aperçu !</value>
+  </data>
+  <data name="DoppelgangerDoppelButton" xml:space="preserve">
+    <value>SOSIE</value>
+  </data>
+  <data name="DoppelgangerFullDescription" xml:space="preserve">
+    <value>Un rôle de Fantôme Imposteur capable de faire apparaître le sosie d'un joueur aux yeux des survivants.
+Compétence « SOSIE » :
+- Après activation, permet d'afficher le sosie du joueur sélectionné aux survivants.</value>
+  </data>
+  <data name="DoppelgangerShortDescription" xml:space="preserve">
+    <value>Surprenez tout le monde avec « SOSIE »</value>
+  </data>
+</root>

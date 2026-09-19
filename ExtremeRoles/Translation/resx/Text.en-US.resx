@@ -1064,6 +1064,12 @@ Do you want to continue Installing?</value>
   <data name="MeetingOption" xml:space="preserve">
     <value>Meeting Settings</value>
   </data>
+  <data name="Judge" xml:space="preserve">
+    <value>Judge</value>
+  </data>
+  <data name="MeetingOptionOverruleSuccessIsNeutral" xml:space="preserve">
+    <value>Whether the Judge's ability succeeds on Neutrals</value>
+  </data>
   <data name="MeetingOptionUseRaiseHand" xml:space="preserve">
     <value>Use "Raise Hand" button</value>
   </data>

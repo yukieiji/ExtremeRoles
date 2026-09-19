@@ -1,122 +1,965 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
   <resheader name="version">
-    <value>2.0</value>
+    <value>1.3</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="MODNAME_TRANS" xml:space="preserve">
+    <value>Extreme Roles</value>
+  </data>
+  <data name="GeneralTab" xml:space="preserve">
+    <value>Paramètres globaux</value>
+  </data>
+  <data name="CrewmateTab" xml:space="preserve">
+    <value>&lt;color=#8CFFFFFF&gt;Paramètres des rôles d'Équipier&lt;/color&gt;</value>
+  </data>
+  <data name="ImpostorTab" xml:space="preserve">
+    <value>&lt;color=#FF1919FF&gt;Paramètres des rôles d'Imposteur&lt;/color&gt;</value>
+  </data>
+  <data name="NeutralTab" xml:space="preserve">
+    <value>&lt;color=#7F7F7FFF&gt;Paramètres des rôles Neutres&lt;/color&gt;</value>
+  </data>
+  <data name="CombinationTab" xml:space="preserve">
+    <value>&lt;color=#8CFFFFFF&gt;Paramètres des rôles de&lt;/color&gt;&lt;color=#FF1919FF&gt; Combi&lt;/color&gt;&lt;color=#7F7F7FFF&gt;naison&lt;/color&gt;</value>
+  </data>
+  <data name="GhostCrewmateTab" xml:space="preserve">
+    <value>&lt;color=#8CFFFFFF&gt;Paramètres des rôles de Fantôme d'Équipier&lt;/color&gt;</value>
+  </data>
+  <data name="GhostImpostorTab" xml:space="preserve">
+    <value>&lt;color=#FF1919FF&gt;Paramètres des rôles de Fantôme d'Imposteur&lt;/color&gt;</value>
+  </data>
+  <data name="GhostNeutralTab" xml:space="preserve">
+    <value>&lt;color=#7F7F7FFF&gt;Paramètres des rôles de Fantôme Neutre&lt;/color&gt;</value>
+  </data>
+  <data name="ExR_SettingsDescription" xml:space="preserve">
+    <value>Configurer les paramètres d'ExtremeRoles</value>
+  </data>
+  <data name="OptionSettingChange" xml:space="preserve">
+    <value>[{0}-{1}] « {2} » a été mis à jour vers « {3} »</value>
+  </data>
+  <data name="PresetOption" xml:space="preserve">
+    <value>Préréglage</value>
+  </data>
+  <data name="PresetOptionSelection" xml:space="preserve">
+    <value>Préréglage à utiliser</value>
+  </data>
+  <data name="RandomOption" xml:space="preserve">
+    <value>Paramètres de génération aléatoire</value>
+  </data>
+  <data name="RandomOptionUseStrong" xml:space="preserve">
+    <value>Utiliser le mélange fort</value>
+  </data>
+  <data name="RandomOptionAlgorithm" xml:space="preserve">
+    <value>Algorithme de génération aléatoire</value>
+  </data>
+  <data name="RoleSpawnCategory" xml:space="preserve">
+    <value>Nombre d'apparitions de rôles</value>
+  </data>
+  <data name="RoleSpawnCategoryMinCrewmate" xml:space="preserve">
+    <value>Nombre min. de rôles d'Équipier</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxCrewmate" xml:space="preserve">
+    <value>Nombre max. de rôles d'Équipier</value>
+  </data>
+  <data name="RoleSpawnCategoryMinNeutral" xml:space="preserve">
+    <value>Nombre min. de rôles Neutres</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxNeutral" xml:space="preserve">
+    <value>Nombre max. de rôles Neutres</value>
+  </data>
+  <data name="RoleSpawnCategoryMinImpostor" xml:space="preserve">
+    <value>Nombre min. de rôles d'Imposteur</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxImpostor" xml:space="preserve">
+    <value>Nombre max. de rôles d'Imposteur</value>
+  </data>
+  <data name="GhostRoleSpawnCategory" xml:space="preserve">
+    <value>Nombre d'apparitions de rôles de fantôme</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinCrewmate" xml:space="preserve">
+    <value>Nombre min. de rôles de fantôme d'Équipier</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxCrewmate" xml:space="preserve">
+    <value>Nombre max. de rôles de fantôme d'Équipier</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinNeutral" xml:space="preserve">
+    <value>Nombre min. de rôles de fantôme Neutres</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxNeutral" xml:space="preserve">
+    <value>Nombre max. de rôles de fantôme Neutres</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinImpostor" xml:space="preserve">
+    <value>Nombre min. de rôles de fantôme d'Imposteur</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxImpostor" xml:space="preserve">
+    <value>Nombre max. de rôles de fantôme d'Imposteur</value>
+  </data>
+  <data name="MeetingOption" xml:space="preserve">
+    <value>Paramètres des réunions</value>
+  </data>
+  <data name="MeetingOptionUseRaiseHand" xml:space="preserve">
+    <value>Utiliser le bouton « Lever la main »</value>
+  </data>
+  <data name="MeetingOptionNumMeating" xml:space="preserve">
+    <value>Nombre total de réunions d'urgence</value>
+  </data>
+  <data name="MeetingOptionChangeMeetingVoteAreaSort" xml:space="preserve">
+    <value>Changer l'ordre des joueurs pendant la réunion</value>
+  </data>
+  <data name="MeetingOptionFixedMeetingPlayerLevel" xml:space="preserve">
+    <value>Fixer le niveau des joueurs dans l'interface de réunion</value>
+  </data>
+  <data name="MeetingOptionDisableSkipInEmergencyMeeting" xml:space="preserve">
+    <value>Interdire de passer le vote</value>
+  </data>
+  <data name="MeetingOptionDisableSelfVote" xml:space="preserve">
+    <value>Interdire de voter contre soi-même</value>
+  </data>
+  <data name="ExiledOption" xml:space="preserve">
+    <value>Paramètres d'éjection</value>
+  </data>
+  <data name="ExiledOptionConfirmExilMode" xml:space="preserve">
+    <value>Camps révélés lors de l'éjection</value>
+  </data>
+  <data name="ExiledOptionIsConfirmRole" xml:space="preserve">
+    <value>Révéler aussi le rôle lors de l'éjection</value>
+  </data>
+  <data name="VentOption" xml:space="preserve">
+    <value>Paramètres des trappes</value>
+  </data>
+  <data name="VentOptionDisable" xml:space="preserve">
+    <value>Désactiver les trappes de la carte</value>
+  </data>
+  <data name="VentOptionCanKillInPlayer" xml:space="preserve">
+    <value>Peut tuer les joueurs dans les trappes</value>
+  </data>
+  <data name="VentOptionEngineerUseImpostor" xml:space="preserve">
+    <value>Utilisation des trappes de l'Ingénieur identique aux Imposteurs</value>
+  </data>
+  <data name="VentOptionAnimationModeInVison" xml:space="preserve">
+    <value>Portée d'affichage des animations de trappe</value>
+  </data>
+  <data name="VanillaAnimation" xml:space="preserve">
+    <value>Toutes les trappes de l'écran</value>
+  </data>
+  <data name="DonotWallHack" xml:space="preserve">
+    <value>Seulement à l'intérieur des murs</value>
+  </data>
+  <data name="DonotOutVison" xml:space="preserve">
+    <value>Seulement dans le champ de vision</value>
+  </data>
+  <data name="TaskOption" xml:space="preserve">
+    <value>Paramètres des tâches</value>
+  </data>
+  <data name="TaskOptionIsFixWallHaskTask" xml:space="preserve">
+    <value>Remplacer le contrôle de mur des tâches</value>
+  </data>
+  <data name="TaskOptionParallelMedBayScans" xml:space="preserve">
+    <value>Autoriser les scans simultanés à l'Infirmerie</value>
+  </data>
+  <data name="TaskOptionGarbageTask" xml:space="preserve">
+    <value>Tâche : Vider la poubelle</value>
+  </data>
+  <data name="TaskOptionShowerTask" xml:space="preserve">
+    <value>Tâche : Décontaminer</value>
+  </data>
+  <data name="TaskOptionDevelopPhotosTask" xml:space="preserve">
+    <value>Tâche : Développer les photos</value>
+  </data>
+  <data name="TaskOptionDivertPowerTask" xml:space="preserve">
+    <value>Tâche : Dévier la puissance</value>
+  </data>
+  <data name="RandomSpawnOption" xml:space="preserve">
+    <value>Paramètres d'apparition aléatoire</value>
+  </data>
+  <data name="RandomSpawnOptionEnable" xml:space="preserve">
+    <value>Activer les paramètres d'apparition avancés</value>
+  </data>
+  <data name="RandomSpawnOptionSkeld" xml:space="preserve">
+    <value>Apparition aléatoire dans « The Skeld »</value>
+  </data>
+  <data name="RandomSpawnOptionMiraHq" xml:space="preserve">
+    <value>Apparition aléatoire dans « MIRA HQ »</value>
+  </data>
+  <data name="RandomSpawnOptionPolus" xml:space="preserve">
+    <value>Apparition aléatoire dans « Polus »</value>
+  </data>
+  <data name="RandomSpawnOptionAirShip" xml:space="preserve">
+    <value>Apparition aléatoire dans « The Airship »</value>
+  </data>
+  <data name="RandomSpawnOptionFungle" xml:space="preserve">
+    <value>Apparition aléatoire dans « The Fungle »</value>
+  </data>
+  <data name="RandomSpawnOptionIsAutoSelect" xml:space="preserve">
+    <value>Sélection automatique du point d'apparition après la réunion</value>
+  </data>
+  <data name="AdminOption" xml:space="preserve">
+    <value>Paramètres de la carte d'administration</value>
+  </data>
+  <data name="AdminOptionIsRemove" xml:space="preserve">
+    <value>Désactiver la carte d'administration</value>
+  </data>
+  <data name="AdminOptionAirShipEnable" xml:space="preserve">
+    <value>Carte d'admin active sur « The Airship »</value>
+  </data>
+  <data name="ModeBoth" xml:space="preserve">
+    <value>Activer les deux</value>
+  </data>
+  <data name="ModeCockpitOnly" xml:space="preserve">
+    <value>Activer uniquement le cockpit</value>
+  </data>
+  <data name="ModeArchiveOnly" xml:space="preserve">
+    <value>Activer uniquement les archives</value>
+  </data>
+  <data name="AdminOptionEnableLimit" xml:space="preserve">
+    <value>Activer la limite de temps pour l'admin</value>
+  </data>
+  <data name="AdminOptionLimitTime" xml:space="preserve">
+    <value>Temps d'utilisation maximal de l'admin</value>
+  </data>
+  <data name="SecurityOption" xml:space="preserve">
+    <value>Paramètres des caméras et registres de sécurité</value>
+  </data>
+  <data name="SecurityOptionIsRemove" xml:space="preserve">
+    <value>Désactiver les caméras et les registres de sécurité</value>
+  </data>
+  <data name="SecurityOptionEnableLimit" xml:space="preserve">
+    <value>Activer la limite de temps pour les caméras et registres</value>
+  </data>
+  <data name="SecurityOptionLimitTime" xml:space="preserve">
+    <value>Temps d'utilisation maximal des caméras et registres</value>
+  </data>
+  <data name="VitalOption" xml:space="preserve">
+    <value>Paramètres des signes vitaux</value>
+  </data>
+  <data name="VitalOptionIsRemove" xml:space="preserve">
+    <value>Désactiver le moniteur des signes vitaux</value>
+  </data>
+  <data name="VitalOptionEnableLimit" xml:space="preserve">
+    <value>Activer la limite de temps pour le moniteur des signes vitaux</value>
+  </data>
+  <data name="VitalOptionLimitTime" xml:space="preserve">
+    <value>Temps d'utilisation maximal des signes vitaux</value>
+  </data>
+  <data name="VitalOptionPolusVitalPos" xml:space="preserve">
+    <value>Position des signes vitaux sur Polus</value>
+  </data>
+  <data name="RandomMapOption" xml:space="preserve">
+    <value>Paramètres de carte aléatoire</value>
+  </data>
+  <data name="RandomMapOptionEnable" xml:space="preserve">
+    <value>Changer de carte aléatoirement à chaque partie</value>
+  </data>
+  <data name="TaskWinOption" xml:space="preserve">
+    <value>Paramètres de victoire par tâches</value>
+  </data>
+  <data name="TaskWinOptionDisableWhenNoneTaskCrew" xml:space="preserve">
+    <value>Désactiver la victoire par tâches s'il n'y a pas d'Équipier avec des tâches</value>
+  </data>
+  <data name="TaskWinOptionDisableAll" xml:space="preserve">
+    <value>Désactiver la victoire par tâches</value>
+  </data>
+  <data name="NeutralWinOption" xml:space="preserve">
+    <value>Paramètres de victoire du camp Neutre</value>
+  </data>
+  <data name="NeutralWinOptionIsSame" xml:space="preserve">
+    <value>Unifier la victoire des Neutres du même rôle</value>
+  </data>
+  <data name="NeutralWinOptionDisableSpecialEnd" xml:space="preserve">
+    <value>Désactiver la fin automatique par victoires spéciales des Neutres</value>
+  </data>
+  <data name="GhostRoleGlobalOption" xml:space="preserve">
+    <value>Paramètres généraux des rôles de fantôme</value>
+  </data>
+  <data name="GhostRoleGlobalOptionIsAssignNeutralToVanillaCrewGhostRole" xml:space="preserve">
+    <value>Attribuer un rôle de fantôme de base aux rôles Neutres</value>
+  </data>
+  <data name="GhostRoleGlobalOptionIsBlockGAAbilityReport" xml:space="preserve">
+    <value>Désactiver le rapport d'activation de la capacité de l'Ange Gardien</value>
+  </data>
+  <data name="EnableHorseMode" xml:space="preserve">
+    <value>Activer le mode Among Horse</value>
+  </data>
+  <data name="OptionCategory" xml:space="preserve">
+    <value>Catégorie</value>
+  </data>
+  <data name="moreOptionText" xml:space="preserve">
+    <value>Paramètres de la MOD</value>
+  </data>
+  <data name="modOptionText" xml:space="preserve">
+    <value>Paramètres de la MOD</value>
+  </data>
+  <data name="GhostsSeeTasksButton" xml:space="preserve">
+    <value>Afficher les tâches restantes de tous en fantôme</value>
+  </data>
+  <data name="GhostsSeeRolesButton" xml:space="preserve">
+    <value>Afficher les rôles de tous en fantôme</value>
+  </data>
+  <data name="GhostsSeeVotesButton" xml:space="preserve">
+    <value>Afficher les votes de tous en fantôme</value>
+  </data>
+  <data name="ShowRoleSummaryButton" xml:space="preserve">
+    <value>Afficher le résultat final de chaque joueur</value>
+  </data>
+  <data name="HideNamePlateButton" xml:space="preserve">
+    <value>Masquer les plaques de nom</value>
+  </data>
+  <data name="custom" xml:space="preserve">
+    <value>personnalisé</value>
+  </data>
+  <data name="ExROfficialTokyo" xml:space="preserve">
+    <value>ExR Tokyo (Officiel)</value>
+  </data>
+  <data name="importCsv" xml:space="preserve">
+    <value>Importer les paramètres</value>
+  </data>
+  <data name="importPleaseWait" xml:space="preserve">
+    <value>Importation des options en cours...
+Veuillez patienter...</value>
+  </data>
+  <data name="importSuccess" xml:space="preserve">
+    <value>Importation réussie</value>
+  </data>
+  <data name="importError" xml:space="preserve">
+    <value>Échec de l'importation.
+Veuillez vérifier vos fichiers.</value>
+  </data>
+  <data name="exportCsv" xml:space="preserve">
+    <value>Exporter les paramètres</value>
+  </data>
+  <data name="exportPleaseWait" xml:space="preserve">
+    <value>Exportation des options en cours...
+Veuillez patienter...</value>
+  </data>
+  <data name="exportSuccess" xml:space="preserve">
+    <value>Exportation réussie</value>
+  </data>
+  <data name="exportError" xml:space="preserve">
+    <value>Échec de l'exportation.
+Veuillez supprimer option.csv et réessayer.</value>
+  </data>
+  <data name="version" xml:space="preserve">
+    <value>Version : </value>
+  </data>
+  <data name="developer" xml:space="preserve">
+    <value>Développé par : </value>
+  </data>
+  <data name="debugThunk" xml:space="preserve">
+    <value>Assistance au débogage : </value>
+  </data>
+  <data name="langTranslate" xml:space="preserve">
+    <value>Traduction : </value>
+  </data>
+  <data name="translatorMember" xml:space="preserve">
+    <value>Équipe de traduction FR</value>
+  </data>
+  <data name="youAreRoleIntro" xml:space="preserve">
+    <value>Votre rôle est</value>
+  </data>
+  <data name="andFirst" xml:space="preserve">
+    <value> ainsi que </value>
+  </data>
+  <data name="and" xml:space="preserve">
+    <value> et </value>
+  </data>
+  <data name="introAnd" xml:space="preserve">
+    <value>Et, </value>
+  </data>
+  <data name="optionOn" xml:space="preserve">
+    <value>&lt;color=#33ffcc&gt;ACTIVÉ&lt;/color&gt;</value>
+  </data>
+  <data name="optionOff" xml:space="preserve">
+    <value>&lt;color=#ff3366&gt;DÉSACTIVÉ&lt;/color&gt;</value>
+  </data>
+  <data name="crewmateRoles" xml:space="preserve">
+    <value>Rôles d'Équipier</value>
+  </data>
+  <data name="neutralRoles" xml:space="preserve">
+    <value>Rôles Neutres</value>
+  </data>
+  <data name="impostorRoles" xml:space="preserve">
+    <value>Rôles d'Imposteur</value>
+  </data>
+  <data name="crewmateGhostRoles" xml:space="preserve">
+    <value>Rôles de fantôme d'Équipier</value>
+  </data>
+  <data name="neutralGhostRoles" xml:space="preserve">
+    <value>Rôles de fantôme Neutres</value>
+  </data>
+  <data name="impostorGhostRoles" xml:space="preserve">
+    <value>Rôles de fantôme d'Imposteur</value>
+  </data>
+  <data name="pressTabForMore" xml:space="preserve">
+    <value>Appuyez sur Tab pour la page suivante...</value>
+  </data>
+  <data name="meetingStatus" xml:space="preserve">
+    <value>LE MEMBRE D'ÉQUIPAGE {0} A ENCORE
+
+
+RÉUNIONS D'URGENCE RESTANTES</value>
+  </data>
+  <data name="meetingCount" xml:space="preserve">
+    <value>{0} fois restante(s) / total du vaisseau : {1}</value>
+  </data>
+  <data name="buttonBlocked" xml:space="preserve">
+    <value>BLOQUÉ</value>
+  </data>
+  <data name="Preset" xml:space="preserve">
+    <value>Préréglage {0}</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>{0} s</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>{0} min</value>
+  </data>
+  <data name="Shot" xml:space="preserve">
+    <value>{0} fois</value>
+  </data>
+  <data name="Multiplier" xml:space="preserve">
+    <value>x{0}</value>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>{0} %</value>
+  </data>
+  <data name="ScrewNum" xml:space="preserve">
+    <value>{0} vis</value>
+  </data>
+  <data name="VoteNum" xml:space="preserve">
+    <value>{0} vote(s)</value>
+  </data>
+  <data name="XionUseXion" xml:space="preserve">
+    <value>Utiliser le rôle d'hôte « Xion »</value>
+  </data>
+  <data name="yourHost" xml:space="preserve">
+    <value>Rôle de l'hôte</value>
+  </data>
+  <data name="youAreNewRuleEditor" xml:space="preserve">
+    <value>Devenez le maître du jeu</value>
+  </data>
+  <data name="Xion" xml:space="preserve">
+    <value>Xion</value>
+  </data>
+  <data name="XionIntroDescription" xml:space="preserve">
+    <value>L'être omnipotent</value>
+  </data>
+  <data name="XionShortDescription" xml:space="preserve">
+    <value>Un être égal à un dieu omniscient</value>
+  </data>
+  <data name="XionFullDescription" xml:space="preserve">
+    <value>Rôle d'observateur obligatoirement attribué à l'hôte.
+Permet de zoomer/dézoomer la carte, changer la vitesse de déplacement, se téléporter, etc.
+Cliquer sur les avatars en bas à gauche vous téléporte vers le joueur ;
+Cliquer en maintenant L-ALT permet de TUER ou RESSUSCITER le joueur.
+
+RACCOURCIS :
+ - ALT + L : Terminer prématurément la partie
+ - ALT + C : Terminer la réunion
+ - ALT + F : Masquer/afficher l'interface
+ - SHIFT + PageUp : Augmenter la vitesse de déplacement
+ - SHIFT + PageDown : Réduire la vitesse de déplacement
+ - SHIFT + R : Réinitialiser la vitesse
+ - CTRL + PageUp : Zoomer
+ - CTRL + PageDown : Dézoomer
+ - CTRL + R : Réinitialiser le zoom
+
+Pour les parties LOCALES :
+ - F dans le lobby : Invoquer un joueur factice (quand XION est actif)
+ - ALT + B : Créer un cadavre factice sous le curseur
+ - Commandes de chat disponibles :
+    - /SetRole [nom_joueur(optionnel)] [NOM_RÔLE] : Attribuer un rôle au joueur.
+    - /IamXion : Définir l'hôte comme Xion</value>
+  </data>
+  <data name="zoomOut" xml:space="preserve">
+    <value>Dézoomer</value>
+  </data>
+  <data name="zoomIn" xml:space="preserve">
+    <value>Zoomer</value>
+  </data>
+  <data name="speedUp" xml:space="preserve">
+    <value>Accélérer</value>
+  </data>
+  <data name="speedDown" xml:space="preserve">
+    <value>Ralentir</value>
+  </data>
+  <data name="alreadyVoted" xml:space="preserve">
+    <value>Vous avez déjà voté !</value>
+  </data>
+  <data name="invalidArgs" xml:space="preserve">
+    <value>Arguments invalides !</value>
+  </data>
+  <data name="invalidPlayerName" xml:space="preserve">
+    <value>Nom de joueur introuvable !</value>
+  </data>
+  <data name="cannotUseThisGameMode" xml:space="preserve">
+    <value>Impossible d'utiliser cette fonction dans ce mode de jeu !</value>
+  </data>
+  <data name="invalidRoleName" xml:space="preserve">
+    <value>Nom de rôle invalide !</value>
+  </data>
+  <data name="setRole" xml:space="preserve">
+    <value>Rôle attribué : {1} au joueur : {0}</value>
+  </data>
+  <data name="XionNow" xml:space="preserve">
+    <value>L'hôte est déjà Xion !</value>
+  </data>
+  <data name="RevartXion" xml:space="preserve">
+    <value>Rôle Xion attribué à l'hôte.</value>
+  </data>
+  <data name="buttonCountText" xml:space="preserve">
+    <value>RESTANT : {0}</value>
+  </data>
+  <data name="summaryText" xml:space="preserve">
+    <value>RÉSULTATS FINAUX :</value>
+  </data>
+  <data name="roleSummaryInfo" xml:space="preserve">
+    <value>Nom du joueur&lt;pos=16.5%&gt;Tâches&lt;pos=25%&gt;Statut final&lt;pos=38%&gt;Rôle</value>
+  </data>
+  <data name="ghostRoleSummaryInfo" xml:space="preserve">
+    <value>Nom du joueur&lt;pos=16.5%&gt;Tâches&lt;pos=25%&gt;Statut final&lt;pos=38%&gt;Rôle de fantôme</value>
+  </data>
+  <data name="noGhostRole" xml:space="preserve">
+    <value>Aucun</value>
+  </data>
+  <data name="tabMoreSummary" xml:space="preserve">
+    <value>Appuyez sur Tab pour changer de page ({0}/{1})</value>
+  </data>
+  <data name="shiftHideSummary" xml:space="preserve">
+    <value>Appuyez sur Shift pour masquer les résultats</value>
+  </data>
+  <data name="shiftShowSummary" xml:space="preserve">
+    <value>Appuyez sur Shift pour afficher les résultats</value>
+  </data>
+  <data name="Alive" xml:space="preserve">
+    <value>Vivant</value>
+  </data>
+  <data name="Exiled" xml:space="preserve">
+    <value>Éjecté</value>
+  </data>
+  <data name="Dead" xml:space="preserve">
+    <value>Mort</value>
+  </data>
+  <data name="Killed" xml:space="preserve">
+    <value>Tué</value>
+  </data>
+  <data name="Suicide" xml:space="preserve">
+    <value>Suicide</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Déconnecté</value>
+  </data>
+  <data name="MissShot" xml:space="preserve">
+    <value>Tir raté</value>
+  </data>
+  <data name="Retaliate" xml:space="preserve">
+    <value>Représailles</value>
+  </data>
+  <data name="Assassinate" xml:space="preserve">
+    <value>Assassiné</value>
+  </data>
+  <data name="DeadAssassinate" xml:space="preserve">
+    <value>Éliminé</value>
+  </data>
+  <data name="Surrender" xml:space="preserve">
+    <value>Capitulation</value>
+  </data>
+  <data name="Departure" xml:space="preserve">
+    <value>Départ</value>
+  </data>
+  <data name="Martyrdom" xml:space="preserve">
+    <value>Mort au combat</value>
+  </data>
+  <data name="Explosion" xml:space="preserve">
+    <value>Explosé</value>
+  </data>
+  <data name="Zombied" xml:space="preserve">
+    <value>Zombifié</value>
+  </data>
+  <data name="Eatting" xml:space="preserve">
+    <value>Dévoré</value>
+  </data>
+  <data name="AllTeam" xml:space="preserve">
+    <value>Toutes les équipes</value>
+  </data>
+  <data name="customServerIp" xml:space="preserve">
+    <value>IP du serveur personnalisé</value>
+  </data>
+  <data name="customServerPort" xml:space="preserve">
+    <value>Port du serveur personnalisé</value>
+  </data>
+  <data name="Neutral" xml:space="preserve">
+    <value>Neutre</value>
+  </data>
+  <data name="neutralIntro" xml:space="preserve">
+    <value>Agissez uniquement pour votre propre victoire</value>
+  </data>
+  <data name="neutralShotCall" xml:space="preserve">
+    <value>ÉGOÏSTES</value>
+  </data>
+  <data name="impostorShotCall" xml:space="preserve">
+    <value>TUEURS</value>
+  </data>
+  <data name="Shapeshifter" xml:space="preserve">
+    <value>Métamorphe</value>
+  </data>
+  <data name="Engineer" xml:space="preserve">
+    <value>Ingénieur</value>
+  </data>
+  <data name="Scientist" xml:space="preserve">
+    <value>Scientifique</value>
+  </data>
+  <data name="GuardianAngel" xml:space="preserve">
+    <value>Ange Gardien</value>
+  </data>
+  <data name="Noisemaker" xml:space="preserve">
+    <value>Avertisseur</value>
+  </data>
+  <data name="Tracker" xml:space="preserve">
+    <value>Pisteur</value>
+  </data>
+  <data name="Phantom" xml:space="preserve">
+    <value>Fantôme</value>
+  </data>
+  <data name="roleAssignNow" xml:space="preserve">
+    <value>Attribution des rôles Extreme Roles en cours...
+Veuillez patienter</value>
+  </data>
+  <data name="impostorIntroText" xml:space="preserve">
+    <value>N'oubliez pas de tuer et de saboter</value>
+  </data>
+  <data name="crewIntroText" xml:space="preserve">
+    <value>N'oubliez pas d'effectuer vos tâches</value>
+  </data>
+  <data name="crewImportantText" xml:space="preserve">
+    <value>Terminez vos tâches</value>
+  </data>
+  <data name="YourRolePanel" xml:space="preserve">
+    <value>Rôle actuel</value>
+  </data>
+  <data name="YourGhostRolePanel" xml:space="preserve">
+    <value>Rôle de fantôme actuel</value>
+  </data>
+  <data name="AllRolePanel" xml:space="preserve">
+    <value>Détails de tous les rôles</value>
+  </data>
+  <data name="AllGhostRolePanel" xml:space="preserve">
+    <value>Détails de tous les rôles de fantôme</value>
+  </data>
+  <data name="GlobalSettingPanel" xml:space="preserve">
+    <value>Paramètres globaux</value>
+  </data>
+  <data name="changePageMore" xml:space="preserve">
+    <value>Changer de page avec PgUp / PgDn</value>
+  </data>
+  <data name="gameOption" xml:space="preserve">
+    <value>Paramètres de jeu actuels</value>
+  </data>
+  <data name="roleOption" xml:space="preserve">
+    <value>Paramètres de </value>
+  </data>
+  <data name="yourAliveNow" xml:space="preserve">
+    <value>Encore en vie</value>
+  </data>
+  <data name="yourNoAssignGhostRole" xml:space="preserve">
+    <value>Aucun rôle de fantôme attribué actuellement</value>
+  </data>
+  <data name="vanilaOptions" xml:space="preserve">
+    <value>Paramètres Among Us d'origine</value>
+  </data>
+  <data name="playerName" xml:space="preserve">
+    <value>Nom du joueur</value>
+  </data>
+  <data name="roleName" xml:space="preserve">
+    <value>Rôle</value>
+  </data>
+  <data name="gameReplace" xml:space="preserve">
+    <value>* Révélé au début ou pendant la partie</value>
+  </data>
+  <data name="ReqBepInExUpdate" xml:space="preserve">
+    <value>Mise à jour de BepInEx en cours. Veuillez patienter...</value>
+  </data>
+  <data name="compatModMenuButton" xml:space="preserve">
+    <value>Gestionnaire de MOD</value>
+  </data>
+  <data name="compatModMenu" xml:space="preserve">
+    <value>Gestionnaire de MOD Extreme Roles</value>
+  </data>
+  <data name="chekUpdateWait" xml:space="preserve">
+    <value>Vérification des mises à jour...</value>
+  </data>
+  <data name="updateNow" xml:space="preserve">
+    <value>Démarrage de la mise à jour</value>
+  </data>
+  <data name="updateManually" xml:space="preserve">
+    <value>Échec de la mise à jour automatique.
+Veuillez mettre à jour manuellement.</value>
+  </data>
+  <data name="updateRestart" xml:space="preserve">
+    <value>Mise à jour réussie !
+Veuillez redémarrer le jeu.</value>
+  </data>
+  <data name="updateInProgress" xml:space="preserve">
+    <value>Mise à jour en cours...</value>
+  </data>
+  <data name="alreadyInstall" xml:space="preserve">
+    <value>Déjà installé.
+Veuillez redémarrer le jeu.</value>
+  </data>
+  <data name="checkInstallNow" xml:space="preserve">
+    <value>Vérification des données d'installation...</value>
+  </data>
+  <data name="installNow" xml:space="preserve">
+    <value>Démarrage de l'installation</value>
+  </data>
+  <data name="installInProgress" xml:space="preserve">
+    <value>Installation en cours...</value>
+  </data>
+  <data name="installManual" xml:space="preserve">
+    <value>Échec de l'installation.
+Veuillez installer manuellement.</value>
+  </data>
+  <data name="installRestart" xml:space="preserve">
+    <value>Installation réussie !
+Veuillez redémarrer le jeu.</value>
+  </data>
+  <data name="alreadyUninstall" xml:space="preserve">
+    <value>Déjà désinstallé.
+Veuillez redémarrer le jeu.</value>
+  </data>
+  <data name="checkUninstallNow" xml:space="preserve">
+    <value>Vérification des données de désinstallation...</value>
+  </data>
+  <data name="uninstallNow" xml:space="preserve">
+    <value>Démarrage de la désinstallation</value>
+  </data>
+  <data name="uninstallInProgress" xml:space="preserve">
+    <value>Désinstallation en cours...</value>
+  </data>
+  <data name="uninstallManual" xml:space="preserve">
+    <value>Échec de la désinstallation.
+Veuillez désinstaller manuellement.</value>
+  </data>
+  <data name="uninstallRestart" xml:space="preserve">
+    <value>Désinstallation réussie.
+Veuillez redémarrer le jeu.</value>
+  </data>
+  <data name="alreadyUninstallAfterInstall" xml:space="preserve">
+    <value>Déjà désinstallé !
+Veuillez redémarrer le jeu.</value>
+  </data>
+  <data name="isReactorInstall" xml:space="preserve">
+    <value>Ce MOD nécessite Reactor comme dépendance.
+Reactor n'est pas garanti sur les serveurs officiels (utilisez « ExR Tokyo », etc.).
+Voulez-vous continuer l'installation ?</value>
+  </data>
+  <data name="searchDowngradeWait" xml:space="preserve">
+    <value>Recherche de la version antérieure...</value>
+  </data>
+  <data name="downgradeStart" xml:space="preserve">
+    <value>Démarrage de la rétrogradation</value>
+  </data>
+  <data name="downgradeManually" xml:space="preserve">
+    <value>Échec de la rétrogradation.
+Veuillez effectuer la rétrogradation manuellement.</value>
+  </data>
+  <data name="downgradeRestart" xml:space="preserve">
+    <value>Rétrogradation réussie.
+Veuillez redémarrer le jeu.</value>
+  </data>
+  <data name="downgradeInProgress" xml:space="preserve">
+    <value>Rétrogradation en cours...</value>
+  </data>
+  <data name="downgradeNotFound" xml:space="preserve">
+    <value>Aucune version antérieure trouvée.</value>
+  </data>
+  <data name="donwgradeConfirm" xml:space="preserve">
+    <value>Cela va rétrograder ExR d'une version.
+Il est recommandé de jouer sur la dernière version sauf en cas de bug bloquant.
+Voulez-vous continuer ?</value>
+  </data>
+  <data name="UninstallButton" xml:space="preserve">
+    <value>Désinstaller</value>
+  </data>
+  <data name="UpdateButton" xml:space="preserve">
+    <value>Vérifier les MAJ</value>
+  </data>
+  <data name="InstallButton" xml:space="preserve">
+    <value>Installer</value>
+  </data>
+  <data name="DowngradeButton" xml:space="preserve">
+    <value>Rétrograder</value>
+  </data>
+  <data name="latestNow" xml:space="preserve">
+    <value>Vous utilisez la dernière version du MOD.</value>
+  </data>
+  <data name="SafeBootMessage" xml:space="preserve">
+    <value>Un problème est survenu au démarrage d'ExR.
+ExR fonctionne en mode restreint.</value>
+  </data>
+  <data name="youDonotUse" xml:space="preserve">
+    <value>ACCÈS REFUSÉ</value>
+  </data>
+  <data name="errorCannotGameStart" xml:space="preserve">
+    <value>IMPOSSIBLE DE DÉMARRER LA PARTIE :</value>
+  </data>
+  <data name="errorNotInstalled" xml:space="preserve">
+    <value>« {0} » n'est pas correctement installé</value>
+  </data>
+  <data name="errorOldInstalled" xml:space="preserve">
+    <value>La version de « {0} » est trop ancienne</value>
+  </data>
+  <data name="errorNewInstalled" xml:space="preserve">
+    <value>La version de « {0} » est plus récente</value>
+  </data>
+  <data name="errorDiffHostVersion" xml:space="preserve">
+    <value>La version de « {0} » est différente de celle de l'hôte</value>
+  </data>
+  <data name="ExileTextSPCrew" xml:space="preserve">
+    <value>{0} était un Équipier.</value>
+  </data>
+  <data name="ExileTextSNCrew" xml:space="preserve">
+    <value>{0} n'était pas un Équipier.</value>
+  </data>
+  <data name="ExileTextPPCrew" xml:space="preserve">
+    <value>{0} était un Équipier.</value>
+  </data>
+  <data name="ExileTextPNCrew" xml:space="preserve">
+    <value>{0} n'était pas un Équipier.</value>
+  </data>
+  <data name="ExileTextSPNeut" xml:space="preserve">
+    <value>{0} était Neutre.</value>
+  </data>
+  <data name="ExileTextSNNeut" xml:space="preserve">
+    <value>{0} n'était pas Neutre.</value>
+  </data>
+  <data name="ExileTextPPNeut" xml:space="preserve">
+    <value>{0} était Neutre.</value>
+  </data>
+  <data name="ExileTextPNNeut" xml:space="preserve">
+    <value>{0} n'était pas Neutre.</value>
+  </data>
+  <data name="ExileTextSPCrewWithRole" xml:space="preserve">
+    <value>{0} était le « {1} » des Équipiers.</value>
+  </data>
+  <data name="ExileTextSNCrewWithRole" xml:space="preserve">
+    <value>{0} n'était pas un Équipier.</value>
+  </data>
+  <data name="ExileTextPPCrewWithRole" xml:space="preserve">
+    <value>{0} était le « {1} » des Équipiers.</value>
+  </data>
+  <data name="ExileTextPNCrewWithRole" xml:space="preserve">
+    <value>{0} n'était pas un Équipier.</value>
+  </data>
+  <data name="ExileTextSPNeutWithRole" xml:space="preserve">
+    <value>{0} était « {1} » en tant que Neutre.</value>
+  </data>
+  <data name="ExileTextSNNeutWithRole" xml:space="preserve">
+    <value>{0} n'était pas Neutre.</value>
+  </data>
+  <data name="ExileTextPPNeutWithRole" xml:space="preserve">
+    <value>{0} était « {1} » en tant que Neutre.</value>
+  </data>
+  <data name="ExileTextPNNeutWithRole" xml:space="preserve">
+    <value>{0} n'était pas Neutre.</value>
+  </data>
+  <data name="ExileTextAllTeam" xml:space="preserve">
+    <value>{0} était {1}.</value>
+  </data>
+  <data name="ExileTextAllTeamWithRole" xml:space="preserve">
+    <value>{0} était le « {2} » de {1}.</value>
+  </data>
+  <data name="CrewmateRemainS" xml:space="preserve">
+    <value>{0} Équipier(s) restant(s).</value>
+  </data>
+  <data name="CrewmateRemainP" xml:space="preserve">
+    <value>{0} Équipier(s) restant(s).</value>
+  </data>
+  <data name="NeutralRemainS" xml:space="preserve">
+    <value>{0} Neutre(s) restant(s).</value>
+  </data>
+  <data name="NeutralRemainP" xml:space="preserve">
+    <value>{0} Neutre(s) restant(s).</value>
+  </data>
+  <data name="AllTeamAlive" xml:space="preserve">
+    <value>{0} Équipier(s), {1} Imposteur(s), {2} Neutre(s) restant(s).</value>
+  </data>
+  <data name="RoleAssignFilter" xml:space="preserve">
+    <value>Filtre d'attribution des rôles</value>
+  </data>
+  <data name="RoleAssignFilterAddRoleMenuTitle" xml:space="preserve">
+    <value>Veuillez choisir un rôle</value>
+  </data>
+  <data name="RoleAssignFilterAssignNum" xml:space="preserve">
+    <value>Nombre d'attributions</value>
+  </data>
+  <data name="RoleAssignFilterDeleteThis" xml:space="preserve">
+    <value>Supprimer le filtre</value>
+  </data>
+  <data name="RoleAssignFilterDeleteAllRole" xml:space="preserve">
+    <value>Réinitialiser les filtres</value>
+  </data>
+  <data name="RoleAssignFilterAddRole" xml:space="preserve">
+    <value>Ajouter un rôle</value>
+  </data>
+  <data name="RoleAssignFilterAddFilter" xml:space="preserve">
+    <value>Ajouter un filtre</value>
+  </data>
+  <data name="SystemMessage" xml:space="preserve">
+    <value>Système</value>
+  </data>
+  <data name="SuccessAmongUsConnect" xml:space="preserve">
+    <value>Connexion réussie à Among Us</value>
+  </data>
+  <data name="InputMessage" xml:space="preserve">
+    <value>Veuillez saisir un message...</value>
+  </data>
+  <data name="DisconectAmongUsMessage" xml:space="preserve">
+    <value>Déconnecté de Among Us</value>
+  </data>
+  <data name="ConectSocketMessage" xml:space="preserve">
+    <value>Connexion réussie à Among Us via Socket</value>
+  </data>
+  <data name="InvalidCharMessage" xml:space="preserve">
+    <value>Message contenant des caractères invalides. Veuillez réessayer.</value>
+  </data>
+  <data name="abilityRemain" xml:space="preserve">
+    <value>ATTENTE DE CAPACITÉ : {0} s restante(s)</value>
+  </data>
+  <data name="abilityOnText" xml:space="preserve">
+    <value>CAPACITÉ ACTIVE : {0} s restante(s)</value>
+  </data>
+  <data name="right" xml:space="preserve">
+    <value>droite</value>
+  </data>
+  <data name="down" xml:space="preserve">
+    <value>bas</value>
+  </data>
+  <data name="left" xml:space="preserve">
+    <value>gauche</value>
+  </data>
+  <data name="up" xml:space="preserve">
+    <value>haut</value>
+  </data>
+  <data name="canDo" xml:space="preserve">
+    <value>Autorisé</value>
+  </data>
+  <data name="cannotDo" xml:space="preserve">
+    <value>Interdit</value>
+  </data>
+  <data name="AdminModule" xml:space="preserve">
+    <value>Carte d'administration</value>
+  </data>
+  <data name="SecurityCamera" xml:space="preserve">
+    <value>Caméras et registres de sécurité</value>
+  </data>
   <data name="Pcg32XshRr" xml:space="preserve">
     <value>PCG32-XSH-RR</value>
   </data>
@@ -152,5 +995,350 @@
   </data>
   <data name="JFT32" xml:space="preserve">
     <value>JFT32</value>
+  </data>
+  <data name="AssignWeight" xml:space="preserve">
+    <value>Poids d'attribution</value>
+  </data>
+  <data name="SpawnRate" xml:space="preserve">
+    <value>Taux d'apparition</value>
+  </data>
+  <data name="RoleNum" xml:space="preserve">
+    <value>Nombre de rôles attribués</value>
+  </data>
+  <data name="HasOtherVision" xml:space="preserve">
+    <value>A un paramètre de vision spécifique</value>
+  </data>
+  <data name="Vision" xml:space="preserve">
+    <value>Vision</value>
+  </data>
+  <data name="ApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Subit les effets de sabotage de vision</value>
+  </data>
+  <data name="HasOtherKillCool" xml:space="preserve">
+    <value>A un temps de rechargement de kill modifié</value>
+  </data>
+  <data name="KillCoolDown" xml:space="preserve">
+    <value>Temps de rechargement du kill</value>
+  </data>
+  <data name="HasOtherKillRange" xml:space="preserve">
+    <value>A une portée de kill modifiée</value>
+  </data>
+  <data name="KillRange" xml:space="preserve">
+    <value>Portée de kill</value>
+  </data>
+  <data name="IsAssignImposter" xml:space="preserve">
+    <value>Autoriser l'attribution aux Imposteurs</value>
+  </data>
+  <data name="ImposterSelectedRate" xml:space="preserve">
+    <value>Taux d'attribution d'Imposteur</value>
+  </data>
+  <data name="IsMultiAssign" xml:space="preserve">
+    <value>Possède les capacités d'un autre rôle</value>
+  </data>
+  <data name="AssignsNum" xml:space="preserve">
+    <value>Nombre d'attributions par paire</value>
+  </data>
+  <data name="DefaultKey" xml:space="preserve">
+    <value>Par défaut</value>
+  </data>
+  <data name="EnableKey" xml:space="preserve">
+    <value>Activer</value>
+  </data>
+  <data name="DisableKey" xml:space="preserve">
+    <value>Désactiver</value>
+  </data>
+  <data name="BothImpostorAndNautral" xml:space="preserve">
+    <value>À la fois Imposteur et Neutre</value>
+  </data>
+  <data name="SkipSettingUsingTab" xml:space="preserve">
+    <value>(Tab / Shift + Tab pour changer de page)</value>
+  </data>
+  <data name="autoDisconnectTo" xml:space="preserve">
+    <value>Déconnexion automatique dans {0} seconde(s) :</value>
+  </data>
+  <data name="LoveYou" xml:space="preserve">
+    <value>Amoureux</value>
+  </data>
+  <data name="OnGameStartOption" xml:space="preserve">
+    <value>Paramètres initiaux en début de partie</value>
+  </data>
+  <data name="OnGameStartOptionIsKillCoolDownIsTen" xml:space="preserve">
+    <value>Rechargement de kill initial fixé à 10s</value>
+  </data>
+  <data name="OnGameStartOptionRemoveSomeoneButton" xml:space="preserve">
+    <value>Consommer à l'avance le bouton de réunion de quelqu'un</value>
+  </data>
+  <data name="OnGameStartOptionReduceNum" xml:space="preserve">
+    <value>Nombre à consommer</value>
+  </data>
+  <data name="OnGameStartOptionFirstButtonCoolDown" xml:space="preserve">
+    <value>Délai avant de pouvoir utiliser le bouton de réunion après le début</value>
+  </data>
+  <data name="roleHistorySummary" xml:space="preserve">
+    <value>・ Historique des changements de rôle</value>
+  </data>
+  <data name="roleHistoryCause" xml:space="preserve">
+    <value>Cause</value>
+  </data>
+  <data name="EmergencyTaskOption" xml:space="preserve">
+    <value>Limite de temps pour les tâches d'urgence</value>
+  </data>
+  <data name="EmergencyTaskOptionSkeldReactor" xml:space="preserve">
+    <value>« The Skeld » : « Réparer le réacteur »</value>
+  </data>
+  <data name="EmergencyTaskOptionSkeldOxygen" xml:space="preserve">
+    <value>« The Skeld » : « Réparer l'oxygène »</value>
+  </data>
+  <data name="EmergencyTaskOptionMiraHqReactor" xml:space="preserve">
+    <value>« MIRA HQ » : « Réparer le réacteur »</value>
+  </data>
+  <data name="EmergencyTaskOptionMiraHqOxygen" xml:space="preserve">
+    <value>« MIRA HQ » : « Réparer l'oxygène »</value>
+  </data>
+  <data name="EmergencyTaskOptionPolusReactor" xml:space="preserve">
+    <value>« Polus » : « Réinitialiser les stabilisateurs sismiques »</value>
+  </data>
+  <data name="EmergencyTaskOptionAirshipHeli" xml:space="preserve">
+    <value>« Airship » : « Éviter la collision »</value>
+  </data>
+  <data name="EmergencyTaskOptionFungleReactor" xml:space="preserve">
+    <value>« Fungle » : « Réparer le réacteur »</value>
+  </data>
+  <data name="GhostRoleGlobalOptionHauntMinigameMaxSpeed" xml:space="preserve">
+    <value>« POSSESSION » : Vitesse maximale de déplacement</value>
+  </data>
+  <data name="IsRatioTeamAssign" xml:space="preserve">
+    <value>Attribution selon le ratio d'équipe</value>
+  </data>
+  <data name="AssignRatio" xml:space="preserve">
+    <value>Ratio d'attribution</value>
+  </data>
+  <data name="OneToOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="TwoToOne" xml:space="preserve">
+    <value>2:1</value>
+  </data>
+  <data name="OneToTwo" xml:space="preserve">
+    <value>1:2</value>
+  </data>
+  <data name="TwoToTwo" xml:space="preserve">
+    <value>2:2</value>
+  </data>
+  <data name="OneToThree" xml:space="preserve">
+    <value>1:3</value>
+  </data>
+  <data name="ThreeToOne" xml:space="preserve">
+    <value>3:1</value>
+  </data>
+  <data name="ThreeToTwo" xml:space="preserve">
+    <value>3:2</value>
+  </data>
+  <data name="TwoToThree" xml:space="preserve">
+    <value>2:3</value>
+  </data>
+  <data name="ThreeToThree" xml:space="preserve">
+    <value>3:3</value>
+  </data>
+  <data name="Detective" xml:space="preserve">
+    <value>Détective</value>
+  </data>
+  <data name="Viper" xml:space="preserve">
+    <value>Vipère</value>
+  </data>
+  <data name="Despair" xml:space="preserve">
+    <value>Désespoir</value>
+  </data>
+  <data name="Clashed" xml:space="preserve">
+    <value>Collision</value>
+  </data>
+  <data name="ShowOnlyActiveRoleInInfoOverlay" xml:space="preserve">
+    <value>Afficher uniquement les rôles configurés</value>
+  </data>
+  <data name="RoleSpawnCategoryMinLiberal" xml:space="preserve">
+    <value>Nombre min. de rôles Libéraux</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxLiberal" xml:space="preserve">
+    <value>Nombre max. de rôles Libéraux</value>
+  </data>
+  <data name="LiberalSettingWinMoney" xml:space="preserve">
+    <value>Fonds requis pour la victoire</value>
+  </data>
+  <data name="LiberalSettingTaskCompletedMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Colombe&lt;/color&gt;
+Bonus de fonds / tâche accomplie</value>
+  </data>
+  <data name="LiberalSettingKillMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Militant&lt;/color&gt;
+Bonus de fonds / kill effectué</value>
+  </data>
+  <data name="LiberalSettingLiberalVison" xml:space="preserve">
+    <value>Vision</value>
+  </data>
+  <data name="LiberalSettingUseVent" xml:space="preserve">
+    <value>Trappes globales</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherVisonSize" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
+A un paramètre de vision spécifique</value>
+  </data>
+  <data name="LiberalSettingLeaderVison" xml:space="preserve">
+    <value>Vision</value>
+  </data>
+  <data name="LiberalSettingCanHasTaskLeader" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
+A des tâches</value>
+  </data>
+  <data name="LiberalSettingLeaderTaskBoost" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
+Augmentation du taux de fonds / tâche accomplie</value>
+  </data>
+  <data name="LiberalSettingLeaderTaskCompletedMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
+Bonus de fonds / tâche accomplie</value>
+  </data>
+  <data name="LiberalSettingCanKillLeader" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
+A un bouton de kill</value>
+  </data>
+  <data name="LiberalSettingLeaderKillBoost" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
+Augmentation du taux de fonds / kill effectué</value>
+  </data>
+  <data name="LiberalSettingLeaderKillMoney" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
+Bonus de fonds / kill effectué</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherKillCool" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
+A un rechargement de kill modifié</value>
+  </data>
+  <data name="LiberalSettingLeaderKillCool" xml:space="preserve">
+    <value>Temps de rechargement du kill</value>
+  </data>
+  <data name="LiberalSettingLeaderHasOtherKillRange" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Leader&lt;/color&gt;
+A une portée de kill modifiée</value>
+  </data>
+  <data name="LiberalSettingLeaderKillRange" xml:space="preserve">
+    <value>Portée de kill</value>
+  </data>
+  <data name="LiberalSettingCanKilledLeader" xml:space="preserve">
+    <value>Autoriser les kills sur le Leader</value>
+  </data>
+  <data name="LiberalSettingLeaderKilledBoost" xml:space="preserve">
+    <value>Augmentation du taux de fonds
+(chaque fois que le Leader est tué)</value>
+  </data>
+  <data name="LiberalSettingCanKilledWhenLeaderSolo" xml:space="preserve">
+    <value>Autoriser les kills quand le camp Libéral
+n'est composé que du Leader</value>
+  </data>
+  <data name="LiberalSettingIsAutoRevive" xml:space="preserve">
+    <value>Réapparition automatique du Leader</value>
+  </data>
+  <data name="LiberalSettingIsAutoExitWhenLeaderSolo" xml:space="preserve">
+    <value>Élimination automatique quand le camp Libéral
+n'est composé que du Leader</value>
+  </data>
+  <data name="LiberalSettingLiberalMilitantMini" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Militant&lt;/color&gt;
+Nombre min. de rôles</value>
+  </data>
+  <data name="LiberalSettingLiberalMilitantMax" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Militant&lt;/color&gt;
+Nombre max. de rôles</value>
+  </data>
+  <data name="LiberalSettingMilitantHasOtherKillCool" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Militant&lt;/color&gt;
+A un rechargement de kill modifié</value>
+  </data>
+  <data name="LiberalSettingMilitantKillCool" xml:space="preserve">
+    <value>Temps de rechargement du kill</value>
+  </data>
+  <data name="LiberalSettingMilitantHasOtherKillRange" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;Militant&lt;/color&gt;
+A une portée de kill modifiée</value>
+  </data>
+  <data name="LiberalSettingMilitantKillRange" xml:space="preserve">
+    <value>Portée de kill</value>
+  </data>
+  <data name="Liberal" xml:space="preserve">
+    <value>Libéral</value>
+  </data>
+  <data name="Leader" xml:space="preserve">
+    <value>Leader</value>
+  </data>
+  <data name="Dove" xml:space="preserve">
+    <value>Colombe</value>
+  </data>
+  <data name="Militant" xml:space="preserve">
+    <value>Militant</value>
+  </data>
+  <data name="LiberalSetting" xml:space="preserve">
+    <value>Paramètres communs des Libéraux</value>
+  </data>
+  <data name="liberalIntro0" xml:space="preserve">
+    <value>Rejetant toute servitude, rassemblés sous le nom de « Liberté »</value>
+  </data>
+  <data name="liberalIntro1" xml:space="preserve">
+    <value>Soyez la lame de l'innovation qui brise la stagnation</value>
+  </data>
+  <data name="liberalIntro2" xml:space="preserve">
+    <value>Notre arme est la raison ; apportez le vrai changement par le débat</value>
+  </data>
+  <data name="liberalGlobalInfo" xml:space="preserve">
+    <value>&lt;size=135%&gt;Description des Libéraux&lt;/size&gt;
+Une faction centrée autour du rôle spécial « Leader », composée de Colombes et de Militants.
+En tant que paramètre commun de cette faction, ils ne sont pas affectés par les effets de vision comme les coupures d'électricité.
+
+- Conditions de victoire :
+  1. Accumuler des fonds supérieurs à la valeur définie
+  2. Tous les survivants deviennent Libéraux (pas de victoire à la majorité)
+
+- Rôle spécial « Leader »
+  Un rôle toujours attribué lorsque la faction Libérale est présente.
+  Fondamentalement invincible.
+  L'état des fonds est affiché à côté du nom de ce joueur.
+  Voir les informations du rôle Leader pour plus de détails.
+
+- Colombe
+  Désigne les rôles Libéraux qui possèdent des tâches, notés « Type : Colombe » ou « Colombe ».
+  Des tâches sont ajoutées indéfiniment.
+  Le nom de rôle par défaut pour « Type : Colombe » est aussi « Colombe ».
+
+- Militant
+  Désigne les rôles Libéraux qui possèdent un bouton de kill, notés « Type : Militant » ou « Militant ».
+  Le nom de rôle par défaut pour « Type : Militant » est aussi « Militant ».</value>
+  </data>
+  <data name="liberalMoneySummaryInfo" xml:space="preserve">
+    <value>Solde des fonds libéraux</value>
+  </data>
+  <data name="AddOnTask" xml:space="preserve">
+    <value>Tâche</value>
+  </data>
+  <data name="AddOnKill" xml:space="preserve">
+    <value>Élimination</value>
+  </data>
+  <data name="liberalShotCall" xml:space="preserve">
+    <value>RÉVOLUTIONNAIRES</value>
+  </data>
+  <data name="liberalRoles" xml:space="preserve">
+    <value>Rôles « Libéral »</value>
+  </data>
+  <data name="ventKey" xml:space="preserve">
+    <value>Trappe</value>
+  </data>
+  <data name="sabotageKey" xml:space="preserve">
+    <value>Sabotage</value>
+  </data>
+  <data name="buttonAbility" xml:space="preserve">
+    <value>Capacité du bouton</value>
+  </data>
+  <data name="Judge" xml:space="preserve">
+    <value>Juge</value>
+  </data>
+  <data name="MeetingOptionOverruleSuccessIsNeutral" xml:space="preserve">
+    <value>Succès de la capacité du Juge même sur les Neutres</value>
   </data>
 </root>

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="LeaderFullDescription" xml:space="preserve">
+    <value>Type : Colombe / Militant (selon les paramètres)
+Considéré comme Colombe si des tâches sont attribuées, et comme Militant si un bouton de kill est attribué.
+
+Les fonds actuels sont affichés à côté du nom du joueur.
+Ce rôle existe toujours lorsque la faction Libérale est attribuée.
+Ce rôle ne peut sous aucun prétexte être ciblé par une capacité.
+Si « Autoriser les kills sur le Leader » est DÉSACTIVÉ, tous les kills sur le Leader sont annulés.
+Le comportement change avec les paramètres suivants :
+- Si « Autoriser les kills quand le camp Libéral n'est composé que du Leader » est ACTIVÉ, le Leader peut être tué lorsqu'il est le dernier membre restant du camp Libéral.
+- Si « Élimination automatique quand le camp Libéral n'est composé que du Leader » est ACTIVÉ, le Leader meurt automatiquement lorsqu'il est le dernier membre restant du camp Libéral. Dans ce cas, aucune réapparition automatique n'aura lieu.
+
+Les paramètres intitulés « Augmentation du taux de fonds » augmentent de façon permanente le multiplicateur de fonds gagnés par tous les membres du camp Libéral lorsque le Leader se trouve dans des situations spécifiques.
+Exemple :
+« Militant : Augmentation du taux de fonds / kill effectué » : 5
+« Leader : Augmentation du taux de fonds / kill effectué » : 10
+« Leader : Bonus de fonds / kill effectué » : 10 %
+1. Lorsque le Leader commence à tuer, le taux d'augmentation des fonds augmente de 10 %, et les fonds augmentent de 11 (10 * 1,1).
+2. Par la suite, lorsqu'un Militant Libéral tue, les fonds augmentent de 5,5 (5 * 1,1).</value>
+  </data>
+  <data name="LeaderShortDescription" xml:space="preserve">
+    <value>Symbole de la révolution</value>
+  </data>
+  <data name="LeaderIntroDescription" xml:space="preserve">
+    <value>Dirigez le camp Libéral en tant que Leader</value>
+  </data>
+  <data name="DoveFullDescription" xml:space="preserve">
+    <value>Type : Colombe
+
+Obtient des fonds en accomplissant des tâches.
+Des tâches sont ajoutées indéfiniment.</value>
+  </data>
+  <data name="DoveShortDescription" xml:space="preserve">
+    <value>Accomplissez la révolution grâce aux tâches</value>
+  </data>
+  <data name="DoveIntroDescription" xml:space="preserve">
+    <value>Ce qui est nécessaire pour la révolution, c'est le « dialogue »</value>
+  </data>
+  <data name="MilitantFullDescription" xml:space="preserve">
+    <value>Type : Militant
+
+Obtient des fonds pour ses activités en effectuant des kills.</value>
+  </data>
+  <data name="MilitantShortDescription" xml:space="preserve">
+    <value>Accomplissez la révolution grâce aux kills</value>
+  </data>
+  <data name="MilitantIntroDescription" xml:space="preserve">
+    <value>Ce qui est nécessaire pour la révolution, c'est une « force écrasante »</value>
+  </data>
+</root>
