@@ -6,9 +6,8 @@ import fr_checker
 
 
 def test_check_french_translations_default():
-    # In current state, default check returns False due to missing French files for other base files
     result = fr_checker.check_french_translations(fr_checker.RESX_DIR)
-    assert result is False
+    assert result is True
 
 
 def test_check_french_translations_target_valid():
@@ -25,7 +24,7 @@ def test_main_default():
     with patch.object(sys, "argv", ["fr_checker.py"]):
         with patch("sys.exit") as mock_exit:
             fr_checker.main()
-            mock_exit.assert_called_once_with(1)
+            mock_exit.assert_not_called()
 
 
 def test_main_target_valid():
