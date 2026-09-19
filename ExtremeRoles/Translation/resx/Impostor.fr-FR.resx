@@ -1,0 +1,1487 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:schema id="root">
+    <xs:element name="root" ns1:IsDataSet="true">
+      <xs:complexType>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="data">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" ns1:Ordinal="1" />
+              <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+              <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="resheader">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" />
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ImpostorFullDescription" xml:space="preserve">
+    <value>Rôle d'IMPOSTEUR
+Peut effectuer des éliminations et des sabotages
+Faites-vous passer pour un membre de l'équipage en simulant des tâches</value>
+  </data>
+  <data name="ShapeshifterFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de se métamorphoser en d'autres joueurs, y compris des cadavres ou d'autres imposteurs.
+Pendant la métamorphose, vous devez faire attention à ne pas vous faire repérer par l'équipage.
+Peut effectuer des éliminations et des sabotages.</value>
+  </data>
+  <data name="PhantomFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de devenir invisible pendant une certaine durée.
+Pendant que vous êtes invisible, vous ne pouvez interagir avec rien d'autre qu'avec les conduits !!</value>
+  </data>
+  <data name="SpecialImpostor" xml:space="preserve">
+    <value>Imposteur Spécial</value>
+  </data>
+  <data name="SpecialImpostorIntroDescription" xml:space="preserve">
+    <value>Un imposteur avec des paramètres un peu différents</value>
+  </data>
+  <data name="SpecialImpostorShortDescription" xml:space="preserve">
+    <value>Un imposteur de style « Extreme »</value>
+  </data>
+  <data name="SpecialImpostorFullDescription" xml:space="preserve">
+    <value>Rôle d'IMPOSTEUR
+Les paramètres communs d'Extreme Roles peuvent s'appliquer à ce rôle.
+Vérifiez les paramètres ci-dessous :</value>
+  </data>
+  <data name="Evolver" xml:space="preserve">
+    <value>Évolueur</value>
+  </data>
+  <data name="EvolverIsEvolvedAnimation" xml:space="preserve">
+    <value>Effectuer une animation lors de l'évolution</value>
+  </data>
+  <data name="EvolverIsEatingEndCleanBody" xml:space="preserve">
+    <value>Faire disparaître le cadavre après l'évolution</value>
+  </data>
+  <data name="EvolverEatingRange" xml:space="preserve">
+    <value>« DÉVORER » : Portée de la compétence</value>
+  </data>
+  <data name="EvolverKillCoolReduceRate" xml:space="preserve">
+    <value>« ÉVOLUTION » : Taux de réduction du temps de recharge d'élimination</value>
+  </data>
+  <data name="EvolverKillCoolResuceRateMulti" xml:space="preserve">
+    <value>« ÉVOLUTION » : Multiplicateur de réduction du temps de recharge d'élimination</value>
+  </data>
+  <data name="EvolverAbilityCoolTime" xml:space="preserve">
+    <value>« ÉVOLUTION » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="EvolverAbilityActiveTime" xml:space="preserve">
+    <value>« DÉVORER » : Durée de la compétence</value>
+  </data>
+  <data name="EvolverAbilityCount" xml:space="preserve">
+    <value>« ÉVOLUTION » : Nombre d'évolutions possibles</value>
+  </data>
+  <data name="EvolverIntroDescription" xml:space="preserve">
+    <value>Évoluez et plongez l'équipage dans le désespoir</value>
+  </data>
+  <data name="EvolverShortDescription" xml:space="preserve">
+    <value>Dévorez des cadavres et évoluez</value>
+  </data>
+  <data name="EvolverFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de dévorer des cadavres pour réduire son temps de recharge d'élimination.
+Pendant la dévoraison, vous devez rester près du cadavre.
+Un nouveau temps de recharge d'élimination s'applique après l'évolution.</value>
+  </data>
+  <data name="evolve" xml:space="preserve">
+    <value>ÉVOLUER</value>
+  </data>
+  <data name="eating" xml:space="preserve">
+    <value>DÉVORAISON...</value>
+  </data>
+  <data name="Carrier" xml:space="preserve">
+    <value>Transporteur</value>
+  </data>
+  <data name="CarrierAbilityCoolTime" xml:space="preserve">
+    <value>« TRANSPORTER » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="CarrierAbilityActiveTime" xml:space="preserve">
+    <value>« TRANSPORTER » : Durée du transport de cadavre</value>
+  </data>
+  <data name="CarrierCarryDistance" xml:space="preserve">
+    <value>« TRANSPORTER » : Portée depuis le cadavre</value>
+  </data>
+  <data name="CarrierCanReportOnCarry" xml:space="preserve">
+    <value>« TRANSPORTER » : Peut être signalé pendant le transport</value>
+  </data>
+  <data name="CarrierIntroDescription" xml:space="preserve">
+    <value>Transportez les cadavres et cachez-les dans un endroit difficile à trouver</value>
+  </data>
+  <data name="CarrierShortDescription" xml:space="preserve">
+    <value>Éliminez et cachez le cadavre</value>
+  </data>
+  <data name="CarrierFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de transporter les cadavres.
+Lorsque la durée de « TRANSPORTER » expire, le cadavre est déposé sur place.</value>
+  </data>
+  <data name="carry" xml:space="preserve">
+    <value>TRANSPORTER</value>
+  </data>
+  <data name="PsychoKiller" xml:space="preserve">
+    <value>Tueur Psychopathe</value>
+  </data>
+  <data name="PsychoKillerKillCoolReduceRate" xml:space="preserve">
+    <value>« COMBO » : Réduction du temps de recharge d'élimination</value>
+  </data>
+  <data name="PsychoKillerCombMax" xml:space="preserve">
+    <value>« COMBO » : Nombre maximal de combos</value>
+  </data>
+  <data name="PsychoKillerCombResetWhenMeeting" xml:space="preserve">
+    <value>« COMBO » : Réinitialiser le combo lors des réunions</value>
+  </data>
+  <data name="PsychoKillerHasSelfKillTimer" xml:space="preserve">
+    <value>Activer le compteur de suicide</value>
+  </data>
+  <data name="PsychoKillerSelfKillTimerTime" xml:space="preserve">
+    <value>Durée du compteur de suicide en secondes</value>
+  </data>
+  <data name="PsychoKillerIsForceRestartWhenMeetingEnd" xml:space="preserve">
+    <value>Redémarrer de force le compteur après une réunion</value>
+  </data>
+  <data name="PsychoKillerIsDiactiveUntilKillWhenMeetingEnd" xml:space="preserve">
+    <value>Désactiver le compteur après une réunion jusqu'à la première élimination</value>
+  </data>
+  <data name="PsychoKillerSelfKillTimerModRate" xml:space="preserve">
+    <value>« COMBO » : Multiplicateur du compteur de suicide</value>
+  </data>
+  <data name="PsychoKillerIntroDescription" xml:space="preserve">
+    <value>Le sang des éliminations est le plus grand des plaisirs !</value>
+  </data>
+  <data name="PsychoKillerShortDescription" xml:space="preserve">
+    <value>Accumulez des combos avec des éliminations et profitez-en</value>
+  </data>
+  <data name="PsychoKillerFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR dont le temps de recharge d'élimination diminue en éliminant plusieurs joueurs consécutivement.
+À chaque élimination, un « Combo » est ajouté et multiplie le taux de réduction du temps de recharge.
+Après une réunion, le temps de recharge revient à la valeur initiale du rôle, mais il recommence à diminuer dès la première élimination.
+Si l'option « Réinitialiser le combo lors des réunions » est ACTIVÉE, le combo est réinitialisé au début de la réunion.
+Si l'option « Activer le compteur de suicide » est ACTIVÉE, un compteur avant votre propre mort s'enclenche à la première élimination. Une nouvelle élimination réinitialise le compteur, mais sa durée est modifiée selon le multiplicateur de combo.</value>
+  </data>
+  <data name="curCombNum" xml:space="preserve">
+    <value>Nombre actuel de combos : {0}</value>
+  </data>
+  <data name="untilSelfKill" xml:space="preserve">
+    <value>Temps restant avant suicide : </value>
+  </data>
+  <data name="BountyHunter" xml:space="preserve">
+    <value>Chasseur de Primes</value>
+  </data>
+  <data name="BountyHunterTargetUpdateTime" xml:space="preserve">
+    <value>Temps de mise à jour de la cible</value>
+  </data>
+  <data name="BountyHunterTargetKillCoolTime" xml:space="preserve">
+    <value>Temps de recharge en cas d'élimination de la cible</value>
+  </data>
+  <data name="BountyHunterNoneTargetKillCoolTime" xml:space="preserve">
+    <value>Temps de recharge en cas d'élimination d'un non-cible</value>
+  </data>
+  <data name="BountyHunterIsShowArrow" xml:space="preserve">
+    <value>Afficher une flèche pointant vers la cible</value>
+  </data>
+  <data name="BountyHunterArrowUpdateCycle" xml:space="preserve">
+    <value>Temps de mise à jour de la flèche</value>
+  </data>
+  <data name="BountyHunterIntroDescription" xml:space="preserve">
+    <value>Quel genre de cri va pousser ma proie ce soir ?</value>
+  </data>
+  <data name="BountyHunterShortDescription" xml:space="preserve">
+    <value>Trouvez la cible et éliminez-la</value>
+  </data>
+  <data name="BountyHunterFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR dont le temps de recharge d'élimination varie selon le joueur éliminé.
+Après une réunion, le temps de recharge revient à la valeur définie pour le rôle.
+Élimination de la cible : {0}
+Élimination d'un non-cible : {1}
+Cible actuelle : {2}</value>
+  </data>
+  <data name="Painter" xml:space="preserve">
+    <value>Peintre</value>
+  </data>
+  <data name="PainterAbilityCoolTime" xml:space="preserve">
+    <value>« PEINTURE » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="PainterCanPaintDistance" xml:space="preserve">
+    <value>« PEINTURE » : Portée de la compétence</value>
+  </data>
+  <data name="PainterPaintColorIsRandom" xml:space="preserve">
+    <value>« PEINTURE » : Couleur de peinture aléatoire</value>
+  </data>
+  <data name="PainterIntroDescription" xml:space="preserve">
+    <value>Comment devrais-je peindre ce cadavre (cette œuvre) ?</value>
+  </data>
+  <data name="PainterShortDescription" xml:space="preserve">
+    <value>Créez de l'art avec des cadavres</value>
+  </data>
+  <data name="PainterFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de modifier la couleur des cadavres.
+Par défaut, la nouvelle couleur du cadavre est transparente.
+Si l'option de couleur aléatoire est activée, chaque cadavre prendra une couleur différente.</value>
+  </data>
+  <data name="paint" xml:space="preserve">
+    <value>PEINTURE</value>
+  </data>
+  <data name="Faker" xml:space="preserve">
+    <value>Usurpateur</value>
+  </data>
+  <data name="FakerAbilityCoolTime" xml:space="preserve">
+    <value>« MANNEQUIN » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="FakerIntroDescription" xml:space="preserve">
+    <value>Êtes-vous un FAKE ou un VRAI ? Laissez-moi essayer...</value>
+  </data>
+  <data name="FakerShortDescription" xml:space="preserve">
+    <value>Créez de faux joueurs et cadavres pour semer la confusion</value>
+  </data>
+  <data name="FakerFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de créer de faux cadavres ou de faux joueurs.
+Bouton « Mannequin (Cadavre) » :
+  - S'active en appuyant sur le bouton.
+  - Crée un « Faux cadavre ».
+  - Un « Faux cadavre » ne peut pas être signalé.
+Bouton « Mannequin (Joueur) » :
+  - S'active en maintenant la touche « Shift gauche » tout en appuyant sur le bouton.
+  - Crée un « Faux joueur ».
+  - Les faux joueurs n'ont pas de collision et ne peuvent pas utiliser de compétences.
+
+En maintenant « Ctrl gauche » ou « Alt gauche », vous pouvez restreindre la sélection des joueurs reproduits :
+  - Sans touche : Sélection aléatoire parmi les survivants.
+  - « Ctrl gauche » : Sélection aléatoire parmi les survivants HORS camp Imposteur.
+  - « Alt gauche » : Sélection aléatoire parmi les survivants HORS vous-même.</value>
+  </data>
+  <data name="dummyDeadBody" xml:space="preserve">
+    <value>MANNEQUIN (CADAVRE)</value>
+  </data>
+  <data name="dummyPlayer" xml:space="preserve">
+    <value>MANNEQUIN (JOUEUR)</value>
+  </data>
+  <data name="DummyPlayerName" xml:space="preserve">
+    <value>MANNEQUIN</value>
+  </data>
+  <data name="OverLoader" xml:space="preserve">
+    <value>Surchargeur</value>
+  </data>
+  <data name="OverLoaderAwakeImpostorNum" xml:space="preserve">
+    <value>« SURCHARGE » : Imposteurs restants pour révéler le rôle</value>
+  </data>
+  <data name="OverLoaderAwakeKillCount" xml:space="preserve">
+    <value>« SURCHARGE » : Éliminations pour révéler le rôle</value>
+  </data>
+  <data name="OverLoaderAbilityCoolTime" xml:space="preserve">
+    <value>« SURCHARGE » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="OverLoaderAbilityActiveTime" xml:space="preserve">
+    <value>« SURCHARGE » : Temps de recharge après activation</value>
+  </data>
+  <data name="OverLoaderKillCoolReduceRate" xml:space="preserve">
+    <value>« SURCHARGE » : Réduction du temps de recharge d'élimination</value>
+  </data>
+  <data name="OverLoaderMoveSpeed" xml:space="preserve">
+    <value>« SURCHARGE » : Bonus de vitesse de déplacement</value>
+  </data>
+  <data name="OverLoaderIntroDescription" xml:space="preserve">
+    <value>Maîtrisez la surcharge et surpassez tout le monde</value>
+  </data>
+  <data name="OverLoaderShortDescription" xml:space="preserve">
+    <value>Tirez parti de la révélation de rôle par surcharge</value>
+  </data>
+  <data name="OverLoaderFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de révéler son rôle.
+En utilisant « Surcharge », votre rôle devient public.
+Après avoir utilisé « Surcharge », le bouton devient « Décharger ». L'utiliser remet votre rôle en état masqué.
+Lorsque le rôle est public, votre nom s'affiche en rouge (Imposteur) pour tous les joueurs, mais votre vitesse de déplacement augmente, la portée d'élimination devient Longue, et votre temps de recharge d'élimination subit une grande réduction.
+Lorsqu'une réunion commence, la « Surcharge » est annulée de force et votre rôle redevient masqué.</value>
+  </data>
+  <data name="overLoad" xml:space="preserve">
+    <value>SURCHARGER</value>
+  </data>
+  <data name="downLoad" xml:space="preserve">
+    <value>DÉCHARGER</value>
+  </data>
+  <data name="Cracker" xml:space="preserve">
+    <value>Pirate</value>
+  </data>
+  <data name="CrackerAbilityCoolTime" xml:space="preserve">
+    <value>« PIRATER » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="CrackerAbilityCount" xml:space="preserve">
+    <value>« PIRATER » : Nombre maximal de charges</value>
+  </data>
+  <data name="CrackerCanCrackDistance" xml:space="preserve">
+    <value>« PIRATER » : Portée de la compétence</value>
+  </data>
+  <data name="CrackerRemoveDeadBody" xml:space="preserve">
+    <value>« PIRATER » : Fait disparaître le cadavre</value>
+  </data>
+  <data name="CrackerIntroDescription" xml:space="preserve">
+    <value>HACK &amp; CRACK ! PAS DE SIGNALEMENT !</value>
+  </data>
+  <data name="CrackerShortDescription" xml:space="preserve">
+    <value>Piratez les cadavres pour empêcher les signalements</value>
+  </data>
+  <data name="CrackerFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR qui pirate les cadavres pour rendre leur signalement impossible.
+Si l'option « Fait disparaître le cadavre » est activée, une trace reste à l'emplacement du cadavre effacé.
+Un cadavre piraté non effacé apparaîtra comme corps retrouvé au début de la réunion suivante.</value>
+  </data>
+  <data name="crack" xml:space="preserve">
+    <value>PIRATER</value>
+  </data>
+  <data name="Bomber" xml:space="preserve">
+    <value>Bombardier</value>
+  </data>
+  <data name="BomberAbilityCoolTime" xml:space="preserve">
+    <value>« PIÉGER » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="BomberAbilityActiveTime" xml:space="preserve">
+    <value>« PIÉGER » : Durée de la compétence</value>
+  </data>
+  <data name="BomberAbilityCount" xml:space="preserve">
+    <value>« PIÉGER » : Nombre maximal de charges</value>
+  </data>
+  <data name="BomberExplosionRange" xml:space="preserve">
+    <value>« PIÉGER » : Portée de l'explosion du joueur piégé</value>
+  </data>
+  <data name="BomberExplosionKillChance" xml:space="preserve">
+    <value>« PIÉGER » : Taux de mortalité des joueurs dans la portée d'explosion</value>
+  </data>
+  <data name="BomberTimerMinTime" xml:space="preserve">
+    <value>« PIÉGER » : Compteur d'explosion minimum</value>
+  </data>
+  <data name="BomberTimerMaxTime" xml:space="preserve">
+    <value>« PIÉGER » : Compteur d'explosion maximum</value>
+  </data>
+  <data name="BomberTellExplosion" xml:space="preserve">
+    <value>Avertir le rôle en cas d'explosion</value>
+  </data>
+  <data name="BomberIntroDescription" xml:space="preserve">
+    <value>L'explosion est un art !</value>
+  </data>
+  <data name="BomberShortDescription" xml:space="preserve">
+    <value>Transformez les membres de l'équipage en bombes humaines</value>
+  </data>
+  <data name="BomberFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de transformer un équipier en bombe.
+En posant une bombe sur un joueur, une explosion survient autour de lui après un certain délai.
+Les équipiers situés dans le rayon d'explosion ont une chance de mourir selon la probabilité définie.
+Les Imposteurs dans le rayon d'explosion survivent toujours (sauf le Bombardier lui-même s'il est pris dedans).
+Si un équipier est protégé par un Garde du corps, le Garde du corps a une chance de mourir à sa place et l'équipier survit.
+Le délai d'explosion est déterminé aléatoirement entre le temps minimum et maximum configurés.
+Si le joueur piégé ou le Bombardier meurt avant l'explosion, la bombe est annulée.</value>
+  </data>
+  <data name="setBomb" xml:space="preserve">
+    <value>PIÉGER</value>
+  </data>
+  <data name="explosionText" xml:space="preserve">
+    <value>Une de vos créations semble être achevée.</value>
+  </data>
+  <data name="Mery" xml:space="preserve">
+    <value>Merry</value>
+  </data>
+  <data name="MeryAbilityCoolTime" xml:space="preserve">
+    <value>« PORTAIL » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="MeryAbilityCount" xml:space="preserve">
+    <value>« PORTAIL » : Utilisation maximale de la compétence</value>
+  </data>
+  <data name="MeryActiveNum" xml:space="preserve">
+    <value>« PORTAIL » : Nombre de joueurs requis pour activer le portail</value>
+  </data>
+  <data name="MeryActiveRange" xml:space="preserve">
+    <value>« PORTAIL » : Portée de détection des joueurs</value>
+  </data>
+  <data name="MeryIntroDescription" xml:space="preserve">
+    <value>C'est moi, Merry. Je suis juste derrière vous...</value>
+  </data>
+  <data name="MeryShortDescription" xml:space="preserve">
+    <value>Placez le conduit spécial « Portail » aux endroits stratégiques</value>
+  </data>
+  <data name="MeryFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de poser des « Portails ».
+Un portail a un état inactif et un état actif (sa texture change aussi).
+Un portail active peut être utilisé comme un conduit pour se déplacer vers un autre portail active.
+Pour activer un portail, un certain nombre de joueurs non-Imposteurs doivent s'en approcher à une distance définie. Une fois activé, il ne repasse plus en état inactif.
+Seuls les Imposteurs et Merlin peuvent voir ou utiliser les portails (actifs ou inactifs).</value>
+  </data>
+  <data name="setCamp" xml:space="preserve">
+    <value>PORTAIL</value>
+  </data>
+  <data name="SlaveDriver" xml:space="preserve">
+    <value>Exploiteur</value>
+  </data>
+  <data name="SlaveDriverCanSeeTaskBar" xml:space="preserve">
+    <value>Peut toujours voir la barre de progression des tâches</value>
+  </data>
+  <data name="SlaveDriverAbilityCoolTime" xml:space="preserve">
+    <value>« HARCELER » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="SlaveDriverAbilityCount" xml:space="preserve">
+    <value>« HARCELER » : Charges de compétence</value>
+  </data>
+  <data name="SlaveDriverRevartTaskNum" xml:space="preserve">
+    <value>« HARCELER » : Tâches réinitialisées à l'utilisation</value>
+  </data>
+  <data name="SlaveDriverRange" xml:space="preserve">
+    <value>« HARCELER » : Portée de la compétence</value>
+  </data>
+  <data name="SlaveDriverIntroDescription" xml:space="preserve">
+    <value>Alors, le travail avance bien ?</value>
+  </data>
+  <data name="SlaveDriverShortDescription" xml:space="preserve">
+    <value>Réinitialisez la progression des tâches avec « HARCELER »</value>
+  </data>
+  <data name="SlaveDriverFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de réinitialiser certaines tâches grâce à sa compétence.
+Bouton « HARCELER » :
+  Cible les joueurs à portée.
+  Une marque apparaît à côté du nom du joueur ciblé.
+  Au début de la réunion suivante, le joueur marqué verra un certain nombre de ses tâches complétées réinitialisées.</value>
+  </data>
+  <data name="Harassment" xml:space="preserve">
+    <value>HARCELER</value>
+  </data>
+  <data name="SlaveDriverReportMessage" xml:space="preserve">
+    <value>Quelqu'un vous a harcelé et vos tâches ont augmenté...</value>
+  </data>
+  <data name="SandWorm" xml:space="preserve">
+    <value>Ver des Sables</value>
+  </data>
+  <data name="SandWormKillCoolPenalty" xml:space="preserve">
+    <value>Pénalité de temps de recharge pour une élimination normale</value>
+  </data>
+  <data name="SandWormAssaultKillCoolReduce" xml:space="preserve">
+    <value>Bonus de temps de recharge pour « ASSAUT » ou élimination pendant la coupure de lumière</value>
+  </data>
+  <data name="SandWormAssaultRange" xml:space="preserve">
+    <value>« ASSAUT » : Portée d'élimination</value>
+  </data>
+  <data name="SandWormAbilityCoolTime" xml:space="preserve">
+    <value>« ASSAUT » : Temps de recharge</value>
+  </data>
+  <data name="SandWormIntroDescription" xml:space="preserve">
+    <value>Un imposteur qui déteste la lumière et adora l'obscurité</value>
+  </data>
+  <data name="SandWormShortDescription" xml:space="preserve">
+    <value>Maîtrisez l'« ASSAUT » depuis les conduits</value>
+  </data>
+  <data name="SandWormFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR disposant d'un bouton d'élimination spécial « ASSAUT ».
+Compétence « ASSAUT » :
+  - Bouton d'élimination utilisable uniquement dans un conduit.
+  - Déclenche l'animation d'ouverture/fermeture du conduit à l'utilisation.
+  - Le temps de recharge ne se recharge que dans les conduits ou pendant une panne de lumière.
+  - Fonctionne uniquement sur les conduits de base de la carte (hors portails de Merry, etc.).
+  - Considéré comme une élimination spéciale, traversant certaines défenses (ex: Bouclier du Maître du Temps).
+Effectuer une élimination normale ajoute une pénalité au temps de recharge.
+Éliminer via « ASSAUT » ou pendant une panne de lumière réduit le temps de recharge sous sa valeur normale.</value>
+  </data>
+  <data name="assault" xml:space="preserve">
+    <value>ASSAUT</value>
+  </data>
+  <data name="Smasher" xml:space="preserve">
+    <value>Fracasseur</value>
+  </data>
+  <data name="SmasherAbilityCoolTime" xml:space="preserve">
+    <value>« FRACAS » : Temps de recharge</value>
+  </data>
+  <data name="SmasherAbilityCount" xml:space="preserve">
+    <value>« FRACAS » : Charges de compétence</value>
+  </data>
+  <data name="SmasherSmashPenaltyKillCool" xml:space="preserve">
+    <value>« FRACAS » : Pénalité de temps de recharge d'élimination</value>
+  </data>
+  <data name="SmasherIntroDescription" xml:space="preserve">
+    <value>Un imposteur avec deux boutons d'élimination</value>
+  </data>
+  <data name="SmasherShortDescription" xml:space="preserve">
+    <value>Maîtrisez votre second bouton d'élimination « FRACAS »</value>
+  </data>
+  <data name="SmasherFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR possédant un deuxième bouton d'élimination nommé « FRACAS ».
+Compétence « FRACAS » :
+  - Possède un temps de recharge séparé du bouton d'élimination classique.
+  - Fonctionne selon la même logique qu'une élimination classique.
+  - Son utilisation augmente le temps de recharge de la prochaine élimination classique.</value>
+  </data>
+  <data name="smash" xml:space="preserve">
+    <value>FRACAS</value>
+  </data>
+  <data name="AssaultMaster" xml:space="preserve">
+    <value>Maître de l'Assaut</value>
+  </data>
+  <data name="AssaultMasterAbilityCoolTime" xml:space="preserve">
+    <value>« RECHARGER » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="AssaultMasterStockLimit" xml:space="preserve">
+    <value>Limite maximale de « RÉSERVE »</value>
+  </data>
+  <data name="AssaultMasterStockNumWhenReport" xml:space="preserve">
+    <value>RÉSERVE chargée par signalement de cadavre</value>
+  </data>
+  <data name="AssaultMasterStockNumWhenMeetingButton" xml:space="preserve">
+    <value>RÉSERVE chargée par bouton de réunion d'urgence</value>
+  </data>
+  <data name="AssaultMasterCockingKillCoolReduceTime" xml:space="preserve">
+    <value>« ARMEMENT » : Réduction du temps de recharge d'élimination</value>
+  </data>
+  <data name="AssaultMasterReloadReduceKillCoolTimePerStock" xml:space="preserve">
+    <value>« ARMEMENT » : Réduction du temps de recharge d'élimination par RÉSERVE</value>
+  </data>
+  <data name="AssaultMasterIsResetReloadCoolTimeWhenKill" xml:space="preserve">
+    <value>Une élimination réinitialise-t-elle le temps de recharge de « RECHARGER »</value>
+  </data>
+  <data name="AssaultMasterReloadCoolTimeReduceRatePerHideStock" xml:space="preserve">
+    <value>« RECHARGER » : Réduction du temps de recharge par RÉSERVE supplémentaire</value>
+  </data>
+  <data name="AssaultMasterIntroDescription" xml:space="preserve">
+    <value>Le maniement des armes et des munitions n'a pas de secret pour vous !</value>
+  </data>
+  <data name="AssaultMasterShortDescription" xml:space="preserve">
+    <value>Maîtrisez les « RÉSERVES » accumulées lors des réunions</value>
+  </data>
+  <data name="AssaultMasterFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR renforcé par les « RÉSERVES » accumulées lors des réunions.
+Compétence passive « RÉSERVE » : Reserves actuelles : {0}/{1}
+  - La réserve se remplit lors des signalements ou des réunions d'urgence.
+  - Le nombre de réserves gagnées diffère entre un signalement et une réunion.
+  - Le nombre de réserves est limité.
+  - Dépasser la limite réduit le temps de recharge de « RECHARGER ».
+Compétence « RECHARGER » : Temps de recharge actuel : {2} s
+  - Consomme autant de réserves que possible pour réduire fortement le temps de recharge d'élimination.
+  - L'utilisation réinitialise le temps de recharge de la compétence.
+Compétence passive « ARMEMENT » :
+  - S'active automatiquement lors d'une élimination.
+  - Consomme 1 réserve pour réduire le temps de recharge d'élimination.</value>
+  </data>
+  <data name="reload" xml:space="preserve">
+    <value>RECHARGER</value>
+  </data>
+  <data name="noStockNow" xml:space="preserve">
+    <value>PAS DE RÉSERVE</value>
+  </data>
+  <data name="reduceKillCool" xml:space="preserve">
+    <value>Temps de recharge d'élimination
+Réduction max de {0} s</value>
+  </data>
+  <data name="Shooter" xml:space="preserve">
+    <value>Tireur</value>
+  </data>
+  <data name="ShooterIsInitAwake" xml:space="preserve">
+    <value>Le rôle est-il révélé au départ</value>
+  </data>
+  <data name="ShooterAwakeKillNum" xml:space="preserve">
+    <value>Éliminations pour révéler le rôle</value>
+  </data>
+  <data name="ShooterAwakeImpNum" xml:space="preserve">
+    <value>Imposteurs restants pour révéler le rôle</value>
+  </data>
+  <data name="ShooterShootKillCoolPenalty" xml:space="preserve">
+    <value>« TIRER » : Pénalité de temps de recharge d'élimination par tir</value>
+  </data>
+  <data name="ShooterNoneAwakeWhenShoot" xml:space="preserve">
+    <value>Annuler la révélation de rôle lors d'un « TIR »</value>
+  </data>
+  <data name="ShooterCanCallMeeting" xml:space="preserve">
+    <value>Peut utiliser le bouton de réunion d'urgence</value>
+  </data>
+  <data name="ShooterCanShootSelfCallMeeting" xml:space="preserve">
+    <value>Peut « TIRER » pendant une réunion qu'il a provoqué lui-même</value>
+  </data>
+  <data name="ShooterMaxShootNum" xml:space="preserve">
+    <value>« TIRER » : Munitions maximales transportables</value>
+  </data>
+  <data name="ShooterInitShootNum" xml:space="preserve">
+    <value>« TIRER » : Munitions initiales</value>
+  </data>
+  <data name="ShooterMaxMeetingShootNum" xml:space="preserve">
+    <value>« TIRER » : Utilisations par réunion</value>
+  </data>
+  <data name="ShooterShootChargeTime" xml:space="preserve">
+    <value>« TIRER » : Rechargement des munitions après</value>
+  </data>
+  <data name="ShooterShootKillNum" xml:space="preserve">
+    <value>« TIRER » : Éliminations requises pour recharger une munition</value>
+  </data>
+  <data name="ShooterIntroDescription" xml:space="preserve">
+    <value>Tirez ! Balle du mal !</value>
+  </data>
+  <data name="ShooterShortDescription" xml:space="preserve">
+    <value>Balayez vos opposants avec « TIRER »</value>
+  </data>
+  <data name="ShooterFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable d'éliminer pendant les réunions.
+Compétence « TIRER » :
+  - Ciblez un joueur avant de voter.
+  - Élimine le joueur ciblé sans hésitation.
+  - Consomme 1 munition à chaque tir.
+  - Des munitions supplémentaires sont obtenues lorsque les conditions de temps et d'éliminations sont remplies.
+  - Le temps ne défile que pendant le jeu normal sur le terrain.
+Tirer applique une pénalité au prochain temps de recharge d'élimination.</value>
+  </data>
+  <data name="shooterShootStatus" xml:space="preserve">
+    <value>Munitions restantes : {0}/{1}
+Peut tirer {2} fois pendant cette réunion</value>
+  </data>
+  <data name="shooterChargeInfo" xml:space="preserve">
+    <value>Statut de charge : {0}/{1}
+Temps restant jusqu'à la fin de la charge</value>
+  </data>
+  <data name="LastWolf" xml:space="preserve">
+    <value>Dernier Loup</value>
+  </data>
+  <data name="LastWolfAwakeImpostorNum" xml:space="preserve">
+    <value>Imposteurs restants pour l'éveil du Dernier Loup</value>
+  </data>
+  <data name="LastWolfDeadPlayerNumBonus" xml:space="preserve">
+    <value>Taux de réduction du temps de recharge d'élimination par joueur mort</value>
+  </data>
+  <data name="LastWolfKillPlayerNumBonus" xml:space="preserve">
+    <value>Taux de réduction du temps de recharge d'élimination par élimination avant éveil</value>
+  </data>
+  <data name="LastWolfAbilityCoolTime" xml:space="preserve">
+    <value>« BLACKOUT » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="LastWolfLightOffVision" xml:space="preserve">
+    <value>« BLACKOUT » : Vision</value>
+  </data>
+  <data name="LastWolfAbilityActiveTime" xml:space="preserve">
+    <value>« BLACKOUT » : Durée de la compétence</value>
+  </data>
+  <data name="LastWolfIntroDescription" xml:space="preserve">
+    <value>Le loup solitaire</value>
+  </data>
+  <data name="LastWolfShortDescription" xml:space="preserve">
+    <value>Maîtrisez le « BLACKOUT »</value>
+  </data>
+  <data name="LastWolfFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR éveillé selon le nombre d'Imposteurs en vie.
+L'élimination du Dernier Loup ne provoque pas de saut/téléportation d'élimination.
+Selon le nombre de survivants, le temps de recharge d'élimination est réduit une seule fois après la réunion (revient à la normale après une élimination). Des bonus s'appliquent selon les éliminations faites avant l'éveil.
+Compétence « BLACKOUT » :
+  - Réduit de force la vision de tous les joueurs sauf du Dernier Loup.
+  - Affecte également les joueurs avec des paramètres de vision spéciaux.
+  - Le temps de recharge de cette compétence augmente à mesure que les survivants diminuent.</value>
+  </data>
+  <data name="liightOff" xml:space="preserve">
+    <value>BLACKOUT</value>
+  </data>
+  <data name="Commander" xml:space="preserve">
+    <value>Commandant</value>
+  </data>
+  <data name="CommanderKillCoolReduceTime" xml:space="preserve">
+    <value>« COMMANDEMENT » : Réduction de base du temps de recharge d'élimination</value>
+  </data>
+  <data name="CommanderKillCoolReduceImpBonus" xml:space="preserve">
+    <value>« COMMANDEMENT » : Réduction bonus par Imposteur éliminé</value>
+  </data>
+  <data name="CommanderIncreaseKillNum" xml:space="preserve">
+    <value>« COMMANDEMENT » : Éliminations requises pour une charge supplémentaire</value>
+  </data>
+  <data name="CommanderAbilityCoolTime" xml:space="preserve">
+    <value>« COMMANDEMENT » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="CommanderAbilityCount" xml:space="preserve">
+    <value>« COMMANDEMENT » : Charges de compétence</value>
+  </data>
+  <data name="CommanderIntroDescription" xml:space="preserve">
+    <value>Ici le QG, éliminez tout l'équipage !</value>
+  </data>
+  <data name="CommanderShortDescription" xml:space="preserve">
+    <value>Utilisez « COMMANDEMENT » pour réduire le temps de recharge d'élimination de vos alliés</value>
+  </data>
+  <data name="CommanderFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de réduire le temps de recharge d'élimination de ses coéquipiers.
+Compétence « COMMANDEMENT » :
+  - Réduit le temps de recharge d'élimination de tous les Imposteurs (y compris vous-même).
+  - La valeur de réduction augmente si des Imposteurs ont été éliminés.
+  - Le nombre d'utilisations augmente lorsque le Commandant effectue un certain nombre d'éliminations.</value>
+  </data>
+  <data name="attackCommand" xml:space="preserve">
+    <value>COMMANDEMENT</value>
+  </data>
+  <data name="Hypnotist" xml:space="preserve">
+    <value>Hypnotiseur</value>
+  </data>
+  <data name="HypnotistAwakeCheckImpostorNum" xml:space="preserve">
+    <value>Imposteurs restants pour l'éveil de l'Hypnotiseur (Condition 1)</value>
+  </data>
+  <data name="HypnotistAwakeCheckTaskGage" xml:space="preserve">
+    <value>Progression globale des tâches pour l'éveil (Condition 2)</value>
+  </data>
+  <data name="HypnotistAwakeKillCount" xml:space="preserve">
+    <value>Éliminations effectuées pour l'éveil (Condition 3)</value>
+  </data>
+  <data name="HypnotistRange" xml:space="preserve">
+    <value>« HYPNOSE » : Portée de la compétence</value>
+  </data>
+  <data name="HypnotistAbilityCoolTime" xml:space="preserve">
+    <value>« HYPNOSE » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="HypnotistAbilityCount" xml:space="preserve">
+    <value>« HYPNOSE » : Charges de compétence</value>
+  </data>
+  <data name="HypnotistHideArrowRange" xml:space="preserve">
+    <value>Distance d'affichage des flèches vers les « Fragments d'Aptitude »</value>
+  </data>
+  <data name="HypnotistDefaultRedAbilityPart" xml:space="preserve">
+    <value>Nombre par défaut de « Fragments d'Aptitude (Rouge) » lors de la création d'une « Poupée »</value>
+  </data>
+  <data name="HypnotistHideKillButtonTime" xml:space="preserve">
+    <value>Poupée : Durée du bouton d'élimination temporaire après l'obtention d'un fragment rouge</value>
+  </data>
+  <data name="HypnotistIsResetKillCoolWhenDollKill" xml:space="preserve">
+    <value>Une élimination par la Poupée réinitialise-t-elle le temps de recharge de l'Hypnotiseur</value>
+  </data>
+  <data name="HypnotistDollKillCoolReduceRate" xml:space="preserve">
+    <value>Poupée : Réduction du temps de recharge d'élimination lors de l'obtention consécutive de fragments rouges</value>
+  </data>
+  <data name="HypnotistDollCrakingCoolTime" xml:space="preserve">
+    <value>Poupée : Temps de recharge de la capacité de « Piratage »</value>
+  </data>
+  <data name="HypnotistDollCrakingActiveTime" xml:space="preserve">
+    <value>Poupée : Durée d'utilisation du « Piratage »</value>
+  </data>
+  <data name="HypnotistIntroDescription" xml:space="preserve">
+    <value>1, 2, 3... Et voilà, vous êtes sous mon hypnose...</value>
+  </data>
+  <data name="HypnotistShortDescription" xml:space="preserve">
+    <value>Créez une « Poupée » avec l'« HYPNOSE »</value>
+  </data>
+  <data name="HypnotistFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de créer une « Poupée » grâce à l'« HYPNOSE ».
+Compétence « HYPNOSE » :
+  - Cible un joueur proche.
+  - Réinitialise son rôle et le transforme en « Poupée ».
+  - Des « Fragments d'Aptitude » apparaissent sur la carte.
+  - Les « Fragments rouges » donnent la capacité d'éliminer à la Poupée et réduisent son temps de recharge.
+  - Les « Fragments bleus » débloquent l'accès aux modules de carte (vitaux, etc.).
+  - Les « Fragments gris » accordent des capacités de piratage.
+  - Les fragments bleus et gris sont en nombre fixe. Les fragments rouges dépendent du rôle d'origine de la Poupée.</value>
+  </data>
+  <data name="Hypnosis" xml:space="preserve">
+    <value>HYPNOSE</value>
+  </data>
+  <data name="Doll" xml:space="preserve">
+    <value>Poupée</value>
+  </data>
+  <data name="DollShortDescription" xml:space="preserve">
+    <value>Vous êtes tombé sous « Hypnose »</value>
+  </data>
+  <data name="DollFullDescription" xml:space="preserve">
+    <value>Rôle créé par l'« Hypnotiseur ».
+Condition de victoire : Atteindre la condition de victoire des Imposteurs.
+Par défaut, ce rôle ne peut rien faire, mais est renforcé par les « Fragments d'Aptitude » ramassés par l'Hypnotiseur.
+  - Hypnotiseur actuel : {0}
+  - Modules de carte débloqués : {1}
+  - Capacités de piratage débloquées : {2}</value>
+  </data>
+  <data name="FeatAccess" xml:space="preserve">
+    <value>Intensité d'hypnose : Accès à « {0} » débloqué</value>
+  </data>
+  <data name="unlockCraking" xml:space="preserve">
+    <value>Intensité d'hypnose : Capacité de piratage « {0} » débloquée</value>
+  </data>
+  <data name="unlockKill" xml:space="preserve">
+    <value>Intensité d'hypnose : Capacité d'élimination accordée</value>
+  </data>
+  <data name="lockKill" xml:space="preserve">
+    <value>Intensité d'hypnose : Capacité d'élimination retirée</value>
+  </data>
+  <data name="UnderWarper" xml:space="preserve">
+    <value>Téléporteur des Souterrains</value>
+  </data>
+  <data name="UnderWarperAwakeKillCount" xml:space="preserve">
+    <value>Éliminations après réunion requises pour s'éveiller</value>
+  </data>
+  <data name="UnderWarperVentLinkKillCout" xml:space="preserve">
+    <value>Éliminations après réunion requises pour lier les conduits</value>
+  </data>
+  <data name="UnderWarperNoVentAnimeKillCout" xml:space="preserve">
+    <value>Éliminations après réunion requises pour retirer l'animation de conduit</value>
+  </data>
+  <data name="UnderWarperWallHackVent" xml:space="preserve">
+    <value>Peut utiliser les conduits à travers les murs après l'éveil</value>
+  </data>
+  <data name="UnderWarperRange" xml:space="preserve">
+    <value>Portée d'utilisation des conduits après l'éveil</value>
+  </data>
+  <data name="UnderWarperIntroDescription" xml:space="preserve">
+    <value>Le maître incontesté des conduits</value>
+  </data>
+  <data name="UnderWarperShortDescription" xml:space="preserve">
+    <value>Utilisez efficacement les conduits pour manoeuvrer</value>
+  </data>
+  <data name="UnderWarperFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR maître des conduits.
+Des capacités et l'éveil lui sont attribués selon le nombre total d'éliminations effectuées à la fin des réunions.
+L'éveil augmente la portée d'utilisation des conduits.</value>
+  </data>
+  <data name="Magician" xml:space="preserve">
+    <value>Magicien</value>
+  </data>
+  <data name="MagicianAbilityCoolTime" xml:space="preserve">
+    <value>« JONGLER » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="MagicianAbilityCount" xml:space="preserve">
+    <value>« JONGLER » : Charges de compétence</value>
+  </data>
+  <data name="MagicianTeleportTargetRate" xml:space="preserve">
+    <value>« JONGLER » : Joueurs ciblés par la compétence</value>
+  </data>
+  <data name="MagicianDupeTeleportTargetTo" xml:space="preserve">
+    <value>« JONGLER » : Téléporte plusieurs joueurs à la même position</value>
+  </data>
+  <data name="MagicianIncludeSpawnPoint" xml:space="preserve">
+    <value>« JONGLER » : Inclut les points d'apparition comme positions de téléportation</value>
+  </data>
+  <data name="MagicianIncludeRolePlayer" xml:space="preserve">
+    <value>« JONGLER » : Inclut le Magicien comme cible de la compétence</value>
+  </data>
+  <data name="MagicianIntroDescription" xml:space="preserve">
+    <value>Sème la confusion dans les discussions !</value>
+  </data>
+  <data name="MagicianShortDescription" xml:space="preserve">
+    <value>Utilisez votre compétence pour perturber les informations !</value>
+  </data>
+  <data name="MagicianFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de déplacer fortement la position des équipiers.
+Compétence « JONGLER » :
+  - Téléporte aléatoirement une partie des survivants à la position d'autres joueurs.
+  - Si l'option d'inclure les points d'apparition est ACTIVÉE, les points d'apparition de la carte sont aussi inclus.
+  - Si l'option d'inclure le Magicien est DÉSACTIVÉE, le Magicien lui-même ne sera pas téléporté ni choisi comme destination.</value>
+  </data>
+  <data name="juggling" xml:space="preserve">
+    <value>JONGLER</value>
+  </data>
+  <data name="Slime" xml:space="preserve">
+    <value>Slime</value>
+  </data>
+  <data name="SlimeAbilityCoolTime" xml:space="preserve">
+    <value>« METAMORPHOSE » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="SlimeAbilityActiveTime" xml:space="preserve">
+    <value>« METAMORPHOSE » : Durée de la compétence</value>
+  </data>
+  <data name="SlimeIntroDescription" xml:space="preserve">
+    <value>Un imposteur visqueux capable de se transformer en n'importe quoi</value>
+  </data>
+  <data name="SlimeShortDescription" xml:space="preserve">
+    <value>Transformez-vous en divers objets avec « MÉTAMORPHOSE »</value>
+  </data>
+  <data name="SlimeFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de prendre l'apparence d'objets du décor de la carte.
+Compétence « MÉTAMORPHOSE » :
+  - Utilisable à proximité d'un objet du décor transformable.
+  - Permet de prendre l'apparence de cet objet.
+  - Éliminer reste possible pendant la métamorphose, mais utiliser un conduit ou une échelle annule la transformation.</value>
+  </data>
+  <data name="SlimeMorph" xml:space="preserve">
+    <value>MÉTAMORPHOSE</value>
+  </data>
+  <data name="Zombie" xml:space="preserve">
+    <value>Zombie</value>
+  </data>
+  <data name="ZombieAwakeKillCount" xml:space="preserve">
+    <value>Éliminations requises pour s'éveiller en Zombie</value>
+  </data>
+  <data name="ZombieAbilityCoolTime" xml:space="preserve">
+    <value>« AUTEL » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="ZombieAbilityActiveTime" xml:space="preserve">
+    <value>« AUTEL » : Durée de la compétence</value>
+  </data>
+  <data name="ZombieAbilityCount" xml:space="preserve">
+    <value>« AUTEL » : Charges de compétence</value>
+  </data>
+  <data name="ZombieShowMagicCircleTime" xml:space="preserve">
+    <value>« AUTEL » : Temps avant de révéler l'autel aux autres joueurs</value>
+  </data>
+  <data name="ZombieResurrectKillCount" xml:space="preserve">
+    <value>Éliminations requises pour activer la résurrection (Condition 2)</value>
+  </data>
+  <data name="ZombieResurrectDelayTime" xml:space="preserve">
+    <value>Délai en secondes entre la mort et la résurrection</value>
+  </data>
+  <data name="ZombieCanResurrectOnExil" xml:space="preserve">
+    <value>Peut aussi ressusciter en cas d'expulsion par vote</value>
+  </data>
+  <data name="ZombieIntroDescription" xml:space="preserve">
+    <value>Un imposteur au corps réanimé</value>
+  </data>
+  <data name="ZombieShortDescription" xml:space="preserve">
+    <value>Posez l'« AUTEL », éliminez des joueurs et offrez des sacrifices</value>
+  </data>
+  <data name="ZombieFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR éveillé capable de ressusciter lorsque les conditions sont remplies.
+Ce rôle n'est pas réattribué en rôle de fantôme.
+Compétence « AUTEL » :
+  - Utilisable dans une pièce spécifique (indiquée par une flèche).
+  - Après une immobilisation, l'autel magique est posé.
+  - Après le délai configuré, l'autel devient visible pour tous.
+  - Si cette compétence a été utilisée et que le nombre requis d'éliminations est atteint, vous devenez « Prêt à ressusciter ».
+En cas d'élimination dans cet état, vous ressuscitez au point d'apparition après un court délai.</value>
+  </data>
+  <data name="featMagicCircle" xml:space="preserve">
+    <value>AUTEL</value>
+  </data>
+  <data name="Thief" xml:space="preserve">
+    <value>Voleur</value>
+  </data>
+  <data name="ThiefAbilityCoolTime" xml:space="preserve">
+    <value>« VOLER » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="ThiefAbilityActiveTime" xml:space="preserve">
+    <value>« VOLER » : Durée de la compétence</value>
+  </data>
+  <data name="ThiefAbilityCount" xml:space="preserve">
+    <value>« VOLER » : Charges de compétence</value>
+  </data>
+  <data name="ThiefRange" xml:space="preserve">
+    <value>« VOLER » : Portée de la compétence</value>
+  </data>
+  <data name="ThiefSetNum" xml:space="preserve">
+    <value>« VOLER » : FRAGMENTS TEMPORELS générés par utilisation</value>
+  </data>
+  <data name="ThiefSetTimeOffset" xml:space="preserve">
+    <value>« VOLER » : Réduit la durée de réunion de</value>
+  </data>
+  <data name="ThiefPickUpTimeOffset" xml:space="preserve">
+    <value>« FRAGMENTS TEMPORELS » : Prolonge la durée de réunion de</value>
+  </data>
+  <data name="ThiefIsAddEffect" xml:space="preserve">
+    <value>« VOLER » : Laisse des particules sur les cadavres</value>
+  </data>
+  <data name="ThiefIntroDescription" xml:space="preserve">
+    <value>Je peux même vous voler le « Temps »</value>
+  </data>
+  <data name="ThiefShortDescription" xml:space="preserve">
+    <value>Volez le « Temps »</value>
+  </data>
+  <data name="ThiefFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de réduire la durée des réunions.
+Compétence « VOLER » :
+  - S'utilise en ciblant un cadavre.
+  - Après être resté près du cadavre pendant un temps défini, la durée de la prochaine réunion est réduite.
+  - Après la réunion suivante, des « Fragments Temporels » apparaissent sur la carte.
+  - Les ramasser prolonge la durée de la réunion suivante.</value>
+  </data>
+  <data name="steal" xml:space="preserve">
+    <value>VOLER</value>
+  </data>
+  <data name="Crewshroom" xml:space="preserve">
+    <value>Champignon</value>
+  </data>
+  <data name="CrewshroomAbilityCoolTime" xml:space="preserve">
+    <value>« CHAMPIGNON » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="CrewshroomAbilityCount" xml:space="preserve">
+    <value>« CHAMPIGNON » : Charges de compétence</value>
+  </data>
+  <data name="CrewshroomDelaySecond" xml:space="preserve">
+    <value>« CHAMPIGNON » : Temps jusqu'à l'activation des spores</value>
+  </data>
+  <data name="CrewshroomFungleIntroDescription" xml:space="preserve">
+    <value>Né sur l'île des champignons, cet imposteur est de retour</value>
+  </data>
+  <data name="CrewshroomIntroDescription" xml:space="preserve">
+    <value>Un contrebandier venu de Fungle</value>
+  </data>
+  <data name="CrewshroomShortDescription" xml:space="preserve">
+    <value>Posez des champignons pour perturber les informations de vision</value>
+  </data>
+  <data name="CrewshroomFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de poser des champignons de la carte Fungle.
+Compétence « CHAMPIGNON » :
+  - Pose un champignon à l'emplacement actuel.
+  - Le fonctionnement est identique aux champignons de Fungle.
+  - Les spores apparaissent après le délai défini.</value>
+  </data>
+  <data name="CrewshroomSet" xml:space="preserve">
+    <value>CHAMPIGNON</value>
+  </data>
+  <data name="Terorist" xml:space="preserve">
+    <value>Terroriste</value>
+  </data>
+  <data name="TeroristAbilityCoolTime" xml:space="preserve">
+    <value>« MENACE » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="TeroristAbilityCount" xml:space="preserve">
+    <value>« MENACE » : Charges de compétence</value>
+  </data>
+  <data name="TeroristCanActiveOtherSabotage" xml:space="preserve">
+    <value>« MENACE » : Utilisable avec d'autres sabotages</value>
+  </data>
+  <data name="TeroristExplosionTime" xml:space="preserve">
+    <value>« MENACE » : Temps jusqu'à l'explosion</value>
+  </data>
+  <data name="TeroristBombNum" xml:space="preserve">
+    <value>« MENACE » : Bombes posées par utilisation</value>
+  </data>
+  <data name="TeroristPlayerActivateTime" xml:space="preserve">
+    <value>« MENACE » : Durée pour désamorcer la bombe (Vivant)</value>
+  </data>
+  <data name="TeroristCanUseDeadPlayer" xml:space="preserve">
+    <value>« MENACE » : Les joueurs morts peuvent-ils désamorcer la bombe</value>
+  </data>
+  <data name="TeroristDeadPlayerActivateTime" xml:space="preserve">
+    <value>« MENACE » : Durée pour désamorcer la bombe (Mort)</value>
+  </data>
+  <data name="TeroristIntroDescription" xml:space="preserve">
+    <value>Posez des bombes et faites tout sauter !</value>
+  </data>
+  <data name="TeroristShortDescription" xml:space="preserve">
+    <value>Divisez l'équipage avec la « MENACE » d'explosion</value>
+  </data>
+  <data name="TeroristFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de déclencher le sabotage personnalisé « Menace d'explosion ».
+Compétence « MENACE » :
+  - Déclenche le sabotage d'explosion.
+  - Des bombes sont posées à des endroits aléatoires de la carte et doivent être désamorcées dans le temps imparti.
+  - L'échec du désamorçage entraîne la victoire spéciale des Imposteurs.
+Voix de l'annonce : VOICEVOX:ZUNDAMON</value>
+  </data>
+  <data name="TeroristBombSet" xml:space="preserve">
+    <value>MENACE</value>
+  </data>
+  <data name="TeroristBombTask" xml:space="preserve">
+    <value>Désamorcer la bombe ({0} s restantes)</value>
+  </data>
+  <data name="TeroristBombMinigameProgress" xml:space="preserve">
+    <value>Progression</value>
+  </data>
+  <data name="TeroristBombMinigameStart" xml:space="preserve">
+    <value>Désamorcer</value>
+  </data>
+  <data name="Raider" xml:space="preserve">
+    <value>Raider</value>
+  </data>
+  <data name="RaiderAbilityCoolTime" xml:space="preserve">
+    <value>« MODE BOMBARDEMENT » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="RaiderAbilityCount" xml:space="preserve">
+    <value>« BOMBARDEMENT » : Charges de compétence</value>
+  </data>
+  <data name="RaiderAbilityActiveTime" xml:space="preserve">
+    <value>« MODE BOMBARDEMENT » : Durée d'affichage</value>
+  </data>
+  <data name="RaiderIsOpenLimit" xml:space="preserve">
+    <value>« MODE BOMBARDEMENT » : Limite d me'affichage</value>
+  </data>
+  <data name="RaiderLimitNum" xml:space="preserve">
+    <value>« MODE BOMBARDEMENT » : Nombre d'affichages</value>
+  </data>
+  <data name="RaiderIsHidePlayerOnOpen" xml:space="preserve">
+    <value>Masquer le joueur pendant le « Mode Bombardement »</value>
+  </data>
+  <data name="RaiderBombType" xml:space="preserve">
+    <value>« BOMBARDEMENT » : Type</value>
+  </data>
+  <data name="SingleBombType" xml:space="preserve">
+    <value>Unique</value>
+  </data>
+  <data name="RandomBombType" xml:space="preserve">
+    <value>Aléatoire (Multiple)</value>
+  </data>
+  <data name="CarpetHorizontalBombType" xml:space="preserve">
+    <value>Bombardement en tapis (Horizontal)</value>
+  </data>
+  <data name="CarpetVerticalBombType" xml:space="preserve">
+    <value>Bombardement en tapis (Vertical)</value>
+  </data>
+  <data name="RaiderBombNum" xml:space="preserve">
+    <value>Nombre de bombes</value>
+  </data>
+  <data name="RaiderBombTargetRange" xml:space="preserve">
+    <value>Zone de bombardement</value>
+  </data>
+  <data name="RaiderBombRange" xml:space="preserve">
+    <value>Portée d'explosion par bombe</value>
+  </data>
+  <data name="RaiderBombAliveTime" xml:space="preserve">
+    <value>Temps de chute par bombe</value>
+  </data>
+  <data name="RaiderBombShowOtherPlayer" xml:space="preserve">
+    <value>« BOMBARDEMENT » : Emplacement de largage visible par les non-Imposteurs</value>
+  </data>
+  <data name="RaiderIntroDescription" xml:space="preserve">
+    <value>Demande de bombardement d'urgence sur l'équipage !</value>
+  </data>
+  <data name="RaiderShortDescription" xml:space="preserve">
+    <value>Transformez la zone en champ de ruines avec le « BOMBARDEMENT »</value>
+  </data>
+  <data name="RaiderFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable d'effectuer un bombardement sur un point sélectionné.
+Compétence « Mode Bombardement » :
+  - Ouvre l'interface de bombardement.
+  - Déplacez le viseur et appuyez sur « Bombarder ».
+  - Les bombes tombent selon l'option configurée.
+  - Tous les joueurs dans la zone d'explosion sont éliminés, sans distinction d'équipe.</value>
+  </data>
+  <data name="OpenBombUI" xml:space="preserve">
+    <value>Mode Bombardement</value>
+  </data>
+  <data name="CloseBombUI" xml:space="preserve">
+    <value>Quitter
+(Fermeture auto dans {0} s)</value>
+  </data>
+  <data name="ExecuteBombFromUI" xml:space="preserve">
+    <value>Bombarder
+({0} restants)</value>
+  </data>
+  <data name="Glitch" xml:space="preserve">
+    <value>Bug</value>
+  </data>
+  <data name="GlitchAbilityCoolTime" xml:space="preserve">
+    <value>« BUG » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="GlitchAbilityCount" xml:space="preserve">
+    <value>« BUG » : Charges de compétence</value>
+  </data>
+  <data name="GlitchRange" xml:space="preserve">
+    <value>« BUG » : Portée d'activation</value>
+  </data>
+  <data name="GlitchEffectOnImpo" xml:space="preserve">
+    <value>« BUG » : Les Imposteurs sont-ils affectés</value>
+  </data>
+  <data name="GlitchDelay" xml:space="preserve">
+    <value>« BUG » : Délai avant activation</value>
+  </data>
+  <data name="GlitchActiveTime" xml:space="preserve">
+    <value>« BUG » : Durée d'activation</value>
+  </data>
+  <data name="GlitchIntroDescription" xml:space="preserve">
+    <value>Je n'ai rien fait et ça s'est cassé !</value>
+  </data>
+  <data name="GlitchShortDescription" xml:space="preserve">
+    <value>Faites bugger les appareils de la carte avec « BUG »</value>
+  </data>
+  <data name="GlitchFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de falsifier les informations des équipements de la carte.
+Compétence « BUG » :
+  - S'utilise à proximité d'un équipement (administrateur, caméras, etc.).
+  - Falsifie les données fournies par cet équipement.</value>
+  </data>
+  <data name="glitchGlitch" xml:space="preserve">
+    <value>BUG</value>
+  </data>
+  <data name="Hijacker" xml:space="preserve">
+    <value>Pirateur</value>
+  </data>
+  <data name="HijackerAbilityCoolTime" xml:space="preserve">
+    <value>« PIRATAGE » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="HijackerAbilityActiveTime" xml:space="preserve">
+    <value>« PIRATAGE » : Durée</value>
+  </data>
+  <data name="HijackerAbilityCount" xml:space="preserve">
+    <value>« PIRATAGE » : Charges de compétence</value>
+  </data>
+  <data name="HijackerIsRandomPlayer" xml:space="preserve">
+    <value>« PIRATAGE » : Joueur cible aléatoire</value>
+  </data>
+  <data name="HijackerIntroDescription" xml:space="preserve">
+    <value>De qui vais-je voler la vision ?</value>
+  </data>
+  <data name="HijackerShortDescription" xml:space="preserve">
+    <value>Piratez la vision des autres joueurs</value>
+  </data>
+  <data name="HijackerFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de voir à travers les yeux des autres joueurs.
+Compétence « PIRATAGE » :
+  - Permet de voir le champ de vision du joueur cible.</value>
+  </data>
+  <data name="hijackerHijack" xml:space="preserve">
+    <value>PIRATAGE</value>
+  </data>
+  <data name="TimeBreaker" xml:space="preserve">
+    <value>Fractureur Temporel</value>
+  </data>
+  <data name="TimeBreakerAbilityCoolTime" xml:space="preserve">
+    <value>« PAUSE TEMPORELLE » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="TimeBreakerAbilityCount" xml:space="preserve">
+    <value>« PAUSE TEMPORELLE » : Charges de compétence</value>
+  </data>
+  <data name="TimeBreakerActiveTime" xml:space="preserve">
+    <value>« PAUSE TEMPORELLE » : Durée d'activation</value>
+  </data>
+  <data name="TimeBreakerEffectImp" xml:space="preserve">
+    <value>« PAUSE TEMPORELLE » : Les Imposteurs sont-ils affectés</value>
+  </data>
+  <data name="TimeBreakerIsActiveScreen" xml:space="preserve">
+    <value>« PAUSE TEMPORELLE » : Effet</value>
+  </data>
+  <data name="TimeBreakerIntroDescription" xml:space="preserve">
+    <value>Temps, arrête-toi !</value>
+  </data>
+  <data name="TimeBreakerShortDescription" xml:space="preserve">
+    <value>Arrêtez le temps pour gagner du temps</value>
+  </data>
+  <data name="TimeBreakerFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable d'arrêter le temps.
+Compétence « PAUSE TEMPORELLE » :
+  - Immobilise les joueurs pendant un certain temps.</value>
+  </data>
+  <data name="timeBreakerTimeBreak" xml:space="preserve">
+    <value>PAUSE TEMPORELLE</value>
+  </data>
+  <data name="TimeBreakerEffectMarlin" xml:space="preserve">
+    <value>« PAUSE TEMPORELLE » : Merlin est-il affecté</value>
+  </data>
+  <data name="GlitchEffectOnMarlin" xml:space="preserve">
+    <value>« BUG » : Merlin est-il affecté</value>
+  </data>
+  <data name="SlimeSeeMorphMerlin" xml:space="preserve">
+    <value>« METAMORPHOSE » : Merlin peut-il voir à travers</value>
+  </data>
+  <data name="FakerSeeDummyMerlin" xml:space="preserve">
+    <value>« MANNEQUIN (JOUEUR) » : Merlin peut-il voir à travers</value>
+  </data>
+  <data name="Scavenger" xml:space="preserve">
+    <value>Pilleur</value>
+  </data>
+  <data name="ScavengerAbilityCoolTime" xml:space="preserve">
+    <value>Temps de recharge des différentes compétences</value>
+  </data>
+  <data name="ScavengerIsRandomInitAbility" xml:space="preserve">
+    <value>Définir une capacité initiale aléatoire</value>
+  </data>
+  <data name="ScavengerAllowDupe" xml:space="preserve">
+    <value>Autoriser des capacités initiales identiques entre joueurs</value>
+  </data>
+  <data name="ScavengerAllowAdvancedWeapon" xml:space="preserve">
+    <value>Inclure les capacités Lv2+ dans les capacités initiales</value>
+  </data>
+  <data name="ScavengerInitAbility" xml:space="preserve">
+    <value>Capacité initiale</value>
+  </data>
+  <data name="ScavengerIsSetWeapon" xml:space="preserve">
+    <value>Placer des armes sur la carte</value>
+  </data>
+  <data name="ScavengerSyncWeapon" xml:space="preserve">
+    <value>Partager le statut d'obtention des armes avec tous les joueurs</value>
+  </data>
+  <data name="ScavengerHandGunCount" xml:space="preserve">
+    <value>« PISTOLET » : Charges de compétence</value>
+  </data>
+  <data name="ScavengerHandGunSpeed" xml:space="preserve">
+    <value>« PISTOLET » : Vitesse de la balle</value>
+  </data>
+  <data name="ScavengerHandGunRange" xml:space="preserve">
+    <value>« PISTOLET » : Portée maximale de la balle</value>
+  </data>
+  <data name="ScavengerFlameCount" xml:space="preserve">
+    <value>« LANCE-FLAMMES » : Charges de compétence</value>
+  </data>
+  <data name="ScavengerFlameChargeTime" xml:space="preserve">
+    <value>« LANCE-FLAMMES » : Temps de charge</value>
+  </data>
+  <data name="ScavengerFlameActiveTime" xml:space="preserve">
+    <value>« LANCE-FLAMMES » : Durée du tir</value>
+  </data>
+  <data name="ScavengerFlameFireSecond" xml:space="preserve">
+    <value>« LANCE-FLAMMES » : Temps pour s'enflammer</value>
+  </data>
+  <data name="ScavengerFlameDeadSecond" xml:space="preserve">
+    <value>« LANCE-FLAMMES » : Temps de l'inflammation à la mort</value>
+  </data>
+  <data name="ScavengerSwordCount" xml:space="preserve">
+    <value>« ÉPÉE » : Charges de compétence</value>
+  </data>
+  <data name="ScavengerSwordChargeTime" xml:space="preserve">
+    <value>« ÉPÉE » : Temps de charge</value>
+  </data>
+  <data name="ScavengerSwordActiveTime" xml:space="preserve">
+    <value>« ÉPÉE » : Durée de rotation</value>
+  </data>
+  <data name="ScavengerSwordR" xml:space="preserve">
+    <value>« ÉPÉE » : Position d'apparition</value>
+  </data>
+  <data name="ScavengerSniperRifleCount" xml:space="preserve">
+    <value>« FUSIL DE PRÉCISION » : Charges de compétence</value>
+  </data>
+  <data name="ScavengerSniperRifleSpeed" xml:space="preserve">
+    <value>« FUSIL DE PRÉCISION » : Vitesse de la balle</value>
+  </data>
+  <data name="ScavengerBeamRifleCount" xml:space="preserve">
+    <value>« FUSIL A LASER » : Charges de compétence</value>
+  </data>
+  <data name="ScavengerBeamRifleSpeed" xml:space="preserve">
+    <value>« FUSIL A LASER » : Vitesse du rayon</value>
+  </data>
+  <data name="ScavengerBeamRifleRange" xml:space="preserve">
+    <value>« FUSIL A LASER » : Portée maximale du rayon</value>
+  </data>
+  <data name="ScavengerBeamSaberCount" xml:space="preserve">
+    <value>« SABRE LASER » : Charges de compétence</value>
+  </data>
+  <data name="ScavengerBeamSaberChargeTime" xml:space="preserve">
+    <value>« SABRE LASER » : Temps de charge</value>
+  </data>
+  <data name="ScavengerBeamSaberRange" xml:space="preserve">
+    <value>« SABRE LASER » : Portée d'élimination</value>
+  </data>
+  <data name="ScavengerWeaponMixTime" xml:space="preserve">
+    <value>« SYNTHÈSE D'ARMES » : Temps requis</value>
+  </data>
+  <data name="ScavengerNull" xml:space="preserve">
+    <value>Aucun</value>
+  </data>
+  <data name="ScavengerHandGun" xml:space="preserve">
+    <value>Pistolet</value>
+  </data>
+  <data name="ScavengerFlame" xml:space="preserve">
+    <value>Lance-flammes</value>
+  </data>
+  <data name="ScavengerSword" xml:space="preserve">
+    <value>Épée</value>
+  </data>
+  <data name="ScavengerSniperRifle" xml:space="preserve">
+    <value>Fusil de précision</value>
+  </data>
+  <data name="ScavengerBeamRifle" xml:space="preserve">
+    <value>Fusil à laser</value>
+  </data>
+  <data name="ScavengerBeamSaber" xml:space="preserve">
+    <value>Sabre laser</value>
+  </data>
+  <data name="ScavengerIntroDescription" xml:space="preserve">
+    <value>Un pilleur d'armes</value>
+  </data>
+  <data name="ScavengerShortDescription" xml:space="preserve">
+    <value>Ramassez des armes et fauchez l'équipage</value>
+  </data>
+  <data name="ScavengerFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de ramasser et fabriquer des armes par synthèse.
+Vous pouvez posséder plusieurs compétences et changer avec la molette.
+
+Compétence « Synthèse d'armes » :
+  - Maintenez la touche Alt pour synthétiser vos compétences et monter leur niveau.
+
+Capacité Lv1 « Pistolet » :
+  - Tire une balle dans la direction où vous faites face.
+
+Capacité Lv1 « Lance-flammes » :
+  - Projette des flammes après charge. Les joueurs enflammés meurent après un certain délai.
+
+Capacité Lv1 « Épée » :
+  - Fait tourner une épée autour de vous.
+
+Capacité Lv2 « Fusil de précision » (Pistolet + Épée) :
+  - Tire une balle longue portée.
+
+Capacité Lv2 « Fusil à laser » (Pistolet + Lance-flammes) :
+  - Projette un rayon laser.
+
+Capacité Lv2 « Sabre laser » (Épée + Lance-flammes) :
+  - Élimine à distance les joueurs à portée après charge.</value>
+  </data>
+  <data name="WeaponMixTimeRemain" xml:space="preserve">
+    <value>Synthèse de « {0} » en cours... : {1} s restantes</value>
+  </data>
+  <data name="WeaponMixInfo" xml:space="preserve">
+    <value>Synthèse d'armes possible avec la touche « Alt »</value>
+  </data>
+  <data name="GetFirstWeapon" xml:space="preserve">
+    <value>Obtention de « {0} »</value>
+  </data>
+  <data name="GetNextWeapon" xml:space="preserve">
+    <value>Obtention de « {0} », changement possible avec la molette de la souris</value>
+  </data>
+  <data name="Boxer" xml:space="preserve">
+    <value>Boxeur</value>
+  </data>
+  <data name="BoxerAbilityCoolTime" xml:space="preserve">
+    <value>« DIRECT » : Temps de recharge de la compétence</value>
+  </data>
+  <data name="BoxerAbilityCount" xml:space="preserve">
+    <value>« DIRECT » : Charges de compétence</value>
+  </data>
+  <data name="BoxerStraightChargeTime" xml:space="preserve">
+    <value>« DIRECT » : Temps de charge</value>
+  </data>
+  <data name="BoxerStraightRange" xml:space="preserve">
+    <value>« DIRECT » : Portée de la compétence</value>
+  </data>
+  <data name="BoxerStraightFirstSpeed" xml:space="preserve">
+    <value>Vitesse initiale de l'équipier projeté</value>
+  </data>
+  <data name="BoxerStraightAcceleration" xml:space="preserve">
+    <value>Accélération de l'équipier projeté</value>
+  </data>
+  <data name="BoxerStraightKillSpeed" xml:space="preserve">
+    <value>Vitesse d'impact contre un mur provoquant la mort</value>
+  </data>
+  <data name="BoxerStraightReflectionE" xml:space="preserve">
+    <value>Coefficient de restitution lors de l'impact contre un mur</value>
+  </data>
+  <data name="BoxerFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR capable de projeter les équipiers avec un « Direct » pour les éliminer.
+
+Compétence « DIRECT » :
+  - S'active pour démarrer la charge.
+  - Appuyez à nouveau lorsqu'un joueur est proche pour le projeter.
+  - Si le joueur projeté percute un mur au-dessus d'une certaine vitesse, il est éliminé.</value>
+  </data>
+  <data name="BoxerShortDescription" xml:space="preserve">
+    <value>Projetez les équipiers avec un « Direct » pour les éliminer</value>
+  </data>
+  <data name="BoxerIntroDescription" xml:space="preserve">
+    <value>Assénez votre « Direct » mortel !</value>
+  </data>
+  <data name="BoxerAbility" xml:space="preserve">
+    <value>DIRECT</value>
+  </data>
+  <data name="Legislator" xml:space="preserve">
+    <value>Législateur</value>
+  </data>
+  <data name="LegislatorFullDescription" xml:space="preserve">
+    <value>Un rôle d'IMPOSTEUR qui accumule les votes des autres pour annuler les votes contre une cible.
+
+Compétence de réunion : « Votes contre »
+  - S'active en ciblant un joueur pendant une réunion.
+  - Annule les votes reçus par ce joueur à hauteur de vos « Votes contre ».
+  - Les votes contre augmentent selon les votes attribués aux autres joueurs.</value>
+  </data>
+  <data name="LegislatorShortDescription" xml:space="preserve">
+    <value>Rassemblez des votes contre et annulez les votes</value>
+  </data>
+  <data name="LegislatorIntroDescription" xml:space="preserve">
+    <value>La règle de la majorité est absurde, je prends la vraie décision</value>
+  </data>
+  <data name="LegislatorIncludeSkipVote" xml:space="preserve">
+    <value>Compter aussi les votes « Passer » comme votes contre</value>
+  </data>
+  <data name="LegislatorDefaultVoteNum" xml:space="preserve">
+    <value>Nombre par défaut de votes contre</value>
+  </data>
+  <data name="LegislatorChargeVotePerOtherVote" xml:space="preserve">
+    <value>Nombre de votes contre gagnés par vote</value>
+  </data>
+  <data name="legislatorVoteStatus" xml:space="preserve">
+    <value>Activation de la compétence : {0}
+Nombre actuel de votes contre : {1}</value>
+  </data>
+</root>
