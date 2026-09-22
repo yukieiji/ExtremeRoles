@@ -18,15 +18,19 @@ public class GameDataRecomputeTaskCountsPatchBody(IGameProgress progress, IGameR
 		GameData.Instance == null ||
 		(GameData.Instance.TotalTasks == forceDisableTaskNum && GameData.Instance.CompletedTasks == 0);
 
+	private readonly IGameProgress _progress = progress;
+	private readonly IGameRuntime _runtime = runtime;
+
 	public bool Prefix(GameData __instance)
 	{
-		if (!progress.IsGameNow || !runtime.TryGetGameContext(out var ctx))
+		if (!_progress.IsGameNow || !_runtime.TryGetGameContext(out var ctx))
 		{
 			return true;
 		}
 		OverridePatch(__instance, ctx);
 		return false;
 	}
+
 	private void OverridePatch(GameData __instance, IGameContext ctx)
 	{
 		var roles = ctx.Roles.All;
