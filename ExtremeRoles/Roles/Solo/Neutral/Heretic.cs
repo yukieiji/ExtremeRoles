@@ -380,6 +380,11 @@ public sealed class Heretic :
 
 		this.isSeeImpostorNow = this.HasTask && this.seeImpostorTaskGage <= 0.0f;
 		this.CanCallMeeting = this.HasTask && this.meetingButtonTaskGage <= 0.0f;
+
+		if (this.Team is HereticTeam hereticTeam)
+		{
+			hereticTeam.CanKillImpostor = this.canKillImpostor;
+		}
 	}
 
 	public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
