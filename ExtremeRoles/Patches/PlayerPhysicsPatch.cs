@@ -38,7 +38,6 @@ public class PlayerPhysicsFixedUpdatePatchBody(IExtremeSystemTypeManager system,
 			setVelocityToZero(__instance);
 			return false;
 		}
-		setVelocityToZero(__instance);
 		return true;
 	}
 
