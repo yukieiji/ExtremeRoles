@@ -18,7 +18,7 @@ public abstract partial class SingleRoleBase
 
     public bool IsLiberal() => this.Team.IsLiberal;
 
-    public virtual bool IsSameTeam(SingleRoleBase targetRole)
+    public bool IsSameTeam(SingleRoleBase targetRole)
     {
 		bool? result = this.Team.IsSame(targetRole);
 		if (result.HasValue)
