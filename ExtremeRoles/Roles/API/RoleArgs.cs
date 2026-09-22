@@ -19,12 +19,16 @@ public readonly record struct RoleArgs(RoleCore Core, RoleProp Prop, ITeam? Team
 	public static RoleArgs BuildLiberalMilitant(ExtremeRoleId id, RoleProp prop = RolePropPresets.LiberalMilitantDefault)
 		=> new RoleArgs(RoleCore.BuildLiberal(id), prop);
 
-	public static RoleArgs BuildNeutral(ExtremeRoleId id, Color color, RoleProp prop, ITeam? team = null)
+	public static RoleArgs BuildNeutral(ExtremeRoleId id, Color color, RoleProp prop)
 	{
 		var core = RoleCore.BuildNeutral(id, color);
-		team ??= new DefaultNeutralTeam(core);
+		return new RoleArgs(core, prop, new DefaultNeutralTeam(core));
+	}
 
-		return new RoleArgs(core, prop, team);
+	public static RoleArgs BuildParentTeamNeutral(ExtremeRoleId id, Color color, RoleProp prop, ExtremeRoleId childId)
+	{
+		var core = RoleCore.BuildNeutral(id, color);
+		return new RoleArgs(core, prop, new ParentNeutralRoleTeam(core, childId));
 	}
 
 	public static RoleArgs BuildDefaultTeamNeutral(ExtremeRoleId id, Color color, RoleProp prop)

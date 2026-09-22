@@ -1,19 +1,20 @@
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Team;
 
-namespace ExtremeRoles.Roles.API;
+namespace ExtremeRoles.Roles;
 
-public class DefaultNeutralTeam(RoleCore core) : ITeam
+public class ParentNeutralRoleTeam(RoleCore core, ExtremeRoleId childId) : ITeam
 {
 	private readonly DefaultTeam _default = new DefaultTeam(core);
+	private readonly ExtremeRoleId _childId = childId;
 
 	public int GameControlId => _default.GameControlId;
 
 	public bool? IsSame(SingleRoleBase targetRole)
 	{
-		var targetCore = targetRole.Core;
-
-		if (_default.Core.Id == targetCore.Id)
+		var id = targetRole.Core.Id;
+		if (id == this._default.Core.Id || id == _childId)
 		{
 			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
 			{
@@ -30,5 +31,6 @@ public class DefaultNeutralTeam(RoleCore core) : ITeam
 		}
 	}
 
-	public void SetControlId(int id) => _default.SetControlId(id);
+	public void SetControlId(int id)
+		=> this._default.SetControlId(id);
 }

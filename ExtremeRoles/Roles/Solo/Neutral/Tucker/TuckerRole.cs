@@ -78,10 +78,11 @@ public sealed class TuckerRole :
 	private HashSet<byte> chimera = new HashSet<byte>();
 
 	public TuckerRole() : base(
-		RoleArgs.BuildNeutral(
+		RoleArgs.BuildParentTeamNeutral(
 			ExtremeRoleId.Tucker,
 			ColorPalette.TuckerMerdedoie,
-            RolePropPresets.OptionalDefault))
+            RolePropPresets.OptionalDefault,
+			ExtremeRoleId.Chimera))
 	{ }
 
 	public static void TargetToChimera(byte rolePlayerId, byte targetPlayerId)
@@ -233,25 +234,6 @@ public sealed class TuckerRole :
 			return Core.Color;
 		}
 		return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
-	}
-
-	public override bool IsSameTeam(SingleRoleBase targetRole)
-	{
-		if (isSameTuckerTeam(targetRole))
-		{
-			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-			{
-				return true;
-			}
-			else
-			{
-				return IsSameControlId(targetRole);
-			}
-		}
-		else
-		{
-			return base.IsSameTeam(targetRole);
-		}
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)

@@ -62,10 +62,11 @@ public sealed class QueenRole :
 	private bool servantSucideWithQueenWhenHasKill;
 
 	public QueenRole() : base(
-		RoleArgs.BuildNeutral(
+		RoleArgs.BuildParentTeamNeutral(
 			ExtremeRoleId.Queen,
 			ColorPalette.QueenWhite,
-            RoleProp.CanKill | RolePropPresets.OptionalDefault))
+            RoleProp.CanKill | RolePropPresets.OptionalDefault,
+			ExtremeRoleId.Servant))
     { }
 
     public static void TargetToServant(
@@ -412,25 +413,6 @@ public sealed class QueenRole :
             RPCOperator.UncheckedMurderPlayer(
                 playerId, playerId,
                 byte.MaxValue);
-        }
-    }
-
-    public override bool IsSameTeam(SingleRoleBase targetRole)
-    {
-        if (isSameQueenTeam(targetRole))
-        {
-            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-            {
-                return true;
-            }
-            else
-            {
-                return IsSameControlId(targetRole);
-            }
-        }
-        else
-        {
-            return base.IsSameTeam(targetRole);
         }
     }
 

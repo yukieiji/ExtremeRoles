@@ -8,24 +8,14 @@ public class DefaultTeam(RoleCore core) : ITeam
 
 	public int GameControlId { get; private set; }
 
-	public bool IsVanillaRole => Core.Id == ExtremeRoleId.VanillaRole;
-
-	public bool IsCrewmate => Core.Team == ExtremeRoleType.Crewmate;
-
-	public bool IsImpostor => Core.Team == ExtremeRoleType.Impostor;
-
-	public bool IsNeutral => Core.Team == ExtremeRoleType.Neutral;
-
-	public bool IsLiberal => Core.Team == ExtremeRoleType.Liberal;
-
 	public bool? IsSame(SingleRoleBase targetRole)
 	{
-		if (this.IsLiberal)
+		if (this.Core.IsLiberal)
 		{
 			return targetRole.IsLiberal();
 		}
 
-		if (this.IsImpostor)
+		if (this.Core.IsImpostor)
 		{
 			return targetRole.IsImpostor();
 		}

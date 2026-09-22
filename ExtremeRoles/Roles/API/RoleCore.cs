@@ -12,6 +12,16 @@ public sealed class RoleCore(ExtremeRoleId id, ExtremeRoleType team, Color color
 	public ExtremeRoleId Id { get; } = id;
 	public string Name { get; } = name;
 
+	public bool IsVanillaRole => this.Id == ExtremeRoleId.VanillaRole;
+
+	public bool IsCrewmate => this.Team == ExtremeRoleType.Crewmate;
+
+	public bool IsImpostor => this.Team == ExtremeRoleType.Impostor;
+
+	public bool IsNeutral => this.Team == ExtremeRoleType.Neutral;
+
+	public bool IsLiberal => this.Team == ExtremeRoleType.Liberal;
+
 
 	public RoleCore(ExtremeRoleId id, ExtremeRoleType team, Color color) : this(id, team, color, id.ToString())
 	{

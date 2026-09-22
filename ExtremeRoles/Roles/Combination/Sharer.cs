@@ -9,9 +9,32 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
+using ExtremeRoles.Roles.API.Interface.Team;
 
 namespace ExtremeRoles.Roles.Combination;
+
+public sealed class SharerTeam(RoleCore core) : ITeam
+{
+	private readonly DefaultTeam _default = new DefaultTeam(core);
+
+	public int GameControlId => _default.GameControlId;
+
+	public bool? IsSame(SingleRoleBase targetRole)
+	{
+		if (targetRole.Core.Id == ExtremeRoleId.Sharer &&
+			GameControlId == targetRole.Team.GameControlId)
+		{
+			return true;
+		}
+		else
+		{
+			return _default.IsSame(targetRole);
+		}
+	}
+
+	public void SetControlId(int id)
+		=> _default.SetControlId(id);
+}
 
 public sealed class SharerManager : FlexibleCombinationRoleManagerBase
 {
@@ -19,7 +42,6 @@ public sealed class SharerManager : FlexibleCombinationRoleManagerBase
 		CombinationRoleType.Sharer,
         new Sharer(), 2, false)
     { }
-
 }
 
 public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleResetMeeting, IRoleUpdate
@@ -82,9 +104,15 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
     }
 
+	private static RoleArgs createSharereRoleArgs()
+	{
+		var core = RoleCore.BuildImpostor(ExtremeRoleId.Sharer);
+		var team = new SharerTeam(core);
+		return new RoleArgs(core, RolePropPresets.ImpostorDefault, team);
+	}
 
     public Sharer() : base(
-		RoleArgs.BuildImpostor(ExtremeRoleId.Sharer),
+		createSharereRoleArgs(),
 		OptionTab.CombinationTab)
     { }
 
@@ -223,19 +251,6 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
         }
 
         return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
-    }
-
-    public override bool IsSameTeam(SingleRoleBase targetRole)
-    {
-        if (targetRole.Core.Id == ExtremeRoleId.Sharer &&
-            this.IsSameControlId(targetRole))
-        {
-            return true;
-        }
-        else
-        {
-            return base.IsSameTeam(targetRole);
-        }
     }
 
     protected override void CreateSpecificOption(

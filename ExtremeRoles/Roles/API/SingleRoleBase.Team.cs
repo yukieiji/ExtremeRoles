@@ -8,15 +8,15 @@ public abstract partial class SingleRoleBase
 
     public int GameControlId => this.Team.GameControlId;
 
-    public bool IsVanillaRole() => this.Team.IsVanillaRole;
+    public bool IsVanillaRole() => this.Core.IsVanillaRole;
 
-    public bool IsCrewmate() => this.Team.IsCrewmate;
+    public bool IsCrewmate() => this.Core.IsCrewmate;
 
-    public bool IsImpostor() => this.Team.IsImpostor;
+    public bool IsImpostor() => this.Core.IsImpostor;
 
-    public bool IsNeutral() => this.Team.IsNeutral;
+    public bool IsNeutral() => this.Core.IsNeutral;
 
-    public bool IsLiberal() => this.Team.IsLiberal;
+    public bool IsLiberal() => this.Core.IsLiberal;
 
     public bool IsSameTeam(SingleRoleBase targetRole)
     {

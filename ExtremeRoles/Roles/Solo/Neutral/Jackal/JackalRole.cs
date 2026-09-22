@@ -177,10 +177,11 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
     }
 
     public JackalRole() : base(
-		RoleArgs.BuildNeutral(
+		RoleArgs.BuildParentTeamNeutral(
 			ExtremeRoleId.Jackal,
 			ColorPalette.JackalBlue,
-            RoleProp.UseVent | RoleProp.CanKill | RolePropPresets.OptionalDefault))
+            RoleProp.UseVent | RoleProp.CanKill | RolePropPresets.OptionalDefault,
+			ExtremeRoleId.Sidekick))
     { }
 
     public override SingleRoleBase Clone()
@@ -290,25 +291,6 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
         }
 
         return baseDesc;
-    }
-
-    public override bool IsSameTeam(SingleRoleBase targetRole)
-    {
-        if (isSameJackalTeam(targetRole))
-        {
-            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-            {
-                return true;
-            }
-            else
-            {
-                return IsSameControlId(targetRole);
-            }
-        }
-        else
-        {
-            return base.IsSameTeam(targetRole);
-        }
     }
 
     public override void ExiledAction(

@@ -1,18 +1,16 @@
+using AmongUs.GameOptions;
+using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface.Team;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 using UnityEngine;
-
-using AmongUs.GameOptions;
-
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Extension.Player;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -22,7 +20,29 @@ public sealed class LoverManager : FlexibleCombinationRoleManagerBase
 		CombinationRoleType.Lover,
 		new Lover())
     { }
+}
 
+public sealed class LoverTeam(RoleCore core) : ITeam
+{
+	private readonly DefaultTeam _default = new DefaultTeam(core);
+
+	public int GameControlId => _default.GameControlId;
+
+	public bool? IsSame(SingleRoleBase targetRole)
+	{
+		if (targetRole.Core.Id == ExtremeRoleId.Loner &&
+			GameControlId == targetRole.Team.GameControlId)
+		{
+			return true;
+		}
+		else
+		{
+			return _default.IsSame(targetRole);
+		}
+	}
+
+	public void SetControlId(int id)
+		=> _default.SetControlId(id);
 }
 
 public sealed class Lover : MultiAssignRoleBase
@@ -47,10 +67,17 @@ public sealed class Lover : MultiAssignRoleBase
     private bool killerLoverIsApplyEnvironmentVisionEffect = false;
     private bool killerLoverCanUseVent = false;
 
-    public Lover() : base(
-		RoleArgs.BuildCrewmate(
+	private static RoleArgs createLoverRoleArgs()
+	{
+		var core = RoleCore.BuildCrewmate(
 			ExtremeRoleId.Lover,
-			ColorPalette.LoverPink),
+			ColorPalette.LoverPink);
+		var team = new LoverTeam(core);
+		return new RoleArgs(core, RolePropPresets.CrewmateDefault, team);
+	}
+
+	public Lover() : base(
+		createLoverRoleArgs(),
 		OptionTab.CombinationTab)
     { }
 
@@ -205,19 +232,6 @@ public sealed class Lover : MultiAssignRoleBase
         }
 
         return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
-    }
-
-    public override bool IsSameTeam(SingleRoleBase targetRole)
-    {
-        if (targetRole.Core.Id == ExtremeRoleId.Lover &&
-            this.IsSameControlId(targetRole))
-        {
-            return true;
-        }
-        else
-        {
-            return base.IsSameTeam(targetRole);
-        }
     }
 
     public void ChangeAllLoverToNeutral()
