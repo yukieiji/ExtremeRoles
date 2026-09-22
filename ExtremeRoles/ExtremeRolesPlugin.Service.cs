@@ -13,6 +13,8 @@ using ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Patches;
+using ExtremeRoles.Patches.Controller;
+using ExtremeRoles.Patches.MapOverlay;
 using ExtremeRoles.Patches.Meeting;
 using ExtremeRoles.Patches.Player;
 using ExtremeRoles.Patches.Role;
@@ -20,7 +22,6 @@ using ExtremeRoles.Patches.Ship;
 using ExtremeRoles.Roles.Solo.Liberal;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using ExtremeRoles.Patches.MapOverlay;
 
 
 namespace ExtremeRoles;
@@ -135,6 +136,8 @@ public partial class ExtremeRolesPlugin
 
 			.AddSingleton<PlayerControlSetKillTimerPatchBody>()
 			.AddSingleton<PlayerControlShapeshiftPatchBody>()
+
+			.AddSingleton<ChatControllerAddChatPatchBody>()
 
 			.AddSingleton<MapCountOverlayUpdatePatchBody>()
 			.AddSingleton<CounterAreaUpdatePatchBody>()
