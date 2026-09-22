@@ -84,10 +84,6 @@ public static class PlayerPhysicsFixedUpdatePatch
 		}
 		_body.Postfix(__instance);
 	}
-	private static void setVelocityToZero(PlayerPhysics body)
-	{
-		body.body.velocity = Vector2.zero;
-	}
 }
 
 [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.HandleAnimation))]
