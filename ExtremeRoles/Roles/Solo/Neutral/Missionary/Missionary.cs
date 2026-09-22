@@ -85,9 +85,6 @@ public sealed class MissionaryRole :
 		}
 	}
 
-	public override bool IsSameTeam(SingleRoleBase targetRole) =>
-        this.IsNeutralSameTeam(targetRole);
-
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {

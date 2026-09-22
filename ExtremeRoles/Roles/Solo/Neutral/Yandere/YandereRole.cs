@@ -195,9 +195,6 @@ public sealed class YandereRole :
         return true;
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
-        this.IsNeutralSameTeam(targetRole);
-
     public override string GetIntroDescription() => string.Format(
         base.GetIntroDescription(),
         oneSidePlayerName);

@@ -56,9 +56,6 @@ public sealed class Alice :
 				ObjectPath.AliceShipBroken));
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
-        this.IsNeutralSameTeam(targetRole);
-
     public bool IsAbilityUse()
 		=> IRoleAbility.IsCommonUse();
 

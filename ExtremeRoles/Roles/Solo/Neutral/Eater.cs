@@ -314,9 +314,6 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
             this.targetPlayer, this, this.range);
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
-        this.IsNeutralSameTeam(targetRole);
-
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {

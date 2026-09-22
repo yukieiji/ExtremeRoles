@@ -75,9 +75,6 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
             forceAbilityOff: () => { });
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
-        this.IsNeutralSameTeam(targetRole);
-
     public bool IsAbilityUse()
     {
         this.tmpTarget = Helper.Player.GetClosestPlayerInRange(

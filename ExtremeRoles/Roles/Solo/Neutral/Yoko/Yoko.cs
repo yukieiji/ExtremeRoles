@@ -101,9 +101,6 @@ public sealed class YokoRole :
         }
     }
 
-	public override bool IsSameTeam(SingleRoleBase targetRole) =>
-        this.IsNeutralSameTeam(targetRole);
-
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {

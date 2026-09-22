@@ -965,10 +965,6 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         return true;
     }
 
-
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
-        this.IsNeutralSameTeam(targetRole);
-
     public override string GetFullDescription()
     {
 		switch (this.Condition)

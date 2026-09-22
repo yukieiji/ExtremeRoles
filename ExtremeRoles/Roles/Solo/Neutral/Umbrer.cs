@@ -311,25 +311,6 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         this.updateShowIcon();
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole)
-    {
-        if (this.Core.Id == targetRole.Core.Id)
-        {
-            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-            {
-                return true;
-            }
-            else
-            {
-                return this.IsSameControlId(targetRole);
-            }
-        }
-        else
-        {
-            return base.IsSameTeam(targetRole);
-        }
-    }
-
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {

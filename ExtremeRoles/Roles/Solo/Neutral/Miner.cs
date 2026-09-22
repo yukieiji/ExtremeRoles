@@ -334,9 +334,6 @@ public sealed class Miner :
         this.resetAllMine();
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
-        this.IsNeutralSameTeam(targetRole);
-
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {

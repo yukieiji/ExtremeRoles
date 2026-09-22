@@ -91,9 +91,6 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				ObjectPath.HatterTimeKill));
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
-        this.IsNeutralSameTeam(targetRole);
-
 	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public bool UseAbility()

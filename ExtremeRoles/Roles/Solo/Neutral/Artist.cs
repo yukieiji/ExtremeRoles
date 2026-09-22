@@ -105,9 +105,6 @@ public sealed class Artist :
 		this.IsWin = false;
 	}
 
-	public override bool IsSameTeam(SingleRoleBase targetRole) =>
-		this.IsNeutralSameTeam(targetRole);
-
 	public override void RolePlayerKilledAction(
 		PlayerControl rolePlayer,
 		PlayerControl killerPlayer)

@@ -63,11 +63,10 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
     public SingleRoleBase(
         RoleArgs arg,
-        OptionTab tab = OptionTab.GeneralTab, 
-		ITeam? team = null)
+        OptionTab tab = OptionTab.GeneralTab)
     {
         this.Core = arg.Core;
-		this.Team = team ?? new DefaultTeam(this.Core);
+		this.Team = arg.Team ?? new DefaultTeam(this.Core);
 
 		var prop = arg.Prop;
 		this.CanKill = prop.HasFlag(RoleProp.CanKill);

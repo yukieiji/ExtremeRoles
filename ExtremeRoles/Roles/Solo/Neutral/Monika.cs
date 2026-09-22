@@ -60,7 +60,7 @@ public sealed class Monika :
 	private float range;
 
 	public Monika(): base(
-		RoleArgs.BuildNeutral(
+		RoleArgs.BuildDefaultTeamNeutral(
 			ExtremeRoleId.Monika,
 			ColorPalette.MonikaRoseSaumon,
             RolePropPresets.OptionalDefault))

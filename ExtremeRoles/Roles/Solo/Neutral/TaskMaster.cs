@@ -106,9 +106,6 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
         }
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
-        this.IsNeutralSameTeam(targetRole);
-
     public override void ExiledAction(PlayerControl rolePlayer)
     {
         resetTask(rolePlayer.PlayerId);
