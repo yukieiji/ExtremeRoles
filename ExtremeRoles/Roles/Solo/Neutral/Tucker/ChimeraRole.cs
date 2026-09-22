@@ -44,10 +44,11 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		IOptionLoader loader,
 		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
-			RoleArgs.BuildNeutral(
+			RoleArgs.BuildParentTeamNeutral(
 				ExtremeRoleId.Chimera,
 				ColorPalette.TuckerMerdedoie,
-				createChimeraProp(option.Vent)))
+				createChimeraProp(option.Vent),
+				ExtremeRoleId.Tucker))
 	{
 		this.Loader = loader;
 		this.status = new ChimeraStatus(tuckerPlayer, this);
@@ -138,25 +139,6 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			return this.Core.Color;
 		}
 		return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
-	}
-
-	public override bool IsSameTeam(SingleRoleBase targetRole)
-	{
-		if (isSameChimeraTeam(targetRole))
-		{
-			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-			{
-				return true;
-			}
-			else
-			{
-				return IsSameControlId(targetRole);
-			}
-		}
-		else
-		{
-			return base.IsSameTeam(targetRole);
-		}
 	}
 
 	public override bool IsBlockShowMeetingRoleInfo() => infoBlock();

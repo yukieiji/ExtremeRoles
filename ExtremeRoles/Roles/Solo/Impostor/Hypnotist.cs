@@ -1,24 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-using Hazel;
 using AmongUs.GameOptions;
-
-using Newtonsoft.Json.Linq;
-
 using BepInEx.Unity.IL2CPP.Utils;
-
+using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Extension.Player;
-using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
@@ -28,6 +17,16 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Roles.API.Interface.Team;
+using Hazel;
+using Newtonsoft.Json.Linq;
+using Rewired.Utils.Classes.Data;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using static MS.Internal.Xml.XPath.QueryBuilder;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -920,6 +919,39 @@ public sealed class DollStatus : IStatusModel, IFakeImpostorStatus
 	public bool IsFakeImpostor { get; } = true;
 }
 
+public class DollTeam(RoleCore core) : ITeam
+{
+	private readonly RoleCore _core = core;
+	public int GameControlId { get; private set; }
+
+	public bool? IsSame(SingleRoleBase targetRole)
+	{
+		var targetCore = targetRole.Core;
+
+		if (_core.Id == targetCore.Id)
+		{
+			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
+			{
+				return true;
+			}
+			else
+			{
+				return GameControlId == targetRole.GameControlId;
+			}
+		}
+		else
+		{
+			return targetRole.Core.IsImpostor;
+		}
+	}
+
+	public void SetControlId(int id)
+	{
+		this.GameControlId = id;
+	}
+}
+
+
 public sealed class Doll :
     SingleRoleBase,
     IRoleAutoBuildAbility,
@@ -963,14 +995,16 @@ public sealed class Doll :
 
 	private bool prevKillState;
 
+	private static RoleArgs createDollState()
+	{
+		var core = RoleCore.BuildNeutral(ExtremeRoleId.Doll, Palette.ImpostorRed);
+		return new RoleArgs(core, RoleProp.None, new DollTeam(core));
+	}
+
     public Doll(
         byte dollPlayerId,
         byte hypnotistPlayerId,
-        Hypnotist parent) : base(
-			RoleArgs.BuildNeutral(
-				ExtremeRoleId.Doll,
-				Palette.ImpostorRed,
-            RoleProp.None))
+        Hypnotist parent) : base(createDollState())
     {
         this.dollPlayerId = dollPlayerId;
         this.hypnotistPlayerId = hypnotistPlayerId;
@@ -1298,25 +1332,6 @@ public sealed class Doll :
 
         return string.Format(
             fullDesc, hypno.Data.PlayerName);
-    }
-
-    public override bool IsSameTeam(SingleRoleBase targetRole)
-    {
-        if (targetRole.Core.Id == this.Core.Id)
-        {
-            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-            {
-                return true;
-            }
-            else
-            {
-                return this.IsSameControlId(targetRole);
-            }
-        }
-        else
-        {
-            return targetRole.IsImpostor();
-        }
     }
 
     protected override void CreateSpecificOption(

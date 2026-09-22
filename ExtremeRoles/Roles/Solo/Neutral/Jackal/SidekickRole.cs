@@ -34,10 +34,11 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 		byte jackalPlayerId,
 		bool isImpostor,
 		JackalRole.SidekickOptionHolder option) : base(
-			RoleArgs.BuildNeutral(
+			RoleArgs.BuildParentTeamNeutral(
 				ExtremeRoleId.Sidekick,
 				ColorPalette.JackalBlue,
-				createSkRoleProp(option)))
+				createSkRoleProp(option),
+				ExtremeRoleId.Jackal))
 	{
 
 		this.Loader = jackal.Loader;
@@ -57,25 +58,6 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 
 		recursion = jackal.CurRecursion;
 		sidekickJackalCanMakeSidekick = jackal.SidekickJackalCanMakeSidekick;
-	}
-
-	public override bool IsSameTeam(SingleRoleBase targetRole)
-	{
-		if (isSameJackalTeam(targetRole))
-		{
-			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-			{
-				return true;
-			}
-			else
-			{
-				return IsSameControlId(targetRole);
-			}
-		}
-		else
-		{
-			return base.IsSameTeam(targetRole);
-		}
 	}
 
 	public override Color GetTargetRoleSeeColor(

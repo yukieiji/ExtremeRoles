@@ -1,14 +1,9 @@
-using System;
-using System.Linq;
-
-using UnityEngine;
-
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Patches.Button;
@@ -18,7 +13,12 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Roles.API.Interface.Team;
 using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Roles.Solo.Impostor;
+using System;
+using System.Linq;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -39,6 +39,30 @@ public sealed class HereticKillModeActive(IOption option) : IOptionActivator
 		}
 
 	}
+}
+
+public sealed class HereticTeam(RoleCore core) : ITeam
+{
+	public bool CanKillImpostor { private get; set; }
+
+	private readonly DefaultNeutralTeam _default = new DefaultNeutralTeam(core);
+
+	public int GameControlId => _default.GameControlId;
+
+	public bool? IsSame(SingleRoleBase targetRole)
+	{
+		if (!CanKillImpostor && targetRole.Core.IsImpostor)
+		{
+			return true;
+		}
+		else
+		{
+			return _default.IsSame(targetRole);
+		}
+	}
+
+	public void SetControlId(int id)
+		=> _default.SetControlId(id);
 }
 
 public sealed class Heretic :
@@ -84,11 +108,13 @@ public sealed class Heretic :
 	private float meetingButtonTaskGage;
 	private Sprite sprite => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
 
-	public Heretic() : base(
-		RoleArgs.BuildNeutral(
-			ExtremeRoleId.Heretic,
-			Palette.ImpostorRed,
-			RoleProp.CanUseAdmin | RoleProp.CanUseSecurity | RoleProp.CanUseVital))
+	private static RoleArgs createHereticArgs()
+	{
+		var core = RoleCore.BuildNeutral(ExtremeRoleId.Heretic, Palette.ImpostorRed);
+		return new RoleArgs(core, RoleProp.CanUseAdmin | RoleProp.CanUseSecurity | RoleProp.CanUseVital, new HereticTeam(core));
+	}
+
+	public Heretic() : base(createHereticArgs())
 	{ }
 
 	public void ModifiedWinPlayer(
@@ -212,10 +238,6 @@ public sealed class Heretic :
 		}
 		Player.RpcUncheckExiled(targetPlayerId);
 	}
-
-	public override bool IsSameTeam(SingleRoleBase targetRole)
-		=> this.IsNeutralSameTeam(targetRole) ||
-			(targetRole.IsImpostor() && !this.canKillImpostor);
 
 	public void ResetOnMeetingStart()
 	{ }
