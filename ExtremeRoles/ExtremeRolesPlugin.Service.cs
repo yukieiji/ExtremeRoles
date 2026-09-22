@@ -131,6 +131,8 @@ public partial class ExtremeRolesPlugin
 	private static void RegisterPatchService(IServiceCollection collection)
 	{
 		collection
+			.AddSingleton<GameDataRecomputeTaskCountsPatchBody>()
+
 			.AddSingleton<ProgressTrackerFixedUpdatePatchBody>()
 			.AddSingleton<PlayerPhysicsFixedUpdatePatchBody>()
 
