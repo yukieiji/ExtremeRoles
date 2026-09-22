@@ -7,6 +7,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.OLDS;
+using ExtremeRoles.Roles.API.Interface.Team;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -62,9 +63,11 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
     public SingleRoleBase(
         RoleArgs arg,
-        OptionTab tab = OptionTab.GeneralTab)
+        OptionTab tab = OptionTab.GeneralTab, 
+		ITeam? team = null)
     {
         this.Core = arg.Core;
+		this.Team = team ?? new DefaultTeam(this.Core);
 
 		var prop = arg.Prop;
 		this.CanKill = prop.HasFlag(RoleProp.CanKill);

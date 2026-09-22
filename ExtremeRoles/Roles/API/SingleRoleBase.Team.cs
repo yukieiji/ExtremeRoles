@@ -1,31 +1,30 @@
+using ExtremeRoles.Roles.API.Interface.Team;
+
 namespace ExtremeRoles.Roles.API;
 
 public abstract partial class SingleRoleBase
 {
+	public ITeam Team { get; }
 
-    public int GameControlId { get; private set; } = 0;
+    public int GameControlId => this.Team.GameControlId;
 
-    public bool IsVanillaRole() => this.Core.Id == ExtremeRoleId.VanillaRole;
+    public bool IsVanillaRole() => this.Team.IsVanillaRole;
 
-    public bool IsCrewmate() => this.Core.Team == ExtremeRoleType.Crewmate;
+    public bool IsCrewmate() => this.Team.IsCrewmate;
 
-    public bool IsImpostor() => this.Core.Team == ExtremeRoleType.Impostor;
+    public bool IsImpostor() => this.Team.IsImpostor;
 
-    public bool IsNeutral() => this.Core.Team == ExtremeRoleType.Neutral;
+    public bool IsNeutral() => this.Team.IsNeutral;
 
-    public bool IsLiberal() => this.Core.Team == ExtremeRoleType.Liberal;
+    public bool IsLiberal() => this.Team.IsLiberal;
 
     public virtual bool IsSameTeam(SingleRoleBase targetRole)
     {
-        if (this.IsLiberal())
-        {
-            return targetRole.IsLiberal();
-        }
-
-        if (this.IsImpostor())
-        {
-            return targetRole.IsImpostor();
-        }
+		bool? result = this.Team.IsSame(targetRole);
+		if (result.HasValue)
+		{
+			return result.Value;
+		}
 
         if (targetRole is MultiAssignRoleBase multiAssignRole &&
 			multiAssignRole.AnotherRole is not null)
@@ -37,10 +36,8 @@ public abstract partial class SingleRoleBase
         return false;
     }
 
-    public void SetControlId(int id)
-    {
-        this.GameControlId = id;
-    }
+	public void SetControlId(int id)
+		=> this.Team.SetControlId(id);
 
     protected bool IsSameControlId(SingleRoleBase tarrgetRole)
     {
