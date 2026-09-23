@@ -24,14 +24,8 @@ public class DelusionerAbilityHandlerTests
 		var localPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		localPlayer.SetupGet(p => p.NetId).Returns(100);
 
-		var mockClient = new Mock<AmongUsClient>(IntPtr.Zero);
-		mockClient.SetupGet(c => c.AmHost).Returns(false);
-		mockClient.SetupGet(c => c.ClientId).Returns(1);
-		mockClient.SetupGet(c => c.HostId).Returns(2);
-
-		var mockClientHelper = new Mock<MockAmongUsClientget_InstanceHelper>();
-		mockClientHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
-		MockAmongUsClientget_InstanceHelper.Instance = mockClientHelper.Object;
+		var mockClient = MockSetupHelper.SetupAmongUsClientMock();
+		mockClient.SetupGet(c => c.AmHost).Returns(true);
 
 		var mockWriter = new Mock<MessageWriter>(IntPtr.Zero);
 		var mockWriterGet = new Mock<MockMessageWriterGetHelper>();

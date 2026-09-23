@@ -47,6 +47,23 @@ public class DelusionerRoleTests
 			.Returns((string id, string defaultStr, Il2CppReferenceArray<Il2CppSystem.Object> parts) => !string.IsNullOrEmpty(defaultStr) ? defaultStr : id);
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
 			.Returns((string id, string defaultStr, Il2CppSystem.Object[] parts) => !string.IsNullOrEmpty(defaultStr) ? defaultStr : id);
+
+		MockSetupHelper.SetupLobbyMock();
+		if (ClientOption.Instance == null)
+		{
+			OptionCreator.Create();
+		}
+
+		var mockTargetPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+		mockTargetPlayer.SetupGet(p => p.PlayerId).Returns((byte)2);
+
+		var mockAllList = new Mock<Il2CppSystem.Collections.Generic.List<PlayerControl>>(IntPtr.Zero);
+		mockAllList.SetupGet(l => l.Count).Returns(1);
+		mockAllList.Setup(l => l[0]).Returns(mockTargetPlayer.Object);
+
+		var mockAllHelper = new Mock<MockPlayerControlget_AllPlayerControlsHelper>();
+		mockAllHelper.Setup(h => h.Invoke()).Returns(mockAllList.Object);
+		MockPlayerControlget_AllPlayerControlsHelper.Instance = mockAllHelper.Object;
 	}
 
 	[Fact]
@@ -82,11 +99,21 @@ public class DelusionerRoleTests
 		mockClient.SetupGet(c => c.GameState).Returns(InnerNetClient.GameStates.NotJoined); // Makes IsAwake = true
 		var role = new DelusionerRole();
 
-		Assert.NotNull(role.GetColoredRoleName(true));
-		Assert.NotNull(role.GetColoredRoleName(false));
-		Assert.NotNull(role.GetFullDescription());
-		Assert.NotNull(role.GetImportantText(true));
-		Assert.NotNull(role.GetIntroDescription());
+		string roleNameStr = ExtremeRoles.Extension.Controller.TranslationControllerExtension.GetString(role.Core.Id.ToString());
+		string expectedColoredName = Design.ColoredString(role.Core.Color, roleNameStr);
+		Assert.Equal(expectedColoredName, role.GetColoredRoleName(true));
+		Assert.Equal(expectedColoredName, role.GetColoredRoleName(false));
+
+		string expectedFullDesc = ExtremeRoles.Extension.Controller.TranslationControllerExtension.GetString($"{role.Core.Id}FullDescription");
+		Assert.Equal(expectedFullDesc, role.GetFullDescription());
+
+		string expectedImportant = ExtremeRoles.Extension.Controller.TranslationControllerExtension.GetString($"{role.Core.Id}ImportantText");
+		Assert.Equal(expectedImportant, role.GetImportantText(true));
+		Assert.Equal(expectedImportant, role.GetImportantText(false));
+
+		string expectedIntro = ExtremeRoles.Extension.Controller.TranslationControllerExtension.GetString($"{role.Core.Id}IntroDescription");
+		Assert.Equal(expectedIntro, role.GetIntroDescription());
+
 		Assert.Equal(role.Core.Color, role.GetNameColor(true));
 		Assert.Equal(role.Core.Color, role.GetNameColor(false));
 	}
@@ -97,10 +124,18 @@ public class DelusionerRoleTests
 		mockClient.SetupGet(c => c.GameState).Returns(InnerNetClient.GameStates.Started); // IsAwake = false
 		var role = new DelusionerRole();
 
-		Assert.NotNull(role.GetColoredRoleName(false));
-		Assert.NotNull(role.GetFullDescription());
-		Assert.NotNull(role.GetImportantText(true));
-		Assert.NotNull(role.GetIntroDescription());
+		string expectedName = Design.ColoredString(Palette.White, ExtremeRoles.Extension.Controller.TranslationControllerExtension.GetString(RoleTypes.Crewmate.ToString()));
+		Assert.Equal(expectedName, role.GetColoredRoleName(false));
+
+		string expectedFullDesc = ExtremeRoles.Extension.Controller.TranslationControllerExtension.GetString($"{RoleTypes.Crewmate}FullDescription");
+		Assert.Equal(expectedFullDesc, role.GetFullDescription());
+
+		string expectedImportant = Design.ColoredString(Palette.White, $"{expectedName}: {ExtremeRoles.Extension.Controller.TranslationControllerExtension.GetString("crewImportantText")}");
+		Assert.Equal(expectedImportant, role.GetImportantText(true));
+
+		string expectedIntro = Design.ColoredString(Palette.CrewmateBlue, "Crewmate Blurb");
+		Assert.Equal(expectedIntro, role.GetIntroDescription());
+
 		Assert.Equal(Palette.White, role.GetNameColor(false));
 	}
 
@@ -123,14 +158,6 @@ public class DelusionerRoleTests
 		Assert.False(role.IsAbilityUse());
 	}
 
-	[Fact]
-	public void ResetOnMeetingStart_And_ResetOnMeetingEnd_And_ResetModifier()
-	{
-		var role = new DelusionerRole();
-		role.ResetOnMeetingStart();
-		role.ResetOnMeetingEnd(null);
-		role.ResetModifier();
-	}
 
 	[Fact]
 	public void HookVoteEnd_AwakeConditionAndCoolTimeReduce()
@@ -172,5 +199,36 @@ public class DelusionerRoleTests
 	{
 		var role = new DelusionerRole();
 		Assert.False(role.UseAbility());
+	}
+
+	[Fact]
+	public void ResetOnMeetingStart_ResetsCoolTimeOnStatus()
+	{
+		var role = new DelusionerRole();
+		var status = new DelusionerStatusModel(2.5f, false, 0.9f);
+		status.CurCoolTime = 99.0f;
+
+		typeof(DelusionerRole).GetField("status", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.SetValue(role, status);
+		typeof(DelusionerRole).GetField("defaultCoolTime", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.SetValue(role, 15.0f);
+
+		role.ResetOnMeetingStart();
+
+		Assert.Equal(15.0f, status.CurCoolTime);
+	}
+
+	[Fact]
+	public void UseAbility_WhenAbilityIsNotNull_ReturnsTrue()
+	{
+		var role = new DelusionerRole();
+		var status = new DelusionerStatusModel(2.5f, false, 1.0f);
+		var ability = new DelusionerAbilityHandler(null, status, role);
+
+		typeof(DelusionerRole).GetField("ability", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.SetValue(role, ability);
+		typeof(DelusionerRole).GetField("includeLocalPlayer", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.SetValue(role, true);
+		typeof(DelusionerRole).GetField("targetPlayerId", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.SetValue(role, (byte)2);
+
+		bool result = role.UseAbility();
+
+		Assert.True(result);
 	}
 }
