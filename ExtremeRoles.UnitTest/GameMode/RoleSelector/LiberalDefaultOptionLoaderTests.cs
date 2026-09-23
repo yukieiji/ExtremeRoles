@@ -20,6 +20,7 @@ public class LiberalDefaultOptionLoaderTests
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
         MockSetupHelper.SetupMockConfig(plugin);
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 
         if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
         {

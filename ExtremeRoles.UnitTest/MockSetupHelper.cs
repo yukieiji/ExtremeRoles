@@ -1,7 +1,10 @@
+using AmongUs.GameOptions;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using HarmonyLib;
@@ -43,6 +46,48 @@ public static class MockSetupHelper
         SetupTimeHelpers();
         SetupRandomHelpers();
         SetupJsonHelpers();
+        SetupConstantsHelpers();
+        SetupAmongUsClientMock();
+        SetupLobbyMock();
+        SetupObjectImplicitHelpers();
+        SetupDestroyableSingletonMock<TranslationController>();
+        SetupOptionManager();
+        SetupAprilFoolsHelpers();
+    }
+
+    public static void SetupAprilFoolsHelpers()
+    {
+        if (MockAprilFoolsModeget_IsAprilFoolsModeToggledOnHelper.Instance == null)
+        {
+            var mockAprilFools = new Mock<MockAprilFoolsModeget_IsAprilFoolsModeToggledOnHelper>();
+            mockAprilFools.Setup(x => x.Invoke()).Returns(false);
+            MockAprilFoolsModeget_IsAprilFoolsModeToggledOnHelper.Instance = mockAprilFools.Object;
+        }
+    }
+
+    public static void SetupOptionManager()
+    {
+        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
+        {
+            var plugin = SetupMockExtremeRolePlugin();
+            SetupMockConfig(plugin);
+            SetupGameOptionsManagerMock();
+            OptionCreator.Create();
+        }
+    }
+
+    public static void SetupGameOptionsManagerMock()
+    {
+        if (MockGameOptionsManagerget_InstanceHelper.Instance == null)
+        {
+            var mockGameOptions = new Mock<IGameOptions>(IntPtr.Zero);
+            var mockGameOptionsManager = new Mock<GameOptionsManager>(IntPtr.Zero);
+            mockGameOptionsManager.SetupGet(g => g.CurrentGameOptions).Returns(mockGameOptions.Object);
+
+            var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
+            mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockGameOptionsManager.Object);
+            MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
+        }
     }
 
     public static void SetupJsonHelpers()
@@ -179,15 +224,26 @@ public static class MockSetupHelper
 
     public static Mock<PlayerControl> SetupPlayerControlMocks()
     {
-        if (MockPlayerControlget_LocalPlayerHelper.Instance == null)
+        if (MockPlayerControlget_LocalPlayerHelper.Instance != null)
         {
-            var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
-            var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
-            mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
-            MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
-            return mockPlayer;
+            try
+            {
+                var localPlayer = PlayerControl.LocalPlayer;
+                if (localPlayer != null)
+                {
+                    return Mock<PlayerControl>.Get(localPlayer);
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
-        return Mock<PlayerControl>.Get(PlayerControl.LocalPlayer);
+
+        var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
+        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+        return mockPlayer;
     }
 
     public static void SetupExtremeSystemTypeManagerMock()
@@ -222,28 +278,50 @@ public static class MockSetupHelper
 
     public static Mock<AmongUsClient> SetupAmongUsClientMock()
     {
-        if (MockAmongUsClientget_InstanceHelper.Instance == null)
+        if (MockAmongUsClientget_InstanceHelper.Instance != null)
         {
-            var mockClient = new Mock<AmongUsClient>(IntPtr.Zero);
-            var mockClientHelper = new Mock<MockAmongUsClientget_InstanceHelper>();
-            mockClientHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
-            MockAmongUsClientget_InstanceHelper.Instance = mockClientHelper.Object;
-            return mockClient;
+            try
+            {
+                var client = AmongUsClient.Instance;
+                if (client != null)
+                {
+                    return Mock<AmongUsClient>.Get(client);
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
-        return Mock<AmongUsClient>.Get(AmongUsClient.Instance);
+
+        var mockClient = new Mock<AmongUsClient>(IntPtr.Zero);
+        var mockClientHelper = new Mock<MockAmongUsClientget_InstanceHelper>();
+        mockClientHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
+        MockAmongUsClientget_InstanceHelper.Instance = mockClientHelper.Object;
+        return mockClient;
     }
 
     public static Mock<LobbyBehaviour> SetupLobbyMock()
     {
-        if (MockLobbyBehaviourget_InstanceHelper.Instance == null)
+        if (MockLobbyBehaviourget_InstanceHelper.Instance != null)
         {
-            var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
-            var mockLobbyInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
-            mockLobbyInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
-            MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyInstance.Object;
-            return mockLobby;
+            try
+            {
+                var lobby = LobbyBehaviour.Instance;
+                if (lobby != null)
+                {
+                    return Mock<LobbyBehaviour>.Get(lobby);
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
-        return Mock<LobbyBehaviour>.Get(LobbyBehaviour.Instance);
+
+        var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
+        var mockLobbyInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
+        mockLobbyInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
+        MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyInstance.Object;
+        return mockLobby;
     }
 
     public static Mock<GameData> SetupGameDataMock()
