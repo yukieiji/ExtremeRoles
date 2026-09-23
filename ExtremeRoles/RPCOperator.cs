@@ -255,7 +255,6 @@ public static class RPCOperator
 
         // 各種システムコンソールリセット
         Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
-        Patches.MapOverlay.MapCountOverlayUpdatePatch.Initialize();
 	}
 
     public static void ForceEnd()

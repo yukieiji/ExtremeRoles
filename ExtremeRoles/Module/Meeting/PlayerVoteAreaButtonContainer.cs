@@ -13,6 +13,9 @@ namespace ExtremeRoles.Module.Meeting;
 
 public sealed class PlayerVoteAreaButtonContainer(PlayerVoteArea pva)
 {
+	// PlayerVoteAreaはMeetingが終わると消されるのでNullチェックをする
+	public bool IsRecreate => this.pva == null;
+
 	private readonly PlayerVoteArea pva = pva;
 	public PlayerVoteAreaButtonGroup Group { get; } = new PlayerVoteAreaButtonGroup(pva);
 	private readonly Dictionary<ExtremeRoleId, UiElement> cache = new Dictionary<ExtremeRoleId, UiElement>(2);

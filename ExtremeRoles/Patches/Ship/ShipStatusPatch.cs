@@ -9,10 +9,71 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Core.Abstract;
+using Microsoft.Extensions.DependencyInjection;
 
 #nullable enable
 
 namespace ExtremeRoles.Patches.Ship;
+
+public class ShipStatusOnEnablePatchBody(IGameRuntime runtime)
+{
+	private readonly IGameRuntime _runtime = runtime;
+	private static ShipStatusOnEnablePatchBody? body;
+
+	public static void StaticPostfix(ShipStatus __instance)
+	{
+		if (body is null)
+		{
+			body = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<ShipStatusOnEnablePatchBody>();
+		}
+		body.Postfix(__instance);
+	}
+
+	private void Postfix(ShipStatus __instance)
+	{
+		if (_runtime.TryGetGameContext(out var ctx))
+		{
+			ctx.GlobalOption.Emergency.ChangeTime(__instance);
+		}
+	}
+}
+
+public class ShipStatusPrespawnStepPatchBody(IGameRuntime runtime)
+{
+	private readonly IGameRuntime _runtime = runtime;
+
+	public bool Postfix(ref IEnumerator __result)
+	{
+		var gmg = GameManager.Instance;
+		if (gmg == null ||
+			gmg.LogicOptions == null ||
+			!_runtime.TryGetGameContext(out var ctx))
+		{
+			return true;
+		}
+
+		var spawnOpt = ctx.GlobalOption.Spawn;
+		if (!spawnOpt.EnableSpecialSetting)
+		{
+			return true;
+		}
+
+		if (gmg.LogicOptions.MapId switch
+		{
+			0 => spawnOpt.Skeld,
+			1 => spawnOpt.MiraHq,
+			2 => spawnOpt.Polus,
+			5 => spawnOpt.Fungle,
+			_ => false,
+		})
+		{
+			__result = ExtremeSpawnSelectorMinigame.WaiteSpawn().WrapToIl2Cpp();
+			return false;
+		}
+		return true;
+	}
+}
 
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake))]
 public static class ShipStatusAwakePatch
@@ -30,7 +91,7 @@ public static class ShipStatusOnEnablePatch
 {
 	public static void Postfix(ShipStatus __instance)
 	{
-		ExtremeGameModeManager.Instance.ShipOption.Emergency.ChangeTime(__instance);
+		ShipStatusOnEnablePatchBody.StaticPostfix(__instance);
 	}
 }
 
@@ -61,28 +122,14 @@ public static class ShipStatusOnDestroyPatch
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.PrespawnStep))]
 public static class ShipStatusPrespawnStepPatch
 {
+	private static ShipStatusPrespawnStepPatchBody? _body;
+
 	public static bool Prefix(ref IEnumerator __result)
 	{
-		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
-		if (!spawnOpt.EnableSpecialSetting)
+		if (_body is null)
 		{
-			return true;
+			_body = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<ShipStatusPrespawnStepPatchBody>();
 		}
-
-		bool enableRandomSpawn = GameManager.Instance.LogicOptions.MapId switch
-		{
-			0 => spawnOpt.Skeld,
-			1 => spawnOpt.MiraHq,
-			2 => spawnOpt.Polus,
-			5 => spawnOpt.Fungle,
-			_ => false,
-		};
-
-		if (enableRandomSpawn)
-		{
-			__result = ExtremeSpawnSelectorMinigame.WaiteSpawn().WrapToIl2Cpp();
-			return false;
-		}
-		return true;
+		return _body.Postfix(ref __result);
 	}
 }

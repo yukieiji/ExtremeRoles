@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ExtremeRoles;
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
@@ -25,10 +26,7 @@ public class ExtremeRoleAssignDataBuilderTests
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
 
-        if (ClientOption.Instance == null)
-        {
-            OptionCreator.Create();
-        }
+        OptionCreator.Create();
     }
 
     [Fact]

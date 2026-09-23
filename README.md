@@ -4,6 +4,7 @@
  - [How to translate](https://github.com/yukieiji/ExtremeRoles/tree/master?tab=readme-ov-file#how-to-translate)
 ##### Other Languages README
 - [English README](https://github.com/yukieiji/ExtremeRoles/blob/master/doc/en/README.md)
+- [French README](https://github.com/yukieiji/ExtremeRoles/blob/master/doc/fr/README.md)
 - [SChinese README(WIP)](https://github.com/yukieiji/ExtremeRoles/blob/master/doc/ch_s/README.md)
 
 <div><img src="./doc/img/burner.png" /></div>
@@ -293,6 +294,7 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 
 |  言語名/Languages  |  対応状況/Status | 翻訳者/Translator(Thank you!!) |
 | ---- | ---- | --- |
+|  フランス語/French  |  完全翻訳済み/Fully Translated  | - |
 |  英語/English  |   ほぼ翻訳済み/Mostly Translated  | [yuhgao](https://github.com/yuhgao) |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  | - |
 |  简体中文/SChinese  |   完全翻訳済み/Fully Translated  | [ZeMingoh233](https://github.com/ZeMingoh233)<br>四个憨批汉化组([fivefirex](https://github.com/fivefirex), 123，乱线Namdam_096，氢氧则名)<br>[小鹿SAMA](https://github.com/ADeerWhoLovesEveryone) |

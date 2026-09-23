@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using HarmonyLib;
 
 using System.Reflection;
@@ -13,7 +13,7 @@ namespace ExtremeRoles.Compat.Interface;
 public interface IInitializer
 {
 	public Assembly Dll { get; }
-	public Harmony Patch { get; }
+	public IHarmonyPatch Patch { get; }
 	public BasePlugin Plugin { get; }
 
 	public SemanticVersioning.Version Version { get; }

@@ -1,22 +1,20 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using UnityEngine;
 using AmongUs.GameOptions;
-
-using HarmonyLib;
-
+using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-
+using HarmonyLib;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using UnityEngine;
 using Il2CppArray = Il2CppSystem.Array;
 using Il2CppObject = Il2CppSystem.Object;
 
@@ -39,7 +37,9 @@ public static class EndGameManagerSetUpPatch
         setWinDetailText(__instance, winNeutral, winner.PlusedWinner);
         setRoleSummary(__instance, gameResult.PlayerSummaries);
         RPCOperator.Initialize();
-    }
+
+		ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IGameRuntimeEnder>().End();
+	}
 
     private static List<(SingleRoleBase, byte)> setPlayerNameAndRole(
         in EndGameManager manager,

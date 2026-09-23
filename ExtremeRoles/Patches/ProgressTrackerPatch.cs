@@ -5,33 +5,38 @@ using HarmonyLib;
 
 using UnityEngine;
 
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
+using ExtremeRoles.Core.Abstract;
+using Microsoft.Extensions.DependencyInjection;
+
+#nullable enable
 
 namespace ExtremeRoles.Patches;
 
-[HarmonyPatch(typeof(ProgressTracker), nameof(ProgressTracker.FixedUpdate))]
-public static class ProgressTrackerFixedUpdatePatch
+public class ProgressTrackerFixedUpdatePatchBody(IGameProgress progress, IGameRuntime runtime)
 {
-	public static bool Prefix(ProgressTracker __instance)
+	private readonly IGameProgress _progress = progress;
+	private readonly IGameRuntime _runtime = runtime;
+
+	public bool Prefix(ProgressTracker __instance)
 		=>
 			GameManager.Instance != null &&
 			GameManager.Instance.LogicOptions != null &&
 			__instance.TileParent != null &&
 			PlayerControl.LocalPlayer != null;
 
-    public static void Postfix(ProgressTracker __instance)
-    {
+	public void Postfix(ProgressTracker __instance)
+	{
 		if (!(
-				GameProgressSystem.IsGameNow && (
+				_runtime.TryGetGameContext(out var ctx) &&
+				_progress.IsGameNow && (
 				(
-					ExtremeRoleManager.TryGetSafeCastedLocalRole<Agency>(out var agency) &&
+					ctx.Roles.TryGetSafeCastedLocalRole<Agency>(out var agency) &&
 					agency.CanSeeTaskBar
 				) ||
 				(
-					ExtremeRoleManager.TryGetSafeCastedLocalRole<SlaveDriver>(out var slaveDriver) &&
+					ctx.Roles.TryGetSafeCastedLocalRole<SlaveDriver>(out var slaveDriver) &&
 					slaveDriver.CanSeeTaskBar
 				))
 			))
@@ -39,27 +44,56 @@ public static class ProgressTrackerFixedUpdatePatch
 			return;
 		}
 
-        if (!__instance.TileParent.enabled)
-        {
-            __instance.TileParent.enabled = true;
-        }
+		if (!__instance.TileParent.enabled)
+		{
+			__instance.TileParent.enabled = true;
+		}
+		
+		GameData gameData = GameData.Instance;
+		
+		if (gameData == null || gameData.TotalTasks <= 0)
+		{
+			return;
+		}
 
-        GameData gameData = GameData.Instance;
-        if (gameData && gameData.TotalTasks > 0)
-        {
-            __instance.gameObject.SetActive(true);
-            int num = (TutorialManager.InstanceExists ?
-                1 : (gameData.PlayerCount - GameOptionsManager.Instance.CurrentGameOptions.GetInt(
-                        Int32OptionNames.NumImpostors)));
-            num -= gameData.AllPlayers.ToArray().ToList().Count(
-                (NetworkedPlayerInfo p) => p.Disconnected);
+		__instance.gameObject.SetActive(true);
+		int num = (TutorialManager.InstanceExists ?
+			1 : (gameData.PlayerCount - GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+					Int32OptionNames.NumImpostors)));
+		num -= gameData.AllPlayers.ToArray().ToList().Count(
+			(NetworkedPlayerInfo p) => p.Disconnected);
+		float curProgress = (float)gameData.CompletedTasks /
+			(float)gameData.TotalTasks * (float)num;
+		__instance.curValue = Mathf.Lerp(
+			__instance.curValue, curProgress, Time.fixedDeltaTime * 2f);
+		__instance.TileParent.material.SetFloat("_Buckets", (float)num);
+		__instance.TileParent.material.SetFloat("_FullBuckets", __instance.curValue);
+	}
+}
 
-            float curProgress = (float)gameData.CompletedTasks /
-				(float)gameData.TotalTasks * (float)num;
-            __instance.curValue = Mathf.Lerp(
-                __instance.curValue, curProgress, Time.fixedDeltaTime * 2f);
-            __instance.TileParent.material.SetFloat("_Buckets", (float)num);
-            __instance.TileParent.material.SetFloat("_FullBuckets", __instance.curValue);
-        }
-    }
+
+[HarmonyPatch(typeof(ProgressTracker), nameof(ProgressTracker.FixedUpdate))]
+public static class ProgressTrackerFixedUpdatePatch
+{
+	private static ProgressTrackerFixedUpdatePatchBody? _body;
+
+	public static bool Prefix(ProgressTracker __instance)
+	{
+		if (_body is null)
+		{
+			_body = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<ProgressTrackerFixedUpdatePatchBody>();
+		}
+		return _body.Prefix(__instance);
+	}
+
+
+	public static void Postfix(ProgressTracker __instance)
+	{
+		if (_body is null)
+		{
+			_body = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<ProgressTrackerFixedUpdatePatchBody>();
+		}
+		_body.Postfix(__instance);
+	}
+
 }
