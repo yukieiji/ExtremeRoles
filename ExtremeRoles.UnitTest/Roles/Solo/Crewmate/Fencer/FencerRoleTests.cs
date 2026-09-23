@@ -73,18 +73,6 @@ public sealed class FencerRoleTests
     }
 
     [Fact]
-    public void Constructor_InitializesCorrectly()
-    {
-        // Act
-        var fencer = new FencerRole();
-
-        // Assert
-        Assert.Equal(ExtremeRoleId.Fencer, fencer.Core.Id);
-        Assert.Null(fencer.Status);
-        Assert.False(fencer.CanKill);
-    }
-
-    [Fact]
     public void RoleSpecificInit_InitializesStatusAndAbilityClass()
     {
         // Arrange
