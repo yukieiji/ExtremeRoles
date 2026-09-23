@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 using Hazel;
@@ -19,18 +20,40 @@ public class DelusionerAbilityHandlerTests
 {
 	public DelusionerAbilityHandlerTests()
 	{
+		MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 		MockSetupHelper.SetupGameDataMock();
 		var localPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		localPlayer.SetupGet(p => p.NetId).Returns(100);
-
-		var mockClient = MockSetupHelper.SetupAmongUsClientMock();
-		mockClient.SetupGet(c => c.AmHost).Returns(true);
+		localPlayer.SetupGet(p => p.PlayerId).Returns((byte)0);
 
 		var mockWriter = new Mock<MessageWriter>(IntPtr.Zero);
+		var mockClient = MockSetupHelper.SetupAmongUsClientMock();
+		mockClient.SetupGet(c => c.AmHost).Returns(true);
+		mockClient.Setup(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<SendOption>(), It.IsAny<int>()))
+			.Returns(mockWriter.Object);
+		mockWriter.Setup(w => w.Write(It.IsAny<MessageWriter>(), It.IsAny<bool>()));
+		mockWriter.Setup(w => w.ToByteArray(It.IsAny<bool>())).Returns((Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>)null!);
 		var mockWriterGet = new Mock<MockMessageWriterGetHelper>();
 		mockWriterGet.Setup(h => h.Invoke(It.IsAny<SendOption>())).Returns(mockWriter.Object);
 		MockMessageWriterGetHelper.Instance = mockWriterGet.Object;
+
+		var mockWriteNetObj = new Mock<InnerNet.MockMessageExtensionsWriteNetObjectHelper>();
+		mockWriteNetObj.Setup(w => w.Invoke(It.IsAny<MessageWriter>(), It.IsAny<InnerNet.InnerNetObject>()));
+		InnerNet.MockMessageExtensionsWriteNetObjectHelper.Instance = mockWriteNetObj.Object;
+
+		var mockReaderHelper = new Mock<Hazel.MockMessageReaderGetHelper>();
+		mockReaderHelper.Setup(g => g.Invoke(It.IsAny<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>>()))
+			.Returns(() =>
+			{
+				var mockReader = new Mock<MessageReader>();
+				mockReader.SetupSequence(r => r.ReadByte())
+					.Returns((byte)ExtremeSystemType.DelusionerCounter)
+					.Returns((byte)DelusionerCounterSystem.Ops.Ready);
+				mockReader.Setup(r => r.ReadPackedInt32()).Returns(3);
+				return mockReader.Object;
+			});
+		Hazel.MockMessageReaderGetHelper.Instance = mockReaderHelper.Object;
 
 		var mockAllList = new Mock<Il2CppSystem.Collections.Generic.List<PlayerControl>>(IntPtr.Zero);
 		mockAllList.SetupGet(l => l.Count).Returns(0);
@@ -54,7 +77,25 @@ public class DelusionerAbilityHandlerTests
 	[Fact]
 	public void ReduceCounterNum_WhenStateIsCoolDownAndButtonIsReadyAndCountGreaterThanZero_CallsReadyCounter()
 	{
-		var system = new DelusionerCounterSystem();
+		var mockWriteNetObj = new Mock<InnerNet.MockMessageExtensionsWriteNetObjectHelper>();
+		mockWriteNetObj.Setup(w => w.Invoke(It.IsAny<MessageWriter>(), It.IsAny<InnerNet.InnerNetObject>()));
+		InnerNet.MockMessageExtensionsWriteNetObjectHelper.Instance = mockWriteNetObj.Object;
+
+		var mockReaderHelper = new Mock<Hazel.MockMessageReaderGetHelper>();
+		mockReaderHelper.Setup(g => g.Invoke(It.IsAny<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>>()))
+			.Returns(() =>
+			{
+				var mockReader = new Mock<MessageReader>();
+				mockReader.SetupSequence(r => r.ReadByte())
+					.Returns((byte)ExtremeSystemType.DelusionerCounter)
+					.Returns((byte)DelusionerCounterSystem.Ops.Ready);
+				mockReader.Setup(r => r.ReadPackedInt32()).Returns(3);
+				return mockReader.Object;
+			});
+		Hazel.MockMessageReaderGetHelper.Instance = mockReaderHelper.Object;
+
+		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DelusionerCounterSystem>(DelusionerCounterSystem.Type);
+		system.Reset(ResetTiming.MeetingStart, null);
 		var status = new DelusionerStatusModel(2.5f, false, 0.9f);
 		var role = new DelusionerRole();
 		var handler = new DelusionerAbilityHandler(system, status, role);
@@ -68,7 +109,7 @@ public class DelusionerAbilityHandlerTests
 		// Initial prevState is CoolDown
 		handler.ReduceCounterNum();
 
-		Assert.True(system.TryGetCounter(0, out _)); // ReadyCounter registers in system for local player (id 0)
+		Assert.True(system.TryGetCounter(PlayerControl.LocalPlayer.PlayerId, out _)); // ReadyCounter registers in system for local player
 	}
 
 	[Fact]

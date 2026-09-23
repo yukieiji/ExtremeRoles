@@ -262,7 +262,7 @@ public class ExorcistRoleTests
         Assert.False(result);
 
         // Clean up
-        MockPlayerControlget_LocalPlayerHelper.Instance = null;
+        MockSetupHelper.SetupPlayerControlMocks();
     }
 
     [Fact]
