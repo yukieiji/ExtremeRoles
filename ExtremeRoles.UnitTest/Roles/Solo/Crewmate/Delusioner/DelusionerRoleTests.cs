@@ -12,6 +12,7 @@ using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
+using Hazel;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using InnerNet;
 using Moq;
@@ -34,6 +35,8 @@ public class DelusionerRoleTests
 		MockSetupHelper.SetupGameDataMock();
 
 		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
+		var mockLocalTransform = new Mock<Transform>(IntPtr.Zero);
+		localPlayerMock.SetupGet(p => p.transform).Returns(mockLocalTransform.Object);
 		var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 		var mockRole = new Mock<RoleBehaviour>(IntPtr.Zero);
 		mockRole.SetupGet(r => r.Blurb).Returns("Crewmate Blurb");
@@ -107,7 +110,12 @@ public class DelusionerRoleTests
 		string expectedFullDesc = ExtremeRoles.Extension.Controller.TranslationControllerExtension.GetString($"{role.Core.Id}FullDescription");
 		Assert.Equal(expectedFullDesc, role.GetFullDescription());
 
-		string expectedImportant = ExtremeRoles.Extension.Controller.TranslationControllerExtension.GetString($"{role.Core.Id}ImportantText");
+		string shortDescStr = ExtremeRoles.Extension.Controller.TranslationControllerExtension.GetString($"{role.Core.Id}ShortDescription");
+		string expectedImportant = Design.ColoredString(
+			role.Core.Color,
+			string.Format("{0}: {1}",
+				Design.ColoredString(role.Core.Color, roleNameStr),
+				shortDescStr));
 		Assert.Equal(expectedImportant, role.GetImportantText(true));
 		Assert.Equal(expectedImportant, role.GetImportantText(false));
 
@@ -219,6 +227,12 @@ public class DelusionerRoleTests
 	[Fact]
 	public void UseAbility_WhenAbilityIsNotNull_ReturnsTrue()
 	{
+		var mockWriter = new Mock<MessageWriter>(IntPtr.Zero);
+		mockWriter.Setup(w => w.Write(It.IsAny<MessageWriter>(), It.IsAny<bool>()));
+		mockWriter.Setup(w => w.ToByteArray(It.IsAny<bool>())).Returns((Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>)null!);
+		mockClient.Setup(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<SendOption>(), It.IsAny<int>()))
+			.Returns(mockWriter.Object);
+
 		var role = new DelusionerRole();
 		var status = new DelusionerStatusModel(2.5f, false, 1.0f);
 		var ability = new DelusionerAbilityHandler(null, status, role);

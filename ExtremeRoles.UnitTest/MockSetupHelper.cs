@@ -179,15 +179,23 @@ public static class MockSetupHelper
 
     public static Mock<PlayerControl> SetupPlayerControlMocks()
     {
-        if (MockPlayerControlget_LocalPlayerHelper.Instance == null)
+        if (MockPlayerControlget_LocalPlayerHelper.Instance != null &&
+            !ReferenceEquals(PlayerControl.LocalPlayer, null))
         {
-            var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
-            var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
-            mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
-            MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
-            return mockPlayer;
+            try
+            {
+                return Mock<PlayerControl>.Get(PlayerControl.LocalPlayer);
+            }
+            catch (ArgumentException)
+            {
+            }
         }
-        return Mock<PlayerControl>.Get(PlayerControl.LocalPlayer);
+
+        var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+        var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+        mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
+        MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+        return mockPlayer;
     }
 
     public static void SetupExtremeSystemTypeManagerMock()
