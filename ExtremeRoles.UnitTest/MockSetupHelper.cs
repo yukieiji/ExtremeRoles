@@ -46,13 +46,6 @@ public static class MockSetupHelper
         SetupTimeHelpers();
         SetupRandomHelpers();
         SetupJsonHelpers();
-        SetupConstantsHelpers();
-        SetupAmongUsClientMock();
-        SetupLobbyMock();
-        SetupObjectImplicitHelpers();
-        SetupDestroyableSingletonMock<TranslationController>();
-        SetupOptionManager();
-        SetupAprilFoolsHelpers();
     }
 
     public static void SetupAprilFoolsHelpers()
