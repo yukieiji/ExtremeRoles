@@ -159,7 +159,7 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 	}
 
 	[Fact]
-	public void Prefix_WhenNotAmOwner_SetsVelocityZeroAndReturnsTrue()
+	public void Prefix_WhenNotAmOwner_ReturnsTrue()
 	{
 		// Arrange
 		var mockSystem = new Mock<IExtremeSystemTypeManager>();
@@ -187,11 +187,11 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 
 		// Assert
 		Assert.True(result);
-		mockBody.VerifySet(b => b.velocity = Vector2.zero, Times.Once);
+		mockBody.VerifySet(b => b.velocity = Vector2.zero, Times.Never);
 	}
 
 	[Fact]
-	public void Prefix_WhenAmOwnerAndCanMove_SetsVelocityZeroAndReturnsTrue()
+	public void Prefix_WhenAmOwnerAndCanMove_ReturnsTrue()
 	{
 		// Arrange
 		var mockSystem = new Mock<IExtremeSystemTypeManager>();
@@ -222,7 +222,7 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 
 		// Assert
 		Assert.True(result);
-		mockBody.VerifySet(b => b.velocity = Vector2.zero, Times.Once);
+		mockBody.VerifySet(b => b.velocity = Vector2.zero, Times.Never);
 	}
 
 	[Fact]
