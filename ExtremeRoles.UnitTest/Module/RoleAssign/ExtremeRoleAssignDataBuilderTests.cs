@@ -25,8 +25,12 @@ public class ExtremeRoleAssignDataBuilderTests
         MockSetupHelper.SetupMockConfig(plugin);
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
+        MockSetupHelper.SetupGameOptionsManagerMock();
 
-        OptionCreator.Create();
+        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
+        {
+            OptionCreator.Create();
+        }
     }
 
     [Fact]
