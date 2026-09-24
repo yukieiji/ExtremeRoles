@@ -50,6 +50,7 @@ public class MapTests : IDisposable
 
 	private void ResetState()
 	{
+		MockSetupHelper.SetupOptionManager();
 		currentMapId = 0;
 
 		Mock.Get(globalGameOptions).Reset();

@@ -29,6 +29,8 @@ public sealed class VentgeistTests
     public VentgeistTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupPaletteHelpers();
+        MockSetupHelper.SetupOptionManager();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
     }
@@ -113,6 +115,8 @@ public sealed class VentgeistTests
 
     private static void SetupHudManagerMock()
     {
+        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
+
         if (MockVector3get_oneHelper.Instance == null)
         {
             var mockOne = new Mock<MockVector3get_oneHelper>();

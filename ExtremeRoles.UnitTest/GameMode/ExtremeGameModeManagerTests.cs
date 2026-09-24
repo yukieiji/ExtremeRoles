@@ -16,18 +16,8 @@ public class ExtremeGameModeManagerTests
     public ExtremeGameModeManagerTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupOptionManager();
         MockSetupHelper.SetupExtremeSystemTypeManagerMock();
-        MockSetupHelper.SetupAmongUsClientMock();
-        MockSetupHelper.SetupLobbyMock();
-        var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
-        MockSetupHelper.SetupLogger();
-        MockSetupHelper.SetupDebugMode();
-        MockSetupHelper.SetupMockConfig(plugin);
-
-        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
-        {
-            OptionCreator.Create();
-        }
 
         ResetInstance();
     }

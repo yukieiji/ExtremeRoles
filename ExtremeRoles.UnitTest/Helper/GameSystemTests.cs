@@ -58,6 +58,7 @@ public class GameSystemTests : IDisposable
 
     private void ResetAllState()
     {
+        MockSetupHelper.SetupOptionManager();
         PlayerCache.RemovePlayerControl(_ => true);
         ExtremeRoleManager.GameRole.Clear();
 

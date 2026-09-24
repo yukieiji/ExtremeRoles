@@ -46,15 +46,13 @@ public static class MockSetupHelper
     public static void SetupUnityCommonMocks()
     {
         SetupColorHelpers();
-        SetupPaletteHelpers();
         SetupMathfHelpers();
-        SetupCompatModManager();
         SetupUnityObjectOperators();
+        SetupObjectImplicitHelpers();
         SetupVector2Helpers();
         SetupVector3Helpers();
         SetupTimeHelpers();
         SetupRandomHelpers();
-        SetupJsonHelpers();
     }
 
     public static void SetupAprilFoolsHelpers()
@@ -69,13 +67,16 @@ public static class MockSetupHelper
 
     public static void SetupOptionManager()
     {
-        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
-        {
-            var plugin = SetupMockExtremeRolePlugin();
-            SetupMockConfig(plugin);
-            SetupGameOptionsManagerMock();
-            OptionCreator.Create();
-        }
+        SetupPaletteHelpers();
+        SetupCompatModManager();
+        SetupJsonHelpers();
+        SetupLobbyMock();
+        SetupAmongUsClientMock();
+        SetupAprilFoolsHelpers();
+        var plugin = SetupMockExtremeRolePlugin();
+        SetupMockConfig(plugin);
+        SetupGameOptionsManagerMock();
+        OptionCreator.Create();
     }
 
     public static void SetupGameOptionsManagerMock()
@@ -224,27 +225,17 @@ public static class MockSetupHelper
         MockTimeget_fixedDeltaTimeHelper.Instance = mockFixedDeltaTime.Object;
     }
 
+    private static object? playerControlHelperRoot;
+    private static object? amongUsClientHelperRoot;
+    private static object? lobbyHelperRoot;
+
     public static Mock<PlayerControl> SetupPlayerControlMocks()
     {
-        if (MockPlayerControlget_LocalPlayerHelper.Instance != null)
-        {
-            try
-            {
-                var localPlayer = PlayerControl.LocalPlayer;
-                if (localPlayer != null)
-                {
-                    return Mock<PlayerControl>.Get(localPlayer);
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
         var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
         mockLocalHelper.Setup(h => h.Invoke()).Returns(mockPlayer.Object);
         MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
+        playerControlHelperRoot = (mockPlayer, mockLocalHelper);
         return mockPlayer;
     }
 
@@ -280,49 +271,22 @@ public static class MockSetupHelper
 
     public static Mock<AmongUsClient> SetupAmongUsClientMock()
     {
-        if (MockAmongUsClientget_InstanceHelper.Instance != null)
-        {
-            try
-            {
-                var client = AmongUsClient.Instance;
-                if (client != null)
-                {
-                    return Mock<AmongUsClient>.Get(client);
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
         var mockClient = new Mock<AmongUsClient>(IntPtr.Zero);
+        mockClient.SetupGet(c => c.AmHost).Returns(false);
         var mockClientHelper = new Mock<MockAmongUsClientget_InstanceHelper>();
         mockClientHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
         MockAmongUsClientget_InstanceHelper.Instance = mockClientHelper.Object;
+        amongUsClientHelperRoot = (mockClient, mockClientHelper);
         return mockClient;
     }
 
     public static Mock<LobbyBehaviour> SetupLobbyMock()
     {
-        if (MockLobbyBehaviourget_InstanceHelper.Instance != null)
-        {
-            try
-            {
-                var lobby = LobbyBehaviour.Instance;
-                if (lobby != null)
-                {
-                    return Mock<LobbyBehaviour>.Get(lobby);
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
         var mockLobby = new Mock<LobbyBehaviour>(IntPtr.Zero);
         var mockLobbyInstance = new Mock<MockLobbyBehaviourget_InstanceHelper>();
         mockLobbyInstance.Setup(x => x.Invoke()).Returns(mockLobby.Object);
         MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyInstance.Object;
+        lobbyHelperRoot = (mockLobby, mockLobbyInstance);
         return mockLobby;
     }
 
@@ -626,13 +590,29 @@ public static class MockSetupHelper
         MockColorget_yellowHelper.Instance = new Mock<MockColorget_yellowHelper>().Object;
     }
 
+    private static object? paletteHelpersRoot;
+
     public static void SetupPaletteHelpers()
     {
-        MockPaletteget_CrewmateBlueHelper.Instance = new Mock<MockPaletteget_CrewmateBlueHelper>().Object;
-        MockPaletteget_ImpostorRedHelper.Instance = new Mock<MockPaletteget_ImpostorRedHelper>().Object;
-        MockPaletteget_WhiteHelper.Instance = new Mock<MockPaletteget_WhiteHelper>().Object;
-        MockPaletteget_ClearWhiteHelper.Instance = new Mock<MockPaletteget_ClearWhiteHelper>().Object;
-        MockPaletteget_BlackHelper.Instance = new Mock<MockPaletteget_BlackHelper>().Object;
+        var mockCrewmateBlue = new Mock<MockPaletteget_CrewmateBlueHelper>();
+        mockCrewmateBlue.Setup(x => x.Invoke()).Returns(Color.blue);
+        MockPaletteget_CrewmateBlueHelper.Instance = mockCrewmateBlue.Object;
+
+        var mockImpostorRed = new Mock<MockPaletteget_ImpostorRedHelper>();
+        mockImpostorRed.Setup(x => x.Invoke()).Returns(Color.red);
+        MockPaletteget_ImpostorRedHelper.Instance = mockImpostorRed.Object;
+
+        var mockWhite = new Mock<MockPaletteget_WhiteHelper>();
+        mockWhite.Setup(x => x.Invoke()).Returns(Color.white);
+        MockPaletteget_WhiteHelper.Instance = mockWhite.Object;
+
+        var mockClearWhite = new Mock<MockPaletteget_ClearWhiteHelper>();
+        mockClearWhite.Setup(x => x.Invoke()).Returns(Color.clear);
+        MockPaletteget_ClearWhiteHelper.Instance = mockClearWhite.Object;
+
+        var mockBlack = new Mock<MockPaletteget_BlackHelper>();
+        mockBlack.Setup(x => x.Invoke()).Returns(Color.black);
+        MockPaletteget_BlackHelper.Instance = mockBlack.Object;
 
         var mockEnabledColor = new Mock<MockPaletteget_EnabledColorHelper>();
         mockEnabledColor.Setup(x => x.Invoke()).Returns(new Color(1f, 1f, 1f, 1f));
@@ -645,6 +625,8 @@ public static class MockSetupHelper
         var mockDisabledGrey = new Mock<MockPaletteget_DisabledGreyHelper>();
         mockDisabledGrey.Setup(x => x.Invoke()).Returns(new Color(0.5f, 0.5f, 0.5f, 1f));
         MockPaletteget_DisabledGreyHelper.Instance = mockDisabledGrey.Object;
+
+        paletteHelpersRoot = (mockCrewmateBlue, mockImpostorRed, mockWhite, mockClearWhite, mockBlack, mockEnabledColor, mockDisabledClear, mockDisabledGrey);
     }
 
     private static bool isSetLocalXPatched = false;

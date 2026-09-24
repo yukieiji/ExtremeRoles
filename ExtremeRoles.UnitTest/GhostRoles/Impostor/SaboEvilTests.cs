@@ -28,6 +28,8 @@ public sealed class SaboEvilTests
     public SaboEvilTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupPaletteHelpers();
+        MockSetupHelper.SetupOptionManager();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
     }
