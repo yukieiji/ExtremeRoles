@@ -30,6 +30,15 @@ internal static class SetLocalXPatch
 	}
 }
 
+[HarmonyPatch(typeof(MonoBehaviour), nameof(MonoBehaviour.StopAllCoroutines))]
+internal static class StopAllCoroutinesPatch
+{
+	private static bool Prefix()
+	{
+		return false;
+	}
+}
+
 public static class MockSetupHelper
 {
 	// UnityEngineの共通Mock
@@ -560,6 +569,13 @@ public static class MockSetupHelper
         mockCeilToInt.Setup(h => h.Invoke(It.IsAny<float>())).Returns((float f) => (int)Math.Ceiling(f));
         MockMathfCeilToIntHelper.Instance = mockCeilToInt.Object;
 
+        if (UnityEngine.MockMathfRoundHelper.Instance == null)
+        {
+            var mockRound = new Mock<UnityEngine.MockMathfRoundHelper>();
+            mockRound.Setup(h => h.Invoke(It.IsAny<float>())).Returns((float f) => (float)Math.Round(f));
+            UnityEngine.MockMathfRoundHelper.Instance = mockRound.Object;
+        }
+
         if (UnityEngine.MockMathfLerpHelper.Instance == null)
         {
             var mockLerp = new Mock<UnityEngine.MockMathfLerpHelper>();
@@ -640,6 +656,7 @@ public static class MockSetupHelper
             try
             {
                 Harmony.CreateAndPatchAll(typeof(SetLocalXPatch));
+                Harmony.CreateAndPatchAll(typeof(StopAllCoroutinesPatch));
             }
             catch { }
             isSetLocalXPatched = true;
