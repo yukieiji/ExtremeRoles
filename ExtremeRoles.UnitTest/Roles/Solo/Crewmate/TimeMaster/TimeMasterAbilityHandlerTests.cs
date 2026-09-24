@@ -83,6 +83,8 @@ public sealed class TimeMasterAbilityHandlerTests
 		mockRolePlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
 		var mockFromPlayer = new Mock<PlayerControl>(IntPtr.Zero);
 
+		mockClient.Invocations.Clear();
+
 		// Act
 		bool result = handler.TryKilledFrom(mockRolePlayer.Object, mockFromPlayer.Object);
 
