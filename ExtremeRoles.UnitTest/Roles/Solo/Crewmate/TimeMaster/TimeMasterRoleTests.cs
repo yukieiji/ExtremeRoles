@@ -37,7 +37,8 @@ public sealed class TimeMasterRoleTests
 		mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
 
-		timeMasterHistory = new TimeMasterHistory(IntPtr.Zero);
+		var mockHistory = new Mock<TimeMasterHistory>(IntPtr.Zero);
+		timeMasterHistory = mockHistory.Object;
 		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
 		mockGameObject.Setup(g => g.AddComponent<TimeMasterHistory>()).Returns(timeMasterHistory);
 		mockLocalPlayer.SetupGet(p => p.gameObject).Returns(mockGameObject.Object);
