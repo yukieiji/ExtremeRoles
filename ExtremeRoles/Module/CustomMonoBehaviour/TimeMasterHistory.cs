@@ -10,7 +10,7 @@ using UnityEngine;
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
 	[Il2CppRegister]
-	public sealed class TimeMasterHistory : MonoBehaviour
+	public class TimeMasterHistory : MonoBehaviour
 	{
 		public readonly record struct History(Vector3 Pos, bool CanMove, bool InVent, bool IsUsed);
 

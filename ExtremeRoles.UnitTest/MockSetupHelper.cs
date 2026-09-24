@@ -7,7 +7,6 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
 using System;
@@ -20,24 +19,6 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace ExtremeRoles.UnitTest;
-
-[HarmonyPatch(typeof(GameObjectExtensions), nameof(GameObjectExtensions.SetLocalX))]
-internal static class SetLocalXPatch
-{
-	private static bool Prefix()
-	{
-		return false;
-	}
-}
-
-[HarmonyPatch(typeof(MonoBehaviour), nameof(MonoBehaviour.StopAllCoroutines))]
-internal static class StopAllCoroutinesPatch
-{
-	private static bool Prefix()
-	{
-		return false;
-	}
-}
 
 public static class MockSetupHelper
 {
@@ -647,19 +628,12 @@ public static class MockSetupHelper
         MockPaletteget_DisabledGreyHelper.Instance = mockDisabledGrey.Object;
     }
 
-    private static bool isSetLocalXPatched = false;
-
     public static void SetupUnityObjectOperators()
     {
-        if (!isSetLocalXPatched)
+        if (GameObjectExtensions.MockGameObjectExtensionsSetLocalXHelper.Instance == null)
         {
-            try
-            {
-                Harmony.CreateAndPatchAll(typeof(SetLocalXPatch));
-                Harmony.CreateAndPatchAll(typeof(StopAllCoroutinesPatch));
-            }
-            catch { }
-            isSetLocalXPatched = true;
+            var mockSetLocalX = new Mock<GameObjectExtensions.MockGameObjectExtensionsSetLocalXHelper>();
+            GameObjectExtensions.MockGameObjectExtensionsSetLocalXHelper.Instance = mockSetLocalX.Object;
         }
 
         var mockEq = new Mock<MockObjectop_EqualityHelper>();

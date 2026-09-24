@@ -20,20 +20,9 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Patches.Meeting;
 
-[HarmonyLib.HarmonyPatch(typeof(Il2CppSystem.Collections.Generic.List<UiElement>), nameof(Il2CppSystem.Collections.Generic.List<UiElement>.Add))]
-internal static class ListUiElementAddPatch
-{
-	private static bool Prefix()
-	{
-		return false;
-	}
-}
-
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 {
-	private readonly HarmonyLib.Harmony _harmony;
-
 	private sealed class DummySingleRole : SingleRoleBase
 	{
 		public DummySingleRole(RoleCore core)
@@ -94,12 +83,10 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 	public PlayerVoteAreaSelectPatchBodyTests()
 	{
 		ResetState();
-		_harmony = HarmonyLib.Harmony.CreateAndPatchAll(typeof(ListUiElementAddPatch));
 	}
 
 	public void Dispose()
 	{
-		_harmony.UnpatchSelf();
 		ResetState();
 	}
 
@@ -242,11 +229,12 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		mockProgress.SetupGet(p => p.IsGameNow).Returns(false);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea();
 
 		// Act
@@ -262,13 +250,14 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		mockProgress.SetupGet(p => p.IsGameNow).Returns(true);
 		IGameContext? ctx = null;
 		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(false);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea();
 
 		// Act
@@ -284,6 +273,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		mockProgress.SetupGet(p => p.IsGameNow).Returns(true);
@@ -296,7 +286,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		IGameContext? ctx = mockContext.Object;
 		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(true);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea(voteComplete: true);
 
 		// Act
@@ -312,6 +302,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		mockProgress.SetupGet(p => p.IsGameNow).Returns(true);
@@ -324,7 +315,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		IGameContext? ctx = mockContext.Object;
 		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(true);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var mockPva = new Mock<PlayerVoteArea>(IntPtr.Zero);
 		var mockCancelBtn = new Mock<UiElement>(IntPtr.Zero);
 		var mockConfirmBtn = new Mock<UiElement>(IntPtr.Zero);
@@ -347,6 +338,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		mockProgress.SetupGet(p => p.IsGameNow).Returns(true);
@@ -359,7 +351,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		IGameContext? ctx = mockContext.Object;
 		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(true);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea(parentSelectResult: false);
 
 		// Act
@@ -375,6 +367,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		mockProgress.SetupGet(p => p.IsGameNow).Returns(true);
@@ -388,7 +381,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		IGameContext? ctx = mockContext.Object;
 		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(true);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea(playerId: 1);
 
 		// Act
@@ -405,6 +398,9 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
+		var mockUiElementList = new Mock<Il2CppSystem.Collections.Generic.List<UiElement>>(IntPtr.Zero);
+		mockObjectProvider.Setup(p => p.GetList<UiElement>()).Returns(mockUiElementList.Object);
 		var mockLogger = new Mock<IModLogger>();
 
 		mockProgress.SetupGet(p => p.IsGameNow).Returns(true);
@@ -423,7 +419,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		mockControllerManagerHelper.Setup(h => h.Invoke()).Returns(mockControllerManager.Object);
 		MockControllerManagerget_InstanceHelper.Instance = mockControllerManagerHelper.Object;
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, mockButtonsGameObject) = CreateMockPlayerVoteArea(playerId: 1);
 
 		// Act
@@ -446,13 +442,14 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		var mockLocalPlayerHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
 		mockLocalPlayerHelper.Setup(h => h.Invoke()).Returns((PlayerControl)null!);
 		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalPlayerHelper.Object;
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea(playerId: 1);
 		var mockContext = new Mock<IGameContext>();
 
@@ -470,6 +467,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		var localPlayer = MockSetupHelper.SetupPlayerControlMocks();
@@ -483,7 +481,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		var oneman = OnemanMeetingSystemManager.CreateOrGet();
 		oneman.Start(mockCaller.Object, OnemanMeetingSystemManager.Type.CEO, mockReporter.Object);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea(playerId: 1);
 		var mockContext = new Mock<IGameContext>();
 
@@ -501,6 +499,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		var localPlayer = MockSetupHelper.SetupPlayerControlMocks();
@@ -514,7 +513,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		var oneman = OnemanMeetingSystemManager.CreateOrGet();
 		oneman.Start(mockCaller.Object, OnemanMeetingSystemManager.Type.CEO, mockReporter.Object);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea(playerId: 1);
 		var mockContext = new Mock<IGameContext>();
 
@@ -532,6 +531,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		var localPlayer = MockSetupHelper.SetupPlayerControlMocks();
@@ -553,7 +553,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		var mockContext = new Mock<IGameContext>();
 		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea(playerId: 1);
 
 		// Act
@@ -570,6 +570,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		var role = new DummyButtonRole(RoleCore.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white));
@@ -579,7 +580,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		var mockContext = new Mock<IGameContext>();
 		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea(playerId: 1);
 
 		// Act
@@ -596,6 +597,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		var mainRole = new DummySingleRole(RoleCore.BuildCrewmate(ExtremeRoleId.Bait, Color.white));
@@ -610,7 +612,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		var mockContext = new Mock<IGameContext>();
 		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea(playerId: 1);
 
 		// Act
@@ -627,6 +629,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		var subRole = new DummyButtonRole(RoleCore.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white));
@@ -638,7 +641,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		var mockContext = new Mock<IGameContext>();
 		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea(playerId: 1);
 
 		// Act
@@ -655,6 +658,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		var role = new DummySingleRole(RoleCore.BuildCrewmate(ExtremeRoleId.Bait, Color.white));
@@ -664,7 +668,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		var mockContext = new Mock<IGameContext>();
 		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 		var (pva, _, _) = CreateMockPlayerVoteArea(playerId: 1);
 
 		// Act
@@ -681,6 +685,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		var localPlayer = MockSetupHelper.SetupPlayerControlMocks();
@@ -716,7 +721,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		Mock.Get(pva).SetupGet(p => p.JudgeOverruleButton).Returns(mockOverruleButton.Object);
 		Mock.Get(pva).SetupGet(p => p.JudgeOverruleButtonCommsDisable).Returns(mockOverruleCommsDisable.Object);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 
 		// Act
 		bool result = patchBody.TryGetMeetingButton(pva, mockContext.Object, out var buttonEnumerable);
@@ -733,6 +738,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		var localPlayer = MockSetupHelper.SetupPlayerControlMocks();
@@ -769,7 +775,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		Mock.Get(pva).SetupGet(p => p.JudgeOverruleButton).Returns(mockOverruleButton.Object);
 		Mock.Get(pva).SetupGet(p => p.JudgeOverruleButtonCommsDisable).Returns(mockOverruleCommsDisable.Object);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 
 		// Act
 		bool result = patchBody.TryGetMeetingButton(pva, mockContext.Object, out var buttonEnumerable);
@@ -786,6 +792,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		// Arrange
 		var mockProgress = new Mock<IGameProgress>();
 		var mockRuntime = new Mock<IGameRuntime>();
+		var mockObjectProvider = new Mock<IIl2CppObjectProvider>();
 		var mockLogger = new Mock<IModLogger>();
 
 		var localPlayer = MockSetupHelper.SetupPlayerControlMocks();
@@ -817,7 +824,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 		Mock.Get(pva).SetupGet(p => p.JudgeOverruleButton).Returns(mockOverruleButton.Object);
 		Mock.Get(pva).SetupGet(p => p.JudgeOverruleButtonCommsDisable).Returns(mockOverruleCommsDisable.Object);
 
-		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockLogger.Object);
+		var patchBody = new PlayerVoteAreaSelectPatchBody(mockProgress.Object, mockRuntime.Object, mockObjectProvider.Object, mockLogger.Object);
 
 		// Act
 		bool result = patchBody.TryGetMeetingButton(pva, mockContext.Object, out var buttonEnumerable);
