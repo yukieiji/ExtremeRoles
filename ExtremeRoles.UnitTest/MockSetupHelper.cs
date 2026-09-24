@@ -630,12 +630,6 @@ public static class MockSetupHelper
 
     public static void SetupUnityObjectOperators()
     {
-        if (GameObjectExtensions.MockGameObjectExtensionsSetLocalXHelper.Instance == null)
-        {
-            var mockSetLocalX = new Mock<GameObjectExtensions.MockGameObjectExtensionsSetLocalXHelper>();
-            GameObjectExtensions.MockGameObjectExtensionsSetLocalXHelper.Instance = mockSetLocalX.Object;
-        }
-
         var mockEq = new Mock<MockObjectop_EqualityHelper>();
         mockEq.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<UnityEngine.Object>()))
             .Returns((UnityEngine.Object x, UnityEngine.Object y) =>
