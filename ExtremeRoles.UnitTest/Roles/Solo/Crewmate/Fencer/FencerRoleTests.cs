@@ -39,6 +39,9 @@ public sealed class FencerRoleTests
 
         var mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
         mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
+
+        MockSetupHelper.SetupGameOptionsManagerMock();
+        MockSetupHelper.SetupOptionManager();
     }
 
     private static void SetupLobbyBehaviourMock()
@@ -73,15 +76,14 @@ public sealed class FencerRoleTests
     }
 
     [Fact]
-    public void RoleSpecificInit_InitializesStatusAndAbilityClass()
+    public void Initialize_InitializesStatusAndAbilityClass()
     {
         // Arrange
         var fencer = new FencerRole();
         fencer.CreateRoleAllOption();
 
         // Act
-        var initMethod = typeof(FencerRole).GetMethod("RoleSpecificInit", BindingFlags.NonPublic | BindingFlags.Instance);
-        initMethod?.Invoke(fencer, null);
+        fencer.Initialize();
 
         // Assert
         Assert.NotNull(fencer.Status);
@@ -98,9 +100,7 @@ public sealed class FencerRoleTests
         // Arrange
         var fencer = new FencerRole();
         fencer.CreateRoleAllOption();
-
-        var initMethod = typeof(FencerRole).GetMethod("RoleSpecificInit", BindingFlags.NonPublic | BindingFlags.Instance);
-        initMethod?.Invoke(fencer, null);
+        fencer.Initialize();
 
         // Act
         fencer.CanKill = true;
@@ -123,9 +123,7 @@ public sealed class FencerRoleTests
         // Arrange
         var fencer = new FencerRole();
         fencer.CreateRoleAllOption();
-
-        var initMethod = typeof(FencerRole).GetMethod("RoleSpecificInit", BindingFlags.NonPublic | BindingFlags.Instance);
-        initMethod?.Invoke(fencer, null);
+        fencer.Initialize();
 
         var status = (FencerStatusModel)fencer.Status!;
         status.IsCounter = true;
@@ -169,9 +167,7 @@ public sealed class FencerRoleTests
         // Arrange
         var fencer = new FencerRole();
         fencer.CreateRoleAllOption();
-
-        var initMethod = typeof(FencerRole).GetMethod("RoleSpecificInit", BindingFlags.NonPublic | BindingFlags.Instance);
-        initMethod?.Invoke(fencer, null);
+        fencer.Initialize();
 
         fencer.CanKill = true;
         ((FencerStatusModel)fencer.Status!).Timer = 0.0f;
@@ -191,9 +187,7 @@ public sealed class FencerRoleTests
         // Arrange
         var fencer = new FencerRole();
         fencer.CreateRoleAllOption();
-
-        var initMethod = typeof(FencerRole).GetMethod("RoleSpecificInit", BindingFlags.NonPublic | BindingFlags.Instance);
-        initMethod?.Invoke(fencer, null);
+        fencer.Initialize();
 
         fencer.CanKill = true;
         var status = (FencerStatusModel)fencer.Status!;
@@ -214,9 +208,7 @@ public sealed class FencerRoleTests
         // Arrange
         var fencer = new FencerRole();
         fencer.CreateRoleAllOption();
-
-        var initMethod = typeof(FencerRole).GetMethod("RoleSpecificInit", BindingFlags.NonPublic | BindingFlags.Instance);
-        initMethod?.Invoke(fencer, null);
+        fencer.Initialize();
 
         var status = (FencerStatusModel)fencer.Status!;
 
@@ -257,9 +249,7 @@ public sealed class FencerRoleTests
 
         var fencer = new FencerRole();
         fencer.CreateRoleAllOption();
-
-        var initMethod = typeof(FencerRole).GetMethod("RoleSpecificInit", BindingFlags.NonPublic | BindingFlags.Instance);
-        initMethod?.Invoke(fencer, null);
+        fencer.Initialize();
 
         ExtremeRoleManager.GameRole.Clear();
         ExtremeRoleManager.GameRole[playerId] = fencer;
@@ -286,9 +276,7 @@ public sealed class FencerRoleTests
 
         var fencer = new FencerRole();
         fencer.CreateRoleAllOption();
-
-        var initMethod = typeof(FencerRole).GetMethod("RoleSpecificInit", BindingFlags.NonPublic | BindingFlags.Instance);
-        initMethod?.Invoke(fencer, null);
+        fencer.Initialize();
 
         var status = (FencerStatusModel)fencer.Status!;
         status.IsCounter = true;
@@ -321,9 +309,7 @@ public sealed class FencerRoleTests
 
         var fencer = new FencerRole();
         fencer.CreateRoleAllOption();
-
-        var initMethod = typeof(FencerRole).GetMethod("RoleSpecificInit", BindingFlags.NonPublic | BindingFlags.Instance);
-        initMethod?.Invoke(fencer, null);
+        fencer.Initialize();
 
         ExtremeRoleManager.GameRole.Clear();
         ExtremeRoleManager.GameRole[playerId] = fencer;
@@ -360,21 +346,15 @@ public sealed class FencerRoleTests
     }
 
     [Fact]
-    public void CreateSpecificOption_CreatesExpectedOptions()
+    public void CreateRoleAllOption_CreatesExpectedOptions()
     {
         // Arrange
         int groupId = ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Fencer);
-        using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
-            groupId,
-            "FencerTestCategory",
-            OptionTab.CrewmateTab,
-            Color.white);
 
         var fencer = new FencerRole();
 
         // Act
-        var createOptionMethod = typeof(FencerRole).GetMethod("CreateSpecificOption", BindingFlags.NonPublic | BindingFlags.Instance);
-        createOptionMethod?.Invoke(fencer, new object[] { factory });
+        fencer.CreateRoleAllOption();
 
         // Assert
         Assert.True(OptionManager.Instance.TryGetCategory(OptionTab.CrewmateTab, groupId, out var category));
