@@ -36,6 +36,55 @@ public static class MockSetupHelper
         SetupTimeHelpers();
         SetupRandomHelpers();
         SetupJsonHelpers();
+        SetupGameObjectExtensionsHelpers();
+    }
+
+    public static void SetupGameObjectExtensionsHelpers()
+    {
+        if (MockGameObjectExtensionsSetLocalXHelper.Instance == null)
+        {
+            var mockSetLocalX = new Mock<MockGameObjectExtensionsSetLocalXHelper>();
+            mockSetLocalX.Setup(x => x.Invoke(It.IsAny<Transform>(), It.IsAny<float>()))
+                .Callback((Transform t, float x) =>
+                {
+                    if (t != null)
+                    {
+                        var pos = t.localPosition;
+                        t.localPosition = new Vector3(x, pos.y, pos.z);
+                    }
+                });
+            MockGameObjectExtensionsSetLocalXHelper.Instance = mockSetLocalX.Object;
+        }
+
+        if (MockGameObjectExtensionsSetLocalYHelper.Instance == null)
+        {
+            var mockSetLocalY = new Mock<MockGameObjectExtensionsSetLocalYHelper>();
+            mockSetLocalY.Setup(x => x.Invoke(It.IsAny<Transform>(), It.IsAny<float>()))
+                .Callback((Transform t, float y) =>
+                {
+                    if (t != null)
+                    {
+                        var pos = t.localPosition;
+                        t.localPosition = new Vector3(pos.x, y, pos.z);
+                    }
+                });
+            MockGameObjectExtensionsSetLocalYHelper.Instance = mockSetLocalY.Object;
+        }
+
+        if (MockGameObjectExtensionsSetLocalZHelper.Instance == null)
+        {
+            var mockSetLocalZ = new Mock<MockGameObjectExtensionsSetLocalZHelper>();
+            mockSetLocalZ.Setup(x => x.Invoke(It.IsAny<Transform>(), It.IsAny<float>()))
+                .Callback((Transform t, float z) =>
+                {
+                    if (t != null)
+                    {
+                        var pos = t.localPosition;
+                        t.localPosition = new Vector3(pos.x, pos.y, z);
+                    }
+                });
+            MockGameObjectExtensionsSetLocalZHelper.Instance = mockSetLocalZ.Object;
+        }
     }
 
     public static void SetupAprilFoolsHelpers()
