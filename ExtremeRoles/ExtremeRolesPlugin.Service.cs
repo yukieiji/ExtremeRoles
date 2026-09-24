@@ -33,6 +33,9 @@ public partial class ExtremeRolesPlugin
 		var collection = new ServiceCollection();
 
 		collection
+			.AddSingleton<IIl2CppObjectProvider, DefaultIl2CppObjectProvider>();
+
+		collection
 			.AddSingleton<IModLogger, BepInExLogger>();
 
 		collection
