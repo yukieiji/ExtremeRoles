@@ -30,6 +30,89 @@ internal static class SetLocalXPatch
 	}
 }
 
+[HarmonyPatch(typeof(ExtremeRoles.Module.CustomMonoBehaviour.PlayerOutLine), nameof(ExtremeRoles.Module.CustomMonoBehaviour.PlayerOutLine.SetOutline))]
+internal static class PlayerOutLineSetOutlinePatch
+{
+	private static bool Prefix()
+	{
+		return false;
+	}
+}
+
+[HarmonyPatch(typeof(PhysicsHelpers), nameof(PhysicsHelpers.AnyNonTriggersBetween))]
+internal static class PhysicsHelpersAnyNonTriggersBetweenPatch
+{
+	private static bool Prefix(ref bool __result)
+	{
+		__result = false;
+		return false;
+	}
+}
+
+[HarmonyPatch(typeof(Vector2), "op_Subtraction")]
+internal static class Vector2SubtractionPatch
+{
+	private static bool Prefix(Vector2 a, Vector2 b, ref Vector2 __result)
+	{
+		__result = new Vector2(a.x - b.x, a.y - b.y);
+		return false;
+	}
+}
+
+[HarmonyPatch(typeof(Vector2), "get_magnitude")]
+internal static class Vector2MagnitudePatch
+{
+	private static bool Prefix(ref Vector2 __instance, ref float __result)
+	{
+		__result = MathF.Sqrt(__instance.x * __instance.x + __instance.y * __instance.y);
+		return false;
+	}
+}
+
+[HarmonyPatch(typeof(Vector2), "get_normalized")]
+internal static class Vector2NormalizedPatch
+{
+	private static bool Prefix(ref Vector2 __instance, ref Vector2 __result)
+	{
+		float mag = MathF.Sqrt(__instance.x * __instance.x + __instance.y * __instance.y);
+		if (mag > 1e-5f)
+		{
+			__result = new Vector2(__instance.x / mag, __instance.y / mag);
+		}
+		else
+		{
+			__result = Vector2.zero;
+		}
+		return false;
+	}
+}
+
+[HarmonyPatch(typeof(PlayerTask), nameof(PlayerTask.TaskIsEmergency))]
+internal static class TaskIsEmergencyPatch
+{
+	private static bool Prefix(ref bool __result)
+	{
+		__result = false;
+		return false;
+	}
+}
+
+[HarmonyPatch(typeof(NetworkedPlayerInfo.TaskInfo), nameof(NetworkedPlayerInfo.TaskInfo.Complete), MethodType.Getter)]
+public static class TaskInfoCompletePatch
+{
+	public static bool? ForceComplete { get; set; }
+
+	private static bool Prefix(ref bool __result)
+	{
+		if (ForceComplete.HasValue)
+		{
+			__result = ForceComplete.Value;
+			return false;
+		}
+		return true;
+	}
+}
+
 public static class MockSetupHelper
 {
 	// UnityEngineの共通Mock
@@ -423,9 +506,23 @@ public static class MockSetupHelper
 
     public static void SetupConstantsHelpers()
     {
+        if (UnityEngine.MockLayerMaskop_ImplicitHelper.Instance == null)
+        {
+            var mockImplicit = new Mock<UnityEngine.MockLayerMaskop_ImplicitHelper>();
+            mockImplicit.Setup(m => m.Invoke(It.IsAny<LayerMask>())).Returns(1);
+            UnityEngine.MockLayerMaskop_ImplicitHelper.Instance = mockImplicit.Object;
+        }
+
         var mockBroadcastHelper = new Mock<MockConstantsGetBroadcastVersionHelper>();
         mockBroadcastHelper.Setup(h => h.Invoke()).Returns(50000);
         MockConstantsGetBroadcastVersionHelper.Instance = mockBroadcastHelper.Object;
+
+        if (MockConstantsget_ShipAndObjectsMaskHelper.Instance == null)
+        {
+            var mockMask = new Mock<MockConstantsget_ShipAndObjectsMaskHelper>();
+            mockMask.Setup(m => m.Invoke()).Returns(new LayerMask());
+            MockConstantsget_ShipAndObjectsMaskHelper.Instance = mockMask.Object;
+        }
     }
 
     public static void SetupCompatModManager()
@@ -640,6 +737,13 @@ public static class MockSetupHelper
             try
             {
                 Harmony.CreateAndPatchAll(typeof(SetLocalXPatch));
+                Harmony.CreateAndPatchAll(typeof(Vector2MagnitudePatch));
+                Harmony.CreateAndPatchAll(typeof(Vector2NormalizedPatch));
+                Harmony.CreateAndPatchAll(typeof(Vector2SubtractionPatch));
+                Harmony.CreateAndPatchAll(typeof(TaskIsEmergencyPatch));
+                Harmony.CreateAndPatchAll(typeof(TaskInfoCompletePatch));
+                Harmony.CreateAndPatchAll(typeof(PhysicsHelpersAnyNonTriggersBetweenPatch));
+                Harmony.CreateAndPatchAll(typeof(PlayerOutLineSetOutlinePatch));
             }
             catch { }
             isSetLocalXPatched = true;
