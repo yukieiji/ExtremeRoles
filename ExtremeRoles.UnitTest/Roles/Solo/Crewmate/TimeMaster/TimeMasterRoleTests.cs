@@ -49,10 +49,8 @@ public sealed class TimeMasterRoleTests
 		mockMeetingHelper.Setup(h => h.Invoke()).Returns((MeetingHud)null!);
 		MockMeetingHudget_InstanceHelper.Instance = mockMeetingHelper.Object;
 
-		if (ClientOption.Instance == null)
-		{
-			OptionCreator.Create();
-		}
+		MockSetupHelper.SetupGameOptionsManagerMock();
+		MockSetupHelper.SetupOptionManager();
 	}
 
 	private static void SetupLobbyBehaviourMock()
@@ -66,8 +64,7 @@ public sealed class TimeMasterRoleTests
 	private static void InitializeRole(TimeMasterRole role, byte playerId = 1)
 	{
 		role.CreateRoleAllOption();
-		var initMethod = typeof(TimeMasterRole).GetMethod("RoleSpecificInit", BindingFlags.NonPublic | BindingFlags.Instance);
-		initMethod?.Invoke(role, null);
+		role.Initialize();
 
 		ExtremeRoleManager.GameRole.Clear();
 		ExtremeRoleManager.GameRole[playerId] = role;
@@ -98,7 +95,7 @@ public sealed class TimeMasterRoleTests
 	}
 
 	[Fact]
-	public void RoleSpecificInit_InitializesStatusAndAbilityClass()
+	public void Initialize_InitializesStatusAndAbilityClass()
 	{
 		// Arrange
 		var role = new TimeMasterRole();
@@ -318,21 +315,15 @@ public sealed class TimeMasterRoleTests
 	}
 
 	[Fact]
-	public void CreateSpecificOption_CreatesExpectedOptions()
+	public void CreateRoleAllOption_CreatesExpectedOptions()
 	{
 		// Arrange
 		int groupId = ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.TimeMaster);
-		using AutoParentSetOptionCategoryFactory factory = OptionCategoryAssembler.CreateAutoParentSetOptionCategory(
-			groupId,
-			"TimeMasterTestCategory",
-			OptionTab.CrewmateTab,
-			Color.white);
 
 		var role = new TimeMasterRole();
 
 		// Act
-		var createOptionMethod = typeof(TimeMasterRole).GetMethod("CreateSpecificOption", BindingFlags.NonPublic | BindingFlags.Instance);
-		createOptionMethod?.Invoke(role, new object[] { factory });
+		role.CreateRoleAllOption();
 
 		// Assert
 		Assert.True(OptionManager.Instance.TryGetCategory(OptionTab.CrewmateTab, groupId, out var category));
