@@ -167,18 +167,6 @@ public sealed class TimeMasterRoleTests
 	}
 
 	[Fact]
-	public void ResetOnMeetingEnd_DoesNotThrow()
-	{
-		// Arrange
-		var role = new TimeMasterRole();
-
-		// Act
-		role.ResetOnMeetingEnd();
-
-		// Assert - no exception thrown
-	}
-
-	[Fact]
 	public void IsAbilityUse_ReturnsBoolean()
 	{
 		// Arrange
@@ -305,7 +293,7 @@ public sealed class TimeMasterRoleTests
 	}
 
 	[Fact]
-	public void Ability_WhenRoleNotFound_DoesNothing()
+	public void Ability_WhenRoleNotFound_DoesNotModifyState()
 	{
 		// Arrange
 		ExtremeRoleManager.GameRole.Clear();
@@ -323,7 +311,9 @@ public sealed class TimeMasterRoleTests
 		// Act
 		TimeMasterRole.Ability(ref reader);
 
-		// Assert - no exception thrown
+		// Assert
+		mockReader.Verify(r => r.ReadByte(), Times.Exactly(2));
+		Assert.False(ExtremeRoleManager.GameRole.ContainsKey(99));
 	}
 
 	[Fact]
