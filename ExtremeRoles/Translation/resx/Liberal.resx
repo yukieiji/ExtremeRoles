@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!--
     Microsoft ResX Schema
@@ -67,38 +67,38 @@
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -212,31 +212,36 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="EmbezzleFullDescription" xml:space="preserve">
     <value>タイプ : ドーヴ
 
-クルーのタスクを能力「偽装計上」で完了させて資金を稼ぐ。効果は会議発生時。</value>
+能力「偽装計上」でタスク完了数を偽装して資金を稼ぐドーヴ
+
+会議発生時に対象となったプレイヤーのタスク完了数に応じて資金を得る
+対象はタスクフェーズ中にボタン能力「偽装計上」の対象になったプレイヤ
+対象になったプレイヤのタスク完了数等は変化しない</value>
   </data>
   <data name="EmbezzleShortDescription" xml:space="preserve">
-    <value>偽装計上で資金稼ぎ</value>
+    <value>タスクを"偽装"計上して資金を得よ</value>
   </data>
   <data name="EmbezzleIntroDescription" xml:space="preserve">
-    <value>クルーのタスクを偽装計上して資金を得よ</value>
+    <value>私のタスク完了報告は、ほとんど常に偽装した報告にすぎない</value>
   </data>
   <data name="EmbezzleMaxDisguiseTaskNum" xml:space="preserve">
-    <value>「偽装計上」で偽装するタスク完了数の上限</value>
+    <value>「偽装計上」で偽装できるタスク完了数の上限</value>
   </data>
   <data name="EmbezzleRange" xml:space="preserve">
     <value>「偽装計上」が発動できる範囲</value>
   </data>
   <data name="EmbezzleNoTaskMoneyGuarantee" xml:space="preserve">
-    <value>対象がタスクを持っていなくても資金を獲得できるか</value>
+    <value>タスクを持っていなくても資金を獲得できるか</value>
   </data>
   <data name="EmbezzleAllowMultipleTargetsPerPhase" xml:space="preserve">
-    <value>1フェーズ中に複数人指定可能か</value>
+    <value>1タスクフェーズ中に複数人指定可能か</value>
   </data>
   <data name="EmbezzleCanSeeTaskBar" xml:space="preserve">
     <value>タスクバーを常に見ることが出来るか</value>
   </data>
   <data name="EmbezzleTaskCompletedMoney" xml:space="preserve">
-    <value>「偽装計上」1タスクあたりの獲得資金（最低保証獲得資金）</value>
+    <value>「偽装計上」の1タスクあたりの獲得資金
+（最低保証獲得資金）</value>
   </data>
   <data name="Addict" xml:space="preserve">
     <value>アディクト</value>
@@ -244,25 +249,24 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="AddictFullDescription" xml:space="preserve">
     <value>タイプ : ドーヴ
 
-パッシブ「自爆タイマー」
-・タスク中、ベントの中、止まるなどするとタイマーが進む
-・はしご、プルプル、ジップラインも含めて進みます
-・0になると爆発
-・一定時間以上動くと自爆タイマーが回復していく</value>
+静止していると「自爆タイマー」が進むドーヴ
+・タスク中、ベントの中、止まるなどすると自爆タイマーが進む
+　・はしご、プルプル、ジップラインも含めて進みます
+・一定時間以上動くと「自爆タイマー」が回復していく</value>
   </data>
   <data name="AddictShortDescription" xml:space="preserve">
-    <value>止まると自爆タイマーが進む</value>
+    <value>働かざるもの食うべからず</value>
   </data>
   <data name="AddictIntroDescription" xml:space="preserve">
-    <value>止まると自爆タイマーが進む</value>
+    <value>お仕事、お仕事、お仕事、お仕事、お仕事、お仕事、お仕事、お仕事、お仕事、お仕事、お仕事・・・・</value>
   </data>
   <data name="AddictSelfKillTimerTime" xml:space="preserve">
     <value>自爆タイマーの秒数</value>
   </data>
   <data name="AddictMovementTimeToRecover" xml:space="preserve">
-    <value>タイマー回復に必要な連続移動時間</value>
+    <value>タイマーの回復が始まる連続移動秒数</value>
   </data>
-  <data name="addictSelfKill" xml:space="preserve">
-    <value>残り自爆タイマー: {0}秒</value>
+  <data name="DisguisedAccounting" xml:space="preserve">
+    <value>偽装会計</value>
   </data>
 </root>

@@ -221,7 +221,4 @@
   <data name="AddictMovementTimeToRecover" xml:space="preserve">
     <value>恢复定时器所需的连续移动时间</value>
   </data>
-  <data name="addictSelfKill" xml:space="preserve">
-    <value>剩余自爆定时器: {0}秒</value>
-  </data>
 </root>

@@ -142,7 +142,7 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 		{
 			LiberalMoneyBankSystem.RpcUpdateSystem(
 				PlayerControl.LocalPlayer.PlayerId,
-				Module.GameResult.LiberalMoneyHistory.Reason.AddOnEmbezzleAbility,
+				Module.GameResult.LiberalMoneyHistory.Reason.DisguisedAccounting,
 				totalMoneyGained);
 		}
 
@@ -178,24 +178,23 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 		factory.CreateBoolOption(
 			EmbezzleOption.CanSeeTaskBar,
 			true);
-		factory.CreateBoolOption(
-			EmbezzleOption.AllowMultipleTargetsPerPhase,
-			false);
-		factory.CreateBoolOption(
-			EmbezzleOption.NoTaskMoneyGuarantee,
-			true);
+		IRoleAbility.CreateAbilityCountOption(
+			factory, 2, 5);
+		factory.CreateIntOption(
+			EmbezzleOption.TaskCompletedMoney,
+			5, 1, 100, 1);
 		factory.CreateIntOption(
 			EmbezzleOption.MaxDisguiseTaskNum,
 			2, 1, 5, 1);
 		factory.CreateFloatOption(
 			EmbezzleOption.Range,
 			1.0f, 0.5f, 3.5f, 0.25f);
-		factory.CreateIntOption(
-			EmbezzleOption.TaskCompletedMoney,
-			5, 1, 100, 1);
-
-		IRoleAbility.CreateAbilityCountOption(
-			factory, 2, 5);
+		factory.CreateBoolOption(
+			EmbezzleOption.AllowMultipleTargetsPerPhase,
+			false);
+		factory.CreateBoolOption(
+			EmbezzleOption.NoTaskMoneyGuarantee,
+			true);
 	}
 
 	protected override void RoleSpecificInit()

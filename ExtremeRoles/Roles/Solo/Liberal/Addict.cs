@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using TMPro;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +37,7 @@ public sealed class AddictStatusModel(float maxTimer, float recoveryTime) : ISta
 
 	public bool UpdateTimer(PlayerControl rolePlayer, float deltaTime)
 	{
-		if (this.hasExploded || rolePlayer.IsInValid())
+		if (!GameProgressSystem.IsTaskPhase || this.hasExploded || rolePlayer.IsInValid())
 		{
 			return false;
 		}
@@ -50,9 +49,11 @@ public sealed class AddictStatusModel(float maxTimer, float recoveryTime) : ISta
 			this.prevPlayerPos = curPos;
 		}
 
-		bool isMoving = rolePlayer.CanMove &&
+		bool isMoving = 
 			Minigame.Instance == null &&
 			!rolePlayer.inVent &&
+			!rolePlayer.onLadder &&
+			!rolePlayer.inMovingPlat &&
 			this.prevPlayerPos.IsNotCloseTo(curPos);
 
 		this.prevPlayerPos = curPos;
@@ -62,7 +63,7 @@ public sealed class AddictStatusModel(float maxTimer, float recoveryTime) : ISta
 			this.currentMovementTime += deltaTime;
 			if (this.currentMovementTime >= this.movementTimeToRecover)
 			{
-				this.CurrentSelfKillTimer = Math.Min(this.maxSelfKillTimer, this.CurrentSelfKillTimer + deltaTime);
+				this.CurrentSelfKillTimer = System.Math.Min(this.maxSelfKillTimer, this.CurrentSelfKillTimer + deltaTime);
 			}
 		}
 		else
@@ -144,7 +145,7 @@ public sealed class Addict :
 		if (this.timerText != null)
 		{
 			this.timerText.gameObject.SetActive(true);
-			this.timerText.text = Tr.GetString("addictSelfKill", Mathf.CeilToInt(this.statusModel.CurrentSelfKillTimer));
+			this.timerText.text = $"{Mathf.CeilToInt(this.statusModel.CurrentSelfKillTimer)}";
 		}
 	}
 
@@ -205,12 +206,22 @@ public sealed class Addict :
 	{
 		var killButton = hud.KillButton;
 
-		this.timerText = UnityEngine.Object.Instantiate(
+		this.timerText = Object.Instantiate(
 			killButton.cooldownTimerText,
 			killButton.transform.parent);
 		this.timerText.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
 		this.timerText.transform.localPosition =
 			hud.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
 		this.timerText.gameObject.SetActive(true);
+
+		var timerInfoText = Object.Instantiate(
+			hud.KillButton.cooldownTimerText,
+			this.timerText.transform);
+		timerInfoText.enableWordWrapping = false;
+		timerInfoText.transform.localScale = Vector3.one * 0.5f;
+		timerInfoText.transform.localPosition += new Vector3(-0.05f, 0.6f, 0);
+		timerInfoText.gameObject.SetActive(true);
+
+		timerInfoText.text = Tr.GetString("untilSelfKill");
 	}
 }

@@ -14,7 +14,7 @@ public static class LiberalMoneyHistory
 		AddOnTask,
 		AddOnKill,
 		
-		AddOnEmbezzleAbility,
+		DisguisedAccounting,
 	}
 
 	public readonly record struct MoneyHistory(Reason Reason, byte PlayerId, float Amount);

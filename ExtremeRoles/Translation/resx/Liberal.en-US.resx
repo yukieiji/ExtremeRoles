@@ -216,7 +216,4 @@ Passive: "Self-Explosion Timer"
   <data name="AddictMovementTimeToRecover" xml:space="preserve">
     <value>Continuous Movement Time to Recover Timer</value>
   </data>
-  <data name="addictSelfKill" xml:space="preserve">
-    <value>Self-Kill Timer: {0}s</value>
-  </data>
 </root>
