@@ -26,21 +26,5 @@ public sealed class SpecialMilitant : SingleRoleBase
 	{
 		var loader = this.Loader;
 		this.UseVent = loader.GetValue<SpecialMilitantOption, bool>(SpecialMilitantOption.UseVent);
-
-		this.HasOtherKillCool = loader.GetValue<KillerCommonOption, bool>(
-			KillerCommonOption.HasOtherKillCool);
-		if (this.HasOtherKillCool)
-		{
-			this.KillCoolTime = loader.GetValue<KillerCommonOption, float>(
-				KillerCommonOption.KillCoolDown);
-		}
-
-		this.HasOtherKillRange = loader.GetValue<KillerCommonOption, bool>(
-			KillerCommonOption.HasOtherKillRange);
-		if (this.HasOtherKillRange)
-		{
-			this.KillRange = loader.GetValue<KillerCommonOption, int>(
-				KillerCommonOption.KillRange);
-		}
 	}
 }
