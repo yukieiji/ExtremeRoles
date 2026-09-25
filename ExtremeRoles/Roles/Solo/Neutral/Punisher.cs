@@ -104,9 +104,10 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 
 			if (this.CanKill)
 			{
+				float maxCool = Mathf.Max(0.01f, this.KillCoolTime);
 				rolePlayer.killTimer = Mathf.Clamp(
 					rolePlayer.killTimer - (this.taskKillCoolReduce * newlyCompletedTaskIds.Count),
-					0.01f, this.KillCoolTime);
+					0.01f, maxCool);
 			}
 		}
 
