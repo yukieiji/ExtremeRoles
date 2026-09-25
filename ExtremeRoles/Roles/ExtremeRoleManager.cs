@@ -811,6 +811,12 @@ public static class ExtremeRoleManager
 		return dualSafeCast<T>(checkRole);
 	}
 
+	public static bool TrySafeCast<T>(SingleRoleBase role, [NotNullWhen(true)] out T? castedRole) where T : SingleRoleBase
+	{
+		castedRole = safeCast<T>(role);
+		return castedRole is not null;
+	}
+
 
 	private static T? safeCast<T>(in SingleRoleBase? checkRole) where T : SingleRoleBase
 	{
