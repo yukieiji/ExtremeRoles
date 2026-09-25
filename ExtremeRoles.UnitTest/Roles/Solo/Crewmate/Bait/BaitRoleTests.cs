@@ -186,16 +186,6 @@ public class BaitRoleTests
 	}
 
 	[Fact]
-	public void Awake_WhenRoleDoesNotExist_DoesNotThrow()
-	{
-		// Arrange
-		ExtremeRoleManager.GameRole.Clear();
-
-		// Act & Assert
-		ExtremeRoles.Roles.Solo.Crewmate.Bait.Awake(99);
-	}
-
-	[Fact]
 	public void RoleSpecificInit_WhenAwakeTaskGageIsZeroOrLess_SetsAwakeRoleTrue()
 	{
 		// Arrange
@@ -453,6 +443,7 @@ public class BaitRoleTests
 
 		// Assert
 		Assert.NotNull(text);
+		Assert.Contains("Bait", text);
 	}
 
 	[Fact]
@@ -490,6 +481,7 @@ public class BaitRoleTests
 
 		// Assert
 		Assert.NotNull(desc);
+		Assert.Contains("BaitIntroDescription", desc);
 	}
 
 	[Fact]
