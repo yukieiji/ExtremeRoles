@@ -91,8 +91,8 @@ public sealed class EmbezzleTests
 		role.UseAbility();
 
 		// Assert
-		Assert.DoesNotContain("★", nameTagBefore);
-		Assert.Contains("★", role.GetRolePlayerNameTag(role, 2));
+		Assert.DoesNotContain("☒", nameTagBefore);
+		Assert.Contains("☒", role.GetRolePlayerNameTag(role, 2));
 	}
 
 	[Fact]
