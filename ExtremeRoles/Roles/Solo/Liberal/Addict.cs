@@ -41,14 +41,7 @@ public sealed class Addict :
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		try
-		{
-			this.handler?.Update(rolePlayer);
-		}
-		catch (Exception ex)
-		{
-			Logging.Debug($"Addict DoveCommonAbilityHandler error: {ex.Message}");
-		}
+		this.handler?.Update(rolePlayer);
 
 		if (this.statusModel is null)
 		{
@@ -64,55 +57,16 @@ public sealed class Addict :
 			return;
 		}
 
-		var curPos = rolePlayer.GetTruePosition();
-
-		if (isCloseTo(this.statusModel.PrevPlayerPos, new Vector2(100.0f, 100.0f), 0.01f))
+		bool explode = this.statusModel.UpdateTimer(rolePlayer, Time.deltaTime);
+		if (explode)
 		{
-			this.statusModel.PrevPlayerPos = curPos;
-		}
-
-		bool isMoving = rolePlayer.CanMove &&
-			Minigame.Instance == null &&
-			!rolePlayer.inVent &&
-			isNotCloseTo(this.statusModel.PrevPlayerPos, curPos);
-
-		this.statusModel.PrevPlayerPos = curPos;
-
-		if (isMoving)
-		{
-			this.statusModel.CurrentMovementTime += Time.deltaTime;
-			if (this.statusModel.CurrentMovementTime >= this.statusModel.MovementTimeToRecover)
+			var localPlayer = PlayerControl.LocalPlayer;
+			if (localPlayer != null && rolePlayer.PlayerId == localPlayer.PlayerId)
 			{
-				this.statusModel.CurrentSelfKillTimer = Math.Min(this.statusModel.MaxSelfKillTimer, this.statusModel.CurrentSelfKillTimer + Time.deltaTime);
-			}
-		}
-		else
-		{
-			this.statusModel.CurrentMovementTime = 0.0f;
-			this.statusModel.CurrentSelfKillTimer -= Time.deltaTime;
-
-			if (this.statusModel.CurrentSelfKillTimer <= 0.0f)
-			{
-				this.statusModel.CurrentSelfKillTimer = 0.0f;
-				if (!this.statusModel.HasExploded)
-				{
-					this.statusModel.HasExploded = true;
-					var localPlayer = PlayerControl.LocalPlayer;
-					if (localPlayer != null && rolePlayer.PlayerId == localPlayer.PlayerId)
-					{
-						try
-						{
-							Player.RpcUncheckMurderPlayer(
-								rolePlayer.PlayerId,
-								rolePlayer.PlayerId,
-								byte.MaxValue);
-						}
-						catch (Exception ex)
-						{
-							Logging.Debug($"Addict RpcUncheckMurderPlayer error: {ex.Message}");
-						}
-					}
-				}
+				Player.RpcUncheckMurderPlayer(
+					rolePlayer.PlayerId,
+					rolePlayer.PlayerId,
+					byte.MaxValue);
 			}
 		}
 
@@ -177,22 +131,9 @@ public sealed class Addict :
 	{
 		var loader = this.Loader;
 
-		try
-		{
-			if (ExtremeRolesPlugin.Instance?.Provider != null)
-			{
-				var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetService<LiberalDefaultOptionLoader>();
-				if (liberalOption != null)
-				{
-					LiberalSettingOverrider.OverrideDefault(this, liberalOption);
-					this.handler = new DoveCommonAbilityHandler(liberalOption);
-				}
-			}
-		}
-		catch (Exception ex)
-		{
-			Logging.Debug($"Addict LiberalOption error: {ex.Message}");
-		}
+		var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
+		LiberalSettingOverrider.OverrideDefault(this, liberalOption);
+		this.handler = new DoveCommonAbilityHandler(liberalOption);
 
 		float maxTimer = loader.GetValue<AddictOption, float>(AddictOption.SelfKillTimerTime);
 		float recoveryTime = loader.GetValue<AddictOption, float>(AddictOption.MovementTimeToRecover);
@@ -217,17 +158,5 @@ public sealed class Addict :
 		this.timerText.transform.localPosition =
 			hudManager.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
 		this.timerText.gameObject.SetActive(true);
-	}
-
-	private static bool isCloseTo(Vector2 a, Vector2 b, float sqrEps = 0.001f)
-	{
-		float dx = a.x - b.x;
-		float dy = a.y - b.y;
-		return (dx * dx + dy * dy) <= sqrEps;
-	}
-
-	private static bool isNotCloseTo(Vector2 a, Vector2 b, float sqrEps = 0.001f)
-	{
-		return !isCloseTo(a, b, sqrEps);
 	}
 }
