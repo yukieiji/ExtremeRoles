@@ -4,6 +4,7 @@ using System.Linq;
 
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
@@ -15,11 +16,11 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 
-internal static class SingleRoleAssignHelper
+public sealed class SingleRoleAssignHelper(IModLogger logger) : ISingleRoleAssignHelper
 {
 	internal readonly record struct IdedSingleSpawnData(int RoleId, SingleRoleSpawnData Data);
 
-	public static void AddSingleExtremeRoleAssignDataFromTeamAndPlayer(
+	public void AddSingleExtremeRoleAssignDataFromTeamAndPlayer(
 		in PreparationData data,
 		ExtremeRoleType team,
 		in IReadOnlyList<VanillaRolePlayerAssignData> targetPlayer,
@@ -47,8 +48,7 @@ internal static class SingleRoleAssignHelper
 
 		foreach (var player in shuffledTargetPlayer)
 		{
-			Logging.Debug(
-				$"-------------------AssignToPlayer:{player.PlayerName}-------------------");
+			logger.LogTrace($"-------------------AssignToPlayer:{player.PlayerName}-------------------");
 			VanillaRolePlayerAssignData? removePlayer = null;
 
 			RoleTypes vanillaRoleId = player.Role;
@@ -69,7 +69,7 @@ internal static class SingleRoleAssignHelper
 					new PlayerToSingleRoleAssignData(
 						player.PlayerId, (int)vanillaRoleId,
 						data.Assign.ControlId));
-				Logging.Debug($"---AssignRole:{vanillaRoleId}---");
+				logger.LogTrace($"---AssignRole:{vanillaRoleId}---");
 			}
 
 			if (data.Limit.CanSpawn(team) &&
@@ -89,7 +89,7 @@ internal static class SingleRoleAssignHelper
 					removePlayer = player;
 					shuffledSpawnCheckRoleId.RemoveAt(i);
 
-					Logging.Debug($"---AssignRole:{intedRoleId}---");
+					logger.LogTrace($"---AssignRole:{intedRoleId}---");
 
 					target.Data.ReduceSpawnNum();
 
@@ -103,7 +103,7 @@ internal static class SingleRoleAssignHelper
 				}
 			}
 
-			Logging.Debug($"-------------------AssignEnd-------------------");
+			logger.LogTrace($"-------------------AssignEnd-------------------");
 			if (removePlayer.HasValue)
 			{
 				data.Assign.RemvePlayer(removePlayer.Value);
@@ -111,7 +111,7 @@ internal static class SingleRoleAssignHelper
 		}
 	}
 
-	public static IReadOnlyList<IdedSingleSpawnData> CreateSingleRoleIdData(
+	internal static IReadOnlyList<IdedSingleSpawnData> CreateSingleRoleIdData(
 		in IReadOnlyDictionary<int, SingleRoleSpawnData> spawnData)
 	{
 		var result = new List<IdedSingleSpawnData>();
@@ -132,7 +132,7 @@ internal static class SingleRoleAssignHelper
 		return result;
 	}
 
-	public static IEnumerable<VanillaRolePlayerAssignData> GetAssignablePlayer(PlayerRoleAssignData assignData, ExtremeRoleType targetTeam)
+	public IEnumerable<VanillaRolePlayerAssignData> GetAssignablePlayer(PlayerRoleAssignData assignData, ExtremeRoleType targetTeam)
 	{
 		foreach (var player in assignData.GetCanCrewmateAssignPlayer())
 		{

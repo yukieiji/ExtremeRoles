@@ -1,8 +1,5 @@
-using ExtremeRoles.Module.RoleAssign;
-
 namespace ExtremeRoles.Module.Interface;
 
-public interface IImpostorSingleRoleAssignDataBuilder
+public interface IImpostorSingleRoleAssignDataBuilder : ISingleRoleAssignDataBuilderBase
 {
-	public void Build(in PreparationData data);
 }
