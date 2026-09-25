@@ -1,11 +1,14 @@
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.GameMode.RoleSelector;
-using Microsoft.Extensions.DependencyInjection;
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Liberal;
+
+public enum SpecialMilitantOption
+{
+	UseVent = 0,
+}
 
 public sealed class SpecialMilitant : SingleRoleBase
 {
@@ -16,12 +19,28 @@ public sealed class SpecialMilitant : SingleRoleBase
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-
+		factory.CreateBoolOption(SpecialMilitantOption.UseVent, false);
 	}
 
 	protected override void RoleSpecificInit()
 	{
-		var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
-		LiberalSettingOverrider.OverrideDefault(this, liberalOption);
+		var loader = this.Loader;
+		this.UseVent = loader.GetValue<SpecialMilitantOption, bool>(SpecialMilitantOption.UseVent);
+
+		this.HasOtherKillCool = loader.GetValue<KillerCommonOption, bool>(
+			KillerCommonOption.HasOtherKillCool);
+		if (this.HasOtherKillCool)
+		{
+			this.KillCoolTime = loader.GetValue<KillerCommonOption, float>(
+				KillerCommonOption.KillCoolDown);
+		}
+
+		this.HasOtherKillRange = loader.GetValue<KillerCommonOption, bool>(
+			KillerCommonOption.HasOtherKillRange);
+		if (this.HasOtherKillRange)
+		{
+			this.KillRange = loader.GetValue<KillerCommonOption, int>(
+				KillerCommonOption.KillRange);
+		}
 	}
 }

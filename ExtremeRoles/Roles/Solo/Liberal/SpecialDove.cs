@@ -1,12 +1,16 @@
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Roles.API.Interface;
-using Microsoft.Extensions.DependencyInjection;
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Liberal;
+
+public enum SpecialDoveOption
+{
+	UseVent = 0,
+	TaskCompletedMoney,
+}
 
 public sealed class SpecialDove : SingleRoleBase, IRoleUpdate
 {
@@ -34,14 +38,16 @@ public sealed class SpecialDove : SingleRoleBase, IRoleUpdate
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-
+		factory.CreateBoolOption(SpecialDoveOption.UseVent, false);
+		factory.CreateIntOption(SpecialDoveOption.TaskCompletedMoney, 5, 1, 1000, 1);
 	}
 
 	protected override void RoleSpecificInit()
 	{
-		var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
-		LiberalSettingOverrider.OverrideDefault(this, liberalOption);
+		var loader = this.Loader;
+		this.UseVent = loader.GetValue<SpecialDoveOption, bool>(SpecialDoveOption.UseVent);
+		float taskDelta = loader.GetValue<SpecialDoveOption, int>(SpecialDoveOption.TaskCompletedMoney);
 
-		this.handler = new DoveCommonAbilityHandler(liberalOption);
+		this.handler = new DoveCommonAbilityHandler(taskDelta, 0.0f);
 	}
 }
