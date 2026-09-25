@@ -6,14 +6,15 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Liberal;
 
-public enum SpecialDoveOption
-{
-	UseVent = 0,
-	TaskCompletedMoney,
-}
 
 public sealed class SpecialDove : SingleRoleBase, IRoleUpdate
 {
+	public enum SpecialDoveOption
+	{
+		UseVent = 0,
+		TaskCompletedMoney,
+	}
+
 	private DoveCommonAbilityHandler? handler;
 
 	public SpecialDove() : base(

@@ -5,13 +5,13 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Liberal;
 
-public enum SpecialMilitantOption
-{
-	UseVent = 0,
-}
-
 public sealed class SpecialMilitant : SingleRoleBase
 {
+	public enum SpecialMilitantOption
+	{
+		UseVent = 0,
+	}
+
 	public SpecialMilitant() : base(
 		RoleArgs.BuildLiberalMilitant(ExtremeRoleId.SpecialMilitant))
 	{
@@ -19,6 +19,7 @@ public sealed class SpecialMilitant : SingleRoleBase
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
+		CreateKillerOption(factory);
 		factory.CreateBoolOption(SpecialMilitantOption.UseVent, false);
 	}
 
