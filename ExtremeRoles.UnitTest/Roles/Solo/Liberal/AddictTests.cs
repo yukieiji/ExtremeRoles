@@ -4,6 +4,7 @@ using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Liberal;
+using HarmonyLib;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace ExtremeRoles.UnitTest.Roles.Solo.Liberal;
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class AddictTests
 {
+	private static Harmony? harmony;
+
 	public AddictTests()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
@@ -36,11 +39,44 @@ public class AddictTests
 		SetupGameOptionsManagerMock();
 		SetupShipStatusMock();
 
+		if (harmony == null)
+		{
+			harmony = new Harmony("AddictTestsPatch");
+			var origSub = typeof(Vector2).GetMethod("op_Subtraction", new[] { typeof(Vector2), typeof(Vector2) });
+			var prefixSub = typeof(Vector2TestPatch).GetMethod(nameof(Vector2TestPatch.OpSubtractionPrefix));
+			if (origSub != null && prefixSub != null)
+			{
+				harmony.Patch(origSub, prefix: new HarmonyMethod(prefixSub));
+			}
+
+			var origSqrMag = typeof(Vector2).GetProperty("sqrMagnitude")?.GetGetMethod();
+			var prefixSqrMag = typeof(Vector2TestPatch).GetMethod(nameof(Vector2TestPatch.SqrMagnitudePrefix));
+			if (origSqrMag != null && prefixSqrMag != null)
+			{
+				harmony.Patch(origSqrMag, prefix: new HarmonyMethod(prefixSqrMag));
+			}
+		}
+
 		ExtremeRoleManager.GameRole.Clear();
 
 		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
 			.Returns((string id, string defaultStr, Il2CppSystem.Object[] parts) => defaultStr ?? id);
+	}
+
+	public static class Vector2TestPatch
+	{
+		public static bool OpSubtractionPrefix(Vector2 a, Vector2 b, ref Vector2 __result)
+		{
+			__result = new Vector2(a.x - b.x, a.y - b.y);
+			return false;
+		}
+
+		public static bool SqrMagnitudePrefix(Vector2 __instance, ref float __result)
+		{
+			__result = __instance.x * __instance.x + __instance.y * __instance.y;
+			return false;
+		}
 	}
 
 	private static void SetupMinigameMock(Minigame? minigame)
@@ -109,8 +145,6 @@ public class AddictTests
 		var status = addict.Status as AddictStatusModel;
 		Assert.NotNull(status);
 
-		Assert.Equal(15.0f, status.MaxSelfKillTimer);
-		Assert.Equal(5.0f, status.MovementTimeToRecover);
 		Assert.Equal(15.0f, status.CurrentSelfKillTimer);
 	}
 

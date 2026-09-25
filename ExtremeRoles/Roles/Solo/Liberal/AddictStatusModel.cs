@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Roles.API.Interface.Status;
 
 #nullable enable
@@ -11,8 +12,8 @@ public sealed class AddictStatusModel(float maxTimer, float recoveryTime) : ISta
 {
 	private static readonly Vector2 defaultPos = new Vector2(100.0f, 100.0f);
 
-	public float MaxSelfKillTimer { get; } = maxTimer;
-	public float MovementTimeToRecover { get; } = recoveryTime;
+	private float maxSelfKillTimer = maxTimer;
+	private float movementTimeToRecover = recoveryTime;
 
 	public float CurrentSelfKillTimer { get; private set; } = maxTimer;
 	private float currentMovementTime = 0.0f;
@@ -21,7 +22,7 @@ public sealed class AddictStatusModel(float maxTimer, float recoveryTime) : ISta
 
 	public void Reset()
 	{
-		this.CurrentSelfKillTimer = this.MaxSelfKillTimer;
+		this.CurrentSelfKillTimer = this.maxSelfKillTimer;
 		this.currentMovementTime = 0.0f;
 		this.prevPlayerPos = defaultPos;
 	}
@@ -35,28 +36,24 @@ public sealed class AddictStatusModel(float maxTimer, float recoveryTime) : ISta
 
 		var curPos = rolePlayer.GetTruePosition();
 
-		float initDx = this.prevPlayerPos.x - defaultPos.x;
-		float initDy = this.prevPlayerPos.y - defaultPos.y;
-		if ((initDx * initDx + initDy * initDy) <= 0.01f)
+		if (this.prevPlayerPos.IsCloseTo(defaultPos, 0.01f))
 		{
 			this.prevPlayerPos = curPos;
 		}
 
-		float dx = this.prevPlayerPos.x - curPos.x;
-		float dy = this.prevPlayerPos.y - curPos.y;
 		bool isMoving = rolePlayer.CanMove &&
 			Minigame.Instance == null &&
 			!rolePlayer.inVent &&
-			(dx * dx + dy * dy) > 0.001f;
+			this.prevPlayerPos.IsNotCloseTo(curPos);
 
 		this.prevPlayerPos = curPos;
 
 		if (isMoving)
 		{
 			this.currentMovementTime += deltaTime;
-			if (this.currentMovementTime >= this.MovementTimeToRecover)
+			if (this.currentMovementTime >= this.movementTimeToRecover)
 			{
-				this.CurrentSelfKillTimer = Math.Min(this.MaxSelfKillTimer, this.CurrentSelfKillTimer + deltaTime);
+				this.CurrentSelfKillTimer = Math.Min(this.maxSelfKillTimer, this.CurrentSelfKillTimer + deltaTime);
 			}
 		}
 		else
