@@ -60,33 +60,25 @@ public sealed class Addict :
 		bool explode = this.statusModel.UpdateTimer(rolePlayer, Time.deltaTime);
 		if (explode)
 		{
-			var localPlayer = PlayerControl.LocalPlayer;
-			if (localPlayer != null && rolePlayer.PlayerId == localPlayer.PlayerId)
-			{
-				Player.RpcUncheckMurderPlayer(
-					rolePlayer.PlayerId,
-					rolePlayer.PlayerId,
-					byte.MaxValue);
-			}
+			Player.RpcUncheckMurderPlayer(
+				rolePlayer.PlayerId,
+				rolePlayer.PlayerId,
+				byte.MaxValue);
 		}
 
-		var currentLocalPlayer = PlayerControl.LocalPlayer;
-		if (currentLocalPlayer != null && rolePlayer.PlayerId == currentLocalPlayer.PlayerId)
+		if (this.timerText == null &&
+			HudManager.Instance != null &&
+			HudManager.Instance.KillButton != null &&
+			HudManager.Instance.KillButton.cooldownTimerText != null &&
+			HudManager.Instance.UseButton != null)
 		{
-			if (this.timerText == null &&
-				HudManager.Instance != null &&
-				HudManager.Instance.KillButton != null &&
-				HudManager.Instance.KillButton.cooldownTimerText != null &&
-				HudManager.Instance.UseButton != null)
-			{
-				createTimerText();
-			}
+			createTimerText();
+		}
 
-			if (this.timerText != null)
-			{
-				this.timerText.gameObject.SetActive(true);
-				this.timerText.text = Tr.GetString("addictSelfKill", Mathf.CeilToInt(this.statusModel.CurrentSelfKillTimer));
-			}
+		if (this.timerText != null)
+		{
+			this.timerText.gameObject.SetActive(true);
+			this.timerText.text = Tr.GetString("addictSelfKill", Mathf.CeilToInt(this.statusModel.CurrentSelfKillTimer));
 		}
 	}
 
