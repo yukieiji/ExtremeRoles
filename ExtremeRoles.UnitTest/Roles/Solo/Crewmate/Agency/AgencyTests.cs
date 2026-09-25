@@ -19,6 +19,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
+using HarmonyLib;
 using Hazel;
 using Il2CppInterop.Runtime.InteropTypes;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
@@ -31,10 +32,26 @@ using Xunit;
 
 namespace ExtremeRoles.UnitTest.Roles.Solo.Crewmate.AgencyTests;
 
+public static class PlayerGetClosestPlayerInRangePatch
+{
+	public static PlayerControl? OverrideTarget;
+
+	public static bool Prefix(ref PlayerControl? __result)
+	{
+		if (OverrideTarget != null)
+		{
+			__result = OverrideTarget;
+			return false;
+		}
+		return true;
+	}
+}
+
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class AgencyTests
 {
 	private readonly Mock<AmongUsClient> mockClient;
+	private static bool isHarmonyPatched = false;
 
 	public AgencyTests()
 	{
@@ -43,6 +60,7 @@ public class AgencyTests
 		SetupVector2Helpers();
 		SetupTaskHelpers();
 		SetupPhysicsHelpers();
+		SetupHarmony();
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
@@ -53,6 +71,9 @@ public class AgencyTests
 		var mockLocalTransform = new Mock<Transform>(IntPtr.Zero);
 		localPlayerMock.SetupGet(p => p.transform).Returns(mockLocalTransform.Object);
 		var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		mockData.SetupGet(d => d.Object).Returns(localPlayerMock.Object);
+		mockData.SetupGet(d => d.IsDead).Returns(false);
+		mockData.SetupGet(d => d.Disconnected).Returns(false);
 		localPlayerMock.SetupGet(p => p.Data).Returns(mockData.Object);
 
 		mockClient = MockSetupHelper.SetupAmongUsClientMock();
@@ -93,6 +114,22 @@ public class AgencyTests
 		}
 
 		SetupShipStatusMock();
+	}
+
+	private static void SetupHarmony()
+	{
+		if (!isHarmonyPatched)
+		{
+			var harmony = new Harmony("test.agency.getclosestplayer");
+			var targetMethod = typeof(Player).GetMethod(nameof(Player.GetClosestPlayerInRange), BindingFlags.Public | BindingFlags.Static);
+			var prefixMethod = typeof(PlayerGetClosestPlayerInRangePatch).GetMethod(nameof(PlayerGetClosestPlayerInRangePatch.Prefix), BindingFlags.Public | BindingFlags.Static);
+			if (targetMethod != null && prefixMethod != null)
+			{
+				harmony.Patch(targetMethod, prefix: new HarmonyMethod(prefixMethod));
+			}
+			isHarmonyPatched = true;
+		}
+		PlayerGetClosestPlayerInRangePatch.OverrideTarget = null;
 	}
 
 	private static void SetupTaskHelpers()
@@ -285,6 +322,16 @@ public class AgencyTests
 			.Returns((Action action) => action != null ? new UnityAction(IntPtr.Zero) : null!);
 		MockUnityActionop_ImplicitHelper.Instance = mockUnityActionImplicit.Object;
 
+		var mockAssetBundle = new Mock<AssetBundle>(IntPtr.Zero);
+		var mockAudioClip = new Mock<AudioClip>(IntPtr.Zero);
+		mockAssetBundle.Setup(b => b.LoadAsset(It.IsAny<string>(), It.IsAny<Il2CppSystem.Type>())).Returns(mockAudioClip.Object);
+
+		var field = typeof(UnityObjectLoader).GetField("cachedBundle", BindingFlags.NonPublic | BindingFlags.Static);
+		if (field?.GetValue(null) is Dictionary<string, AssetBundle> dict)
+		{
+			dict[ObjectPath.SoundEffect] = mockAssetBundle.Object;
+		}
+
 		var mockSoundManager = new Mock<SoundManager>(IntPtr.Zero);
 		var mockAudioSource = new Mock<AudioSource>(IntPtr.Zero);
 		mockSoundManager.Setup(s => s.PlaySound(It.IsAny<AudioClip>(), It.IsAny<bool>(), It.IsAny<float>(), null))
@@ -400,20 +447,18 @@ public class AgencyTests
 		// Arrange
 		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
 		localPlayerMock.SetupGet(p => p.CanMove).Returns(true);
-		var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
-		mockData.SetupGet(d => d.IsDead).Returns(false);
-		mockData.SetupGet(d => d.Disconnected).Returns(false);
-		localPlayerMock.SetupGet(p => p.Data).Returns(mockData.Object);
+
+		var mockLocalData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		mockLocalData.SetupGet(d => d.Object).Returns(localPlayerMock.Object);
+		mockLocalData.SetupGet(d => d.IsDead).Returns(false);
+		mockLocalData.SetupGet(d => d.Disconnected).Returns(false);
+		localPlayerMock.SetupGet(p => p.Data).Returns(mockLocalData.Object);
 
 		var agency = new Agency();
 		agency.CreateRoleAllOption();
 		agency.Initialize();
 
-		var mockAllList = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>>(IntPtr.Zero);
-		mockAllList.SetupGet(l => l.Count).Returns(0);
-
-		var mockGameData = GameData.Instance;
-		Mock.Get(mockGameData).SetupGet(g => g.AllPlayers).Returns(mockAllList.Object);
+		PlayerGetClosestPlayerInRangePatch.OverrideTarget = null;
 
 		// Act
 		bool isUse = agency.IsAbilityUse();
@@ -421,6 +466,41 @@ public class AgencyTests
 		// Assert
 		Assert.False(isUse);
 		Assert.Equal(byte.MaxValue, agency.TargetPlayer);
+	}
+
+	[Fact]
+	public void IsAbilityUse_WhenTargetInRange_ReturnsTrueAndSetsTargetPlayer()
+	{
+		// Arrange
+		byte targetId = 2;
+
+		var agency = new Agency();
+		agency.CreateRoleAllOption();
+		agency.Initialize();
+
+		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
+		localPlayerMock.SetupGet(p => p.CanMove).Returns(true);
+
+		var mockLocalData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		mockLocalData.SetupGet(d => d.Object).Returns(localPlayerMock.Object);
+		mockLocalData.SetupGet(d => d.IsDead).Returns(false);
+		mockLocalData.SetupGet(d => d.Disconnected).Returns(false);
+		localPlayerMock.SetupGet(p => p.Data).Returns(mockLocalData.Object);
+
+		var mockTargetPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+		mockTargetPlayer.SetupGet(p => p.PlayerId).Returns(targetId);
+
+		PlayerGetClosestPlayerInRangePatch.OverrideTarget = mockTargetPlayer.Object;
+
+		// Act
+		bool isUse = agency.IsAbilityUse();
+
+		// Assert
+		Assert.True(isUse);
+		Assert.Equal(targetId, agency.TargetPlayer);
+
+		// Clean up
+		PlayerGetClosestPlayerInRangePatch.OverrideTarget = null;
 	}
 
 	[Fact]
