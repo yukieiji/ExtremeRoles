@@ -55,11 +55,12 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 	{
+		string baseName = base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 		if (this.targetedPlayers.Contains(targetPlayerId))
 		{
-			return Design.ColoredString(this.Core.Color, " ★");
+			return baseName + Design.ColoredString(this.Core.Color, " ★");
 		}
-		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+		return baseName;
 	}
 
 	public void CreateAbility()
@@ -73,6 +74,11 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 
 	public bool UseAbility()
 	{
+		if (!this.allowMultipleTargets && this.targetedPlayers.Count > 0)
+		{
+			return false;
+		}
+
 		if (this.currentTarget != byte.MaxValue)
 		{
 			this.targetedPlayers.Add(this.currentTarget);
@@ -118,30 +124,17 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 			int completedCount = 0;
 			if (targetPlayerInfo.Tasks != null && targetPlayerInfo.Tasks.Count > 0)
 			{
-				var shuffleTaskIndex = Enumerable.Range(0, targetPlayerInfo.Tasks.Count)
-					.OrderBy(_ => RandomGenerator.Instance.Next());
-
-				List<int> getTaskId = new();
-
-				foreach (int i in shuffleTaskIndex)
+				foreach (var task in targetPlayerInfo.Tasks)
 				{
 					if (completedCount >= this.maxDisguiseTaskNum)
 					{
 						break;
 					}
 
-					if (targetPlayerInfo.Tasks[i].Complete)
+					if (!task.Complete)
 					{
-						continue;
+						completedCount++;
 					}
-
-					completedCount++;
-					getTaskId.Add((int)targetPlayerInfo.Tasks[i].Id);
-				}
-
-				if (getTaskId.Count > 0)
-				{
-					Agency.TakeTargetPlayerTask(targetId, getTaskId);
 				}
 			}
 
