@@ -172,6 +172,7 @@ public enum ExtremeRoleId : int
 	SpecialDove,
 	SpecialMilitant,
 	Embezzle,
+	Addict,
 
 	Xion,
 }
@@ -399,6 +400,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.SpecialDove    , new SpecialDove()},
 			{(int)ExtremeRoleId.SpecialMilitant, new SpecialMilitant()},
 			{(int)ExtremeRoleId.Embezzle       , new Embezzle()},
+			{(int)ExtremeRoleId.Addict         , new Addict()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
