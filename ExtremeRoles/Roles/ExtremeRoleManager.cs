@@ -165,7 +165,6 @@ public enum ExtremeRoleId : int
 	Surrogator,
 	Knight,
 	Pawn,
-
 	Punisher,
 
 	Leader,
@@ -208,9 +207,6 @@ public enum RoleGameOverReason
 
     AliceKilledByImposter,
     AliceKillAllOther,
-
-    PunisherKilledImpostor,
-    PunisherKillAllOther,
 
     JackalKillAllOther,
 
@@ -255,6 +251,9 @@ public enum RoleGameOverReason
 	MonikaThisGameIsMine,
 	MonikaIamTheOnlyOne,
 
+	PunisherKilledImpostor,
+	PunisherKillAllOther,
+
 	AllJackalWin,
 	AllYandereWin,
 	AllQueenWin,
@@ -270,7 +269,6 @@ public enum NeutralSeparateTeam
 
     Jackal = 0,
     Alice,
-    Punisher,
     Lover,
     Missionary,
     Yandere,
@@ -282,6 +280,7 @@ public enum NeutralSeparateTeam
     Kids,
 	Tucker,
 	Monika,
+	Punisher,
 
 	JackalSub,
 	YandereSub,

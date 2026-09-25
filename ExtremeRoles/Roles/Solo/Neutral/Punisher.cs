@@ -1,14 +1,16 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
+
 
 #nullable enable
 
@@ -28,7 +30,8 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 	private float taskKillCoolReduce;
 	private float nonImpostorKillCoolIncrease;
 
-	private HashSet<uint> completedTasks = new();
+	private HashSet<uint> completedTasks = [];
+	private byte? winRolePlayerId;
 
 	public Punisher() : base(
 		RoleArgs.BuildNeutral(
@@ -46,9 +49,12 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 			return false;
 		}
 
+		this.winRolePlayerId = null;
+
 		if (targetRole.IsImpostor())
 		{
-			this.IsWin = true;
+			// 勝利予定者に組み込み
+			this.winRolePlayerId = rolePlayer.PlayerId;
 			return true;
 		}
 		else
@@ -63,7 +69,7 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (rolePlayer == null || rolePlayer.Data == null || rolePlayer.Data.Tasks == null)
+		if (rolePlayer.IsInValid() || rolePlayer.Data.Tasks == null)
 		{
 			return;
 		}
@@ -71,9 +77,10 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 		int currentCompletedCount = 0;
 		List<uint> newlyCompletedTaskIds = new();
 
-		for (int i = 0; i < rolePlayer.Data.Tasks.Count; ++i)
+		var allTask = rolePlayer.Data.Tasks;
+
+		foreach (var task in allTask.GetFastEnumerator())
 		{
-			var task = rolePlayer.Data.Tasks[i];
 			if (!task.Complete)
 			{
 				continue;
@@ -111,15 +118,34 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 			}
 		}
 
-		// 無限タスク生成: 全てのタスクが完了したらランダムなショートタスクを補充する
-		if (currentCompletedCount == rolePlayer.Data.Tasks.Count && rolePlayer.Data.Tasks.Count > 0)
+		// 無限タスク生成: 全てのタスクが完了したらランダムな同じタイプのタスクを補充する
+		if (currentCompletedCount == allTask.Count && allTask.Count > 0)
 		{
-			int newTaskId = GameSystem.GetRandomShortTaskId();
-			uint nextId = (uint)rolePlayer.Data.Tasks.Count;
-			if (GameSystem.SetPlayerNewTask(rolePlayer, (byte)newTaskId, nextId))
+			for (int i = 0; i < allTask.Count; ++i)
 			{
-				rolePlayer.Data.Tasks[rolePlayer.Data.Tasks.Count - 1] = new((byte)newTaskId, nextId);
-				rolePlayer.Data.MarkDirty();
+				var task = allTask[i];
+				int taskId = task.TypeId;
+				int newTaskId = 0;
+				if (ShipStatus.Instance.CommonTasks.Any(
+					(NormalPlayerTask t) => t.Index == taskId))
+				{
+					newTaskId = GameSystem.GetRandomCommonTaskId();
+				}
+				else if (ShipStatus.Instance.LongTasks.Any(
+					(NormalPlayerTask t) => t.Index == taskId))
+				{
+					newTaskId = GameSystem.GetRandomLongTask();
+				}
+				else if (ShipStatus.Instance.ShortTasks.Any(
+					(NormalPlayerTask t) => t.Index == taskId))
+				{
+					newTaskId = GameSystem.GetRandomShortTaskId();
+				}
+				else
+				{
+					continue;
+				}
+				GameSystem.RpcReplaceNewTask(rolePlayer.PlayerId, i, newTaskId);
 			}
 		}
 	}
@@ -129,9 +155,10 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 
 	public void OnEndKill()
 	{
-		if (this.IsWin && PlayerControl.LocalPlayer != null)
+		// 勝利予定者で合った場合にここに来る => sourceがwinRolePlayerIdなので全体RPCを飛ばして勝利にする
+		if (this.winRolePlayerId.HasValue)
 		{
-			ExtremeRolesPlugin.ShipState.RpcRoleIsWin(PlayerControl.LocalPlayer.PlayerId);
+			ExtremeRolesPlugin.ShipState.RpcRoleIsWin(this.winRolePlayerId.Value);
 		}
 	}
 
@@ -144,14 +171,14 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 			Option.RequiredTaskNumToKill,
 			2, 0, 10, 1);
 
-		factory.CreateFloatOption(
+		factory.CreateIntOption(
 			Option.TaskCompletionKillCoolReduce,
-			5.0f, 0.0f, 120.0f, 1.0f,
+			5, 0, 120, 1,
 			format: OptionUnit.Second);
 
-		factory.CreateFloatOption(
+		factory.CreateIntOption(
 			Option.NonImpostorKillCoolIncrease,
-			10.0f, 0.0f, 120.0f, 1.0f,
+			10, 0, 120, 1,
 			format: OptionUnit.Second);
 	}
 
@@ -168,6 +195,13 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 		this.nonImpostorKillCoolIncrease = loader.GetValue<Option, float>(
 			Option.NonImpostorKillCoolIncrease);
 
+		if (!this.HasOtherKillCool)
+		{
+			this.HasOtherKillCool = true;
+			this.KillCoolTime = Player.DefaultKillCoolTime;
+		}
+
+		this.winRolePlayerId = null;
 		this.completedTasks.Clear();
 		this.IsWin = false;
 		this.CanKill = this.requiredTaskNum == 0;
