@@ -31,6 +31,9 @@ public sealed class Militant : SingleRoleBase
 		}
 	}
 
+	public override string GetRoleTag()
+		=> "Mi";
+
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 

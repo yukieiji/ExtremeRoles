@@ -200,9 +200,6 @@
   <data name="Addict" xml:space="preserve">
     <value>成瘾者</value>
   </data>
-  <data name="AddictSuffix" xml:space="preserve">
-    <value>Ad</value>
-  </data>
   <data name="AddictFullDescription" xml:space="preserve">
     <value>类型：和平派
 
