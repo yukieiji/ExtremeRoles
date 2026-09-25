@@ -70,6 +70,11 @@ public partial class ExtremeRolesPlugin
 			.AddTransient<MockVanillaRolePlayerAssignDataProvider>();
 
 		collection
+			.AddTransient<ISingleRoleAssignHelper, SingleRoleAssignHelper>()
+			.AddTransient<IImpostorSingleRoleAssignDataBuilder, ImpostorSingleRoleAssignDataBuilder>()
+			.AddTransient<INeutralSingleRoleAssignDataBuilder, NeutralSingleRoleAssignDataBuilder>()
+			.AddTransient<ILiberalSingleRoleAssignDataBuilder, LiberalSingleRoleAssignDataBuilder>()
+			.AddTransient<ICrewmateSingleRoleAssignDataBuilder, CrewmateSingleRoleAssignDataBuilder>()
 			.AddTransient<IRoleAssignDataBuilder, ExtremeRoleAssignDataBuilder>()
 			.AddTransient<IRoleAssignDataBuildBehaviour, CombinationRoleAssignDataBuilder>()
 			.AddTransient<IRoleAssignDataBuildBehaviour, SingleRoleAssignDataBuilder>()
