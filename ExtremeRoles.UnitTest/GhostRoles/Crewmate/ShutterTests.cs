@@ -29,6 +29,8 @@ public sealed class ShutterTests : IDisposable
     public ShutterTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupObjectImplicitHelpers();
+        MockSetupHelper.SetupOptionManager();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
         MeetingReporter.Reset();

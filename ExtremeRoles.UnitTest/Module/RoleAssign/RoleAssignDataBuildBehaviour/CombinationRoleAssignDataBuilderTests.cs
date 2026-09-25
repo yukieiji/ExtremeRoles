@@ -42,10 +42,7 @@ public class CombinationRoleAssignDataBuilderTests
         mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockOptionsMgr.Object);
         MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
 
-        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
-        {
-            OptionCreator.Create();
-        }
+        MockSetupHelper.SetupOptionManager();
 
         if (ExtremeGameModeManager.Instance == null)
         {

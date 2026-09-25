@@ -28,6 +28,7 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 	private static void ResetState()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupPaletteHelpers();
 		MockSetupHelper.SetupTimeHelpers();
 		MockSetupHelper.SetupPlayerControlMocks();
 	}

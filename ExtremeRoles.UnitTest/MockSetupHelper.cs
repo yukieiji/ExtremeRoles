@@ -27,15 +27,12 @@ public static class MockSetupHelper
     public static void SetupUnityCommonMocks()
     {
         SetupColorHelpers();
-        SetupPaletteHelpers();
         SetupMathfHelpers();
-        SetupCompatModManager();
         SetupUnityObjectOperators();
         SetupVector2Helpers();
         SetupVector3Helpers();
         SetupTimeHelpers();
         SetupRandomHelpers();
-        SetupJsonHelpers();
         SetupGameObjectExtensionsHelpers();
     }
 
@@ -89,16 +86,25 @@ public static class MockSetupHelper
 
     public static void SetupAprilFoolsHelpers()
     {
-        if (MockAprilFoolsModeget_IsAprilFoolsModeToggledOnHelper.Instance == null)
-        {
-            var mockAprilFools = new Mock<MockAprilFoolsModeget_IsAprilFoolsModeToggledOnHelper>();
-            mockAprilFools.Setup(x => x.Invoke()).Returns(false);
-            MockAprilFoolsModeget_IsAprilFoolsModeToggledOnHelper.Instance = mockAprilFools.Object;
-        }
+        var mockAprilFools = new Mock<MockAprilFoolsModeget_IsAprilFoolsModeToggledOnHelper>();
+        mockAprilFools.Setup(x => x.Invoke()).Returns(false);
+        MockAprilFoolsModeget_IsAprilFoolsModeToggledOnHelper.Instance = mockAprilFools.Object;
+
+        var mockLong = new Mock<MockAprilFoolsModeShouldLongAroundHelper>();
+        mockLong.Setup(x => x.Invoke()).Returns(false);
+        MockAprilFoolsModeShouldLongAroundHelper.Instance = mockLong.Object;
+
+        var mockHorse = new Mock<MockAprilFoolsModeShouldHorseAroundHelper>();
+        mockHorse.Setup(x => x.Invoke()).Returns(false);
+        MockAprilFoolsModeShouldHorseAroundHelper.Instance = mockHorse.Object;
     }
 
     public static void SetupOptionManager()
     {
+        SetupPaletteHelpers();
+        SetupCompatModManager();
+        SetupAmongUsClientMock();
+        SetupLobbyMock();
         if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
         {
             var plugin = SetupMockExtremeRolePlugin();
@@ -506,7 +512,7 @@ public static class MockSetupHelper
 		}
 
 		var providerField = typeof(ExtremeRolesPlugin).GetField("<Provider>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
-		if (providerField != null && providerField.GetValue(plugin) == null)
+		if (providerField != null)
 		{
 			var provider = ExtremeRolesPlugin.BuildProvider();
 			providerField.SetValue(plugin, provider);
@@ -658,22 +664,36 @@ public static class MockSetupHelper
 
     public static void SetupPaletteHelpers()
     {
-        MockPaletteget_CrewmateBlueHelper.Instance = new Mock<MockPaletteget_CrewmateBlueHelper>().Object;
-        MockPaletteget_ImpostorRedHelper.Instance = new Mock<MockPaletteget_ImpostorRedHelper>().Object;
-        MockPaletteget_WhiteHelper.Instance = new Mock<MockPaletteget_WhiteHelper>().Object;
-        MockPaletteget_ClearWhiteHelper.Instance = new Mock<MockPaletteget_ClearWhiteHelper>().Object;
-        MockPaletteget_BlackHelper.Instance = new Mock<MockPaletteget_BlackHelper>().Object;
+        var mockCrewmateBlue = new Mock<MockPaletteget_CrewmateBlueHelper>();
+        mockCrewmateBlue.Setup(x => x.Invoke()).Returns(new Color32(115, 165, 255, 255));
+        MockPaletteget_CrewmateBlueHelper.Instance = mockCrewmateBlue.Object;
+
+        var mockImpostorRed = new Mock<MockPaletteget_ImpostorRedHelper>();
+        mockImpostorRed.Setup(x => x.Invoke()).Returns(new Color32(255, 25, 25, 255));
+        MockPaletteget_ImpostorRedHelper.Instance = mockImpostorRed.Object;
+
+        var mockWhite = new Mock<MockPaletteget_WhiteHelper>();
+        mockWhite.Setup(x => x.Invoke()).Returns(new Color32(255, 255, 255, 255));
+        MockPaletteget_WhiteHelper.Instance = mockWhite.Object;
+
+        var mockClearWhite = new Mock<MockPaletteget_ClearWhiteHelper>();
+        mockClearWhite.Setup(x => x.Invoke()).Returns(new Color32(255, 255, 255, 0));
+        MockPaletteget_ClearWhiteHelper.Instance = mockClearWhite.Object;
+
+        var mockBlack = new Mock<MockPaletteget_BlackHelper>();
+        mockBlack.Setup(x => x.Invoke()).Returns(new Color32(0, 0, 0, 255));
+        MockPaletteget_BlackHelper.Instance = mockBlack.Object;
 
         var mockEnabledColor = new Mock<MockPaletteget_EnabledColorHelper>();
-        mockEnabledColor.Setup(x => x.Invoke()).Returns(new Color(1f, 1f, 1f, 1f));
+        mockEnabledColor.Setup(x => x.Invoke()).Returns(new Color32(255, 255, 255, 255));
         MockPaletteget_EnabledColorHelper.Instance = mockEnabledColor.Object;
 
         var mockDisabledClear = new Mock<MockPaletteget_DisabledClearHelper>();
-        mockDisabledClear.Setup(x => x.Invoke()).Returns(new Color(0f, 0f, 0f, 0f));
+        mockDisabledClear.Setup(x => x.Invoke()).Returns(new Color32(0, 0, 0, 0));
         MockPaletteget_DisabledClearHelper.Instance = mockDisabledClear.Object;
 
         var mockDisabledGrey = new Mock<MockPaletteget_DisabledGreyHelper>();
-        mockDisabledGrey.Setup(x => x.Invoke()).Returns(new Color(0.5f, 0.5f, 0.5f, 1f));
+        mockDisabledGrey.Setup(x => x.Invoke()).Returns(new Color32(128, 128, 128, 255));
         MockPaletteget_DisabledGreyHelper.Instance = mockDisabledGrey.Object;
     }
 

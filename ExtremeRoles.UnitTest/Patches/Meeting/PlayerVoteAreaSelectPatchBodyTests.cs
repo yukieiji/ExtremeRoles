@@ -93,6 +93,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 	private static void ResetState()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupPaletteHelpers();
 		MockSetupHelper.SetupTimeHelpers();
 		MockSetupHelper.SetupObjectImplicitHelpers();
 		MockSetupHelper.SetupLogger();

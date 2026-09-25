@@ -29,10 +29,7 @@ public class ShipGlobalOptionTests
 
     private static void EnsureShipGlobalOptionsCreated()
     {
-        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
-        {
-            OptionCreator.Create();
-        }
+        MockSetupHelper.SetupOptionManager();
     }
 
     [Fact]
