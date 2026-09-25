@@ -123,9 +123,12 @@ public sealed class Addict :
 	{
 		var loader = this.Loader;
 
-		var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
-		LiberalSettingOverrider.OverrideDefault(this, liberalOption);
-		this.handler = new DoveCommonAbilityHandler(liberalOption);
+		var liberalOption = ExtremeRolesPlugin.Instance.Provider?.GetService<LiberalDefaultOptionLoader>();
+		if (liberalOption != null)
+		{
+			LiberalSettingOverrider.OverrideDefault(this, liberalOption);
+			this.handler = new DoveCommonAbilityHandler(liberalOption);
+		}
 
 		float maxTimer = loader.GetValue<AddictOption, float>(AddictOption.SelfKillTimerTime);
 		float recoveryTime = loader.GetValue<AddictOption, float>(AddictOption.MovementTimeToRecover);
