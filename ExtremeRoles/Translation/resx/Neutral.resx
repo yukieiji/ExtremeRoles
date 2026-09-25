@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -58,27 +58,27 @@
 			: using a System.ComponentModel.TypeConverter
 			: and then encoded with base64 encoding.
 	-->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1540,5 +1540,29 @@
   </data>
   <data name="HereticMeetingButtonTaskGage" xml:space="preserve">
     <value>「緊急会議」ボタンが使用可能になる&lt;br&gt;タスク進捗率</value>
+  </data>
+  <data name="Punisher" xml:space="preserve">
+    <value>パニッシャー</value>
+  </data>
+  <data name="PunisherFullDescription" xml:space="preserve">
+    <value>キルボタンを持ち、自陣営がインポスターを「キル」すると勝利。アリスの逆パターンイメージ。&lt;br&gt;タスクを一定数行うことで、キルが可能となり、その後もタスクを完了させると、現在のキルクールが回復する。&lt;br&gt;キル以外での排除は勝利とならず、インポスター以外をキルすると、キルクールが永続増加してしまう。</value>
+  </data>
+  <data name="PunisherShortDescription" xml:space="preserve">
+    <value>インポスターをキルすると勝利</value>
+  </data>
+  <data name="PunisherIntroDescription" xml:space="preserve">
+    <value>インポスターをキルして勝利を目指せ</value>
+  </data>
+  <data name="PunisherCanUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="PunisherRequiredTaskNumToKill" xml:space="preserve">
+    <value>キルが可能になるタスク量</value>
+  </data>
+  <data name="PunisherNonImpostorKillCoolIncrease" xml:space="preserve">
+    <value>インポスター以外をキルしたときのキルクール増加量</value>
+  </data>
+  <data name="PunisherTaskCompletionKillCoolReduce" xml:space="preserve">
+    <value>タスク完了時のキルクール減少量</value>
   </data>
 </root>

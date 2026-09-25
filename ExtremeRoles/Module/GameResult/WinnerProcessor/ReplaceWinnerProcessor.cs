@@ -152,6 +152,11 @@ public sealed class ReplaceWinnerProcessor(int winGameControlId) : IWinnerProces
 				processor.ReplaceWinnerToSpecificNeutralRolePlayer(
 					ExtremeRoleId.Alice);
 				break;
+			case RoleGameOverReason.PunisherKilledImpostor:
+			case RoleGameOverReason.PunisherKillAllOther:
+				processor.ReplaceWinnerToSpecificNeutralRolePlayer(
+					ExtremeRoleId.Punisher);
+				break;
 			case RoleGameOverReason.JackalKillAllOther:
 				processor.ReplaceWinnerToSpecificNeutralRolePlayer(
 					ExtremeRoleId.Jackal, ExtremeRoleId.Sidekick);
