@@ -14,60 +14,60 @@ public sealed class AddictStatusModel(float maxTimer, float recoveryTime) : ISta
 	public float MaxSelfKillTimer { get; } = maxTimer;
 	public float MovementTimeToRecover { get; } = recoveryTime;
 
-	public float CurrentSelfKillTimer { get; internal set; } = maxTimer;
-	public float CurrentMovementTime { get; internal set; } = 0.0f;
-	public Vector2 PrevPlayerPos { get; internal set; } = defaultPos;
-	public bool HasExploded { get; internal set; } = false;
+	public float CurrentSelfKillTimer { get; private set; } = maxTimer;
+	private float currentMovementTime = 0.0f;
+	private Vector2 prevPlayerPos = defaultPos;
+	private bool hasExploded = false;
 
 	public void Reset()
 	{
 		this.CurrentSelfKillTimer = this.MaxSelfKillTimer;
-		this.CurrentMovementTime = 0.0f;
-		this.PrevPlayerPos = defaultPos;
+		this.currentMovementTime = 0.0f;
+		this.prevPlayerPos = defaultPos;
 	}
 
 	public bool UpdateTimer(PlayerControl rolePlayer, float deltaTime)
 	{
-		if (this.HasExploded || rolePlayer.IsInValid())
+		if (this.hasExploded || rolePlayer.IsInValid())
 		{
 			return false;
 		}
 
 		var curPos = rolePlayer.GetTruePosition();
 
-		float initDx = this.PrevPlayerPos.x - defaultPos.x;
-		float initDy = this.PrevPlayerPos.y - defaultPos.y;
+		float initDx = this.prevPlayerPos.x - defaultPos.x;
+		float initDy = this.prevPlayerPos.y - defaultPos.y;
 		if ((initDx * initDx + initDy * initDy) <= 0.01f)
 		{
-			this.PrevPlayerPos = curPos;
+			this.prevPlayerPos = curPos;
 		}
 
-		float dx = this.PrevPlayerPos.x - curPos.x;
-		float dy = this.PrevPlayerPos.y - curPos.y;
+		float dx = this.prevPlayerPos.x - curPos.x;
+		float dy = this.prevPlayerPos.y - curPos.y;
 		bool isMoving = rolePlayer.CanMove &&
 			Minigame.Instance == null &&
 			!rolePlayer.inVent &&
 			(dx * dx + dy * dy) > 0.001f;
 
-		this.PrevPlayerPos = curPos;
+		this.prevPlayerPos = curPos;
 
 		if (isMoving)
 		{
-			this.CurrentMovementTime += deltaTime;
-			if (this.CurrentMovementTime >= this.MovementTimeToRecover)
+			this.currentMovementTime += deltaTime;
+			if (this.currentMovementTime >= this.MovementTimeToRecover)
 			{
 				this.CurrentSelfKillTimer = Math.Min(this.MaxSelfKillTimer, this.CurrentSelfKillTimer + deltaTime);
 			}
 		}
 		else
 		{
-			this.CurrentMovementTime = 0.0f;
+			this.currentMovementTime = 0.0f;
 			this.CurrentSelfKillTimer -= deltaTime;
 
 			if (this.CurrentSelfKillTimer <= 0.0f)
 			{
 				this.CurrentSelfKillTimer = 0.0f;
-				this.HasExploded = true;
+				this.hasExploded = true;
 				return true;
 			}
 		}

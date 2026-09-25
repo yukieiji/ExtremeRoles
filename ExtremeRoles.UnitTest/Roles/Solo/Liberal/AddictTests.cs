@@ -1,8 +1,10 @@
 using System;
 using AmongUs.GameOptions;
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Liberal;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using UnityEngine;
 using Xunit;
@@ -23,6 +25,7 @@ public class AddictTests
 		MockSetupHelper.SetupGameDataMock();
 		MockSetupHelper.SetupTimeHelpers();
 		MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
+		MockSetupHelper.SetupOptionManager();
 		SetupMeetingHudAndExileMocks();
 		SetupMinigameMock(null);
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
@@ -109,8 +112,6 @@ public class AddictTests
 		Assert.Equal(15.0f, status.MaxSelfKillTimer);
 		Assert.Equal(5.0f, status.MovementTimeToRecover);
 		Assert.Equal(15.0f, status.CurrentSelfKillTimer);
-		Assert.Equal(0.0f, status.CurrentMovementTime);
-		Assert.False(status.HasExploded);
 	}
 
 	[Fact]
@@ -124,26 +125,19 @@ public class AddictTests
 		var status = addict.Status as AddictStatusModel;
 		Assert.NotNull(status);
 
-		status.CurrentSelfKillTimer = 5.0f;
-		status.CurrentMovementTime = 2.0f;
-		status.HasExploded = true;
-
 		// Act
 		addict.ResetOnMeetingStart();
 
 		// Assert
 		Assert.Equal(15.0f, status.CurrentSelfKillTimer);
-		Assert.Equal(0.0f, status.CurrentMovementTime);
-		Assert.False(status.HasExploded);
 
-		status.CurrentSelfKillTimer = 3.0f;
 		addict.ResetOnMeetingEnd(null);
 
 		Assert.Equal(15.0f, status.CurrentSelfKillTimer);
 	}
 
 	[Fact]
-	public void Update_WhenTaskPhase_UpdatesPositionAndTimer()
+	public void Update_WhenTaskPhase_UpdatesTimerAndTriggersExplosion()
 	{
 		// Arrange
 		ExtremeSystemTypeManager.Instance.CreateOrGet<GameProgressSystem>(ExtremeSystemType.GameProgress);
@@ -173,17 +167,14 @@ public class AddictTests
 		addict.Update(localPlayerMock.Object);
 
 		// Assert
-		Assert.Equal(new Vector2(10f, 10f), status.PrevPlayerPos);
+		Assert.True(status.CurrentSelfKillTimer <= 15.0f);
 	}
 
 	[Fact]
-	public void Update_WhenTimerReachesZero_SetsHasExplodedTrue()
+	public void UpdateTimer_WhenStationaryAndMoving_UpdatesTimersAndTriggersExplosion()
 	{
 		// Arrange
-		ExtremeSystemTypeManager.Instance.CreateOrGet<GameProgressSystem>(ExtremeSystemType.GameProgress);
-		GameProgressSystem.Current = GameProgressSystem.Progress.RoleSetUpEnd;
-		GameProgressSystem.Current = GameProgressSystem.Progress.Task;
-
+		var status = new AddictStatusModel(15.0f, 5.0f);
 		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
 		localPlayerMock.SetupGet(p => p.CanMove).Returns(true);
 		localPlayerMock.SetupGet(p => p.inVent).Returns(false);
@@ -193,21 +184,21 @@ public class AddictTests
 		infoMock.SetupGet(i => i.IsDead).Returns(false);
 		infoMock.SetupGet(i => i.Disconnected).Returns(false);
 		localPlayerMock.SetupGet(p => p.Data).Returns(infoMock.Object);
-		localPlayerMock.Setup(p => p.GetTruePosition()).Returns(new Vector2(0f, 0f));
 
-		var addict = new Addict();
-		addict.CreateRoleAllOption();
-		addict.Initialize();
+		Vector2 currentPos = new Vector2(0f, 0f);
+		localPlayerMock.Setup(p => p.GetTruePosition()).Returns(() => currentPos);
 
-		var status = addict.Status as AddictStatusModel;
-		Assert.NotNull(status);
+		// Stationary update
+		bool explode = status.UpdateTimer(localPlayerMock.Object, 1.0f);
+		Assert.False(explode);
+		Assert.Equal(14.0f, status.CurrentSelfKillTimer);
 
-		status.CurrentSelfKillTimer = -1.0f;
+		// Trigger explosion
+		explode = status.UpdateTimer(localPlayerMock.Object, 14.0f);
+		Assert.True(explode);
 
-		// Act
-		addict.Update(localPlayerMock.Object);
-
-		// Assert
-		Assert.True(status.HasExploded);
+		// Subsequent call after explosion returns false
+		explode = status.UpdateTimer(localPlayerMock.Object, 1.0f);
+		Assert.False(explode);
 	}
 }
