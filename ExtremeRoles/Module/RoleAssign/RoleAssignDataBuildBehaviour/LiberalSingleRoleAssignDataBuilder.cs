@@ -76,29 +76,26 @@ public sealed class LiberalSingleRoleAssignDataBuilder(
 		var militantTargetPlayers = targetPlayers.Take(militantNum).ToList();
 		var doveTargetPlayers = targetPlayers.Skip(militantNum).Take(doveNum).ToList();
 
-		Dictionary<int, SingleRoleSpawnData>? liberalSpawnDict = null;
-		if (data.RoleSpawn.CurrentSingleRoleSpawnData.TryGetValue(liberalTeam, out var spawnDict))
+		if (!data.RoleSpawn.CurrentSingleRoleSpawnData.TryGetValue(liberalTeam, out var liberalSpawnDict))
 		{
-			liberalSpawnDict = spawnDict;
+			logger.LogError("Can't find liberal single role spawn data.");
+			return;
 		}
 
 		var militantSpawnDict = new Dictionary<int, SingleRoleSpawnData>();
 		var doveSpawnDict = new Dictionary<int, SingleRoleSpawnData>();
 
-		if (liberalSpawnDict != null)
+		foreach (var (roleId, spawnData) in liberalSpawnDict)
 		{
-			foreach (var (roleId, spawnData) in liberalSpawnDict)
+			if (ExtremeRoleManager.NormalRole.TryGetValue(roleId, out var role))
 			{
-				if (ExtremeRoleManager.NormalRole.TryGetValue(roleId, out var role))
+				if (role.HasTask)
 				{
-					if (role.HasTask)
-					{
-						doveSpawnDict.Add(roleId, spawnData);
-					}
-					else
-					{
-						militantSpawnDict.Add(roleId, spawnData);
-					}
+					doveSpawnDict.Add(roleId, spawnData);
+				}
+				else
+				{
+					militantSpawnDict.Add(roleId, spawnData);
 				}
 			}
 		}
