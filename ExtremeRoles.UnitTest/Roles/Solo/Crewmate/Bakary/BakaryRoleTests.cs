@@ -23,6 +23,7 @@ public class BakaryRoleTests
 		MockSetupHelper.SetupMockConfig(plugin);
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 		MockSetupHelper.SetupOptionManager();
+		MockSetupHelper.SetupGameOptionsManagerMock();
 
 		mockClient = MockSetupHelper.SetupAmongUsClientMock();
 	}
