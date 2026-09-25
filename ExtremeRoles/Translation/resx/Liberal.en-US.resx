@@ -49,4 +49,30 @@ Gains funds for activities by killing.</value>
   <data name="MilitantIntroDescription" xml:space="preserve">
     <value>What is needed for revolution is "overwhelming power"</value>
   </data>
+  <data name="SpecialDove" xml:space="preserve">
+    <value>Special Dove</value>
+  </data>
+  <data name="SpecialDoveIntroDescription" xml:space="preserve">
+    <value>A Dove with modified settings</value>
+  </data>
+  <data name="SpecialDoveShortDescription" xml:space="preserve">
+    <value>An "Extreme-styled" Dove</value>
+  </data>
+  <data name="SpecialDoveFullDescription" xml:space="preserve">
+    <value>A Liberal Dove role which can be modified with Extreme roles' common settings
+Check the settings below:</value>
+  </data>
+  <data name="SpecialMilitant" xml:space="preserve">
+    <value>Special Militant</value>
+  </data>
+  <data name="SpecialMilitantIntroDescription" xml:space="preserve">
+    <value>A Militant with modified settings</value>
+  </data>
+  <data name="SpecialMilitantShortDescription" xml:space="preserve">
+    <value>An "Extreme-styled" Militant</value>
+  </data>
+  <data name="SpecialMilitantFullDescription" xml:space="preserve">
+    <value>A Liberal Militant role which can be modified with Extreme roles' common settings
+Check the settings below:</value>
+  </data>
 </root>

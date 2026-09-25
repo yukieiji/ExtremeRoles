@@ -20,6 +20,7 @@ using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Combination.InvestigatorOffice;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
+using ExtremeRoles.Roles.Solo.Liberal;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 using ExtremeRoles.Roles.Solo.Crewmate.Fencer;
 using ExtremeRoles.Roles.Solo.Crewmate.Loner;
@@ -168,6 +169,8 @@ public enum ExtremeRoleId : int
 	Leader,
 	Dove,
 	Militant,
+	SpecialDove,
+	SpecialMilitant,
 
 	Xion,
 }
@@ -391,6 +394,9 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Surrogator, new SurrogatorRole()},
 			{(int)ExtremeRoleId.Knight    , new KnightRole()},
 			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
+
+			{(int)ExtremeRoleId.SpecialDove    , new SpecialDove()},
+			{(int)ExtremeRoleId.SpecialMilitant, new SpecialMilitant()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
@@ -561,7 +567,9 @@ public static class ExtremeRoleManager
 				if (
 					roleId == (int)ExtremeRoleId.Leader ||
 					roleId == (int)ExtremeRoleId.Dove ||
-					roleId == (int)ExtremeRoleId.Militant)
+					roleId == (int)ExtremeRoleId.Militant ||
+					roleId == (int)ExtremeRoleId.SpecialDove ||
+					roleId == (int)ExtremeRoleId.SpecialMilitant)
 				{
 					setPlyerIdToSingleRoleFromProvidoer(playerId, roleId, controlId);
 					return;

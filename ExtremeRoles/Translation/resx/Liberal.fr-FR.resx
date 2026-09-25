@@ -61,4 +61,28 @@ Obtient des fonds pour ses activités en effectuant des kills.</value>
   <data name="MilitantIntroDescription" xml:space="preserve">
     <value>Ce qui est nécessaire pour la révolution, c'est une « force écrasante »</value>
   </data>
+  <data name="SpecialDove" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialDoveIntroDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialDoveShortDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialDoveFullDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialMilitant" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialMilitantIntroDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialMilitantShortDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialMilitantFullDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
 </root>

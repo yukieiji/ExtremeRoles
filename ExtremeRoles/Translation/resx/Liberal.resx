@@ -59,4 +59,32 @@
   <data name="MilitantIntroDescription" xml:space="preserve">
     <value>革命に必要なものは"圧倒的な力"だ</value>
   </data>
+  <data name="SpecialDove" xml:space="preserve">
+    <value>スペシャルダブ</value>
+  </data>
+  <data name="SpecialDoveIntroDescription" xml:space="preserve">
+    <value>普通のダブとは少し違う設定を持つ</value>
+  </data>
+  <data name="SpecialDoveShortDescription" xml:space="preserve">
+    <value>エクストリームなダブ</value>
+  </data>
+  <data name="SpecialDoveFullDescription" xml:space="preserve">
+    <value>リベラル陣営のダブ役職
+Extreme Rolesの各役職の共通設定が適用できる
+設定内容は以下を確認</value>
+  </data>
+  <data name="SpecialMilitant" xml:space="preserve">
+    <value>スペシャルミリタント</value>
+  </data>
+  <data name="SpecialMilitantIntroDescription" xml:space="preserve">
+    <value>普通のミリタントとは少し違う設定を持つ</value>
+  </data>
+  <data name="SpecialMilitantShortDescription" xml:space="preserve">
+    <value>エクストリームなミリタント</value>
+  </data>
+  <data name="SpecialMilitantFullDescription" xml:space="preserve">
+    <value>リベラル陣営のミリタント役職
+Extreme Rolesの各役職の共通設定が適用できる
+設定内容は以下を確認</value>
+  </data>
 </root>
