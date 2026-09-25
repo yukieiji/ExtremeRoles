@@ -48,11 +48,8 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 	{
 		string baseName = base.GetRolePlayerNameTag(targetRole, targetPlayerId);
-		if (this.targetedPlayers.Contains(targetPlayerId))
-		{
-			return baseName + Design.ColoredString(this.Core.Color, " ★");
-		}
-		return baseName;
+		return this.targetedPlayers.Contains(targetPlayerId) ?
+			$"{baseName}{Design.ColoredString(this.Core.Color, " ☒")}" : baseName;
 	}
 
 	public void CreateAbility()
@@ -145,7 +142,7 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 		{
 			LiberalMoneyBankSystem.RpcUpdateSystem(
 				PlayerControl.LocalPlayer.PlayerId,
-				Module.GameResult.LiberalMoneyHistory.Reason.AddOnTask,
+				Module.GameResult.LiberalMoneyHistory.Reason.AddOnEmbezzleAbility,
 				totalMoneyGained);
 		}
 
