@@ -95,6 +95,7 @@ public sealed class NeutralSeparateTeamBuilder()
 		var team = roleId switch
 		{
 			ExtremeRoleId.Alice => NeutralSeparateTeam.Alice,
+			ExtremeRoleId.Punisher => NeutralSeparateTeam.Punisher,
 			ExtremeRoleId.Jackal or ExtremeRoleId.Sidekick => NeutralSeparateTeam.Jackal,
 			ExtremeRoleId.Lover => NeutralSeparateTeam.Lover,
 			ExtremeRoleId.Missionary => NeutralSeparateTeam.Missionary,

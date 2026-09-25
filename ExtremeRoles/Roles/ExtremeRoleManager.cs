@@ -166,6 +166,8 @@ public enum ExtremeRoleId : int
 	Knight,
 	Pawn,
 
+	Punisher,
+
 	Leader,
 	Dove,
 	Militant,
@@ -206,6 +208,9 @@ public enum RoleGameOverReason
 
     AliceKilledByImposter,
     AliceKillAllOther,
+
+    PunisherKilledImpostor,
+    PunisherKillAllOther,
 
     JackalKillAllOther,
 
@@ -265,6 +270,7 @@ public enum NeutralSeparateTeam
 
     Jackal = 0,
     Alice,
+    Punisher,
     Lover,
     Missionary,
     Yandere,
@@ -396,6 +402,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Surrogator, new SurrogatorRole()},
 			{(int)ExtremeRoleId.Knight    , new KnightRole()},
 			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
+			{(int)ExtremeRoleId.Punisher  , new Punisher()},
 
 			{(int)ExtremeRoleId.SpecialDove    , new SpecialDove()},
 			{(int)ExtremeRoleId.SpecialMilitant, new SpecialMilitant()},
