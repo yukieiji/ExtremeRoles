@@ -19,7 +19,6 @@ public sealed class SpecialMilitant : SingleRoleBase
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		CreateKillerOption(factory);
 		factory.CreateBoolOption(SpecialMilitantOption.UseVent, false);
 	}
 
