@@ -19,6 +19,7 @@ namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 public sealed class SingleRoleAssignHelper(IModLogger logger) : ISingleRoleAssignHelper
 {
 	internal readonly record struct IdedSingleSpawnData(int RoleId, SingleRoleSpawnData Data);
+	private readonly IModLogger logger = logger;
 
 	public void AddSingleExtremeRoleAssignDataFromTeamAndPlayer(
 		in PreparationData data,

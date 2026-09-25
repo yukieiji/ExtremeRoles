@@ -16,6 +16,8 @@ public sealed class CrewmateSingleRoleAssignDataBuilder(
 {
 	private readonly IReadOnlySet<RoleTypes> vanillaCrewRoleType = roleProvider.CrewmateRole;
 
+	private readonly IModLogger logger = logger;
+
 	public void Build(in PreparationData data)
 	{
 		logger.LogTrace("------------------------- SingleRoleAssign - Crewmate - Start -------------------------");

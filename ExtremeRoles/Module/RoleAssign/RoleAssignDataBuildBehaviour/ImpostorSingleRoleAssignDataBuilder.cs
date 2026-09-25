@@ -16,6 +16,8 @@ public sealed class ImpostorSingleRoleAssignDataBuilder(
 {
 	private readonly IReadOnlySet<RoleTypes> vanillaImpRoleType = roleProvider.ImpostorRole;
 
+	private readonly IModLogger logger = logger;
+
 	public void Build(in PreparationData data)
 	{
 		logger.LogTrace("------------------------- SingleRoleAssign - Impostor - Start -------------------------");
