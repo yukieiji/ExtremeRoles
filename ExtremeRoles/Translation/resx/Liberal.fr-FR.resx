@@ -190,4 +190,34 @@ Obtient des fonds pour ses activités en effectuant des kills.</value>
   <data name="SpecialMilitantFullDescription" xml:space="preserve">
     <value>STRMISS</value>
   </data>
+  <data name="Addict" xml:space="preserve">
+    <value>Accro</value>
+  </data>
+  <data name="AddictSuffix" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="AddictFullDescription" xml:space="preserve">
+    <value>Type : Colombe
+
+Passif : "Minuteur d'auto-explosion"
+- Le minuteur avance pendant les tâches, dans les évents ou à l'arrêt.
+- Avance également sur les échelles, purupuru et tyroliennes.
+- Explose à 0.
+- Récupère en se déplaçant pendant un certain temps.</value>
+  </data>
+  <data name="AddictShortDescription" xml:space="preserve">
+    <value>Le minuteur avance à l'arrêt</value>
+  </data>
+  <data name="AddictIntroDescription" xml:space="preserve">
+    <value>Le minuteur avance à l'arrêt</value>
+  </data>
+  <data name="AddictSelfKillTimerTime" xml:space="preserve">
+    <value>Durée du minuteur d'auto-explosion</value>
+  </data>
+  <data name="AddictMovementTimeToRecover" xml:space="preserve">
+    <value>Temps de déplacement continu pour récupérer</value>
+  </data>
+  <data name="addictSelfKill" xml:space="preserve">
+    <value>Minuteur d'auto-explosion : {0}s</value>
+  </data>
 </root>

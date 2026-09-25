@@ -192,4 +192,34 @@ Check the settings below:</value>
     <value>A Liberal Militant role which can be modified with Extreme roles' common settings
 Check the settings below:</value>
   </data>
+  <data name="Addict" xml:space="preserve">
+    <value>Addict</value>
+  </data>
+  <data name="AddictSuffix" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="AddictFullDescription" xml:space="preserve">
+    <value>Type: Dove
+
+Passive: "Self-Explosion Timer"
+- The timer progresses when performing tasks, inside vents, or stopping.
+- Timer progresses on ladders, purupuru, and ziplines as well.
+- Explodes when reaching 0.
+- Timer recovers when moving for a continuous period of time.</value>
+  </data>
+  <data name="AddictShortDescription" xml:space="preserve">
+    <value>Self-explosion timer advances when stopping</value>
+  </data>
+  <data name="AddictIntroDescription" xml:space="preserve">
+    <value>Self-explosion timer advances when stopping</value>
+  </data>
+  <data name="AddictSelfKillTimerTime" xml:space="preserve">
+    <value>Self-Explosion Timer Duration</value>
+  </data>
+  <data name="AddictMovementTimeToRecover" xml:space="preserve">
+    <value>Continuous Movement Time to Recover Timer</value>
+  </data>
+  <data name="addictSelfKill" xml:space="preserve">
+    <value>Self-Kill Timer: {0}s</value>
+  </data>
 </root>
