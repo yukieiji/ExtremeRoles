@@ -567,9 +567,7 @@ public static class ExtremeRoleManager
 				if (
 					roleId == (int)ExtremeRoleId.Leader ||
 					roleId == (int)ExtremeRoleId.Dove ||
-					roleId == (int)ExtremeRoleId.Militant ||
-					roleId == (int)ExtremeRoleId.SpecialDove ||
-					roleId == (int)ExtremeRoleId.SpecialMilitant)
+					roleId == (int)ExtremeRoleId.Militant)
 				{
 					setPlyerIdToSingleRoleFromProvidoer(playerId, roleId, controlId);
 					return;

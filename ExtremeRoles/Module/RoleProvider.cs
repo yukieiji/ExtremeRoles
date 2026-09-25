@@ -18,8 +18,6 @@ public sealed class RoleProvider(IServiceProvider provider) : IRoleProvider
 			ExtremeRoleId.Leader => typeof(Leader),
 			ExtremeRoleId.Dove => typeof(Dove),
 			ExtremeRoleId.Militant => typeof(Militant),
-			ExtremeRoleId.SpecialDove => typeof(SpecialDove),
-			ExtremeRoleId.SpecialMilitant => typeof(SpecialMilitant),
 			_ => throw new NotSupportedException()
 		};
 
