@@ -17,6 +17,8 @@ public sealed class LiberalSingleRoleAssignDataBuilder(
 	ISingleRoleAssignHelper helper,
 	IModLogger logger) : ILiberalSingleRoleAssignDataBuilder
 {
+	private readonly IModLogger logger = logger;
+
 	public void Build(in PreparationData data)
 	{
 		const ExtremeRoleType liberalTeam = ExtremeRoleType.Liberal;
