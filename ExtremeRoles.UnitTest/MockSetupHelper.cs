@@ -116,7 +116,9 @@ public static class MockSetupHelper
 
     public static void SetupGameOptionsManagerMock()
     {
-        if (MockGameOptionsManagerget_InstanceHelper.Instance == null)
+        if (MockGameOptionsManagerget_InstanceHelper.Instance == null ||
+            GameOptionsManager.Instance == null ||
+            GameOptionsManager.Instance.CurrentGameOptions == null)
         {
             var mockGameOptions = new Mock<IGameOptions>(IntPtr.Zero);
             var mockGameOptionsManager = new Mock<GameOptionsManager>(IntPtr.Zero);

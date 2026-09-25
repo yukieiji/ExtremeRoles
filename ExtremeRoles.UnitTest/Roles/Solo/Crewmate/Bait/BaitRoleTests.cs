@@ -31,7 +31,7 @@ public class BaitRoleTests
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
 		MockSetupHelper.SetupPlayerControlMocks();
-		SetupGameOptionsManagerMock();
+		MockSetupHelper.SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
 
 		clientMock = MockSetupHelper.SetupAmongUsClientMock();
@@ -57,20 +57,6 @@ public class BaitRoleTests
 		MockDestroyableSingletonget_InstanceHelper<MeetingHud>.Instance = mockDestroyableMeetingHelper.Object;
 
 		SetLobbyMode(false);
-	}
-
-	private static void SetupGameOptionsManagerMock()
-	{
-		if (MockGameOptionsManagerget_InstanceHelper.Instance == null)
-		{
-			var mockGameOptions = new Mock<IGameOptions>(IntPtr.Zero);
-			var mockGameOptionsManager = new Mock<GameOptionsManager>(IntPtr.Zero);
-			mockGameOptionsManager.SetupGet(g => g.CurrentGameOptions).Returns(mockGameOptions.Object);
-
-			var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
-			mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockGameOptionsManager.Object);
-			MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
-		}
 	}
 
 	private void SetLobbyMode(bool isLobby)
