@@ -172,6 +172,8 @@ public sealed class Addict :
 		this.handler?.ClearTask(rolePlayer);
 	}
 
+	public override string GetRoleTag() => "Ad";
+
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateFloatOption(
