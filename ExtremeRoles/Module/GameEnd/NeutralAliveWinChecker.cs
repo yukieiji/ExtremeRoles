@@ -34,10 +34,6 @@ public sealed class NeutralAliveWinChecker(IPlayerStatistics statistics) : IGame
 		{
 			endReason = RoleGameOverReason.AliceKillAllOther;
 		}
-		else if (team is NeutralSeparateTeam.Punisher)
-		{
-			endReason = RoleGameOverReason.PunisherKillAllOther;
-		}
 		else if (
 			// 以下は全てインポスターと勝負しても問題ないのでインポスターが生きていると勝利できない
 			// アサシンがキルできないオプションのとき、ニュートラルの勝ち目が少なくなるので、勝利とする
@@ -61,6 +57,7 @@ public sealed class NeutralAliveWinChecker(IPlayerStatistics statistics) : IGame
 				NeutralSeparateTeam.Queen => RoleGameOverReason.QueenKillAllOther,
 				NeutralSeparateTeam.Kids => RoleGameOverReason.KidsAliveAlone,
 				NeutralSeparateTeam.Tucker => RoleGameOverReason.TuckerShipIsExperimentStation,
+				NeutralSeparateTeam.Punisher => RoleGameOverReason.PunisherKillAllOther,
 
 				NeutralSeparateTeam.JackalSub => RoleGameOverReason.AllJackalWin,
 				NeutralSeparateTeam.YandereSub => RoleGameOverReason.AllYandereWin,

@@ -22,13 +22,13 @@ public sealed class NeutralSpecialWinChecker : IGameEndChecker
 			reason = (GameOverReason)(role.Core.Id switch
 			{
 				ExtremeRoleId.Alice => RoleGameOverReason.AliceKilledByImposter,
-				ExtremeRoleId.Punisher => RoleGameOverReason.PunisherKilledImpostor,
 				ExtremeRoleId.TaskMaster => RoleGameOverReason.TaskMasterGoHome,
 				ExtremeRoleId.Jester => RoleGameOverReason.JesterMeetingFavorite,
 				ExtremeRoleId.Eater => RoleGameOverReason.EaterAllEatInTheShip,
 				ExtremeRoleId.Umbrer => RoleGameOverReason.UmbrerBiohazard,
 				ExtremeRoleId.Hatter => RoleGameOverReason.HatterEndlessTeaTime,
 				ExtremeRoleId.Artist => RoleGameOverReason.ArtistShipToArt,
+				ExtremeRoleId.Punisher => RoleGameOverReason.PunisherKilledImpostor,
 				_ => RoleGameOverReason.UnKnown,
 			});
 			return true;
