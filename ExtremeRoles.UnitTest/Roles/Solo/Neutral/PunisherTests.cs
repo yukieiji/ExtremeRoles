@@ -44,6 +44,11 @@ public sealed class PunisherTests
 
 		MockSetupHelper.SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
+
+		var mockShipStatus = new Mock<ShipStatus>(IntPtr.Zero);
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
+		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShipStatus.Object);
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 	}
 
 	private static void SetupLobbyBehaviourMock()
@@ -134,5 +139,50 @@ public sealed class PunisherTests
 
 		// Assert
 		Assert.False(role.IsWin);
+	}
+
+	[Fact]
+	public void Update_WhenNullRolePlayer_DoesNotThrow()
+	{
+		// Arrange
+		var role = new Punisher();
+		InitializeRole(role, 1);
+
+		// Act & Assert
+		role.Update(null!);
+	}
+
+	[Fact]
+	public void Update_WhenTaskCompleted_EnablesCanKillAndReducesKillTimer()
+	{
+		// Arrange
+		var role = new Punisher();
+		InitializeRole(role, 1);
+		role.KillCoolTime = 30.0f;
+
+		var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		var mockTasksList = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo.TaskInfo>>(IntPtr.Zero);
+		var task1 = new Mock<NetworkedPlayerInfo.TaskInfo>(IntPtr.Zero);
+		var task2 = new Mock<NetworkedPlayerInfo.TaskInfo>(IntPtr.Zero);
+
+		task1.SetupGet(t => t.Id).Returns(1u);
+		task1.SetupGet(t => t.Complete).Returns(true);
+		task2.SetupGet(t => t.Id).Returns(2u);
+		task2.SetupGet(t => t.Complete).Returns(true);
+
+		mockTasksList.SetupGet(l => l.Count).Returns(2);
+		mockTasksList.Setup(l => l[0]).Returns(task1.Object);
+		mockTasksList.Setup(l => l[1]).Returns(task2.Object);
+
+		mockData.SetupGet(d => d.Tasks).Returns(mockTasksList.Object);
+		mockLocalPlayer.SetupGet(p => p.Data).Returns(mockData.Object);
+		mockLocalPlayer.Object.killTimer = 15.0f;
+
+		// Act
+		role.Update(mockLocalPlayer.Object);
+
+		// Assert
+		Assert.True(role.CanKill);
+		Assert.True(mockLocalPlayer.Object.killTimer < 15.0f);
 	}
 }
