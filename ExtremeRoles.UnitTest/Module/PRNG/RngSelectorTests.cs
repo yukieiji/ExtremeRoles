@@ -59,10 +59,7 @@ public sealed class RngSelectorTests
 
 	private static void EnsureRandomOptionCategory(bool useStrong, int algorithm)
 	{
-		if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, randCategoryKey, out _))
-		{
-			OptionCreator.Create();
-		}
+		MockSetupHelper.SetupOptionManager();
 
 		if (OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, randCategoryKey, out var category))
 		{

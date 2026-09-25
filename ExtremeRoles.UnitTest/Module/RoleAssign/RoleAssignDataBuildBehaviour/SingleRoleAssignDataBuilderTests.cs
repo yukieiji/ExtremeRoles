@@ -28,10 +28,7 @@ public class SingleRoleAssignDataBuilderTests
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
 
-        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
-        {
-            OptionCreator.Create();
-        }
+        MockSetupHelper.SetupOptionManager();
 
         if (ExtremeGameModeManager.Instance == null)
         {

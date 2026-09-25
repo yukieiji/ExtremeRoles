@@ -51,11 +51,7 @@ public class DelusionerRoleTests
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
 			.Returns((string id, string defaultStr, Il2CppSystem.Object[] parts) => !string.IsNullOrEmpty(defaultStr) ? defaultStr : id);
 
-		MockSetupHelper.SetupLobbyMock();
-		if (ClientOption.Instance == null)
-		{
-			OptionCreator.Create();
-		}
+		MockSetupHelper.SetupOptionManager();
 
 		var mockTargetPlayer = new Mock<PlayerControl>(IntPtr.Zero);
 		mockTargetPlayer.SetupGet(p => p.PlayerId).Returns((byte)2);

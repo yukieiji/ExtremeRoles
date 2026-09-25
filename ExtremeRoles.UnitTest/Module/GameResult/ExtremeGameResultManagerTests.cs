@@ -34,6 +34,7 @@ public class ExtremeGameResultManagerTests
     public ExtremeGameResultManagerTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupPaletteHelpers();
         MockSetupHelper.SetupLogger("ExtremeGameResultManagerTests");
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);

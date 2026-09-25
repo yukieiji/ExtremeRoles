@@ -181,15 +181,10 @@ public sealed class SubmergedIntegratorTests : IDisposable
 
 	private void ResetState()
 	{
-		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
-		MockSetupHelper.SetupMockConfig(plugin);
-		MockSetupHelper.SetupAmongUsClientMock();
-		if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
-		{
-			OptionCreator.Create();
-		}
 		globalOptionsHelper.Setup(h => h.Invoke()).Returns(globalGameOptionsManager);
 		MockGameOptionsManagerget_InstanceHelper.Instance = globalOptionsHelper.Object;
+		MockSetupHelper.SetupOptionManager();
+		MockSetupHelper.SetupAmongUsClientMock();
 
 		VentPatchData.InTransitionValue = false;
 		FloorHandler.HandlerInstance = null;

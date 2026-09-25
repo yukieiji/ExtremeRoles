@@ -17,6 +17,7 @@ public class PlayerVoteAreaButtonContainerTests
     public PlayerVoteAreaButtonContainerTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupPaletteHelpers();
         MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
