@@ -19,11 +19,11 @@ public class BakaryRoleTests
 	public BakaryRoleTests()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupGameOptionsManagerMock();
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 		MockSetupHelper.SetupOptionManager();
-		MockSetupHelper.SetupGameOptionsManagerMock();
 
 		mockClient = MockSetupHelper.SetupAmongUsClientMock();
 	}
