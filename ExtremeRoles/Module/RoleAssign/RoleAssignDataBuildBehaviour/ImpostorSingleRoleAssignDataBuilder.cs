@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using AmongUs.GameOptions;
-using ExtremeRoles.GameMode;
-using ExtremeRoles.Helper;
+using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -10,20 +9,21 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 
-public sealed class ImpostorSingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvider) : IImpostorSingleRoleAssignDataBuilder
+public sealed class ImpostorSingleRoleAssignDataBuilder(
+	IVanillaRoleProvider roleProvider,
+	ISingleRoleAssignHelper helper,
+	IModLogger logger) : IImpostorSingleRoleAssignDataBuilder
 {
 	private readonly IReadOnlySet<RoleTypes> vanillaImpRoleType = roleProvider.ImpostorRole;
 
 	public void Build(in PreparationData data)
 	{
-		Logging.Debug(
-			$"------------------------- SingleRoleAssign - Impostor - Start -------------------------");
-		SingleRoleAssignHelper.AddSingleExtremeRoleAssignDataFromTeamAndPlayer(
+		logger.LogTrace("------------------------- SingleRoleAssign - Impostor - Start -------------------------");
+		helper.AddSingleExtremeRoleAssignDataFromTeamAndPlayer(
 			data,
 			ExtremeRoleType.Impostor,
 			data.Assign.GetCanImpostorAssignPlayer(),
 			vanillaImpRoleType);
-		Logging.Debug(
-			$"------------------------- SingleRoleAssign - Impostor - End -------------------------");
+		logger.LogTrace("------------------------- SingleRoleAssign - Impostor - End -------------------------");
 	}
 }

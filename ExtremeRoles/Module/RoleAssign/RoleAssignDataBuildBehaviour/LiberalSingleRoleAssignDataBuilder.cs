@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
@@ -12,7 +13,9 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 
-public sealed class LiberalSingleRoleAssignDataBuilder : ILiberalSingleRoleAssignDataBuilder
+public sealed class LiberalSingleRoleAssignDataBuilder(
+	ISingleRoleAssignHelper helper,
+	IModLogger logger) : ILiberalSingleRoleAssignDataBuilder
 {
 	public void Build(in PreparationData data)
 	{
@@ -27,10 +30,9 @@ public sealed class LiberalSingleRoleAssignDataBuilder : ILiberalSingleRoleAssig
 			return;
 		}
 
-		Logging.Debug(
-			$"------------------------- SingleRoleAssign - Liberal - Start -------------------------");
+		logger.LogTrace("------------------------- SingleRoleAssign - Liberal - Start -------------------------");
 
-		var liberalAssignTargetPlayer = SingleRoleAssignHelper.GetAssignablePlayer(data.Assign, liberalTeam);
+		var liberalAssignTargetPlayer = helper.GetAssignablePlayer(data.Assign, liberalTeam);
 
 		if (!liberalAssignTargetPlayer.Any())
 		{
@@ -39,7 +41,7 @@ public sealed class LiberalSingleRoleAssignDataBuilder : ILiberalSingleRoleAssig
 
 		var leaderPlayer = liberalAssignTargetPlayer.OrderBy(x => RandomGenerator.Instance.Next()).Take(1).First();
 
-		Logging.Debug($"Liberal Leader: {leaderPlayer.PlayerId}");
+		logger.LogTrace($"Liberal Leader: {leaderPlayer.PlayerId}");
 
 		// leaderの確実な割当
 		data.Limit.Reduce(liberalTeam);
@@ -49,7 +51,7 @@ public sealed class LiberalSingleRoleAssignDataBuilder : ILiberalSingleRoleAssig
 		data.Assign.RemvePlayer(leaderPlayer);
 		RoleAssignFilter.Instance.Update(intedLeaderId);
 
-		var remainLiberalAssignTargetPlayer = SingleRoleAssignHelper.GetAssignablePlayer(data.Assign, liberalTeam);
+		var remainLiberalAssignTargetPlayer = helper.GetAssignablePlayer(data.Assign, liberalTeam);
 		// 一人だとリーダー一人で終了！！
 		if (liberalNum <= 1 || !remainLiberalAssignTargetPlayer.Any())
 		{
@@ -76,11 +78,10 @@ public sealed class LiberalSingleRoleAssignDataBuilder : ILiberalSingleRoleAssig
 		/// デフォルトの割当
 		addDefaultLiberalRoleAssignData(cate, (int)ExtremeRoleId.Dove, liberalNum - 1 - militantNum, data, shuffle);
 
-		Logging.Debug(
-			$"------------------------- SingleRoleAssign - Liberal - End -------------------------");
+		logger.LogTrace("------------------------- SingleRoleAssign - Liberal - End -------------------------");
 	}
 
-	private static void addDefaultLiberalRoleAssignData(
+	private void addDefaultLiberalRoleAssignData(
 		in OptionCategory option,
 		in int intedTargetId,
 		in int targetNum,
@@ -101,7 +102,7 @@ public sealed class LiberalSingleRoleAssignDataBuilder : ILiberalSingleRoleAssig
 				!RoleAssignFilter.Instance.IsBlock(intedTargetId))
 			{
 				data.Limit.Reduce(ExtremeRoleType.Liberal);
-				Logging.Debug($"Liberal Default Role:{intedTargetId} to {player.PlayerId}");
+				logger.LogTrace($"Liberal Default Role:{intedTargetId} to {player.PlayerId}");
 				data.Assign.AddAssignData(
 					new PlayerToSingleRoleAssignData(
 						player.PlayerId, intedTargetId, data.Assign.ControlId));

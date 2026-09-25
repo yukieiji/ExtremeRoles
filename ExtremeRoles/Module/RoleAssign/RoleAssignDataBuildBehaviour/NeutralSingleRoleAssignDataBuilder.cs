@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AmongUs.GameOptions;
+using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
@@ -12,7 +13,10 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 
-public sealed class NeutralSingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvider) : INeutralSingleRoleAssignDataBuilder
+public sealed class NeutralSingleRoleAssignDataBuilder(
+	IVanillaRoleProvider roleProvider,
+	ISingleRoleAssignHelper helper,
+	IModLogger logger) : INeutralSingleRoleAssignDataBuilder
 {
 	private readonly IReadOnlySet<RoleTypes> vanillaCrewRoleType = roleProvider.CrewmateRole;
 
@@ -24,9 +28,8 @@ public sealed class NeutralSingleRoleAssignDataBuilder(IVanillaRoleProvider role
 			return;
 		}
 
-		Logging.Debug(
-			$"------------------------- SingleRoleAssign - Neutral - Start -------------------------");
-		var neutralAssignTargetPlayer = SingleRoleAssignHelper.GetAssignablePlayer(data.Assign, ExtremeRoleType.Neutral).ToList();
+		logger.LogTrace("------------------------- SingleRoleAssign - Neutral - Start -------------------------");
+		var neutralAssignTargetPlayer = helper.GetAssignablePlayer(data.Assign, ExtremeRoleType.Neutral).ToList();
 
 		int assignNum = Math.Clamp(
 			neutralNum,
@@ -34,17 +37,16 @@ public sealed class NeutralSingleRoleAssignDataBuilder(IVanillaRoleProvider role
 				neutralAssignTargetPlayer.Count,
 				data.RoleSpawn.CurrentSingleRoleUseNum[ExtremeRoleType.Neutral]));
 
-		Logging.Debug($"Neutral assign num:{assignNum}");
+		logger.LogTrace($"Neutral assign num:{assignNum}");
 
 		neutralAssignTargetPlayer = neutralAssignTargetPlayer.OrderBy(
 			x => RandomGenerator.Instance.Next()).Take(assignNum).ToList();
 
-		SingleRoleAssignHelper.AddSingleExtremeRoleAssignDataFromTeamAndPlayer(
+		helper.AddSingleExtremeRoleAssignDataFromTeamAndPlayer(
 			data,
 			ExtremeRoleType.Neutral,
 			neutralAssignTargetPlayer,
 			vanillaCrewRoleType);
-		Logging.Debug(
-			$"------------------------- SingleRoleAssign - Neutral - End -------------------------");
+		logger.LogTrace("------------------------- SingleRoleAssign - Neutral - End -------------------------");
 	}
 }

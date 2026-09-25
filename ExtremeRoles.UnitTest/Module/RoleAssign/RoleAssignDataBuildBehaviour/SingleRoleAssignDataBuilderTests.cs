@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AmongUs.GameOptions;
+using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.Interface;
@@ -46,12 +47,14 @@ public class SingleRoleAssignDataBuilderTests
         var mockNeutral = new Mock<INeutralSingleRoleAssignDataBuilder>();
         var mockLiberal = new Mock<ILiberalSingleRoleAssignDataBuilder>();
         var mockCrew = new Mock<ICrewmateSingleRoleAssignDataBuilder>();
+        var mockLogger = new Mock<IModLogger>();
 
         var builder = new SingleRoleAssignDataBuilder(
             mockImp.Object,
             mockNeutral.Object,
             mockLiberal.Object,
-            mockCrew.Object);
+            mockCrew.Object,
+            mockLogger.Object);
 
         var mockRoleProvider = new Mock<IVanillaRoleProvider>();
         var mockAssignData = new Mock<IVanillaRolePlayerAssignDataProvider>();

@@ -1,4 +1,4 @@
-using ExtremeRoles.Helper;
+using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.Module.Interface;
 
 #nullable enable
@@ -9,19 +9,18 @@ public sealed class SingleRoleAssignDataBuilder(
 	IImpostorSingleRoleAssignDataBuilder impostorBuilder,
 	INeutralSingleRoleAssignDataBuilder neutralBuilder,
 	ILiberalSingleRoleAssignDataBuilder liberalBuilder,
-	ICrewmateSingleRoleAssignDataBuilder crewmateBuilder) : IRoleAssignDataBuildBehaviour
+	ICrewmateSingleRoleAssignDataBuilder crewmateBuilder,
+	IModLogger logger) : IRoleAssignDataBuildBehaviour
 {
 	public int Priority => (int)ExtremeRoleAssignDataBuilder.Priority.Single;
 
 	public void Build(in PreparationData data)
 	{
-		Logging.Debug(
-			$"----------------------------- SingleRoleAssign - Start -----------------------------");
+		logger.LogTrace("----------------------------- SingleRoleAssign - Start -----------------------------");
 		impostorBuilder.Build(data);
 		neutralBuilder.Build(data);
 		liberalBuilder.Build(data);
 		crewmateBuilder.Build(data);
-		Logging.Debug(
-			$"----------------------------- SingleRoleAssign - End -----------------------------");
+		logger.LogTrace("----------------------------- SingleRoleAssign - End -----------------------------");
 	}
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AmongUs.GameOptions;
+using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.Interface;
@@ -17,6 +18,8 @@ namespace ExtremeRoles.UnitTest.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class RoleAssignSubBuildersTests
 {
+    private readonly Mock<IModLogger> mockLogger = new();
+
     public RoleAssignSubBuildersTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
@@ -48,7 +51,8 @@ public class RoleAssignSubBuildersTests
         mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new HashSet<RoleTypes> { RoleTypes.Crewmate });
         mockRoleProvider.SetupGet(x => x.AllImpostor).Returns(new HashSet<RoleTypes> { RoleTypes.Impostor });
 
-        var builder = new ImpostorSingleRoleAssignDataBuilder(mockRoleProvider.Object);
+        var helper = new SingleRoleAssignHelper(mockLogger.Object);
+        var builder = new ImpostorSingleRoleAssignDataBuilder(mockRoleProvider.Object, helper, mockLogger.Object);
 
         var players = new List<VanillaRolePlayerAssignData>
         {
@@ -91,7 +95,8 @@ public class RoleAssignSubBuildersTests
         mockRoleProvider.SetupGet(x => x.ImpostorRole).Returns(new HashSet<RoleTypes>());
         mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new HashSet<RoleTypes> { RoleTypes.Crewmate });
 
-        var builder = new NeutralSingleRoleAssignDataBuilder(mockRoleProvider.Object);
+        var helper = new SingleRoleAssignHelper(mockLogger.Object);
+        var builder = new NeutralSingleRoleAssignDataBuilder(mockRoleProvider.Object, helper, mockLogger.Object);
 
         var players = new List<VanillaRolePlayerAssignData>
         {
@@ -138,7 +143,8 @@ public class RoleAssignSubBuildersTests
         mockRoleProvider.SetupGet(x => x.CrewmateRole).Returns(new HashSet<RoleTypes> { RoleTypes.Crewmate });
         mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new HashSet<RoleTypes> { RoleTypes.Crewmate });
 
-        var builder = new LiberalSingleRoleAssignDataBuilder();
+        var helper = new SingleRoleAssignHelper(mockLogger.Object);
+        var builder = new LiberalSingleRoleAssignDataBuilder(helper, mockLogger.Object);
 
         var players = new List<VanillaRolePlayerAssignData>
         {
@@ -177,7 +183,8 @@ public class RoleAssignSubBuildersTests
         mockRoleProvider.SetupGet(x => x.CrewmateRole).Returns(new HashSet<RoleTypes>());
         mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new HashSet<RoleTypes> { RoleTypes.Crewmate });
 
-        var builder = new CrewmateSingleRoleAssignDataBuilder(mockRoleProvider.Object);
+        var helper = new SingleRoleAssignHelper(mockLogger.Object);
+        var builder = new CrewmateSingleRoleAssignDataBuilder(mockRoleProvider.Object, helper, mockLogger.Object);
 
         var players = new List<VanillaRolePlayerAssignData>
         {
