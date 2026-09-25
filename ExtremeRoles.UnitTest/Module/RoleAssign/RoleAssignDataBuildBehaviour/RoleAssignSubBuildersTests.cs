@@ -149,7 +149,8 @@ public class RoleAssignSubBuildersTests
         var players = new List<VanillaRolePlayerAssignData>
         {
             new VanillaRolePlayerAssignData(1, "Liberal1", RoleTypes.Crewmate),
-            new VanillaRolePlayerAssignData(2, "Liberal2", RoleTypes.Crewmate)
+            new VanillaRolePlayerAssignData(2, "Liberal2", RoleTypes.Crewmate),
+            new VanillaRolePlayerAssignData(3, "Liberal3", RoleTypes.Crewmate)
         };
         var mockAssignData = new Mock<IVanillaRolePlayerAssignDataProvider>();
         mockAssignData.SetupGet(x => x.Data).Returns(players);
@@ -166,7 +167,7 @@ public class RoleAssignSubBuildersTests
 
         var mockLimiter = new Mock<ISpawnLimiter>();
         mockLimiter.Setup(x => x.CanSpawn(ExtremeRoleType.Liberal, It.IsAny<int>())).Returns(true);
-        mockLimiter.Setup(x => x.Get(ExtremeRoleType.Liberal)).Returns(2);
+        mockLimiter.Setup(x => x.Get(ExtremeRoleType.Liberal)).Returns(3);
 
         var prepData = new PreparationData(playerRoleAssignData, mockSpawnData.Object, mockLimiter.Object);
 
@@ -174,6 +175,53 @@ public class RoleAssignSubBuildersTests
 
         Assert.NotEmpty(playerRoleAssignData.Data);
         Assert.Contains(playerRoleAssignData.Data, a => a is PlayerToSingleRoleAssignData single && single.RoleId == (int)ExtremeRoleId.Leader);
+        Assert.Contains(playerRoleAssignData.Data, a => a is PlayerToSingleRoleAssignData single && (single.RoleId == (int)ExtremeRoleId.Dove || single.RoleId == (int)ExtremeRoleId.Militant));
+    }
+
+    [Fact]
+    public void LiberalBuilder_AssignsCustomLiberalRoles_BasedOnHasTaskProperty()
+    {
+        var mockRoleProvider = new Mock<IVanillaRoleProvider>();
+        mockRoleProvider.SetupGet(x => x.CrewmateRole).Returns(new HashSet<RoleTypes> { RoleTypes.Crewmate });
+        mockRoleProvider.SetupGet(x => x.AllCrewmate).Returns(new HashSet<RoleTypes> { RoleTypes.Crewmate });
+
+        var helper = new SingleRoleAssignHelper(mockLogger.Object);
+        var builder = new LiberalSingleRoleAssignDataBuilder(helper, mockLogger.Object);
+
+        var players = new List<VanillaRolePlayerAssignData>
+        {
+            new VanillaRolePlayerAssignData(1, "Liberal1", RoleTypes.Crewmate),
+            new VanillaRolePlayerAssignData(2, "Liberal2", RoleTypes.Crewmate)
+        };
+        var mockAssignData = new Mock<IVanillaRolePlayerAssignDataProvider>();
+        mockAssignData.SetupGet(x => x.Data).Returns(players);
+
+        var playerRoleAssignData = new PlayerRoleAssignData(mockRoleProvider.Object, mockAssignData.Object);
+
+        var liberalSpawnDict = new Dictionary<int, SingleRoleSpawnData>
+        {
+            { (int)ExtremeRoleId.Dove, new SingleRoleSpawnData(1, 100, 10) }
+        };
+
+        var singleSpawnData = new Dictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnData>>
+        {
+            { ExtremeRoleType.Liberal, liberalSpawnDict }
+        };
+
+        var mockSpawnData = new Mock<ISpawnDataManager>();
+        mockSpawnData.SetupGet(x => x.CurrentSingleRoleSpawnData).Returns(singleSpawnData);
+
+        var mockLimiter = new Mock<ISpawnLimiter>();
+        mockLimiter.Setup(x => x.CanSpawn(ExtremeRoleType.Liberal, It.IsAny<int>())).Returns(true);
+        mockLimiter.Setup(x => x.Get(ExtremeRoleType.Liberal)).Returns(2);
+
+        var prepData = new PreparationData(playerRoleAssignData, mockSpawnData.Object, mockLimiter.Object);
+
+        builder.Build(prepData);
+
+        Assert.Equal(2, playerRoleAssignData.Data.Count);
+        Assert.Contains(playerRoleAssignData.Data, a => a is PlayerToSingleRoleAssignData single && single.RoleId == (int)ExtremeRoleId.Leader);
+        Assert.Contains(playerRoleAssignData.Data, a => a is PlayerToSingleRoleAssignData single && single.RoleId == (int)ExtremeRoleId.Dove);
     }
 
     [Fact]
