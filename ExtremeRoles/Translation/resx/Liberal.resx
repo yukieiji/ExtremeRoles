@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <!--
     Microsoft ResX Schema
@@ -67,38 +67,38 @@
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -205,6 +205,38 @@ Extreme Rolesの各役職の共通設定が適用できる
 
 Extreme Rolesの各役職の共通設定が適用できる
 設定内容は以下を確認</value>
+  </data>
+  <data name="Embezzle" xml:space="preserve">
+    <value>エムベザル</value>
+  </data>
+  <data name="EmbezzleFullDescription" xml:space="preserve">
+    <value>タイプ : ドーヴ
+
+クルーのタスクを能力「偽装計上」で完了させて資金を稼ぐ。効果は会議発生時。</value>
+  </data>
+  <data name="EmbezzleShortDescription" xml:space="preserve">
+    <value>偽装計上で資金稼ぎ</value>
+  </data>
+  <data name="EmbezzleIntroDescription" xml:space="preserve">
+    <value>クルーのタスクを偽装計上して資金を得よ</value>
+  </data>
+  <data name="EmbezzleMaxDisguiseTaskNum" xml:space="preserve">
+    <value>「偽装計上」で偽装するタスク完了数の上限</value>
+  </data>
+  <data name="EmbezzleRange" xml:space="preserve">
+    <value>「偽装計上」が発動できる範囲</value>
+  </data>
+  <data name="EmbezzleNoTaskMoneyGuarantee" xml:space="preserve">
+    <value>対象がタスクを持っていなくても資金を獲得できるか</value>
+  </data>
+  <data name="EmbezzleAllowMultipleTargetsPerPhase" xml:space="preserve">
+    <value>1フェーズ中に複数人指定可能か</value>
+  </data>
+  <data name="EmbezzleCanSeeTaskBar" xml:space="preserve">
+    <value>タスクバーを常に見ることが出来るか</value>
+  </data>
+  <data name="EmbezzleTaskCompletedMoney" xml:space="preserve">
+    <value>「偽装計上」1タスクあたりの獲得資金（最低保証獲得資金）</value>
   </data>
   <data name="Addict" xml:space="preserve">
     <value>アディクト</value>
