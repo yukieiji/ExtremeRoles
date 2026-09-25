@@ -29,4 +29,8 @@
     <Reference Include="$(MSBuildProjectDirectory)/.mockbuilder/build/output/*.dll" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Roles\Solo\Liberal\" />
+  </ItemGroup>
+
 </Project>
