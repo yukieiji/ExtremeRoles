@@ -165,6 +165,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 
 			ExtremeRoleId.SpecialDove,
 			ExtremeRoleId.SpecialMilitant,
+			ExtremeRoleId.Embezzle,
 		];
 
     private CombinationRoleType[] getUseCombRoleType() =>
