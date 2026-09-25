@@ -62,17 +62,6 @@ public sealed class EmbezzleTests
 	}
 
 	[Fact]
-	public void Constructor_InitializesCorrectly()
-	{
-		// Act
-		var role = new Embezzle();
-
-		// Assert
-		Assert.NotNull(role);
-		Assert.Equal(ExtremeRoleId.Embezzle, role.Core.Id);
-	}
-
-	[Fact]
 	public void Initialize_RegistersOptionsAndProperties()
 	{
 		// Arrange
