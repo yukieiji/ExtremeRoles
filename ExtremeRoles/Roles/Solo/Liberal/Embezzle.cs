@@ -75,8 +75,9 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 		{
 			this.targetedPlayers.Add(this.currentTarget);
 			this.currentTarget = byte.MaxValue;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	public bool IsAbilityUse()

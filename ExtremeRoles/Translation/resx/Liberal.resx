@@ -60,7 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -237,5 +237,32 @@ Extreme Rolesの各役職の共通設定が適用できる
   </data>
   <data name="EmbezzleTaskCompletedMoney" xml:space="preserve">
     <value>「偽装計上」1タスクあたりの獲得資金（最低保証獲得資金）</value>
+  </data>
+  <data name="Addict" xml:space="preserve">
+    <value>アディクト</value>
+  </data>
+  <data name="AddictFullDescription" xml:space="preserve">
+    <value>タイプ : ドーヴ
+
+パッシブ「自爆タイマー」
+・タスク中、ベントの中、止まるなどするとタイマーが進む
+・はしご、プルプル、ジップラインも含めて進みます
+・0になると爆発
+・一定時間以上動くと自爆タイマーが回復していく</value>
+  </data>
+  <data name="AddictShortDescription" xml:space="preserve">
+    <value>止まると自爆タイマーが進む</value>
+  </data>
+  <data name="AddictIntroDescription" xml:space="preserve">
+    <value>止まると自爆タイマーが進む</value>
+  </data>
+  <data name="AddictSelfKillTimerTime" xml:space="preserve">
+    <value>自爆タイマーの秒数</value>
+  </data>
+  <data name="AddictMovementTimeToRecover" xml:space="preserve">
+    <value>タイマー回復に必要な連続移動時間</value>
+  </data>
+  <data name="addictSelfKill" xml:space="preserve">
+    <value>残り自爆タイマー: {0}秒</value>
   </data>
 </root>
