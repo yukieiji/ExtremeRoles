@@ -33,7 +33,7 @@ public class ExorcistRoleTests
         MockSetupHelper.SetupLobbyMock();
         MockSetupHelper.SetupExtremeSystemTypeManagerMock();
         MockSetupHelper.SetupPlayerControlMocks();
-        SetupGameOptionsManagerMock();
+        MockSetupHelper.SetupGameOptionsManagerMock();
 
         var shipStateField = typeof(ExtremeRolesPlugin).GetField("<ShipState>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
         shipStateField?.SetValue(null, new ExtremeShipStatus());
@@ -118,20 +118,6 @@ public class ExorcistRoleTests
             mockOverlap.Setup(m => m.Invoke(It.IsAny<Vector2>(), It.IsAny<float>(), It.IsAny<int>()))
                 .Returns(Array.Empty<Collider2D>());
             UnityEngine.MockPhysics2DOverlapCircleAllHelper.Instance = mockOverlap.Object;
-        }
-    }
-
-    private static void SetupGameOptionsManagerMock()
-    {
-        if (MockGameOptionsManagerget_InstanceHelper.Instance == null)
-        {
-            var mockGameOptions = new Mock<IGameOptions>(IntPtr.Zero);
-            var mockGameOptionsManager = new Mock<GameOptionsManager>(IntPtr.Zero);
-            mockGameOptionsManager.SetupGet(g => g.CurrentGameOptions).Returns(mockGameOptions.Object);
-
-            var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
-            mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockGameOptionsManager.Object);
-            MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
         }
     }
 
