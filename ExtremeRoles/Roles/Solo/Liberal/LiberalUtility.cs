@@ -152,9 +152,6 @@ public static class LiberalSettingOverrider
 	{
 		role.IsApplyEnvironmentVision = false;
 		role.UseVent = option.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.UseVent);
-		if (!role.HasOtherVision)
-		{
-			role.Vision = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LiberalVison);
-		}
+		role.Vision = option.GetValue<LiberalGlobalSetting, float>(LiberalGlobalSetting.LiberalVison);
 	}
 }
