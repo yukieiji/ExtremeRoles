@@ -190,6 +190,10 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		{
 			return GetRoleTag();
 		}
+		if (targetRole.IsLiberal())
+		{
+			return $" {targetRole.GetRoleTag()}";
+		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
 

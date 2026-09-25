@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-    <data name="LeaderFullDescription" xml:space="preserve">
+  <data name="LeaderFullDescription" xml:space="preserve">
     <value>領袖屬於革命黨
 根據設置領袖可能是激進派或溫和派
 有任務就是溫和派
@@ -199,9 +199,6 @@
   </data>
   <data name="Addict" xml:space="preserve">
     <value>成癮者</value>
-  </data>
-  <data name="AddictSuffix" xml:space="preserve">
-    <value>Ad</value>
   </data>
   <data name="AddictFullDescription" xml:space="preserve">
     <value>類型：和平派
