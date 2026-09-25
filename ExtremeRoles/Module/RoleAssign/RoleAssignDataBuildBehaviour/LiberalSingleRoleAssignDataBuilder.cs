@@ -60,7 +60,9 @@ public sealed class LiberalSingleRoleAssignDataBuilder(
 			return;
 		}
 
-		var shuffle = remainLiberalAssignTargetPlayer.OrderBy(x => RandomGenerator.Instance.Next());
+		var targetPlayers = remainLiberalAssignTargetPlayer
+			.OrderBy(x => RandomGenerator.Instance.Next())
+			.ToList();
 
 		// 過激派の数を想定する
 		int mini = cate.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.LiberalMilitantMini);
@@ -68,48 +70,117 @@ public sealed class LiberalSingleRoleAssignDataBuilder(
 		int clampedMax = Math.Max(mini, max);
 		int militantNum = RandomGenerator.Instance.Next(mini, clampedMax + 1);
 
-		// リベラルのデフォルト役職以外の割当はまだ作ってない(というかまだ想定してない・・・・)
-		if (militantNum > 0)
+		militantNum = Math.Clamp(militantNum, 0, targetPlayers.Count);
+		int doveNum = Math.Clamp(liberalNum - 1 - militantNum, 0, targetPlayers.Count - militantNum);
+
+		var militantTargetPlayers = targetPlayers.Take(militantNum).ToList();
+		var doveTargetPlayers = targetPlayers.Skip(militantNum).Take(doveNum).ToList();
+
+		if (!data.RoleSpawn.CurrentSingleRoleSpawnData.TryGetValue(liberalTeam, out var liberalSpawnDict))
 		{
-			/// リベラル過激派割当
-			/// デフォルトの割当
-			addDefaultLiberalRoleAssignData(cate, (int)ExtremeRoleId.Militant, militantNum, data, shuffle);
+			logger.LogError("Can't find liberal single role spawn data.");
+			return;
 		}
 
-		/// リベル穏健派割当
-		/// デフォルトの割当
-		addDefaultLiberalRoleAssignData(cate, (int)ExtremeRoleId.Dove, liberalNum - 1 - militantNum, data, shuffle);
+		var militantSpawnDict = new Dictionary<int, SingleRoleSpawnData>();
+		var doveSpawnDict = new Dictionary<int, SingleRoleSpawnData>();
+
+		foreach (var (roleId, spawnData) in liberalSpawnDict)
+		{
+			if (ExtremeRoleManager.NormalRole.TryGetValue(roleId, out var role))
+			{
+				if (role.HasTask)
+				{
+					doveSpawnDict.Add(roleId, spawnData);
+				}
+				else
+				{
+					militantSpawnDict.Add(roleId, spawnData);
+				}
+			}
+		}
+
+		var militantCandidates = SingleRoleAssignHelper.CreateSingleRoleIdData(militantSpawnDict)
+			.OrderByDescending(x => x.Data.Weight)
+			.ThenBy(x => RandomGenerator.Instance.Next())
+			.ToList();
+
+		var doveCandidates = SingleRoleAssignHelper.CreateSingleRoleIdData(doveSpawnDict)
+			.OrderByDescending(x => x.Data.Weight)
+			.ThenBy(x => RandomGenerator.Instance.Next())
+			.ToList();
+
+		if (militantTargetPlayers.Count > 0)
+		{
+			assignLiberalRoles(
+				militantTargetPlayers,
+				militantCandidates,
+				(int)ExtremeRoleId.Militant,
+				data,
+				liberalTeam);
+		}
+
+		if (doveTargetPlayers.Count > 0)
+		{
+			assignLiberalRoles(
+				doveTargetPlayers,
+				doveCandidates,
+				(int)ExtremeRoleId.Dove,
+				data,
+				liberalTeam);
+		}
 
 		logger.LogTrace("------------------------- SingleRoleAssign - Liberal - End -------------------------");
 	}
 
-	private void addDefaultLiberalRoleAssignData(
-		in OptionCategory option,
-		in int intedTargetId,
-		in int targetNum,
+	private void assignLiberalRoles(
+		IReadOnlyList<VanillaRolePlayerAssignData> targetPlayers,
+		List<SingleRoleAssignHelper.IdedSingleSpawnData> candidates,
+		int defaultRoleId,
 		in PreparationData data,
-		in IEnumerable<VanillaRolePlayerAssignData> randomTargetPlayer)
+		ExtremeRoleType liberalTeam)
 	{
-		if (RoleAssignFilter.Instance.IsBlock(intedTargetId))
+		foreach (var player in targetPlayers)
 		{
-			return;
-		}
-
-		var target = randomTargetPlayer.Take(targetNum);
-
-		// 固定しておく
-		foreach (var player in target.ToArray())
-		{
-			if (data.Limit.CanSpawn(ExtremeRoleType.Liberal) &&
-				!RoleAssignFilter.Instance.IsBlock(intedTargetId))
+			if (!data.Limit.CanSpawn(liberalTeam))
 			{
-				data.Limit.Reduce(ExtremeRoleType.Liberal);
-				logger.LogTrace($"Liberal Default Role:{intedTargetId} to {player.PlayerId}");
+				break;
+			}
+
+			bool assigned = false;
+
+			for (int i = 0; i < candidates.Count; ++i)
+			{
+				var candidate = candidates[i];
+				int roleId = candidate.RoleId;
+
+				if (RoleAssignFilter.Instance.IsBlock(roleId))
+				{
+					continue;
+				}
+
+				candidates.RemoveAt(i);
+				candidate.Data.ReduceSpawnNum();
+				data.Limit.Reduce(liberalTeam);
+				logger.LogTrace($"Liberal Role:{roleId} to {player.PlayerId}");
 				data.Assign.AddAssignData(
 					new PlayerToSingleRoleAssignData(
-						player.PlayerId, intedTargetId, data.Assign.ControlId));
+						player.PlayerId, roleId, data.Assign.ControlId));
 				data.Assign.RemvePlayer(player);
-				RoleAssignFilter.Instance.Update(intedTargetId);
+				RoleAssignFilter.Instance.Update(roleId);
+				assigned = true;
+				break;
+			}
+
+			if (!assigned && !RoleAssignFilter.Instance.IsBlock(defaultRoleId))
+			{
+				data.Limit.Reduce(liberalTeam);
+				logger.LogTrace($"Liberal Default Role:{defaultRoleId} to {player.PlayerId}");
+				data.Assign.AddAssignData(
+					new PlayerToSingleRoleAssignData(
+						player.PlayerId, defaultRoleId, data.Assign.ControlId));
+				data.Assign.RemvePlayer(player);
+				RoleAssignFilter.Instance.Update(defaultRoleId);
 			}
 		}
 	}
