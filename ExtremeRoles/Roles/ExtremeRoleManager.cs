@@ -165,6 +165,7 @@ public enum ExtremeRoleId : int
 	Surrogator,
 	Knight,
 	Pawn,
+	Punisher,
 
 	Leader,
 	Dove,
@@ -250,6 +251,9 @@ public enum RoleGameOverReason
 	MonikaThisGameIsMine,
 	MonikaIamTheOnlyOne,
 
+	PunisherKilledImpostor,
+	PunisherKillAllOther,
+
 	AllJackalWin,
 	AllYandereWin,
 	AllQueenWin,
@@ -276,6 +280,7 @@ public enum NeutralSeparateTeam
     Kids,
 	Tucker,
 	Monika,
+	Punisher,
 
 	JackalSub,
 	YandereSub,
@@ -396,6 +401,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Surrogator, new SurrogatorRole()},
 			{(int)ExtremeRoleId.Knight    , new KnightRole()},
 			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
+			{(int)ExtremeRoleId.Punisher  , new Punisher()},
 
 			{(int)ExtremeRoleId.SpecialDove    , new SpecialDove()},
 			{(int)ExtremeRoleId.SpecialMilitant, new SpecialMilitant()},
