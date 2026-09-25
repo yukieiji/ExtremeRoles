@@ -197,4 +197,31 @@
   <data name="SpecialMilitantFullDescription" xml:space="preserve">
     <value>STRMISS</value>
   </data>
+  <data name="Addict" xml:space="preserve">
+    <value>成瘾者</value>
+  </data>
+  <data name="AddictFullDescription" xml:space="preserve">
+    <value>类型：和平派
+
+被动“自爆定时器”
+・做任务、在管道中、停止移动等情况时自爆定时器会推进
+・在梯子、软梯、滑索上时也会推进
+・归零时自爆
+・持续移动一定时间以上时自爆定时器会恢复</value>
+  </data>
+  <data name="AddictShortDescription" xml:space="preserve">
+    <value>停止移动时自爆定时器推进</value>
+  </data>
+  <data name="AddictIntroDescription" xml:space="preserve">
+    <value>停止移动时自爆定时器推进</value>
+  </data>
+  <data name="AddictSelfKillTimerTime" xml:space="preserve">
+    <value>自爆定时器秒数</value>
+  </data>
+  <data name="AddictMovementTimeToRecover" xml:space="preserve">
+    <value>恢复定时器所需的连续移动时间</value>
+  </data>
+  <data name="addictSelfKill" xml:space="preserve">
+    <value>剩余自爆定时器: {0}秒</value>
+  </data>
 </root>
