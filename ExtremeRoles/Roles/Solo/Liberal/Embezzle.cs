@@ -153,6 +153,9 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 		this.currentTarget = byte.MaxValue;
 	}
 
+	public override string GetRoleTag()
+		=> "Em";
+
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
 	}
