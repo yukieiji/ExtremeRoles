@@ -214,7 +214,4 @@ Passif : "Minuteur d'auto-explosion"
   <data name="AddictMovementTimeToRecover" xml:space="preserve">
     <value>Temps de déplacement continu pour récupérer</value>
   </data>
-  <data name="addictSelfKill" xml:space="preserve">
-    <value>Minuteur d'auto-explosion : {0}s</value>
-  </data>
 </root>
