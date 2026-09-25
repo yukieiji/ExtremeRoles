@@ -19,9 +19,7 @@ public sealed class SpecialDove : SingleRoleBase, IRoleUpdate
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		this.handler ??= new DoveCommonAbilityHandler(
-			ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>());
-		this.handler.Update(rolePlayer);
+		this.handler?.Update(rolePlayer);
 	}
 
 	public override void ExiledAction(PlayerControl rolePlayer)
@@ -36,27 +34,14 @@ public sealed class SpecialDove : SingleRoleBase, IRoleUpdate
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		CreateKillerOption(factory);
+
 	}
 
 	protected override void RoleSpecificInit()
 	{
-		var loader = this.Loader;
-		this.HasOtherKillCool = loader.GetValue<KillerCommonOption, bool>(
-			KillerCommonOption.HasOtherKillCool);
-		if (this.HasOtherKillCool)
-		{
-			this.KillCoolTime = loader.GetValue<KillerCommonOption, float>(
-				KillerCommonOption.KillCoolDown);
-		}
+		var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
+		LiberalSettingOverrider.OverrideDefault(this, liberalOption);
 
-		this.HasOtherKillRange = loader.GetValue<KillerCommonOption, bool>(
-			KillerCommonOption.HasOtherKillRange);
-
-		if (this.HasOtherKillRange)
-		{
-			this.KillRange = loader.GetValue<KillerCommonOption, int>(
-				KillerCommonOption.KillRange);
-		}
+		this.handler = new DoveCommonAbilityHandler(liberalOption);
 	}
 }
