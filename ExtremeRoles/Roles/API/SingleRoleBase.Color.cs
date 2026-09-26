@@ -26,7 +26,7 @@ public abstract partial class SingleRoleBase
 			return Palette.ImpostorRed;
 		}
 
-        if (targetRole is Solo.Impostor.RemoteKiller remoteKiller &&
+        if (targetRole is Solo.Impostor.RemoteKiller.RemoteKillerRole remoteKiller &&
 			remoteKiller.IsPurging)
         {
 			return Palette.ImpostorRed;
