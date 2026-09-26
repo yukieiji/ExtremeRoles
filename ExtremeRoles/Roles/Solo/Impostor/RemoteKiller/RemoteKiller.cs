@@ -120,11 +120,7 @@ public sealed class RemoteKillerRole :
 
 	public override IStatusModel? Status => this.statusModel;
 
-	public bool IsPurging
-	{
-		get => this.statusModel.IsPurging;
-		set => this.statusModel.IsPurging = value;
-	}
+	public bool IsPurging => this.statusModel.IsPurging;
 
 	private readonly RemoteKillerStatusModel statusModel = new RemoteKillerStatusModel();
 	private RemoteKillerRobHandler robHandler;
@@ -151,12 +147,12 @@ public sealed class RemoteKillerRole :
 		switch (ops)
 		{
 			case RemoteKillerRpc.PurgeStart:
-				remoteKiller.statusModel.IsPurging = true;
+				remoteKiller.statusModel.SetPurging(true);
 				remoteKiller.statusModel.CanMove = false;
 				break;
 
 			case RemoteKillerRpc.PurgeCancel:
-				remoteKiller.statusModel.IsPurging = false;
+				remoteKiller.statusModel.SetPurging(false);
 				remoteKiller.statusModel.CanMove = true;
 				break;
 		}
@@ -201,7 +197,7 @@ public sealed class RemoteKillerRole :
 			var target = Player.GetPlayerControlById(targetId);
 			if (target != null && target.Data != null && !target.Data.IsDead && !target.Data.Disconnected)
 			{
-				if (this.statusModel.PendingReports.Contains(targetId))
+				if (this.statusModel.IsPendingReport(targetId))
 				{
 					if (shouldSendReport)
 					{
@@ -222,31 +218,33 @@ public sealed class RemoteKillerRole :
 						}
 					}
 
-					this.statusModel.PendingReports.Remove(targetId);
+					this.statusModel.RemovePendingReport(targetId);
 				}
 			}
 
-			if (this.statusModel.TaskPhaseContacts.ContainsKey(targetId))
-			{
-				this.statusModel.TaskPhaseContacts[targetId].Clear();
-			}
+			this.statusModel.ClearTaskPhaseContacts(targetId);
 		}
 	}
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
 		this.statusModel.CanMove = true;
-		this.statusModel.IsPurging = false;
+		this.statusModel.SetPurging(false);
 	}
 
 	public void Update(PlayerControl rolePlayer)
 	{
 		// 死亡または切断された執行対象を削除（蘇生時に再度ターゲット可能にするため）
-		this.statusModel.ExecutionTargets.RemoveWhere(id =>
+		var deadTargets = this.statusModel.ExecutionTargets.Where(id =>
 		{
 			var p = GameData.Instance.GetPlayerById(id);
 			return p == null || p.IsDead || p.Disconnected;
-		});
+		}).ToList();
+
+		foreach (var deadId in deadTargets)
+		{
+			this.statusModel.RemoveExecutionTarget(deadId);
+		}
 
 		// タスクフェーズ中以外は接触記録を行わない
 		if (!GameProgressSystem.IsTaskPhase)
@@ -263,7 +261,7 @@ public sealed class RemoteKillerRole :
 
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 	{
-		if (this.statusModel.ExecutionTargets.Contains(targetPlayerId))
+		if (this.statusModel.HasExecutionTarget(targetPlayerId))
 		{
 			return Design.ColoredString(Palette.ImpostorRed, " ▼");
 		}
@@ -296,17 +294,13 @@ public sealed class RemoteKillerRole :
 
 	protected override void RoleSpecificInit()
 	{
-		this.statusModel.CanMove = true;
-
 		var loader = this.Loader;
-		this.statusModel.RobRange = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.RobRange);
-		this.statusModel.RobActiveTime = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.RobActiveTime);
-		this.statusModel.ContactPlayerCount = loader.GetValue<RemoteKillerOption, int>(RemoteKillerOption.ContactPlayerCount);
-		this.statusModel.PurgeTime = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.PurgeTime);
+		float robRange = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.RobRange);
+		float robActiveTime = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.RobActiveTime);
+		int contactPlayerCount = loader.GetValue<RemoteKillerOption, int>(RemoteKillerOption.ContactPlayerCount);
+		float purgeTime = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.PurgeTime);
 
-		this.statusModel.ExecutionTargets.Clear();
-		this.statusModel.PendingReports.Clear();
-		this.statusModel.TaskPhaseContacts.Clear();
-		this.statusModel.IsPurging = false;
+		this.statusModel.Reset();
+		this.statusModel.SetOptions(robRange, robActiveTime, contactPlayerCount, purgeTime);
 	}
 }

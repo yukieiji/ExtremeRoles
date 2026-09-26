@@ -10,13 +10,12 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API.Interface.Ability;
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
 
-public sealed class RemoteKillerRobHandler(RemoteKillerStatusModel status, RemoteKillerRole role) : IAbility
+public sealed class RemoteKillerRobHandler(RemoteKillerStatusModel status, RemoteKillerRole role)
 {
 	private readonly RemoteKillerStatusModel status = status;
 	private readonly RemoteKillerRole role = role;
@@ -58,7 +57,7 @@ public sealed class RemoteKillerRobHandler(RemoteKillerStatusModel status, Remot
 			return false;
 		}
 
-		if (this.status.ExecutionTargets.Contains(target.PlayerId))
+		if (this.status.HasExecutionTarget(target.PlayerId))
 		{
 			return false;
 		}
@@ -106,13 +105,7 @@ public sealed class RemoteKillerRobHandler(RemoteKillerStatusModel status, Remot
 		if (this.currentRobTarget != null)
 		{
 			byte targetId = this.currentRobTarget.PlayerId;
-
-			this.status.ExecutionTargets.Add(targetId);
-			this.status.PendingReports.Add(targetId);
-			if (!this.status.TaskPhaseContacts.ContainsKey(targetId))
-			{
-				this.status.TaskPhaseContacts[targetId] = new HashSet<byte>();
-			}
+			this.status.AddExecutionTarget(targetId);
 		}
 
 		this.currentRobTarget = null;
@@ -132,12 +125,6 @@ public sealed class RemoteKillerRobHandler(RemoteKillerStatusModel status, Remot
 		}
 
 		Vector2 targetPos = targetInfo.Object.GetTruePosition();
-
-		if (!this.status.TaskPhaseContacts.TryGetValue(targetId, out var contacts))
-		{
-			contacts = new HashSet<byte>();
-			this.status.TaskPhaseContacts[targetId] = contacts;
-		}
 
 		foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
@@ -159,7 +146,7 @@ public sealed class RemoteKillerRobHandler(RemoteKillerStatusModel status, Remot
 				continue;
 			}
 
-			contacts.Add(playerInfo.PlayerId);
+			this.status.RecordContact(targetId, playerInfo.PlayerId);
 		}
 	}
 }
