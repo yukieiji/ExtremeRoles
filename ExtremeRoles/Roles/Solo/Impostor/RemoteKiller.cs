@@ -48,10 +48,8 @@ public sealed class RemoteKiller :
 
 	public enum RemoteKillerRpc : byte
 	{
-		RobSuccess,
 		PurgeStart,
 		PurgeCancel,
-		PurgeExecute,
 	}
 
 	public sealed class RemoteKillerReportSerializer : IStringSerializer
@@ -167,16 +165,6 @@ public sealed class RemoteKiller :
 
 		switch (ops)
 		{
-			case RemoteKillerRpc.RobSuccess:
-				byte targetId = reader.ReadByte();
-				remoteKiller.executionTargets.Add(targetId);
-				remoteKiller.pendingReports.Add(targetId);
-				if (!remoteKiller.taskPhaseContacts.ContainsKey(targetId))
-				{
-					remoteKiller.taskPhaseContacts[targetId] = new HashSet<byte>();
-				}
-				break;
-
 			case RemoteKillerRpc.PurgeStart:
 				remoteKiller.IsPurging = true;
 				if (remoteKiller.status is not null)
@@ -190,21 +178,6 @@ public sealed class RemoteKiller :
 				if (remoteKiller.status is not null)
 				{
 					remoteKiller.status.CanMove = true;
-				}
-				break;
-
-			case RemoteKillerRpc.PurgeExecute:
-				byte executedTarget = reader.ReadByte();
-				remoteKiller.IsPurging = false;
-				if (remoteKiller.status is not null)
-				{
-					remoteKiller.status.CanMove = true;
-				}
-
-				if (remoteKiller.executionTargets.Contains(executedTarget))
-				{
-					remoteKiller.executionTargets.Remove(executedTarget);
-					Player.RpcUncheckMurderPlayer(executedTarget, executedTarget, 0);
 				}
 				break;
 		}
@@ -432,7 +405,7 @@ public sealed class RemoteKiller :
 
 	private bool isUseRob()
 	{
-		if (!IRoleAbility.IsCommonUse())
+		if (!IsAbilityUse())
 		{
 			return false;
 		}
@@ -496,15 +469,17 @@ public sealed class RemoteKiller :
 	{
 		if (this.currentRobTarget != null)
 		{
-			byte localId = PlayerControl.LocalPlayer.PlayerId;
 			byte targetId = this.currentRobTarget.PlayerId;
 
-			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
+			// リモートキラー自身のローカルデータに執行対象を追加（全体共有RPCは不要）
+			this.executionTargets.Add(targetId);
+			this.pendingReports.Add(targetId);
+			if (!this.taskPhaseContacts.ContainsKey(targetId))
 			{
-				caller.WriteByte((byte)RemoteKillerRpc.RobSuccess);
-				caller.WriteByte(localId);
-				caller.WriteByte(targetId);
+				this.taskPhaseContacts[targetId] = new HashSet<byte>();
 			}
+
+			EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 		}
 		this.currentRobTarget = null;
 	}
@@ -561,7 +536,6 @@ public sealed class RemoteKiller :
 		{
 			caller.WriteByte((byte)RemoteKillerRpc.PurgeStart);
 			caller.WriteByte(localId);
-			caller.WriteByte(targetId);
 		}
 
 		if (this.Button != null && this.Button.Transform.TryGetComponent<PassiveButton>(out var button))
@@ -592,12 +566,18 @@ public sealed class RemoteKiller :
 			byte localId = PlayerControl.LocalPlayer.PlayerId;
 			byte targetId = this.selectedPurgeTarget.PlayerId;
 
+			// 1) 粛清状態の解除RPCを送信（移動制限・赤名前の解除）
 			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
 			{
-				caller.WriteByte((byte)RemoteKillerRpc.PurgeExecute);
+				caller.WriteByte((byte)RemoteKillerRpc.PurgeCancel);
 				caller.WriteByte(localId);
-				caller.WriteByte(targetId);
 			}
+
+			// 2) 既存の標準キルRPCを呼び出して遠隔キル（自殺アニメーション）を実行
+			Player.RpcUncheckMurderPlayer(targetId, targetId, 0);
+
+			// 執行対象リストから除外
+			this.executionTargets.Remove(targetId);
 		}
 
 		this.selectedPurgeTarget = null;
