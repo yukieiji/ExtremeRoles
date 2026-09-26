@@ -12,8 +12,16 @@ public static class HudManagerExtension
 
 		if (cachedArrange == null)
 		{
-			cachedArrange = mng.UseButton.transform.parent.gameObject.GetComponent<GridArrange>();
+			var useButton = mng.UseButton;
+			if (useButton == null || useButton.transform == null || useButton.transform.parent == null)
+			{
+				return;
+			}
+			cachedArrange = useButton.transform.parent.gameObject.GetComponent<GridArrange>();
 		}
-		cachedArrange.ArrangeChilds();
+		if (cachedArrange != null)
+		{
+			cachedArrange.ArrangeChilds();
+		}
 	}
 }
