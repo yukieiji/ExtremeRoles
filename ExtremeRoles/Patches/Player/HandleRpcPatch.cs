@@ -371,6 +371,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.ArtistRpcOps:
 				RPCOperator.ArtistDrawOps(reader);
 				break;
+			case RPCOperator.Command.EncloserOps:
+				RPCOperator.EncloserRpcOps(reader);
+				break;
 			case RPCOperator.Command.SetGhostRole:
 				RPCOperator.SetGhostRole(
 					ref reader);
@@ -383,9 +386,6 @@ public static class PlayerControlHandleRpcPatch
 				break;
 			case RPCOperator.Command.XionAbility:
 				RPCOperator.XionAbility(ref reader);
-				break;
-			case RPCOperator.Command.EncloserOps:
-				Roles.Solo.Liberal.Encloser.RpcOps(reader);
 				break;
 			default:
 				break;
