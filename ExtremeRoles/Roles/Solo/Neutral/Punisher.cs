@@ -27,10 +27,11 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 	}
 
 	private int requiredTaskNum;
-	private float taskKillCoolReduce;
-	private float nonImpostorKillCoolIncrease;
+	private int taskKillCoolReduce;
+	private int nonImpostorKillCoolIncrease;
 
-	private HashSet<uint> completedTasks = [];
+	private HashSet<uint> curTaskListCompleted = [];
+	private int totalTaskComplete;
 	private byte? winRolePlayerId;
 
 	public Punisher() : base(
@@ -87,13 +88,14 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 			}
 
 			currentCompletedCount++;
-			if (!this.completedTasks.Contains(task.Id))
+			if (!this.curTaskListCompleted.Contains(task.Id))
 			{
+				this.totalTaskComplete++;
 				newlyCompletedTaskIds.Add(task.Id);
 			}
 		}
 
-		if (currentCompletedCount >= this.requiredTaskNum)
+		if (this.totalTaskComplete >= this.requiredTaskNum)
 		{
 			this.CanKill = true;
 		}
@@ -106,7 +108,7 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 		{
 			foreach (uint id in newlyCompletedTaskIds)
 			{
-				this.completedTasks.Add(id);
+				this.curTaskListCompleted.Add(id);
 			}
 
 			if (this.CanKill)
@@ -147,6 +149,7 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 				}
 				GameSystem.RpcReplaceNewTask(rolePlayer.PlayerId, i, newTaskId);
 			}
+			this.curTaskListCompleted.Clear();
 		}
 	}
 
@@ -190,9 +193,9 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 
 		this.requiredTaskNum = loader.GetValue<Option, int>(
 			Option.RequiredTaskNumToKill);
-		this.taskKillCoolReduce = loader.GetValue<Option, float>(
+		this.taskKillCoolReduce = loader.GetValue<Option, int>(
 			Option.TaskCompletionKillCoolReduce);
-		this.nonImpostorKillCoolIncrease = loader.GetValue<Option, float>(
+		this.nonImpostorKillCoolIncrease = loader.GetValue<Option, int>(
 			Option.NonImpostorKillCoolIncrease);
 
 		if (!this.HasOtherKillCool)
@@ -201,8 +204,9 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 			this.KillCoolTime = Player.DefaultKillCoolTime;
 		}
 
+		this.totalTaskComplete = 0;
 		this.winRolePlayerId = null;
-		this.completedTasks.Clear();
+		this.curTaskListCompleted.Clear();
 		this.IsWin = false;
 		this.CanKill = this.requiredTaskNum == 0;
 	}
