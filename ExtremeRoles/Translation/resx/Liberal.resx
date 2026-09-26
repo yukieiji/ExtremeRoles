@@ -269,4 +269,33 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="DisguisedAccounting" xml:space="preserve">
     <value>偽装会計</value>
   </data>
+  <data name="Martyr" xml:space="preserve">
+    <value>マーター</value>
+  </data>
+  <data name="MartyrFullDescription" xml:space="preserve">
+    <value>タイプ : ミリタント
+
+能力「自爆」で範囲内のプレイヤーを一定の確率で消し飛ばすミリタント
+・ボタンを押すと爆発が発生し、その場にいるプレイヤーを確率で爆破する
+・爆発でマーター自身は必ず死亡する
+・消し飛ばしたプレイヤー1人ごとに資金を獲得する</value>
+  </data>
+  <data name="MartyrShortDescription" xml:space="preserve">
+    <value>敵と一緒に、自爆しろ</value>
+  </data>
+  <data name="MartyrIntroDescription" xml:space="preserve">
+    <value>私の命は、最後の瞬間まで誰にも渡さない</value>
+  </data>
+  <data name="SelfDestruct" xml:space="preserve">
+    <value>自爆</value>
+  </data>
+  <data name="MartyrKillProbability" xml:space="preserve">
+    <value>「自爆」で範囲内のプレイヤーを消し飛ばす確率</value>
+  </data>
+  <data name="MartyrKillMoney" xml:space="preserve">
+    <value>「自爆」の1キルあたりの獲得資金</value>
+  </data>
+  <data name="MartyrRange" xml:space="preserve">
+    <value>「自爆」の爆発範囲</value>
+  </data>
 </root>
