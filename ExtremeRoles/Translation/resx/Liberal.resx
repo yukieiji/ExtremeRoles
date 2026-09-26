@@ -318,4 +318,36 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="MartyrAbilityCoolTime" xml:space="preserve">
     <value>「自爆」のクールタイム</value>
   </data>
+  <data name="Encloser" xml:space="preserve">
+    <value>エンクローサー</value>
+  </data>
+  <data name="EncloserFullDescription" xml:space="preserve">
+    <value>タイプ : ミリタント
+
+能力「杭」で杭を打ち、多角形を構築して「滅」で一括キルするミリタント</value>
+  </data>
+  <data name="EncloserShortDescription" xml:space="preserve">
+    <value>結界で敵を屠れ</value>
+  </data>
+  <data name="EncloserIntroDescription" xml:space="preserve">
+    <value>結界師の方囲、定礎、滅ができる</value>
+  </data>
+  <data name="EncloserStakeCount" xml:space="preserve">
+    <value>杭の設置数（多角形の頂点数）</value>
+  </data>
+  <data name="EncloserMetsuLimit" xml:space="preserve">
+    <value>「滅」の使用回数制限</value>
+  </data>
+  <data name="EncloserAbilityCoolTime" xml:space="preserve">
+    <value>能力のクールタイム</value>
+  </data>
+  <data name="EncloserMetsuKillMoney" xml:space="preserve">
+    <value>「滅」の資金ボーナス/他陣営キル1人あたり</value>
+  </data>
+  <data name="Stake" xml:space="preserve">
+    <value>杭</value>
+  </data>
+  <data name="Metsu" xml:space="preserve">
+    <value>滅</value>
+  </data>
 </root>
