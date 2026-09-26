@@ -59,33 +59,58 @@ public sealed class RemoteKiller :
 		public StringSerializerType Type => StringSerializerType.RemoteKillerNotebookStolen;
 		public bool IsRpc { get; set; } = false;
 
-		private string names = string.Empty;
+		private readonly List<byte> contactPlayerIds = new List<byte>();
 
 		public RemoteKillerReportSerializer() { }
 
-		public RemoteKillerReportSerializer(string names)
+		public RemoteKillerReportSerializer(List<byte> playerIds)
 		{
-			this.names = names;
+			this.contactPlayerIds = playerIds;
 		}
 
 		public void Serialize(RPCOperator.RpcCaller caller)
 		{
-			caller.WriteStr(this.names);
+			caller.WriteByte((byte)this.contactPlayerIds.Count);
+			foreach (byte id in this.contactPlayerIds)
+			{
+				caller.WriteByte(id);
+			}
 		}
 
 		public void Deserialize(MessageReader reader)
 		{
-			this.names = reader.ReadString();
+			byte count = reader.ReadByte();
+			this.contactPlayerIds.Clear();
+			for (int i = 0; i < count; i++)
+			{
+				this.contactPlayerIds.Add(reader.ReadByte());
+			}
 		}
 
 		public override string ToString()
 		{
 			string header = Tr.GetString("remoteKillerNotebookStolenReport");
-			if (string.IsNullOrEmpty(this.names))
+			if (this.contactPlayerIds.Count == 0)
 			{
 				return header;
 			}
-			return $"{header}\n{this.names}";
+
+			List<string> names = new List<string>();
+			foreach (byte pId in this.contactPlayerIds)
+			{
+				var p = Player.GetPlayerControlById(pId);
+				if (p != null && p.Data != null)
+				{
+					names.Add(p.Data.PlayerName);
+				}
+			}
+
+			if (names.Count == 0)
+			{
+				return header;
+			}
+
+			return $"{header}\n{string.Join("\n", names)}";
 		}
 	}
 
@@ -269,24 +294,13 @@ public sealed class RemoteKiller :
 								.Take(this.contactPlayerCount)
 								.ToList();
 
-							List<string> pickedNames = new List<string>();
-							foreach (byte pId in pickedIds)
-							{
-								var p = Player.GetPlayerControlById(pId);
-								if (p != null && p.Data != null)
-								{
-									pickedNames.Add(p.Data.PlayerName);
-								}
-							}
-
-							string namesStr = string.Join("\n", pickedNames);
 							MeetingReporter.RpcAddTargetMeetingChatReport(
-								targetId, new RemoteKillerReportSerializer(namesStr));
+								targetId, new RemoteKillerReportSerializer(pickedIds));
 						}
 						else
 						{
 							MeetingReporter.RpcAddTargetMeetingChatReport(
-								targetId, new RemoteKillerReportSerializer(string.Empty));
+								targetId, new RemoteKillerReportSerializer(new List<byte>()));
 						}
 					}
 
@@ -313,100 +327,54 @@ public sealed class RemoteKiller :
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		List<byte> deadTargets = new List<byte>();
+		// Clean up dead or disconnected execution targets
+		this.executionTargets.RemoveWhere(id =>
+		{
+			var p = GameData.Instance.GetPlayerById(id);
+			return p == null || p.IsDead || p.Disconnected;
+		});
+
+		if (PlayerControl.LocalPlayer.PlayerId == rolePlayer.PlayerId && this.IsPurging)
+		{
+			updatePurging(rolePlayer);
+		}
+
+		if (!GameProgressSystem.IsTaskPhase)
+		{
+			return;
+		}
+
 		foreach (byte targetId in this.executionTargets)
 		{
-			var target = Player.GetPlayerControlById(targetId);
-			if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected)
+			var targetInfo = GameData.Instance.GetPlayerById(targetId);
+			if (targetInfo == null || targetInfo.IsDead || targetInfo.Disconnected || !targetInfo.Object)
 			{
-				deadTargets.Add(targetId);
+				continue;
 			}
-		}
 
-		foreach (byte deadId in deadTargets)
-		{
-			this.executionTargets.Remove(deadId);
-			this.pendingReports.Remove(deadId);
-			this.taskPhaseContacts.Remove(deadId);
-		}
+			Vector2 targetPos = targetInfo.Object.GetTruePosition();
 
-		if (PlayerControl.LocalPlayer.PlayerId == rolePlayer.PlayerId)
-		{
-			if (this.IsPurging)
+			if (!this.taskPhaseContacts.TryGetValue(targetId, out var contacts))
 			{
-				if (this.status is not null)
-				{
-					this.status.CanMove = false;
-				}
-
-				if (rolePlayer.Data.IsDead || MeetingHud.Instance != null)
-				{
-					cancelPurge();
-					return;
-				}
-
-				if (this.purgeTargetId.HasValue)
-				{
-					var target = Player.GetPlayerControlById(this.purgeTargetId.Value);
-					if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected)
-					{
-						cancelPurge();
-						return;
-					}
-				}
-
-				this.purgeTimer -= Time.deltaTime;
-				if (this.purgeTimer <= 0.0f)
-				{
-					if (this.purgeTargetId.HasValue)
-					{
-						byte targetId = this.purgeTargetId.Value;
-						using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
-						{
-							caller.WriteByte((byte)RemoteKillerRpc.PurgeExecute);
-							caller.WriteByte(rolePlayer.PlayerId);
-							caller.WriteByte(targetId);
-						}
-					}
-				}
+				contacts = new HashSet<byte>();
+				this.taskPhaseContacts[targetId] = contacts;
 			}
-		}
 
-		if (GameProgressSystem.IsTaskPhase)
-		{
-			foreach (byte targetId in this.executionTargets)
+			foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
-				var target = Player.GetPlayerControlById(targetId);
-				if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected)
+				if (playerInfo.IsInValid() || playerInfo.PlayerId == targetId || !playerInfo.Object || playerInfo.Object.inVent)
 				{
 					continue;
 				}
 
-				if (!this.taskPhaseContacts.TryGetValue(targetId, out var contacts))
+				Vector2 diff = playerInfo.Object.GetTruePosition() - targetPos;
+				float dist = diff.magnitude;
+
+				if (dist <= this.robRange &&
+					!PhysicsHelpers.AnyNonTriggersBetween(
+						targetPos, diff.normalized, dist, Constants.ShipAndObjectsMask))
 				{
-					contacts = new HashSet<byte>();
-					this.taskPhaseContacts[targetId] = contacts;
-				}
-
-				Vector2 targetPos = target.GetTruePosition();
-
-				foreach (var other in PlayerCache.AllPlayerControl)
-				{
-					if (other.PlayerId == targetId || other.Data == null || other.Data.IsDead || other.Data.Disconnected || other.inVent)
-					{
-						continue;
-					}
-
-					Vector2 otherPos = other.GetTruePosition();
-					Vector2 diff = otherPos - targetPos;
-					float dist = diff.magnitude;
-
-					if (dist <= this.robRange &&
-						!PhysicsHelpers.AnyNonTriggersBetween(
-							targetPos, diff.normalized, dist, Constants.ShipAndObjectsMask))
-					{
-						contacts.Add(other.PlayerId);
-					}
+					contacts.Add(playerInfo.PlayerId);
 				}
 			}
 		}
@@ -461,6 +429,45 @@ public sealed class RemoteKiller :
 		this.IsPurging = false;
 		this.purgeTargetId = null;
 		this.currentRobTarget = null;
+	}
+
+	private void updatePurging(PlayerControl rolePlayer)
+	{
+		if (this.status is not null)
+		{
+			this.status.CanMove = false;
+		}
+
+		if (rolePlayer.Data.IsDead || MeetingHud.Instance != null)
+		{
+			cancelPurge();
+			return;
+		}
+
+		if (this.purgeTargetId.HasValue)
+		{
+			var target = Player.GetPlayerControlById(this.purgeTargetId.Value);
+			if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected)
+			{
+				cancelPurge();
+				return;
+			}
+		}
+
+		this.purgeTimer -= Time.deltaTime;
+		if (this.purgeTimer <= 0.0f)
+		{
+			if (this.purgeTargetId.HasValue)
+			{
+				byte targetId = this.purgeTargetId.Value;
+				using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
+				{
+					caller.WriteByte((byte)RemoteKillerRpc.PurgeExecute);
+					caller.WriteByte(rolePlayer.PlayerId);
+					caller.WriteByte(targetId);
+				}
+			}
+		}
 	}
 
 	private bool isUseRob()
