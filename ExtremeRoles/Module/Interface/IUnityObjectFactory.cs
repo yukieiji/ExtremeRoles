@@ -7,7 +7,8 @@ namespace ExtremeRoles.Module.Interface;
 public interface IUnityObjectFactory
 {
 	public GameObject CreateGameObject(string name);
-	public Material? CreateMaterial(Shader shader);
+	public Material CreateMaterial(Shader shader);
+	public Material CreateSpriteMaterial();
 	public Mesh CreateMesh();
 }
 
@@ -18,9 +19,14 @@ public class DefaultUnityObjectFactory : IUnityObjectFactory
 		return new GameObject(name);
 	}
 
-	public Material? CreateMaterial(Shader shader)
+	public Material CreateMaterial(Shader shader)
 	{
-		return shader != null ? new Material(shader) : null;
+		return new Material(shader);
+	}
+
+	public Material CreateSpriteMaterial()
+	{
+		return new Material(Shader.Find("Sprites/Default"));
 	}
 
 	public Mesh CreateMesh()
