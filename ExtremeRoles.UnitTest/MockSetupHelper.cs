@@ -246,8 +246,22 @@ public static class MockSetupHelper
         if (MockPlayerVoteAreaget_HasNotVotedHelper.Instance == null)
         {
             var mockHasNotVoted = new Mock<MockPlayerVoteAreaget_HasNotVotedHelper>();
-            mockHasNotVoted.Setup(h => h.Invoke()).Returns((byte)253);
+            mockHasNotVoted.Setup(h => h.Invoke()).Returns((byte)255);
             MockPlayerVoteAreaget_HasNotVotedHelper.Instance = mockHasNotVoted.Object;
+        }
+
+        if (MockPlayerVoteAreaget_SkippedVoteHelper.Instance == null)
+        {
+            var mockSkipped = new Mock<MockPlayerVoteAreaget_SkippedVoteHelper>();
+            mockSkipped.Setup(h => h.Invoke()).Returns((byte)251);
+            MockPlayerVoteAreaget_SkippedVoteHelper.Instance = mockSkipped.Object;
+        }
+
+        if (MockPlayerVoteAreaget_DeadVoteHelper.Instance == null)
+        {
+            var mockDead = new Mock<MockPlayerVoteAreaget_DeadVoteHelper>();
+            mockDead.Setup(h => h.Invoke()).Returns((byte)254);
+            MockPlayerVoteAreaget_DeadVoteHelper.Instance = mockDead.Object;
         }
     }
 
