@@ -109,6 +109,7 @@ public static class RPCOperator
 
 		// リベラル
 		EncloserOps,
+		DeltaOps,
 
 		// 幽霊役職
 		SetGhostRole,
@@ -755,6 +756,11 @@ public static class RPCOperator
 	public static void EncloserRpcOps(in MessageReader reader)
 	{
 		Roles.Solo.Liberal.Encloser.EncloserRole.RpcOps(reader);
+	}
+
+	public static void DeltaRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Liberal.Delta.RpcOps(reader);
 	}
 
 	public static void SetGhostRole(

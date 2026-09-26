@@ -248,4 +248,22 @@ Place stakes with "Stake" ability to construct a polygon, then perform "Metsu" t
   <data name="Metsu" xml:space="preserve">
     <value>Metsu</value>
   </data>
+  <data name="Delta" xml:space="preserve">
+    <value>Delta</value>
+  </data>
+  <data name="DeltaFullDescription" xml:space="preserve">
+    <value>Compares tasks completed with target player and gains bonus funds based on difference.</value>
+  </data>
+  <data name="DeltaShortDescription" xml:space="preserve">
+    <value>Gains funds based on task completion difference with target player.</value>
+  </data>
+  <data name="DeltaIntroDescription" xml:space="preserve">
+    <value>Compare completed tasks with others to earn bonus funds!</value>
+  </data>
+  <data name="DeltaRange" xml:space="preserve">
+    <value>Range</value>
+  </data>
+  <data name="DeltaMoneyPerTaskDiff" xml:space="preserve">
+    <value>Bonus Funds per Task Difference</value>
+  </data>
 </root>
