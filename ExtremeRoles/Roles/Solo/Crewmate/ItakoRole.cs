@@ -4,8 +4,10 @@ using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -29,18 +31,24 @@ public sealed class ItakoRole :
 	{
 		get
 		{
-			if (OffsetInfo != null)
+			if (this.OffsetInfo != null &&
+				OptionManager.Instance.TryGetCategory(
+					this.Tab,
+					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
+					out var combCate))
 			{
-				return base.Loader;
+				return new OptionLoadWrapper(combCate, this.OffsetInfo.IdOffset);
 			}
-			if (!OptionManager.Instance.TryGetCategory(
+
+			if (OptionManager.Instance.TryGetCategory(
 					this.Tab,
 					ExtremeRoleManager.GetRoleGroupId(this.Core.Id),
 					out var cate))
 			{
-				throw new System.ArgumentException("Can't find category");
+				return cate;
 			}
-			return cate;
+
+			return base.Loader;
 		}
 	}
 
@@ -49,6 +57,7 @@ public sealed class ItakoRole :
 	private NetworkedPlayerInfo? targetBody;
 	private NetworkedPlayerInfo? tmpTargetBody;
 	private byte activeTargetBodyId = byte.MaxValue;
+	private bool isChannelingActive = false;
 
 	private float range;
 	private float requiredTaskRate;
@@ -88,6 +97,7 @@ public sealed class ItakoRole :
 		}
 		this.targetBody = this.tmpTargetBody;
 		this.activeTargetBodyId = this.targetBody.PlayerId;
+		this.isChannelingActive = true;
 		return true;
 	}
 
@@ -111,6 +121,8 @@ public sealed class ItakoRole :
 		bool callerIsCrewmate = this.IsCrewmate();
 		bool targetIsCrewmate = ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) && targetRole.IsCrewmate();
 
+		this.isChannelingActive = false;
+
 		if (!callerIsCrewmate || !targetIsCrewmate)
 		{
 			Player.RpcUncheckMurderPlayer(localPlayerId, localPlayerId, byte.MaxValue);
@@ -125,7 +137,9 @@ public sealed class ItakoRole :
 				Player.RpcCleanDeadBody(targetPlayerId);
 			}
 
-			DoInherit(localPlayerId, targetPlayerId);
+			ExtremeRoleManager.RpcReplaceRole(
+				localPlayerId, targetPlayerId,
+				ExtremeRoleManager.ReplaceOperation.ItakoInherit);
 		}
 
 		ForceCleanUp();
@@ -133,9 +147,18 @@ public sealed class ItakoRole :
 
 	public void ForceCleanUp()
 	{
+		if (this.isChannelingActive)
+		{
+			if (this.Button?.Behavior is ICountBehavior countBehavior)
+			{
+				countBehavior.SetAbilityCount(countBehavior.AbilityCount + 1);
+			}
+		}
+
 		this.targetBody = null;
 		this.tmpTargetBody = null;
 		this.activeTargetBodyId = byte.MaxValue;
+		this.isChannelingActive = false;
 	}
 
 	public void ResetOnMeetingStart()
@@ -169,7 +192,7 @@ public sealed class ItakoRole :
 		this.requiredTaskRate = loader.GetValue<Option, int>(Option.RequiredTaskRate) / 100.0f;
 	}
 
-	public static void DoInherit(byte itakoPlayerId, byte targetPlayerId)
+	public static void InheritTargetRole(byte itakoPlayerId, byte targetPlayerId)
 	{
 		if (ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
 			ExtremeRoleManager.TryGetRole(itakoPlayerId, out var itakoRole) &&
@@ -259,7 +282,10 @@ public sealed class ItakoRole :
 					newAbility.Button.HotKey = KeyCode.C;
 				}
 			}
-			HudManager.Instance.ReGridButtons();
+			if (HudManager.InstanceExists)
+			{
+				HudManager.Instance.ReGridButtons();
+			}
 		}
 	}
 }
