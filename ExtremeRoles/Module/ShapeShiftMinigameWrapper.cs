@@ -17,7 +17,7 @@ public sealed class ShapeShiftMinigameWrapper
 	public bool IsOpen { get; private set; }
 	private ShapeshifterMinigame? prefab = null;
 
-	public bool OpenUi(System.Action<PlayerControl> playerSelectAction)
+	public bool OpenUi(System.Action<PlayerControl> playerSelectAction, System.Func<PlayerControl, bool>? filter = null)
 	{
 		if (this.prefab == null)
 		{
@@ -34,6 +34,7 @@ public sealed class ShapeShiftMinigameWrapper
 
 		var game = MinigameSystem.Open(this.prefab);
 		var overider = game.gameObject.TryAddComponent<ShapeshifterMinigameShapeshiftOverride>();
+		overider.Filter = filter;
 		overider.AddSelectPlayerAction(playerSelectAction);
 		overider.AddCloseAction(() => this.IsOpen = false);
 		this.IsOpen = true;
