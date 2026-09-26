@@ -13,7 +13,6 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
@@ -181,9 +180,6 @@ public sealed class RemoteKiller :
 				}
 				break;
 		}
-
-		// 全クライアントの描画（オーバーロード同様の名前色変更等）を更新
-		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 	}
 
 	public void CreateAbility()
@@ -479,8 +475,6 @@ public sealed class RemoteKiller :
 			{
 				this.taskPhaseContacts[targetId] = new HashSet<byte>();
 			}
-
-			EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 		}
 		this.currentRobTarget = null;
 	}
