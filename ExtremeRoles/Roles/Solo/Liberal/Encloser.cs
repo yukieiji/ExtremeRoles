@@ -5,6 +5,8 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 
+using ExtremeRoles.Core;
+using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
@@ -52,33 +54,36 @@ public enum EncloserRpcOpsType : byte
 public sealed class EncloserPolygon
 {
 	public bool IsCompleted { get; private set; }
-	public int Count => this.stakes.Count;
-	public IReadOnlyList<Vector2> Stakes => this.stakes;
+	public int Count => this.stakeObjects.Count;
 
-	private readonly List<Vector2> stakes = new List<Vector2>();
 	private readonly List<GameObject> stakeObjects = new List<GameObject>();
 	private readonly IUnityObjectFactory factory;
+	private readonly IIl2CppObjectProvider il2cppProvider;
 
 	private LineRenderer? lineRenderer;
 	private MeshFilter? meshFilter;
 
-	public EncloserPolygon(IUnityObjectFactory? factory = null)
+	public EncloserPolygon(IUnityObjectFactory? factory = null, IIl2CppObjectProvider? il2cppProvider = null)
 	{
 		this.factory = factory ?? new DefaultUnityObjectFactory();
+		this.il2cppProvider = il2cppProvider ?? new DefaultIl2CppObjectProvider();
 	}
 
 	public void AddStake(Vector2 pos, int maxStakes)
 	{
-		this.stakes.Add(pos);
-
-		var stake = this.factory.CreateGameObject($"EncloserStake_{this.stakes.Count}");
+		System.Console.WriteLine($"[DEBUG-ADDSTAKE] incoming pos=({pos.x}, {pos.y})");
+		var stake = this.factory.CreateGameObject($"EncloserStake_{this.stakeObjects.Count + 1}");
 		var sr = stake.AddComponent<SpriteRenderer>();
 		sr.sprite = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.Bomb);
 		sr.color = ColorPalette.LiberalColor;
-		stake.transform.position = new Vector3(pos.x, pos.y, -0.1f);
+		var stakePos = default(Vector3);
+		stakePos.x = pos.x;
+		stakePos.y = pos.y;
+		stakePos.z = -0.1f;
+		stake.transform.position = stakePos;
 		this.stakeObjects.Add(stake);
 
-		if (this.stakes.Count >= maxStakes)
+		if (this.stakeObjects.Count >= maxStakes)
 		{
 			this.IsCompleted = true;
 		}
@@ -88,7 +93,8 @@ public sealed class EncloserPolygon
 
 	public bool IsPointInside(Vector2 point)
 	{
-		if (!this.IsCompleted || this.stakes.Count < 3)
+		int count = this.stakeObjects.Count;
+		if (!this.IsCompleted || count < 3)
 		{
 			return false;
 		}
@@ -97,13 +103,15 @@ public sealed class EncloserPolygon
 		float px = point.x;
 		float py = point.y;
 
-		int j = this.stakes.Count - 1;
-		for (int i = 0; i < this.stakes.Count; i++)
+		int j = count - 1;
+		for (int i = 0; i < count; i++)
 		{
-			float ix = this.stakes[i].x;
-			float iy = this.stakes[i].y;
-			float jx = this.stakes[j].x;
-			float jy = this.stakes[j].y;
+			Vector3 posI = this.stakeObjects[i].transform.position;
+			Vector3 posJ = this.stakeObjects[j].transform.position;
+			float ix = posI.x;
+			float iy = posI.y;
+			float jx = posJ.x;
+			float jy = posJ.y;
 
 			bool intersect = ((iy > py) != (jy > py)) &&
 				(px < (jx - ix) * (py - iy) / (jy - iy) + ix);
@@ -163,13 +171,13 @@ public sealed class EncloserPolygon
 			this.meshFilter = null;
 		}
 
-		this.stakes.Clear();
 		this.IsCompleted = false;
 	}
 
 	private void rebuildLinesAndMesh()
 	{
-		if (this.stakes.Count < 2)
+		int count = this.stakeObjects.Count;
+		if (count < 2)
 		{
 			return;
 		}
@@ -178,48 +186,42 @@ public sealed class EncloserPolygon
 		{
 			var linesObj = this.factory.CreateGameObject("EncloserLines");
 			this.lineRenderer = linesObj.AddComponent<LineRenderer>();
-			Shader? defaultShader = null;
-			try
-			{
-				defaultShader = Shader.Find("Sprites/Default");
-			}
-			catch (System.NullReferenceException)
-			{
-			}
-
-			if (defaultShader != null)
-			{
-				var mat = this.factory.CreateMaterial(defaultShader);
-				if (mat != null)
-				{
-					this.lineRenderer.material = mat;
-				}
-			}
-
+			this.lineRenderer.material = this.factory.CreateSpriteMaterial();
 			this.lineRenderer.startWidth = 0.15f;
 			this.lineRenderer.endWidth = 0.15f;
 			this.lineRenderer.startColor = ColorPalette.LiberalColor;
 			this.lineRenderer.endColor = ColorPalette.LiberalColor;
 		}
 
-		int posCount = this.stakes.Count + (this.IsCompleted ? 1 : 0);
+		int posCount = count + (this.IsCompleted ? 1 : 0);
 		this.lineRenderer.positionCount = posCount;
 
-		for (int i = 0; i < this.stakes.Count; i++)
+		for (int i = 0; i < count; i++)
 		{
-			this.lineRenderer.SetPosition(i, new Vector3(this.stakes[i].x, this.stakes[i].y, -0.05f));
+			Vector3 pos = this.stakeObjects[i].transform.position;
+			var linePos = default(Vector3);
+			linePos.x = pos.x;
+			linePos.y = pos.y;
+			linePos.z = -0.05f;
+			this.lineRenderer.SetPosition(i, linePos);
 		}
 
 		if (this.IsCompleted)
 		{
-			this.lineRenderer.SetPosition(this.stakes.Count, new Vector3(this.stakes[0].x, this.stakes[0].y, -0.05f));
+			Vector3 firstPos = this.stakeObjects[0].transform.position;
+			var firstLinePos = default(Vector3);
+			firstLinePos.x = firstPos.x;
+			firstLinePos.y = firstPos.y;
+			firstLinePos.z = -0.05f;
+			this.lineRenderer.SetPosition(count, firstLinePos);
 			buildMesh();
 		}
 	}
 
 	private void buildMesh()
 	{
-		if (this.stakes.Count < 3)
+		int count = this.stakeObjects.Count;
+		if (count < 3)
 		{
 			return;
 		}
@@ -229,40 +231,28 @@ public sealed class EncloserPolygon
 			var meshObj = this.factory.CreateGameObject("EncloserPolygonMesh");
 			this.meshFilter = meshObj.AddComponent<MeshFilter>();
 			var meshRenderer = meshObj.AddComponent<MeshRenderer>();
-			Shader? defaultShader = null;
-			try
-			{
-				defaultShader = Shader.Find("Sprites/Default");
-			}
-			catch (System.NullReferenceException)
-			{
-			}
-
-			if (defaultShader != null)
-			{
-				var mat = this.factory.CreateMaterial(defaultShader);
-				if (mat != null)
-				{
-					meshRenderer.material = mat;
-				}
-			}
-
+			meshRenderer.material = this.factory.CreateSpriteMaterial();
 			meshObj.AddComponent<EncloserPolygonMeshBehaviour>();
 		}
 
 		Mesh mesh = this.factory.CreateMesh();
 		if (mesh != null)
 		{
-			Il2CppStructArray<Vector3> vertices = new Il2CppStructArray<Vector3>(this.stakes.Count);
-			for (int i = 0; i < this.stakes.Count; i++)
+			Il2CppStructArray<Vector3> vertices = this.il2cppProvider.GetStructArray<Vector3>(count);
+			for (int i = 0; i < count; i++)
 			{
-				vertices[i] = new Vector3(this.stakes[i].x, this.stakes[i].y, 0.05f);
+				Vector3 pos = this.stakeObjects[i].transform.position;
+				var vertPos = default(Vector3);
+				vertPos.x = pos.x;
+				vertPos.y = pos.y;
+				vertPos.z = 0.05f;
+				vertices[i] = vertPos;
 			}
 
-			int triangleCount = (this.stakes.Count - 2) * 3;
-			Il2CppStructArray<int> triangles = new Il2CppStructArray<int>(triangleCount);
+			int triangleCount = (count - 2) * 3;
+			Il2CppStructArray<int> triangles = this.il2cppProvider.GetStructArray<int>(triangleCount);
 			int tIndex = 0;
-			for (int i = 1; i < this.stakes.Count - 1; i++)
+			for (int i = 1; i < count - 1; i++)
 			{
 				triangles[tIndex++] = 0;
 				triangles[tIndex++] = i;
@@ -275,7 +265,7 @@ public sealed class EncloserPolygon
 				ColorPalette.LiberalColor.b,
 				0.3f);
 
-			Il2CppStructArray<Color> colors = new Il2CppStructArray<Color>(this.stakes.Count);
+			Il2CppStructArray<Color> colors = this.il2cppProvider.GetStructArray<Color>(count);
 			for (int i = 0; i < colors.Length; i++)
 			{
 				colors[i] = yellowFill;
@@ -313,9 +303,10 @@ public sealed class EncloserAbilityHandler : IAbility
 		int metsuLimit,
 		float abilityCoolTime,
 		int metsuKillMoney,
-		IUnityObjectFactory? factory = null)
+		IUnityObjectFactory? factory = null,
+		IIl2CppObjectProvider? il2cppProvider = null)
 	{
-		this.polygon = new EncloserPolygon(factory);
+		this.polygon = new EncloserPolygon(factory, il2cppProvider);
 		this.stakeCount = stakeCount;
 		this.metsuLimit = metsuLimit;
 		this.abilityCoolTime = abilityCoolTime;
@@ -524,11 +515,6 @@ public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 
 	private EncloserAbilityHandler? abilityHandler;
 
-	private int stakeCount;
-	private int metsuLimit;
-	private float abilityCoolTime;
-	private int metsuKillMoney;
-
 	public Encloser() : base(
 		RoleArgs.BuildLiberalMilitant(ExtremeRoleId.Encloser))
 	{
@@ -541,14 +527,8 @@ public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 
 	public void CreateAbility()
 	{
-		this.abilityHandler = new EncloserAbilityHandler(
-			this.stakeCount,
-			this.metsuLimit,
-			this.abilityCoolTime,
-			this.metsuKillMoney);
-
 		this.AbilityClass = this.abilityHandler;
-		this.abilityHandler.CreateAbility();
+		this.abilityHandler?.CreateAbility();
 	}
 
 	public bool UseAbility()
@@ -600,10 +580,16 @@ public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 		var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
 		LiberalSettingOverrider.OverrideDefault(this, liberalOption);
 
-		this.stakeCount = loader.GetValue<EncloserOption, int>(EncloserOption.StakeCount);
-		this.metsuLimit = loader.GetValue<EncloserOption, int>(EncloserOption.MetsuLimit);
-		this.abilityCoolTime = loader.GetValue<EncloserOption, float>(EncloserOption.AbilityCoolTime);
-		this.metsuKillMoney = loader.GetValue<EncloserOption, int>(EncloserOption.MetsuKillMoney);
+		int stakeCount = loader.GetValue<EncloserOption, int>(EncloserOption.StakeCount);
+		int metsuLimit = loader.GetValue<EncloserOption, int>(EncloserOption.MetsuLimit);
+		float abilityCoolTime = loader.GetValue<EncloserOption, float>(EncloserOption.AbilityCoolTime);
+		int metsuKillMoney = loader.GetValue<EncloserOption, int>(EncloserOption.MetsuKillMoney);
+
+		this.abilityHandler = new EncloserAbilityHandler(
+			stakeCount,
+			metsuLimit,
+			abilityCoolTime,
+			metsuKillMoney);
 	}
 
 	public static void RpcOps(MessageReader reader)
