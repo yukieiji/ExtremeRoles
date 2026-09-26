@@ -1702,4 +1702,38 @@ Lv2能力「ビームセーバー」
     <value>能力の発動: {0}
 現在の反対票数: {1}</value>
   </data>
+  <data name="RemoteKiller" xml:space="preserve">
+    <value>リモートキラー</value>
+  </data>
+  <data name="RemoteKillerFullDescription" xml:space="preserve">
+    <value>相手に接近して「奪う」で執行対象に加える。
+執行対象が存在する場合、「執行」で遠隔キルが可能（実行中は移動不可・名前が赤くなる）。</value>
+  </data>
+  <data name="RemoteKillerShortDescription" xml:space="preserve">
+    <value>相手の手帳を奪い遠隔で粛清・執行せよ</value>
+  </data>
+  <data name="RemoteKillerIntroDescription" xml:space="preserve">
+    <value>ふふふ…お前の名前はもう手帳に書かれている…</value>
+  </data>
+  <data name="RemoteKillerRobRange" xml:space="preserve">
+    <value>「奪う」が発動できる範囲</value>
+  </data>
+  <data name="RemoteKillerContactPlayerCount" xml:space="preserve">
+    <value>接触したクルーの表示数</value>
+  </data>
+  <data name="RemoteKillerRobActiveTime" xml:space="preserve">
+    <value>「奪う」にかかる時間</value>
+  </data>
+  <data name="RemoteKillerPurgeTime" xml:space="preserve">
+    <value>「執行」にかかる時間</value>
+  </data>
+  <data name="remoteKillerRob" xml:space="preserve">
+    <value>奪う</value>
+  </data>
+  <data name="remoteKillerPurge" xml:space="preserve">
+    <value>執行</value>
+  </data>
+  <data name="remoteKillerNotebookStolenReport" xml:space="preserve">
+    <value>手帳が奪われた！仲間に報告しよう！ あいつに接触された気がする・・・</value>
+  </data>
 </root>

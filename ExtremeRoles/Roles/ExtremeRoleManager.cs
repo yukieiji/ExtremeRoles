@@ -27,6 +27,7 @@ using ExtremeRoles.Roles.Solo.Crewmate.Loner;
 using ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Roles.Solo.Impostor;
+using ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
 using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Neutral.IronMate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
@@ -133,6 +134,7 @@ public enum ExtremeRoleId : int
 	Scavenger,
 	Boxer,
 	Legislator,
+	RemoteKiller,
 
 	Alice,
     Jackal,
@@ -377,6 +379,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Scavenger      , new Scavenger()},
 			{(int)ExtremeRoleId.Boxer          , new Boxer()},
 			{(int)ExtremeRoleId.Legislator     , new Legislator()},
+			{(int)ExtremeRoleId.RemoteKiller   , new RemoteKillerRole()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new JackalRole()},

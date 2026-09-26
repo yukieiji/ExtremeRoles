@@ -17,6 +17,8 @@ public enum StringSerializerType : byte
 	SlaveDriverHarassment,
 
 	ShutterPhoto,
+
+	RemoteKillerNotebookStolen,
 }
 
 public interface IStringSerializer
@@ -42,6 +44,7 @@ public interface IStringSerializer
 			StringSerializerType.PhotographerPhoto => new Photographer.PhotoSerializer(),
 			StringSerializerType.SlaveDriverHarassment => new SlaveDriver.HarassmentReportSerializer(),
 			StringSerializerType.ShutterPhoto => new Shutter.GhostPhotoSerializer(),
+			StringSerializerType.RemoteKillerNotebookStolen => new ExtremeRoles.Roles.Solo.Impostor.RemoteKiller.RemoteKillerRole.RemoteKillerReportSerializer(),
 			_ => throw new ArgumentException("Invalided Type"),
 		};
 

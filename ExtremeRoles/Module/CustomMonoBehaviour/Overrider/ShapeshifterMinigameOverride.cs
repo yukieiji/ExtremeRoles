@@ -15,6 +15,9 @@ public sealed class ShapeshifterMinigameShapeshiftOverride(IntPtr ptr) : MonoBeh
 	private Action<PlayerControl>? overrideAction;
 	private OnDestroyBehavior? destroyBehavior;
 
+	[HideFromIl2Cpp]
+	public Func<PlayerControl, bool>? Filter { get; set; }
+
 	public void Awake()
 	{
 		this.destroyBehavior = this.gameObject.AddComponent<OnDestroyBehavior>();
@@ -53,6 +56,10 @@ public sealed class ShapeshifterMinigameShapeshiftOverride(IntPtr ptr) : MonoBeh
 		}
 		if (target != null)
 		{
+			if (this.Filter != null && !this.Filter(target))
+			{
+				return;
+			}
 			this.overrideAction?.Invoke(target);
 		}
 		else
