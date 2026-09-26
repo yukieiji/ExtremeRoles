@@ -182,6 +182,7 @@ public sealed class RemoteKiller :
 				break;
 		}
 
+		// 全クライアントの描画（オーバーロード同様の名前色変更等）を更新
 		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 	}
 
@@ -471,7 +472,7 @@ public sealed class RemoteKiller :
 		{
 			byte targetId = this.currentRobTarget.PlayerId;
 
-			// リモートキラー自身のローカルデータに執行対象を追加（全体共有RPCは不要）
+			// リモートキラー自身のローカルデータに執行対象を追加
 			this.executionTargets.Add(targetId);
 			this.pendingReports.Add(targetId);
 			if (!this.taskPhaseContacts.ContainsKey(targetId))
@@ -491,7 +492,7 @@ public sealed class RemoteKiller :
 
 	private bool isUsePurge()
 	{
-		if (!IRoleAbility.IsCommonUseWithMinigame())
+		if (!IsAbilityUse() || !IRoleAbility.IsCommonUseWithMinigame())
 		{
 			return false;
 		}
@@ -530,7 +531,6 @@ public sealed class RemoteKiller :
 
 		this.selectedPurgeTarget = target;
 		byte localId = PlayerControl.LocalPlayer.PlayerId;
-		byte targetId = target.PlayerId;
 
 		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
 		{
