@@ -4,11 +4,13 @@ using Hazel;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.ModeSwitcher;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -38,6 +40,12 @@ public enum EncloserMode : byte
 {
 	Stake,
 	Metsu
+}
+
+public enum EncloserRpcOpsType : byte
+{
+	PlaceStake,
+	UseMetsu
 }
 
 public sealed class EncloserPolygon
@@ -272,7 +280,7 @@ public sealed class EncloserPolygon
 	}
 }
 
-public sealed class EncloserAbilityHandler : IAbility, IRoleAutoBuildAbility, IRoleResetMeeting
+public sealed class EncloserAbilityHandler : IAbility
 {
 	public ExtremeAbilityButton Button { get; set; } = null!;
 
@@ -311,9 +319,11 @@ public sealed class EncloserAbilityHandler : IAbility, IRoleAutoBuildAbility, IR
 		var stakeGraphic = new ButtonGraphic(Tr.GetString("Stake"), bombSprite);
 		var metsuGraphic = new ButtonGraphic(Tr.GetString("Metsu"), bombSprite);
 
-		this.CreateAbilityCountButton(
+		this.Button = RoleAbilityFactory.CreateCountAbility(
 			stakeGraphic.Text,
-			stakeGraphic.Img);
+			stakeGraphic.Img,
+			this.IsAbilityUse,
+			this.UseAbility);
 
 		this.Button.SetLabelToCrewmate();
 		this.Button.Behavior.SetCoolTime(this.abilityCoolTime);
@@ -334,6 +344,7 @@ public sealed class EncloserAbilityHandler : IAbility, IRoleAutoBuildAbility, IR
 			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EncloserOps))
 			{
 				caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+				caller.WriteByte((byte)EncloserRpcOpsType.PlaceStake);
 				caller.WriteFloat(pos.x);
 				caller.WriteFloat(pos.y);
 			}
@@ -401,15 +412,13 @@ public sealed class EncloserAbilityHandler : IAbility, IRoleAutoBuildAbility, IR
 					0.0f);
 			}
 
-			this.remainingMetsuCount--;
-			this.polygon.Clear();
-
-			if (this.remainingMetsuCount > 0)
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EncloserOps))
 			{
-				this.modeSwitcher?.Switch(EncloserMode.Stake);
+				caller.WriteByte(encloserPlayerId);
+				caller.WriteByte((byte)EncloserRpcOpsType.UseMetsu);
 			}
 
-			this.Button.Behavior.SetCoolTime(this.abilityCoolTime);
+			HandleUseMetsuRpc(encloserPlayerId);
 			return true;
 		}
 
@@ -423,15 +432,16 @@ public sealed class EncloserAbilityHandler : IAbility, IRoleAutoBuildAbility, IR
 			return false;
 		}
 
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
+		bool isCommonUse = localPlayer != null && localPlayer.IsAlive() && localPlayer.CanMove;
+
 		if (this.CurrentMode == EncloserMode.Stake)
 		{
-			return IRoleAutoBuildAbility.IsCommonUse() &&
-				this.polygon.Count < this.stakeCount;
+			return isCommonUse && this.polygon.Count < this.stakeCount;
 		}
 		else if (this.CurrentMode == EncloserMode.Metsu)
 		{
-			return IRoleAutoBuildAbility.IsCommonUse() &&
-				this.polygon.IsCompleted;
+			return isCommonUse && this.polygon.IsCompleted;
 		}
 
 		return false;
@@ -452,12 +462,20 @@ public sealed class EncloserAbilityHandler : IAbility, IRoleAutoBuildAbility, IR
 		this.polygon.UpdateVisuals(PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == encloserPlayerId);
 	}
 
-	public void ResetOnMeetingStart()
+	public void HandleUseMetsuRpc(byte encloserPlayerId)
 	{
-	}
+		this.remainingMetsuCount--;
+		this.polygon.Clear();
 
-	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
-	{
+		if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == encloserPlayerId)
+		{
+			if (this.remainingMetsuCount > 0)
+			{
+				this.modeSwitcher?.Switch(EncloserMode.Stake);
+			}
+
+			this.Button.Behavior.SetCoolTime(this.abilityCoolTime);
+		}
 	}
 
 	public void Reset()
@@ -474,12 +492,6 @@ public sealed class EncloserAbilityHandler : IAbility, IRoleAutoBuildAbility, IR
 		bool isLocalPlayerEncloser = PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == encloserPlayerId;
 		this.polygon.UpdateVisuals(isLocalPlayerEncloser);
 	}
-}
-
-public enum EncloserRpcOpsType : byte
-{
-	PlaceStake,
-	UseMetsu
 }
 
 public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleResetMeeting
@@ -537,12 +549,10 @@ public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 
 	public void ResetOnMeetingStart()
 	{
-		this.abilityHandler?.ResetOnMeetingStart();
 	}
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
-		this.abilityHandler?.ResetOnMeetingEnd(exiledPlayer);
 	}
 
 	public void Update(PlayerControl rolePlayer)
@@ -585,13 +595,24 @@ public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 	public static void RpcOps(MessageReader reader)
 	{
 		byte rolePlayerId = reader.ReadByte();
-		float x = reader.ReadSingle();
-		float y = reader.ReadSingle();
+		EncloserRpcOpsType ops = (EncloserRpcOpsType)reader.ReadByte();
 
-		if (ExtremeRoleManager.TryGetSafeCastedRole<Encloser>(rolePlayerId, out var encloser) &&
-			encloser.abilityHandler != null)
+		if (!ExtremeRoleManager.TryGetSafeCastedRole<Encloser>(rolePlayerId, out var encloser) ||
+			encloser.abilityHandler == null)
 		{
-			encloser.abilityHandler.HandlePlaceStake(rolePlayerId, new Vector2(x, y));
+			return;
+		}
+
+		switch (ops)
+		{
+			case EncloserRpcOpsType.PlaceStake:
+				float x = reader.ReadSingle();
+				float y = reader.ReadSingle();
+				encloser.abilityHandler.HandlePlaceStake(rolePlayerId, new Vector2(x, y));
+				break;
+			case EncloserRpcOpsType.UseMetsu:
+				encloser.abilityHandler.HandleUseMetsuRpc(rolePlayerId);
+				break;
 		}
 	}
 }
