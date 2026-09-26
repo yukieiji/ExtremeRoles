@@ -6,41 +6,58 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API.Interface.Ability;
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
 
-public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, RemoteKillerRole role) : IAbility
+public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, RemoteKillerRole role)
 {
 	private readonly RemoteKillerStatusModel status = status;
 	private readonly RemoteKillerRole role = role;
 	private ShapeShiftMinigameWrapper? minigame;
 	private PlayerControl? selectedPurgeTarget;
 
-	public ActivatingCountBehavior CreateBehavior(float coolTime, int purgeCount)
+	public ChargingAndActivatingCountBehaviour CreateBehavior(float coolTime, int purgeCount)
 	{
-		var behavior = new ActivatingCountBehavior(
+		var behavior = new ChargingAndActivatingCountBehaviour(
 			text: Tr.GetString("remoteKillerPurge"),
 			img: UnityObjectLoader.LoadSpriteFromResources(ObjectPath.SucideSprite),
-			canUse: IsUsePurge,
-			ability: PurgeOpenMenu,
+			isUse: IsUsePurgeCheck,
+			ability: PurgeStartAbility,
+			onCharge: PurgeOpenMenu,
+			reduceTiming: ChargingAndActivatingCountBehaviour.ReduceTiming.OnActiveDone,
+			isCharge: () => this.minigame != null && this.minigame.IsOpen,
 			canActivating: IsPurgeCheck,
 			abilityOff: PurgeCleanUp,
-			forceAbilityOff: PurgeForceCleanUp,
-			isReduceOnActive: false);
+			forceAbilityOff: PurgeForceCleanUp);
 
 		behavior.SetCoolTime(coolTime);
+		behavior.ChargeTime = float.MaxValue;
 		behavior.ActiveTime = this.status.PurgeTime;
 		behavior.SetAbilityCount(purgeCount);
 
 		return behavior;
 	}
 
-	public bool IsUsePurge()
+	public bool IsUsePurgeCheck(bool isCharging, float chargeGage)
 	{
-		if (!this.role.IsAbilityUse() || !this.role.IsAbilityUseWithMinigame())
+		var isSab = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer);
+		if (isSab)
+		{
+			if (isCharging && Minigame.Instance != null)
+			{
+				Minigame.Instance.ForceClose();
+			}
+			return false;
+		}
+
+		if (isCharging)
+		{
+			return this.role.IsAbilityUseWithMinigame();
+		}
+
+		if (!this.role.IsAbilityUse())
 		{
 			return false;
 		}
@@ -54,15 +71,11 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 
 	public bool PurgeOpenMenu()
 	{
-		if (this.selectedPurgeTarget != null)
-		{
-			return true;
-		}
-
+		this.selectedPurgeTarget = null;
 		this.minigame ??= new ShapeShiftMinigameWrapper();
 		return this.minigame.IsOpen || this.minigame.OpenUi(
 			OnPurgeTargetSelected,
-			p => p != null && p.Data != null && !p.Data.IsDead && !p.Data.Disconnected && this.status.ExecutionTargets.Contains(p.PlayerId));
+			p => p != null && p.Data != null && !p.Data.IsDead && !p.Data.Disconnected && this.status.HasExecutionTarget(p.PlayerId));
 	}
 
 	public void OnPurgeTargetSelected(PlayerControl target)
@@ -72,12 +85,32 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 			return;
 		}
 
-		if (!this.status.ExecutionTargets.Contains(target.PlayerId))
+		if (!this.status.HasExecutionTarget(target.PlayerId))
 		{
 			return;
 		}
 
 		this.selectedPurgeTarget = target;
+
+		if (Minigame.Instance != null)
+		{
+			Minigame.Instance.Close();
+		}
+		this.minigame?.Reset();
+
+		if (this.role.Button != null && this.role.Button.Transform.TryGetComponent<PassiveButton>(out var button))
+		{
+			button.OnClick.Invoke();
+		}
+	}
+
+	public bool PurgeStartAbility(float chargeGage)
+	{
+		if (this.selectedPurgeTarget == null)
+		{
+			return false;
+		}
+
 		byte localId = PlayerControl.LocalPlayer.PlayerId;
 
 		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
@@ -86,10 +119,7 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 			caller.WriteByte(localId);
 		}
 
-		if (this.role.Button != null && this.role.Button.Transform.TryGetComponent<PassiveButton>(out var button))
-		{
-			button.OnClick.Invoke();
-		}
+		return true;
 	}
 
 	public bool IsPurgeCheck()
@@ -125,7 +155,7 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 			Player.RpcUncheckMurderPlayer(targetId, targetId, 0);
 
 			// 執行対象リストから除外
-			this.status.ExecutionTargets.Remove(targetId);
+			this.status.RemoveExecutionTarget(targetId);
 		}
 
 		this.selectedPurgeTarget = null;
