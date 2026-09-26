@@ -15,7 +15,7 @@ public static class LiberalMoneyHistory
 		AddOnKill,
 		
 		DisguisedAccounting,
-		MartyrSelfDestruct,
+		SelfBomb,
 	}
 
 	public readonly record struct MoneyHistory(Reason Reason, byte PlayerId, float Amount);
