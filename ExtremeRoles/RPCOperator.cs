@@ -111,6 +111,7 @@ public static class RPCOperator
         UseGhostRoleAbility,
 
         XionAbility,
+        EncloserOps,
     }
 
     public sealed class RpcCaller : IDisposable
