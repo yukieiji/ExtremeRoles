@@ -28,6 +28,8 @@ public sealed class DoppelgangerTests
     public DoppelgangerTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupObjectImplicitHelpers();
+        MockSetupHelper.SetupOptionManager();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
     }

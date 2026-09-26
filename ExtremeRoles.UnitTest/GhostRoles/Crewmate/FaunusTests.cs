@@ -27,6 +27,8 @@ public sealed class FaunusTests
     public FaunusTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupObjectImplicitHelpers();
+        MockSetupHelper.SetupOptionManager();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
     }

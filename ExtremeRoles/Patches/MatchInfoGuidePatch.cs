@@ -4,7 +4,6 @@ using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using HarmonyLib;
@@ -267,13 +266,19 @@ public static class MatchInfoGuideCreateNormalModeSettingsPatch
 	{
 		// MatchInfoGuideHelper.CreateModSettingEntry(__instance);
 		MatchInfoGuideHelper.CreateModRoleEntry(__instance);
-		
+
 		// 何で公式はインポスターの人数をいちいち数えてるんだ？
-		__instance.CreateSettingsEntry(
-			StringNames.GameNumImpostors,
-			(GameOptionsManager.Instance != null &&
-			 GameOptionsManager.Instance.currentNormalGameOptions != null ?
-			 GameOptionsManager.Instance.currentNormalGameOptions.NumImpostors : 0).ToString());
+		GameObject @new = Object.Instantiate(__instance.MatchInfoSettingPrefab, __instance.settingsScrollArea);
+		if (@new.TryGetComponent<MatchInfoGuideSettingLabel>(out var component))
+		{
+			component.SetInfo(Tr.GetString(StringNames.GameNumImpostors.ToString()), 
+				(GameOptionsManager.Instance != null &&
+				 GameOptionsManager.Instance.currentNormalGameOptions != null ?
+				 GameOptionsManager.Instance.currentNormalGameOptions.NumImpostors : 0).ToString());
+		}
+		var old = __instance.NormalModeSettings[0];
+		__instance.NormalModeSettings[0] = @new;
+		Object.Destroy(old);
 	}
 }
 

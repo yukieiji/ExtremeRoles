@@ -29,6 +29,8 @@ public sealed class VentgeistTests
     public VentgeistTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupObjectImplicitHelpers();
+        MockSetupHelper.SetupOptionManager();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
     }
@@ -202,6 +204,13 @@ public sealed class VentgeistTests
         mockUnityActionImplicit.Setup(x => x.Invoke(It.IsAny<Action>()))
             .Returns((Action action) => action != null ? new UnityAction(IntPtr.Zero) : null!);
         MockUnityActionop_ImplicitHelper.Instance = mockUnityActionImplicit.Object;
+
+        var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
+        mockTranslation.Setup(t => t.GetString(
+            It.IsAny<string>(),
+            It.IsAny<string>(),
+            It.IsAny<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object>>()))
+            .Returns((string id, string defaultStr, Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object> parts) => defaultStr ?? id);
 
         var mockHud = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
         mockHud.SetupGet(h => h.KillButton).Returns(mockKillButton.Object);
