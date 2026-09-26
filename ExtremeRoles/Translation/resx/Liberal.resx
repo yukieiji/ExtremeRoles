@@ -289,7 +289,7 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>私の命は、最後の瞬間まで誰にも渡さない</value>
   </data>
   <data name="MartyrKillProbability" xml:space="preserve">
-    <value>「自爆」で範囲内のプレイヤーを消し飛ばす確率</value>
+    <value>「自爆」で範囲内のキル確率</value>
   </data>
   <data name="MartyrKillMoney" xml:space="preserve">
     <value>「自爆」の資金ボーナス/1キルあたり</value>
