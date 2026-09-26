@@ -31,7 +31,7 @@ public sealed class Martyr : SingleRoleBase, IRoleAutoBuildAbility
 
 	public ExtremeAbilityButton Button { get; set; } = null!;
 
-	public sealed record ExplosionOutcome(
+	public readonly record struct ExplosionOutcome(
 		IReadOnlyList<byte> KilledTargets,
 		float EarnedMoney);
 
