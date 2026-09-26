@@ -216,4 +216,36 @@ Passive: "Self-Explosion Timer"
   <data name="AddictMovementTimeToRecover" xml:space="preserve">
     <value>Continuous Movement Time to Recover Timer</value>
   </data>
+  <data name="Encloser" xml:space="preserve">
+    <value>Encloser</value>
+  </data>
+  <data name="EncloserFullDescription" xml:space="preserve">
+    <value>Type: Militant
+
+Place stakes with "Stake" ability to construct a polygon, then perform "Metsu" to kill everyone inside.</value>
+  </data>
+  <data name="EncloserShortDescription" xml:space="preserve">
+    <value>Slay enemies with the boundary barrier</value>
+  </data>
+  <data name="EncloserIntroDescription" xml:space="preserve">
+    <value>Can use Houi, Teiso, and Metsu barrier techniques</value>
+  </data>
+  <data name="EncloserStakeCount" xml:space="preserve">
+    <value>Number of Stakes (Polygon Vertices)</value>
+  </data>
+  <data name="EncloserMetsuLimit" xml:space="preserve">
+    <value>"Metsu" Usage Limit</value>
+  </data>
+  <data name="EncloserAbilityCoolTime" xml:space="preserve">
+    <value>Ability Cooldown Time</value>
+  </data>
+  <data name="EncloserMetsuKillMoney" xml:space="preserve">
+    <value>"Metsu" Fund Bonus per Non-Liberal Kill</value>
+  </data>
+  <data name="Stake" xml:space="preserve">
+    <value>Stake</value>
+  </data>
+  <data name="Metsu" xml:space="preserve">
+    <value>Metsu</value>
+  </data>
 </root>

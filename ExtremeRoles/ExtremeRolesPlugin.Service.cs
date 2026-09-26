@@ -116,7 +116,8 @@ public partial class ExtremeRolesPlugin
 			.AddTransient<Leader>()
 			.AddTransient<DoveCommonAbilityHandler>()
 			.AddTransient<Dove>()
-			.AddTransient<Militant>();
+			.AddTransient<Militant>()
+			.AddTransient<Encloser>();
 
 		collection.AddTransient<ExtremeGameEndChecker>();
 

@@ -18,7 +18,7 @@ namespace ExtremeRoles.UnitTest.Module.Ability;
 public class ExtremeMultiModalAbilityButtonTests
 {
     private Mock<IButtonAutoActivator> mockActivator;
-    private Mock<IGameObjectFactory> mockGOFactory = null!;
+    private Mock<IUnityObjectFactory> mockGOFactory = null!;
     private Mock<ISpriteLoader> mockSpriteLoader = null!;
     private TestBehavior behavior1;
     private TestBehavior behavior2;
@@ -170,8 +170,8 @@ public class ExtremeMultiModalAbilityButtonTests
         mockMultiAbilityGO.SetupGet(g => g.transform).Returns(mockMultiTransform.Object);
         mockMultiAbilityGO.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockSpriteRenderer.Object);
 
-        mockGOFactory = new Mock<IGameObjectFactory>();
-        mockGOFactory.Setup(f => f.Create(It.IsAny<string>())).Returns(mockMultiAbilityGO.Object);
+        mockGOFactory = new Mock<IUnityObjectFactory>();
+        mockGOFactory.Setup(f => f.CreateGameObject(It.IsAny<string>())).Returns(mockMultiAbilityGO.Object);
 
         var mockSprite = new Mock<Sprite>(IntPtr.Zero);
         mockSpriteLoader = new Mock<ISpriteLoader>();

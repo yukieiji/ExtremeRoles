@@ -384,6 +384,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.XionAbility:
 				RPCOperator.XionAbility(ref reader);
 				break;
+			case RPCOperator.Command.EncloserOps:
+				Roles.Solo.Liberal.Encloser.RpcOps(reader);
+				break;
 			default:
 				break;
 		}
