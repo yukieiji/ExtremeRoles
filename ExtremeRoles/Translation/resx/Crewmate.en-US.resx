@@ -1546,4 +1546,39 @@ Passive Ability "Stress":
   <data name="inspectSystem" xml:space="preserve">
     <value> usage is being monitored...</value>
   </data>
+  <data name="Itako" xml:space="preserve">
+    <value>Itako</value>
+  </data>
+  <data name="ItakoAbility" xml:space="preserve">
+    <value>Spirit Channeling</value>
+  </data>
+  <data name="ItakoIntroDescription" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ItakoShortDescription" xml:space="preserve">
+    <value>Channel dead bodies to inherit their role</value>
+  </data>
+  <data name="ItakoFullDescription" xml:space="preserve">
+    <value>A Crewmate role that can channel dead bodies to inherit their role.
+
+Button ability "Spirit Channeling":
+- Inherits the role of the dead body when used.
+- If used on a non-Crewmate dead body, Itako self-destructs and both dead bodies vanish.
+- If below the required task progress rate, the dead body vanishes after channeling.</value>
+  </data>
+  <data name="ItakoRange" xml:space="preserve">
+    <value>"SPIRIT CHANNELING" : Range from dead body</value>
+  </data>
+  <data name="ItakoRequiredTaskRate" xml:space="preserve">
+    <value>"SPIRIT CHANNELING" : Task progress rate to keep dead body</value>
+  </data>
+  <data name="ItakoAbilityCoolTime" xml:space="preserve">
+    <value>"SPIRIT CHANNELING" : Ability Cooldown</value>
+  </data>
+  <data name="ItakoAbilityActiveTime" xml:space="preserve">
+    <value>"SPIRIT CHANNELING" : Time required</value>
+  </data>
+  <data name="ItakoAbilityCount" xml:space="preserve">
+    <value>"SPIRIT CHANNELING" : Ability Charges</value>
+  </data>
 </root>

@@ -33,7 +33,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
 					out var cate))
 			{
-				throw new ArgumentException("Can't find category");
+				return base.Loader;
 			}
 			return new OptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
 		}
