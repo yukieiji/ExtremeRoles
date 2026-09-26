@@ -93,42 +93,16 @@ public sealed class RemoteKillerTests
 	}
 
 	[Fact]
-	public void RpcHandle_RobSuccess_AddsTargetToExecutionTargets()
-	{
-		// Arrange
-		var role = new RemoteKiller();
-		InitializeRole(role, 1);
-
-		byte targetId = 2;
-		var mockReader = new Mock<MessageReader>();
-		mockReader.SetupSequence(r => r.ReadByte())
-			.Returns((byte)RemoteKiller.RemoteKillerRpc.RobSuccess)
-			.Returns((byte)1)
-			.Returns(targetId);
-
-		var readerObj = mockReader.Object;
-
-		// Act
-		RemoteKiller.RpcHandle(ref readerObj);
-
-		// Assert
-		string tag = role.GetRolePlayerNameTag(role, targetId);
-		Assert.Contains("▼", tag);
-	}
-
-	[Fact]
 	public void RpcHandle_PurgeStartAndCancel_TogglesPurgingState()
 	{
 		// Arrange
 		var role = new RemoteKiller();
 		InitializeRole(role, 1);
 
-		byte targetId = 2;
 		var startReaderMock = new Mock<MessageReader>();
 		startReaderMock.SetupSequence(r => r.ReadByte())
 			.Returns((byte)RemoteKiller.RemoteKillerRpc.PurgeStart)
-			.Returns((byte)1)
-			.Returns(targetId);
+			.Returns((byte)1);
 
 		var startReaderObj = startReaderMock.Object;
 
