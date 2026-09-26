@@ -45,7 +45,19 @@ public sealed class PunisherTests
 		MockSetupHelper.SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
 
+		if (ExtremeRolesPlugin.ShipState == null)
+		{
+			var shipStateProp = typeof(ExtremeRolesPlugin).GetProperty(nameof(ExtremeRolesPlugin.ShipState), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+			shipStateProp?.SetValue(null, new ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus());
+		}
+
 		var mockShipStatus = new Mock<ShipStatus>(IntPtr.Zero);
+		var emptyTasks = new Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<NormalPlayerTask>(0);
+
+		mockShipStatus.SetupGet(s => s.CommonTasks).Returns(emptyTasks);
+		mockShipStatus.SetupGet(s => s.LongTasks).Returns(emptyTasks);
+		mockShipStatus.SetupGet(s => s.ShortTasks).Returns(emptyTasks);
+
 		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShipStatus.Object);
 		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
@@ -96,6 +108,7 @@ public sealed class PunisherTests
 
 		// Act
 		bool result = role.TryRolePlayerKillTo(mockLocalPlayer.Object, mockTargetPlayer.Object);
+		role.OnEndKill();
 
 		// Assert
 		Assert.True(result);
@@ -171,9 +184,12 @@ public sealed class PunisherTests
 		task2.SetupGet(t => t.Complete).Returns(true);
 
 		mockTasksList.SetupGet(l => l.Count).Returns(2);
-		mockTasksList.Setup(l => l[0]).Returns(task1.Object);
-		mockTasksList.Setup(l => l[1]).Returns(task2.Object);
+		mockTasksList.SetupGet(l => l[0]).Returns(task1.Object);
+		mockTasksList.SetupGet(l => l[1]).Returns(task2.Object);
 
+		mockData.SetupGet(d => d.Object).Returns(mockLocalPlayer.Object);
+		mockData.SetupGet(d => d.IsDead).Returns(false);
+		mockData.SetupGet(d => d.Disconnected).Returns(false);
 		mockData.SetupGet(d => d.Tasks).Returns(mockTasksList.Object);
 		mockLocalPlayer.SetupGet(p => p.Data).Returns(mockData.Object);
 		mockLocalPlayer.Object.killTimer = 15.0f;

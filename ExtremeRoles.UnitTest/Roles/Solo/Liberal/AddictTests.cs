@@ -208,6 +208,10 @@ public class AddictTests
 	public void UpdateTimer_WhenStationaryAndMoving_UpdatesTimersAndTriggersExplosion()
 	{
 		// Arrange
+		ExtremeSystemTypeManager.Instance.CreateOrGet<GameProgressSystem>(ExtremeSystemType.GameProgress);
+		GameProgressSystem.Current = GameProgressSystem.Progress.RoleSetUpEnd;
+		GameProgressSystem.Current = GameProgressSystem.Progress.Task;
+
 		var status = new AddictStatusModel(15.0f, 5.0f);
 		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
 		localPlayerMock.SetupGet(p => p.CanMove).Returns(true);
