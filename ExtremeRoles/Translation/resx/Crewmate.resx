@@ -1611,4 +1611,39 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="inspectSystem" xml:space="preserve">
     <value>の発動が監視されている・・・</value>
   </data>
+  <data name="Itako" xml:space="preserve">
+    <value>イタコ</value>
+  </data>
+  <data name="ItakoAbility" xml:space="preserve">
+    <value>口寄せ</value>
+  </data>
+  <data name="ItakoIntroDescription" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ItakoShortDescription" xml:space="preserve">
+    <value>「死体」に「口寄せ」して役職を引き継げ</value>
+  </data>
+  <data name="ItakoFullDescription" xml:space="preserve">
+    <value>「死体」に「口寄せ」することでその役職を引き継ぐクルー役職
+
+ボタン能力「口寄せ」
+　・「死体」に使用することでその役職を引き継ぐ
+　・クルー陣営以外の「死体」に「口寄せ」した場合は自爆し、両方の死体が消滅する
+　・設定されたタスク進捗率に満たない場合、「死体」は消滅する</value>
+  </data>
+  <data name="ItakoRange" xml:space="preserve">
+    <value>「口寄せ」が発動できる死体からの距離</value>
+  </data>
+  <data name="ItakoRequiredTaskRate" xml:space="preserve">
+    <value>「死体」が消えないようになるタスク進捗率</value>
+  </data>
+  <data name="ItakoAbilityCoolTime" xml:space="preserve">
+    <value>「口寄せ」のクールタイム</value>
+  </data>
+  <data name="ItakoAbilityActiveTime" xml:space="preserve">
+    <value>「口寄せ」が完了するまでの時間</value>
+  </data>
+  <data name="ItakoAbilityCount" xml:space="preserve">
+    <value>「口寄せ」の使用回数</value>
+  </data>
 </root>

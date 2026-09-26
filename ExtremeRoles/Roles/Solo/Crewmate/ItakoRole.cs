@@ -1,0 +1,293 @@
+using UnityEngine;
+
+using Hazel;
+
+using ExtremeRoles.Extension.Manager;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+
+#nullable enable
+
+namespace ExtremeRoles.Roles.Solo.Crewmate;
+
+public sealed class ItakoRole :
+	MultiAssignRoleBase,
+	IRoleAutoBuildAbility,
+	IRoleUpdate,
+	IRoleResetMeeting
+{
+	public enum Option
+	{
+		Range,
+		RequiredTaskRate,
+	}
+
+	public ExtremeAbilityButton? Button { get; set; }
+
+	private NetworkedPlayerInfo? targetBody;
+	private NetworkedPlayerInfo? tmpTargetBody;
+	private byte activeTargetBodyId = byte.MaxValue;
+
+	private float range;
+	private float requiredTaskRate;
+
+	public ItakoRole() : base(
+		RoleArgs.BuildCrewmate(
+			ExtremeRoleId.Itako,
+			ColorPalette.ItakoSkyBlue,
+			RolePropPresets.OptionalDefault))
+	{
+		this.CanHasAnotherRole = true;
+	}
+
+	public void CreateAbility()
+	{
+		this.CreateActivatingAbilityCountButton(
+			"ItakoAbility",
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Itako),
+			checkAbility: CheckAbility,
+			abilityOff: CleanUp,
+			forceAbilityOff: ForceCleanUp,
+			isReduceOnActive: false);
+		this.Button?.SetLabelToCrewmate();
+	}
+
+	public bool IsAbilityUse()
+	{
+		this.tmpTargetBody = Player.GetDeadBodyInfo(this.range);
+		return IRoleAbility.IsCommonUse() && this.tmpTargetBody != null;
+	}
+
+	public bool UseAbility()
+	{
+		if (this.tmpTargetBody == null)
+		{
+			return false;
+		}
+		this.targetBody = this.tmpTargetBody;
+		this.activeTargetBodyId = this.targetBody.PlayerId;
+		return true;
+	}
+
+	public bool CheckAbility()
+	{
+		var check = Player.GetDeadBodyInfo(this.range);
+		return check != null && check.PlayerId == this.activeTargetBodyId;
+	}
+
+	public void CleanUp()
+	{
+		if (this.targetBody == null || PlayerControl.LocalPlayer == null)
+		{
+			ForceCleanUp();
+			return;
+		}
+
+		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+		byte targetPlayerId = this.targetBody.PlayerId;
+
+		bool callerIsCrewmate = this.IsCrewmate();
+		bool targetIsCrewmate = ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) && targetRole.IsCrewmate();
+
+		if (!callerIsCrewmate || !targetIsCrewmate)
+		{
+			RpcDoSelfDestruct(localPlayerId, targetPlayerId);
+		}
+		else
+		{
+			float myTaskRate = Player.GetPlayerTaskGage(PlayerControl.LocalPlayer);
+			bool cleanBody = myTaskRate < this.requiredTaskRate;
+
+			RpcDoInherit(localPlayerId, targetPlayerId, cleanBody);
+
+			if (this.Button?.Behavior is ICountBehavior countBehavior)
+			{
+				countBehavior.SetAbilityCount(countBehavior.AbilityCount - 1);
+			}
+		}
+
+		ForceCleanUp();
+	}
+
+	public void ForceCleanUp()
+	{
+		this.targetBody = null;
+		this.tmpTargetBody = null;
+		this.activeTargetBodyId = byte.MaxValue;
+	}
+
+	public void ResetOnMeetingStart()
+	{
+		ForceCleanUp();
+	}
+
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
+	{
+		ForceCleanUp();
+	}
+
+	public void Update(PlayerControl rolePlayer)
+	{
+	}
+
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+	{
+		IRoleAbility.CreateAbilityCountOption(
+			factory,
+			defaultAbilityCount: 1,
+			maxAbilityCount: 10,
+			defaultActiveTime: 3.0f);
+		factory.CreateFloatOption(
+			Option.Range,
+			1.0f, 0.5f, 3.5f, 0.1f);
+		factory.Create0To100Percentage10StepOption(
+			Option.RequiredTaskRate, defaultGage: 50);
+	}
+
+	protected override void RoleSpecificInit()
+	{
+		var loader = this.Loader;
+		this.range = loader.GetValue<Option, float>(Option.Range);
+		this.requiredTaskRate = loader.GetValue<Option, int>(Option.RequiredTaskRate) / 100.0f;
+	}
+
+	public static void RpcOps(in MessageReader reader)
+	{
+		byte ops = reader.ReadByte();
+		byte itakoPlayerId = reader.ReadByte();
+		byte targetPlayerId = reader.ReadByte();
+
+		if (ops == 0)
+		{
+			DoSelfDestruct(itakoPlayerId, targetPlayerId);
+		}
+		else if (ops == 1)
+		{
+			bool cleanBody = reader.ReadBoolean();
+			DoInherit(itakoPlayerId, targetPlayerId, cleanBody);
+		}
+	}
+
+	public static void RpcDoSelfDestruct(byte itakoPlayerId, byte targetPlayerId)
+	{
+		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ItakoOps))
+		{
+			caller.WriteByte(0); // 0 = SelfDestruct
+			caller.WriteByte(itakoPlayerId);
+			caller.WriteByte(targetPlayerId);
+		}
+		DoSelfDestruct(itakoPlayerId, targetPlayerId);
+	}
+
+	public static void RpcDoInherit(byte itakoPlayerId, byte targetPlayerId, bool cleanBody)
+	{
+		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ItakoOps))
+		{
+			caller.WriteByte(1); // 1 = Inherit
+			caller.WriteByte(itakoPlayerId);
+			caller.WriteByte(targetPlayerId);
+			caller.WriteBoolean(cleanBody);
+		}
+		DoInherit(itakoPlayerId, targetPlayerId, cleanBody);
+	}
+
+	public static void DoSelfDestruct(byte itakoPlayerId, byte targetPlayerId)
+	{
+		RPCOperator.UncheckedMurderPlayer(itakoPlayerId, itakoPlayerId, byte.MaxValue);
+		Player.RpcCleanDeadBody(targetPlayerId);
+		Player.RpcCleanDeadBody(itakoPlayerId);
+	}
+
+	public static void DoInherit(byte itakoPlayerId, byte targetPlayerId, bool cleanBody)
+	{
+		if (ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
+			ExtremeRoleManager.TryGetRole(itakoPlayerId, out var itakoRole) &&
+			itakoRole is MultiAssignRoleBase multiItako)
+		{
+			SingleRoleBase inheritedRole = ExtractInheritedRole(targetRole);
+
+			clonedNewRole(multiItako, itakoPlayerId, inheritedRole);
+		}
+
+		if (cleanBody)
+		{
+			Player.RpcCleanDeadBody(targetPlayerId);
+		}
+	}
+
+	public static SingleRoleBase ExtractInheritedRole(SingleRoleBase targetRole)
+	{
+		if (targetRole is MultiAssignRoleBase multiAssign)
+		{
+			if (multiAssign.OffsetInfo != null)
+			{
+				var cloned = multiAssign.Clone();
+				if (cloned is MultiAssignRoleBase multiCloned)
+				{
+					multiCloned.AnotherRole = null;
+				}
+				return cloned;
+			}
+			if (multiAssign.AnotherRole is MultiAssignRoleBase anotherMulti && anotherMulti.OffsetInfo != null)
+			{
+				var cloned = anotherMulti.Clone();
+				if (cloned is MultiAssignRoleBase multiCloned)
+				{
+					multiCloned.AnotherRole = null;
+				}
+				return cloned;
+			}
+			if (multiAssign.AnotherRole != null && multiAssign is Solo.VanillaRoleWrapper)
+			{
+				return multiAssign.AnotherRole.Clone();
+			}
+			if (multiAssign.AnotherRole != null)
+			{
+				return multiAssign.AnotherRole.Clone();
+			}
+		}
+
+		return targetRole.Clone();
+	}
+
+	private static void clonedNewRole(MultiAssignRoleBase multiItako, byte itakoPlayerId, SingleRoleBase inheritedRole)
+	{
+		if (multiItako.AnotherRole != null)
+		{
+			if (PlayerControl.LocalPlayer != null &&
+				PlayerControl.LocalPlayer.PlayerId == itakoPlayerId)
+			{
+				if (multiItako.AnotherRole is IRoleAbility prevAbility && prevAbility.Button != null)
+				{
+					prevAbility.Button.OnMeetingStart();
+				}
+			}
+		}
+
+		SingleRoleBase newRole = inheritedRole.Clone();
+		newRole.SetControlId(multiItako.GameControlId);
+		newRole.Initialize();
+
+		ExtremeRoleManager.SetNewAnothorRole(itakoPlayerId, newRole);
+
+		if (PlayerControl.LocalPlayer != null &&
+			PlayerControl.LocalPlayer.PlayerId == itakoPlayerId)
+		{
+			if (newRole is IRoleAbility newAbility)
+			{
+				newAbility.CreateAbility();
+				if (newAbility.Button != null)
+				{
+					newAbility.Button.HotKey = KeyCode.C;
+				}
+			}
+			HudManager.Instance.ReGridButtons();
+		}
+	}
+}
