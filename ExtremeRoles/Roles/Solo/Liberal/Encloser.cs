@@ -71,7 +71,6 @@ public sealed class EncloserPolygon
 
 	public void AddStake(Vector2 pos, int maxStakes)
 	{
-		System.Console.WriteLine($"[DEBUG-ADDSTAKE] incoming pos=({pos.x}, {pos.y})");
 		var stake = this.factory.CreateGameObject($"EncloserStake_{this.stakeObjects.Count + 1}");
 		var sr = stake.AddComponent<SpriteRenderer>();
 		sr.sprite = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.Bomb);
