@@ -1,13 +1,11 @@
 using UnityEngine;
 
-using Hazel;
-
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -26,6 +24,25 @@ public sealed class ItakoRole :
 	{
 		Range,
 		RequiredTaskRate,
+	}
+
+	public override IOptionLoader Loader
+	{
+		get
+		{
+			if (OffsetInfo != null)
+			{
+				return base.Loader;
+			}
+			if (!OptionManager.Instance.TryGetCategory(
+					this.Tab,
+					ExtremeRoleManager.GetRoleGroupId(this.Core.Id),
+					out var cate))
+			{
+				throw new System.ArgumentException("Can't find category");
+			}
+			return cate;
+		}
 	}
 
 	public ExtremeAbilityButton? Button { get; set; }
@@ -54,7 +71,7 @@ public sealed class ItakoRole :
 			checkAbility: CheckAbility,
 			abilityOff: CleanUp,
 			forceAbilityOff: ForceCleanUp,
-			isReduceOnActive: false);
+			isReduceOnActive: true);
 		this.Button?.SetLabelToCrewmate();
 	}
 
@@ -97,19 +114,19 @@ public sealed class ItakoRole :
 
 		if (!callerIsCrewmate || !targetIsCrewmate)
 		{
-			RpcDoSelfDestruct(localPlayerId, targetPlayerId);
+			Player.RpcUncheckMurderPlayer(localPlayerId, localPlayerId, byte.MaxValue);
+			Player.RpcCleanDeadBody(targetPlayerId);
+			Player.RpcCleanDeadBody(localPlayerId);
 		}
 		else
 		{
 			float myTaskRate = Player.GetPlayerTaskGage(PlayerControl.LocalPlayer);
-			bool cleanBody = myTaskRate < this.requiredTaskRate;
-
-			RpcDoInherit(localPlayerId, targetPlayerId, cleanBody);
-
-			if (this.Button?.Behavior is ICountBehavior countBehavior)
+			if (myTaskRate < this.requiredTaskRate)
 			{
-				countBehavior.SetAbilityCount(countBehavior.AbilityCount - 1);
+				Player.RpcCleanDeadBody(targetPlayerId);
 			}
+
+			DoInherit(localPlayerId, targetPlayerId);
 		}
 
 		ForceCleanUp();
@@ -157,54 +174,7 @@ public sealed class ItakoRole :
 		this.requiredTaskRate = loader.GetValue<Option, int>(Option.RequiredTaskRate) / 100.0f;
 	}
 
-	public static void RpcOps(in MessageReader reader)
-	{
-		byte ops = reader.ReadByte();
-		byte itakoPlayerId = reader.ReadByte();
-		byte targetPlayerId = reader.ReadByte();
-
-		if (ops == 0)
-		{
-			DoSelfDestruct(itakoPlayerId, targetPlayerId);
-		}
-		else if (ops == 1)
-		{
-			bool cleanBody = reader.ReadBoolean();
-			DoInherit(itakoPlayerId, targetPlayerId, cleanBody);
-		}
-	}
-
-	public static void RpcDoSelfDestruct(byte itakoPlayerId, byte targetPlayerId)
-	{
-		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ItakoOps))
-		{
-			caller.WriteByte(0); // 0 = SelfDestruct
-			caller.WriteByte(itakoPlayerId);
-			caller.WriteByte(targetPlayerId);
-		}
-		DoSelfDestruct(itakoPlayerId, targetPlayerId);
-	}
-
-	public static void RpcDoInherit(byte itakoPlayerId, byte targetPlayerId, bool cleanBody)
-	{
-		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ItakoOps))
-		{
-			caller.WriteByte(1); // 1 = Inherit
-			caller.WriteByte(itakoPlayerId);
-			caller.WriteByte(targetPlayerId);
-			caller.WriteBoolean(cleanBody);
-		}
-		DoInherit(itakoPlayerId, targetPlayerId, cleanBody);
-	}
-
-	public static void DoSelfDestruct(byte itakoPlayerId, byte targetPlayerId)
-	{
-		RPCOperator.UncheckedMurderPlayer(itakoPlayerId, itakoPlayerId, byte.MaxValue);
-		Player.RpcCleanDeadBody(targetPlayerId);
-		Player.RpcCleanDeadBody(itakoPlayerId);
-	}
-
-	public static void DoInherit(byte itakoPlayerId, byte targetPlayerId, bool cleanBody)
+	public static void DoInherit(byte itakoPlayerId, byte targetPlayerId)
 	{
 		if (ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
 			ExtremeRoleManager.TryGetRole(itakoPlayerId, out var itakoRole) &&
@@ -213,11 +183,6 @@ public sealed class ItakoRole :
 			SingleRoleBase inheritedRole = ExtractInheritedRole(targetRole);
 
 			clonedNewRole(multiItako, itakoPlayerId, inheritedRole);
-		}
-
-		if (cleanBody)
-		{
-			Player.RpcCleanDeadBody(targetPlayerId);
 		}
 	}
 
@@ -258,14 +223,26 @@ public sealed class ItakoRole :
 
 	private static void clonedNewRole(MultiAssignRoleBase multiItako, byte itakoPlayerId, SingleRoleBase inheritedRole)
 	{
-		if (multiItako.AnotherRole != null)
+		var prevAnotherRole = multiItako.AnotherRole;
+		if (prevAnotherRole != null)
 		{
-			if (PlayerControl.LocalPlayer != null &&
-				PlayerControl.LocalPlayer.PlayerId == itakoPlayerId)
+			if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == itakoPlayerId)
 			{
-				if (multiItako.AnotherRole is IRoleAbility prevAbility && prevAbility.Button != null)
+				if (prevAnotherRole is IRoleAbility prevAbility && prevAbility.Button != null)
 				{
 					prevAbility.Button.OnMeetingStart();
+				}
+				if (prevAnotherRole is IRoleResetMeeting meetingResetRole)
+				{
+					meetingResetRole.ResetOnMeetingStart();
+				}
+			}
+
+			if (Player.TryGetPlayerControl(itakoPlayerId, out var itakoPlayer))
+			{
+				if (prevAnotherRole is IRoleSpecialReset specialResetRole)
+				{
+					specialResetRole.AllReset(itakoPlayer);
 				}
 			}
 		}

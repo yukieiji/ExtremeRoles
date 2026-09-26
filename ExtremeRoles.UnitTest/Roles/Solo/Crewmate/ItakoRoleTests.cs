@@ -155,7 +155,7 @@ public class ItakoRoleTests
 		ExtremeRoleManager.GameRole[targetId] = sheriff;
 
 		// Act 1: Inherit Sheriff
-		ItakoRole.DoInherit(itakoId, targetId, cleanBody: false);
+		ItakoRole.DoInherit(itakoId, targetId);
 
 		// Assert 1
 		Assert.NotNull(itako.AnotherRole);
@@ -168,52 +168,10 @@ public class ItakoRoleTests
 		bakery.Initialize();
 		ExtremeRoleManager.GameRole[newTargetId] = bakery;
 
-		ItakoRole.DoInherit(itakoId, newTargetId, cleanBody: false);
+		ItakoRole.DoInherit(itakoId, newTargetId);
 
 		// Assert 2
 		Assert.NotNull(itako.AnotherRole);
 		Assert.Equal(ExtremeRoleId.Bakary, itako.AnotherRole.Core.Id);
-	}
-
-	[Fact]
-	public void RpcOps_SelfDestructAndInherit_ExecutesExpectedOperations()
-	{
-		// Arrange
-		byte itakoId = 1;
-		byte targetId = 2;
-
-		var itako = new ItakoRole();
-		itako.CreateRoleAllOption();
-		itako.Initialize();
-
-		var sheriff = new Sheriff();
-		sheriff.CreateRoleAllOption();
-		sheriff.Initialize();
-
-		ExtremeRoleManager.GameRole[itakoId] = itako;
-		ExtremeRoleManager.GameRole[targetId] = sheriff;
-
-		// Act: RpcOps Inherit (ops = 1)
-		var mockReader1 = new Mock<MessageReader>();
-		mockReader1.SetupSequence(r => r.ReadByte())
-			.Returns((byte)1) // Inherit
-			.Returns(itakoId)
-			.Returns(targetId);
-		mockReader1.Setup(r => r.ReadBoolean()).Returns(false);
-
-		ItakoRole.RpcOps(mockReader1.Object);
-
-		// Assert
-		Assert.NotNull(itako.AnotherRole);
-		Assert.Equal(ExtremeRoleId.Sheriff, itako.AnotherRole.Core.Id);
-
-		// Act: RpcOps SelfDestruct (ops = 0)
-		var mockReader0 = new Mock<MessageReader>();
-		mockReader0.SetupSequence(r => r.ReadByte())
-			.Returns((byte)0) // SelfDestruct
-			.Returns(itakoId)
-			.Returns(targetId);
-
-		ItakoRole.RpcOps(mockReader0.Object);
 	}
 }
