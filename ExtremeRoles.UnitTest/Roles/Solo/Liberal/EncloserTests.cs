@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Liberal;
 using Hazel;
@@ -40,6 +42,13 @@ public sealed class EncloserTests
 
 		MockSetupHelper.SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
+
+		string key = $"{ObjectPath.Bomb}115";
+		if (!LruCache<string, Sprite>.TryGetValue(key, out _))
+		{
+			var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+			LruCache<string, Sprite>.Add(key, mockSprite.Object);
+		}
 	}
 
 	private static void SetupLobbyBehaviourMock()
@@ -69,19 +78,27 @@ public sealed class EncloserTests
 
 	private sealed class MockUnityObjectFactory : IUnityObjectFactory
 	{
-		public GameObject Create(string name)
+		public GameObject CreateGameObject(string name)
 		{
-			return null!;
+			var mockGo = new Mock<GameObject>(IntPtr.Zero);
+			var mockTrans = new Mock<Transform>(IntPtr.Zero);
+			var mockSr = new Mock<SpriteRenderer>(IntPtr.Zero);
+			mockGo.SetupGet(g => g.transform).Returns(mockTrans.Object);
+			mockGo.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockSr.Object);
+			mockGo.Setup(g => g.AddComponent<LineRenderer>()).Returns(new Mock<LineRenderer>(IntPtr.Zero).Object);
+			mockGo.Setup(g => g.AddComponent<MeshFilter>()).Returns(new Mock<MeshFilter>(IntPtr.Zero).Object);
+			mockGo.Setup(g => g.AddComponent<MeshRenderer>()).Returns(new Mock<MeshRenderer>(IntPtr.Zero).Object);
+			return mockGo.Object;
 		}
 
 		public Material CreateMaterial(Shader shader)
 		{
-			return null!;
+			return new Mock<Material>(IntPtr.Zero).Object;
 		}
 
 		public Mesh CreateMesh()
 		{
-			return null!;
+			return new Mock<Mesh>(IntPtr.Zero).Object;
 		}
 	}
 

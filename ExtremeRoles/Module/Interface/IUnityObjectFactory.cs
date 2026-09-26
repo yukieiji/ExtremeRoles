@@ -4,17 +4,23 @@ namespace ExtremeRoles.Module.Interface;
 
 #nullable enable
 
-public interface IUnityObjectFactory : IGameObjectFactory
+public interface IUnityObjectFactory
 {
-	public Material CreateMaterial(Shader shader);
+	public GameObject CreateGameObject(string name);
+	public Material? CreateMaterial(Shader shader);
 	public Mesh CreateMesh();
 }
 
-public class DefaultUnityObjectFactory : DefaultGameObjectFactory, IUnityObjectFactory
+public class DefaultUnityObjectFactory : IUnityObjectFactory
 {
-	public Material CreateMaterial(Shader shader)
+	public GameObject CreateGameObject(string name)
 	{
-		return new Material(shader);
+		return new GameObject(name);
+	}
+
+	public Material? CreateMaterial(Shader shader)
+	{
+		return shader != null ? new Material(shader) : null;
 	}
 
 	public Mesh CreateMesh()
