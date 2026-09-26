@@ -56,7 +56,7 @@ public sealed class EncloserPolygon
 
 	private readonly List<Vector2> stakes = new List<Vector2>();
 	private readonly List<GameObject> stakeObjects = new List<GameObject>();
-	private readonly IGameObjectFactory factory;
+	private readonly IUnityObjectFactory factory;
 
 	private GameObject? linesObj;
 	private LineRenderer? lineRenderer;
@@ -64,9 +64,9 @@ public sealed class EncloserPolygon
 	private MeshFilter? meshFilter;
 	private MeshRenderer? meshRenderer;
 
-	public EncloserPolygon(IGameObjectFactory? factory = null)
+	public EncloserPolygon(IUnityObjectFactory? factory = null)
 	{
-		this.factory = factory ?? new DefaultGameObjectFactory();
+		this.factory = factory ?? new DefaultUnityObjectFactory();
 	}
 
 	public void AddStake(Vector2 pos, int maxStakes)
@@ -77,12 +77,8 @@ public sealed class EncloserPolygon
 		if (stake != null)
 		{
 			var sr = stake.AddComponent<SpriteRenderer>();
-			if (sr != null)
-			{
-				sr.sprite = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.Bomb);
-				sr.color = ColorPalette.LiberalColor;
-			}
-
+			sr.sprite = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.Bomb);
+			sr.color = ColorPalette.LiberalColor;
 			stake.transform.position = new Vector3(pos.x, pos.y, -0.1f);
 			this.stakeObjects.Add(stake);
 		}
@@ -187,14 +183,15 @@ public sealed class EncloserPolygon
 			if (this.linesObj != null)
 			{
 				this.lineRenderer = this.linesObj.AddComponent<LineRenderer>();
-				if (this.lineRenderer != null)
+				Shader? defaultShader = Shader.Find("Sprites/Default");
+				if (defaultShader != null)
 				{
-					this.lineRenderer.startWidth = 0.15f;
-					this.lineRenderer.endWidth = 0.15f;
-					this.lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-					this.lineRenderer.startColor = ColorPalette.LiberalColor;
-					this.lineRenderer.endColor = ColorPalette.LiberalColor;
+					this.lineRenderer.material = this.factory.CreateMaterial(defaultShader);
 				}
+				this.lineRenderer.startWidth = 0.15f;
+				this.lineRenderer.endWidth = 0.15f;
+				this.lineRenderer.startColor = ColorPalette.LiberalColor;
+				this.lineRenderer.endColor = ColorPalette.LiberalColor;
 			}
 		}
 
@@ -230,9 +227,10 @@ public sealed class EncloserPolygon
 			{
 				this.meshFilter = this.meshObj.AddComponent<MeshFilter>();
 				this.meshRenderer = this.meshObj.AddComponent<MeshRenderer>();
-				if (this.meshRenderer != null)
+				Shader? defaultShader = Shader.Find("Sprites/Default");
+				if (defaultShader != null)
 				{
-					this.meshRenderer.material = new Material(Shader.Find("Sprites/Default"));
+					this.meshRenderer.material = this.factory.CreateMaterial(defaultShader);
 				}
 
 				this.meshObj.AddComponent<EncloserPolygonMeshBehaviour>();
@@ -241,7 +239,7 @@ public sealed class EncloserPolygon
 
 		if (this.meshFilter != null)
 		{
-			Mesh mesh = new Mesh();
+			Mesh mesh = this.factory.CreateMesh();
 			Vector3[] vertices = new Vector3[this.stakes.Count];
 			for (int i = 0; i < this.stakes.Count; i++)
 			{
@@ -302,7 +300,7 @@ public sealed class EncloserAbilityHandler : IAbility
 		int metsuLimit,
 		float abilityCoolTime,
 		int metsuKillMoney,
-		IGameObjectFactory? factory = null)
+		IUnityObjectFactory? factory = null)
 	{
 		this.polygon = new EncloserPolygon(factory);
 		this.stakeCount = stakeCount;
@@ -474,7 +472,10 @@ public sealed class EncloserAbilityHandler : IAbility
 				this.modeSwitcher?.Switch(EncloserMode.Stake);
 			}
 
-			this.Button.Behavior.SetCoolTime(this.abilityCoolTime);
+			if (this.Button != null && this.Button.Behavior != null)
+			{
+				this.Button.Behavior.SetCoolTime(this.abilityCoolTime);
+			}
 		}
 	}
 

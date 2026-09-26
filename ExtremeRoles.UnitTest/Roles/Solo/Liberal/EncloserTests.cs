@@ -67,9 +67,19 @@ public sealed class EncloserTests
 		return v;
 	}
 
-	private sealed class NullGameObjectFactory : IGameObjectFactory
+	private sealed class MockUnityObjectFactory : IUnityObjectFactory
 	{
 		public GameObject Create(string name)
+		{
+			return null!;
+		}
+
+		public Material CreateMaterial(Shader shader)
+		{
+			return null!;
+		}
+
+		public Mesh CreateMesh()
 		{
 			return null!;
 		}
@@ -95,37 +105,38 @@ public sealed class EncloserTests
 	public void EncloserPolygon_InsidePolygon_ReturnsTrue()
 	{
 		// Arrange
-		var factory = new NullGameObjectFactory();
+		var factory = new MockUnityObjectFactory();
 		var polygon = new EncloserPolygon(factory);
+
+		// Act
 		polygon.AddStake(CreateVec2(0, 0), 4);
 		polygon.AddStake(CreateVec2(10, 0), 4);
 		polygon.AddStake(CreateVec2(10, 10), 4);
 		polygon.AddStake(CreateVec2(0, 10), 4);
 
 		var testPoint = CreateVec2(5, 5);
-
-		// Act
 		bool isInside = polygon.IsPointInside(testPoint);
 
 		// Assert
 		Assert.True(isInside);
 		Assert.True(polygon.IsCompleted);
+		Assert.Equal(4, polygon.Count);
 	}
 
 	[Fact]
 	public void EncloserPolygon_OutsidePolygon_ReturnsFalse()
 	{
 		// Arrange
-		var factory = new NullGameObjectFactory();
+		var factory = new MockUnityObjectFactory();
 		var polygon = new EncloserPolygon(factory);
+
+		// Act
 		polygon.AddStake(CreateVec2(0, 0), 4);
 		polygon.AddStake(CreateVec2(10, 0), 4);
 		polygon.AddStake(CreateVec2(10, 10), 4);
 		polygon.AddStake(CreateVec2(0, 10), 4);
 
 		var testPoint = CreateVec2(15, 5);
-
-		// Act
 		bool isInside = polygon.IsPointInside(testPoint);
 
 		// Assert
@@ -136,18 +147,74 @@ public sealed class EncloserTests
 	public void EncloserPolygon_NotCompleted_ReturnsFalse()
 	{
 		// Arrange
-		var factory = new NullGameObjectFactory();
+		var factory = new MockUnityObjectFactory();
 		var polygon = new EncloserPolygon(factory);
+
+		// Act
 		polygon.AddStake(CreateVec2(0, 0), 4);
 		polygon.AddStake(CreateVec2(10, 0), 4);
 
 		var testPoint = CreateVec2(5, 0);
-
-		// Act
 		bool isInside = polygon.IsPointInside(testPoint);
 
 		// Assert
 		Assert.False(isInside);
 		Assert.False(polygon.IsCompleted);
+		Assert.Equal(2, polygon.Count);
+	}
+
+	[Fact]
+	public void EncloserAbilityHandler_HandlePlaceStake_UpdatesPolygonState()
+	{
+		// Arrange
+		var factory = new MockUnityObjectFactory();
+		var handler = new EncloserAbilityHandler(3, 1, 20f, 10, factory);
+
+		// Act
+		handler.HandlePlaceStake(1, CreateVec2(0, 0));
+		handler.HandlePlaceStake(1, CreateVec2(10, 0));
+
+		bool isCompletedBeforeMax = handler.Polygon.IsCompleted;
+
+		handler.HandlePlaceStake(1, CreateVec2(5, 10));
+		bool isCompletedAfterMax = handler.Polygon.IsCompleted;
+
+		// Assert
+		Assert.False(isCompletedBeforeMax);
+		Assert.True(isCompletedAfterMax);
+		Assert.Equal(3, handler.Polygon.Count);
+	}
+
+	[Fact]
+	public void EncloserAbilityHandler_HandleUseMetsuRpc_ClearsPolygon()
+	{
+		// Arrange
+		var factory = new MockUnityObjectFactory();
+		var handler = new EncloserAbilityHandler(3, 1, 20f, 10, factory);
+		handler.HandlePlaceStake(1, CreateVec2(0, 0));
+		handler.HandlePlaceStake(1, CreateVec2(10, 0));
+		handler.HandlePlaceStake(1, CreateVec2(5, 10));
+
+		// Act
+		handler.HandleUseMetsuRpc(1);
+
+		// Assert
+		Assert.Equal(0, handler.Polygon.Count);
+		Assert.False(handler.Polygon.IsCompleted);
+	}
+
+	[Fact]
+	public void Encloser_ResetOnMeetingStart_PreservesStakes()
+	{
+		// Arrange
+		var role = new Encloser();
+		InitializeRole(role, 1);
+
+		// Act
+		role.ResetOnMeetingStart();
+		role.ResetOnMeetingEnd(null);
+
+		// Assert
+		Assert.Equal("Ec", role.GetRoleTag());
 	}
 }
