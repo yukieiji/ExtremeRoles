@@ -67,7 +67,7 @@ public sealed class Martyr : SingleRoleBase, IRoleAutoBuildAbility
 	public void CreateAbility()
 	{
 		this.CreateNormalAbilityButton(
-			"SelfDestruct",
+			"SelfBomb",
 			Resources.UnityObjectLoader.LoadFromResources<Sprite>(
 				ObjectPath.Bomb));
 		this.Button.SetLabelToCrewmate();
@@ -114,7 +114,7 @@ public sealed class Martyr : SingleRoleBase, IRoleAutoBuildAbility
 		{
 			LiberalMoneyBankSystem.RpcUpdateSystem(
 				selfId,
-				LiberalMoneyHistory.Reason.MartyrSelfDestruct,
+				LiberalMoneyHistory.Reason.SelfBomb,
 				outcome.EarnedMoney);
 		}
 
