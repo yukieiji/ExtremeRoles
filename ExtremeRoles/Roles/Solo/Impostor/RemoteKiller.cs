@@ -135,12 +135,11 @@ public sealed class RemoteKiller :
 	private RemoteKillerStatus? status;
 
 	private ReusableActivatingBehavior? robBehavior;
-	private CountBehavior? purgeBehavior;
+	private ActivatingCountBehavior? purgeBehavior;
 	private ShapeShiftMinigameWrapper? minigame;
 
 	private PlayerControl? currentRobTarget;
-	private byte? purgeTargetId;
-	private float purgeTimer = 0.0f;
+	private PlayerControl? selectedPurgeTarget;
 
 	private float robRange;
 	private float robActiveTime;
@@ -179,14 +178,11 @@ public sealed class RemoteKiller :
 				break;
 
 			case RemoteKillerRpc.PurgeStart:
-				byte purgeTarget = reader.ReadByte();
 				remoteKiller.IsPurging = true;
 				if (remoteKiller.status is not null)
 				{
 					remoteKiller.status.CanMove = false;
 				}
-				remoteKiller.purgeTargetId = purgeTarget;
-				remoteKiller.purgeTimer = remoteKiller.purgeTime;
 				break;
 
 			case RemoteKillerRpc.PurgeCancel:
@@ -195,7 +191,6 @@ public sealed class RemoteKiller :
 				{
 					remoteKiller.status.CanMove = true;
 				}
-				remoteKiller.purgeTargetId = null;
 				break;
 
 			case RemoteKillerRpc.PurgeExecute:
@@ -209,16 +204,8 @@ public sealed class RemoteKiller :
 				if (remoteKiller.executionTargets.Contains(executedTarget))
 				{
 					remoteKiller.executionTargets.Remove(executedTarget);
-
-					if (PlayerControl.LocalPlayer.PlayerId == rolePlayerId &&
-						remoteKiller.purgeBehavior != null)
-					{
-						remoteKiller.purgeBehavior.SetAbilityCount(remoteKiller.purgeBehavior.AbilityCount - 1);
-					}
-
 					Player.RpcUncheckMurderPlayer(executedTarget, executedTarget, 0);
 				}
-				remoteKiller.purgeTargetId = null;
 				break;
 		}
 
@@ -250,12 +237,17 @@ public sealed class RemoteKiller :
 		this.robBehavior.SetCoolTime(coolTime);
 		this.robBehavior.ActiveTime = this.robActiveTime;
 
-		this.purgeBehavior = new CountBehavior(
+		this.purgeBehavior = new ActivatingCountBehavior(
 			text: Tr.GetString("remoteKillerPurge"),
 			img: UnityObjectLoader.LoadSpriteFromResources(ObjectPath.SucideSprite),
 			canUse: isUsePurge,
-			ability: purgeOpenMenu);
+			ability: purgeOpenMenu,
+			canActivating: isPurgeCheck,
+			abilityOff: purgeCleanUp,
+			forceAbilityOff: purgeForceCleanUp,
+			isReduceOnActive: false);
 		this.purgeBehavior.SetCoolTime(coolTime);
+		this.purgeBehavior.ActiveTime = this.purgeTime;
 		this.purgeBehavior.SetAbilityCount(purgeCount);
 
 		this.Button = new ExtremeMultiModalAbilityButton(
@@ -268,10 +260,9 @@ public sealed class RemoteKiller :
 	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
 	public void ResetOnMeetingStart()
-	{
-		if (this.IsPurging)
+	{		if (this.IsPurging)
 		{
-			cancelPurge();
+			purgeForceCleanUp();
 		}
 
 		this.minigame?.Reset();
@@ -322,7 +313,7 @@ public sealed class RemoteKiller :
 			this.status.CanMove = true;
 		}
 		this.IsPurging = false;
-		this.purgeTargetId = null;
+		this.selectedPurgeTarget = null;
 	}
 
 	public void Update(PlayerControl rolePlayer)
@@ -333,11 +324,6 @@ public sealed class RemoteKiller :
 			var p = GameData.Instance.GetPlayerById(id);
 			return p == null || p.IsDead || p.Disconnected;
 		});
-
-		if (PlayerControl.LocalPlayer.PlayerId == rolePlayer.PlayerId && this.IsPurging)
-		{
-			updatePurging(rolePlayer);
-		}
 
 		if (!GameProgressSystem.IsTaskPhase)
 		{
@@ -427,47 +413,8 @@ public sealed class RemoteKiller :
 		this.pendingReports.Clear();
 		this.taskPhaseContacts.Clear();
 		this.IsPurging = false;
-		this.purgeTargetId = null;
+		this.selectedPurgeTarget = null;
 		this.currentRobTarget = null;
-	}
-
-	private void updatePurging(PlayerControl rolePlayer)
-	{
-		if (this.status is not null)
-		{
-			this.status.CanMove = false;
-		}
-
-		if (rolePlayer.Data.IsDead || MeetingHud.Instance != null)
-		{
-			cancelPurge();
-			return;
-		}
-
-		if (this.purgeTargetId.HasValue)
-		{
-			var target = Player.GetPlayerControlById(this.purgeTargetId.Value);
-			if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected)
-			{
-				cancelPurge();
-				return;
-			}
-		}
-
-		this.purgeTimer -= Time.deltaTime;
-		if (this.purgeTimer <= 0.0f)
-		{
-			if (this.purgeTargetId.HasValue)
-			{
-				byte targetId = this.purgeTargetId.Value;
-				using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
-				{
-					caller.WriteByte((byte)RemoteKillerRpc.PurgeExecute);
-					caller.WriteByte(rolePlayer.PlayerId);
-					caller.WriteByte(targetId);
-				}
-			}
-		}
 	}
 
 	private bool isUseRob()
@@ -570,6 +517,11 @@ public sealed class RemoteKiller :
 
 	private bool purgeOpenMenu()
 	{
+		if (this.selectedPurgeTarget != null)
+		{
+			return true;
+		}
+
 		this.minigame ??= new ShapeShiftMinigameWrapper();
 		return this.minigame.IsOpen || this.minigame.OpenUi(
 			this.onPurgeTargetSelected,
@@ -588,6 +540,7 @@ public sealed class RemoteKiller :
 			return;
 		}
 
+		this.selectedPurgeTarget = target;
 		byte localId = PlayerControl.LocalPlayer.PlayerId;
 		byte targetId = target.PlayerId;
 
@@ -597,16 +550,59 @@ public sealed class RemoteKiller :
 			caller.WriteByte(localId);
 			caller.WriteByte(targetId);
 		}
+
+		if (this.Button != null && this.Button.Transform.TryGetComponent<PassiveButton>(out var button))
+		{
+			button.OnClick.Invoke();
+		}
 	}
 
-	private void cancelPurge()
+	private bool isPurgeCheck()
 	{
-		byte localId = PlayerControl.LocalPlayer.PlayerId;
-
-		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
+		if (this.selectedPurgeTarget == null ||
+			this.selectedPurgeTarget.Data == null ||
+			this.selectedPurgeTarget.Data.IsDead ||
+			this.selectedPurgeTarget.Data.Disconnected ||
+			PlayerControl.LocalPlayer.Data.IsDead ||
+			MeetingHud.Instance != null)
 		{
-			caller.WriteByte((byte)RemoteKillerRpc.PurgeCancel);
-			caller.WriteByte(localId);
+			return false;
 		}
+
+		return true;
+	}
+
+	private void purgeCleanUp()
+	{
+		if (this.selectedPurgeTarget != null)
+		{
+			byte localId = PlayerControl.LocalPlayer.PlayerId;
+			byte targetId = this.selectedPurgeTarget.PlayerId;
+
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
+			{
+				caller.WriteByte((byte)RemoteKillerRpc.PurgeExecute);
+				caller.WriteByte(localId);
+				caller.WriteByte(targetId);
+			}
+		}
+
+		this.selectedPurgeTarget = null;
+	}
+
+	private void purgeForceCleanUp()
+	{
+		if (this.IsPurging)
+		{
+			byte localId = PlayerControl.LocalPlayer.PlayerId;
+
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
+			{
+				caller.WriteByte((byte)RemoteKillerRpc.PurgeCancel);
+				caller.WriteByte(localId);
+			}
+		}
+
+		this.selectedPurgeTarget = null;
 	}
 }
