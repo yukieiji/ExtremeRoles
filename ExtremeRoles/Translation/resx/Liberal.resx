@@ -242,8 +242,8 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>タスクバーを常に見ることが出来るか</value>
   </data>
   <data name="EmbezzleTaskCompletedMoney" xml:space="preserve">
-    <value>「偽装計上」の1タスクあたりの
-獲得資金（最低保証獲得資金）</value>
+    <value>「偽装計上」の資金ボーナス/
+1タスクあたり（最低保証獲得資金）</value>
   </data>
   <data name="Addict" xml:space="preserve">
     <value>アディクト</value>
@@ -292,7 +292,7 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>「自爆」で範囲内のプレイヤーを消し飛ばす確率</value>
   </data>
   <data name="MartyrKillMoney" xml:space="preserve">
-    <value>「自爆」の1キルあたりの獲得資金</value>
+    <value>「自爆」の資金ボーナス/1キルあたり</value>
   </data>
   <data name="MartyrRange" xml:space="preserve">
     <value>「自爆」の爆発範囲</value>
@@ -302,5 +302,17 @@ Extreme Rolesの各役職の共通設定が適用できる
   </data>
   <data name="EmbezzleAbilityCount" xml:space="preserve">
     <value>「偽装会計」の使用できる回数</value>
+  </data>
+  <data name="SpecialDoveUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="SpecialDoveTaskCompletedMoney" xml:space="preserve">
+    <value>資金ボーナス/1タスク完了あたり</value>
+  </data>
+  <data name="SpecialMilitantUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="SpecialMilitantKillMoney" xml:space="preserve">
+    <value>資金ボーナス/キル1回あたり</value>
   </data>
 </root>
