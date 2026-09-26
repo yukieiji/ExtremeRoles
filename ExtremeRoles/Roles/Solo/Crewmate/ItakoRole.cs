@@ -57,7 +57,6 @@ public sealed class ItakoRole :
 	private NetworkedPlayerInfo? targetBody;
 	private NetworkedPlayerInfo? tmpTargetBody;
 	private byte activeTargetBodyId = byte.MaxValue;
-	private bool isChannelingActive = false;
 
 	private float range;
 	private float requiredTaskRate;
@@ -79,7 +78,7 @@ public sealed class ItakoRole :
 			checkAbility: CheckAbility,
 			abilityOff: CleanUp,
 			forceAbilityOff: ForceCleanUp,
-			isReduceOnActive: true);
+			isReduceOnActive: false);
 		this.Button?.SetLabelToCrewmate();
 	}
 
@@ -97,7 +96,6 @@ public sealed class ItakoRole :
 		}
 		this.targetBody = this.tmpTargetBody;
 		this.activeTargetBodyId = this.targetBody.PlayerId;
-		this.isChannelingActive = true;
 		return true;
 	}
 
@@ -120,8 +118,6 @@ public sealed class ItakoRole :
 
 		bool callerIsCrewmate = this.IsCrewmate();
 		bool targetIsCrewmate = ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) && targetRole.IsCrewmate();
-
-		this.isChannelingActive = false;
 
 		if (!callerIsCrewmate || !targetIsCrewmate)
 		{
@@ -147,18 +143,9 @@ public sealed class ItakoRole :
 
 	public void ForceCleanUp()
 	{
-		if (this.isChannelingActive)
-		{
-			if (this.Button?.Behavior is ICountBehavior countBehavior)
-			{
-				countBehavior.SetAbilityCount(countBehavior.AbilityCount + 1);
-			}
-		}
-
 		this.targetBody = null;
 		this.tmpTargetBody = null;
 		this.activeTargetBodyId = byte.MaxValue;
-		this.isChannelingActive = false;
 	}
 
 	public void ResetOnMeetingStart()
