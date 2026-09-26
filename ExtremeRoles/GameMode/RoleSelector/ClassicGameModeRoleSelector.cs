@@ -166,6 +166,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 
 			ExtremeRoleId.SpecialDove,
 			ExtremeRoleId.SpecialMilitant,
+			ExtremeRoleId.Addict,
 			ExtremeRoleId.Embezzle,
 			ExtremeRoleId.Martyr,
 		];
