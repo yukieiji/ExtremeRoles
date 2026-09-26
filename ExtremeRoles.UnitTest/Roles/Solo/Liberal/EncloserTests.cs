@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Reflection;
 
 using UnityEngine;
 using ExtremeRoles.Roles;
@@ -84,60 +83,59 @@ public sealed class EncloserTests
 	}
 
 	[Fact]
-	public void IsPointInPolygon_InsidePolygon_ReturnsTrue()
+	public void EncloserPolygon_InsidePolygon_ReturnsTrue()
 	{
 		// Arrange
-		var polygon = new List<Vector2>
-		{
-			CreateVec2(0, 0),
-			CreateVec2(10, 0),
-			CreateVec2(10, 10),
-			CreateVec2(0, 10)
-		};
+		var polygon = new EncloserPolygon();
+		polygon.AddStake(CreateVec2(0, 0), 4);
+		polygon.AddStake(CreateVec2(10, 0), 4);
+		polygon.AddStake(CreateVec2(10, 10), 4);
+		polygon.AddStake(CreateVec2(0, 10), 4);
+
 		var testPoint = CreateVec2(5, 5);
 
 		// Act
-		bool isInside = Encloser.IsPointInPolygon(testPoint, polygon);
+		bool isInside = polygon.IsPointInside(testPoint);
 
 		// Assert
 		Assert.True(isInside);
+		Assert.True(polygon.IsCompleted);
 	}
 
 	[Fact]
-	public void IsPointInPolygon_OutsidePolygon_ReturnsFalse()
+	public void EncloserPolygon_OutsidePolygon_ReturnsFalse()
 	{
 		// Arrange
-		var polygon = new List<Vector2>
-		{
-			CreateVec2(0, 0),
-			CreateVec2(10, 0),
-			CreateVec2(10, 10),
-			CreateVec2(0, 10)
-		};
+		var polygon = new EncloserPolygon();
+		polygon.AddStake(CreateVec2(0, 0), 4);
+		polygon.AddStake(CreateVec2(10, 0), 4);
+		polygon.AddStake(CreateVec2(10, 10), 4);
+		polygon.AddStake(CreateVec2(0, 10), 4);
+
 		var testPoint = CreateVec2(15, 5);
 
 		// Act
-		bool isInside = Encloser.IsPointInPolygon(testPoint, polygon);
+		bool isInside = polygon.IsPointInside(testPoint);
 
 		// Assert
 		Assert.False(isInside);
 	}
 
 	[Fact]
-	public void IsPointInPolygon_LessThan3Vertices_ReturnsFalse()
+	public void EncloserPolygon_NotCompleted_ReturnsFalse()
 	{
 		// Arrange
-		var polygon = new List<Vector2>
-		{
-			CreateVec2(0, 0),
-			CreateVec2(10, 0)
-		};
+		var polygon = new EncloserPolygon();
+		polygon.AddStake(CreateVec2(0, 0), 4);
+		polygon.AddStake(CreateVec2(10, 0), 4);
+
 		var testPoint = CreateVec2(5, 0);
 
 		// Act
-		bool isInside = Encloser.IsPointInPolygon(testPoint, polygon);
+		bool isInside = polygon.IsPointInside(testPoint);
 
 		// Assert
 		Assert.False(isInside);
+		Assert.False(polygon.IsCompleted);
 	}
 }
