@@ -31,32 +31,12 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Liberal;
 
-public enum EncloserOption
-{
-	StakeCount,
-	MetsuLimit,
-	AbilityCoolTime,
-	MetsuKillMoney
-}
-
-public enum EncloserMode : byte
-{
-	Stake,
-	Metsu
-}
-
-public enum EncloserRpcOpsType : byte
-{
-	PlaceStake,
-	UseMetsu
-}
-
 public sealed class EncloserPolygon
 {
 	public bool IsCompleted { get; private set; }
 	public int Count => this.stakeObjects.Count;
 
-	private readonly List<GameObject> stakeObjects = new List<GameObject>();
+	private readonly List<GameObject> stakeObjects = [];
 	private readonly IUnityObjectFactory factory;
 	private readonly IIl2CppObjectProvider il2cppProvider;
 
@@ -75,11 +55,7 @@ public sealed class EncloserPolygon
 		var sr = stake.AddComponent<SpriteRenderer>();
 		sr.sprite = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.Bomb);
 		sr.color = ColorPalette.LiberalColor;
-		var stakePos = default(Vector3);
-		stakePos.x = pos.x;
-		stakePos.y = pos.y;
-		stakePos.z = -0.1f;
-		stake.transform.position = stakePos;
+		stake.transform.position = this.factory.CreateMapPos(pos);
 		this.stakeObjects.Add(stake);
 
 		if (this.stakeObjects.Count >= maxStakes)
@@ -192,26 +168,20 @@ public sealed class EncloserPolygon
 			this.lineRenderer.endColor = ColorPalette.LiberalColor;
 		}
 
-		int posCount = count + (this.IsCompleted ? 1 : 0);
-		this.lineRenderer.positionCount = posCount;
+		this.lineRenderer.positionCount = count + (this.IsCompleted ? 1 : 0);
 
+		// 線は杭より後ろに置きたいので
 		for (int i = 0; i < count; i++)
 		{
 			Vector3 pos = this.stakeObjects[i].transform.position;
-			var linePos = default(Vector3);
-			linePos.x = pos.x;
-			linePos.y = pos.y;
-			linePos.z = -0.05f;
+			var linePos = this.factory.CreateMapPos(pos, 975.0f);
 			this.lineRenderer.SetPosition(i, linePos);
 		}
 
 		if (this.IsCompleted)
 		{
 			Vector3 firstPos = this.stakeObjects[0].transform.position;
-			var firstLinePos = default(Vector3);
-			firstLinePos.x = firstPos.x;
-			firstLinePos.y = firstPos.y;
-			firstLinePos.z = -0.05f;
+			var firstLinePos = this.factory.CreateMapPos(firstPos, 975.0f);
 			this.lineRenderer.SetPosition(count, firstLinePos);
 			buildMesh();
 		}
@@ -235,48 +205,41 @@ public sealed class EncloserPolygon
 		}
 
 		Mesh mesh = this.factory.CreateMesh();
-		if (mesh != null)
+		Il2CppStructArray<Vector3> vertices = this.il2cppProvider.GetStructArray<Vector3>(count);
+		for (int i = 0; i < count; i++)
 		{
-			Il2CppStructArray<Vector3> vertices = this.il2cppProvider.GetStructArray<Vector3>(count);
-			for (int i = 0; i < count; i++)
-			{
-				Vector3 pos = this.stakeObjects[i].transform.position;
-				var vertPos = default(Vector3);
-				vertPos.x = pos.x;
-				vertPos.y = pos.y;
-				vertPos.z = 0.05f;
-				vertices[i] = vertPos;
-			}
-
-			int triangleCount = (count - 2) * 3;
-			Il2CppStructArray<int> triangles = this.il2cppProvider.GetStructArray<int>(triangleCount);
-			int tIndex = 0;
-			for (int i = 1; i < count - 1; i++)
-			{
-				triangles[tIndex++] = 0;
-				triangles[tIndex++] = i;
-				triangles[tIndex++] = i + 1;
-			}
-
-			Color yellowFill = new Color(
-				ColorPalette.LiberalColor.r,
-				ColorPalette.LiberalColor.g,
-				ColorPalette.LiberalColor.b,
-				0.3f);
-
-			Il2CppStructArray<Color> colors = this.il2cppProvider.GetStructArray<Color>(count);
-			for (int i = 0; i < colors.Length; i++)
-			{
-				colors[i] = yellowFill;
-			}
-
-			mesh.vertices = vertices;
-			mesh.triangles = triangles;
-			mesh.colors = colors;
-			mesh.RecalculateBounds();
-
-			this.meshFilter.mesh = mesh;
+			Vector3 pos = this.stakeObjects[i].transform.position;
+			vertices[i] = this.factory.CreateMapPos(pos, 950.0f);
 		}
+
+		int triangleCount = (count - 2) * 3;
+		Il2CppStructArray<int> triangles = this.il2cppProvider.GetStructArray<int>(triangleCount);
+		int tIndex = 0;
+		for (int i = 1; i < count - 1; i++)
+		{
+			triangles[tIndex++] = 0;
+			triangles[tIndex++] = i;
+			triangles[tIndex++] = i + 1;
+		}
+
+		Color yellowFill = new Color(
+			ColorPalette.LiberalColor.r,
+			ColorPalette.LiberalColor.g,
+			ColorPalette.LiberalColor.b,
+			0.3f);
+
+		Il2CppStructArray<Color> colors = this.il2cppProvider.GetStructArray<Color>(count);
+		for (int i = 0; i < colors.Length; i++)
+		{
+			colors[i] = yellowFill;
+		}
+
+		mesh.vertices = vertices;
+		mesh.triangles = triangles;
+		mesh.colors = colors;
+		mesh.RecalculateBounds();
+
+		this.meshFilter.mesh = mesh;
 	}
 }
 
@@ -284,18 +247,15 @@ public sealed class EncloserAbilityHandler : IAbility
 {
 	public ExtremeAbilityButton Button { get; set; } = null!;
 
-	public EncloserMode CurrentMode => this.modeSwitcher?.Current ?? EncloserMode.Stake;
-
-	public EncloserPolygon Polygon => this.polygon;
-
-	private readonly EncloserPolygon polygon;
 	private readonly int stakeCount;
-	private readonly int metsuLimit;
 	private readonly float abilityCoolTime;
 	private readonly int metsuKillMoney;
+	private readonly EncloserPolygon polygon;
+
+	private Encloser.Mode currentMode => this.modeSwitcher?.Current ?? Encloser.Mode.Stake;
 
 	private int remainingMetsuCount;
-	private GraphicSwitcher<EncloserMode>? modeSwitcher;
+	private GraphicSwitcher<Encloser.Mode>? modeSwitcher;
 
 	public EncloserAbilityHandler(
 		int stakeCount,
@@ -307,7 +267,6 @@ public sealed class EncloserAbilityHandler : IAbility
 	{
 		this.polygon = new EncloserPolygon(factory, il2cppProvider);
 		this.stakeCount = stakeCount;
-		this.metsuLimit = metsuLimit;
 		this.abilityCoolTime = abilityCoolTime;
 		this.metsuKillMoney = metsuKillMoney;
 		this.remainingMetsuCount = metsuLimit;
@@ -329,23 +288,23 @@ public sealed class EncloserAbilityHandler : IAbility
 		this.Button.SetLabelToCrewmate();
 		this.Button.Behavior.SetCoolTime(this.abilityCoolTime);
 
-		this.modeSwitcher = new GraphicSwitcher<EncloserMode>(
+		this.modeSwitcher = new GraphicSwitcher<Encloser.Mode>(
 			this.Button.Behavior,
-			new GraphicMode<EncloserMode>(EncloserMode.Stake, stakeGraphic),
-			new GraphicMode<EncloserMode>(EncloserMode.Metsu, metsuGraphic));
+			new GraphicMode<Encloser.Mode>(Encloser.Mode.Stake, stakeGraphic),
+			new GraphicMode<Encloser.Mode>(Encloser.Mode.Metsu, metsuGraphic));
 
-		this.modeSwitcher.Switch(EncloserMode.Stake);
+		this.modeSwitcher.Switch(Encloser.Mode.Stake);
 	}
 
 	public bool UseAbility()
 	{
-		if (this.CurrentMode == EncloserMode.Stake)
+		if (this.currentMode == Encloser.Mode.Stake)
 		{
 			Vector2 pos = PlayerControl.LocalPlayer.GetTruePosition();
 			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EncloserOps))
 			{
 				caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
-				caller.WriteByte((byte)EncloserRpcOpsType.PlaceStake);
+				caller.WriteByte((byte)Encloser.RpcOpsType.PlaceStake);
 				caller.WriteFloat(pos.x);
 				caller.WriteFloat(pos.y);
 			}
@@ -353,51 +312,34 @@ public sealed class EncloserAbilityHandler : IAbility
 			HandlePlaceStake(PlayerControl.LocalPlayer.PlayerId, pos);
 			return true;
 		}
-		else if (this.CurrentMode == EncloserMode.Metsu)
+		else if (this.currentMode == Encloser.Mode.Metsu)
 		{
 			byte encloserPlayerId = PlayerControl.LocalPlayer.PlayerId;
 			int nonLiberalKills = 0;
 
-			bool isMonikaImmune = false;
-			if (MonikaTrashSystem.TryGet(out var trashSystem) && trashSystem.InvalidPlayer(encloserPlayerId))
-			{
-				isMonikaImmune = true;
-			}
-
 			foreach (var pc in PlayerCache.AllPlayerControl)
 			{
-				if (pc == null || pc.Data == null || pc.Data.IsDead || pc.Data.Disconnected)
+				if (pc.IsInValid())
 				{
 					continue;
 				}
 
 				Vector2 pPos = pc.GetTruePosition();
-				if (!this.polygon.IsPointInside(pPos))
+
+				if (!this.polygon.IsPointInside(pPos) ||
+					!ExtremeRoleManager.TryGetRole(pc.PlayerId, out var targetRole) ||
+					targetRole.Core.Id is ExtremeRoleId.Leader ||
+					(
+						targetRole.AbilityClass is IInvincible invincible &&
+						invincible.IsBlockKillFrom(encloserPlayerId)
+					))
 				{
 					continue;
 				}
 
-				if (ExtremeRoleManager.TryGetRole(pc.PlayerId, out var targetRole))
+				if (!targetRole.IsLiberal())
 				{
-					if (targetRole.Core.Id is ExtremeRoleId.Leader or ExtremeRoleId.Assassin)
-					{
-						continue;
-					}
-
-					if (targetRole.Core.Id is ExtremeRoleId.Monika && isMonikaImmune)
-					{
-						continue;
-					}
-
-					if (targetRole.AbilityClass is IInvincible invincible && invincible.IsBlockKillFrom(encloserPlayerId))
-					{
-						continue;
-					}
-
-					if (!targetRole.IsLiberal())
-					{
-						nonLiberalKills++;
-					}
+					nonLiberalKills++;
 				}
 
 				Player.RpcUncheckMurderPlayer(encloserPlayerId, pc.PlayerId, byte.MinValue);
@@ -416,7 +358,7 @@ public sealed class EncloserAbilityHandler : IAbility
 			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EncloserOps))
 			{
 				caller.WriteByte(encloserPlayerId);
-				caller.WriteByte((byte)EncloserRpcOpsType.UseMetsu);
+				caller.WriteByte((byte)Encloser.RpcOpsType.UseMetsu);
 			}
 
 			HandleUseMetsuRpc(encloserPlayerId);
@@ -436,11 +378,11 @@ public sealed class EncloserAbilityHandler : IAbility
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		bool isCommonUse = localPlayer != null && localPlayer.IsAlive() && localPlayer.CanMove;
 
-		if (this.CurrentMode == EncloserMode.Stake)
+		if (this.currentMode == Encloser.Mode.Stake)
 		{
 			return isCommonUse && this.polygon.Count < this.stakeCount;
 		}
-		else if (this.CurrentMode == EncloserMode.Metsu)
+		else if (this.currentMode == Encloser.Mode.Metsu)
 		{
 			return isCommonUse && this.polygon.IsCompleted;
 		}
@@ -452,15 +394,14 @@ public sealed class EncloserAbilityHandler : IAbility
 	{
 		this.polygon.AddStake(pos, this.stakeCount);
 
-		if (this.polygon.IsCompleted)
+		var localPlayer = PlayerControl.LocalPlayer;
+		bool isEncloser = localPlayer != null && localPlayer.PlayerId == encloserPlayerId;
+		if (this.polygon.IsCompleted && isEncloser)
 		{
-			if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == encloserPlayerId)
-			{
-				this.modeSwitcher?.Switch(EncloserMode.Metsu);
-			}
+			this.modeSwitcher?.Switch(Encloser.Mode.Metsu);
 		}
 
-		this.polygon.UpdateVisuals(PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == encloserPlayerId);
+		this.polygon.UpdateVisuals(isEncloser);
 	}
 
 	public void HandleUseMetsuRpc(byte encloserPlayerId)
@@ -468,26 +409,19 @@ public sealed class EncloserAbilityHandler : IAbility
 		this.remainingMetsuCount--;
 		this.polygon.Clear();
 
-		if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == encloserPlayerId)
+		if (PlayerControl.LocalPlayer == null || PlayerControl.LocalPlayer.PlayerId != encloserPlayerId)
 		{
-			if (this.remainingMetsuCount > 0)
-			{
-				this.modeSwitcher?.Switch(EncloserMode.Stake);
-			}
-
-			if (this.Button != null && this.Button.Behavior != null)
-			{
-				this.Button.Behavior.SetCoolTime(this.abilityCoolTime);
-			}
+			return;
 		}
-	}
 
-	public void Reset()
-	{
-		this.polygon.Clear();
-		if (PlayerControl.LocalPlayer != null && this.Button != null)
+		if (this.remainingMetsuCount > 0)
 		{
-			this.modeSwitcher?.Switch(EncloserMode.Stake);
+			this.modeSwitcher?.Switch(Encloser.Mode.Stake);
+		}
+
+		if (this.Button != null && this.Button.Behavior != null)
+		{
+			this.Button.Behavior.SetCoolTime(this.abilityCoolTime);
 		}
 	}
 
@@ -500,6 +434,27 @@ public sealed class EncloserAbilityHandler : IAbility
 
 public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleResetMeeting
 {
+
+	public enum Option
+	{
+		StakeCount,
+		MetsuLimit,
+		AbilityCoolTime,
+		MetsuKillMoney
+	}
+
+	public enum Mode : byte
+	{
+		Stake,
+		Metsu
+	}
+
+	public enum RpcOpsType : byte
+	{
+		PlaceStake,
+		UseMetsu
+	}
+
 	public ExtremeAbilityButton Button
 	{
 		get => this.abilityHandler != null ? this.abilityHandler.Button : null!;
@@ -520,13 +475,10 @@ public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 	}
 
 	public override string GetRoleTag()
-	{
-		return "Ec";
-	}
+		=> "Ec";
 
 	public void CreateAbility()
 	{
-		this.AbilityClass = this.abilityHandler;
 		this.abilityHandler?.CreateAbility();
 	}
 
@@ -560,16 +512,16 @@ public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 		AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateIntOption(
-			EncloserOption.StakeCount,
+			Option.StakeCount,
 			3, 3, 10, 1);
 		factory.CreateIntOption(
-			EncloserOption.MetsuLimit,
+			Option.MetsuLimit,
 			1, 1, 10, 1);
 		factory.CreateFloatOption(
-			EncloserOption.AbilityCoolTime,
+			Option.AbilityCoolTime,
 			20.0f, 5.0f, 60.0f, 2.5f);
 		factory.CreateIntOption(
-			EncloserOption.MetsuKillMoney,
+			Option.MetsuKillMoney,
 			10, 0, 100, 1);
 	}
 
@@ -579,22 +531,23 @@ public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 		var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
 		LiberalSettingOverrider.OverrideDefault(this, liberalOption);
 
-		int stakeCount = loader.GetValue<EncloserOption, int>(EncloserOption.StakeCount);
-		int metsuLimit = loader.GetValue<EncloserOption, int>(EncloserOption.MetsuLimit);
-		float abilityCoolTime = loader.GetValue<EncloserOption, float>(EncloserOption.AbilityCoolTime);
-		int metsuKillMoney = loader.GetValue<EncloserOption, int>(EncloserOption.MetsuKillMoney);
+		int stakeCount = loader.GetValue<Option, int>(Option.StakeCount);
+		int metsuLimit = loader.GetValue<Option, int>(Option.MetsuLimit);
+		float abilityCoolTime = loader.GetValue<Option, float>(Option.AbilityCoolTime);
+		int metsuKillMoney = loader.GetValue<Option, int>(Option.MetsuKillMoney);
 
 		this.abilityHandler = new EncloserAbilityHandler(
 			stakeCount,
 			metsuLimit,
 			abilityCoolTime,
 			metsuKillMoney);
+		this.AbilityClass = this.abilityHandler;
 	}
 
 	public static void RpcOps(MessageReader reader)
 	{
 		byte rolePlayerId = reader.ReadByte();
-		EncloserRpcOpsType ops = (EncloserRpcOpsType)reader.ReadByte();
+		RpcOpsType ops = (RpcOpsType)reader.ReadByte();
 
 		if (!ExtremeRoleManager.TryGetSafeCastedRole<Encloser>(rolePlayerId, out var encloser) ||
 			encloser.abilityHandler == null)
@@ -604,12 +557,12 @@ public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 
 		switch (ops)
 		{
-			case EncloserRpcOpsType.PlaceStake:
+			case RpcOpsType.PlaceStake:
 				float x = reader.ReadSingle();
 				float y = reader.ReadSingle();
 				encloser.abilityHandler.HandlePlaceStake(rolePlayerId, new Vector2(x, y));
 				break;
-			case EncloserRpcOpsType.UseMetsu:
+			case RpcOpsType.UseMetsu:
 				encloser.abilityHandler.HandleUseMetsuRpc(rolePlayerId);
 				break;
 		}

@@ -7,30 +7,22 @@ namespace ExtremeRoles.Module.Interface;
 public interface IUnityObjectFactory
 {
 	public GameObject CreateGameObject(string name);
-	public Material CreateMaterial(Shader shader);
 	public Material CreateSpriteMaterial();
+	public Vector3 CreateMapPos(Vector2 target, float offset = 1000.0f);
 	public Mesh CreateMesh();
 }
 
 public class DefaultUnityObjectFactory : IUnityObjectFactory
 {
 	public GameObject CreateGameObject(string name)
-	{
-		return new GameObject(name);
-	}
+		=> new GameObject(name);
 
-	public Material CreateMaterial(Shader shader)
-	{
-		return new Material(shader);
-	}
+	public Vector3 CreateMapPos(Vector2 target, float offset = 1000.0f)
+		=> new Vector3(target.x, target.y, target.y / offset);
 
 	public Material CreateSpriteMaterial()
-	{
-		return new Material(Shader.Find("Sprites/Default"));
-	}
+		=> new Material(Shader.Find("Sprites/Default"));
 
 	public Mesh CreateMesh()
-	{
-		return new Mesh();
-	}
+		=> new Mesh();
 }
