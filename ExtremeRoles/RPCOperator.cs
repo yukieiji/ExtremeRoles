@@ -80,7 +80,6 @@ public static class RPCOperator
 		ExorcistOps,
 		CEOOps,
 		EchoOps,
-		ItakoOps,
 
 		// インポスター
 		CarrierAbility,
@@ -221,14 +220,10 @@ public static class RPCOperator
 
     public static void CleanDeadBody(byte targetId)
     {
-        if (GameData.Instance == null) { return; }
         DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
-        if (array == null) { return; }
         for (int i = 0; i < array.Length; ++i)
         {
-            if (array[i] == null) { continue; }
-            var playerInfo = GameData.Instance.GetPlayerById(array[i].ParentId);
-            if (playerInfo != null && playerInfo.PlayerId == targetId)
+            if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == targetId)
             {
                 UnityEngine.Object.Destroy(array[i].gameObject);
                 break;
@@ -633,11 +628,6 @@ public static class RPCOperator
 	public static void EchoRpcOps(in MessageReader reader)
 	{
 		Roles.Solo.Crewmate.Echo.Rpc(reader);
-	}
-
-	public static void ItakoRpcOps(in MessageReader reader)
-	{
-		Roles.Solo.Crewmate.ItakoRole.RpcOps(reader);
 	}
 
 	public static void CarrierAbility(
