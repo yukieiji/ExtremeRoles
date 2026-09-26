@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Liberal;
 using Hazel;
@@ -66,6 +67,14 @@ public sealed class EncloserTests
 		return v;
 	}
 
+	private sealed class NullGameObjectFactory : IGameObjectFactory
+	{
+		public GameObject Create(string name)
+		{
+			return null!;
+		}
+	}
+
 	[Fact]
 	public void Initialize_RegistersOptionsAndProperties()
 	{
@@ -86,7 +95,8 @@ public sealed class EncloserTests
 	public void EncloserPolygon_InsidePolygon_ReturnsTrue()
 	{
 		// Arrange
-		var polygon = new EncloserPolygon();
+		var factory = new NullGameObjectFactory();
+		var polygon = new EncloserPolygon(factory);
 		polygon.AddStake(CreateVec2(0, 0), 4);
 		polygon.AddStake(CreateVec2(10, 0), 4);
 		polygon.AddStake(CreateVec2(10, 10), 4);
@@ -106,7 +116,8 @@ public sealed class EncloserTests
 	public void EncloserPolygon_OutsidePolygon_ReturnsFalse()
 	{
 		// Arrange
-		var polygon = new EncloserPolygon();
+		var factory = new NullGameObjectFactory();
+		var polygon = new EncloserPolygon(factory);
 		polygon.AddStake(CreateVec2(0, 0), 4);
 		polygon.AddStake(CreateVec2(10, 0), 4);
 		polygon.AddStake(CreateVec2(10, 10), 4);
@@ -125,7 +136,8 @@ public sealed class EncloserTests
 	public void EncloserPolygon_NotCompleted_ReturnsFalse()
 	{
 		// Arrange
-		var polygon = new EncloserPolygon();
+		var factory = new NullGameObjectFactory();
+		var polygon = new EncloserPolygon(factory);
 		polygon.AddStake(CreateVec2(0, 0), 4);
 		polygon.AddStake(CreateVec2(10, 0), 4);
 
