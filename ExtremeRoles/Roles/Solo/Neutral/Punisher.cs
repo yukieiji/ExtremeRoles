@@ -56,13 +56,12 @@ public sealed class Punisher : SingleRoleBase, IRoleUpdate, IRolePerformKillHook
 		{
 			// 勝利予定者に組み込み
 			this.winRolePlayerId = rolePlayer.PlayerId;
-			return true;
 		}
 		else
 		{
 			this.KillCoolTime += this.nonImpostorKillCoolIncrease;
-			return true;
 		}
+		return true;
 	}
 
 	public override bool IsSameTeam(SingleRoleBase targetRole) =>
