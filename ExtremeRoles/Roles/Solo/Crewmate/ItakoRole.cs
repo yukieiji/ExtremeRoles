@@ -17,7 +17,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 public sealed class ItakoRole :
 	MultiAssignRoleBase,
 	IRoleAutoBuildAbility,
-	IRoleUpdate,
 	IRoleResetMeeting
 {
 	public enum Option
@@ -147,10 +146,6 @@ public sealed class ItakoRole :
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
 		ForceCleanUp();
-	}
-
-	public void Update(PlayerControl rolePlayer)
-	{
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
