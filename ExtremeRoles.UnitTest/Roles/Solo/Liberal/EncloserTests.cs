@@ -72,7 +72,7 @@ public sealed class EncloserTests
 
 	private static Vector2 CreateVec2(float x, float y)
 	{
-		var v = default(Vector2);
+		var v = new Vector2();
 		v.x = x;
 		v.y = y;
 		return v;
@@ -96,15 +96,22 @@ public sealed class EncloserTests
 		{
 			var mockGo = new Mock<GameObject>(IntPtr.Zero);
 			var mockTrans = new Mock<Transform>(IntPtr.Zero);
-			Vector3 pos = Vector3.zero;
-			mockTrans.SetupGet(t => t.position).Returns(() => pos);
-			mockTrans.SetupSet(t => t.position = It.IsAny<Vector3>()).Callback<Vector3>(v => pos = v);
+			mockTrans.SetupProperty(t => t.position);
+
 			var mockSr = new Mock<SpriteRenderer>(IntPtr.Zero);
+			var mockLine = new Mock<LineRenderer>(IntPtr.Zero);
+			mockLine.SetupProperty(l => l.positionCount, 0);
+
+			var mockMeshFilter = new Mock<MeshFilter>(IntPtr.Zero);
+			mockMeshFilter.SetupProperty(m => m.mesh, (Mesh)null!);
+
+			var mockMeshRenderer = new Mock<MeshRenderer>(IntPtr.Zero);
+
 			mockGo.SetupGet(g => g.transform).Returns(mockTrans.Object);
 			mockGo.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockSr.Object);
-			mockGo.Setup(g => g.AddComponent<LineRenderer>()).Returns(new Mock<LineRenderer>(IntPtr.Zero).Object);
-			mockGo.Setup(g => g.AddComponent<MeshFilter>()).Returns(new Mock<MeshFilter>(IntPtr.Zero).Object);
-			mockGo.Setup(g => g.AddComponent<MeshRenderer>()).Returns(new Mock<MeshRenderer>(IntPtr.Zero).Object);
+			mockGo.Setup(g => g.AddComponent<LineRenderer>()).Returns(mockLine.Object);
+			mockGo.Setup(g => g.AddComponent<MeshFilter>()).Returns(mockMeshFilter.Object);
+			mockGo.Setup(g => g.AddComponent<MeshRenderer>()).Returns(mockMeshRenderer.Object);
 
 			return mockGo.Object;
 		}
@@ -117,6 +124,15 @@ public sealed class EncloserTests
 		public Material CreateSpriteMaterial()
 		{
 			return new Mock<Material>(IntPtr.Zero).Object;
+		}
+
+		public Vector3 CreateMapPos(Vector2 target, float offset = 1000.0f)
+		{
+			var v3 = new Vector3();
+			v3.x = target.x;
+			v3.y = target.y;
+			v3.z = target.y / offset;
+			return v3;
 		}
 
 		public Mesh CreateMesh()
@@ -206,6 +222,12 @@ public sealed class EncloserTests
 		Assert.Equal(2, polygon.Count);
 	}
 
+	private static EncloserPolygon GetPolygon(EncloserAbilityHandler handler)
+	{
+		var field = typeof(EncloserAbilityHandler).GetField("polygon", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+		return (EncloserPolygon)field!.GetValue(handler)!;
+	}
+
 	[Fact]
 	public void EncloserAbilityHandler_HandlePlaceStake_UpdatesPolygonState()
 	{
@@ -213,20 +235,21 @@ public sealed class EncloserTests
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
 		var handler = new EncloserAbilityHandler(3, 1, 20f, 10, factory, il2cppProvider);
+		var polygon = GetPolygon(handler);
 
 		// Act
 		handler.HandlePlaceStake(1, CreateVec2(0, 0));
 		handler.HandlePlaceStake(1, CreateVec2(10, 0));
 
-		bool isCompletedBeforeMax = handler.Polygon.IsCompleted;
+		bool isCompletedBeforeMax = polygon.IsCompleted;
 
 		handler.HandlePlaceStake(1, CreateVec2(5, 10));
-		bool isCompletedAfterMax = handler.Polygon.IsCompleted;
+		bool isCompletedAfterMax = polygon.IsCompleted;
 
 		// Assert
 		Assert.False(isCompletedBeforeMax);
 		Assert.True(isCompletedAfterMax);
-		Assert.Equal(3, handler.Polygon.Count);
+		Assert.Equal(3, polygon.Count);
 	}
 
 	[Fact]
@@ -236,6 +259,8 @@ public sealed class EncloserTests
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
 		var handler = new EncloserAbilityHandler(3, 1, 20f, 10, factory, il2cppProvider);
+		var polygon = GetPolygon(handler);
+
 		handler.HandlePlaceStake(1, CreateVec2(0, 0));
 		handler.HandlePlaceStake(1, CreateVec2(10, 0));
 		handler.HandlePlaceStake(1, CreateVec2(5, 10));
@@ -244,8 +269,8 @@ public sealed class EncloserTests
 		handler.HandleUseMetsuRpc(1);
 
 		// Assert
-		Assert.Equal(0, handler.Polygon.Count);
-		Assert.False(handler.Polygon.IsCompleted);
+		Assert.Equal(0, polygon.Count);
+		Assert.False(polygon.IsCompleted);
 	}
 
 	[Fact]
