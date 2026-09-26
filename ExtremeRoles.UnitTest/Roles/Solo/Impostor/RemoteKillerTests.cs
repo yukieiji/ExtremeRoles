@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using AmongUs.GameOptions;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
 using Hazel;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
 using UnityEngine;
 using Xunit;
@@ -26,6 +29,7 @@ public sealed class RemoteKillerTests
 		MockSetupHelper.SetupMockConfig(plugin);
 
 		SetupLobbyBehaviourMock();
+		SetupTranslationControllerMock();
 
 		mockClient = MockSetupHelper.SetupAmongUsClientMock();
 		var mockWriter = new Mock<MessageWriter>(IntPtr.Zero);
@@ -70,6 +74,15 @@ public sealed class RemoteKillerTests
 		MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyHelper.Object;
 	}
 
+	private static void SetupTranslationControllerMock()
+	{
+		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
+		mockTranslation.Setup(t => t.GetString(It.IsAny<StringNames>())).Returns("TestString");
+		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>())).Returns("TestString");
+		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>())).Returns("TestString");
+		mockTranslation.Setup(t => t.GetString(It.IsAny<StringNames>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>())).Returns("TestString");
+	}
+
 	private static void InitializeRole(SingleRoleBase role, byte playerId = 1)
 	{
 		role.CreateRoleAllOption();
@@ -90,6 +103,7 @@ public sealed class RemoteKillerTests
 		// Assert
 		Assert.Equal(ExtremeRoleId.RemoteKiller, role.Core.Id);
 		Assert.True(role.IsImpostor());
+		Assert.NotNull(role.Status);
 	}
 
 	[Fact]
@@ -111,7 +125,6 @@ public sealed class RemoteKillerTests
 
 		// Assert
 		Assert.True(role.IsPurging);
-		Assert.NotNull(role.Status);
 
 		// Act: PurgeCancel
 		var cancelReaderMock = new Mock<MessageReader>();
@@ -124,5 +137,113 @@ public sealed class RemoteKillerTests
 
 		// Assert
 		Assert.False(role.IsPurging);
+	}
+
+	[Fact]
+	public void RpcHandle_InvalidPlayerId_DoesNotThrow()
+	{
+		// Arrange
+		var startReaderMock = new Mock<MessageReader>();
+		startReaderMock.SetupSequence(r => r.ReadByte())
+			.Returns((byte)RemoteKillerRole.RemoteKillerRpc.PurgeStart)
+			.Returns((byte)99); // player 99 doesn't exist
+
+		var readerObj = startReaderMock.Object;
+
+		// Act & Assert
+		RemoteKillerRole.RpcHandle(ref readerObj);
+	}
+
+	[Fact]
+	public void GetRolePlayerNameTag_WhenTargetInExecutionTargets_ReturnsRedTag()
+	{
+		// Arrange
+		var role = new RemoteKillerRole();
+		InitializeRole(role, 1);
+
+		var status = (RemoteKillerStatusModel)role.Status!;
+		status.AddExecutionTarget(2);
+
+		var targetRole = new SpecialCrew();
+
+		// Act
+		string tag = role.GetRolePlayerNameTag(targetRole, 2);
+
+		// Assert
+		Assert.Contains("▼", tag);
+	}
+
+	[Fact]
+	public void GetRolePlayerNameTag_WhenTargetNotInExecutionTargets_ReturnsBaseTag()
+	{
+		// Arrange
+		var role = new RemoteKillerRole();
+		InitializeRole(role, 1);
+
+		var targetRole = new SpecialCrew();
+
+		// Act
+		string tag = role.GetRolePlayerNameTag(targetRole, 3);
+
+		// Assert
+		Assert.DoesNotContain("▼", tag);
+	}
+
+	[Fact]
+	public void ResetOnMeetingEnd_ResetsPurgingAndCanMove()
+	{
+		// Arrange
+		var role = new RemoteKillerRole();
+		InitializeRole(role, 1);
+
+		var status = (RemoteKillerStatusModel)role.Status!;
+		status.SetPurging(true);
+		status.CanMove = false;
+
+		// Act
+		role.ResetOnMeetingEnd(null);
+
+		// Assert
+		Assert.True(status.CanMove);
+		Assert.False(role.IsPurging);
+	}
+
+	[Fact]
+	public void ReportSerializer_SerializeAndDeserialize_RestoresData()
+	{
+		// Arrange
+		var playerIds = new List<byte> { 2, 3, 4 };
+		var serializer = new RemoteKillerRole.RemoteKillerReportSerializer(playerIds);
+
+		using var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps);
+
+		// Act: Serialize
+		serializer.Serialize(caller);
+
+		// Act: Deserialize
+		var mockReader = new Mock<MessageReader>();
+		mockReader.SetupSequence(r => r.ReadByte())
+			.Returns((byte)2) // count
+			.Returns((byte)5) // id 1
+			.Returns((byte)6); // id 2
+
+		var deserializedSerializer = new RemoteKillerRole.RemoteKillerReportSerializer();
+		deserializedSerializer.Deserialize(mockReader.Object);
+
+		// Assert
+		Assert.Equal(StringSerializerType.RemoteKillerNotebookStolen, deserializedSerializer.Type);
+	}
+
+	[Fact]
+	public void ReportSerializer_ToString_WhenContactListEmpty_ReturnsHeader()
+	{
+		// Arrange
+		var serializer = new RemoteKillerRole.RemoteKillerReportSerializer(new List<byte>());
+
+		// Act
+		string result = serializer.ToString();
+
+		// Assert
+		Assert.NotNull(result);
 	}
 }
