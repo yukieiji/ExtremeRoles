@@ -7,6 +7,12 @@ using UnityEngine;
 using Xunit;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.Interface;
+using UnityEngine.Events;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles;
@@ -22,6 +28,31 @@ namespace ExtremeRoles.UnitTest.Roles.Solo.Crewmate;
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ItakoRoleTests
 {
+	private sealed class TestCountBehavior : BehaviorBase, ICountBehavior
+	{
+		public int AbilityCount { get; private set; } = 0;
+
+		public TestCountBehavior() : base("Test", null!) { }
+
+		public override void Initialize(ActionButton button) { }
+		public override void ForceAbilityOff() { }
+		public override void AbilityOff() { }
+		public override bool IsUse() => true;
+		public override AbilityState Update(AbilityState curState) => curState;
+		public override bool TryUseAbility(float timer, AbilityState curState, out AbilityState newState)
+		{
+			newState = AbilityState.CoolDown;
+			return true;
+		}
+
+		public void SetAbilityCount(int count)
+		{
+			AbilityCount = count;
+		}
+
+		public void SetButtonTextFormat(string newTextFormat) { }
+	}
+
 	public ItakoRoleTests()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
@@ -33,6 +64,7 @@ public class ItakoRoleTests
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 		MockSetupHelper.SetupPlayerControlMocks();
 		MockSetupHelper.SetupGameDataMock();
+		MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
 		SetupGameOptionsManagerMock();
 
 		var shipStateField = typeof(ExtremeRolesPlugin).GetField("<ShipState>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
@@ -137,7 +169,7 @@ public class ItakoRoleTests
 	}
 
 	[Fact]
-	public void DoInherit_SetsAnotherRoleAndOverwritesPreviousRole()
+	public void InheritTargetRole_SetsAnotherRoleAndOverwritesPreviousRole()
 	{
 		// Arrange
 		byte itakoId = 1;
@@ -155,7 +187,7 @@ public class ItakoRoleTests
 		ExtremeRoleManager.GameRole[targetId] = sheriff;
 
 		// Act 1: Inherit Sheriff
-		ItakoRole.DoInherit(itakoId, targetId);
+		ItakoRole.InheritTargetRole(itakoId, targetId);
 
 		// Assert 1
 		Assert.NotNull(itako.AnotherRole);
@@ -168,10 +200,86 @@ public class ItakoRoleTests
 		bakery.Initialize();
 		ExtremeRoleManager.GameRole[newTargetId] = bakery;
 
-		ItakoRole.DoInherit(itakoId, newTargetId);
+		ItakoRole.InheritTargetRole(itakoId, newTargetId);
 
 		// Assert 2
 		Assert.NotNull(itako.AnotherRole);
 		Assert.Equal(ExtremeRoleId.Bakary, itako.AnotherRole.Core.Id);
+	}
+
+	[Fact]
+	public void ForceCleanUp_WhenChannelingActive_RefundsAbilityCount()
+	{
+		// Arrange
+		var itako = new ItakoRole();
+		itako.CreateRoleAllOption();
+		itako.Initialize();
+
+		var mockBehavior = new TestCountBehavior();
+		var mockActivator = new Mock<IButtonAutoActivator>();
+
+		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
+		var mockGridArrange = new Mock<GridArrange>(IntPtr.Zero);
+		var mockParentGameObject = new Mock<GameObject>(IntPtr.Zero);
+		mockParentGameObject.Setup(g => g.GetComponent<GridArrange>()).Returns(mockGridArrange.Object);
+
+		var mockParentTransform = new Mock<Transform>(IntPtr.Zero);
+		mockParentTransform.SetupGet(t => t.gameObject).Returns(mockParentGameObject.Object);
+
+		var mockTransform = new Mock<Transform>(IntPtr.Zero);
+		mockTransform.SetupGet(t => t.parent).Returns(mockParentTransform.Object);
+
+		var mockMaterial = new Mock<Material>(IntPtr.Zero);
+		var mockSpriteRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+		mockSpriteRenderer.SetupGet(s => s.material).Returns(mockMaterial.Object);
+
+		var mockLabelText = new Mock<TMPro.TextMeshPro>(IntPtr.Zero);
+		var mockCoolText = new Mock<TMPro.TextMeshPro>(IntPtr.Zero);
+		mockCoolText.SetupGet(t => t.gameObject).Returns(mockGameObject.Object);
+
+		var mockPersistentCallGroup = new Mock<PersistentCallGroup>(IntPtr.Zero);
+		var mockOnClick = new Mock<UnityEngine.UI.Button.ButtonClickedEvent>(IntPtr.Zero);
+		mockOnClick.SetupGet(e => e.m_PersistentCalls).Returns(mockPersistentCallGroup.Object);
+		var mockPassiveButton = new Mock<PassiveButton>(IntPtr.Zero);
+		mockPassiveButton.SetupGet(p => p.OnClick).Returns(mockOnClick.Object);
+
+		var mockKillButton = new Mock<KillButton>(IntPtr.Zero);
+		mockKillButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
+		mockKillButton.SetupGet(b => b.gameObject).Returns(mockGameObject.Object);
+		mockKillButton.SetupGet(b => b.graphic).Returns(mockSpriteRenderer.Object);
+		mockKillButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
+		mockKillButton.SetupGet(b => b.cooldownTimerText).Returns(mockCoolText.Object);
+		mockKillButton.Setup(b => b.GetComponent<PassiveButton>()).Returns(mockPassiveButton.Object);
+
+		var mockUseButton = new Mock<UseButton>(IntPtr.Zero);
+		mockUseButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
+		mockUseButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
+
+		var mockHud = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
+		mockHud.SetupGet(h => h.KillButton).Returns(mockKillButton.Object);
+		mockHud.SetupGet(h => h.UseButton).Returns(mockUseButton.Object);
+
+		var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
+		mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
+			.Returns((UnityEngine.Object original, Transform parent) => original);
+		MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
+
+		var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
+		mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
+			.Returns((UnityEngine.Object original, Transform parent) => original);
+		MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
+
+		var button = new ExtremeAbilityButton(mockBehavior, mockActivator.Object, KeyCode.F);
+		itako.Button = button;
+
+		var channelingField = typeof(ItakoRole).GetField("isChannelingActive", BindingFlags.NonPublic | BindingFlags.Instance);
+		channelingField?.SetValue(itako, true);
+
+		// Act
+		itako.ForceCleanUp();
+
+		// Assert
+		Assert.Equal(1, mockBehavior.AbilityCount);
+		Assert.False((bool)channelingField?.GetValue(itako)!);
 	}
 }

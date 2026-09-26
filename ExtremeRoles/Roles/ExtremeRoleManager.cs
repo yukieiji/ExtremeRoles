@@ -466,6 +466,7 @@ public static class ExtremeRoleManager
 		ForceRelaceToChimera,
 		RemoveChimera,
 		RebornJackal,
+		ItakoInherit,
 	}
 
 	private static IRoleProvider? provider;
@@ -668,6 +669,9 @@ public static class ExtremeRoleManager
 				break;
 			case ReplaceOperation.RebornJackal:
 				FurryRole.BecomeToJackal(caller, targetId);
+				break;
+			case ReplaceOperation.ItakoInherit:
+				ItakoRole.InheritTargetRole(caller, targetId);
 				break;
 			default:
                 break;
