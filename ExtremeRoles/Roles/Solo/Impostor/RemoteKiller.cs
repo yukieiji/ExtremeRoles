@@ -260,7 +260,8 @@ public sealed class RemoteKiller :
 	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
 	public void ResetOnMeetingStart()
-	{		if (this.IsPurging)
+	{
+		if (this.IsPurging)
 		{
 			purgeForceCleanUp();
 		}
@@ -318,51 +319,63 @@ public sealed class RemoteKiller :
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		// Clean up dead or disconnected execution targets
+		// 死亡または切断された執行対象を削除（蘇生時に再度ターゲット可能にするため）
 		this.executionTargets.RemoveWhere(id =>
 		{
 			var p = GameData.Instance.GetPlayerById(id);
 			return p == null || p.IsDead || p.Disconnected;
 		});
 
+		// タスクフェーズ中以外は接触記録を行わない
 		if (!GameProgressSystem.IsTaskPhase)
 		{
 			return;
 		}
 
+		// タスクフェーズ中、各執行対象の近くに接近した他プレイヤーを記録（会議開始時の報告用）
 		foreach (byte targetId in this.executionTargets)
 		{
-			var targetInfo = GameData.Instance.GetPlayerById(targetId);
-			if (targetInfo == null || targetInfo.IsDead || targetInfo.Disconnected || !targetInfo.Object)
+			recordTargetContacts(targetId);
+		}
+	}
+
+	private void recordTargetContacts(byte targetId)
+	{
+		var targetInfo = GameData.Instance.GetPlayerById(targetId);
+		if (targetInfo == null || targetInfo.IsDead || targetInfo.Disconnected || !targetInfo.Object)
+		{
+			return;
+		}
+
+		Vector2 targetPos = targetInfo.Object.GetTruePosition();
+
+		if (!this.taskPhaseContacts.TryGetValue(targetId, out var contacts))
+		{
+			contacts = new HashSet<byte>();
+			this.taskPhaseContacts[targetId] = contacts;
+		}
+
+		foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
+		{
+			if (playerInfo.IsInValid() || playerInfo.PlayerId == targetId || !playerInfo.Object || playerInfo.Object.inVent)
 			{
 				continue;
 			}
 
-			Vector2 targetPos = targetInfo.Object.GetTruePosition();
+			Vector2 diff = playerInfo.Object.GetTruePosition() - targetPos;
+			float dist = diff.magnitude;
 
-			if (!this.taskPhaseContacts.TryGetValue(targetId, out var contacts))
+			if (dist > this.robRange)
 			{
-				contacts = new HashSet<byte>();
-				this.taskPhaseContacts[targetId] = contacts;
+				continue;
 			}
 
-			foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
+			if (PhysicsHelpers.AnyNonTriggersBetween(targetPos, diff.normalized, dist, Constants.ShipAndObjectsMask))
 			{
-				if (playerInfo.IsInValid() || playerInfo.PlayerId == targetId || !playerInfo.Object || playerInfo.Object.inVent)
-				{
-					continue;
-				}
-
-				Vector2 diff = playerInfo.Object.GetTruePosition() - targetPos;
-				float dist = diff.magnitude;
-
-				if (dist <= this.robRange &&
-					!PhysicsHelpers.AnyNonTriggersBetween(
-						targetPos, diff.normalized, dist, Constants.ShipAndObjectsMask))
-				{
-					contacts.Add(playerInfo.PlayerId);
-				}
+				continue;
 			}
+
+			contacts.Add(playerInfo.PlayerId);
 		}
 	}
 
