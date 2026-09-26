@@ -225,23 +225,25 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>私のタスク完了報告は、ほとんど常に偽装した報告にすぎない</value>
   </data>
   <data name="EmbezzleMaxDisguiseTaskNum" xml:space="preserve">
-    <value>「偽装計上」で偽装できるタスク完了数の上限</value>
+    <value>「偽装計上」で偽装できるタスク
+完了数の上限</value>
   </data>
   <data name="EmbezzleRange" xml:space="preserve">
     <value>「偽装計上」が発動できる範囲</value>
   </data>
   <data name="EmbezzleNoTaskMoneyGuarantee" xml:space="preserve">
-    <value>タスクを持っていなくても資金を獲得できるか</value>
+    <value>タスクを持っていなくても資金を
+獲得できるか</value>
   </data>
   <data name="EmbezzleAllowMultipleTargetsPerPhase" xml:space="preserve">
-    <value>1タスクフェーズ中に複数人指定可能か</value>
+    <value>「偽装会計」の複数人指定</value>
   </data>
   <data name="EmbezzleCanSeeTaskBar" xml:space="preserve">
     <value>タスクバーを常に見ることが出来るか</value>
   </data>
   <data name="EmbezzleTaskCompletedMoney" xml:space="preserve">
-    <value>「偽装計上」の1タスクあたりの獲得資金
-（最低保証獲得資金）</value>
+    <value>「偽装計上」の1タスクあたりの
+獲得資金（最低保証獲得資金）</value>
   </data>
   <data name="Addict" xml:space="preserve">
     <value>アディクト</value>
@@ -294,5 +296,11 @@ Extreme Rolesの各役職の共通設定が適用できる
   </data>
   <data name="MartyrRange" xml:space="preserve">
     <value>「自爆」の爆発範囲</value>
+  </data>
+  <data name="EmbezzleAbilityCoolTime" xml:space="preserve">
+    <value>「偽装会計」のクールタイム</value>
+  </data>
+  <data name="EmbezzleAbilityCount" xml:space="preserve">
+    <value>「偽装会計」の使用できる回数</value>
   </data>
 </root>
