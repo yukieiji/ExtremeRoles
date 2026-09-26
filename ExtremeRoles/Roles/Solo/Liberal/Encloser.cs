@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using Hazel;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 
@@ -58,11 +59,8 @@ public sealed class EncloserPolygon
 	private readonly List<GameObject> stakeObjects = new List<GameObject>();
 	private readonly IUnityObjectFactory factory;
 
-	private GameObject? linesObj;
 	private LineRenderer? lineRenderer;
-	private GameObject? meshObj;
 	private MeshFilter? meshFilter;
-	private MeshRenderer? meshRenderer;
 
 	public EncloserPolygon(IUnityObjectFactory? factory = null)
 	{
@@ -73,15 +71,12 @@ public sealed class EncloserPolygon
 	{
 		this.stakes.Add(pos);
 
-		var stake = this.factory.Create($"EncloserStake_{this.stakes.Count}");
-		if (stake != null)
-		{
-			var sr = stake.AddComponent<SpriteRenderer>();
-			sr.sprite = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.Bomb);
-			sr.color = ColorPalette.LiberalColor;
-			stake.transform.position = new Vector3(pos.x, pos.y, -0.1f);
-			this.stakeObjects.Add(stake);
-		}
+		var stake = this.factory.CreateGameObject($"EncloserStake_{this.stakes.Count}");
+		var sr = stake.AddComponent<SpriteRenderer>();
+		sr.sprite = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.Bomb);
+		sr.color = ColorPalette.LiberalColor;
+		stake.transform.position = new Vector3(pos.x, pos.y, -0.1f);
+		this.stakeObjects.Add(stake);
 
 		if (this.stakes.Count >= maxStakes)
 		{
@@ -128,14 +123,14 @@ public sealed class EncloserPolygon
 	{
 		bool showVisuals = this.IsCompleted || isLocalPlayerEncloser;
 
-		if (this.linesObj != null)
+		if (this.lineRenderer != null && this.lineRenderer.gameObject != null)
 		{
-			this.linesObj.SetActive(showVisuals);
+			this.lineRenderer.gameObject.SetActive(showVisuals);
 		}
 
-		if (this.meshObj != null)
+		if (this.meshFilter != null && this.meshFilter.gameObject != null)
 		{
-			this.meshObj.SetActive(showVisuals);
+			this.meshFilter.gameObject.SetActive(showVisuals);
 		}
 	}
 
@@ -143,27 +138,29 @@ public sealed class EncloserPolygon
 	{
 		foreach (var stake in this.stakeObjects)
 		{
-			if (stake != null)
-			{
-				Object.Destroy(stake);
-			}
+			Object.Destroy(stake);
 		}
 
 		this.stakeObjects.Clear();
 
-		if (this.linesObj != null)
+		if (this.lineRenderer != null)
 		{
-			Object.Destroy(this.linesObj);
-			this.linesObj = null;
+			if (this.lineRenderer.gameObject != null)
+			{
+				Object.Destroy(this.lineRenderer.gameObject);
+			}
+
 			this.lineRenderer = null;
 		}
 
-		if (this.meshObj != null)
+		if (this.meshFilter != null)
 		{
-			Object.Destroy(this.meshObj);
-			this.meshObj = null;
+			if (this.meshFilter.gameObject != null)
+			{
+				Object.Destroy(this.meshFilter.gameObject);
+			}
+
 			this.meshFilter = null;
-			this.meshRenderer = null;
 		}
 
 		this.stakes.Clear();
@@ -177,39 +174,46 @@ public sealed class EncloserPolygon
 			return;
 		}
 
-		if (this.linesObj == null)
+		if (this.lineRenderer == null)
 		{
-			this.linesObj = this.factory.Create("EncloserLines");
-			if (this.linesObj != null)
+			var linesObj = this.factory.CreateGameObject("EncloserLines");
+			this.lineRenderer = linesObj.AddComponent<LineRenderer>();
+			Shader? defaultShader = null;
+			try
 			{
-				this.lineRenderer = this.linesObj.AddComponent<LineRenderer>();
-				Shader? defaultShader = Shader.Find("Sprites/Default");
-				if (defaultShader != null)
-				{
-					this.lineRenderer.material = this.factory.CreateMaterial(defaultShader);
-				}
-				this.lineRenderer.startWidth = 0.15f;
-				this.lineRenderer.endWidth = 0.15f;
-				this.lineRenderer.startColor = ColorPalette.LiberalColor;
-				this.lineRenderer.endColor = ColorPalette.LiberalColor;
+				defaultShader = Shader.Find("Sprites/Default");
 			}
+			catch (System.NullReferenceException)
+			{
+			}
+
+			if (defaultShader != null)
+			{
+				var mat = this.factory.CreateMaterial(defaultShader);
+				if (mat != null)
+				{
+					this.lineRenderer.material = mat;
+				}
+			}
+
+			this.lineRenderer.startWidth = 0.15f;
+			this.lineRenderer.endWidth = 0.15f;
+			this.lineRenderer.startColor = ColorPalette.LiberalColor;
+			this.lineRenderer.endColor = ColorPalette.LiberalColor;
 		}
 
-		if (this.lineRenderer != null)
+		int posCount = this.stakes.Count + (this.IsCompleted ? 1 : 0);
+		this.lineRenderer.positionCount = posCount;
+
+		for (int i = 0; i < this.stakes.Count; i++)
 		{
-			int posCount = this.stakes.Count + (this.IsCompleted ? 1 : 0);
-			this.lineRenderer.positionCount = posCount;
+			this.lineRenderer.SetPosition(i, new Vector3(this.stakes[i].x, this.stakes[i].y, -0.05f));
+		}
 
-			for (int i = 0; i < this.stakes.Count; i++)
-			{
-				this.lineRenderer.SetPosition(i, new Vector3(this.stakes[i].x, this.stakes[i].y, -0.05f));
-			}
-
-			if (this.IsCompleted)
-			{
-				this.lineRenderer.SetPosition(this.stakes.Count, new Vector3(this.stakes[0].x, this.stakes[0].y, -0.05f));
-				buildMesh();
-			}
+		if (this.IsCompleted)
+		{
+			this.lineRenderer.SetPosition(this.stakes.Count, new Vector3(this.stakes[0].x, this.stakes[0].y, -0.05f));
+			buildMesh();
 		}
 	}
 
@@ -220,34 +224,43 @@ public sealed class EncloserPolygon
 			return;
 		}
 
-		if (this.meshObj == null)
+		if (this.meshFilter == null)
 		{
-			this.meshObj = this.factory.Create("EncloserPolygonMesh");
-			if (this.meshObj != null)
+			var meshObj = this.factory.CreateGameObject("EncloserPolygonMesh");
+			this.meshFilter = meshObj.AddComponent<MeshFilter>();
+			var meshRenderer = meshObj.AddComponent<MeshRenderer>();
+			Shader? defaultShader = null;
+			try
 			{
-				this.meshFilter = this.meshObj.AddComponent<MeshFilter>();
-				this.meshRenderer = this.meshObj.AddComponent<MeshRenderer>();
-				Shader? defaultShader = Shader.Find("Sprites/Default");
-				if (defaultShader != null)
-				{
-					this.meshRenderer.material = this.factory.CreateMaterial(defaultShader);
-				}
-
-				this.meshObj.AddComponent<EncloserPolygonMeshBehaviour>();
+				defaultShader = Shader.Find("Sprites/Default");
 			}
+			catch (System.NullReferenceException)
+			{
+			}
+
+			if (defaultShader != null)
+			{
+				var mat = this.factory.CreateMaterial(defaultShader);
+				if (mat != null)
+				{
+					meshRenderer.material = mat;
+				}
+			}
+
+			meshObj.AddComponent<EncloserPolygonMeshBehaviour>();
 		}
 
-		if (this.meshFilter != null)
+		Mesh mesh = this.factory.CreateMesh();
+		if (mesh != null)
 		{
-			Mesh mesh = this.factory.CreateMesh();
-			Vector3[] vertices = new Vector3[this.stakes.Count];
+			Il2CppStructArray<Vector3> vertices = new Il2CppStructArray<Vector3>(this.stakes.Count);
 			for (int i = 0; i < this.stakes.Count; i++)
 			{
 				vertices[i] = new Vector3(this.stakes[i].x, this.stakes[i].y, 0.05f);
 			}
 
 			int triangleCount = (this.stakes.Count - 2) * 3;
-			int[] triangles = new int[triangleCount];
+			Il2CppStructArray<int> triangles = new Il2CppStructArray<int>(triangleCount);
 			int tIndex = 0;
 			for (int i = 1; i < this.stakes.Count - 1; i++)
 			{
@@ -262,7 +275,7 @@ public sealed class EncloserPolygon
 				ColorPalette.LiberalColor.b,
 				0.3f);
 
-			Color[] colors = new Color[vertices.Length];
+			Il2CppStructArray<Color> colors = new Il2CppStructArray<Color>(this.stakes.Count);
 			for (int i = 0; i < colors.Length; i++)
 			{
 				colors[i] = yellowFill;
