@@ -5,7 +5,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
-using ExtremeRoles.Roles.Solo.Impostor;
+using ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
 using Hazel;
 using Moq;
 using UnityEngine;
@@ -82,7 +82,7 @@ public sealed class RemoteKillerTests
 	public void Initialize_RegistersOptionsAndProperties()
 	{
 		// Arrange
-		var role = new RemoteKiller();
+		var role = new RemoteKillerRole();
 
 		// Act
 		InitializeRole(role);
@@ -96,18 +96,18 @@ public sealed class RemoteKillerTests
 	public void RpcHandle_PurgeStartAndCancel_TogglesPurgingState()
 	{
 		// Arrange
-		var role = new RemoteKiller();
+		var role = new RemoteKillerRole();
 		InitializeRole(role, 1);
 
 		var startReaderMock = new Mock<MessageReader>();
 		startReaderMock.SetupSequence(r => r.ReadByte())
-			.Returns((byte)RemoteKiller.RemoteKillerRpc.PurgeStart)
+			.Returns((byte)RemoteKillerRole.RemoteKillerRpc.PurgeStart)
 			.Returns((byte)1);
 
 		var startReaderObj = startReaderMock.Object;
 
 		// Act: PurgeStart
-		RemoteKiller.RpcHandle(ref startReaderObj);
+		RemoteKillerRole.RpcHandle(ref startReaderObj);
 
 		// Assert
 		Assert.True(role.IsPurging);
@@ -116,11 +116,11 @@ public sealed class RemoteKillerTests
 		// Act: PurgeCancel
 		var cancelReaderMock = new Mock<MessageReader>();
 		cancelReaderMock.SetupSequence(r => r.ReadByte())
-			.Returns((byte)RemoteKiller.RemoteKillerRpc.PurgeCancel)
+			.Returns((byte)RemoteKillerRole.RemoteKillerRpc.PurgeCancel)
 			.Returns((byte)1);
 
 		var cancelReaderObj = cancelReaderMock.Object;
-		RemoteKiller.RpcHandle(ref cancelReaderObj);
+		RemoteKillerRole.RpcHandle(ref cancelReaderObj);
 
 		// Assert
 		Assert.False(role.IsPurging);
