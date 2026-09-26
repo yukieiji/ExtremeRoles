@@ -315,4 +315,7 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="SpecialMilitantKillMoney" xml:space="preserve">
     <value>資金ボーナス/キル1回あたり</value>
   </data>
+  <data name="MartyrAbilityCoolTime" xml:space="preserve">
+    <value>「自爆」のクールタイム</value>
+  </data>
 </root>
