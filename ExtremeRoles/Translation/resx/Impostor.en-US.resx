@@ -1673,4 +1673,38 @@ Button ability "TIME BREAK":
   <data name="legislatorVoteStatus" xml:space="preserve">
     <value>Ability active: {0}&#xA;Current negative votes: {1}</value>
   </data>
+  <data name="RemoteKiller" xml:space="preserve">
+    <value>Remote Killer</value>
+  </data>
+  <data name="RemoteKillerFullDescription" xml:space="preserve">
+    <value>Approach a target and use "Rob" to mark them for execution.
+When execution targets exist, use "Purge" for remote kills (movement is restricted and name turns red during channel).</value>
+  </data>
+  <data name="RemoteKillerShortDescription" xml:space="preserve">
+    <value>Steal notebooks and execute targets remotely</value>
+  </data>
+  <data name="RemoteKillerIntroDescription" xml:space="preserve">
+    <value>Your name is already written in my notebook...</value>
+  </data>
+  <data name="RemoteKillerRobRange" xml:space="preserve">
+    <value>"Rob" activation range</value>
+  </data>
+  <data name="RemoteKillerContactPlayerCount" xml:space="preserve">
+    <value>Max contact players shown</value>
+  </data>
+  <data name="RemoteKillerRobActiveTime" xml:space="preserve">
+    <value>"Rob" channel time</value>
+  </data>
+  <data name="RemoteKillerPurgeTime" xml:space="preserve">
+    <value>"Purge" channel time</value>
+  </data>
+  <data name="remoteKillerRob" xml:space="preserve">
+    <value>Rob</value>
+  </data>
+  <data name="remoteKillerPurge" xml:space="preserve">
+    <value>Purge</value>
+  </data>
+  <data name="remoteKillerNotebookStolenReport" xml:space="preserve">
+    <value>My notebook was stolen! I should report to my crew... I feel like someone touched me...</value>
+  </data>
 </root>

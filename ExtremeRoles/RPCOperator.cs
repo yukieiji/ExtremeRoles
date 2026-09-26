@@ -96,6 +96,7 @@ public static class RPCOperator
 		ThiefAddDeadbodyEffect,
 		BoxerRpcOps,
 		LegislatorAbility,
+		RemoteKillerOps,
 
 		// ニュートラル
 		AliceShipBroken,
@@ -705,6 +706,11 @@ public static class RPCOperator
 	public static void LegislatorTargetVote(ref MessageReader reader)
 	{
 		Roles.Solo.Impostor.Legislator.UseAbility(ref reader);
+	}
+
+	public static void RemoteKillerRpcOps(ref MessageReader reader)
+	{
+		Roles.Solo.Impostor.RemoteKiller.RpcHandle(ref reader);
 	}
 	public static void AliceShipBroken(
         byte callerId, byte targetPlayerId, List<int> taskId)

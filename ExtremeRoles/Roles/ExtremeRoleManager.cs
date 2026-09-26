@@ -133,6 +133,7 @@ public enum ExtremeRoleId : int
 	Scavenger,
 	Boxer,
 	Legislator,
+	RemoteKiller,
 
 	Alice,
     Jackal,
@@ -376,6 +377,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Scavenger      , new Scavenger()},
 			{(int)ExtremeRoleId.Boxer          , new Boxer()},
 			{(int)ExtremeRoleId.Legislator     , new Legislator()},
+			{(int)ExtremeRoleId.RemoteKiller   , new RemoteKiller()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new JackalRole()},
