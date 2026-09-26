@@ -106,8 +106,11 @@ public static class RPCOperator
 		MadmateToFakeImpostor,
 		ArtistRpcOps,
 
-        // 幽霊役職
-        SetGhostRole,
+		// リベラル
+		EncloserOps,
+
+		// 幽霊役職
+		SetGhostRole,
         UseGhostRoleAbility,
 
         XionAbility,
@@ -741,6 +744,11 @@ public static class RPCOperator
 	public static void ArtistDrawOps(in MessageReader reader)
 	{
 		Roles.Solo.Neutral.Artist.DrawOps(reader);
+	}
+
+	public static void EncloserRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Liberal.Encloser.RpcOps(reader);
 	}
 
 	public static void SetGhostRole(

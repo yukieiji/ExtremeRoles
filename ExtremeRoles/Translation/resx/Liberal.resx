@@ -1,5 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!--
+    Microsoft ResX Schema
+
+    Version 2.0
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+
+    There are any number of "resheader" rows that contain simple
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
   <data name="LeaderFullDescription" xml:space="preserve">
     <value>タイプ : ドーヴ/ミリタント(設定による)
 タスクを持つ場合はドーヴ
@@ -58,5 +175,179 @@
   </data>
   <data name="MilitantIntroDescription" xml:space="preserve">
     <value>革命に必要なものは"圧倒的な力"だ</value>
+  </data>
+  <data name="SpecialDove" xml:space="preserve">
+    <value>スペシャルドーヴ</value>
+  </data>
+  <data name="SpecialDoveIntroDescription" xml:space="preserve">
+    <value>普通のドーヴとは少し違う設定を持つ</value>
+  </data>
+  <data name="SpecialDoveShortDescription" xml:space="preserve">
+    <value>エクストリームなドーヴ</value>
+  </data>
+  <data name="SpecialDoveFullDescription" xml:space="preserve">
+    <value>タイプ : ドーヴ
+
+Extreme Rolesの各役職の共通設定が適用できる
+設定内容は以下を確認</value>
+  </data>
+  <data name="SpecialMilitant" xml:space="preserve">
+    <value>スペシャルミリタント</value>
+  </data>
+  <data name="SpecialMilitantIntroDescription" xml:space="preserve">
+    <value>普通のミリタントとは少し違う設定を持つ</value>
+  </data>
+  <data name="SpecialMilitantShortDescription" xml:space="preserve">
+    <value>エクストリームなミリタント</value>
+  </data>
+  <data name="SpecialMilitantFullDescription" xml:space="preserve">
+    <value>タイプ : ミリタント
+
+Extreme Rolesの各役職の共通設定が適用できる
+設定内容は以下を確認</value>
+  </data>
+  <data name="Embezzle" xml:space="preserve">
+    <value>エムベザル</value>
+  </data>
+  <data name="EmbezzleFullDescription" xml:space="preserve">
+    <value>タイプ : ドーヴ
+
+能力「偽装計上」でタスク完了数を偽装して資金を稼ぐドーヴ
+
+会議発生時に対象となったプレイヤーのタスク完了数に応じて資金を得る
+対象はタスクフェーズ中にボタン能力「偽装計上」の対象になったプレイヤ
+対象になったプレイヤのタスク完了数等は変化しない</value>
+  </data>
+  <data name="EmbezzleShortDescription" xml:space="preserve">
+    <value>タスクを"偽装"計上して資金を得よ</value>
+  </data>
+  <data name="EmbezzleIntroDescription" xml:space="preserve">
+    <value>私のタスク完了報告は、ほとんど常に偽装した報告にすぎない</value>
+  </data>
+  <data name="EmbezzleMaxDisguiseTaskNum" xml:space="preserve">
+    <value>「偽装計上」で偽装できるタスク
+完了数の上限</value>
+  </data>
+  <data name="EmbezzleRange" xml:space="preserve">
+    <value>「偽装計上」が発動できる範囲</value>
+  </data>
+  <data name="EmbezzleNoTaskMoneyGuarantee" xml:space="preserve">
+    <value>タスクを持っていなくても資金を
+獲得できるか</value>
+  </data>
+  <data name="EmbezzleAllowMultipleTargetsPerPhase" xml:space="preserve">
+    <value>「偽装会計」の複数人指定</value>
+  </data>
+  <data name="EmbezzleCanSeeTaskBar" xml:space="preserve">
+    <value>タスクバーを常に見ることが出来るか</value>
+  </data>
+  <data name="EmbezzleTaskCompletedMoney" xml:space="preserve">
+    <value>「偽装計上」の資金ボーナス/
+1タスクあたり（最低保証獲得資金）</value>
+  </data>
+  <data name="Addict" xml:space="preserve">
+    <value>アディクト</value>
+  </data>
+  <data name="AddictFullDescription" xml:space="preserve">
+    <value>タイプ : ドーヴ
+
+静止していると「自爆タイマー」が進むドーヴ
+・タスク中、ベントの中、止まるなどすると自爆タイマーが進む
+　・はしご、プルプル、ジップラインも含めて進みます
+・一定時間以上動くと「自爆タイマー」が回復していく</value>
+  </data>
+  <data name="AddictShortDescription" xml:space="preserve">
+    <value>働かざるもの食うべからず</value>
+  </data>
+  <data name="AddictIntroDescription" xml:space="preserve">
+    <value>お仕事、お仕事、お仕事、お仕事、お仕事、お仕事、お仕事、お仕事、お仕事、お仕事、お仕事・・・・</value>
+  </data>
+  <data name="AddictSelfKillTimerTime" xml:space="preserve">
+    <value>自爆タイマーの秒数</value>
+  </data>
+  <data name="AddictMovementTimeToRecover" xml:space="preserve">
+    <value>タイマーの回復が始まる連続移動秒数</value>
+  </data>
+  <data name="DisguisedAccounting" xml:space="preserve">
+    <value>偽装会計</value>
+  </data>
+  <data name="Martyr" xml:space="preserve">
+    <value>マーター</value>
+  </data>
+  <data name="MartyrFullDescription" xml:space="preserve">
+    <value>タイプ : ミリタント
+
+能力「自爆」で範囲内のプレイヤーを一定の確率で消し飛ばすミリタント
+・ボタンを押すと、周囲にいるプレイヤーを確率でキルする
+　・マーター自身は必ず死亡する
+・消し飛ばしたプレイヤー1人(マーターは含まない)ごとに資金を獲得する</value>
+  </data>
+  <data name="MartyrShortDescription" xml:space="preserve">
+    <value>敵と一緒に、自爆しろ</value>
+  </data>
+  <data name="MartyrIntroDescription" xml:space="preserve">
+    <value>私の命は、最後の瞬間まで誰にも渡さない</value>
+  </data>
+  <data name="MartyrKillProbability" xml:space="preserve">
+    <value>「自爆」で範囲内のキル確率</value>
+  </data>
+  <data name="MartyrKillMoney" xml:space="preserve">
+    <value>「自爆」の資金ボーナス/1キルあたり</value>
+  </data>
+  <data name="MartyrRange" xml:space="preserve">
+    <value>「自爆」の爆発範囲</value>
+  </data>
+  <data name="EmbezzleAbilityCoolTime" xml:space="preserve">
+    <value>「偽装会計」のクールタイム</value>
+  </data>
+  <data name="EmbezzleAbilityCount" xml:space="preserve">
+    <value>「偽装会計」の使用できる回数</value>
+  </data>
+  <data name="SpecialDoveUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="SpecialDoveTaskCompletedMoney" xml:space="preserve">
+    <value>資金ボーナス/1タスク完了あたり</value>
+  </data>
+  <data name="SpecialMilitantUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="SpecialMilitantKillMoney" xml:space="preserve">
+    <value>資金ボーナス/キル1回あたり</value>
+  </data>
+  <data name="MartyrAbilityCoolTime" xml:space="preserve">
+    <value>「自爆」のクールタイム</value>
+  </data>
+  <data name="Encloser" xml:space="preserve">
+    <value>エンクローサー</value>
+  </data>
+  <data name="EncloserFullDescription" xml:space="preserve">
+    <value>タイプ : ミリタント
+
+能力「杭」で杭を打ち、多角形を構築して「滅」で一括キルするミリタント</value>
+  </data>
+  <data name="EncloserShortDescription" xml:space="preserve">
+    <value>結界で敵を屠れ</value>
+  </data>
+  <data name="EncloserIntroDescription" xml:space="preserve">
+    <value>結界師の方囲、定礎、滅ができる</value>
+  </data>
+  <data name="EncloserStakeCount" xml:space="preserve">
+    <value>杭の設置数（多角形の頂点数）</value>
+  </data>
+  <data name="EncloserMetsuLimit" xml:space="preserve">
+    <value>「滅」の使用回数制限</value>
+  </data>
+  <data name="EncloserAbilityCoolTime" xml:space="preserve">
+    <value>能力のクールタイム</value>
+  </data>
+  <data name="EncloserMetsuKillMoney" xml:space="preserve">
+    <value>「滅」の資金ボーナス/他陣営キル1人あたり</value>
+  </data>
+  <data name="Stake" xml:space="preserve">
+    <value>杭</value>
+  </data>
+  <data name="Metsu" xml:space="preserve">
+    <value>滅</value>
   </data>
 </root>

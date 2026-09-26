@@ -190,6 +190,10 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		{
 			return GetRoleTag();
 		}
+		if (targetRole.IsLiberal())
+		{
+			return $" {targetRole.GetRoleTag()}";
+		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
 
@@ -298,7 +302,9 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		}
 		
 		bool isLeader = role.Core.Id is ExtremeRoleId.Leader;
-		float money = isLeader ? this.killSetting.LeadeKillMoney : this.killSetting.KillMoney;
+		float money = 
+			ExtremeRoleManager.TrySafeCast<SpecialMilitant>(role, out var spMilitant) ? spMilitant.KillMoney :
+			isLeader ? this.killSetting.LeadeKillMoney : this.killSetting.KillMoney;
 		float delta = isLeader ? this.killSetting.LeadeKillBoostDelta : 0.0f;
 
 		LiberalMoneyBankSystem.RpcUpdateSystem(source.PlayerId, LiberalMoneyHistory.Reason.AddOnKill, money, delta);

@@ -371,6 +371,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.ArtistRpcOps:
 				RPCOperator.ArtistDrawOps(reader);
 				break;
+			case RPCOperator.Command.EncloserOps:
+				RPCOperator.EncloserRpcOps(reader);
+				break;
 			case RPCOperator.Command.SetGhostRole:
 				RPCOperator.SetGhostRole(
 					ref reader);

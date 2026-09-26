@@ -70,6 +70,11 @@ public partial class ExtremeRolesPlugin
 			.AddTransient<MockVanillaRolePlayerAssignDataProvider>();
 
 		collection
+			.AddTransient<ISingleRoleAssignHelper, SingleRoleAssignHelper>()
+			.AddTransient<IImpostorSingleRoleAssignDataBuilder, ImpostorSingleRoleAssignDataBuilder>()
+			.AddTransient<INeutralSingleRoleAssignDataBuilder, NeutralSingleRoleAssignDataBuilder>()
+			.AddTransient<ILiberalSingleRoleAssignDataBuilder, LiberalSingleRoleAssignDataBuilder>()
+			.AddTransient<ICrewmateSingleRoleAssignDataBuilder, CrewmateSingleRoleAssignDataBuilder>()
 			.AddTransient<IRoleAssignDataBuilder, ExtremeRoleAssignDataBuilder>()
 			.AddTransient<IRoleAssignDataBuildBehaviour, CombinationRoleAssignDataBuilder>()
 			.AddTransient<IRoleAssignDataBuildBehaviour, SingleRoleAssignDataBuilder>()
@@ -111,7 +116,8 @@ public partial class ExtremeRolesPlugin
 			.AddTransient<Leader>()
 			.AddTransient<DoveCommonAbilityHandler>()
 			.AddTransient<Dove>()
-			.AddTransient<Militant>();
+			.AddTransient<Militant>()
+			.AddTransient<Encloser>();
 
 		collection.AddTransient<ExtremeGameEndChecker>();
 

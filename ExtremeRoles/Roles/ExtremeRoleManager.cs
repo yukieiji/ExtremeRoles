@@ -20,6 +20,7 @@ using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Combination.InvestigatorOffice;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
+using ExtremeRoles.Roles.Solo.Liberal;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 using ExtremeRoles.Roles.Solo.Crewmate.Fencer;
 using ExtremeRoles.Roles.Solo.Crewmate.Loner;
@@ -164,10 +165,17 @@ public enum ExtremeRoleId : int
 	Surrogator,
 	Knight,
 	Pawn,
+	Punisher,
 
 	Leader,
 	Dove,
 	Militant,
+	SpecialDove,
+	SpecialMilitant,
+	Addict,
+	Embezzle,
+	Martyr,
+	Encloser,
 
 	Xion,
 }
@@ -245,6 +253,9 @@ public enum RoleGameOverReason
 	MonikaThisGameIsMine,
 	MonikaIamTheOnlyOne,
 
+	PunisherKilledImpostor,
+	PunisherKillAllOther,
+
 	AllJackalWin,
 	AllYandereWin,
 	AllQueenWin,
@@ -271,6 +282,7 @@ public enum NeutralSeparateTeam
     Kids,
 	Tucker,
 	Monika,
+	Punisher,
 
 	JackalSub,
 	YandereSub,
@@ -391,6 +403,14 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Surrogator, new SurrogatorRole()},
 			{(int)ExtremeRoleId.Knight    , new KnightRole()},
 			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
+			{(int)ExtremeRoleId.Punisher  , new Punisher()},
+
+			{(int)ExtremeRoleId.SpecialDove    , new SpecialDove()},
+			{(int)ExtremeRoleId.SpecialMilitant, new SpecialMilitant()},
+			{(int)ExtremeRoleId.Addict         , new Addict()},
+			{(int)ExtremeRoleId.Embezzle       , new Embezzle()},
+			{(int)ExtremeRoleId.Martyr         , new Martyr()},
+			{(int)ExtremeRoleId.Encloser       , new Encloser()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
@@ -803,6 +823,12 @@ public static class ExtremeRoleManager
     {
 		TryGetRole(playerId, out var checkRole);
 		return dualSafeCast<T>(checkRole);
+	}
+
+	public static bool TrySafeCast<T>(SingleRoleBase role, [NotNullWhen(true)] out T? castedRole) where T : SingleRoleBase
+	{
+		castedRole = safeCast<T>(role);
+		return castedRole is not null;
 	}
 
 

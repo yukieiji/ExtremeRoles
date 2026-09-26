@@ -280,7 +280,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
                 new (
 					AbilityType.SelfBomb,
 					new ButtonGraphic(
-						Tr.GetString("selfBomb"),
+						Tr.GetString("SelfBomb"),
 						UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.Bomb))
 				),
                 this.IsAbilityUse,

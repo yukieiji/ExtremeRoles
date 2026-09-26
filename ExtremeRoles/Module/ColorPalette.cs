@@ -66,6 +66,7 @@ public static class ColorPalette
 
 	public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
 	public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
+	public readonly static Color PunisherDarkGold = new Color32(77, 65, 0, byte.MaxValue);
 	public readonly static Color MissionaryBlue = new Color32(103, 118, 161, byte.MaxValue);
 	public readonly static Color JesterPink = new Color32(245, 125, 167, byte.MaxValue);
 	public readonly static Color YandereVioletRed = new Color32(199, 21, 133, byte.MaxValue);
