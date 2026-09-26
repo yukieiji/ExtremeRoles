@@ -120,17 +120,15 @@ public sealed class RemoteKillerRole :
 
 	public override IStatusModel? Status => this.statusModel;
 
-	public bool IsPurging => this.statusModel.IsPurging;
+	public bool IsPurging => this.statusModel?.IsPurging ?? false;
 
-	private readonly RemoteKillerStatusModel statusModel = new RemoteKillerStatusModel();
-	private RemoteKillerRobHandler robHandler;
-	private RemoteKillerPurgeHandler purgeHandler;
+	private RemoteKillerStatusModel? statusModel;
+	private RemoteKillerRobHandler? robHandler;
+	private RemoteKillerPurgeHandler? purgeHandler;
 
 	public RemoteKillerRole() : base(
 		RoleArgs.BuildImpostor(ExtremeRoleId.RemoteKiller))
 	{
-		this.robHandler = new RemoteKillerRobHandler(this.statusModel, this);
-		this.purgeHandler = new RemoteKillerPurgeHandler(this.statusModel, this);
 	}
 
 	public static void RpcHandle(ref MessageReader reader)
@@ -139,7 +137,7 @@ public sealed class RemoteKillerRole :
 		byte rolePlayerId = reader.ReadByte();
 
 		var remoteKiller = ExtremeRoleManager.GetSafeCastedRole<RemoteKillerRole>(rolePlayerId);
-		if (remoteKiller is null)
+		if (remoteKiller is null || remoteKiller.statusModel is null)
 		{
 			return;
 		}
@@ -160,6 +158,11 @@ public sealed class RemoteKillerRole :
 
 	public void CreateAbility()
 	{
+		if (this.robHandler == null || this.purgeHandler == null)
+		{
+			return;
+		}
+
 		var loader = this.Loader;
 
 		float coolTime = loader.GetValue<RoleAbilityCommonOption, float>(
@@ -183,12 +186,17 @@ public sealed class RemoteKillerRole :
 
 	public void ResetOnMeetingStart()
 	{
-		if (this.IsPurging)
+		if (this.statusModel == null)
 		{
-			this.purgeHandler.PurgeForceCleanUp();
+			return;
 		}
 
-		this.purgeHandler.ResetMinigame();
+		if (this.IsPurging)
+		{
+			this.purgeHandler?.PurgeForceCleanUp();
+		}
+
+		this.purgeHandler?.ResetMinigame();
 
 		bool shouldSendReport = PlayerControl.LocalPlayer.PlayerId == this.GameControlId || AmongUsClient.Instance.AmHost;
 
@@ -228,12 +236,20 @@ public sealed class RemoteKillerRole :
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
-		this.statusModel.CanMove = true;
-		this.statusModel.SetPurging(false);
+		if (this.statusModel != null)
+		{
+			this.statusModel.CanMove = true;
+			this.statusModel.SetPurging(false);
+		}
 	}
 
 	public void Update(PlayerControl rolePlayer)
 	{
+		if (this.statusModel == null || this.robHandler == null)
+		{
+			return;
+		}
+
 		// 死亡または切断された執行対象を削除（蘇生時に再度ターゲット可能にするため）
 		var deadTargets = this.statusModel.ExecutionTargets.Where(id =>
 		{
@@ -261,7 +277,7 @@ public sealed class RemoteKillerRole :
 
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 	{
-		if (this.statusModel.HasExecutionTarget(targetPlayerId))
+		if (this.statusModel != null && this.statusModel.HasExecutionTarget(targetPlayerId))
 		{
 			return Design.ColoredString(Palette.ImpostorRed, " ▼");
 		}
@@ -300,7 +316,8 @@ public sealed class RemoteKillerRole :
 		int contactPlayerCount = loader.GetValue<RemoteKillerOption, int>(RemoteKillerOption.ContactPlayerCount);
 		float purgeTime = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.PurgeTime);
 
-		this.statusModel.Reset();
-		this.statusModel.SetOptions(robRange, robActiveTime, contactPlayerCount, purgeTime);
+		this.statusModel = new RemoteKillerStatusModel(robRange, robActiveTime, contactPlayerCount, purgeTime);
+		this.robHandler = new RemoteKillerRobHandler(this.statusModel, this);
+		this.purgeHandler = new RemoteKillerPurgeHandler(this.statusModel, this);
 	}
 }
