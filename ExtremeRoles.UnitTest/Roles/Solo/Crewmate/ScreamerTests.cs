@@ -75,12 +75,10 @@ public class ScreamerTests
 		Assert.Equal(ExtremeRoleId.Screamer, screamer.Core.Id);
 		Assert.Equal(ExtremeRoleType.Crewmate, screamer.Core.Team);
 		Assert.Equal(ColorPalette.ScreamerColor, screamer.Core.Color);
-		Assert.NotNull(screamer.AbilityClass);
-		Assert.IsType<ScreamerAbilityHandler>(screamer.AbilityClass);
 	}
 
 	[Fact]
-	public void RoleSpecificInit_LoadsOptionValues()
+	public void RoleSpecificInit_LoadsOptionValuesAndCreatesAbilityHandler()
 	{
 		// Arrange
 		var screamer = new Screamer();
@@ -90,8 +88,8 @@ public class ScreamerTests
 		screamer.Initialize();
 
 		// Assert
-		Assert.True(screamer.IsScreamOnKill);
-		Assert.Equal(100.0f, screamer.ScreamImageScale);
+		Assert.NotNull(screamer.AbilityClass);
+		Assert.IsType<ScreamerAbilityHandler>(screamer.AbilityClass);
 	}
 
 	[Fact]
@@ -100,7 +98,7 @@ public class ScreamerTests
 		// Arrange
 		var mockFactory = new Mock<IUnityObjectFactory>();
 		var mockResources = new Mock<IResourcesProvider>();
-		var handler = new ScreamerAbilityHandler(mockFactory.Object, mockResources.Object);
+		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object, mockResources.Object);
 
 		var mockExiledPlayer = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 
@@ -120,12 +118,13 @@ public class ScreamerTests
 		// Arrange
 		var mockFactory = new Mock<IUnityObjectFactory>();
 		var mockResources = new Mock<IResourcesProvider>();
+		var handler = new ScreamerAbilityHandler(false, 1.0f, mockFactory.Object, mockResources.Object);
+
 		var screamer = new Screamer(mockFactory.Object, mockResources.Object);
 		screamer.CreateRoleAllOption();
-		screamer.Initialize();
 
-		var isScreamProperty = typeof(Screamer).GetProperty("IsScreamOnKill", BindingFlags.Public | BindingFlags.Instance);
-		isScreamProperty?.SetValue(screamer, false);
+		var abilityClassField = typeof(SingleRoleBase).GetProperty("AbilityClass", BindingFlags.Public | BindingFlags.Instance);
+		abilityClassField?.SetValue(screamer, handler);
 
 		var mockVictim = new Mock<PlayerControl>(IntPtr.Zero);
 		var mockKiller = new Mock<PlayerControl>(IntPtr.Zero);
@@ -138,31 +137,21 @@ public class ScreamerTests
 	}
 
 	[Fact]
-	public void RolePlayerKilledAction_WhenIsScreamOnKillEnabled_SpawnsScreamImageUsingFactory()
+	public void RolePlayerKilledAction_WhenTargetBodyIsNull_DoesNotSpawnImage()
 	{
 		// Arrange
-		var mockRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
-		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
-		var mockTransform = new Mock<Transform>(IntPtr.Zero);
-
-		mockGameObject.SetupGet(g => g.transform).Returns(mockTransform.Object);
-		mockGameObject.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockRenderer.Object);
-
 		var mockFactory = new Mock<IUnityObjectFactory>();
-		mockFactory.Setup(f => f.CreateGameObject(It.IsAny<string>())).Returns(mockGameObject.Object);
-
 		var mockResources = new Mock<IResourcesProvider>();
+		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object, mockResources.Object);
 
 		var screamer = new Screamer(mockFactory.Object, mockResources.Object);
 		screamer.CreateRoleAllOption();
-		screamer.Initialize();
 
-		var mockVictimTransform = new Mock<Transform>(IntPtr.Zero);
-		mockVictimTransform.SetupGet(t => t.position).Returns(Vector3.zero);
+		var abilityClassField = typeof(SingleRoleBase).GetProperty("AbilityClass", BindingFlags.Public | BindingFlags.Instance);
+		abilityClassField?.SetValue(screamer, handler);
 
 		var mockVictim = new Mock<PlayerControl>(IntPtr.Zero);
-		mockVictim.SetupGet(p => p.PlayerId).Returns((byte)1);
-		mockVictim.SetupGet(p => p.transform).Returns(mockVictimTransform.Object);
+		mockVictim.SetupGet(p => p.PlayerId).Returns((byte)99);
 
 		var mockKiller = new Mock<PlayerControl>(IntPtr.Zero);
 
@@ -170,7 +159,6 @@ public class ScreamerTests
 		screamer.RolePlayerKilledAction(mockVictim.Object, mockKiller.Object);
 
 		// Assert
-		mockFactory.Verify(f => f.CreateGameObject("ScreamerScreamImage"), Times.Once);
-		mockResources.Verify(r => r.LoadRoleSprite(ExtremeRoleId.Screamer, It.IsAny<string>()), Times.Once);
+		mockFactory.Verify(f => f.CreateGameObject(It.IsAny<string>()), Times.Never);
 	}
 }
