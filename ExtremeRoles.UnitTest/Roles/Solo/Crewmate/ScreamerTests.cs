@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using AmongUs.GameOptions;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
 using UnityEngine;
 using Xunit;
@@ -17,6 +18,8 @@ namespace ExtremeRoles.UnitTest.Roles.Solo.Crewmate;
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ScreamerTests
 {
+	private readonly Mock<GameData> mockGameData;
+
 	public ScreamerTests()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
@@ -26,6 +29,8 @@ public class ScreamerTests
 		MockSetupHelper.SetupMockConfig(plugin);
 		MockSetupHelper.SetupLobbyMock();
 		MockSetupHelper.SetupOptionManager();
+
+		this.mockGameData = MockSetupHelper.SetupGameDataMock();
 
 		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
@@ -80,5 +85,54 @@ public class ScreamerTests
 
 		Assert.True(isScream);
 		Assert.Equal(1.0f, size);
+	}
+
+	[Fact]
+	public void RolePlayerKilledAction_WhenIsScreamWhenKilledIsFalse_ReturnsEarlyWithoutQueryingDeadBody()
+	{
+		// Arrange
+		var screamer = new Screamer();
+		screamer.CreateRoleAllOption();
+		screamer.Initialize();
+
+		var isScreamField = typeof(Screamer).GetField("isScreamWhenKilled", BindingFlags.NonPublic | BindingFlags.Instance);
+		isScreamField?.SetValue(screamer, false);
+
+		bool findObjectsCalled = false;
+		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
+		mockFindObjects.Setup(x => x.Invoke<DeadBody>()).Callback(() => findObjectsCalled = true)
+			.Returns(new Il2CppReferenceArray<DeadBody>(IntPtr.Zero));
+		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects.Object;
+
+		var mockRolePlayer = new Mock<PlayerControl>(IntPtr.Zero);
+		mockRolePlayer.SetupGet(p => p.PlayerId).Returns((byte)5);
+		var mockKillerPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+
+		// Act
+		screamer.RolePlayerKilledAction(mockRolePlayer.Object, mockKillerPlayer.Object);
+
+		// Assert
+		Assert.False(findObjectsCalled);
+	}
+
+	[Fact]
+	public void RolePlayerKilledAction_WhenDeadBodyIsNull_ReturnsEarlyWithoutException()
+	{
+		// Arrange
+		var screamer = new Screamer();
+		screamer.CreateRoleAllOption();
+		screamer.Initialize();
+
+		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
+		mockFindObjects.Setup(x => x.Invoke<DeadBody>())
+			.Returns(new Il2CppReferenceArray<DeadBody>(IntPtr.Zero));
+		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects.Object;
+
+		var mockRolePlayer = new Mock<PlayerControl>(IntPtr.Zero);
+		mockRolePlayer.SetupGet(p => p.PlayerId).Returns((byte)5);
+		var mockKillerPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+
+		// Act & Assert
+		screamer.RolePlayerKilledAction(mockRolePlayer.Object, mockKillerPlayer.Object);
 	}
 }
