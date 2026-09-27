@@ -72,7 +72,8 @@ public sealed class ItakoRole :
 	{
 		this.CreateActivatingAbilityCountButton(
 			"ItakoAbility",
-			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Itako),
+			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton),
+			// UnityObjectLoader.LoadFromResources(ExtremeRoleId.Itako),
 			checkAbility: CheckAbility,
 			abilityOff: CleanUp,
 			forceAbilityOff: ForceCleanUp,
