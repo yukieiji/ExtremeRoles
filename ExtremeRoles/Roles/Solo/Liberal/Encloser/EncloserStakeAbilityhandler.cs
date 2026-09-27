@@ -7,7 +7,7 @@ using ExtremeRoles.Module.Ability.ModeSwitcher;
 
 namespace ExtremeRoles.Roles.Solo.Liberal.Encloser;
 
-public sealed class EncloserStakeAbilityhandler(
+public sealed class EncloserStakeAbilityHandler(
 	EncloserStatusModel statusModel,
 	ICountBehavior count,
 	GraphicSwitcher<EncloserRole.Mode> switcher)

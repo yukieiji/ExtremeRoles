@@ -18,9 +18,7 @@ public sealed class EncloserRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleU
 
 	public enum Option
 	{
-		StakeCount,
 		MetsuLimit,
-		AbilityCoolTime,
 		MetsuKillMoney
 	}
 
@@ -66,7 +64,6 @@ public sealed class EncloserRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleU
 		var loader = this.Loader;
 		int stakeCount = loader.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount);
 		int metsuLimit = loader.GetValue<Option, int>(Option.MetsuLimit);
-		float abilityCoolTime = loader.GetValue<Option, float>(Option.AbilityCoolTime);
 		int metsuKillMoney = loader.GetValue<Option, int>(Option.MetsuKillMoney);
 
 		this.status = new EncloserStatusModel(stakeCount, metsuKillMoney, metsuLimit);
@@ -107,9 +104,6 @@ public sealed class EncloserRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleU
 		factory.CreateIntOption(
 			Option.MetsuLimit,
 			1, 1, 10, 1);
-		factory.CreateFloatOption(
-			Option.AbilityCoolTime,
-			20.0f, 5.0f, 60.0f, 2.5f);
 		factory.CreateIntOption(
 			Option.MetsuKillMoney,
 			10, 0, 100, 1);
