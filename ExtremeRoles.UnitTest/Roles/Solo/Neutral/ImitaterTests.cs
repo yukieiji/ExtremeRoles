@@ -41,8 +41,21 @@ public sealed class ImitaterTests
 		mockMeetingHelper.Setup(h => h.Invoke()).Returns((MeetingHud)null!);
 		MockMeetingHudget_InstanceHelper.Instance = mockMeetingHelper.Object;
 
-		MockSetupHelper.SetupGameOptionsManagerMock();
+		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
+		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
+			.Returns((string id, string defaultStr, Il2CppSystem.Object[] parts) => defaultStr ?? id);
+
+		MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
+
+		SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
+
+		ExtremeRoleManager.CreateNormalRoleOptions();
+
+		if (ExtremeRoles.GameMode.ExtremeGameModeManager.Instance == null)
+		{
+			ExtremeRoles.GameMode.ExtremeGameModeManager.Create(GameModes.Normal);
+		}
 
 		if (ExtremeRolesPlugin.ShipState == null)
 		{
@@ -68,6 +81,21 @@ public sealed class ImitaterTests
 		var mockLobbyHelper = new Mock<MockLobbyBehaviourget_InstanceHelper>();
 		mockLobbyHelper.Setup(x => x.Invoke()).Returns(mockLobby.Object);
 		MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyHelper.Object;
+	}
+
+	private static void SetupGameOptionsManagerMock()
+	{
+		var mockGameOptions = new Mock<IGameOptions>(IntPtr.Zero);
+		mockGameOptions.Setup(g => g.GetFloat(It.IsAny<FloatOptionNames>())).Returns(1.0f);
+		mockGameOptions.Setup(g => g.GetInt(It.IsAny<Int32OptionNames>())).Returns(1);
+		mockGameOptions.Setup(g => g.GetBool(It.IsAny<BoolOptionNames>())).Returns(false);
+
+		var mockGameOptionsManager = new Mock<GameOptionsManager>(IntPtr.Zero);
+		mockGameOptionsManager.SetupGet(g => g.CurrentGameOptions).Returns(mockGameOptions.Object);
+
+		var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
+		mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockGameOptionsManager.Object);
+		MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
 	}
 
 	private static void InitializeRole(SingleRoleBase role, byte playerId = 1)

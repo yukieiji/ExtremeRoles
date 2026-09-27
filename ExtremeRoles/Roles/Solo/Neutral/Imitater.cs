@@ -202,23 +202,20 @@ public sealed class Imitater :
 		IRoleSpecialReset.ResetRole(imitaterPlayerId);
 		IRoleSpecialReset.ResetLover(imitaterPlayerId);
 
-		if (inheritedRole is Solo.VanillaRoleWrapper vanillaRole)
+		if (Player.TryGetPlayerControl(imitaterPlayerId, out var imitaterPlayer) && RoleManager.InstanceExists)
 		{
-			RoleManager.Instance.SetRole(
-				Player.GetPlayerControlById(imitaterPlayerId),
-				vanillaRole.VanilaRoleId);
-		}
-		else if (inheritedRole.IsImpostor())
-		{
-			RoleManager.Instance.SetRole(
-				Player.GetPlayerControlById(imitaterPlayerId),
-				AmongUs.GameOptions.RoleTypes.Impostor);
-		}
-		else
-		{
-			RoleManager.Instance.SetRole(
-				Player.GetPlayerControlById(imitaterPlayerId),
-				AmongUs.GameOptions.RoleTypes.Crewmate);
+			if (inheritedRole is Solo.VanillaRoleWrapper vanillaRole)
+			{
+				RoleManager.Instance.SetRole(imitaterPlayer, vanillaRole.VanilaRoleId);
+			}
+			else if (inheritedRole.IsImpostor())
+			{
+				RoleManager.Instance.SetRole(imitaterPlayer, AmongUs.GameOptions.RoleTypes.Impostor);
+			}
+			else
+			{
+				RoleManager.Instance.SetRole(imitaterPlayer, AmongUs.GameOptions.RoleTypes.Crewmate);
+			}
 		}
 
 		var newRole = inheritedRole.Clone();
@@ -226,7 +223,8 @@ public sealed class Imitater :
 		if (PlayerControl.LocalPlayer != null &&
 			PlayerControl.LocalPlayer.PlayerId == imitaterPlayerId)
 		{
-			if (newRole is IRoleAbility newAbility)
+			if (newRole is IRoleAbility newAbility &&
+				HudManager.InstanceExists)
 			{
 				newAbility.CreateAbility();
 				if (newAbility.Button != null)
