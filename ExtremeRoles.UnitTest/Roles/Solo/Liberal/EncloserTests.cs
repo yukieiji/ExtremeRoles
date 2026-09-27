@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 using UnityEngine;
 using ExtremeRoles.Core.Abstract;
@@ -7,7 +9,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.Solo.Liberal;
+using ExtremeRoles.Roles.Solo.Liberal.Encloser;
 using Hazel;
 using Moq;
 using Xunit;
@@ -45,11 +47,27 @@ public sealed class EncloserTests
 		MockSetupHelper.SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
 
+		SetupResourceMocks();
+	}
+
+	private static void SetupResourceMocks()
+	{
 		string key = $"{ObjectPath.Bomb}115";
 		if (!LruCache<string, Sprite>.TryGetValue(key, out _))
 		{
 			var mockSprite = new Mock<Sprite>(IntPtr.Zero);
 			LruCache<string, Sprite>.Add(key, mockSprite.Object);
+		}
+
+		var mockSpriteForAsset = new Mock<Sprite>(IntPtr.Zero);
+		var mockBundle = new Mock<AssetBundle>(IntPtr.Zero);
+		mockBundle.Setup(b => b.LoadAsset(It.IsAny<string>(), It.IsAny<Il2CppSystem.Type>()))
+			.Returns(mockSpriteForAsset.Object);
+
+		var cachedBundleField = typeof(UnityObjectLoader).GetField("cachedBundle", BindingFlags.NonPublic | BindingFlags.Static);
+		if (cachedBundleField?.GetValue(null) is Dictionary<string, AssetBundle> dict)
+		{
+			dict["resources/bomb.asset"] = mockBundle.Object;
 		}
 	}
 
@@ -61,7 +79,7 @@ public sealed class EncloserTests
 		MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyHelper.Object;
 	}
 
-	private static void InitializeRole(Encloser role, byte playerId = 1)
+	private static void InitializeRole(EncloserRole role, byte playerId = 1)
 	{
 		role.CreateRoleAllOption();
 		role.Initialize();
@@ -145,7 +163,7 @@ public sealed class EncloserTests
 	public void Initialize_RegistersOptionsAndProperties()
 	{
 		// Arrange
-		var role = new Encloser();
+		var role = new EncloserRole();
 
 		// Act
 		InitializeRole(role);
@@ -222,51 +240,22 @@ public sealed class EncloserTests
 		Assert.Equal(2, polygon.Count);
 	}
 
-	private static EncloserPolygon GetPolygon(EncloserAbilityHandler handler)
-	{
-		var field = typeof(EncloserAbilityHandler).GetField("polygon", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-		return (EncloserPolygon)field!.GetValue(handler)!;
-	}
-
 	[Fact]
-	public void EncloserAbilityHandler_HandlePlaceStake_UpdatesPolygonState()
+	public void EncloserPolygon_Clear_ResetsPolygon()
 	{
 		// Arrange
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var handler = new EncloserAbilityHandler(3, 1, 20f, 10, factory, il2cppProvider);
-		var polygon = GetPolygon(handler);
+		var polygon = new EncloserPolygon(factory, il2cppProvider);
+
+		polygon.AddStake(CreateVec2(0, 0), 3);
+		polygon.AddStake(CreateVec2(10, 0), 3);
+		polygon.AddStake(CreateVec2(5, 10), 3);
+
+		Assert.True(polygon.IsCompleted);
 
 		// Act
-		handler.HandlePlaceStake(1, CreateVec2(0, 0));
-		handler.HandlePlaceStake(1, CreateVec2(10, 0));
-
-		bool isCompletedBeforeMax = polygon.IsCompleted;
-
-		handler.HandlePlaceStake(1, CreateVec2(5, 10));
-		bool isCompletedAfterMax = polygon.IsCompleted;
-
-		// Assert
-		Assert.False(isCompletedBeforeMax);
-		Assert.True(isCompletedAfterMax);
-		Assert.Equal(3, polygon.Count);
-	}
-
-	[Fact]
-	public void EncloserAbilityHandler_HandleUseMetsuRpc_ClearsPolygon()
-	{
-		// Arrange
-		var factory = new MockUnityObjectFactory();
-		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var handler = new EncloserAbilityHandler(3, 1, 20f, 10, factory, il2cppProvider);
-		var polygon = GetPolygon(handler);
-
-		handler.HandlePlaceStake(1, CreateVec2(0, 0));
-		handler.HandlePlaceStake(1, CreateVec2(10, 0));
-		handler.HandlePlaceStake(1, CreateVec2(5, 10));
-
-		// Act
-		handler.HandleUseMetsuRpc(1);
+		polygon.Clear();
 
 		// Assert
 		Assert.Equal(0, polygon.Count);
@@ -274,10 +263,43 @@ public sealed class EncloserTests
 	}
 
 	[Fact]
-	public void Encloser_ResetOnMeetingStart_PreservesStakes()
+	public void EncloserStatusModel_PlaceStakeAndClear_UpdatesState()
 	{
 		// Arrange
-		var role = new Encloser();
+		var factory = new MockUnityObjectFactory();
+		var il2cppProvider = CreateMockIl2CppObjectProvider();
+		var status = new EncloserStatusModel(3, 10, 1, factory, il2cppProvider);
+
+		Assert.Equal(0, status.CurStakeCount);
+		Assert.False(status.IsUseMetsu);
+
+		// Act - Place stakes
+		status.PlaceStake(CreateVec2(0, 0), true);
+		status.PlaceStake(CreateVec2(10, 0), true);
+
+		Assert.Equal(2, status.CurStakeCount);
+		Assert.False(status.IsUseMetsu);
+
+		status.PlaceStake(CreateVec2(5, 10), true);
+
+		Assert.Equal(3, status.CurStakeCount);
+		Assert.True(status.IsUseMetsu);
+		Assert.True(status.IsKillPosition(CreateVec2(5, 5)));
+
+		// Act - Clear
+		status.ClearStake();
+
+		// Assert
+		Assert.Equal(0, status.CurStakeCount);
+		Assert.False(status.IsUseMetsu);
+		Assert.False(status.IsKillPosition(CreateVec2(5, 5)));
+	}
+
+	[Fact]
+	public void EncloserRole_ResetOnMeetingStart_PreservesStakes()
+	{
+		// Arrange
+		var role = new EncloserRole();
 		InitializeRole(role, 1);
 
 		// Act
@@ -286,5 +308,62 @@ public sealed class EncloserTests
 
 		// Assert
 		Assert.Equal("Ec", role.GetRoleTag());
+	}
+
+	[Fact]
+	public void EncloserRole_RpcOps_PlaceStakeAndUseMetsu_ModifiesRoleStatus()
+	{
+		// Arrange
+		var role = new EncloserRole();
+		InitializeRole(role, 1);
+
+		var mockStatus = new EncloserStatusModel(3, 10, 1, new MockUnityObjectFactory(), CreateMockIl2CppObjectProvider());
+		typeof(EncloserRole).GetField("status", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(role, mockStatus);
+
+		// Act 1: Place Stake via RPC
+		var placeReader = new Mock<MessageReader>(IntPtr.Zero);
+		placeReader.SetupSequence(r => r.ReadByte())
+			.Returns((byte)1) // playerId
+			.Returns((byte)EncloserRole.RpcOpsType.PlaceStake); // ops
+		placeReader.SetupSequence(r => r.ReadSingle())
+			.Returns(0f)  // x
+			.Returns(0f); // y
+
+		EncloserRole.RpcOps(placeReader.Object);
+
+		Assert.Equal(1, mockStatus.CurStakeCount);
+
+		// Act 2: Clear via UseMetsu RPC
+		var metsuReader = new Mock<MessageReader>(IntPtr.Zero);
+		metsuReader.SetupSequence(r => r.ReadByte())
+			.Returns((byte)1) // playerId
+			.Returns((byte)EncloserRole.RpcOpsType.UseMetsu); // ops
+
+		EncloserRole.RpcOps(metsuReader.Object);
+
+		// Assert
+		Assert.Equal(0, mockStatus.CurStakeCount);
+	}
+
+	[Fact]
+	public void EncloserRole_RpcOps_InvalidPlayer_DoesNothing()
+	{
+		// Arrange
+		var role = new EncloserRole();
+		InitializeRole(role, 1);
+
+		var mockStatus = new EncloserStatusModel(3, 10, 1, new MockUnityObjectFactory(), CreateMockIl2CppObjectProvider());
+		typeof(EncloserRole).GetField("status", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(role, mockStatus);
+
+		var reader = new Mock<MessageReader>(IntPtr.Zero);
+		reader.SetupSequence(r => r.ReadByte())
+			.Returns((byte)99) // nonexistent playerId
+			.Returns((byte)EncloserRole.RpcOpsType.UseMetsu);
+
+		// Act
+		EncloserRole.RpcOps(reader.Object);
+
+		// Assert
+		Assert.Equal(0, mockStatus.CurStakeCount);
 	}
 }
