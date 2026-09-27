@@ -41,6 +41,7 @@ public class ItakoRoleTests
 		MockSetupHelper.SetupPlayerControlMocks();
 		MockSetupHelper.SetupGameDataMock();
 		MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
+		MockSetupHelper.SetupOptionManager();
 		SetupGameOptionsManagerMock();
 		SetupConstantsMock();
 
@@ -103,7 +104,7 @@ public class ItakoRoleTests
 		Assert.Equal(ExtremeRoleId.Itako, itako.Core.Id);
 		Assert.Equal(ExtremeRoleType.Crewmate, itako.Core.Team);
 		Assert.Equal(ColorPalette.ItakoSkyBlue, itako.Core.Color);
-		Assert.True(itako.CanHasAnotherRole);
+		Assert.False(itako.CanHasAnotherRole);
 	}
 
 	[Fact]
@@ -128,38 +129,29 @@ public class ItakoRoleTests
 	}
 
 	[Fact]
-	public void ExtractInheritedRole_SingleRole_ReturnsClonedSingleRole()
+	public void TryGetExtractInheritedRole_SingleRoleInNormalRole_ReturnsTrueAndRole()
 	{
 		// Arrange
 		var sheriff = new Sheriff();
 
 		// Act
-		var inherited = ItakoRole.ExtractInheritedRole(sheriff);
+		bool result = ItakoRole.TryGetExtractInheritedRole(sheriff, out var inherited);
 
 		// Assert
+		Assert.True(result);
 		Assert.NotNull(inherited);
 		Assert.Equal(ExtremeRoleId.Sheriff, inherited.Core.Id);
 	}
 
 	[Fact]
-	public void ExtractInheritedRole_MultiAssignRoleWithOffsetInfo_ReturnsClonedRoleWithoutAnotherRole()
+	public void TryGetExtractInheritedRole_NullTargetRole_ReturnsFalse()
 	{
-		// Arrange
-		var buddyRole = new Buddy();
-		buddyRole.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(CombinationRoleType.Buddy, 100);
-		var bakery = new Bakary();
-		buddyRole.SetAnotherRole(bakery);
-
 		// Act
-		var inherited = ItakoRole.ExtractInheritedRole(buddyRole);
+		bool result = ItakoRole.TryGetExtractInheritedRole(null, out var inherited);
 
 		// Assert
-		Assert.NotNull(inherited);
-		Assert.Equal(ExtremeRoleId.Buddy, inherited.Core.Id);
-		if (inherited is MultiAssignRoleBase multiAssign)
-		{
-			Assert.Null(multiAssign.AnotherRole);
-		}
+		Assert.False(result);
+		Assert.Null(inherited);
 	}
 
 	[Fact]
