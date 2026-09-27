@@ -324,13 +324,24 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="EncloserFullDescription" xml:space="preserve">
     <value>タイプ : ミリタント
 
-能力「杭」で杭を打ち、多角形を構築して「滅」で一括キルするミリタント</value>
+「杭」で「結界」を構築して「滅」で一括キルするミリタント
+
+ボタン能力「杭」
+ - ボタンを押すとその位置に「杭」が設置される
+ - 「杭」は即時反映される
+ - 「杭」の使用回数が0回になると以下が起きる
+   - ボタン能力が「滅」に変化する
+   - 「滅」でキルされる範囲(結界)が全員に表示される
+
+ボタン能力「滅」
+ - 範囲内のプレイヤー全員キルする
+ - 「滅」の使用回数が残っているとボタン能力が「杭」になる</value>
   </data>
   <data name="EncloserShortDescription" xml:space="preserve">
     <value>結界で敵を屠れ</value>
   </data>
   <data name="EncloserIntroDescription" xml:space="preserve">
-    <value>結界師の方囲、定礎、滅ができる</value>
+    <value>方囲、定礎、滅</value>
   </data>
   <data name="EncloserStakeCount" xml:space="preserve">
     <value>杭の設置数（多角形の頂点数）</value>
@@ -338,11 +349,9 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="EncloserMetsuLimit" xml:space="preserve">
     <value>「滅」の使用回数制限</value>
   </data>
-  <data name="EncloserAbilityCoolTime" xml:space="preserve">
-    <value>能力のクールタイム</value>
-  </data>
   <data name="EncloserMetsuKillMoney" xml:space="preserve">
-    <value>「滅」の資金ボーナス/他陣営キル1人あたり</value>
+    <value>「滅」の資金ボーナス/
+他陣営キル1人あたり</value>
   </data>
   <data name="Stake" xml:space="preserve">
     <value>杭</value>
@@ -364,5 +373,11 @@ Extreme Rolesの各役職の共通設定が適用できる
   </data>
   <data name="ScapeactorTaskCompletedMoney" xml:space="preserve">
     <value>資金ボーナス/1タスク完了あたり</value>
+  </data>
+  <data name="EncloserAbilityCoolTime" xml:space="preserve">
+    <value>「杭」と「滅」のクールタイム</value>
+  </data>
+  <data name="EncloserAbilityCount" xml:space="preserve">
+    <value>「杭」の設置数(結界の頂点数)</value>
   </data>
 </root>

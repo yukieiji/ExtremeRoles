@@ -137,7 +137,7 @@ public sealed class EncloserRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleU
 			return;
 		}
 
-		// 本来はabilityhandler経由で呼び出すべきだけど内部的なICountが取れず内部ハンドラが構築できないため
+		// 本来はabilityhandler経由で呼び出すべきだけど内部的なICountが取れず内部ハンドラが構築できないためステータスモデルを叩く
 		switch (ops)
 		{
 			case RpcOpsType.PlaceStake:
