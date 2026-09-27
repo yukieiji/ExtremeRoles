@@ -2,6 +2,7 @@ using UnityEngine;
 
 using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API.Interface.Status;
 
 #nullable enable
@@ -13,7 +14,8 @@ public sealed class EncloserStatusModel(
 	int metsuKillMoney,
 	int metsuLimit,
 	IUnityObjectFactory? factory = null,
-	IIl2CppObjectProvider? il2cppProvider = null
+	IIl2CppObjectProvider? il2cppProvider = null,
+	IResourcesProvider? resourcesProvider = null
 ) : IStatusModel
 {
 	public int StakeCount { get; } = stakeCount;
@@ -23,7 +25,7 @@ public sealed class EncloserStatusModel(
 	public int CurStakeCount => this.polygon.Count;
 	public bool IsUseMetsu => this.polygon.IsCompleted;
 
-	private readonly EncloserPolygon polygon = new EncloserPolygon(factory, il2cppProvider);
+	private readonly EncloserPolygon polygon = new EncloserPolygon(factory, il2cppProvider, resourcesProvider);
 
 	public void Update()
 	{
