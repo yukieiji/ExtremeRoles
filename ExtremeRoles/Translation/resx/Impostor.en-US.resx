@@ -1707,4 +1707,27 @@ When execution targets exist, use "Purge" for remote kills (movement is restrict
   <data name="remoteKillerNotebookStolenReport" xml:space="preserve">
     <value>My notebook was stolen! I should report to my crew... I feel like someone touched me...</value>
   </data>
+  <data name="YoYo" xml:space="preserve">
+    <value>YoYo</value>
+  </data>
+  <data name="YoYoFullDescription" xml:space="preserve">
+    <value>An Impostor who can teleport to a saved location.
+Only 1 location can be saved at a time and is single-use.
+Teleporting consumes 1 ability count.</value>
+  </data>
+  <data name="YoYoShortDescription" xml:space="preserve">
+    <value>Save a location and teleport instantly</value>
+  </data>
+  <data name="YoYoIntroDescription" xml:space="preserve">
+    <value>Teleport to your saved location instantly</value>
+  </data>
+  <data name="YoYoIsResetMarkOnMeeting" xml:space="preserve">
+    <value>Reset saved location when meeting starts</value>
+  </data>
+  <data name="YoYoSaveLocation" xml:space="preserve">
+    <value>Save Location</value>
+  </data>
+  <data name="YoYoTeleportLocation" xml:space="preserve">
+    <value>Teleport</value>
+  </data>
 </root>
