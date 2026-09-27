@@ -470,6 +470,16 @@ public static class MockSetupHelper
             .Returns((Vector2 v) => new Vector3(v.x, v.y, 0f));
         MockVector2op_ImplicitHelper2.Instance = mockVec2Implicit2.Object;
 
+        var mockSub = new Mock<MockVector2op_SubtractionHelper>();
+        mockSub.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<Vector2>()))
+            .Returns((Vector2 a, Vector2 b) => new Vector2(a.x - b.x, a.y - b.y));
+        MockVector2op_SubtractionHelper.Instance = mockSub.Object;
+
+        var mockSqrMag = new Mock<MockVector2SqrMagnitudeHelper>();
+        mockSqrMag.Setup(x => x.Invoke(It.IsAny<Vector2>()))
+            .Returns((Vector2 v) => v.x * v.x + v.y * v.y);
+        MockVector2SqrMagnitudeHelper.Instance = mockSqrMag.Object;
+
         var mockRotate = new Mock<MockExtensionsRotateHelper>();
         mockRotate.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<float>()))
             .Returns((Vector2 v, float degrees) =>

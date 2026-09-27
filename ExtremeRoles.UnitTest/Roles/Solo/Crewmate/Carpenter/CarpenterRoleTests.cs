@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using AmongUs.GameOptions;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
@@ -16,6 +17,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using Hazel;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using InnerNet;
 using MonoMod.RuntimeDetour;
 using Moq;
@@ -45,24 +47,45 @@ public class CarpenterRoleTests : IDisposable
 	private delegate void RpcDisposeOrig(RPCOperator.RpcCaller self);
 	private delegate void RpcDisposeHook(RpcDisposeOrig orig, RPCOperator.RpcCaller self);
 
-	private delegate bool IsCloseToOrig(Vector2 self, Vector2 other, float sqrEps);
-	private delegate bool IsCloseToHook(IsCloseToOrig orig, Vector2 self, Vector2 other, float sqrEps);
-
 	private delegate void SetButtonShowOrig(ExtremeAbilityButton self, bool isShow);
 	private delegate void SetButtonShowHook(SetButtonShowOrig orig, ExtremeAbilityButton self, bool isShow);
+
+	private delegate void RemoveVentOrig(int ventId);
+	private delegate void RemoveVentHook(RemoveVentOrig orig, int ventId);
+
+	private delegate void SetCameraOrig(float x, float y, SystemTypes roomType);
+	private delegate void SetCameraHook(SetCameraOrig orig, float x, float y, SystemTypes roomType);
+
+	private delegate float Vector2DistanceOrig(Vector2 a, Vector2 b);
+	private delegate float Vector2DistanceHook(Vector2DistanceOrig orig, Vector2 a, Vector2 b);
+
+	private delegate float Vector2SqrMagOrig(ref Vector2 self);
+	private delegate float Vector2SqrMagHook(Vector2SqrMagOrig orig, ref Vector2 self);
+
+	private delegate void Vector2CtorOrig(ref Vector2 self, float x, float y);
+	private delegate void Vector2CtorHook(Vector2CtorOrig orig, ref Vector2 self, float x, float y);
 
 	private readonly Hook createCallerHook;
 	private readonly Hook rpcWriteByteHook;
 	private readonly Hook rpcWriteFloatHook;
 	private readonly Hook rpcWriteIntHook;
 	private readonly Hook rpcDisposeHook;
-	private readonly Hook isCloseToHook;
 	private readonly Hook setButtonShowHook;
+	private readonly Hook vector2DistanceHook;
+	private readonly Hook sqrMagHook;
+	private readonly Hook v2CtorHook;
 
 	private readonly Mock<AmongUsClient> clientMock;
+	private readonly Mock<PlayerControl> localPlayerMock;
+
+	private static int? lastRemoveVentId;
+	private static (float x, float y, SystemTypes roomType)? lastSetCameraArgs;
 
 	public CarpenterRoleTests()
 	{
+		lastRemoveVentId = null;
+		lastSetCameraArgs = null;
+
 		MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupObjectImplicitHelpers();
 
@@ -81,14 +104,36 @@ public class CarpenterRoleTests : IDisposable
 			MockVector2op_SubtractionHelper.Instance = mockSub.Object;
 		}
 
+		if (MockVector2op_ImplicitHelper.Instance == null)
+		{
+			var mockImplicit = new Mock<MockVector2op_ImplicitHelper>();
+			mockImplicit.Setup(x => x.Invoke(It.IsAny<Vector3>())).Returns((Vector3 v) => new Vector2(v.x, v.y));
+			MockVector2op_ImplicitHelper.Instance = mockImplicit.Object;
+		}
+
 		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipHelper.Setup(h => h.Invoke()).Returns((ShipStatus)null!);
 		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
 
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
-		MockSetupHelper.SetupPlayerControlMocks();
+
+		this.localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
+		this.localPlayerMock.SetupGet(p => p.CanMove).Returns(true);
+
+		var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		mockData.SetupGet(d => d.IsDead).Returns(false);
+		mockData.SetupGet(d => d.Disconnected).Returns(false);
+		mockData.SetupGet(d => d.Object).Returns(this.localPlayerMock.Object);
+		this.localPlayerMock.SetupGet(p => p.Data).Returns(mockData.Object);
+
+		var mockPlayerTransform = new Mock<Transform>(IntPtr.Zero);
+		mockPlayerTransform.SetupGet(t => t.position).Returns(new Vector3(0f, 0f, 0f));
+		this.localPlayerMock.SetupGet(p => p.transform).Returns(mockPlayerTransform.Object);
+
 		MockSetupHelper.SetupGameOptionsManagerMock();
+		Mock.Get(GameOptionsManager.Instance.CurrentGameOptions).Setup(o => o.GetByte(ByteOptionNames.MapId)).Returns((byte)0); // Skeld default
+
 		MockSetupHelper.SetupOptionManager();
 
 		clientMock = MockSetupHelper.SetupAmongUsClientMock();
@@ -120,15 +165,22 @@ public class CarpenterRoleTests : IDisposable
 		var rpcDisposeHookDelegate = new RpcDisposeHook(getRpcDisposeHook);
 		this.rpcDisposeHook = new Hook(rpcDisposeTarget, rpcDisposeHookDelegate);
 
-		var isCloseToTarget = typeof(ExtremeRoles.Extension.Vector.VectorExtension)
-			.GetMethod(nameof(ExtremeRoles.Extension.Vector.VectorExtension.IsCloseTo), new[] { typeof(Vector2), typeof(Vector2), typeof(float) })!;
-		var isCloseToHookDelegate = new IsCloseToHook(getIsCloseToHook);
-		this.isCloseToHook = new Hook(isCloseToTarget, isCloseToHookDelegate);
-
 		var setButtonShowTarget = typeof(ExtremeAbilityButton)
 			.GetMethod(nameof(ExtremeAbilityButton.SetButtonShow), new[] { typeof(bool) })!;
 		var setButtonShowHookDelegate = new SetButtonShowHook(getSetButtonShowHook);
 		this.setButtonShowHook = new Hook(setButtonShowTarget, setButtonShowHookDelegate);
+
+		var distanceTarget = typeof(Vector2).GetMethod(nameof(Vector2.Distance), new[] { typeof(Vector2), typeof(Vector2) })!;
+		var distanceHookDelegate = new Vector2DistanceHook(getVector2DistanceHook);
+		this.vector2DistanceHook = new Hook(distanceTarget, distanceHookDelegate);
+
+		var sqrMagTarget = typeof(Vector2).GetProperty("sqrMagnitude")!.GetGetMethod()!;
+		var sqrMagHookDelegate = new Vector2SqrMagHook(getSqrMagnitudeHook);
+		this.sqrMagHook = new Hook(sqrMagTarget, sqrMagHookDelegate);
+
+		var v2CtorTarget = typeof(Vector2).GetConstructor(new[] { typeof(float), typeof(float) })!;
+		var v2CtorHookDelegate = new Vector2CtorHook(getV2CtorHook);
+		this.v2CtorHook = new Hook(v2CtorTarget, v2CtorHookDelegate);
 
 		SetLobbyMode(false);
 	}
@@ -140,8 +192,10 @@ public class CarpenterRoleTests : IDisposable
 		this.rpcWriteFloatHook.Dispose();
 		this.rpcWriteIntHook.Dispose();
 		this.rpcDisposeHook.Dispose();
-		this.isCloseToHook.Dispose();
 		this.setButtonShowHook.Dispose();
+		this.vector2DistanceHook.Dispose();
+		this.sqrMagHook.Dispose();
+		this.v2CtorHook.Dispose();
 	}
 
 	private static RPCOperator.RpcCaller getCreateCallerHook(CreateCallerOrig orig, uint netId, RPCOperator.Command ops)
@@ -154,14 +208,35 @@ public class CarpenterRoleTests : IDisposable
 	private static void getRpcWriteIntHook(RpcWriteIntOrig orig, RPCOperator.RpcCaller self, int value) { }
 	private static void getRpcDisposeHook(RpcDisposeOrig orig, RPCOperator.RpcCaller self) { }
 
-	private static bool getIsCloseToHook(IsCloseToOrig orig, Vector2 self, Vector2 other, float sqrEps)
+	private static void getSetButtonShowHook(SetButtonShowOrig orig, ExtremeAbilityButton self, bool isShow) { }
+
+	private static void getRemoveVentHook(RemoveVentOrig orig, int ventId)
 	{
-		float dx = self.x - other.x;
-		float dy = self.y - other.y;
-		return (dx * dx + dy * dy) <= sqrEps;
+		lastRemoveVentId = ventId;
 	}
 
-	private static void getSetButtonShowHook(SetButtonShowOrig orig, ExtremeAbilityButton self, bool isShow) { }
+	private static void getSetCameraHook(SetCameraOrig orig, float x, float y, SystemTypes roomType)
+	{
+		lastSetCameraArgs = (x, y, roomType);
+	}
+
+	private static float getVector2DistanceHook(Vector2DistanceOrig orig, Vector2 a, Vector2 b)
+	{
+		float dx = a.x - b.x;
+		float dy = a.y - b.y;
+		return (float)Math.Sqrt(dx * dx + dy * dy);
+	}
+
+	private static float getSqrMagnitudeHook(Vector2SqrMagOrig orig, ref Vector2 self)
+	{
+		return self.x * self.x + self.y * self.y;
+	}
+
+	private static void getV2CtorHook(Vector2CtorOrig orig, ref Vector2 self, float x, float y)
+	{
+		self.x = x;
+		self.y = y;
+	}
 
 	private static void SetupInstantiateFor(UnityEngine.Object result)
 	{
@@ -191,18 +266,6 @@ public class CarpenterRoleTests : IDisposable
 			mockLobbyHelper.Setup(x => x.Invoke()).Returns((LobbyBehaviour)null!);
 			MockLobbyBehaviourget_InstanceHelper.Instance = mockLobbyHelper.Object;
 		}
-	}
-
-	[Fact]
-	public void Constructor_InitializesCorrectly()
-	{
-		// Act
-		var role = new Carpenter();
-
-		// Assert
-		Assert.NotNull(role);
-		Assert.Equal(ExtremeRoleId.Carpenter, role.Core.Id);
-		Assert.Equal(RoleTypes.Crewmate, role.NoneAwakeRole);
 	}
 
 	[Theory]
@@ -459,14 +522,13 @@ public class CarpenterRoleTests : IDisposable
 	{
 		// Arrange
 		SetLobbyMode(false);
-		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
 
 		var mockRole = new Mock<RoleBehaviour>(IntPtr.Zero);
 		mockRole.SetupGet(r => r.Blurb).Returns("Crewmate Intro Blurb");
 
 		var mockInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 		mockInfo.SetupGet(i => i.Role).Returns(mockRole.Object);
-		localPlayerMock.SetupGet(p => p.Data).Returns(mockInfo.Object);
+		this.localPlayerMock.SetupGet(p => p.Data).Returns(mockInfo.Object);
 
 		var role = new Carpenter();
 		role.CreateRoleAllOption();
@@ -541,17 +603,21 @@ public class CarpenterRoleTests : IDisposable
 	}
 
 	[Fact]
-	public void ResetOnMeetingStartAndEnd_ExecutesWithoutError()
+	public void ResetOnMeetingEnd_ResetsTargetVentToNull()
 	{
 		// Arrange
 		var role = new Carpenter();
+		var mockVent = new Mock<Vent>(IntPtr.Zero);
+		var field = typeof(Carpenter).GetField("targetVent", BindingFlags.NonPublic | BindingFlags.Instance)!;
+		field.SetValue(role, mockVent.Object);
 
 		// Act
 		role.ResetOnMeetingStart();
 		role.ResetOnMeetingEnd(null);
 
 		// Assert
-		Assert.True(true);
+		var ventVal = field.GetValue(role);
+		Assert.Null(ventVal);
 	}
 
 	[Fact]
@@ -562,6 +628,86 @@ public class CarpenterRoleTests : IDisposable
 
 		// Act & Assert
 		role.RoleAbilityInit();
+	}
+
+	[Fact]
+	public void RoleAbilityInit_WhenButtonNotNull_InitializesBehaviorCoolTimeAndCount()
+	{
+		// Arrange
+		var role = new Carpenter();
+		role.CreateRoleAllOption();
+		role.Initialize();
+
+		var ventMode = new GraphicAndActiveTimeMode<Carpenter.CarpenterAbilityMode>(
+			Carpenter.CarpenterAbilityMode.RemoveVent,
+			new ButtonGraphic("VentSeal", null!),
+			5.0f);
+
+		var cameraMode = new GraphicAndActiveTimeMode<Carpenter.CarpenterAbilityMode>(
+			Carpenter.CarpenterAbilityMode.SetCamera,
+			new ButtonGraphic("CameraSet", null!),
+			2.5f);
+
+		var behavior = new Carpenter.CarpenterAbilityBehavior(
+			ventMode, cameraMode, 10, 5,
+			() => true, () => true, () => true, () => { }, () => true);
+
+		var mockCoolTimerText = new Mock<TextMeshPro>(IntPtr.Zero);
+		var mockParent = new Mock<Transform>(IntPtr.Zero);
+		mockCoolTimerText.SetupGet(t => t.transform.parent).Returns(mockParent.Object);
+
+		var mockText = new Mock<TextMeshPro>(IntPtr.Zero);
+		var mockTextTransform = new Mock<Transform>(IntPtr.Zero);
+		mockText.SetupGet(t => t.transform).Returns(mockTextTransform.Object);
+
+		SetupInstantiateFor(mockText.Object);
+
+		var mockButton = new Mock<ActionButton>(IntPtr.Zero);
+		mockButton.SetupGet(b => b.cooldownTimerText).Returns(mockCoolTimerText.Object);
+
+		behavior.Initialize(mockButton.Object);
+
+		var uninitializedButton = (ExtremeAbilityButton)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeAbilityButton));
+		typeof(ExtremeAbilityButton).GetProperty("Behavior")!.SetValue(uninitializedButton, behavior);
+
+		role.Button = uninitializedButton;
+
+		// Act
+		role.RoleAbilityInit();
+
+		// Assert
+		Assert.Equal(15, behavior.AbilityCount);
+		Assert.Equal(15.0f, role.Button.Behavior.CoolTime);
+	}
+
+	[Fact]
+	public void IsAbilityCheck_WhenPlayerNotMoved_ReturnsTrue()
+	{
+		// Arrange
+		var role = new Carpenter();
+		var prevPosField = typeof(Carpenter).GetField("prevPos", BindingFlags.NonPublic | BindingFlags.Instance)!;
+		prevPosField.SetValue(role, new Vector2(0.0f, 0.0f));
+
+		// Act
+		bool checkResult = role.IsAbilityCheck();
+
+		// Assert
+		Assert.True(checkResult);
+	}
+
+	[Fact]
+	public void IsAbilityCheck_WhenPlayerMoved_ReturnsFalse()
+	{
+		// Arrange
+		var role = new Carpenter();
+		var prevPosField = typeof(Carpenter).GetField("prevPos", BindingFlags.NonPublic | BindingFlags.Instance)!;
+		prevPosField.SetValue(role, new Vector2(100.0f, 100.0f));
+
+		// Act
+		bool checkResult = role.IsAbilityCheck();
+
+		// Assert
+		Assert.False(checkResult);
 	}
 
 	[Fact]
@@ -584,6 +730,82 @@ public class CarpenterRoleTests : IDisposable
 	}
 
 	[Fact]
+	public void IsVentMode_WhenVentInUsableDistance_ReturnsTrueAndSetsTargetVent()
+	{
+		// Arrange
+		var role = new Carpenter();
+
+		var mockVentTransform = new Mock<Transform>(IntPtr.Zero);
+
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+		var mockRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+		mockRenderer.SetupGet(r => r.sprite).Returns(mockSprite.Object);
+
+		var mockVentGameObject = new Mock<GameObject>(IntPtr.Zero);
+		mockVentGameObject.SetupGet(g => g.active).Returns(true);
+
+		var mockVent = new Mock<Vent>(IntPtr.Zero);
+		mockVent.SetupGet(v => v.transform).Returns(mockVentTransform.Object);
+		mockVent.SetupGet(v => v.UsableDistance).Returns(2.0f);
+		mockVent.SetupGet(v => v.myRend).Returns(mockRenderer.Object);
+		mockVent.SetupGet(v => v.gameObject).Returns(mockVentGameObject.Object);
+
+		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
+		mockShip.SetupGet(s => s.enabled).Returns(true);
+		mockShip.SetupGet(s => s.AllVents).Returns(new Il2CppReferenceArray<Vent>([mockVent.Object]));
+
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
+		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
+
+		// Act
+		bool isVentMode = role.IsVentMode();
+
+		// Assert
+		Assert.True(isVentMode);
+		var targetVentField = typeof(Carpenter).GetField("targetVent", BindingFlags.NonPublic | BindingFlags.Instance)!;
+		Assert.Equal(mockVent.Object, targetVentField.GetValue(role));
+	}
+
+	[Fact]
+	public void IsVentMode_WhenNoVentInUsableDistance_ReturnsFalseAndClearsTargetVent()
+	{
+		// Arrange
+		var role = new Carpenter();
+
+		var mockVentTransform = new Mock<Transform>(IntPtr.Zero);
+
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+		var mockRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+		mockRenderer.SetupGet(r => r.sprite).Returns(mockSprite.Object);
+
+		var mockVentGameObject = new Mock<GameObject>(IntPtr.Zero);
+		mockVentGameObject.SetupGet(g => g.active).Returns(true);
+
+		var mockVent = new Mock<Vent>(IntPtr.Zero);
+		mockVent.SetupGet(v => v.transform).Returns(mockVentTransform.Object);
+		mockVent.SetupGet(v => v.UsableDistance).Returns(-1.0f); // UsableDistance is -1, so 0 <= UsableDistance is false
+		mockVent.SetupGet(v => v.myRend).Returns(mockRenderer.Object);
+		mockVent.SetupGet(v => v.gameObject).Returns(mockVentGameObject.Object);
+
+		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
+		mockShip.SetupGet(s => s.enabled).Returns(true);
+		mockShip.SetupGet(s => s.AllVents).Returns(new Il2CppReferenceArray<Vent>([mockVent.Object]));
+
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
+		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
+
+		// Act
+		bool isVentMode = role.IsVentMode();
+
+		// Assert
+		Assert.False(isVentMode);
+		var targetVentField = typeof(Carpenter).GetField("targetVent", BindingFlags.NonPublic | BindingFlags.Instance)!;
+		Assert.Null(targetVentField.GetValue(role));
+	}
+
+	[Fact]
 	public void IsVentMode_WhenShipStatusNull_ReturnsFalse()
 	{
 		// Arrange
@@ -597,6 +819,38 @@ public class CarpenterRoleTests : IDisposable
 	}
 
 	[Fact]
+	public void IsAbilityUse_WhenAwakeAndSkeld_ReturnsTrue()
+	{
+		// Arrange
+		SetLobbyMode(false);
+		Mock.Get(GameOptionsManager.Instance.CurrentGameOptions).Setup(o => o.GetByte(ByteOptionNames.MapId)).Returns((byte)0); // Skeld
+
+		this.localPlayerMock.SetupGet(p => p.CanMove).Returns(true);
+
+		var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		mockData.SetupGet(d => d.IsDead).Returns(false);
+		mockData.SetupGet(d => d.Disconnected).Returns(false);
+		mockData.SetupGet(d => d.Object).Returns(this.localPlayerMock.Object);
+		this.localPlayerMock.SetupGet(p => p.Data).Returns(mockData.Object);
+
+		var role = new Carpenter();
+		role.CreateRoleAllOption();
+
+		if (role.Loader.TryGet(Carpenter.CarpenterOption.AwakeTaskGage, out var option) && option != null)
+		{
+			option.Selection = 0; // 0% -> awake
+		}
+
+		role.Initialize();
+
+		// Act
+		bool canUse = role.IsAbilityUse();
+
+		// Assert
+		Assert.True(canUse);
+	}
+
+	[Fact]
 	public void IsAbilityUse_WhenNotAwake_ReturnsFalse()
 	{
 		// Arrange
@@ -606,7 +860,7 @@ public class CarpenterRoleTests : IDisposable
 
 		if (role.Loader.TryGet(Carpenter.CarpenterOption.AwakeTaskGage, out var option) && option != null)
 		{
-			option.Selection = 7; // 70%
+			option.Selection = 7; // 70% -> not awake
 		}
 
 		role.Initialize();
@@ -616,6 +870,120 @@ public class CarpenterRoleTests : IDisposable
 
 		// Assert
 		Assert.False(canUse);
+	}
+
+	[Fact]
+	public void IsAbilityUse_WhenTargetVentNullAndMapIsMiraHQ_ReturnsFalse()
+	{
+		// Arrange
+		SetLobbyMode(false);
+		Mock.Get(GameOptionsManager.Instance.CurrentGameOptions).Setup(o => o.GetByte(ByteOptionNames.MapId)).Returns((byte)1); // Mira HQ
+
+		var role = new Carpenter();
+		role.CreateRoleAllOption();
+
+		if (role.Loader.TryGet(Carpenter.CarpenterOption.AwakeTaskGage, out var option) && option != null)
+		{
+			option.Selection = 0; // 0% -> awake
+		}
+
+		role.Initialize();
+
+		// Act
+		bool canUse = role.IsAbilityUse();
+
+		// Assert
+		Assert.False(canUse);
+	}
+
+	[Fact]
+	public void UpdateMapObject_RemoveVent_InvokesRemoveVentMethod()
+	{
+		// Arrange
+		var removeVentTarget = typeof(Carpenter).GetMethod("removeVent", BindingFlags.NonPublic | BindingFlags.Static, null, new[] { typeof(int) }, null)!;
+		var removeVentHookDelegate = new RemoveVentHook(getRemoveVentHook);
+		using var removeVentHook = new Hook(removeVentTarget, removeVentHookDelegate);
+
+		var mockReader = new Mock<MessageReader>();
+		mockReader.SetupSequence(r => r.ReadByte())
+			.Returns((byte)Carpenter.AbilityType.RemoveVent);
+		mockReader.SetupSequence(r => r.ReadInt32())
+			.Returns(789);
+
+		var readerObj = mockReader.Object;
+
+		// Act
+		Carpenter.UpdateMapObject(ref readerObj);
+
+		// Assert
+		Assert.Equal(789, lastRemoveVentId);
+	}
+
+	[Fact]
+	public void UpdateMapObject_SetCamera_InvokesSetCameraMethod()
+	{
+		// Arrange
+		var setCameraTarget = typeof(Carpenter).GetMethod("setCamera", BindingFlags.NonPublic | BindingFlags.Static, null, new[] { typeof(float), typeof(float), typeof(SystemTypes) }, null)!;
+		var setCameraHookDelegate = new SetCameraHook(getSetCameraHook);
+		using var setCameraHook = new Hook(setCameraTarget, setCameraHookDelegate);
+
+		var mockReader = new Mock<MessageReader>();
+		mockReader.SetupSequence(r => r.ReadByte())
+			.Returns((byte)Carpenter.AbilityType.SetCamera)
+			.Returns((byte)SystemTypes.Cafeteria);
+
+		mockReader.SetupSequence(r => r.ReadSingle())
+			.Returns(3.5f)
+			.Returns(4.5f);
+
+		var readerObj = mockReader.Object;
+
+		// Act
+		Carpenter.UpdateMapObject(ref readerObj);
+
+		// Assert
+		Assert.NotNull(lastSetCameraArgs);
+		Assert.Equal(3.5f, lastSetCameraArgs.Value.x);
+		Assert.Equal(4.5f, lastSetCameraArgs.Value.y);
+		Assert.Equal(SystemTypes.Cafeteria, lastSetCameraArgs.Value.roomType);
+	}
+
+	[Fact]
+	public void RemoveVent_UnlinksAdjacentVentAndClearsSprite()
+	{
+		// Arrange
+		int targetVentId = 100;
+		int rightVentId = 200;
+
+		var mockSpriteRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+		mockSpriteRenderer.SetupProperty(r => r.sprite, mockSprite.Object);
+
+		var rightVentMock = new Mock<Vent>(IntPtr.Zero);
+		rightVentMock.SetupGet(v => v.Id).Returns(rightVentId);
+
+		var targetVentMock = new Mock<Vent>(IntPtr.Zero);
+		targetVentMock.SetupGet(v => v.Id).Returns(targetVentId);
+		targetVentMock.SetupProperty(v => v.Right, rightVentMock.Object);
+		targetVentMock.SetupGet(v => v.myRend).Returns(mockSpriteRenderer.Object);
+
+		rightVentMock.SetupProperty(v => v.Right, targetVentMock.Object);
+
+		var mockShip = new Mock<ShipStatus>(IntPtr.Zero);
+		mockShip.SetupGet(s => s.AllVents).Returns(new Il2CppReferenceArray<Vent>([targetVentMock.Object, rightVentMock.Object]));
+
+		var mockShipHelper = new Mock<MockShipStatusget_InstanceHelper>();
+		mockShipHelper.Setup(h => h.Invoke()).Returns(mockShip.Object);
+		MockShipStatusget_InstanceHelper.Instance = mockShipHelper.Object;
+
+		var removeVentMethod = typeof(Carpenter).GetMethod("removeVent", BindingFlags.NonPublic | BindingFlags.Static, null, new[] { typeof(int) }, null)!;
+
+		// Act
+		removeVentMethod.Invoke(null, new object[] { targetVentId });
+
+		// Assert
+		Assert.Null(rightVentMock.Object.Right);
+		Assert.Null(targetVentMock.Object.myRend.sprite);
 	}
 
 	[Fact]
@@ -847,56 +1215,5 @@ public class CarpenterRoleTests : IDisposable
 		setCountStartResult = false;
 		bool success4 = behavior.TryUseAbility(0.0f, AbilityState.Ready, out var newState4);
 		Assert.False(success4);
-	}
-
-	[Fact]
-	public void UpdateMapObject_RemoveVent_InvokesRemoveVent()
-	{
-		// Arrange
-		var mockReader = new Mock<MessageReader>();
-		mockReader.SetupSequence(r => r.ReadByte())
-			.Returns((byte)Carpenter.AbilityType.RemoveVent);
-		mockReader.SetupSequence(r => r.ReadInt32())
-			.Returns(123);
-
-		var readerObj = mockReader.Object;
-
-		// Act & Assert
-		Carpenter.UpdateMapObject(ref readerObj);
-	}
-
-	[Fact]
-	public void UpdateMapObject_SetCamera_InvokesSetCamera()
-	{
-		// Arrange
-		var mockReader = new Mock<MessageReader>();
-		mockReader.SetupSequence(r => r.ReadByte())
-			.Returns((byte)Carpenter.AbilityType.SetCamera);
-		mockReader.SetupSequence(r => r.ReadSingle())
-			.Returns(1.0f)
-			.Returns(2.0f);
-		mockReader.SetupSequence(r => r.ReadByte())
-			.Returns((byte)SystemTypes.Cafeteria);
-
-		var readerObj = mockReader.Object;
-
-		// Act & Assert
-		Carpenter.UpdateMapObject(ref readerObj);
-	}
-
-	[Fact]
-	public void IsAbilityCheck_ChecksPositionProximity()
-	{
-		// Arrange
-		var role = new Carpenter();
-		var localPlayer = MockSetupHelper.SetupPlayerControlMocks();
-
-		role.UseAbility();
-
-		// Act
-		bool checkResult = role.IsAbilityCheck();
-
-		// Assert
-		Assert.True(checkResult);
 	}
 }
