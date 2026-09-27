@@ -25,7 +25,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 public sealed class CEOAbilityHandler(CEOStatus status) : IAbility, IExiledAnimationOverride
 {
 	private readonly CEOStatus status = status;
-	public OverrideInfo? OverrideInfo => this.status.IsAwake ? new OverrideInfo(null, Tr.GetString("CEOExiledOverride")) : null;
+
+	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo exiledPlayer)
+	{
+		if (this.status.IsAwake)
+		{
+			return new OverrideInfo(null, Tr.GetString("CEOExiledOverride"));
+		}
+		return null;
+	}
 }
 
 public sealed class CEOStatus : IStatusModel
