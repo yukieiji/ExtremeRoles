@@ -102,6 +102,7 @@ public enum ExtremeRoleId : int
 	Echo,
 	Inspector,
 	Itako,
+	Screamer,
 
 	SpecialImpostor,
     Evolver,
@@ -352,6 +353,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Echo        , new Echo()},
 			{(int)ExtremeRoleId.Inspector   , new Inspector()},
 			{(int)ExtremeRoleId.Itako       , new ItakoRole()},
+			{(int)ExtremeRoleId.Screamer    , new Screamer()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},

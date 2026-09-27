@@ -1581,4 +1581,37 @@ Button ability "Spirit Channeling":
   <data name="ItakoAbilityCount" xml:space="preserve">
     <value>"SPIRIT CHANNELING" : Ability Charges</value>
   </data>
+  <data name="Screamer" xml:space="preserve">
+    <value>Screamer</value>
+  </data>
+  <data name="ScreamerFullDescription" xml:space="preserve">
+    <value>A role that screams loudly upon death or exile.</value>
+  </data>
+  <data name="ScreamerShortDescription" xml:space="preserve">
+    <value>Hear my final scream!</value>
+  </data>
+  <data name="ScreamerIntroDescription" xml:space="preserve">
+    <value>Scatter with a scream</value>
+  </data>
+  <data name="ScreamerIsScreamOnKill" xml:space="preserve">
+    <value>Scream when killed</value>
+  </data>
+  <data name="ScreamerScreamImageSize" xml:space="preserve">
+    <value>Scream Image Size</value>
+  </data>
+  <data name="ScreamerExile1" xml:space="preserve">
+    <value> "AAAAAAAAAAAAAAAAAAAAA!!!!"</value>
+  </data>
+  <data name="ScreamerExile2" xml:space="preserve">
+    <value> "GYAAAAAAAAAAAAAAAAAAA!!!!"</value>
+  </data>
+  <data name="ScreamerExile3" xml:space="preserve">
+    <value> "UWAAAAAAAAAAAAAAAAAAA!!!!"</value>
+  </data>
+  <data name="ScreamerExile4" xml:space="preserve">
+    <value> "HELP MEEEEEEEEEEEEEEEE!!!!"</value>
+  </data>
+  <data name="ScreamerExileRare" xml:space="preserve">
+    <value> "TAKENOKO IS THE BEST!!!!"</value>
+  </data>
 </root>
