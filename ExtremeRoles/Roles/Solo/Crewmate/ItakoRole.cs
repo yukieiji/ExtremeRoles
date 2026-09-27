@@ -63,8 +63,7 @@ public sealed class ItakoRole :
 	public ItakoRole() : base(
 		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Itako,
-			ColorPalette.ItakoSkyBlue,
-			RolePropPresets.OptionalDefault))
+			ColorPalette.ItakoSkyBlue))
 	{
 	}
 
@@ -198,7 +197,7 @@ public sealed class ItakoRole :
 		}
 
 		int intedId = (int)targetRole.Core.Id;
-		if (ExtremeRoleManager.NormalRole.TryGetValue((int)intedId, out role) &&
+		if (ExtremeRoleManager.NormalRole.TryGetValue(intedId, out role) &&
 			role is not null)
 		{
 			return true;
