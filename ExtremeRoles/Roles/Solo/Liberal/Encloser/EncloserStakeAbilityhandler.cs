@@ -18,13 +18,10 @@ public sealed class EncloserStakeAbilityHandler(
 
 	public void CleanUp()
 	{
-		Helper.Logging.Debug("cleanUp");
-
 		if (!this.encloserStatus.IsUseMetsu)
 		{
 			return;
 		}
-		Helper.Logging.Debug("Switch to metsu");
 		this.switcher.Switch(EncloserRole.Mode.Metsu);
 		this.count.SetAbilityCount(this.encloserStatus.RemainingMetsuCount);
 	}
@@ -43,15 +40,8 @@ public sealed class EncloserStakeAbilityHandler(
 			caller.WriteFloat(pos.y);
 		}
 
-		HandlePlaceStake(encloserPlayerId, pos);
+		this.encloserStatus.PlaceStake(pos, true);
 
 		return true;
 	}
-	public void HandlePlaceStake(byte encloserPlayerId, Vector2 pos)
-	{
-		this.encloserStatus.PlaceStake(pos, isLocalPlayerIsEncloser(encloserPlayerId));
-	}
-
-	private static bool isLocalPlayerIsEncloser(byte encloserPlayerId)
-		=> PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == encloserPlayerId;
 }
