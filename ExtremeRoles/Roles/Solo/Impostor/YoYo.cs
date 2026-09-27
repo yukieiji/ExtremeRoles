@@ -244,10 +244,7 @@ public sealed class YoYo :
         if (isCreateMarker)
         {
             this.markerObject = new GameObject("YoYoMark");
-            if (this.markerObject.transform != null)
-            {
-                this.markerObject.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
-            }
+            this.markerObject.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 
             SpriteRenderer renderer = this.markerObject.AddComponent<SpriteRenderer>();
             renderer.sprite = UnityObjectLoader.LoadFromResources(ExtremeRoleId.YoYo);
