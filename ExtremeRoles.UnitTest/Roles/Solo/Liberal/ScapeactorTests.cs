@@ -28,6 +28,7 @@ public sealed class ScapeactorTests
 		SetupLobbyBehaviourMock();
 
 		mockClient = MockSetupHelper.SetupAmongUsClientMock();
+		mockClient.SetupGet(c => c.AmHost).Returns(true);
 		var mockWriter = new Mock<MessageWriter>(IntPtr.Zero);
 		mockClient.Setup(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<SendOption>(), It.IsAny<int>()))
 			.Returns(mockWriter.Object);
