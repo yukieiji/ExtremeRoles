@@ -10,6 +10,7 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Liberal.Encloser;
+using HarmonyLib;
 using Hazel;
 using Moq;
 using Xunit;
@@ -17,10 +18,11 @@ using Xunit;
 namespace ExtremeRoles.UnitTest.Roles.Solo.Liberal;
 
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public sealed class EncloserTests
+public sealed class EncloserTests : IDisposable
 {
 	private readonly Mock<AmongUsClient> mockClient;
 	private readonly Mock<PlayerControl> mockLocalPlayer;
+	private static Harmony? harmonyInstance;
 
 	public EncloserTests()
 	{
@@ -59,16 +61,29 @@ public sealed class EncloserTests
 			LruCache<string, Sprite>.Add(key, mockSprite.Object);
 		}
 
-		var mockSpriteForAsset = new Mock<Sprite>(IntPtr.Zero);
-		var mockBundle = new Mock<AssetBundle>(IntPtr.Zero);
-		mockBundle.Setup(b => b.LoadAsset(It.IsAny<string>(), It.IsAny<Il2CppSystem.Type>()))
-			.Returns(mockSpriteForAsset.Object);
-
-		var cachedBundleField = typeof(UnityObjectLoader).GetField("cachedBundle", BindingFlags.NonPublic | BindingFlags.Static);
-		if (cachedBundleField?.GetValue(null) is Dictionary<string, AssetBundle> dict)
+		if (harmonyInstance == null)
 		{
-			dict["resources/bomb.asset"] = mockBundle.Object;
+			harmonyInstance = new Harmony("com.test.enclosertests");
+			var method = typeof(UnityObjectLoader).GetMethod("LoadFromResources", new[] { typeof(string), typeof(Assembly) })?.MakeGenericMethod(typeof(Sprite));
+			if (method != null)
+			{
+				var prefix = typeof(EncloserTests).GetMethod(nameof(LoadFromResourcesPrefix), BindingFlags.NonPublic | BindingFlags.Static);
+				harmonyInstance.Patch(method, prefix: new HarmonyMethod(prefix));
+			}
 		}
+	}
+
+	public void Dispose()
+	{
+		harmonyInstance?.UnpatchSelf();
+		harmonyInstance = null;
+	}
+
+	private static bool LoadFromResourcesPrefix(string objName, ref Sprite __result)
+	{
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+		__result = mockSprite.Object;
+		return false;
 	}
 
 	private static void SetupLobbyBehaviourMock()
