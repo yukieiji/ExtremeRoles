@@ -101,6 +101,7 @@ public static class RPCOperator
 		// ニュートラル
 		AliceShipBroken,
         JesterOutburstKill,
+        ImitaterKyugenKill,
         YandereSetOneSidedLover,
         TotocalcioSetBetPlayer,
 		MinerHandle,
@@ -725,6 +726,12 @@ public static class RPCOperator
         byte killerId, byte targetId)
     {
         Roles.Solo.Neutral.Jester.OutburstKill(
+            killerId, targetId);
+    }
+    public static void ImitaterKyugenKill(
+        byte killerId, byte targetId)
+    {
+        Roles.Solo.Neutral.Imitater.KyugenKill(
             killerId, targetId);
     }
 	public static void MinerHandle(ref MessageReader reader)
