@@ -1,6 +1,5 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using UnityEngine;
 
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
@@ -12,6 +11,8 @@ using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
@@ -34,7 +35,7 @@ public sealed class Delta : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	private DoveCommonAbilityHandler? handler;
 
 	public Delta() : base(
-		RoleArgs.BuildLiberalMilitant(ExtremeRoleId.Delta))
+		RoleArgs.BuildLiberalDove(ExtremeRoleId.Delta))
 	{
 	}
 
@@ -64,16 +65,15 @@ public sealed class Delta : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 	public bool UseAbility()
 	{
-		if (this.currentTarget != byte.MaxValue)
+		if (this.currentTarget == byte.MaxValue)
 		{
-			byte deltaId = PlayerControl.LocalPlayer.PlayerId;
-			byte targetId = this.currentTarget;
-
-			ExecuteAbility(deltaId, targetId);
-			this.currentTarget = byte.MaxValue;
-			return true;
+			return false;
 		}
-		return false;
+		byte targetId = this.currentTarget;
+
+		ExecuteAbility(PlayerControl.LocalPlayer, targetId);
+		this.currentTarget = byte.MaxValue;
+		return true;
 	}
 
 	public void ResetOnMeetingStart()
@@ -123,17 +123,19 @@ public sealed class Delta : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		this.moneyPerTaskDiff = loader.GetValue<DeltaOption, int>(DeltaOption.MoneyPerTaskDiff);
 	}
 
-	public static void ExecuteAbility(byte deltaPlayerId, byte targetPlayerId)
+	public void ExecuteAbility(PlayerControl deltaPlayer, byte targetPlayerId)
 	{
-		if (!ExtremeRoleManager.TryGetSafeCastedRole<Delta>(deltaPlayerId, out var deltaRole))
+		if (deltaPlayer.IsInValid())
 		{
 			return;
 		}
 
-		NetworkedPlayerInfo? deltaInfo = GameData.Instance.GetPlayerById(deltaPlayerId);
+		byte deltaPlayerId = deltaPlayer.PlayerId;
+		var deltaInfo = deltaPlayer.Data;
+
 		NetworkedPlayerInfo? targetInfo = GameData.Instance.GetPlayerById(targetPlayerId);
 
-		if (deltaInfo == null || targetInfo == null)
+		if (targetInfo == null)
 		{
 			ExplodeDelta(deltaPlayerId);
 			return;
@@ -142,11 +144,7 @@ public sealed class Delta : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		int deltaCompleted = GetCompletedTaskCount(deltaInfo);
 		int targetCompleted = GetCompletedTaskCount(targetInfo);
 
-		bool isSameTeam = false;
-		if (ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole))
-		{
-			isSameTeam = deltaRole.IsSameTeam(targetRole);
-		}
+		bool isSameTeam = ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) && IsSameTeam(targetRole);
 
 		bool shouldExplode =
 			deltaCompleted == 0 ||
@@ -161,7 +159,7 @@ public sealed class Delta : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		else
 		{
 			int diff = Math.Abs(targetCompleted - deltaCompleted);
-			float earnedMoney = diff * deltaRole.moneyPerTaskDiff;
+			float earnedMoney = diff * this.moneyPerTaskDiff;
 			if (earnedMoney > 0f)
 			{
 				LiberalMoneyBankSystem.RpcUpdateSystem(
@@ -174,15 +172,16 @@ public sealed class Delta : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 	public static int GetCompletedTaskCount(NetworkedPlayerInfo? playerInfo)
 	{
-		if (playerInfo == null || playerInfo.Tasks == null || playerInfo.Tasks.Count == 0)
+		if (playerInfo == null || 
+			playerInfo.Tasks == null || 
+			playerInfo.Tasks.Count == 0)
 		{
 			return 0;
 		}
 
 		int count = 0;
-		for (int i = 0; i < playerInfo.Tasks.Count; i++)
+		foreach (var task in playerInfo.Tasks.GetFastEnumerator())
 		{
-			var task = playerInfo.Tasks[i];
 			if (task != null && task.Complete)
 			{
 				count++;
