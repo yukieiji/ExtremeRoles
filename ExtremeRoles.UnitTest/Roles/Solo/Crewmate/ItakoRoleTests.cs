@@ -18,6 +18,7 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 
@@ -41,6 +42,7 @@ public class ItakoRoleTests
 		MockSetupHelper.SetupGameDataMock();
 		MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
 		SetupGameOptionsManagerMock();
+		SetupConstantsMock();
 
 		var shipStateField = typeof(ExtremeRolesPlugin).GetField("<ShipState>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
 		shipStateField?.SetValue(null, new ExtremeShipStatus());
@@ -71,6 +73,23 @@ public class ItakoRoleTests
 			var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
 			mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockGameOptionsManager.Object);
 			MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
+		}
+	}
+
+	private static void SetupConstantsMock()
+	{
+		if (MockConstantsget_PlayersOnlyMaskHelper.Instance == null)
+		{
+			var mockMask = new Mock<MockConstantsget_PlayersOnlyMaskHelper>();
+			mockMask.Setup(x => x.Invoke()).Returns(1);
+			MockConstantsget_PlayersOnlyMaskHelper.Instance = mockMask.Object;
+		}
+		if (UnityEngine.MockPhysics2DOverlapCircleAllHelper.Instance == null)
+		{
+			var mockOverlap = new Mock<UnityEngine.MockPhysics2DOverlapCircleAllHelper>();
+			mockOverlap.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<float>(), It.IsAny<int>()))
+				.Returns(Array.Empty<Collider2D>());
+			UnityEngine.MockPhysics2DOverlapCircleAllHelper.Instance = mockOverlap.Object;
 		}
 	}
 
@@ -201,5 +220,184 @@ public class ItakoRoleTests
 		// Assert
 		Assert.Null(targetField?.GetValue(itako));
 		Assert.Equal(byte.MaxValue, (byte)activeIdField?.GetValue(itako)!);
+	}
+
+	[Fact]
+	public void CreateAbility_ConfiguresButton()
+	{
+		// Arrange
+		SetupHudManagerMock();
+
+		var mockBehavior = new Mock<BehaviorBase>("Test", null!);
+		var mockActivator = new Mock<IButtonAutoActivator>();
+		var button = new ExtremeAbilityButton(mockBehavior.Object, mockActivator.Object, KeyCode.F);
+
+		var itako = new ItakoRole();
+		itako.CreateRoleAllOption();
+		itako.Button = button;
+
+		// Assert
+		Assert.NotNull(itako.Button);
+	}
+
+	[Fact]
+	public void ResetOnMeetingStart_CallsForceCleanUp()
+	{
+		// Arrange
+		var itako = new ItakoRole();
+		itako.CreateRoleAllOption();
+		itako.Initialize();
+
+		var activeIdField = typeof(ItakoRole).GetField("activeTargetBodyId", BindingFlags.NonPublic | BindingFlags.Instance);
+		activeIdField?.SetValue(itako, (byte)3);
+
+		// Act
+		itako.ResetOnMeetingStart();
+
+		// Assert
+		Assert.Equal(byte.MaxValue, (byte)activeIdField?.GetValue(itako)!);
+	}
+
+	[Fact]
+	public void UseAbility_WhenTmpTargetBodyIsNull_ReturnsFalse()
+	{
+		// Arrange
+		var itako = new ItakoRole();
+		itako.CreateRoleAllOption();
+		itako.Initialize();
+
+		// Act
+		bool result = itako.UseAbility();
+
+		// Assert
+		Assert.False(result);
+	}
+
+	[Fact]
+	public void CheckAbility_WhenNoDeadBodyFound_ReturnsFalse()
+	{
+		// Arrange
+		var itako = new ItakoRole();
+		itako.CreateRoleAllOption();
+		itako.Initialize();
+
+		// Act
+		bool result = itako.CheckAbility();
+
+		// Assert
+		Assert.False(result);
+	}
+
+	[Fact]
+	public void CleanUp_WhenTargetBodyIsNull_CallsForceCleanUp()
+	{
+		// Arrange
+		var itako = new ItakoRole();
+		itako.CreateRoleAllOption();
+		itako.Initialize();
+
+		var activeIdField = typeof(ItakoRole).GetField("activeTargetBodyId", BindingFlags.NonPublic | BindingFlags.Instance);
+		activeIdField?.SetValue(itako, (byte)5);
+
+		// Act
+		itako.CleanUp();
+
+		// Assert
+		Assert.Equal(byte.MaxValue, (byte)activeIdField?.GetValue(itako)!);
+	}
+
+	private static void SetupHudManagerMock()
+	{
+		if (MockVector3get_oneHelper.Instance == null)
+		{
+			var mockOne = new Mock<MockVector3get_oneHelper>();
+			mockOne.Setup(x => x.Invoke()).Returns(new Vector3(1f, 1f, 1f));
+			MockVector3get_oneHelper.Instance = mockOne.Object;
+		}
+
+		var mockObjectImplicitInt = new Mock<Il2CppSystem.MockObjectop_ImplicitHelper6>();
+		mockObjectImplicitInt.Setup(x => x.Invoke(It.IsAny<int>())).Returns(new Mock<Il2CppSystem.Object>(IntPtr.Zero).Object);
+		Il2CppSystem.MockObjectop_ImplicitHelper6.Instance = mockObjectImplicitInt.Object;
+
+		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
+		mockGameObject.Setup(g => g.SetActive(It.IsAny<bool>()));
+
+		var mockGridArrange = new Mock<GridArrange>(IntPtr.Zero);
+		mockGridArrange.Setup(g => g.ArrangeChilds());
+
+		var mockParentGameObject = new Mock<GameObject>(IntPtr.Zero);
+		mockParentGameObject.Setup(g => g.GetComponent<GridArrange>()).Returns(mockGridArrange.Object);
+
+		var mockParentTransform = new Mock<Transform>(IntPtr.Zero);
+		mockParentTransform.SetupGet(t => t.gameObject).Returns(mockParentGameObject.Object);
+
+		var mockTransform = new Mock<Transform>(IntPtr.Zero);
+		mockTransform.SetupGet(t => t.parent).Returns(mockParentTransform.Object);
+		mockTransform.Setup(t => t.FindChild(It.IsAny<string>())).Returns((Transform)null!);
+
+		var mockMaterial = new Mock<Material>(IntPtr.Zero);
+		mockMaterial.Setup(m => m.SetFloat(It.IsAny<string>(), It.IsAny<float>()));
+
+		var mockSpriteRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+		mockSpriteRenderer.SetupProperty(s => s.sprite);
+		mockSpriteRenderer.SetupProperty(s => s.color);
+		mockSpriteRenderer.SetupProperty(s => s.enabled);
+		mockSpriteRenderer.SetupGet(s => s.material).Returns(mockMaterial.Object);
+
+		var mockLabelText = new Mock<TMPro.TextMeshPro>(IntPtr.Zero);
+		mockLabelText.SetupProperty(t => t.color);
+		mockLabelText.SetupProperty(t => t.fontMaterial);
+		mockLabelText.SetupProperty(t => t.text);
+		mockLabelText.SetupGet(t => t.transform).Returns(mockTransform.Object);
+
+		var mockCoolText = new Mock<TMPro.TextMeshPro>(IntPtr.Zero);
+		mockCoolText.SetupProperty(t => t.color);
+		mockCoolText.SetupProperty(t => t.enableWordWrapping);
+		mockCoolText.SetupProperty(t => t.text);
+		mockCoolText.SetupGet(t => t.gameObject).Returns(mockGameObject.Object);
+		mockCoolText.SetupGet(t => t.transform).Returns(mockTransform.Object);
+
+		var mockPersistentCallGroup = new Mock<PersistentCallGroup>(IntPtr.Zero);
+		mockPersistentCallGroup.Setup(p => p.Clear());
+
+		var mockOnClick = new Mock<UnityEngine.UI.Button.ButtonClickedEvent>(IntPtr.Zero);
+		mockOnClick.Setup(e => e.RemoveAllListeners());
+		mockOnClick.Setup(e => e.AddListener(It.IsAny<UnityAction>()));
+		mockOnClick.SetupGet(e => e.m_PersistentCalls).Returns(mockPersistentCallGroup.Object);
+
+		var mockPassiveButton = new Mock<PassiveButton>(IntPtr.Zero);
+		mockPassiveButton.SetupGet(p => p.OnClick).Returns(mockOnClick.Object);
+
+		var mockKillButton = new Mock<KillButton>(IntPtr.Zero);
+		mockKillButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
+		mockKillButton.SetupGet(b => b.gameObject).Returns(mockGameObject.Object);
+		mockKillButton.SetupGet(b => b.graphic).Returns(mockSpriteRenderer.Object);
+		mockKillButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
+		mockKillButton.SetupGet(b => b.cooldownTimerText).Returns(mockCoolText.Object);
+		mockKillButton.Setup(b => b.GetComponent<PassiveButton>()).Returns(mockPassiveButton.Object);
+		mockKillButton.SetupGet(b => b.isActiveAndEnabled).Returns(true);
+
+		var mockUseButton = new Mock<UseButton>(IntPtr.Zero);
+		mockUseButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
+		mockUseButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
+
+		var mockInstantiate5 = new Mock<MockObjectInstantiateHelper5>();
+		mockInstantiate5.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
+			.Returns((UnityEngine.Object original, Transform parent) => original);
+		MockObjectInstantiateHelper5.Instance = mockInstantiate5.Object;
+
+		var mockInstantiate10 = new Mock<MockObjectInstantiateHelper10>();
+		mockInstantiate10.Setup(x => x.Invoke(It.IsAny<UnityEngine.Object>(), It.IsAny<Transform>()))
+			.Returns((UnityEngine.Object original, Transform parent) => original);
+		MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
+
+		var mockUnityActionImplicit = new Mock<MockUnityActionop_ImplicitHelper>();
+		mockUnityActionImplicit.Setup(x => x.Invoke(It.IsAny<Action>()))
+			.Returns((Action action) => action != null ? new UnityAction(IntPtr.Zero) : null!);
+		MockUnityActionop_ImplicitHelper.Instance = mockUnityActionImplicit.Object;
+
+		var mockHud = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
+		mockHud.SetupGet(h => h.KillButton).Returns(mockKillButton.Object);
+		mockHud.SetupGet(h => h.UseButton).Returns(mockUseButton.Object);
 	}
 }
