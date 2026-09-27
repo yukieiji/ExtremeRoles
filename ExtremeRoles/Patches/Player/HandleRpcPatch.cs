@@ -351,6 +351,12 @@ public static class PlayerControlHandleRpcPatch
 				RPCOperator.JesterOutburstKill(
 					outburstKillerId, killTargetId);
 				break;
+			case RPCOperator.Command.ImitaterKyugenKill:
+				byte kyugenKillerId = reader.ReadByte();
+				byte kyugenTargetId = reader.ReadByte();
+				RPCOperator.ImitaterKyugenKill(
+					kyugenKillerId, kyugenTargetId);
+				break;
 			case RPCOperator.Command.YandereSetOneSidedLover:
 				byte yanderePlayerId = reader.ReadByte();
 				byte loverPlayerId = reader.ReadByte();

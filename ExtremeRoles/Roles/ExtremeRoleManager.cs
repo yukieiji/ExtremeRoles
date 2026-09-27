@@ -170,6 +170,7 @@ public enum ExtremeRoleId : int
 	Knight,
 	Pawn,
 	Punisher,
+	Imitater,
 
 	Leader,
 	Dove,
@@ -412,6 +413,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Knight    , new KnightRole()},
 			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
 			{(int)ExtremeRoleId.Punisher  , new Punisher()},
+			{(int)ExtremeRoleId.Imitater  , new Imitater()},
 
 			{(int)ExtremeRoleId.SpecialDove    , new SpecialDove()},
 			{(int)ExtremeRoleId.SpecialMilitant, new SpecialMilitant()},
@@ -467,6 +469,7 @@ public static class ExtremeRoleManager
 		RemoveChimera,
 		RebornJackal,
 		ItakoInherit,
+		ImitaterInherit,
 	}
 
 	private static IRoleProvider? provider;
@@ -672,6 +675,9 @@ public static class ExtremeRoleManager
 				break;
 			case ReplaceOperation.ItakoInherit:
 				ItakoRole.InheritTargetRole(caller, targetId);
+				break;
+			case ReplaceOperation.ImitaterInherit:
+				Imitater.InheritTargetRole(caller, targetId);
 				break;
 			default:
                 break;

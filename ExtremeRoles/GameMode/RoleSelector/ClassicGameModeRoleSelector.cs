@@ -144,6 +144,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.TaskMaster,
             ExtremeRoleId.Missionary,
             ExtremeRoleId.Jester,
+            ExtremeRoleId.Imitater,
             ExtremeRoleId.Yandere,
             ExtremeRoleId.Yoko,
             ExtremeRoleId.Totocalcio,
