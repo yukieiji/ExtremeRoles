@@ -1,7 +1,8 @@
 using UnityEngine;
 
-using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 #nullable enable
 
@@ -42,7 +43,7 @@ public abstract partial class SingleRoleBase
         }
 
 		if (targetRole.Core.Id is ExtremeRoleId.Leader ||
-			(targetRole.IsLiberal() && this.IsLiberal()))
+			(ExtremeGameModeManager.Instance.CanSeeOtherLiberal && targetRole.IsLiberal() && this.IsLiberal()))
 		{
 			return ColorPalette.LiberalColor;
 		}
