@@ -83,12 +83,7 @@ public sealed class EncloserMetsuAbilityHandler(
 			caller.WriteByte(encloserPlayerId);
 			caller.WriteByte((byte)EncloserRole.RpcOpsType.UseMetsu);
 		}
-		HandleUseMetsuRpc();
-		return true;
-	}
-
-	public void HandleUseMetsuRpc()
-	{
 		this.encloserStatus.ClearStake();
+		return true;
 	}
 }

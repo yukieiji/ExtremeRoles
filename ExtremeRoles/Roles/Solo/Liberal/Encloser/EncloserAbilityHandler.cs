@@ -94,14 +94,4 @@ public sealed class EncloserAbilityHandler(
 				break;
 		}
 	}
-
-	public void HandlePlaceStake(byte encloserPlayerId, Vector2 pos)
-	{
-		this.stake?.HandlePlaceStake(encloserPlayerId, pos);
-	}
-
-	public void HandleUseMetsuRpc()
-	{
-		this.mestu?.HandleUseMetsuRpc();
-	}
 }
