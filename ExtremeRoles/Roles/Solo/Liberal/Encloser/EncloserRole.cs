@@ -103,7 +103,7 @@ public sealed class EncloserRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleU
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
-		IRoleAbility.CreateAbilityCountOption(factory, 3, 3, 10, 1);
+		IRoleAbility.CreateAbilityCountOption(factory, 3, 10);
 		factory.CreateIntOption(
 			Option.MetsuLimit,
 			1, 1, 10, 1);
