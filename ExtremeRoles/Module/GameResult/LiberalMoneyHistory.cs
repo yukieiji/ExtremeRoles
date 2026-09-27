@@ -17,6 +17,7 @@ public static class LiberalMoneyHistory
 		DisguisedAccounting,
 		SelfBomb,
 		AddOnExile,
+		STRMISS,
 	}
 
 	public readonly record struct MoneyHistory(Reason Reason, byte PlayerId, float Amount);
