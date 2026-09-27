@@ -80,6 +80,7 @@ public sealed class EncloserMetsuAbilityHandler(
 
 		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EncloserOps))
 		{
+			caller.WriteByte(encloserPlayerId);
 			caller.WriteByte((byte)EncloserRole.RpcOpsType.UseMetsu);
 		}
 		HandleUseMetsuRpc();
