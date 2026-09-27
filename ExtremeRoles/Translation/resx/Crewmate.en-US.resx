@@ -1581,4 +1581,37 @@ Button ability "Spirit Channeling":
   <data name="ItakoAbilityCount" xml:space="preserve">
     <value>"SPIRIT CHANNELING" : Ability Charges</value>
   </data>
+  <data name="Screamer" xml:space="preserve">
+    <value>Screamer</value>
+  </data>
+  <data name="ScreamerFullDescription" xml:space="preserve">
+    <value>Screams loudly when exiled or killed. When exiled, a special message is displayed. When killed, a scream image appears at the position.</value>
+  </data>
+  <data name="ScreamerShortDescription" xml:space="preserve">
+    <value>Scream upon death</value>
+  </data>
+  <data name="ScreamerIntroDescription" xml:space="preserve">
+    <value>Scream when exiled or killed</value>
+  </data>
+  <data name="ScreamerIsScreamWhenKilled" xml:space="preserve">
+    <value>Scream When Killed</value>
+  </data>
+  <data name="ScreamerScreamImageSize" xml:space="preserve">
+    <value>Scream Image Size</value>
+  </data>
+  <data name="ScreamerExiledOverride0" xml:space="preserve">
+    <value>AAAAAAAHHHHHHHHHHH!!!</value>
+  </data>
+  <data name="ScreamerExiledOverride1" xml:space="preserve">
+    <value>UWWAAAAAAAHHHHHHHH!!!</value>
+  </data>
+  <data name="ScreamerExiledOverride2" xml:space="preserve">
+    <value>NOOOOOOOOOOOOOOOOO!!!</value>
+  </data>
+  <data name="ScreamerExiledOverride3" xml:space="preserve">
+    <value>EEEEKAAAAAAAHHHHHH!!!</value>
+  </data>
+  <data name="ScreamerExiledOverride4" xml:space="preserve">
+    <value>(* An exceptionally terrifying scream echoed through space!!)</value>
+  </data>
 </root>

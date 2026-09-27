@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -65,20 +65,20 @@
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1618,7 +1618,7 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>口寄せ</value>
   </data>
   <data name="ItakoIntroDescription" xml:space="preserve">
-    <value></value>
+    <value/>
   </data>
   <data name="ItakoShortDescription" xml:space="preserve">
     <value>「死体」に「口寄せ」して役職を引き継げ</value>
@@ -1645,5 +1645,38 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   </data>
   <data name="ItakoAbilityCount" xml:space="preserve">
     <value>「口寄せ」の使用回数</value>
+  </data>
+  <data name="Screamer" xml:space="preserve">
+    <value>スクリーマー</value>
+  </data>
+  <data name="ScreamerFullDescription" xml:space="preserve">
+    <value>追放もしくはキルされたときに大きな叫び声をあげる。追放時には特別なメッセージが表示され、キル時には叫んだ画像がその場所に残る。</value>
+  </data>
+  <data name="ScreamerShortDescription" xml:space="preserve">
+    <value>死亡時に叫ぶ</value>
+  </data>
+  <data name="ScreamerIntroDescription" xml:space="preserve">
+    <value>追放やキルされた時に叫び声をあげよう</value>
+  </data>
+  <data name="ScreamerIsScreamWhenKilled" xml:space="preserve">
+    <value>キルされた時に叫ぶ</value>
+  </data>
+  <data name="ScreamerScreamImageSize" xml:space="preserve">
+    <value>叫んだ画像のサイズ</value>
+  </data>
+  <data name="ScreamerExiledOverride0" xml:space="preserve">
+    <value>ぎゃあああああああああああ！！！</value>
+  </data>
+  <data name="ScreamerExiledOverride1" xml:space="preserve">
+    <value>うわあああああああああああ！！！</value>
+  </data>
+  <data name="ScreamerExiledOverride2" xml:space="preserve">
+    <value>いやあああああああああああ！！！</value>
+  </data>
+  <data name="ScreamerExiledOverride3" xml:space="preserve">
+    <value>ひええええええええええええ！！！</value>
+  </data>
+  <data name="ScreamerExiledOverride4" xml:space="preserve">
+    <value>（※とびきり凄まじい叫び声が宇宙に轟いた！！）</value>
   </data>
 </root>
