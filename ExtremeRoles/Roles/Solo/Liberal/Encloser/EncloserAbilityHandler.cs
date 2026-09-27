@@ -20,12 +20,12 @@ public sealed class EncloserAbilityHandler(
 	private EncloserStatusModel encloserStatus = statusModel;
 	private EncloserRole.Mode currentMode => this.modeSwitcher?.Current ?? EncloserRole.Mode.Stake;
 	private GraphicSwitcher<EncloserRole.Mode>? modeSwitcher;
-	private EncloserStakeAbilityhandler? stake;
-	private EncloserMetsuAbilityhandler? mestu;
+	private EncloserStakeAbilityHandler? stake;
+	private EncloserMetsuAbilityHandler? mestu;
 
 	public void CreateAbility()
 	{
-		Sprite bombSprite = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.Bomb);
+		Sprite bombSprite = UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.Bomb);
 
 		var stakeGraphic = new ButtonGraphic(Tr.GetString("Stake"), bombSprite);
 		var metsuGraphic = new ButtonGraphic(Tr.GetString("Metsu"), bombSprite);
@@ -47,8 +47,8 @@ public sealed class EncloserAbilityHandler(
 
 		if (this.Button.Behavior is ICountBehavior countBehavior)
 		{
-			this.stake = new EncloserStakeAbilityhandler(this.encloserStatus, countBehavior, this.modeSwitcher);
-			this.mestu = new EncloserMetsuAbilityhandler(this.encloserStatus, countBehavior, this.modeSwitcher);
+			this.stake = new EncloserStakeAbilityHandler(this.encloserStatus, countBehavior, this.modeSwitcher);
+			this.mestu = new EncloserMetsuAbilityHandler(this.encloserStatus, countBehavior, this.modeSwitcher);
 		}
 	}
 

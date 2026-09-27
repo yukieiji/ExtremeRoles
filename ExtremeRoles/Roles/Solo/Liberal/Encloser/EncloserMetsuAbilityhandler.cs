@@ -13,7 +13,7 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Liberal.Encloser;
 
-public sealed class EncloserMetsuAbilityhandler(
+public sealed class EncloserMetsuAbilityHandler(
 	EncloserStatusModel statusModel,
 	ICountBehavior count,
 	GraphicSwitcher<EncloserRole.Mode> switcher)

@@ -30,7 +30,7 @@ public sealed class EncloserPolygon(IUnityObjectFactory? factory = null, IIl2Cpp
 	{
 		var stake = this.factory.CreateGameObject($"EncloserStake_{this.stakeObjects.Count + 1}");
 		var sr = stake.AddComponent<SpriteRenderer>();
-		sr.sprite = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.Bomb);
+		sr.sprite = UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.Bomb);
 		sr.color = ColorPalette.LiberalColor;
 		stake.transform.position = this.factory.CreateMapPos(pos);
 		this.stakeObjects.Add(stake);
