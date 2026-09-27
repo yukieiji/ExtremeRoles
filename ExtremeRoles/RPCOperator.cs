@@ -754,7 +754,7 @@ public static class RPCOperator
 
 	public static void EncloserRpcOps(in MessageReader reader)
 	{
-		Roles.Solo.Liberal.Encloser.RpcOps(reader);
+		Roles.Solo.Liberal.Encloser.EncloserRole.RpcOps(reader);
 	}
 
 	public static void SetGhostRole(

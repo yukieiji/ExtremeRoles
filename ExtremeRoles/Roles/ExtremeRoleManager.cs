@@ -37,6 +37,7 @@ using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using ExtremeRoles.Roles.Solo.Neutral.Yoko;
+using ExtremeRoles.Roles.Solo.Liberal.Encloser;
 
 
 namespace ExtremeRoles.Roles;
@@ -414,7 +415,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Embezzle       , new Embezzle()},
 			{(int)ExtremeRoleId.Addict         , new Addict()},
 			{(int)ExtremeRoleId.Martyr         , new Martyr()},
-			{(int)ExtremeRoleId.Encloser       , new Encloser()},
+			{(int)ExtremeRoleId.Encloser       , new EncloserRole()},
 			{(int)ExtremeRoleId.Scapeactor     , new Scapeactor()},
 		}.ToImmutableDictionary();
 
