@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using AmongUs.GameOptions;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
@@ -30,6 +31,11 @@ public sealed class DeltaTests
 		{
 			var shipStateProp = typeof(ExtremeRolesPlugin).GetProperty(nameof(ExtremeRolesPlugin.ShipState), BindingFlags.Public | BindingFlags.Static);
 			shipStateProp?.SetValue(null, new ExtremeShipStatus());
+		}
+
+		if (ExtremeGameModeManager.Instance == null)
+		{
+			ExtremeGameModeManager.Create(GameModes.Normal);
 		}
 
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
@@ -74,6 +80,7 @@ public sealed class DeltaTests
 
 		MockSetupHelper.SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
+		ExtremeGameModeManager.Instance?.Load();
 	}
 
 	private static void SetupLobbyBehaviourMock()
@@ -146,9 +153,10 @@ public sealed class DeltaTests
 	{
 		// Arrange
 		ExtremeRoleManager.GameRole.Clear();
+		var role = new Delta();
 
 		// Act & Assert - Should not throw
-		Delta.ExecuteAbility(1, 2);
+		role.ExecuteAbility(this.mockLocalPlayer.Object, 2);
 	}
 
 	[Fact]
@@ -178,20 +186,25 @@ public sealed class DeltaTests
 		teammateTasksList.SetupGet(l => l[0]).Returns(tTask1.Object);
 		teammateTasksList.SetupGet(l => l[1]).Returns(tTask2.Object);
 
+		var teammatePlayer = MockSetupHelper.SetupPlayerControlMocks();
+
 		var deltaPlayerInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 		deltaPlayerInfo.SetupGet(p => p.PlayerId).Returns((byte)1);
 		deltaPlayerInfo.SetupGet(p => p.Tasks).Returns(deltaTasksList.Object);
+		deltaPlayerInfo.SetupGet(p => p.Object).Returns(this.mockLocalPlayer.Object);
+		this.mockLocalPlayer.SetupGet(p => p.Data).Returns(deltaPlayerInfo.Object);
 
 		var teammatePlayerInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 		teammatePlayerInfo.SetupGet(p => p.PlayerId).Returns((byte)2);
 		teammatePlayerInfo.SetupGet(p => p.Tasks).Returns(teammateTasksList.Object);
+		teammatePlayerInfo.SetupGet(p => p.Object).Returns(teammatePlayer.Object);
 
 		var mockGameData = MockSetupHelper.SetupGameDataMock();
 		mockGameData.Setup(g => g.GetPlayerById(1)).Returns(deltaPlayerInfo.Object);
 		mockGameData.Setup(g => g.GetPlayerById(2)).Returns(teammatePlayerInfo.Object);
 
 		// Act
-		Delta.ExecuteAbility(1, 2);
+		deltaRole.ExecuteAbility(this.mockLocalPlayer.Object, 2);
 
 		// Assert - RPC was called to murder delta
 		this.mockClient.Verify(
@@ -229,20 +242,25 @@ public sealed class DeltaTests
 		crewTasksList.SetupGet(l => l[1]).Returns(cTask2.Object);
 		crewTasksList.SetupGet(l => l[2]).Returns(cTask3.Object);
 
+		var crewPlayer = MockSetupHelper.SetupPlayerControlMocks();
+
 		var deltaPlayerInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 		deltaPlayerInfo.SetupGet(p => p.PlayerId).Returns((byte)1);
 		deltaPlayerInfo.SetupGet(p => p.Tasks).Returns(deltaTasksList.Object);
+		deltaPlayerInfo.SetupGet(p => p.Object).Returns(this.mockLocalPlayer.Object);
+		this.mockLocalPlayer.SetupGet(p => p.Data).Returns(deltaPlayerInfo.Object);
 
 		var crewPlayerInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 		crewPlayerInfo.SetupGet(p => p.PlayerId).Returns((byte)2);
 		crewPlayerInfo.SetupGet(p => p.Tasks).Returns(crewTasksList.Object);
+		crewPlayerInfo.SetupGet(p => p.Object).Returns(crewPlayer.Object);
 
 		var mockGameData = MockSetupHelper.SetupGameDataMock();
 		mockGameData.Setup(g => g.GetPlayerById(1)).Returns(deltaPlayerInfo.Object);
 		mockGameData.Setup(g => g.GetPlayerById(2)).Returns(crewPlayerInfo.Object);
 
 		// Act
-		Delta.ExecuteAbility(1, 2);
+		deltaRole.ExecuteAbility(this.mockLocalPlayer.Object, 2);
 
 		// Assert - System RPC update sent for money bank
 		this.mockClient.Verify(
