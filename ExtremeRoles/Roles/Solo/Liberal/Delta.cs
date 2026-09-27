@@ -1,18 +1,14 @@
 using System;
-using Hazel;
 using Microsoft.Extensions.DependencyInjection;
 using UnityEngine;
 
-using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -57,7 +53,7 @@ public sealed class Delta : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	{
 		this.currentTarget = byte.MaxValue;
 
-		PlayerControl? target = GetClosestTarget(PlayerControl.LocalPlayer, this.range, this);
+		PlayerControl? target = Player.GetClosestPlayerInRange(PlayerControl.LocalPlayer, this, this.range);
 		if (target != null)
 		{
 			this.currentTarget = target.PlayerId;
@@ -125,63 +121,6 @@ public sealed class Delta : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 		this.range = loader.GetValue<DeltaOption, float>(DeltaOption.Range);
 		this.moneyPerTaskDiff = loader.GetValue<DeltaOption, int>(DeltaOption.MoneyPerTaskDiff);
-	}
-
-	public static PlayerControl? GetClosestTarget(
-		PlayerControl sourcePlayer,
-		float range,
-		SingleRoleBase role)
-	{
-		if (!ShipStatus.Instance)
-		{
-			return null;
-		}
-
-		Vector2 truePosition = sourcePlayer.GetTruePosition();
-		PlayerControl? closest = null;
-		float closestDist = float.MaxValue;
-
-		foreach (PlayerControl pc in PlayerCache.AllPlayerControl)
-		{
-			if (pc == null || pc.IsInValid() || pc.PlayerId == sourcePlayer.PlayerId || !pc.IsAlive())
-			{
-				continue;
-			}
-
-			if (pc.inVent || pc.inMovingPlat || pc.onLadder)
-			{
-				continue;
-			}
-
-			Vector2 vector = pc.GetTruePosition() - truePosition;
-			float magnitude = vector.magnitude;
-			if (magnitude <= range &&
-				!PhysicsHelpers.AnyNonTriggersBetween(
-					truePosition, vector.normalized,
-					magnitude, Constants.ShipAndObjectsMask))
-			{
-				if (magnitude < closestDist)
-				{
-					closestDist = magnitude;
-					closest = pc;
-				}
-			}
-		}
-
-		if (closest != null)
-		{
-			PlayerOutLine.SetOutline(closest, role.GetNameColor());
-		}
-
-		return closest;
-	}
-
-	public static void RpcOps(MessageReader reader)
-	{
-		byte deltaPlayerId = reader.ReadByte();
-		byte targetPlayerId = reader.ReadByte();
-
-		ExecuteAbility(deltaPlayerId, targetPlayerId);
 	}
 
 	public static void ExecuteAbility(byte deltaPlayerId, byte targetPlayerId)

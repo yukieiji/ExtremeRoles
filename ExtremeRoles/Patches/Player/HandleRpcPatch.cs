@@ -377,9 +377,6 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.EncloserOps:
 				RPCOperator.EncloserRpcOps(reader);
 				break;
-			case RPCOperator.Command.DeltaOps:
-				RPCOperator.DeltaRpcOps(reader);
-				break;
 			case RPCOperator.Command.SetGhostRole:
 				RPCOperator.SetGhostRole(
 					ref reader);
