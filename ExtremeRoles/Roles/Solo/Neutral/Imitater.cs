@@ -189,37 +189,26 @@ public sealed class Imitater :
 
 	public static void InheritTargetRole(byte imitaterPlayerId, byte targetPlayerId)
 	{
-		if (!ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) ||
-			!ExtremeRoleManager.TryGetSafeCastedRole<Imitater>(imitaterPlayerId, out var imitaterRole))
+		if (ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
+			ExtremeRoleManager.TryGetSafeCastedRole<Imitater>(imitaterPlayerId, out var imitaterRole) &&
+			TryGetExtractInheritedRole(targetRole, out var inheritedRole))
 		{
-			return;
+			clonedNewRole(imitaterRole, imitaterPlayerId, inheritedRole);
 		}
-
-		clonedNewRole(imitaterRole, imitaterPlayerId, targetRole);
 	}
 
-	private static void clonedNewRole(Imitater imitater, byte imitaterPlayerId, SingleRoleBase targetRole)
+	private static void clonedNewRole(Imitater imitater, byte imitaterPlayerId, SingleRoleBase inheritedRole)
 	{
 		IRoleSpecialReset.ResetRole(imitaterPlayerId);
 		IRoleSpecialReset.ResetLover(imitaterPlayerId);
 
-		SingleRoleBase templateRole;
-		if (!TryGetExtractInheritedRole(targetRole, out var extracted))
-		{
-			templateRole = targetRole;
-		}
-		else
-		{
-			templateRole = extracted;
-		}
-
-		if (templateRole is Solo.VanillaRoleWrapper vanillaRole)
+		if (inheritedRole is Solo.VanillaRoleWrapper vanillaRole)
 		{
 			RoleManager.Instance.SetRole(
 				Player.GetPlayerControlById(imitaterPlayerId),
 				vanillaRole.VanilaRoleId);
 		}
-		else if (templateRole.IsImpostor())
+		else if (inheritedRole.IsImpostor())
 		{
 			RoleManager.Instance.SetRole(
 				Player.GetPlayerControlById(imitaterPlayerId),
@@ -232,7 +221,7 @@ public sealed class Imitater :
 				AmongUs.GameOptions.RoleTypes.Crewmate);
 		}
 
-		var newRole = templateRole.Clone();
+		var newRole = inheritedRole.Clone();
 
 		if (PlayerControl.LocalPlayer != null &&
 			PlayerControl.LocalPlayer.PlayerId == imitaterPlayerId)
