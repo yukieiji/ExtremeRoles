@@ -8,6 +8,8 @@ using Xunit;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
@@ -81,92 +83,77 @@ public class ScreamerTests
 	public void RoleSpecificInit_LoadsOptionValues()
 	{
 		// Arrange
-		var role = new Screamer();
-		role.CreateRoleAllOption();
+		var screamer = new Screamer();
+		screamer.CreateRoleAllOption();
 
 		// Act
-		role.Initialize();
+		screamer.Initialize();
 
 		// Assert
-		Assert.True(role.IsScreamOnKill);
-		Assert.Equal(1.0f, role.ScreamImageScale);
+		Assert.True(screamer.IsScreamOnKill);
+		Assert.Equal(100.0f, screamer.ScreamImageScale);
 	}
 
 	[Fact]
-	public void ScreamerAbilityHandler_OverrideInfo_ReturnsExileInfo()
+	public void ScreamerAbilityHandler_GetOverrideInfo_ReturnsExileInfoWithPlayer()
 	{
 		// Arrange
-		var screamer = new Screamer();
-		screamer.CreateRoleAllOption();
-		screamer.Initialize();
+		var mockFactory = new Mock<IUnityObjectFactory>();
+		var mockResources = new Mock<IResourcesProvider>();
+		var handler = new ScreamerAbilityHandler(mockFactory.Object, mockResources.Object);
 
-		var handler = new ScreamerAbilityHandler(screamer);
+		var mockExiledPlayer = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 
 		// Act
-		var overrideInfo = handler.OverrideInfo;
+		var overrideInfo = handler.GetOverrideInfo(mockExiledPlayer.Object);
 
 		// Assert
 		Assert.NotNull(overrideInfo);
-		Assert.NotNull(overrideInfo!.AnimationText);
+		Assert.Equal(mockExiledPlayer.Object, overrideInfo!.ExiledPlayer);
+		Assert.NotNull(overrideInfo.AnimationText);
 		Assert.NotEmpty(overrideInfo.AnimationText);
-	}
-
-	[Fact]
-	public void GetRandomExileText_ReturnsNonEmptyString()
-	{
-		// Arrange
-		var screamer = new Screamer();
-
-		// Act
-		for (int i = 0; i < 20; ++i)
-		{
-			string text = screamer.GetRandomExileText();
-
-			// Assert
-			Assert.NotNull(text);
-			Assert.NotEmpty(text);
-		}
-	}
-
-	[Fact]
-	public void GetRandomImageIndex_ReturnsValueBetweenOneAndFive()
-	{
-		// Arrange
-		var screamer = new Screamer();
-
-		// Act
-		for (int i = 0; i < 20; ++i)
-		{
-			int idx = screamer.GetRandomImageIndex();
-
-			// Assert
-			Assert.InRange(idx, 1, 5);
-		}
 	}
 
 	[Fact]
 	public void RolePlayerKilledAction_WhenIsScreamOnKillDisabled_DoesNotSpawn()
 	{
 		// Arrange
-		var screamer = new Screamer();
+		var mockFactory = new Mock<IUnityObjectFactory>();
+		var mockResources = new Mock<IResourcesProvider>();
+		var screamer = new Screamer(mockFactory.Object, mockResources.Object);
 		screamer.CreateRoleAllOption();
 		screamer.Initialize();
 
-		var isScreamField = typeof(Screamer).GetField("isScreamOnKill", BindingFlags.NonPublic | BindingFlags.Instance);
-		isScreamField?.SetValue(screamer, false);
+		var isScreamProperty = typeof(Screamer).GetProperty("IsScreamOnKill", BindingFlags.Public | BindingFlags.Instance);
+		isScreamProperty?.SetValue(screamer, false);
 
 		var mockVictim = new Mock<PlayerControl>(IntPtr.Zero);
 		var mockKiller = new Mock<PlayerControl>(IntPtr.Zero);
 
-		// Act & Assert (Should complete without exception)
+		// Act
 		screamer.RolePlayerKilledAction(mockVictim.Object, mockKiller.Object);
+
+		// Assert
+		mockFactory.Verify(f => f.CreateGameObject(It.IsAny<string>()), Times.Never);
 	}
 
 	[Fact]
-	public void RolePlayerKilledAction_WhenIsScreamOnKillEnabled_ExecutesSuccessfully()
+	public void RolePlayerKilledAction_WhenIsScreamOnKillEnabled_SpawnsScreamImageUsingFactory()
 	{
 		// Arrange
-		var screamer = new Screamer();
+		var mockRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
+		var mockTransform = new Mock<Transform>(IntPtr.Zero);
+
+		mockGameObject.SetupGet(g => g.transform).Returns(mockTransform.Object);
+		mockGameObject.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockRenderer.Object);
+
+		var mockFactory = new Mock<IUnityObjectFactory>();
+		mockFactory.Setup(f => f.CreateGameObject(It.IsAny<string>())).Returns(mockGameObject.Object);
+
+		var mockResources = new Mock<IResourcesProvider>();
+
+		var screamer = new Screamer(mockFactory.Object, mockResources.Object);
 		screamer.CreateRoleAllOption();
 		screamer.Initialize();
 
@@ -179,7 +166,11 @@ public class ScreamerTests
 
 		var mockKiller = new Mock<PlayerControl>(IntPtr.Zero);
 
-		// Act & Assert
+		// Act
 		screamer.RolePlayerKilledAction(mockVictim.Object, mockKiller.Object);
+
+		// Assert
+		mockFactory.Verify(f => f.CreateGameObject("ScreamerScreamImage"), Times.Once);
+		mockResources.Verify(r => r.LoadRoleSprite(ExtremeRoleId.Screamer, It.IsAny<string>()), Times.Once);
 	}
 }
