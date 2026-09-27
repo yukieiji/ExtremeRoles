@@ -4,13 +4,12 @@ using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.OLDS;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable enable
 
@@ -67,7 +66,6 @@ public sealed class ItakoRole :
 			ColorPalette.ItakoSkyBlue,
 			RolePropPresets.OptionalDefault))
 	{
-		this.CanHasAnotherRole = true;
 	}
 
 	public void CreateAbility()
@@ -116,16 +114,10 @@ public sealed class ItakoRole :
 		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 		byte targetPlayerId = this.targetBody.PlayerId;
 
-		bool callerIsCrewmate = this.IsCrewmate();
-		bool targetIsCrewmate = ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) && targetRole.IsCrewmate();
-
-		if (!callerIsCrewmate || !targetIsCrewmate)
-		{
-			Player.RpcUncheckMurderPlayer(localPlayerId, localPlayerId, byte.MaxValue);
-			Player.RpcCleanDeadBody(targetPlayerId);
-			Player.RpcCleanDeadBody(localPlayerId);
-		}
-		else
+		if (ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) && 
+			targetRole.IsCrewmate() &&
+			this.IsCrewmate() &&
+			TryGetExtractInheritedRole(targetRole, out _))
 		{
 			float myTaskRate = Player.GetPlayerTaskGage(PlayerControl.LocalPlayer);
 			if (myTaskRate < this.requiredTaskRate)
@@ -136,6 +128,12 @@ public sealed class ItakoRole :
 			ExtremeRoleManager.RpcReplaceRole(
 				localPlayerId, targetPlayerId,
 				ExtremeRoleManager.ReplaceOperation.ItakoInherit);
+		}
+		else
+		{
+			Player.RpcUncheckMurderPlayer(localPlayerId, localPlayerId, byte.MaxValue);
+			Player.RpcCleanDeadBody(targetPlayerId);
+			Player.RpcCleanDeadBody(localPlayerId);
 		}
 
 		ForceCleanUp();
@@ -183,80 +181,51 @@ public sealed class ItakoRole :
 	{
 		if (ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
 			ExtremeRoleManager.TryGetRole(itakoPlayerId, out var itakoRole) &&
-			itakoRole is MultiAssignRoleBase multiItako)
+			itakoRole is MultiAssignRoleBase multiItako &&
+			TryGetExtractInheritedRole(targetRole, out var inheritedRole))
 		{
-			SingleRoleBase inheritedRole = ExtractInheritedRole(targetRole);
-
-			clonedNewRole(multiItako, itakoPlayerId, inheritedRole);
+			clonedNewRole(multiItako, itakoPlayerId, targetRole);
 		}
 	}
 
-	public static SingleRoleBase ExtractInheritedRole(SingleRoleBase targetRole)
+	public static bool TryGetExtractInheritedRole(SingleRoleBase? targetRole, [NotNullWhen(true)] out SingleRoleBase? role)
 	{
-		if (targetRole is MultiAssignRoleBase multiAssign)
+		if (targetRole is null)
 		{
-			if (multiAssign.OffsetInfo != null)
-			{
-				var cloned = multiAssign.Clone();
-				if (cloned is MultiAssignRoleBase multiCloned)
-				{
-					multiCloned.AnotherRole = null;
-				}
-				return cloned;
-			}
-			if (multiAssign.AnotherRole is MultiAssignRoleBase anotherMulti && anotherMulti.OffsetInfo != null)
-			{
-				var cloned = anotherMulti.Clone();
-				if (cloned is MultiAssignRoleBase multiCloned)
-				{
-					multiCloned.AnotherRole = null;
-				}
-				return cloned;
-			}
-			if (multiAssign.AnotherRole != null && multiAssign is Solo.VanillaRoleWrapper)
-			{
-				return multiAssign.AnotherRole.Clone();
-			}
-			if (multiAssign.AnotherRole != null)
-			{
-				return multiAssign.AnotherRole.Clone();
-			}
+			role = null;
+			return false;
 		}
 
-		return targetRole.Clone();
+		int intedId = (int)targetRole.Core.Id;
+		if (ExtremeRoleManager.NormalRole.TryGetValue((int)intedId, out role) &&
+			role is not null)
+		{
+			return true;
+		}
+		foreach (var combRole in ExtremeRoleManager.CombRole.Values)
+		{
+			role = combRole.GetRole(intedId, AmongUs.GameOptions.RoleTypes.Crewmate);
+			if (role is not null)
+			{
+				return true;
+			}
+		}
+		role = null;
+		return false;
 	}
 
 	private static void clonedNewRole(MultiAssignRoleBase multiItako, byte itakoPlayerId, SingleRoleBase inheritedRole)
 	{
-		var prevAnotherRole = multiItako.AnotherRole;
-		if (prevAnotherRole != null)
-		{
-			if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == itakoPlayerId)
-			{
-				if (prevAnotherRole is IRoleAbility prevAbility && prevAbility.Button != null)
-				{
-					prevAbility.Button.OnMeetingStart();
-				}
-				if (prevAnotherRole is IRoleResetMeeting meetingResetRole)
-				{
-					meetingResetRole.ResetOnMeetingStart();
-				}
-			}
+		IRoleSpecialReset.ResetRole(itakoPlayerId);
 
-			if (Player.TryGetPlayerControl(itakoPlayerId, out var itakoPlayer))
-			{
-				if (prevAnotherRole is IRoleSpecialReset specialResetRole)
-				{
-					specialResetRole.AllReset(itakoPlayer);
-				}
-			}
+		if (inheritedRole is VanillaRoleWrapper vanillaRole)
+		{
+			RoleManager.Instance.SetRole(
+			   Player.GetPlayerControlById(itakoPlayerId),
+			   vanillaRole.VanilaRoleId);
 		}
 
-		SingleRoleBase newRole = inheritedRole.Clone();
-		newRole.SetControlId(multiItako.GameControlId);
-		newRole.Initialize();
-
-		ExtremeRoleManager.SetNewAnothorRole(itakoPlayerId, newRole);
+		var newRole = inheritedRole.Clone();
 
 		if (PlayerControl.LocalPlayer != null &&
 			PlayerControl.LocalPlayer.PlayerId == itakoPlayerId)
@@ -273,6 +242,21 @@ public sealed class ItakoRole :
 			{
 				HudManager.Instance.ReGridButtons();
 			}
+		}
+
+		newRole.SetControlId(multiItako.GameControlId);
+		newRole.Initialize();
+
+		if (newRole is MultiAssignRoleBase multiAssignRole)
+		{
+			multiAssignRole.CanHasAnotherRole = true;
+			ExtremeRoleManager.SetNewRole(itakoPlayerId, newRole);
+			ExtremeRoleManager.SetNewAnothorRole(itakoPlayerId, multiItako);
+		}
+		else
+		{
+			multiItako.CanHasAnotherRole = true;
+			ExtremeRoleManager.SetNewAnothorRole(itakoPlayerId, newRole);
 		}
 	}
 }
