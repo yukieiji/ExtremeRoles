@@ -17,8 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class ItakoRole :
 	MultiAssignRoleBase,
-	IRoleAutoBuildAbility,
-	IRoleResetMeeting
+	IRoleAutoBuildAbility
 {
 	public enum Option
 	{
@@ -180,11 +179,10 @@ public sealed class ItakoRole :
 	public static void InheritTargetRole(byte itakoPlayerId, byte targetPlayerId)
 	{
 		if (ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
-			ExtremeRoleManager.TryGetRole(itakoPlayerId, out var itakoRole) &&
-			itakoRole is MultiAssignRoleBase multiItako &&
+			ExtremeRoleManager.TryGetSafeCastedRole<ItakoRole>(itakoPlayerId, out var itakoRole) &&
 			TryGetExtractInheritedRole(targetRole, out var inheritedRole))
 		{
-			clonedNewRole(multiItako, itakoPlayerId, targetRole);
+			clonedNewRole(itakoRole, itakoPlayerId, targetRole);
 		}
 	}
 
@@ -214,9 +212,16 @@ public sealed class ItakoRole :
 		return false;
 	}
 
-	private static void clonedNewRole(MultiAssignRoleBase multiItako, byte itakoPlayerId, SingleRoleBase inheritedRole)
+	private static void clonedNewRole(ItakoRole multiItako, byte itakoPlayerId, SingleRoleBase inheritedRole)
 	{
+		// まずは全体をリセット
 		IRoleSpecialReset.ResetRole(itakoPlayerId);
+		
+		// そのうえでイタコをアクティブ化
+		multiItako.AnotherRole = null;
+		multiItako.CanHasAnotherRole = false;
+		multiItako.Button?.OnMeetingEnd();
+		multiItako.ResetOnMeetingEnd();
 
 		if (inheritedRole is VanillaRoleWrapper vanillaRole)
 		{
