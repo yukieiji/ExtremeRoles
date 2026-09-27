@@ -1574,4 +1574,33 @@
   <data name="PunisherTaskCompletionKillCoolReduce" xml:space="preserve">
     <value>タスク完了時のキルクール減少量</value>
   </data>
+  <data name="Imitater" xml:space="preserve">
+    <value>イミテイター</value>
+  </data>
+  <data name="ImitaterAbility" xml:space="preserve">
+    <value>求源</value>
+  </data>
+  <data name="ImitaterRange" xml:space="preserve">
+    <value>「求源」を発動できる距離</value>
+  </data>
+  <data name="ImitaterAbilityCoolTime" xml:space="preserve">
+    <value>「求源」のクールタイム</value>
+  </data>
+  <data name="ImitaterAbilityActiveTime" xml:space="preserve">
+    <value>「求源」後キルが発生するまでの時間</value>
+  </data>
+  <data name="ImitaterAbilityCount" xml:space="preserve">
+    <value>「求源」の使用上限</value>
+  </data>
+  <data name="ImitaterIntroDescription" xml:space="preserve">
+    <value>自分を殺したものの能力を模倣しろ</value>
+  </data>
+  <data name="ImitaterShortDescription" xml:space="preserve">
+    <value>自身に対してキル能力を使用したプレイヤーの役職に変化する</value>
+  </data>
+  <data name="ImitaterFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+・自身に対してキル能力が使用された場合、そのキルを無効化し相手の役職に変化する
+・ボタン能力「求源」で対象のキルを暴発させることができる</value>
+  </data>
 </root>

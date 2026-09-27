@@ -1526,4 +1526,33 @@ Victory Condition: Queen's victory (including special victories).</value>
   <data name="PunisherTaskCompletionKillCoolReduce" xml:space="preserve">
     <value>Kill Cooldown Reduction on Task Completion</value>
   </data>
+  <data name="Imitater" xml:space="preserve">
+    <value>Imitater</value>
+  </data>
+  <data name="ImitaterAbility" xml:space="preserve">
+    <value>Kyugen</value>
+  </data>
+  <data name="ImitaterRange" xml:space="preserve">
+    <value>"KYUGEN" : Ability Distance</value>
+  </data>
+  <data name="ImitaterAbilityCoolTime" xml:space="preserve">
+    <value>"KYUGEN" : Ability cooldown</value>
+  </data>
+  <data name="ImitaterAbilityActiveTime" xml:space="preserve">
+    <value>"KYUGEN" : Triggered KILL occurs after</value>
+  </data>
+  <data name="ImitaterAbilityCount" xml:space="preserve">
+    <value>"KYUGEN" : Maximum usage</value>
+  </data>
+  <data name="ImitaterIntroDescription" xml:space="preserve">
+    <value>Imitate the role of the one who tries to kill you</value>
+  </data>
+  <data name="ImitaterShortDescription" xml:space="preserve">
+    <value>Transform into the role of the player who targets you with a kill</value>
+  </data>
+  <data name="ImitaterFullDescription" xml:space="preserve">
+    <value>A NEUTRAL role.
+- Nullifies kill attempts against you and transforms into the attacker's role.
+- Can use "Kyugen" to force a target player's kill.</value>
+  </data>
 </root>
