@@ -239,7 +239,7 @@ public sealed class YoYo :
             this.markerObject = null;
         }
 
-        if (isCreateMarker && AmongUsClient.Instance != null && AmongUsClient.Instance.gameObject != null)
+        if (isCreateMarker)
         {
             this.markerObject = new GameObject("YoYoMark");
             this.markerObject.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
