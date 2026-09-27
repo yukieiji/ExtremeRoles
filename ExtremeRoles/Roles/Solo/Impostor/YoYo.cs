@@ -201,7 +201,9 @@ public sealed class YoYo :
 
     public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
-    public bool UseAbility()
+    public bool UseAbility() => UseAbilityInternal(true);
+
+    public bool UseAbilityInternal(bool isCreateMarker)
     {
         PlayerControl localPlayer = PlayerControl.LocalPlayer;
         if (localPlayer == null)
@@ -224,7 +226,7 @@ public sealed class YoYo :
         else
         {
             Vector2 currentPos = localPlayer.GetTruePosition();
-            this.SetMark(currentPos);
+            this.SetMark(currentPos, isCreateMarker);
             return true;
         }
     }
@@ -242,7 +244,10 @@ public sealed class YoYo :
         if (isCreateMarker)
         {
             this.markerObject = new GameObject("YoYoMark");
-            this.markerObject.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+            if (this.markerObject.transform != null)
+            {
+                this.markerObject.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+            }
 
             SpriteRenderer renderer = this.markerObject.AddComponent<SpriteRenderer>();
             renderer.sprite = UnityObjectLoader.LoadFromResources(ExtremeRoleId.YoYo);
