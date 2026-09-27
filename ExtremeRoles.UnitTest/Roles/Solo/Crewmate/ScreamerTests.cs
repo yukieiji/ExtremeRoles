@@ -6,11 +6,8 @@ using Moq;
 using UnityEngine;
 using Xunit;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
@@ -41,24 +38,13 @@ public class ScreamerTests
 			.Returns((string id, string defaultStr, Il2CppSystem.Object[] parts) => defaultStr ?? id);
 
 		ExtremeRoleManager.GameRole.Clear();
-
-		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
-		for (int i = 0; i < 5; i++)
-		{
-			string path = string.Format(ObjectPath.ScreamerScreamFormat, i);
-			string key = $"{path}115";
-			if (!LruCache<string, Sprite>.TryGetValue(key, out _))
-			{
-				LruCache<string, Sprite>.Add(key, mockSprite.Object);
-			}
-		}
 	}
 
 	[Fact]
 	public void ScreamerAbilityHandler_GetOverrideInfo_SetsExiledPlayerAndText()
 	{
 		// Arrange
-		var handler = new ScreamerAbilityHandler();
+		var handler = new ScreamerAbilityHandler(() => 1.0f);
 		var mockPlayer = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 
 		// Act
@@ -68,17 +54,6 @@ public class ScreamerTests
 		Assert.NotNull(info);
 		Assert.Same(mockPlayer.Object, info.ExiledPlayer);
 		Assert.False(string.IsNullOrEmpty(info.AnimationText));
-	}
-
-	[Fact]
-	public void GetRandomScreamIndex_ReturnsValidRange()
-	{
-		// Act & Assert
-		for (int i = 0; i < 100; i++)
-		{
-			int index = ScreamerAbilityHandler.GetRandomScreamIndex();
-			Assert.True(index >= 0 && index <= 4);
-		}
 	}
 
 	[Fact]
@@ -131,11 +106,12 @@ public class ScreamerTests
 	}
 
 	[Fact]
-	public void CreateScreamEffect_WhenDeadBodyIsNull_ReturnsNullWithoutCreatingGameObject()
+	public void CreateScreamEffect_WhenDeadBodyIsNull_ReturnsEarlyWithoutCreatingGameObjectOrLoadingSprite()
 	{
 		// Arrange
 		var mockFactory = new Mock<IUnityObjectFactory>();
-		var handler = new ScreamerAbilityHandler(mockFactory.Object);
+		var mockResourceProvider = new Mock<IScreamerResourceProvider>();
+		var handler = new ScreamerAbilityHandler(() => 1.0f, mockFactory.Object, mockResourceProvider.Object);
 
 		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
 		mockFindObjects.Setup(x => x.Invoke<DeadBody>())
@@ -143,19 +119,20 @@ public class ScreamerTests
 		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects.Object;
 
 		// Act
-		var result = handler.CreateScreamEffect(5, 1.0f);
+		handler.CreateScreamEffect(5);
 
 		// Assert
-		Assert.Null(result);
 		mockFactory.Verify(f => f.CreateGameObject(It.IsAny<string>()), Times.Never);
+		mockResourceProvider.Verify(r => r.LoadScreamSprite(It.IsAny<int>()), Times.Never);
 	}
 
 	[Fact]
-	public void CreateScreamEffect_WhenDeadBodyExists_CreatesGameObjectAndConfiguresEffect()
+	public void CreateScreamEffect_WhenDeadBodyExists_CreatesGameObjectLoadsSpriteAndConfiguresEffect()
 	{
 		// Arrange
 		var mockFactory = new Mock<IUnityObjectFactory>();
-		var handler = new ScreamerAbilityHandler(mockFactory.Object);
+		var mockResourceProvider = new Mock<IScreamerResourceProvider>();
+		var handler = new ScreamerAbilityHandler(() => 1.5f, mockFactory.Object, mockResourceProvider.Object);
 
 		byte killedPlayerId = 5;
 
@@ -176,6 +153,9 @@ public class ScreamerTests
 			.Returns(new Il2CppReferenceArray<DeadBody>([mockDeadBody.Object]));
 		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects.Object;
 
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+		mockResourceProvider.Setup(r => r.LoadScreamSprite(It.IsAny<int>())).Returns(mockSprite.Object);
+
 		var mockSpriteRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
 		mockSpriteRenderer.SetupProperty(s => s.sprite);
 
@@ -191,17 +171,15 @@ public class ScreamerTests
 			.Returns(mockScreamGO.Object);
 
 		// Act
-		var resultObj = handler.CreateScreamEffect(killedPlayerId, 1.5f);
+		handler.CreateScreamEffect(killedPlayerId);
 
 		// Assert
-		Assert.NotNull(resultObj);
-		Assert.Same(mockScreamGO.Object, resultObj);
-
+		mockResourceProvider.Verify(r => r.LoadScreamSprite(It.IsInRange(0, 4, Moq.Range.Inclusive)), Times.Once);
 		mockFactory.Verify(f => f.CreateGameObject("ScreamerScreamEffect"), Times.Once);
 		mockScreamGO.Verify(g => g.AddComponent<SpriteRenderer>(), Times.Once);
 		mockScreamTransform.Verify(t => t.SetParent(mockBodyTransform.Object, false), Times.Once);
 		Assert.Equal(new Vector3(0f, 0f, -1f), mockScreamTransform.Object.localPosition);
 		Assert.Equal(new Vector3(1.5f, 1.5f, 1f), mockScreamTransform.Object.localScale);
-		Assert.NotNull(mockSpriteRenderer.Object.sprite);
+		Assert.Same(mockSprite.Object, mockSpriteRenderer.Object.sprite);
 	}
 }
