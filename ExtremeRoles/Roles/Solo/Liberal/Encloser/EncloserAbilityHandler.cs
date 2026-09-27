@@ -14,10 +14,12 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 namespace ExtremeRoles.Roles.Solo.Liberal.Encloser;
 
 public sealed class EncloserAbilityHandler(
-	EncloserStatusModel statusModel) : IAbility
+	EncloserStatusModel statusModel,
+	IResourcesProvider? resourcesProvider = null) : IAbility
 {
 	public ExtremeAbilityButton Button { get; set; } = null!;
 	private EncloserStatusModel encloserStatus = statusModel;
+	private readonly IResourcesProvider resourcesProvider = resourcesProvider ?? new DefaultResourcesProvider();
 	private EncloserRole.Mode currentMode => this.modeSwitcher?.Current ?? EncloserRole.Mode.Stake;
 	private GraphicSwitcher<EncloserRole.Mode>? modeSwitcher;
 	private EncloserStakeAbilityHandler? stake;
@@ -25,7 +27,7 @@ public sealed class EncloserAbilityHandler(
 
 	public void CreateAbility()
 	{
-		Sprite bombSprite = UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.Bomb);
+		Sprite bombSprite = this.resourcesProvider.LoadSprite(ObjectPath.Bomb);
 
 		var stakeGraphic = new ButtonGraphic(Tr.GetString("Stake"), bombSprite);
 		var metsuGraphic = new ButtonGraphic(Tr.GetString("Metsu"), bombSprite);

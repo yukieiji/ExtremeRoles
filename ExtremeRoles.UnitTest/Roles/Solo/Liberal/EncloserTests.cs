@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 using UnityEngine;
@@ -58,17 +57,15 @@ public sealed class EncloserTests
 			var mockSprite = new Mock<Sprite>(IntPtr.Zero);
 			LruCache<string, Sprite>.Add(key, mockSprite.Object);
 		}
+	}
 
-		var mockSpriteForAsset = new Mock<Sprite>(IntPtr.Zero);
-		var mockBundle = new Mock<AssetBundle>(IntPtr.Zero);
-		mockBundle.Setup(b => b.LoadAsset(It.IsAny<string>(), It.IsAny<Il2CppSystem.Type>()))
-			.Returns(mockSpriteForAsset.Object);
-
-		var cachedBundleField = typeof(UnityObjectLoader).GetField("cachedBundle", BindingFlags.NonPublic | BindingFlags.Static);
-		if (cachedBundleField?.GetValue(null) is Dictionary<string, AssetBundle> dict)
-		{
-			dict["resources/bomb.asset"] = mockBundle.Object;
-		}
+	private static IResourcesProvider CreateMockResourcesProvider()
+	{
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+		var mockProvider = new Mock<IResourcesProvider>();
+		mockProvider.Setup(p => p.LoadSprite(It.IsAny<string>()))
+			.Returns(mockSprite.Object);
+		return mockProvider.Object;
 	}
 
 	private static void SetupLobbyBehaviourMock()
@@ -181,7 +178,8 @@ public sealed class EncloserTests
 		// Arrange
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var polygon = new EncloserPolygon(factory, il2cppProvider);
+		var resourcesProvider = CreateMockResourcesProvider();
+		var polygon = new EncloserPolygon(factory, il2cppProvider, resourcesProvider);
 
 		// Act
 		polygon.AddStake(CreateVec2(0, 0), 4);
@@ -204,7 +202,8 @@ public sealed class EncloserTests
 		// Arrange
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var polygon = new EncloserPolygon(factory, il2cppProvider);
+		var resourcesProvider = CreateMockResourcesProvider();
+		var polygon = new EncloserPolygon(factory, il2cppProvider, resourcesProvider);
 
 		// Act
 		polygon.AddStake(CreateVec2(0, 0), 4);
@@ -225,7 +224,8 @@ public sealed class EncloserTests
 		// Arrange
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var polygon = new EncloserPolygon(factory, il2cppProvider);
+		var resourcesProvider = CreateMockResourcesProvider();
+		var polygon = new EncloserPolygon(factory, il2cppProvider, resourcesProvider);
 
 		// Act
 		polygon.AddStake(CreateVec2(0, 0), 4);
@@ -246,7 +246,8 @@ public sealed class EncloserTests
 		// Arrange
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var polygon = new EncloserPolygon(factory, il2cppProvider);
+		var resourcesProvider = CreateMockResourcesProvider();
+		var polygon = new EncloserPolygon(factory, il2cppProvider, resourcesProvider);
 
 		polygon.AddStake(CreateVec2(0, 0), 3);
 		polygon.AddStake(CreateVec2(10, 0), 3);
@@ -268,7 +269,8 @@ public sealed class EncloserTests
 		// Arrange
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var status = new EncloserStatusModel(3, 10, 1, factory, il2cppProvider);
+		var resourcesProvider = CreateMockResourcesProvider();
+		var status = new EncloserStatusModel(3, 10, 1, factory, il2cppProvider, resourcesProvider);
 
 		Assert.Equal(0, status.CurStakeCount);
 		Assert.False(status.IsUseMetsu);
@@ -317,7 +319,7 @@ public sealed class EncloserTests
 		var role = new EncloserRole();
 		InitializeRole(role, 1);
 
-		var mockStatus = new EncloserStatusModel(3, 10, 1, new MockUnityObjectFactory(), CreateMockIl2CppObjectProvider());
+		var mockStatus = new EncloserStatusModel(3, 10, 1, new MockUnityObjectFactory(), CreateMockIl2CppObjectProvider(), CreateMockResourcesProvider());
 		typeof(EncloserRole).GetField("status", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(role, mockStatus);
 
 		// Act 1: Place Stake via RPC
@@ -352,7 +354,7 @@ public sealed class EncloserTests
 		var role = new EncloserRole();
 		InitializeRole(role, 1);
 
-		var mockStatus = new EncloserStatusModel(3, 10, 1, new MockUnityObjectFactory(), CreateMockIl2CppObjectProvider());
+		var mockStatus = new EncloserStatusModel(3, 10, 1, new MockUnityObjectFactory(), CreateMockIl2CppObjectProvider(), CreateMockResourcesProvider());
 		typeof(EncloserRole).GetField("status", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(role, mockStatus);
 
 		var reader = new Mock<MessageReader>(IntPtr.Zero);
