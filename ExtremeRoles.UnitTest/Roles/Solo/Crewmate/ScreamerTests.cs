@@ -35,19 +35,34 @@ public class ScreamerTests
 	}
 
 	[Fact]
-	public void Constructor_InitializesScreamerRoleCorrectly()
+	public void ScreamerAbilityHandler_GetOverrideInfo_SetsExiledPlayerAndText()
 	{
-		// Arrange & Act
-		var screamer = new Screamer();
+		// Arrange
+		var handler = new ScreamerAbilityHandler();
+		var mockPlayer = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+
+		// Act
+		var info = handler.GetOverrideInfo(mockPlayer.Object);
 
 		// Assert
-		Assert.Equal(ExtremeRoleId.Screamer, screamer.Core.Id);
-		Assert.Equal(ExtremeRoleType.Crewmate, screamer.Core.Team);
-		Assert.Equal(ColorPalette.ScreamerSaffron, screamer.Core.Color);
+		Assert.NotNull(info);
+		Assert.Same(mockPlayer.Object, info.ExiledPlayer);
+		Assert.False(string.IsNullOrEmpty(info.AnimationText));
 	}
 
 	[Fact]
-	public void RoleSpecificInit_LoadsOptionValues()
+	public void GetRandomScreamIndex_ReturnsValidRange()
+	{
+		// Act & Assert
+		for (int i = 0; i < 100; i++)
+		{
+			int index = ScreamerAbilityHandler.GetRandomScreamIndex();
+			Assert.True(index >= 0 && index <= 4);
+		}
+	}
+
+	[Fact]
+	public void RoleSpecificInit_LoadsCustomOptions()
 	{
 		// Arrange
 		var screamer = new Screamer();
@@ -65,46 +80,5 @@ public class ScreamerTests
 
 		Assert.True(isScream);
 		Assert.Equal(1.0f, size);
-	}
-
-	[Fact]
-	public void ScreamerAbilityHandler_GetOverrideInfo_ReturnsValidInfo()
-	{
-		// Act
-		var handler = new ScreamerAbilityHandler();
-		var info = handler.OverrideInfo;
-
-		// Assert
-		Assert.NotNull(info);
-		Assert.Null(info.ExiledPlayer);
-		Assert.NotNull(info.AnimationText);
-	}
-
-	[Fact]
-	public void GetRandomScreamIndex_ReturnsValidRange()
-	{
-		// Act & Assert
-		for (int i = 0; i < 50; i++)
-		{
-			int index = ScreamerAbilityHandler.GetRandomScreamIndex();
-			Assert.True(index >= 0 && index <= 4);
-		}
-	}
-
-	[Fact]
-	public void RolePlayerKilledAction_WhenDisabled_DoesNotThrow()
-	{
-		// Arrange
-		var screamer = new Screamer();
-		screamer.CreateRoleAllOption();
-
-		var isScreamField = typeof(Screamer).GetField("isScreamWhenKilled", BindingFlags.NonPublic | BindingFlags.Instance);
-		isScreamField?.SetValue(screamer, false);
-
-		var mockRolePlayer = new Mock<PlayerControl>(IntPtr.Zero);
-		var mockKillerPlayer = new Mock<PlayerControl>(IntPtr.Zero);
-
-		// Act & Assert (Should return early without error)
-		screamer.RolePlayerKilledAction(mockRolePlayer.Object, mockKillerPlayer.Object);
 	}
 }

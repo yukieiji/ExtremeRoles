@@ -326,13 +326,13 @@ public static class ExileControllerBeginePatch
 		// 今後複数役職でIExiledAnimationOverrideが出てきた時に考えろ
 		if (exiledPlayerRole.AbilityClass is IExiledAnimationOverrideWhenExiled @override)
 		{
-			info = @override.OverrideInfo;
+			info = @override.GetOverrideInfo(targetExiled);
 		}
 		else if (
 			exiledPlayerRole is MultiAssignRoleBase multiAssignRole &&
 			multiAssignRole.AbilityClass is IExiledAnimationOverrideWhenExiled @multiOverride)
 		{
-			info = @multiOverride.OverrideInfo;
+			info = @multiOverride.GetOverrideInfo(targetExiled);
 		}
 		return info;
 	}

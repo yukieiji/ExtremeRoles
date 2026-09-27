@@ -15,12 +15,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class ScreamerAbilityHandler : IAbility, IExiledAnimationOverrideWhenExiled
 {
-	public OverrideInfo? OverrideInfo => GetOverrideInfo();
-
-	public static OverrideInfo GetOverrideInfo()
+	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo exiledPlayer)
 	{
 		int index = GetRandomScreamIndex();
-		return new OverrideInfo(null, Tr.GetString($"ScreamerExiledOverride{index}"));
+		return new OverrideInfo(exiledPlayer, Tr.GetString($"ScreamerExiledOverride{index}"));
 	}
 
 	public static int GetRandomScreamIndex()
@@ -61,28 +59,23 @@ public sealed class Screamer : SingleRoleBase
 			return;
 		}
 
+		DeadBody? deadBody = GameSystem.GetDeadBody(rolePlayer.PlayerId);
+		if (deadBody == null)
+		{
+			return;
+		}
+
 		int index = ScreamerAbilityHandler.GetRandomScreamIndex();
 		string imagePath = string.Format(ObjectPath.ScreamerScreamFormat, index);
 		Sprite screamSprite = UnityObjectLoader.LoadSpriteFromResources(imagePath);
 
-		DeadBody? deadBody = GameSystem.GetDeadBody(rolePlayer.PlayerId);
 		GameObject screamObj = new GameObject("ScreamerScreamEffect");
 
 		SpriteRenderer renderer = screamObj.AddComponent<SpriteRenderer>();
 		renderer.sprite = screamSprite;
 
-		if (deadBody != null)
-		{
-			screamObj.transform.SetParent(deadBody.transform, false);
-			screamObj.transform.localPosition = new Vector3(0f, 0f, -1f);
-		}
-		else
-		{
-			Vector3 pos = rolePlayer.transform.position;
-			pos.z = pos.y / 1000f - 0.001f;
-			screamObj.transform.position = pos;
-		}
-
+		screamObj.transform.SetParent(deadBody.transform, false);
+		screamObj.transform.localPosition = new Vector3(0f, 0f, -1f);
 		screamObj.transform.localScale = new Vector3(this.screamImageSize, this.screamImageSize, 1f);
 	}
 
