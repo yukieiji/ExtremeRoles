@@ -13,9 +13,9 @@ public sealed class EncloserStatusModel(
 	int stakeCount,
 	int metsuKillMoney,
 	int metsuLimit,
-	IUnityObjectFactory? factory = null,
-	IIl2CppObjectProvider? il2cppProvider = null,
-	IResourcesProvider? resourcesProvider = null
+	IUnityObjectFactory factory,
+	IIl2CppObjectProvider il2cppProvider,
+	IResourcesProvider resourcesProvider
 ) : IStatusModel
 {
 	public int StakeCount { get; } = stakeCount;
