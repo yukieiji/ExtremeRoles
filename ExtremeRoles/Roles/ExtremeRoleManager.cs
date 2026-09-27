@@ -101,6 +101,7 @@ public enum ExtremeRoleId : int
 	CEO,
 	Echo,
 	Inspector,
+	Itako,
 
 	SpecialImpostor,
     Evolver,
@@ -348,6 +349,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.CEO         , new CEO()},
 			{(int)ExtremeRoleId.Echo        , new Echo()},
 			{(int)ExtremeRoleId.Inspector   , new Inspector()},
+			{(int)ExtremeRoleId.Itako       , new ItakoRole()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -464,6 +466,7 @@ public static class ExtremeRoleManager
 		ForceRelaceToChimera,
 		RemoveChimera,
 		RebornJackal,
+		ItakoInherit,
 	}
 
 	private static IRoleProvider? provider;
@@ -666,6 +669,9 @@ public static class ExtremeRoleManager
 				break;
 			case ReplaceOperation.RebornJackal:
 				FurryRole.BecomeToJackal(caller, targetId);
+				break;
+			case ReplaceOperation.ItakoInherit:
+				ItakoRole.InheritTargetRole(caller, targetId);
 				break;
 			default:
                 break;
