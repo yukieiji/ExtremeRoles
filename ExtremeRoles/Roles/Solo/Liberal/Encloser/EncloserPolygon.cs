@@ -14,7 +14,10 @@ using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Roles.Solo.Liberal.Encloser;
 
-public sealed class EncloserPolygon(IUnityObjectFactory? factory = null, IIl2CppObjectProvider? il2cppProvider = null)
+public sealed class EncloserPolygon(
+	IUnityObjectFactory? factory = null,
+	IIl2CppObjectProvider? il2cppProvider = null,
+	IResourcesProvider? resourcesProvider = null)
 {
 	public bool IsCompleted { get; private set; }
 	public int Count => this.stakeObjects.Count;
@@ -22,6 +25,7 @@ public sealed class EncloserPolygon(IUnityObjectFactory? factory = null, IIl2Cpp
 	private readonly List<GameObject> stakeObjects = [];
 	private readonly IUnityObjectFactory factory = factory ?? new DefaultUnityObjectFactory();
 	private readonly IIl2CppObjectProvider il2cppProvider = il2cppProvider ?? new DefaultIl2CppObjectProvider();
+	private readonly IResourcesProvider resourcesProvider = resourcesProvider ?? new DefaultResourcesProvider();
 
 	private LineRenderer? lineRenderer;
 	private MeshFilter? meshFilter;
@@ -30,7 +34,7 @@ public sealed class EncloserPolygon(IUnityObjectFactory? factory = null, IIl2Cpp
 	{
 		var stake = this.factory.CreateGameObject($"EncloserStake_{this.stakeObjects.Count + 1}");
 		var sr = stake.AddComponent<SpriteRenderer>();
-		sr.sprite = UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.Bomb);
+		sr.sprite = this.resourcesProvider.LoadSprite(ObjectPath.Bomb);
 		sr.color = ColorPalette.LiberalColor;
 		stake.transform.position = this.factory.CreateMapPos(pos);
 		this.stakeObjects.Add(stake);

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 using UnityEngine;
@@ -10,7 +9,6 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Liberal.Encloser;
-using HarmonyLib;
 using Hazel;
 using Moq;
 using Xunit;
@@ -18,11 +16,10 @@ using Xunit;
 namespace ExtremeRoles.UnitTest.Roles.Solo.Liberal;
 
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public sealed class EncloserTests : IDisposable
+public sealed class EncloserTests
 {
 	private readonly Mock<AmongUsClient> mockClient;
 	private readonly Mock<PlayerControl> mockLocalPlayer;
-	private static Harmony? harmonyInstance;
 
 	public EncloserTests()
 	{
@@ -60,30 +57,15 @@ public sealed class EncloserTests : IDisposable
 			var mockSprite = new Mock<Sprite>(IntPtr.Zero);
 			LruCache<string, Sprite>.Add(key, mockSprite.Object);
 		}
-
-		if (harmonyInstance == null)
-		{
-			harmonyInstance = new Harmony("com.test.enclosertests");
-			var method = typeof(UnityObjectLoader).GetMethod("LoadFromResources", new[] { typeof(string), typeof(Assembly) })?.MakeGenericMethod(typeof(Sprite));
-			if (method != null)
-			{
-				var prefix = typeof(EncloserTests).GetMethod(nameof(LoadFromResourcesPrefix), BindingFlags.NonPublic | BindingFlags.Static);
-				harmonyInstance.Patch(method, prefix: new HarmonyMethod(prefix));
-			}
-		}
 	}
 
-	public void Dispose()
-	{
-		harmonyInstance?.UnpatchSelf();
-		harmonyInstance = null;
-	}
-
-	private static bool LoadFromResourcesPrefix(string objName, ref Sprite __result)
+	private static IResourcesProvider CreateMockResourcesProvider()
 	{
 		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
-		__result = mockSprite.Object;
-		return false;
+		var mockProvider = new Mock<IResourcesProvider>();
+		mockProvider.Setup(p => p.LoadSprite(It.IsAny<string>()))
+			.Returns(mockSprite.Object);
+		return mockProvider.Object;
 	}
 
 	private static void SetupLobbyBehaviourMock()
@@ -196,7 +178,8 @@ public sealed class EncloserTests : IDisposable
 		// Arrange
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var polygon = new EncloserPolygon(factory, il2cppProvider);
+		var resourcesProvider = CreateMockResourcesProvider();
+		var polygon = new EncloserPolygon(factory, il2cppProvider, resourcesProvider);
 
 		// Act
 		polygon.AddStake(CreateVec2(0, 0), 4);
@@ -219,7 +202,8 @@ public sealed class EncloserTests : IDisposable
 		// Arrange
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var polygon = new EncloserPolygon(factory, il2cppProvider);
+		var resourcesProvider = CreateMockResourcesProvider();
+		var polygon = new EncloserPolygon(factory, il2cppProvider, resourcesProvider);
 
 		// Act
 		polygon.AddStake(CreateVec2(0, 0), 4);
@@ -240,7 +224,8 @@ public sealed class EncloserTests : IDisposable
 		// Arrange
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var polygon = new EncloserPolygon(factory, il2cppProvider);
+		var resourcesProvider = CreateMockResourcesProvider();
+		var polygon = new EncloserPolygon(factory, il2cppProvider, resourcesProvider);
 
 		// Act
 		polygon.AddStake(CreateVec2(0, 0), 4);
@@ -261,7 +246,8 @@ public sealed class EncloserTests : IDisposable
 		// Arrange
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var polygon = new EncloserPolygon(factory, il2cppProvider);
+		var resourcesProvider = CreateMockResourcesProvider();
+		var polygon = new EncloserPolygon(factory, il2cppProvider, resourcesProvider);
 
 		polygon.AddStake(CreateVec2(0, 0), 3);
 		polygon.AddStake(CreateVec2(10, 0), 3);
@@ -283,7 +269,8 @@ public sealed class EncloserTests : IDisposable
 		// Arrange
 		var factory = new MockUnityObjectFactory();
 		var il2cppProvider = CreateMockIl2CppObjectProvider();
-		var status = new EncloserStatusModel(3, 10, 1, factory, il2cppProvider);
+		var resourcesProvider = CreateMockResourcesProvider();
+		var status = new EncloserStatusModel(3, 10, 1, factory, il2cppProvider, resourcesProvider);
 
 		Assert.Equal(0, status.CurStakeCount);
 		Assert.False(status.IsUseMetsu);
@@ -332,7 +319,7 @@ public sealed class EncloserTests : IDisposable
 		var role = new EncloserRole();
 		InitializeRole(role, 1);
 
-		var mockStatus = new EncloserStatusModel(3, 10, 1, new MockUnityObjectFactory(), CreateMockIl2CppObjectProvider());
+		var mockStatus = new EncloserStatusModel(3, 10, 1, new MockUnityObjectFactory(), CreateMockIl2CppObjectProvider(), CreateMockResourcesProvider());
 		typeof(EncloserRole).GetField("status", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(role, mockStatus);
 
 		// Act 1: Place Stake via RPC
@@ -367,7 +354,7 @@ public sealed class EncloserTests : IDisposable
 		var role = new EncloserRole();
 		InitializeRole(role, 1);
 
-		var mockStatus = new EncloserStatusModel(3, 10, 1, new MockUnityObjectFactory(), CreateMockIl2CppObjectProvider());
+		var mockStatus = new EncloserStatusModel(3, 10, 1, new MockUnityObjectFactory(), CreateMockIl2CppObjectProvider(), CreateMockResourcesProvider());
 		typeof(EncloserRole).GetField("status", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(role, mockStatus);
 
 		var reader = new Mock<MessageReader>(IntPtr.Zero);
