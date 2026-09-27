@@ -18,11 +18,13 @@ public sealed class EncloserStakeAbilityHandler(
 
 	public void CleanUp()
 	{
+		Helper.Logging.Debug("cleanUp");
+
 		if (!this.encloserStatus.IsUseMetsu)
 		{
 			return;
 		}
-
+		Helper.Logging.Debug("Switch to metsu");
 		this.switcher.Switch(EncloserRole.Mode.Metsu);
 		this.count.SetAbilityCount(this.encloserStatus.RemainingMetsuCount);
 	}
