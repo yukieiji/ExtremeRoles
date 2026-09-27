@@ -15,81 +15,55 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class ScreamerAbilityHandler(
+	bool isScreamOnKill,
+	float screamImageScale,
 	IUnityObjectFactory unityObjectFactory,
 	IResourcesProvider resourcesProvider) : IAbility, IExiledAnimationOverride
 {
+	private readonly bool isScreamOnKill = isScreamOnKill;
+	private readonly float screamImageScale = screamImageScale;
 	private readonly IUnityObjectFactory unityObjectFactory = unityObjectFactory;
 	private readonly IResourcesProvider resourcesProvider = resourcesProvider;
 
 	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo exiledPlayer)
 	{
-		string text = getNextExileText();
+		int index = getRandomIndex();
+		string text = index == 5 ? Tr.GetString("ScreamerExileRare") : Tr.GetString($"ScreamerExile{index}");
 		return new OverrideInfo(exiledPlayer, text);
 	}
 
-	public void SpawnScreamImage(
-		PlayerControl rolePlayer,
-		float scalePercentage)
+	public void SpawnScreamImage(PlayerControl rolePlayer)
 	{
-		int imageIndex = getNextImageIndex();
-		DeadBody targetBody = findDeadBody(rolePlayer.PlayerId);
+		if (!this.isScreamOnKill)
+		{
+			return;
+		}
+
+		DeadBody? targetBody = GameSystem.GetDeadBody(rolePlayer.PlayerId);
+		if (targetBody == null)
+		{
+			return;
+		}
+
+		int imageIndex = getRandomIndex();
 
 		GameObject screamObj = this.unityObjectFactory.CreateGameObject("ScreamerScreamImage");
-		if (targetBody != null)
-		{
-			screamObj.transform.SetParent(targetBody.transform, false);
-			screamObj.transform.localPosition = Vector3.zero;
-		}
-		else
-		{
-			screamObj.transform.position = rolePlayer.transform.position;
-		}
-
-		float scale = scalePercentage / 100.0f;
-		screamObj.transform.localScale = new Vector3(scale, scale, 1.0f);
+		screamObj.transform.SetParent(targetBody.transform, false);
+		screamObj.transform.localPosition = Vector3.zero;
+		screamObj.transform.localScale = new Vector3(this.screamImageScale, this.screamImageScale, 1.0f);
 
 		SpriteRenderer renderer = screamObj.AddComponent<SpriteRenderer>();
-		if (renderer != null)
-		{
-			renderer.sortingOrder = 100;
+		renderer.sortingOrder = 100;
 
-			string imageName = imageIndex == 5 ? "ScreamerRare" : $"Screamer{imageIndex}";
-			Sprite sprite = this.resourcesProvider.LoadRoleSprite(ExtremeRoleId.Screamer, imageName);
-			if (sprite != null)
-			{
-				renderer.sprite = sprite;
-			}
+		string imageName = imageIndex == 5 ? "ScreamerRare" : $"Screamer{imageIndex}";
+		Sprite sprite = this.resourcesProvider.LoadRoleSprite(ExtremeRoleId.Screamer, imageName);
+		if (sprite != null)
+		{
+			renderer.sprite = sprite;
 		}
 	}
 
-	private static DeadBody findDeadBody(byte playerId)
-	{
-		DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
-		if (array != null)
-		{
-			for (int i = 0; i < array.Length; ++i)
-			{
-				if (array[i].ParentId == playerId)
-				{
-					return array[i];
-				}
-			}
-		}
-		return null!;
-	}
-
-	private static string getNextExileText()
-	{
-		int rand = RandomGenerator.Instance.Next(100);
-		if (rand < 10)
-		{
-			return Tr.GetString("ScreamerExileRare");
-		}
-		int commonIdx = ((rand - 10) % 4) + 1;
-		return Tr.GetString($"ScreamerExile{commonIdx}");
-	}
-
-	private static int getNextImageIndex()
+	private static int getRandomIndex()
 	{
 		int rand = RandomGenerator.Instance.Next(100);
 		if (rand < 10)
@@ -108,8 +82,8 @@ public sealed class Screamer : SingleRoleBase
 		ScreamImageSize,
 	}
 
-	public bool IsScreamOnKill { get; private set; }
-	public float ScreamImageScale { get; private set; }
+	private readonly IUnityObjectFactory unityObjectFactory;
+	private readonly IResourcesProvider resourcesProvider;
 
 	public Screamer() : this(new DefaultUnityObjectFactory(), new DefaultResourcesProvider())
 	{
@@ -122,21 +96,17 @@ public sealed class Screamer : SingleRoleBase
 			ExtremeRoleId.Screamer,
 			ColorPalette.ScreamerColor))
 	{
-		this.AbilityClass = new ScreamerAbilityHandler(unityObjectFactory, resourcesProvider);
+		this.unityObjectFactory = unityObjectFactory;
+		this.resourcesProvider = resourcesProvider;
 	}
 
 	public override void RolePlayerKilledAction(
 		PlayerControl rolePlayer,
 		PlayerControl killerPlayer)
 	{
-		if (!this.IsScreamOnKill)
-		{
-			return;
-		}
-
 		if (this.AbilityClass is ScreamerAbilityHandler handler)
 		{
-			handler.SpawnScreamImage(rolePlayer, this.ScreamImageScale);
+			handler.SpawnScreamImage(rolePlayer);
 		}
 	}
 
@@ -154,9 +124,13 @@ public sealed class Screamer : SingleRoleBase
 
 	protected override void RoleSpecificInit()
 	{
-		this.IsScreamOnKill = this.Loader.GetValue<Option, bool>(
-			Option.IsScreamOnKill);
-		this.ScreamImageScale = this.Loader.GetValue<Option, int>(
-			Option.ScreamImageSize);
+		bool isScreamOnKill = this.Loader.GetValue<Option, bool>(Option.IsScreamOnKill);
+		float scale = this.Loader.GetValue<Option, int>(Option.ScreamImageSize) / 100.0f;
+
+		this.AbilityClass = new ScreamerAbilityHandler(
+			isScreamOnKill,
+			scale,
+			this.unityObjectFactory,
+			this.resourcesProvider);
 	}
 }
