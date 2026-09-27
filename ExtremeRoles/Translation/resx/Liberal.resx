@@ -350,4 +350,19 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="Metsu" xml:space="preserve">
     <value>滅</value>
   </data>
+  <data name="Scapeactor" xml:space="preserve">
+    <value>スケープアクター</value>
+  </data>
+  <data name="ScapeactorFullDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="ScapeactorShortDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="ScapeactorIntroDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="ScapeactorTaskCompletedMoney" xml:space="preserve">
+    <value>資金ボーナス/1タスク完了あたり</value>
+  </data>
 </root>
