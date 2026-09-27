@@ -269,7 +269,7 @@ public sealed class ItakoRole :
 					newAbility.Button.HotKey = KeyCode.C;
 				}
 			}
-			if (HudManager.InstanceExists)
+			if (HudManager.InstanceExists && HudManager.Instance.UseButton != null)
 			{
 				HudManager.Instance.ReGridButtons();
 			}
