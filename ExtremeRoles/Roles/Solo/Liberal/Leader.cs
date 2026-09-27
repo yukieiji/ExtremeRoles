@@ -137,6 +137,8 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	// リベラルがキルしたロジックはリーダーが全部引き受けるため
 	private readonly record struct KillSetting(int KillMoney, int LeadeKillMoney, float LeadeKillBoostDelta);
 
+	private readonly bool canSeeOtherLiberal;
+
 	public Leader(
 		LeaderVisual visual,
 		LeaderCoreOption leaderCoreOption,
@@ -148,6 +150,8 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	{
 		this.visual = visual;
 		this.status = status;
+
+		this.canSeeOtherLiberal = option.CanSeeOtherLiberal;
 
 		this.abilityHandler = new LeaderAbilityHandler(leaderCoreOption, status);
 		this.revive = new ReviveSetting(leaderCoreOption.IsAutoExit, leaderCoreOption.IsAutoRevive);
@@ -190,7 +194,7 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		{
 			return GetRoleTag();
 		}
-		if (targetRole.IsLiberal())
+		if (this.canSeeOtherLiberal && targetRole.IsLiberal())
 		{
 			return $" {targetRole.GetRoleTag()}";
 		}
