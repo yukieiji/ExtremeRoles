@@ -34,7 +34,9 @@ public sealed class EncloserAbilityHandler(
 			stakeGraphic.Text,
 			stakeGraphic.Img,
 			this.IsAbilityUse,
-			this.UseAbility);
+			this.UseAbility,
+			this.AbilityOff,
+			() => { });
 
 		this.Button.SetLabelToCrewmate();
 
