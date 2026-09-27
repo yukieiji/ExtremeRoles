@@ -16,10 +16,11 @@ public sealed class Scapeactor : SingleRoleBase, IRoleUpdate
 	public enum ScapeactorOption
 	{
 		TaskCompletedMoney,
+		ExiledMoney
 	}
 
 	private DoveCommonAbilityHandler? handler;
-	private float winMoney;
+	private int exiledMoney;
 
 	public Scapeactor() : base(
 		RoleArgs.BuildLiberalDove(ExtremeRoleId.Scapeactor))
@@ -38,10 +39,14 @@ public sealed class Scapeactor : SingleRoleBase, IRoleUpdate
 	{
 		this.handler?.ClearTask(rolePlayer);
 
-		LiberalMoneyBankSystem.RpcUpdateSystem(
-			rolePlayer.PlayerId,
-			LiberalMoneyHistory.Reason.AddOnExile,
-			this.winMoney);
+		if (AmongUsClient.Instance != null &&
+			AmongUsClient.Instance.AmHost)
+		{
+			LiberalMoneyBankSystem.RpcUpdateSystem(
+				rolePlayer.PlayerId,
+				LiberalMoneyHistory.Reason.AddOnExile,
+				this.exiledMoney);
+		}
 	}
 
 	public override void RolePlayerKilledAction(PlayerControl rolePlayer, PlayerControl killerPlayer)
@@ -54,6 +59,9 @@ public sealed class Scapeactor : SingleRoleBase, IRoleUpdate
 		factory.CreateFloatOption(
 			ScapeactorOption.TaskCompletedMoney,
 			5f, 0.1f, 1000f, 0.1f);
+		factory.CreateIntOption(
+			ScapeactorOption.ExiledMoney,
+			50, 1, 1000, 1);
 	}
 
 	protected override void RoleSpecificInit()
@@ -64,7 +72,7 @@ public sealed class Scapeactor : SingleRoleBase, IRoleUpdate
 		LiberalSettingOverrider.OverrideDefault(this, liberalOption);
 
 		float taskDelta = loader.GetValue<ScapeactorOption, float>(ScapeactorOption.TaskCompletedMoney);
-		this.winMoney = liberalOption.GetValue<LiberalGlobalSetting, int>(LiberalGlobalSetting.WinMoney);
+		this.exiledMoney = loader.GetValue<ScapeactorOption, int>(ScapeactorOption.ExiledMoney);
 		this.handler = new DoveCommonAbilityHandler(taskDelta, 0.0f);
 	}
 }
