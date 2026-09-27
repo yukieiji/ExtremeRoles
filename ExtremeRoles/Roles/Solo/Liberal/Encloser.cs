@@ -21,11 +21,11 @@ using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 #nullable enable
 
@@ -297,76 +297,12 @@ public sealed class EncloserAbilityHandler : IAbility
 	}
 
 	public bool UseAbility()
-	{
-		if (this.currentMode == Encloser.Mode.Stake)
-		{
-			Vector2 pos = PlayerControl.LocalPlayer.GetTruePosition();
-			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EncloserOps))
-			{
-				caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
-				caller.WriteByte((byte)Encloser.RpcOpsType.PlaceStake);
-				caller.WriteFloat(pos.x);
-				caller.WriteFloat(pos.y);
-			}
-
-			HandlePlaceStake(PlayerControl.LocalPlayer.PlayerId, pos);
-			return true;
-		}
-		else if (this.currentMode == Encloser.Mode.Metsu)
-		{
-			byte encloserPlayerId = PlayerControl.LocalPlayer.PlayerId;
-			int nonLiberalKills = 0;
-
-			foreach (var pc in PlayerCache.AllPlayerControl)
-			{
-				if (pc.IsInValid())
-				{
-					continue;
-				}
-
-				Vector2 pPos = pc.GetTruePosition();
-
-				if (!this.polygon.IsPointInside(pPos) ||
-					!ExtremeRoleManager.TryGetRole(pc.PlayerId, out var targetRole) ||
-					targetRole.Core.Id is ExtremeRoleId.Leader ||
-					(
-						targetRole.AbilityClass is IInvincible invincible &&
-						invincible.IsBlockKillFrom(encloserPlayerId)
-					))
-				{
-					continue;
-				}
-
-				if (!targetRole.IsLiberal())
-				{
-					nonLiberalKills++;
-				}
-
-				Player.RpcUncheckMurderPlayer(encloserPlayerId, pc.PlayerId, byte.MinValue);
-			}
-
-			if (nonLiberalKills > 0)
-			{
-				float totalMoney = nonLiberalKills * this.metsuKillMoney;
-				LiberalMoneyBankSystem.RpcUpdateSystem(
-					encloserPlayerId,
-					LiberalMoneyHistory.Reason.AddOnKill,
-					totalMoney,
-					0.0f);
-			}
-
-			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EncloserOps))
-			{
-				caller.WriteByte(encloserPlayerId);
-				caller.WriteByte((byte)Encloser.RpcOpsType.UseMetsu);
-			}
-
-			HandleUseMetsuRpc(encloserPlayerId);
-			return true;
-		}
-
-		return false;
-	}
+		=> this.currentMode switch
+		{ 
+			Encloser.Mode.Stake => invokeStake(),
+			Encloser.Mode.Metsu => invokeMetu(),
+			_ => false
+		};
 
 	public bool IsAbilityUse()
 	{
@@ -378,58 +314,148 @@ public sealed class EncloserAbilityHandler : IAbility
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		bool isCommonUse = localPlayer != null && localPlayer.IsAlive() && localPlayer.CanMove;
 
-		if (this.currentMode == Encloser.Mode.Stake)
+		return this.currentMode switch
 		{
-			return isCommonUse && this.polygon.Count < this.stakeCount;
-		}
-		else if (this.currentMode == Encloser.Mode.Metsu)
-		{
-			return isCommonUse && this.polygon.IsCompleted;
-		}
+			Encloser.Mode.Stake => isCommonUse && this.polygon.Count < this.stakeCount,
+			Encloser.Mode.Metsu => isCommonUse && this.polygon.IsCompleted,
+			_ => false
+		};
+	}
 
-		return false;
+	public void AbilityOff()
+	{
+		switch (this.currentMode)
+		{
+			case Encloser.Mode.Stake:
+				if (this.polygon.IsCompleted)
+				{
+					swithModeToMetsu();
+				}
+				break;
+			case Encloser.Mode.Metsu:
+				swithModeToStake();
+				break;
+			default:
+				break;
+		}
 	}
 
 	public void HandlePlaceStake(byte encloserPlayerId, Vector2 pos)
 	{
 		this.polygon.AddStake(pos, this.stakeCount);
-
-		var localPlayer = PlayerControl.LocalPlayer;
-		bool isEncloser = localPlayer != null && localPlayer.PlayerId == encloserPlayerId;
-		if (this.polygon.IsCompleted && isEncloser)
-		{
-			this.modeSwitcher?.Switch(Encloser.Mode.Metsu);
-		}
-
-		this.polygon.UpdateVisuals(isEncloser);
+		this.polygon.UpdateVisuals(isLocalPlayerIsEncloser(encloserPlayerId));
 	}
 
 	public void HandleUseMetsuRpc(byte encloserPlayerId)
 	{
 		this.remainingMetsuCount--;
 		this.polygon.Clear();
-
-		if (PlayerControl.LocalPlayer == null || PlayerControl.LocalPlayer.PlayerId != encloserPlayerId)
-		{
-			return;
-		}
-
-		if (this.remainingMetsuCount > 0)
-		{
-			this.modeSwitcher?.Switch(Encloser.Mode.Stake);
-		}
-
-		if (this.Button != null && this.Button.Behavior != null)
-		{
-			this.Button.Behavior.SetCoolTime(this.abilityCoolTime);
-		}
 	}
 
 	public void UpdateVisuals(byte encloserPlayerId)
 	{
-		bool isLocalPlayerEncloser = PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == encloserPlayerId;
-		this.polygon.UpdateVisuals(isLocalPlayerEncloser);
+		this.polygon.UpdateVisuals(isLocalPlayerIsEncloser(encloserPlayerId));
 	}
+
+	private bool invokeMetu()
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		byte encloserPlayerId = localPlayer.PlayerId;
+
+		int nonLiberalKills = 0;
+
+		foreach (var pc in PlayerCache.AllPlayerControl)
+		{
+			if (pc.IsInValid())
+			{
+				continue;
+			}
+
+			Vector2 pPos = pc.GetTruePosition();
+
+			if (!this.polygon.IsPointInside(pPos) ||
+				!ExtremeRoleManager.TryGetRole(pc.PlayerId, out var targetRole) ||
+				targetRole.Core.Id is ExtremeRoleId.Leader ||
+				(
+					targetRole.AbilityClass is IInvincible invincible &&
+					invincible.IsBlockKillFrom(encloserPlayerId)
+				))
+			{
+				continue;
+			}
+
+			if (!targetRole.IsLiberal())
+			{
+				nonLiberalKills++;
+			}
+
+			Player.RpcUncheckMurderPlayer(encloserPlayerId, pc.PlayerId, byte.MinValue);
+		}
+
+		if (nonLiberalKills > 0)
+		{
+			float totalMoney = nonLiberalKills * this.metsuKillMoney;
+			LiberalMoneyBankSystem.RpcUpdateSystem(
+				encloserPlayerId,
+				LiberalMoneyHistory.Reason.AddOnKill,
+				totalMoney,
+				0.0f);
+		}
+
+		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EncloserOps))
+		{
+			caller.WriteByte(encloserPlayerId);
+			caller.WriteByte((byte)Encloser.RpcOpsType.UseMetsu);
+		}
+		HandleUseMetsuRpc(encloserPlayerId);
+		return true;
+	}
+
+	private bool invokeStake()
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		byte encloserPlayerId = localPlayer.PlayerId;
+
+		Vector2 pos = localPlayer.GetTruePosition();
+		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.EncloserOps))
+		{
+			caller.WriteByte(encloserPlayerId);
+			caller.WriteByte((byte)Encloser.RpcOpsType.PlaceStake);
+			caller.WriteFloat(pos.x);
+			caller.WriteFloat(pos.y);
+		}
+
+		HandlePlaceStake(encloserPlayerId, pos);
+		return true;
+	}
+
+	private void swithModeToMetsu()
+	{
+		this.modeSwitcher?.Switch(Encloser.Mode.Metsu);
+		if (this.Button.Behavior is ICountBehavior countBehavior)
+		{
+			countBehavior.SetAbilityCount(this.remainingMetsuCount);
+		}
+	}
+
+	private void swithModeToStake()
+	{
+		if (this.Button.Behavior is not ICountBehavior count)
+		{
+			return;
+		}
+
+		this.remainingMetsuCount = count.AbilityCount;
+		if (this.remainingMetsuCount <= 0)
+		{
+			return;
+		}
+		this.modeSwitcher?.Switch(Encloser.Mode.Stake);
+		count.SetAbilityCount(this.stakeCount);
+	}
+
+	private static bool isLocalPlayerIsEncloser(byte encloserPlayerId)
+		=> PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == encloserPlayerId;
 }
 
 public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleResetMeeting
@@ -511,9 +537,7 @@ public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateIntOption(
-			Option.StakeCount,
-			3, 3, 10, 1);
+		IRoleAbility.CreateAbilityCountOption(factory, 3, 3, 10, 1);
 		factory.CreateIntOption(
 			Option.MetsuLimit,
 			1, 1, 10, 1);
@@ -531,7 +555,7 @@ public sealed class Encloser : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 		var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
 		LiberalSettingOverrider.OverrideDefault(this, liberalOption);
 
-		int stakeCount = loader.GetValue<Option, int>(Option.StakeCount);
+		int stakeCount = loader.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount);
 		int metsuLimit = loader.GetValue<Option, int>(Option.MetsuLimit);
 		float abilityCoolTime = loader.GetValue<Option, float>(Option.AbilityCoolTime);
 		int metsuKillMoney = loader.GetValue<Option, int>(Option.MetsuKillMoney);
