@@ -1,5 +1,6 @@
 using System;
 using AmongUs.GameOptions;
+using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
 using Hazel;
@@ -105,12 +106,12 @@ public sealed class YoYoTests
         var role = new YoYo();
         InitializeRole(role);
 
-        bool saveResult = role.UseAbility();
+        bool saveResult = role.UseAbilityInternal(isCreateMarker: false);
         Assert.True(saveResult);
         Assert.NotNull(role.SavedPosition);
         Assert.Equal(new Vector2(10f, 20f), role.SavedPosition!.Value);
 
-        bool teleportResult = role.UseAbility();
+        bool teleportResult = role.UseAbilityInternal(isCreateMarker: false);
         Assert.True(teleportResult);
         Assert.Null(role.SavedPosition);
     }
@@ -126,5 +127,65 @@ public sealed class YoYoTests
 
         role.ResetOnMeetingStart();
         Assert.Null(role.SavedPosition);
+    }
+
+    [Fact]
+    public void Behavior_TryUseAbility_WhenIsReduceAbilityCountFalse_DoesNotReduceCount()
+    {
+        bool abilityExecuted = false;
+        var behavior = new YoYo.YoYoAbilityBehavior(
+            "Test", null!,
+            () => true,
+            () => { abilityExecuted = true; return true; });
+
+        behavior.SetAbilityCount(3);
+        behavior.IsReduceAbilityCount = false;
+
+        bool result = behavior.TryUseAbility(0f, AbilityState.Ready, out var newState);
+
+        Assert.True(result);
+        Assert.True(abilityExecuted);
+        Assert.Equal(3, behavior.AbilityCount);
+        Assert.Equal(AbilityState.CoolDown, newState);
+    }
+
+    [Fact]
+    public void Behavior_TryUseAbility_WhenIsReduceAbilityCountTrue_ReducesCount()
+    {
+        bool abilityExecuted = false;
+        var behavior = new YoYo.YoYoAbilityBehavior(
+            "Test", null!,
+            () => true,
+            () => { abilityExecuted = true; return true; });
+
+        behavior.SetAbilityCount(3);
+        behavior.IsReduceAbilityCount = true;
+
+        bool result = behavior.TryUseAbility(0f, AbilityState.Ready, out var newState);
+
+        Assert.True(result);
+        Assert.True(abilityExecuted);
+        Assert.Equal(2, behavior.AbilityCount);
+        Assert.False(behavior.IsReduceAbilityCount);
+        Assert.Equal(AbilityState.CoolDown, newState);
+    }
+
+    [Fact]
+    public void Behavior_Update_ReturnsExpectedState()
+    {
+        var behavior = new YoYo.YoYoAbilityBehavior(
+            "Test", null!,
+            () => true,
+            () => true);
+
+        behavior.SetAbilityCount(1);
+        // Updating after SetAbilityCount resolves one-time isUpdate flag to CoolDown
+        Assert.Equal(AbilityState.CoolDown, behavior.Update(AbilityState.Ready));
+        // Subsequent update returns curState when count > 0
+        Assert.Equal(AbilityState.Ready, behavior.Update(AbilityState.Ready));
+
+        behavior.SetAbilityCount(0);
+        behavior.Update(AbilityState.Ready); // consume isUpdate flag
+        Assert.Equal(AbilityState.None, behavior.Update(AbilityState.Ready));
     }
 }
