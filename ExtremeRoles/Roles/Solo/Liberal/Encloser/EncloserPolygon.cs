@@ -15,17 +15,17 @@ using ExtremeRoles.Resources;
 namespace ExtremeRoles.Roles.Solo.Liberal.Encloser;
 
 public sealed class EncloserPolygon(
-	IUnityObjectFactory? factory = null,
-	IIl2CppObjectProvider? il2cppProvider = null,
-	IResourcesProvider? resourcesProvider = null)
+	IUnityObjectFactory factory ,
+	IIl2CppObjectProvider il2cppProvider,
+	IResourcesProvider resourcesProvider)
 {
 	public bool IsCompleted { get; private set; }
 	public int Count => this.stakeObjects.Count;
 
 	private readonly List<GameObject> stakeObjects = [];
-	private readonly IUnityObjectFactory factory = factory ?? new DefaultUnityObjectFactory();
-	private readonly IIl2CppObjectProvider il2cppProvider = il2cppProvider ?? new DefaultIl2CppObjectProvider();
-	private readonly IResourcesProvider resourcesProvider = resourcesProvider ?? new DefaultResourcesProvider();
+	private readonly IUnityObjectFactory factory = factory;
+	private readonly IIl2CppObjectProvider il2cppProvider = il2cppProvider;
+	private readonly IResourcesProvider resourcesProvider = resourcesProvider;
 
 	private LineRenderer? lineRenderer;
 	private MeshFilter? meshFilter;

@@ -8,6 +8,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Core;
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Liberal.Encloser;
@@ -120,8 +123,12 @@ public sealed class EncloserRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleU
 		int metsuLimit = loader.GetValue<Option, int>(Option.MetsuLimit);
 		int metsuKillMoney = loader.GetValue<Option, int>(Option.MetsuKillMoney);
 
-		this.status = new EncloserStatusModel(stakeCount, metsuKillMoney, metsuLimit);
-		this.abilityHandler = new EncloserAbilityHandler(this.status);
+		var resourcesProvider = new DefaultResourcesProvider();
+		var unityObjectFactory = new DefaultUnityObjectFactory();
+		var il2CppObjectProvider = new DefaultIl2CppObjectProvider();
+
+		this.status = new EncloserStatusModel(stakeCount, metsuKillMoney, metsuLimit, unityObjectFactory, il2CppObjectProvider, resourcesProvider);
+		this.abilityHandler = new EncloserAbilityHandler(this.status, resourcesProvider);
 
 		this.AbilityClass = this.abilityHandler;
 	}

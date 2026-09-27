@@ -15,11 +15,11 @@ namespace ExtremeRoles.Roles.Solo.Liberal.Encloser;
 
 public sealed class EncloserAbilityHandler(
 	EncloserStatusModel statusModel,
-	IResourcesProvider? resourcesProvider = null) : IAbility
+	IResourcesProvider resourcesProvider) : IAbility
 {
 	public ExtremeAbilityButton Button { get; set; } = null!;
 	private EncloserStatusModel encloserStatus = statusModel;
-	private readonly IResourcesProvider resourcesProvider = resourcesProvider ?? new DefaultResourcesProvider();
+	private readonly IResourcesProvider resourcesProvider = resourcesProvider;
 	private EncloserRole.Mode currentMode => this.modeSwitcher?.Current ?? EncloserRole.Mode.Stake;
 	private GraphicSwitcher<EncloserRole.Mode>? modeSwitcher;
 	private EncloserStakeAbilityHandler? stake;
