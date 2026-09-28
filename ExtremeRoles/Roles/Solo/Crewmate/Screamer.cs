@@ -48,7 +48,7 @@ public sealed class ScreamerAbilityHandler(
 		string formattedText = insertRandomLineBreaks(rawText);
 
 		// Rich text effect tags
-		string[] effectTags = ["b", "i", "u", "s", "mark", "uppercase", "lowercase", "smallcaps"];
+		string[] effectTags = ["s", "mark", "uppercase", "lowercase", "smallcaps"];
 		int index = RandomGenerator.Instance.Next(3);
 		if (index == 2)
 		{
@@ -119,7 +119,7 @@ public sealed class ScreamerAbilityHandler(
 	private static int getRandomIndex()
 	{
 		int rand = RandomGenerator.Instance.Next(100);
-		return rand < 5 ? 0 : RandomGenerator.Instance.Next(1, MaxExileIndex + 1);
+		return rand < 5 ? 0 : 1 + ((rand - 5) % MaxExileIndex);
 	}
 }
 
