@@ -99,6 +99,13 @@ public class ScreamerTests
 	}
 
 	[Fact]
+	public void ScreamerAbilityHandler_MaxExileIndex_IsFour()
+	{
+		// Assert
+		Assert.Equal(4, ScreamerAbilityHandler.MaxExileIndex);
+	}
+
+	[Fact]
 	public void ScreamerAbilityHandler_GetOverrideInfo_ReturnsExileInfoWithPlayer()
 	{
 		// Arrange
@@ -115,6 +122,27 @@ public class ScreamerTests
 		Assert.Equal(mockExiledPlayer.Object, overrideInfo!.ExiledPlayer);
 		Assert.NotNull(overrideInfo.AnimationText);
 		Assert.NotEmpty(overrideInfo.AnimationText);
+	}
+
+	[Fact]
+	public void ScreamerAbilityHandler_GetOverrideInfo_ReturnsValidIndicesWithinRange()
+	{
+		// Arrange
+		var mockFactory = new Mock<IUnityObjectFactory>();
+		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object);
+		var mockExiledPlayer = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+
+		// Act & Assert - test 100 random calls to verify returned index range 0..MaxExileIndex
+		for (int i = 0; i < 100; i++)
+		{
+			var overrideInfo = handler.GetOverrideInfo(mockExiledPlayer.Object);
+			Assert.NotNull(overrideInfo?.AnimationText);
+			Assert.StartsWith("ScreamerExile", overrideInfo!.AnimationText);
+
+			string indexStr = overrideInfo.AnimationText.Replace("ScreamerExile", "");
+			Assert.True(int.TryParse(indexStr, out int index));
+			Assert.InRange(index, 0, ScreamerAbilityHandler.MaxExileIndex);
+		}
 	}
 
 	[Fact]
