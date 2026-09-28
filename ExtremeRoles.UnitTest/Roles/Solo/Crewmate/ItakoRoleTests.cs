@@ -181,7 +181,7 @@ public class ItakoRoleTests
 
 		// Act 2: Overwrite with Bakary
 		byte newTargetId = 3;
-		var bakery = new Bakary();
+		var bakery = new ExtremeRoles.Roles.Solo.Crewmate.Bakary();
 		bakery.CreateRoleAllOption();
 		bakery.Initialize();
 		ExtremeRoleManager.GameRole[newTargetId] = bakery;

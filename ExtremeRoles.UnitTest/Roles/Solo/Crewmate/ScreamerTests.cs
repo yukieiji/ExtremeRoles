@@ -103,8 +103,7 @@ public class ScreamerTests
 	{
 		// Arrange
 		var mockFactory = new Mock<IUnityObjectFactory>();
-		var mockResources = new Mock<IResourcesProvider>();
-		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object, mockResources.Object);
+		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object);
 
 		var mockExiledPlayer = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 
@@ -123,10 +122,9 @@ public class ScreamerTests
 	{
 		// Arrange
 		var mockFactory = new Mock<IUnityObjectFactory>();
-		var mockResources = new Mock<IResourcesProvider>();
-		var handler = new ScreamerAbilityHandler(false, 1.0f, mockFactory.Object, mockResources.Object);
+		var handler = new ScreamerAbilityHandler(false, 1.0f, mockFactory.Object);
 
-		var screamer = new Screamer(mockFactory.Object, mockResources.Object);
+		var screamer = new Screamer();
 		screamer.CreateRoleAllOption();
 
 		var abilityClassProperty = typeof(SingleRoleBase).GetProperty("AbilityClass", BindingFlags.Public | BindingFlags.Instance);
@@ -147,10 +145,9 @@ public class ScreamerTests
 	{
 		// Arrange
 		var mockFactory = new Mock<IUnityObjectFactory>();
-		var mockResources = new Mock<IResourcesProvider>();
-		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object, mockResources.Object);
+		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object);
 
-		var screamer = new Screamer(mockFactory.Object, mockResources.Object);
+		var screamer = new Screamer();
 		screamer.CreateRoleAllOption();
 
 		var abilityClassProperty = typeof(SingleRoleBase).GetProperty("AbilityClass", BindingFlags.Public | BindingFlags.Instance);
@@ -169,7 +166,7 @@ public class ScreamerTests
 	}
 
 	[Fact]
-	public void RolePlayerKilledAction_WhenTargetBodyExists_SpawnsScreamImage()
+	public void RolePlayerKilledAction_WhenTargetBodyExists_SpawnsScreamText()
 	{
 		// Arrange
 		var mockDeadBody = new Mock<DeadBody>(IntPtr.Zero);
@@ -188,19 +185,17 @@ public class ScreamerTests
 			.Returns(new Il2CppReferenceArray<DeadBody>(new DeadBody[] { mockDeadBody.Object }));
 		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects3.Object;
 
-		var mockRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+		var mockTextMesh = new Mock<TMPro.TextMeshPro>(IntPtr.Zero);
 		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
 		mockGameObject.SetupGet(g => g.transform).Returns(mockTransform.Object);
-		mockGameObject.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockRenderer.Object);
+		mockGameObject.Setup(g => g.AddComponent<TMPro.TextMeshPro>()).Returns(mockTextMesh.Object);
 
 		var mockFactory = new Mock<IUnityObjectFactory>();
 		mockFactory.Setup(f => f.CreateGameObject(It.IsAny<string>())).Returns(mockGameObject.Object);
 
-		var mockResources = new Mock<IResourcesProvider>();
+		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object);
 
-		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object, mockResources.Object);
-
-		var screamer = new Screamer(mockFactory.Object, mockResources.Object);
+		var screamer = new Screamer();
 		screamer.CreateRoleAllOption();
 
 		var abilityClassProperty = typeof(SingleRoleBase).GetProperty("AbilityClass", BindingFlags.Public | BindingFlags.Instance);
@@ -215,7 +210,7 @@ public class ScreamerTests
 		screamer.RolePlayerKilledAction(mockVictim.Object, mockKiller.Object);
 
 		// Assert
-		mockFactory.Verify(f => f.CreateGameObject("ScreamerScreamImage"), Times.Once);
-		mockResources.Verify(r => r.LoadRoleSprite(ExtremeRoleId.Screamer, It.IsAny<string>()), Times.Once);
+		mockFactory.Verify(f => f.CreateGameObject("ScreamerScreamText"), Times.Once);
+		mockTextMesh.VerifySet(t => t.text = It.IsAny<string>(), Times.Once);
 	}
 }
