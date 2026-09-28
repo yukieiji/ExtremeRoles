@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using AmongUs.GameOptions;
 using Hazel;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
 using UnityEngine;
 using Xunit;
@@ -49,6 +50,11 @@ public class ScreamerTests
 		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
 			.Returns((string id, string defaultStr, Il2CppSystem.Object[] parts) => defaultStr ?? id);
+
+		var mockFindObjects3 = new Mock<MockObjectFindObjectsOfTypeHelper3>();
+		mockFindObjects3.Setup(m => m.Invoke<DeadBody>())
+			.Returns(new Il2CppReferenceArray<DeadBody>(IntPtr.Zero));
+		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects3.Object;
 	}
 
 	private static void SetupGameOptionsManagerMock()
@@ -123,8 +129,8 @@ public class ScreamerTests
 		var screamer = new Screamer(mockFactory.Object, mockResources.Object);
 		screamer.CreateRoleAllOption();
 
-		var abilityClassField = typeof(SingleRoleBase).GetProperty("AbilityClass", BindingFlags.Public | BindingFlags.Instance);
-		abilityClassField?.SetValue(screamer, handler);
+		var abilityClassProperty = typeof(SingleRoleBase).GetProperty("AbilityClass", BindingFlags.Public | BindingFlags.Instance);
+		abilityClassProperty?.SetValue(screamer, handler);
 
 		var mockVictim = new Mock<PlayerControl>(IntPtr.Zero);
 		var mockKiller = new Mock<PlayerControl>(IntPtr.Zero);
@@ -147,8 +153,8 @@ public class ScreamerTests
 		var screamer = new Screamer(mockFactory.Object, mockResources.Object);
 		screamer.CreateRoleAllOption();
 
-		var abilityClassField = typeof(SingleRoleBase).GetProperty("AbilityClass", BindingFlags.Public | BindingFlags.Instance);
-		abilityClassField?.SetValue(screamer, handler);
+		var abilityClassProperty = typeof(SingleRoleBase).GetProperty("AbilityClass", BindingFlags.Public | BindingFlags.Instance);
+		abilityClassProperty?.SetValue(screamer, handler);
 
 		var mockVictim = new Mock<PlayerControl>(IntPtr.Zero);
 		mockVictim.SetupGet(p => p.PlayerId).Returns((byte)99);
@@ -160,5 +166,56 @@ public class ScreamerTests
 
 		// Assert
 		mockFactory.Verify(f => f.CreateGameObject(It.IsAny<string>()), Times.Never);
+	}
+
+	[Fact]
+	public void RolePlayerKilledAction_WhenTargetBodyExists_SpawnsScreamImage()
+	{
+		// Arrange
+		var mockDeadBody = new Mock<DeadBody>(IntPtr.Zero);
+		mockDeadBody.SetupGet(b => b.ParentId).Returns((byte)1);
+
+		var mockTransform = new Mock<Transform>(IntPtr.Zero);
+		mockDeadBody.SetupGet(b => b.transform).Returns(mockTransform.Object);
+
+		var mockGameData = MockSetupHelper.SetupGameDataMock();
+		var mockPlayerInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		mockPlayerInfo.SetupGet(p => p.PlayerId).Returns((byte)1);
+		mockGameData.Setup(g => g.GetPlayerById((byte)1)).Returns(mockPlayerInfo.Object);
+
+		var mockFindObjects3 = new Mock<MockObjectFindObjectsOfTypeHelper3>();
+		mockFindObjects3.Setup(m => m.Invoke<DeadBody>())
+			.Returns(new Il2CppReferenceArray<DeadBody>(new DeadBody[] { mockDeadBody.Object }));
+		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects3.Object;
+
+		var mockRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
+		mockGameObject.SetupGet(g => g.transform).Returns(mockTransform.Object);
+		mockGameObject.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockRenderer.Object);
+
+		var mockFactory = new Mock<IUnityObjectFactory>();
+		mockFactory.Setup(f => f.CreateGameObject(It.IsAny<string>())).Returns(mockGameObject.Object);
+
+		var mockResources = new Mock<IResourcesProvider>();
+
+		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object, mockResources.Object);
+
+		var screamer = new Screamer(mockFactory.Object, mockResources.Object);
+		screamer.CreateRoleAllOption();
+
+		var abilityClassProperty = typeof(SingleRoleBase).GetProperty("AbilityClass", BindingFlags.Public | BindingFlags.Instance);
+		abilityClassProperty?.SetValue(screamer, handler);
+
+		var mockVictim = new Mock<PlayerControl>(IntPtr.Zero);
+		mockVictim.SetupGet(p => p.PlayerId).Returns((byte)1);
+
+		var mockKiller = new Mock<PlayerControl>(IntPtr.Zero);
+
+		// Act
+		screamer.RolePlayerKilledAction(mockVictim.Object, mockKiller.Object);
+
+		// Assert
+		mockFactory.Verify(f => f.CreateGameObject("ScreamerScreamImage"), Times.Once);
+		mockResources.Verify(r => r.LoadRoleSprite(ExtremeRoleId.Screamer, It.IsAny<string>()), Times.Once);
 	}
 }
