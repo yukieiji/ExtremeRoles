@@ -1599,19 +1599,19 @@ Button ability "Spirit Channeling":
   <data name="ScreamerScreamImageSize" xml:space="preserve">
     <value>Scream Image Size</value>
   </data>
-  <data name="ScreamerExile1" xml:space="preserve">
+  <data name="ScreamerExile0" xml:space="preserve">
     <value> "AAAAAAAAAAAAAAAAAAAAA!!!!"</value>
   </data>
-  <data name="ScreamerExile2" xml:space="preserve">
+  <data name="ScreamerExile1" xml:space="preserve">
     <value> "GYAAAAAAAAAAAAAAAAAAA!!!!"</value>
   </data>
-  <data name="ScreamerExile3" xml:space="preserve">
+  <data name="ScreamerExile2" xml:space="preserve">
     <value> "UWAAAAAAAAAAAAAAAAAAA!!!!"</value>
   </data>
-  <data name="ScreamerExile4" xml:space="preserve">
+  <data name="ScreamerExile3" xml:space="preserve">
     <value> "HELP MEEEEEEEEEEEEEEEE!!!!"</value>
   </data>
-  <data name="ScreamerExileRare" xml:space="preserve">
+  <data name="ScreamerExile4" xml:space="preserve">
     <value> "TAKENOKO IS THE BEST!!!!"</value>
   </data>
 </root>
