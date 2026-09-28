@@ -1652,19 +1652,20 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="ScreamerFullDescription" xml:space="preserve">
     <value>死亡時や追放時にメッセージを出すクルー役職
 
-メッセージはランダムな文章が選出されます</value>
+メッセージは各プレイヤーごとにランダムな文章が
+選出されます</value>
   </data>
   <data name="ScreamerShortDescription" xml:space="preserve">
-    <value>最期の叫びを聞け！</value>
+    <value>最期(いのち)の叫びを聞け！</value>
   </data>
   <data name="ScreamerIntroDescription" xml:space="preserve">
     <value>叫びとともに散れ</value>
   </data>
   <data name="ScreamerIsScreamOnKill" xml:space="preserve">
-    <value>キルされたときのダイイングメッセージ</value>
+    <value>キルされたときのメッセージ</value>
   </data>
   <data name="ScreamerScreamImageSize" xml:space="preserve">
-    <value>ダイイングメッセージのサイズ</value>
+    <value>メッセージのサイズ</value>
   </data>
   <data name="ScreamerExile0" xml:space="preserve">
     <value>犯人はたけのこ派の・・・・・</value>
