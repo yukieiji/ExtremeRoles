@@ -1,4 +1,3 @@
-using AmongUs.GameOptions;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -7,7 +6,6 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 
 #nullable enable
@@ -25,11 +23,10 @@ public sealed class ScreamerAbilityHandler(
 	private readonly IUnityObjectFactory unityObjectFactory = unityObjectFactory;
 	private readonly IResourcesProvider resourcesProvider = resourcesProvider;
 
-	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo exiledPlayer)
+	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo? exiledPlayer)
 	{
 		int index = getRandomIndex();
-		string text = index == 5 ? Tr.GetString("ScreamerExileRare") : Tr.GetString($"ScreamerExile{index}");
-		return new OverrideInfo(exiledPlayer, text);
+		return new OverrideInfo(exiledPlayer, Tr.GetString($"ScreamerExile{index}"));
 	}
 
 	public void SpawnScreamImage(PlayerControl rolePlayer)
@@ -54,23 +51,13 @@ public sealed class ScreamerAbilityHandler(
 
 		SpriteRenderer renderer = screamObj.AddComponent<SpriteRenderer>();
 		renderer.sortingOrder = 100;
-
-		string imageName = imageIndex == 5 ? "ScreamerRare" : $"Screamer{imageIndex}";
-		Sprite sprite = this.resourcesProvider.LoadRoleSprite(ExtremeRoleId.Screamer, imageName);
-		if (sprite != null)
-		{
-			renderer.sprite = sprite;
-		}
+		renderer.sprite = this.resourcesProvider.LoadRoleSprite(ExtremeRoleId.Screamer, $"Screamer{imageIndex}");
 	}
 
 	private static int getRandomIndex()
 	{
 		int rand = RandomGenerator.Instance.Next(100);
-		if (rand < 10)
-		{
-			return 5;
-		}
-		return ((rand - 10) % 4) + 1;
+		return rand < 5 ? 4 : (rand - 5) % 4;
 	}
 }
 
@@ -82,22 +69,11 @@ public sealed class Screamer : SingleRoleBase
 		ScreamImageSize,
 	}
 
-	private readonly IUnityObjectFactory unityObjectFactory;
-	private readonly IResourcesProvider resourcesProvider;
-
-	public Screamer() : this(new DefaultUnityObjectFactory(), new DefaultResourcesProvider())
-	{
-	}
-
-	public Screamer(
-		IUnityObjectFactory unityObjectFactory,
-		IResourcesProvider resourcesProvider) : base(
+	public Screamer() : base(
 		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Screamer,
 			ColorPalette.ScreamerColor))
 	{
-		this.unityObjectFactory = unityObjectFactory;
-		this.resourcesProvider = resourcesProvider;
 	}
 
 	public override void RolePlayerKilledAction(
@@ -130,7 +106,7 @@ public sealed class Screamer : SingleRoleBase
 		this.AbilityClass = new ScreamerAbilityHandler(
 			isScreamOnKill,
 			scale,
-			this.unityObjectFactory,
-			this.resourcesProvider);
+			new DefaultUnityObjectFactory(),
+			new DefaultResourcesProvider());
 	}
 }

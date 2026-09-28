@@ -6,5 +6,5 @@ public sealed record OverrideInfo(NetworkedPlayerInfo? ExiledPlayer, string Anim
 
 public interface IExiledAnimationOverride
 {
-	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo exiledPlayer);
+	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo? exiledPlayer);
 }

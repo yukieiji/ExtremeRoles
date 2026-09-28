@@ -14,14 +14,8 @@ public interface IResourcesProvider
 public class DefaultResourcesProvider : IResourcesProvider
 {
 	public Sprite LoadSprite(string objName)
-	{
-		return UnityObjectLoader.LoadFromResources<Sprite>(objName);
-	}
+		=> UnityObjectLoader.LoadFromResources<Sprite>(objName);
 
 	public Sprite LoadRoleSprite<TEnum>(TEnum id, string imageName) where TEnum : Enum
-	{
-		return UnityObjectLoader.LoadFromResources<Sprite, TEnum>(
-			id,
-			ObjectPath.GetRoleImgPath(id, imageName));
-	}
+		=> UnityObjectLoader.LoadFromResources<Sprite, TEnum>(id, imageName);
 }

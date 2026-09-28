@@ -26,14 +26,8 @@ public sealed class CEOAbilityHandler(CEOStatus status) : IAbility, IExiledAnima
 {
 	private readonly CEOStatus status = status;
 
-	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo exiledPlayer)
-	{
-		if (this.status.IsAwake)
-		{
-			return new OverrideInfo(null, Tr.GetString("CEOExiledOverride"));
-		}
-		return null;
-	}
+	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo? exiledPlayer)
+		=> this.status.IsAwake ? new OverrideInfo(null, Tr.GetString("CEOExiledOverride")) : null;
 }
 
 public sealed class CEOStatus : IStatusModel

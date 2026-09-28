@@ -24,7 +24,7 @@ public class CEOAbilityHandlerTests
 		var status = new CEOStatus { IsAwake = false };
 		var handler = new CEOAbilityHandler(status);
 
-		Assert.Null(handler.OverrideInfo);
+		Assert.Null(handler.GetOverrideInfo(null));
 	}
 
 	[Fact]
@@ -33,7 +33,7 @@ public class CEOAbilityHandlerTests
 		var status = new CEOStatus { IsAwake = true };
 		var handler = new CEOAbilityHandler(status);
 
-		var info = handler.OverrideInfo;
+		var info = handler.GetOverrideInfo(null);
 		Assert.NotNull(info);
 		Assert.Equal("CEOExiledOverride", info.AnimationText);
 	}
