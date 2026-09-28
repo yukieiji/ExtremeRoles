@@ -1,3 +1,5 @@
+using System.Text;
+using TMPro;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -16,12 +18,12 @@ public sealed class ScreamerAbilityHandler(
 	bool isScreamOnKill,
 	float screamImageScale,
 	IUnityObjectFactory unityObjectFactory,
-	IResourcesProvider resourcesProvider) : IAbility, IExiledAnimationOverride
+	IResourcesProvider? resourcesProvider = null) : IAbility, IExiledAnimationOverride
 {
 	private readonly bool isScreamOnKill = isScreamOnKill;
 	private readonly float screamImageScale = screamImageScale;
 	private readonly IUnityObjectFactory unityObjectFactory = unityObjectFactory;
-	private readonly IResourcesProvider resourcesProvider = resourcesProvider;
+	private readonly IResourcesProvider? resourcesProvider = resourcesProvider;
 
 	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo? exiledPlayer)
 	{
@@ -29,7 +31,7 @@ public sealed class ScreamerAbilityHandler(
 		return new OverrideInfo(exiledPlayer, Tr.GetString($"ScreamerExile{index}"));
 	}
 
-	public void SpawnScreamImage(PlayerControl rolePlayer)
+	public void SpawnScreamText(PlayerControl rolePlayer)
 	{
 		if (!this.isScreamOnKill)
 		{
@@ -42,16 +44,79 @@ public sealed class ScreamerAbilityHandler(
 			return;
 		}
 
-		int imageIndex = getRandomIndex();
+		int textIndex = getRandomIndex();
+		string rawText = Tr.GetString($"ScreamerExile{textIndex}");
+		string formattedText = insertRandomLineBreaks(rawText);
 
-		GameObject screamObj = this.unityObjectFactory.CreateGameObject("ScreamerScreamImage");
+		// Rich text effect tags
+		string[] effectTags = new[] { "shake", "wave" };
+		string tag = effectTags[RandomGenerator.Instance.Next(effectTags.Length)];
+		formattedText = $"<{tag}>{formattedText}</{tag}>";
+
+		GameObject screamObj = this.unityObjectFactory.CreateGameObject("ScreamerScreamText");
 		screamObj.transform.SetParent(targetBody.transform, false);
 		screamObj.transform.localPosition = Vector3.zero;
-		screamObj.transform.localScale = new Vector3(this.screamImageScale, this.screamImageScale, 1.0f);
 
-		SpriteRenderer renderer = screamObj.AddComponent<SpriteRenderer>();
-		renderer.sortingOrder = 100;
-		renderer.sprite = this.resourcesProvider.LoadRoleSprite(ExtremeRoleId.Screamer, $"Screamer{imageIndex}");
+		// Random Z-axis rotation
+		float randomAngle = RandomGenerator.Instance.Next(-180, 180);
+		screamObj.transform.localEulerAngles = new Vector3(0f, 0f, randomAngle);
+
+		// Scale based on screamImageScale
+		float fontScale = this.screamImageScale;
+		screamObj.transform.localScale = new Vector3(fontScale, fontScale, 1.0f);
+
+		TextMeshPro textComponent = screamObj.AddComponent<TextMeshPro>();
+		textComponent.alignment = TextAlignmentOptions.Center;
+		textComponent.enableWordWrapping = false;
+		textComponent.richText = true;
+		textComponent.text = formattedText;
+
+		// Random color
+		textComponent.color = new Color(
+			RandomGenerator.Instance.Next(10000) / 10000.0f,
+			RandomGenerator.Instance.Next(10000) / 10000.0f,
+			RandomGenerator.Instance.Next(10000) / 10000.0f,
+			1.0f);
+
+		// Random font styles
+		FontStyles styles = FontStyles.Normal;
+		if (RandomGenerator.Instance.Next(2) == 0) { styles |= FontStyles.Bold; }
+		if (RandomGenerator.Instance.Next(2) == 0) { styles |= FontStyles.Italic; }
+		if (RandomGenerator.Instance.Next(2) == 0) { styles |= FontStyles.Underline; }
+		if (RandomGenerator.Instance.Next(2) == 0) { styles |= FontStyles.Strikethrough; }
+		textComponent.fontStyle = styles;
+
+		// Outline properties
+		textComponent.outlineWidth = RandomGenerator.Instance.Next(100, 500) / 1000.0f;
+		textComponent.outlineColor = new Color32(
+			(byte)RandomGenerator.Instance.Next(256),
+			(byte)RandomGenerator.Instance.Next(256),
+			(byte)RandomGenerator.Instance.Next(256),
+			255);
+	}
+
+	public void SpawnScreamImage(PlayerControl rolePlayer) => SpawnScreamText(rolePlayer);
+
+	private static string insertRandomLineBreaks(string text)
+	{
+		if (string.IsNullOrEmpty(text) || text.Length <= 1)
+		{
+			return text;
+		}
+
+		var sb = new StringBuilder();
+		for (int i = 0; i < text.Length; i++)
+		{
+			sb.Append(text[i]);
+			if (i < text.Length - 1 && text[i] != '\n')
+			{
+				if (RandomGenerator.Instance.Next(100) < 30)
+				{
+					sb.Append('\n');
+				}
+			}
+		}
+		return sb.ToString();
 	}
 
 	private static int getRandomIndex()
