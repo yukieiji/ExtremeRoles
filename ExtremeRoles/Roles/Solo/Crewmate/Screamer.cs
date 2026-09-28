@@ -6,7 +6,6 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Ability;
 
@@ -17,13 +16,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 public sealed class ScreamerAbilityHandler(
 	bool isScreamOnKill,
 	float screamImageScale,
-	IUnityObjectFactory unityObjectFactory,
-	IResourcesProvider? resourcesProvider = null) : IAbility, IExiledAnimationOverride
+	IUnityObjectFactory unityObjectFactory) : IAbility, IExiledAnimationOverride
 {
 	private readonly bool isScreamOnKill = isScreamOnKill;
 	private readonly float screamImageScale = screamImageScale;
 	private readonly IUnityObjectFactory unityObjectFactory = unityObjectFactory;
-	private readonly IResourcesProvider? resourcesProvider = resourcesProvider;
 
 	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo? exiledPlayer)
 	{
@@ -95,8 +92,6 @@ public sealed class ScreamerAbilityHandler(
 			255);
 	}
 
-	public void SpawnScreamImage(PlayerControl rolePlayer) => SpawnScreamText(rolePlayer);
-
 	private static string insertRandomLineBreaks(string text)
 	{
 		if (string.IsNullOrEmpty(text) || text.Length <= 1)
@@ -147,7 +142,7 @@ public sealed class Screamer : SingleRoleBase
 	{
 		if (this.AbilityClass is ScreamerAbilityHandler handler)
 		{
-			handler.SpawnScreamImage(rolePlayer);
+			handler.SpawnScreamText(rolePlayer);
 		}
 	}
 
@@ -171,7 +166,6 @@ public sealed class Screamer : SingleRoleBase
 		this.AbilityClass = new ScreamerAbilityHandler(
 			isScreamOnKill,
 			scale,
-			new DefaultUnityObjectFactory(),
-			new DefaultResourcesProvider());
+			new DefaultUnityObjectFactory());
 	}
 }

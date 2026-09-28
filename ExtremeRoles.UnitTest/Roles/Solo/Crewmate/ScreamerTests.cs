@@ -103,8 +103,7 @@ public class ScreamerTests
 	{
 		// Arrange
 		var mockFactory = new Mock<IUnityObjectFactory>();
-		var mockResources = new Mock<IResourcesProvider>();
-		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object, mockResources.Object);
+		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object);
 
 		var mockExiledPlayer = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 
@@ -123,8 +122,7 @@ public class ScreamerTests
 	{
 		// Arrange
 		var mockFactory = new Mock<IUnityObjectFactory>();
-		var mockResources = new Mock<IResourcesProvider>();
-		var handler = new ScreamerAbilityHandler(false, 1.0f, mockFactory.Object, mockResources.Object);
+		var handler = new ScreamerAbilityHandler(false, 1.0f, mockFactory.Object);
 
 		var screamer = new Screamer();
 		screamer.CreateRoleAllOption();
@@ -147,8 +145,7 @@ public class ScreamerTests
 	{
 		// Arrange
 		var mockFactory = new Mock<IUnityObjectFactory>();
-		var mockResources = new Mock<IResourcesProvider>();
-		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object, mockResources.Object);
+		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object);
 
 		var screamer = new Screamer();
 		screamer.CreateRoleAllOption();
@@ -196,9 +193,7 @@ public class ScreamerTests
 		var mockFactory = new Mock<IUnityObjectFactory>();
 		mockFactory.Setup(f => f.CreateGameObject(It.IsAny<string>())).Returns(mockGameObject.Object);
 
-		var mockResources = new Mock<IResourcesProvider>();
-
-		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object, mockResources.Object);
+		var handler = new ScreamerAbilityHandler(true, 1.0f, mockFactory.Object);
 
 		var screamer = new Screamer();
 		screamer.CreateRoleAllOption();
