@@ -14,12 +14,12 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class ScreamerAbilityHandler(
-	bool isScreamOnKill,
-	float screamImageScale,
+	bool isOnKill,
+	float fontScale,
 	IUnityObjectFactory unityObjectFactory) : IAbility, IExiledAnimationOverride
 {
-	private readonly bool isScreamOnKill = isScreamOnKill;
-	private readonly float screamImageScale = screamImageScale;
+	private readonly bool isOnKill = isOnKill;
+	private readonly float fontScale = fontScale;
 	private readonly IUnityObjectFactory unityObjectFactory = unityObjectFactory;
 
 	public OverrideInfo? GetOverrideInfo(NetworkedPlayerInfo? exiledPlayer)
@@ -30,7 +30,7 @@ public sealed class ScreamerAbilityHandler(
 
 	public void SpawnScreamText(PlayerControl rolePlayer)
 	{
-		if (!this.isScreamOnKill)
+		if (!this.isOnKill)
 		{
 			return;
 		}
@@ -46,27 +46,30 @@ public sealed class ScreamerAbilityHandler(
 		string formattedText = insertRandomLineBreaks(rawText);
 
 		// Rich text effect tags
-		string[] effectTags = new[] { "shake", "wave" };
-		string tag = effectTags[RandomGenerator.Instance.Next(effectTags.Length)];
-		formattedText = $"<{tag}>{formattedText}</{tag}>";
+		string[] effectTags = ["shake", "wave"];
+		int index = RandomGenerator.Instance.Next(3);
+		if (index == 2)
+		{
+			string tag = effectTags[RandomGenerator.Instance.Next(effectTags.Length)];
+			formattedText = $"<{tag}>{formattedText}</{tag}>";
+		}
 
 		GameObject screamObj = this.unityObjectFactory.CreateGameObject("ScreamerScreamText");
 		screamObj.transform.SetParent(targetBody.transform, false);
 		screamObj.transform.localPosition = Vector3.zero;
-
-		// Random Z-axis rotation
-		float randomAngle = RandomGenerator.Instance.Next(-180, 180);
-		screamObj.transform.localEulerAngles = new Vector3(0f, 0f, randomAngle);
-
-		// Scale based on screamImageScale
-		float fontScale = this.screamImageScale;
-		screamObj.transform.localScale = new Vector3(fontScale, fontScale, 1.0f);
 
 		TextMeshPro textComponent = screamObj.AddComponent<TextMeshPro>();
 		textComponent.alignment = TextAlignmentOptions.Center;
 		textComponent.enableWordWrapping = false;
 		textComponent.richText = true;
 		textComponent.text = formattedText;
+
+		// Random Z-axis rotation
+		float randomAngle = RandomGenerator.Instance.Next(-180, 180);
+		screamObj.transform.localEulerAngles = new Vector3(0f, 0f, randomAngle);
+
+		// Scale based on screamImageScale
+		screamObj.transform.localScale = new Vector3(this.fontScale, this.fontScale, 1.0f);
 
 		// Random color
 		textComponent.color = new Color(
@@ -80,7 +83,6 @@ public sealed class ScreamerAbilityHandler(
 		if (RandomGenerator.Instance.Next(2) == 0) { styles |= FontStyles.Bold; }
 		if (RandomGenerator.Instance.Next(2) == 0) { styles |= FontStyles.Italic; }
 		if (RandomGenerator.Instance.Next(2) == 0) { styles |= FontStyles.Underline; }
-		if (RandomGenerator.Instance.Next(2) == 0) { styles |= FontStyles.Strikethrough; }
 		textComponent.fontStyle = styles;
 
 		// Outline properties
@@ -103,12 +105,10 @@ public sealed class ScreamerAbilityHandler(
 		for (int i = 0; i < text.Length; i++)
 		{
 			sb.Append(text[i]);
-			if (i < text.Length - 1 && text[i] != '\n')
+			if (i < text.Length - 1&&
+				RandomGenerator.Instance.Next(100) < 25)
 			{
-				if (RandomGenerator.Instance.Next(100) < 30)
-				{
-					sb.Append('\n');
-				}
+				sb.AppendLine();
 			}
 		}
 		return sb.ToString();
