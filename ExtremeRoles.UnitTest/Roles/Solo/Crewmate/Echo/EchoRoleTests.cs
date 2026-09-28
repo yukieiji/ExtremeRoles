@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 using AmongUs.GameOptions;
 using BepInEx.Unity.IL2CPP.Utils;
@@ -57,15 +56,6 @@ public class EchoRoleTests : IDisposable
 	private delegate Il2CppSystem.Type TypeFromPointerInternalOrig(IntPtr classPointer, string typeName, bool throwOnFailure);
 	private delegate Il2CppSystem.Type TypeFromPointerInternalHook(TypeFromPointerInternalOrig orig, IntPtr classPointer, string typeName, bool throwOnFailure);
 
-	private delegate float Vector2SqrMagOrig(ref Vector2 self);
-	private delegate float Vector2SqrMagHook(Vector2SqrMagOrig orig, ref Vector2 self);
-
-	private delegate float Vector3SqrMagOrig(ref Vector3 self);
-	private delegate float Vector3SqrMagHook(Vector3SqrMagOrig orig, ref Vector3 self);
-
-	private delegate void Vector2CtorOrig(ref Vector2 self, float x, float y);
-	private delegate void Vector2CtorHook(Vector2CtorOrig orig, ref Vector2 self, float x, float y);
-
 	private delegate bool IsInValidNetPlayerOrig(NetworkedPlayerInfo? self);
 	private delegate bool IsInValidNetPlayerHook(IsInValidNetPlayerOrig orig, NetworkedPlayerInfo? self);
 
@@ -75,6 +65,12 @@ public class EchoRoleTests : IDisposable
 	private delegate Vector2 GetTruePositionOrig(PlayerControl self);
 	private delegate Vector2 GetTruePositionHook(GetTruePositionOrig orig, PlayerControl self);
 
+	private delegate float Vector2SqrMagOrig(ref Vector2 self);
+	private delegate float Vector2SqrMagHook(Vector2SqrMagOrig orig, ref Vector2 self);
+
+	private delegate float Vector3SqrMagOrig(ref Vector3 self);
+	private delegate float Vector3SqrMagHook(Vector3SqrMagOrig orig, ref Vector3 self);
+
 	private readonly Hook createCaller1Hook;
 	private readonly Hook createCaller2Hook;
 	private readonly Hook rpcWriteByteHook;
@@ -82,30 +78,25 @@ public class EchoRoleTests : IDisposable
 	private readonly Hook rpcDisposeHook;
 	private readonly Hook startCoroutineHook;
 	private readonly Hook typeFromPointerHook;
-	private readonly Hook sqrMagHook;
-	private readonly Hook v3SqrMagHook;
-	private readonly Hook v2CtorHook;
 	private readonly Hook isInValidNetPlayerHook;
 	private readonly Hook isInValidPlayerControlHook;
 	private readonly Hook getTruePositionHook;
+	private readonly Hook v2SqrMagHook;
+	private readonly Hook v3SqrMagHook;
 
 	private readonly Mock<AmongUsClient> clientMock;
 	private readonly Mock<PlayerControl> localPlayerMock;
 
 	public static int StartCoroutineCallCount { get; private set; }
-	internal static readonly Dictionary<IntPtr, Vector2> MockPointerPositions = new();
+	internal static readonly Dictionary<byte, Vector2> MockPlayerPositions = new();
 
 	public EchoRoleTests()
 	{
 		StartCoroutineCallCount = 0;
-		MockPointerPositions.Clear();
+		MockPlayerPositions.Clear();
 
 		MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupObjectImplicitHelpers();
-
-		var v2CtorTarget = typeof(Vector2).GetConstructor(new[] { typeof(float), typeof(float) })!;
-		var v2CtorHookDelegate = new Vector2CtorHook(getV2CtorHook);
-		this.v2CtorHook = new Hook(v2CtorTarget, v2CtorHookDelegate);
 
 		var isInValidNetPlayerTarget = typeof(PlayerControlExtension)
 			.GetMethod(nameof(PlayerControlExtension.IsInValid), new[] { typeof(NetworkedPlayerInfo) })!;
@@ -122,19 +113,27 @@ public class EchoRoleTests : IDisposable
 		var getTruePositionHookDelegate = new GetTruePositionHook(getGetTruePositionHook);
 		this.getTruePositionHook = new Hook(getTruePositionTarget, getTruePositionHookDelegate);
 
+		var v2SqrMagTarget = typeof(Vector2).GetProperty("sqrMagnitude")!.GetGetMethod()!;
+		var v2SqrMagHookDelegate = new Vector2SqrMagHook(getV2SqrMagnitudeHook);
+		this.v2SqrMagHook = new Hook(v2SqrMagTarget, v2SqrMagHookDelegate);
+
+		var v3SqrMagTarget = typeof(Vector3).GetProperty("sqrMagnitude")!.GetGetMethod()!;
+		var v3SqrMagHookDelegate = new Vector3SqrMagHook(getV3SqrMagnitudeHook);
+		this.v3SqrMagHook = new Hook(v3SqrMagTarget, v3SqrMagHookDelegate);
+
 		var mockSub2 = new Mock<MockVector2op_SubtractionHelper>();
 		mockSub2.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<Vector2>()))
-			.Returns((Vector2 a, Vector2 b) => new Vector2(a.x - b.x, a.y - b.y));
+			.Returns((Vector2 a, Vector2 b) => new Vector2 { x = a.x - b.x, y = a.y - b.y });
 		MockVector2op_SubtractionHelper.Instance = mockSub2.Object;
 
 		var mockSub3 = new Mock<MockVector3op_SubtractionHelper>();
 		mockSub3.Setup(x => x.Invoke(It.IsAny<Vector3>(), It.IsAny<Vector3>()))
-			.Returns((Vector3 a, Vector3 b) => new Vector3(a.x - b.x, a.y - b.y, a.z - b.z));
+			.Returns((Vector3 a, Vector3 b) => new Vector3 { x = a.x - b.x, y = a.y - b.y, z = a.z - b.z });
 		MockVector3op_SubtractionHelper.Instance = mockSub3.Object;
 
 		var mockColorSub = new Mock<MockColorop_SubtractionHelper>();
 		mockColorSub.Setup(x => x.Invoke(It.IsAny<Color>(), It.IsAny<Color>()))
-			.Returns((Color a, Color b) => new Color(a.r - b.r, a.g - b.g, a.b - b.b, a.a - b.a));
+			.Returns((Color a, Color b) => new Color { r = a.r - b.r, g = a.g - b.g, b = a.b - b.b, a = a.a - b.a });
 		MockColorop_SubtractionHelper.Instance = mockColorSub.Object;
 
 		var mockSqrMag = new Mock<MockVector2SqrMagnitudeHelper>();
@@ -148,16 +147,17 @@ public class EchoRoleTests : IDisposable
 		this.localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
 		this.localPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)1);
 		this.localPlayerMock.SetupGet(p => p.CanMove).Returns(true);
+		MockPlayerPositions[1] = new Vector2 { x = 0f, y = 0f };
+
+		var mockLocalPlayerTransform = new Mock<Transform>(IntPtr.Zero);
+		mockLocalPlayerTransform.SetupGet(t => t.position).Returns(new Vector3(0f, 0f, 0f));
+		this.localPlayerMock.SetupGet(p => p.transform).Returns(mockLocalPlayerTransform.Object);
 
 		var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 		mockData.SetupGet(d => d.IsDead).Returns(false);
 		mockData.SetupGet(d => d.Disconnected).Returns(false);
 		mockData.SetupGet(d => d.Object).Returns(this.localPlayerMock.Object);
 		this.localPlayerMock.SetupGet(p => p.Data).Returns(mockData.Object);
-
-		var mockPlayerTransform = new Mock<Transform>(IntPtr.Zero);
-		mockPlayerTransform.SetupGet(t => t.position).Returns(new Vector3(0f, 0f, 0f));
-		this.localPlayerMock.SetupGet(p => p.transform).Returns(mockPlayerTransform.Object);
 
 		MockSetupHelper.SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
@@ -203,23 +203,16 @@ public class EchoRoleTests : IDisposable
 		var typeFromPointerHookDelegate = new TypeFromPointerInternalHook(getTypeFromPointerInternalHook);
 		this.typeFromPointerHook = new Hook(typeFromPointerTarget, typeFromPointerHookDelegate);
 
-		var sqrMagTarget = typeof(Vector2).GetProperty("sqrMagnitude")!.GetGetMethod()!;
-		var sqrMagHookDelegate = new Vector2SqrMagHook(getSqrMagnitudeHook);
-		this.sqrMagHook = new Hook(sqrMagTarget, sqrMagHookDelegate);
-
-		var v3SqrMagTarget = typeof(Vector3).GetProperty("sqrMagnitude")!.GetGetMethod()!;
-		var v3SqrMagHookDelegate = new Vector3SqrMagHook(getVector3SqrMagnitudeHook);
-		this.v3SqrMagHook = new Hook(v3SqrMagTarget, v3SqrMagHookDelegate);
-
 		SetLobbyMode(false);
 	}
 
 	public void Dispose()
 	{
-		this.v2CtorHook.Dispose();
 		this.isInValidNetPlayerHook.Dispose();
 		this.isInValidPlayerControlHook.Dispose();
 		this.getTruePositionHook.Dispose();
+		this.v2SqrMagHook.Dispose();
+		this.v3SqrMagHook.Dispose();
 		this.createCaller1Hook.Dispose();
 		this.createCaller2Hook.Dispose();
 		this.rpcWriteByteHook.Dispose();
@@ -227,8 +220,6 @@ public class EchoRoleTests : IDisposable
 		this.rpcDisposeHook.Dispose();
 		this.startCoroutineHook.Dispose();
 		this.typeFromPointerHook.Dispose();
-		this.sqrMagHook.Dispose();
-		this.v3SqrMagHook.Dispose();
 	}
 
 	private static RPCOperator.RpcCaller getCreateCaller1Hook(CreateCaller1Orig orig, RPCOperator.Command ops)
@@ -256,22 +247,6 @@ public class EchoRoleTests : IDisposable
 		return (Il2CppSystem.Type)RuntimeHelpers.GetUninitializedObject(typeof(Il2CppSystem.Type));
 	}
 
-	private static float getSqrMagnitudeHook(Vector2SqrMagOrig orig, ref Vector2 self)
-	{
-		return self.x * self.x + self.y * self.y;
-	}
-
-	private static float getVector3SqrMagnitudeHook(Vector3SqrMagOrig orig, ref Vector3 self)
-	{
-		return self.x * self.x + self.y * self.y + self.z * self.z;
-	}
-
-	private static void getV2CtorHook(Vector2CtorOrig orig, ref Vector2 self, float x, float y)
-	{
-		self.x = x;
-		self.y = y;
-	}
-
 	private static bool getIsInValidNetPlayerHook(IsInValidNetPlayerOrig orig, NetworkedPlayerInfo? self)
 	{
 		return self == null || self.IsDead || self.Disconnected;
@@ -279,16 +254,31 @@ public class EchoRoleTests : IDisposable
 
 	private static bool getIsInValidPlayerControlHook(IsInValidPlayerControlOrig orig, PlayerControl? self)
 	{
-		return self == null || self.Data == null || self.Data.IsDead || self.Data.Disconnected;
+		if (self == null) return true;
+		if (self.Data != null)
+		{
+			return self.Data.IsDead || self.Data.Disconnected;
+		}
+		return false;
 	}
 
 	private static Vector2 getGetTruePositionHook(GetTruePositionOrig orig, PlayerControl self)
 	{
-		if (self != null && MockPointerPositions.TryGetValue(self.Pointer, out var pos))
+		if (self != null && MockPlayerPositions.TryGetValue(self.PlayerId, out var pos))
 		{
 			return pos;
 		}
-		return orig(self);
+		return Vector2.zero;
+	}
+
+	private static float getV2SqrMagnitudeHook(Vector2SqrMagOrig orig, ref Vector2 self)
+	{
+		return self.x * self.x + self.y * self.y;
+	}
+
+	private static float getV3SqrMagnitudeHook(Vector3SqrMagOrig orig, ref Vector3 self)
+	{
+		return self.x * self.x + self.y * self.y + self.z * self.z;
 	}
 
 	private void SetLobbyMode(bool isLobby)
@@ -451,42 +441,24 @@ public class EchoRoleTests : IDisposable
 
 	private static Mock<PlayerControl> CreateMockPlayer(byte id, Vector2 position)
 	{
-		IntPtr fakePlayerPtr = Marshal.AllocHGlobal(1024);
-		Marshal.Copy(new byte[1024], 0, fakePlayerPtr, 1024);
-
-		IntPtr fakeDataPtr = Marshal.AllocHGlobal(1024);
-		Marshal.Copy(new byte[1024], 0, fakeDataPtr, 1024);
-
-		var playerIdField = typeof(InnerNetObject).GetField("NativeFieldInfoPtr_PlayerId", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static)
-			?? typeof(PlayerControl).GetField("NativeFieldInfoPtr_PlayerId", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
-
-		if (playerIdField != null)
-		{
-			IntPtr fieldPtr = (IntPtr)playerIdField.GetValue(null)!;
-			if (fieldPtr != IntPtr.Zero)
-			{
-				int offset = (int)IL2CPP.il2cpp_field_get_offset(fieldPtr);
-				Marshal.WriteInt32(fakePlayerPtr + offset, id);
-				Marshal.WriteByte(fakePlayerPtr + offset, id);
-			}
-		}
-
-		var mockPlayer = new Mock<PlayerControl>(fakePlayerPtr);
+		var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
 		mockPlayer.SetupGet(p => p.PlayerId).Returns(id);
-
-		MockPointerPositions[fakePlayerPtr] = position;
+		MockPlayerPositions[id] = position;
 
 		var mockTransform = new Mock<Transform>(IntPtr.Zero);
 		mockTransform.SetupGet(t => t.position).Returns(new Vector3(position.x, position.y, 0f));
 		mockPlayer.SetupGet(p => p.transform).Returns(mockTransform.Object);
 
-		var mockData = new Mock<NetworkedPlayerInfo>(fakeDataPtr);
+		var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 		mockData.SetupGet(d => d.PlayerId).Returns(id);
 		mockData.SetupGet(d => d.IsDead).Returns(false);
 		mockData.SetupGet(d => d.Disconnected).Returns(false);
 		mockData.SetupGet(d => d.Object).Returns(mockPlayer.Object);
 
 		mockPlayer.SetupGet(p => p.Data).Returns(mockData.Object);
+
+		PlayerCache.AddPlayerControl(mockPlayer.Object);
+
 		return mockPlayer;
 	}
 
@@ -819,7 +791,6 @@ public class EchoRoleTests : IDisposable
 		// Arrange
 		SetupHudManagerMock();
 
-		MockPointerPositions.Clear();
 		PlayerCache.RemovePlayerControl(p => true);
 		PlayerCache.AddPlayerControl(this.localPlayerMock.Object);
 
@@ -845,17 +816,19 @@ public class EchoRoleTests : IDisposable
 	public void AddPlayerLocationInfo_FiltersAndSortsPlayersByDistanceCorrectly()
 	{
 		// Arrange
-		MockPointerPositions.Clear();
-
-		var sourcePlayer = this.localPlayerMock;
-		MockPointerPositions[sourcePlayer.Object.Pointer] = new Vector2(0f, 0f);
-
-		var playerNear = CreateMockPlayer(20, new Vector2(2f, 0f)); // sqrDist = 4
-		var playerFar = CreateMockPlayer(30, new Vector2(6f, 0f));  // sqrDist = 36
-		var playerOut = CreateMockPlayer(40, new Vector2(50f, 0f)); // sqrDist = 2500 > 100
+		var sourcePlayer = CreateMockPlayer(10, new Vector2 { x = 0f, y = 0f });
+		var playerNear = CreateMockPlayer(20, new Vector2 { x = 2f, y = 0f }); // sqrDist = 4
+		var playerFar = CreateMockPlayer(30, new Vector2 { x = 6f, y = 0f });  // sqrDist = 36
+		var playerOut = CreateMockPlayer(40, new Vector2 { x = 20f, y = 0f }); // sqrDist = 400 > 100
 
 		var role = new Echo();
 		role.CreateRoleAllOption();
+
+		if (role.Loader.TryGet(Echo.Option.Range, out var rangeOpt) && rangeOpt != null)
+		{
+			rangeOpt.Selection = (int)((10.0f - 5.0f) / 0.5f); // Range = 10 -> sqrRange = 100
+		}
+
 		role.Initialize();
 
 		PlayerCache.RemovePlayerControl(p => true);
@@ -863,8 +836,6 @@ public class EchoRoleTests : IDisposable
 		PlayerCache.AddPlayerControl(playerNear.Object);
 		PlayerCache.AddPlayerControl(playerFar.Object);
 		PlayerCache.AddPlayerControl(playerOut.Object);
-
-		typeof(Echo).GetField("echoLocationRangeSquare", BindingFlags.NonPublic | BindingFlags.Instance)!.SetValue(role, 100.0f);
 
 		var addPlayerInfoMethod = typeof(Echo).GetMethod("addPlayerLocationInfo", BindingFlags.NonPublic | BindingFlags.Instance)!;
 
@@ -877,7 +848,7 @@ public class EchoRoleTests : IDisposable
 
 		// Assert
 		int count = (int)listType.GetProperty("Count")!.GetValue(resultList)!;
-		Assert.Equal(2, count); // playerNear and playerFar
+		Assert.Equal(2, count);
 
 		var item0 = listType.GetProperty("Item")!.GetValue(resultList, new object[] { 0 });
 		var item1 = listType.GetProperty("Item")!.GetValue(resultList, new object[] { 1 });
@@ -900,7 +871,6 @@ public class EchoRoleTests : IDisposable
 		// Arrange
 		SetupHudManagerMock();
 
-		MockPointerPositions.Clear();
 		PlayerCache.RemovePlayerControl(p => true);
 		PlayerCache.AddPlayerControl(this.localPlayerMock.Object);
 
