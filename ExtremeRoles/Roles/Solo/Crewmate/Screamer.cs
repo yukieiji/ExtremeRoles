@@ -161,7 +161,8 @@ public sealed class Screamer : SingleRoleBase
 	protected override void RoleSpecificInit()
 	{
 		bool isScreamOnKill = this.Loader.GetValue<Option, bool>(Option.IsScreamOnKill);
-		float scale = this.Loader.GetValue<Option, int>(Option.ScreamImageSize) / 100.0f;
+		// 100％でも大きかたので100％ => 0.5にしてそれでサイズ調整する感じに
+		float scale = this.Loader.GetValue<Option, int>(Option.ScreamImageSize) / 200.0f;
 
 		this.AbilityClass = new ScreamerAbilityHandler(
 			isScreamOnKill,
