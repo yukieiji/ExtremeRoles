@@ -47,15 +47,6 @@ public sealed class ScreamerAbilityHandler(
 		string rawText = Tr.GetString($"ScreamerExile{textIndex}");
 		string formattedText = insertRandomLineBreaks(rawText);
 
-		// Rich text effect tags
-		string[] effectTags = ["s", "mark", "uppercase", "lowercase", "smallcaps"];
-		int index = RandomGenerator.Instance.Next(3);
-		if (index == 2)
-		{
-			string tag = effectTags[RandomGenerator.Instance.Next(effectTags.Length)];
-			formattedText = $"<{tag}>{formattedText}</{tag}>";
-		}
-
 		GameObject screamObj = this.unityObjectFactory.CreateGameObject("ScreamerScreamText");
 		screamObj.transform.SetParent(targetBody.transform, false);
 		screamObj.transform.localPosition = Vector3.zero;
