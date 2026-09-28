@@ -98,11 +98,6 @@ public sealed class YoYo :
 
         public override AbilityState Update(AbilityState curState)
         {
-            if (curState == AbilityState.Activating)
-            {
-                return curState;
-            }
-
             if (this.isUpdate)
             {
                 this.isUpdate = false;
@@ -293,7 +288,7 @@ public sealed class YoYo :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        IRoleAbility.CreateAbilityCountOption(factory, 3, 1, 10, 1);
+        IRoleAbility.CreateAbilityCountOption(factory, 3, 10);
         factory.CreateBoolOption(
             YoYoOption.IsResetMarkOnMeeting,
             true);
