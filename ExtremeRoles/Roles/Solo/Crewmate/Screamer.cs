@@ -18,6 +18,8 @@ public sealed class ScreamerAbilityHandler(
 	float fontScale,
 	IUnityObjectFactory unityObjectFactory) : IAbility, IExiledAnimationOverride
 {
+	public const int MaxExileIndex = 4;
+
 	private readonly bool isOnKill = isOnKill;
 	private readonly float fontScale = fontScale;
 	private readonly IUnityObjectFactory unityObjectFactory = unityObjectFactory;
@@ -46,7 +48,7 @@ public sealed class ScreamerAbilityHandler(
 		string formattedText = insertRandomLineBreaks(rawText);
 
 		// Rich text effect tags
-		string[] effectTags = ["shake", "wave"];
+		string[] effectTags = ["b", "i", "u", "s", "mark", "uppercase", "lowercase", "smallcaps"];
 		int index = RandomGenerator.Instance.Next(3);
 		if (index == 2)
 		{
@@ -117,7 +119,7 @@ public sealed class ScreamerAbilityHandler(
 	private static int getRandomIndex()
 	{
 		int rand = RandomGenerator.Instance.Next(100);
-		return rand < 5 ? 4 : (rand - 5) % 4;
+		return rand < 5 ? 0 : RandomGenerator.Instance.Next(1, MaxExileIndex + 1);
 	}
 }
 
