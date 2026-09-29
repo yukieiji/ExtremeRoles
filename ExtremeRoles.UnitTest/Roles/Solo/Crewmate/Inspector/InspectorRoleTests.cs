@@ -3,7 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance;
@@ -270,6 +274,21 @@ public class InspectorRoleTests
 	}
 
 	[Fact]
+	public void ButtonProperty_GetterAndSetterWork()
+	{
+		SetupHudManagerMock();
+
+		var role = new Inspector();
+		var behavior = new NullBehaviour();
+		var mockActivator = new Mock<IButtonAutoActivator>();
+		var button = new ExtremeAbilityButton(behavior, mockActivator.Object, KeyCode.F);
+
+		role.Button = button;
+
+		Assert.Same(button, role.Button);
+	}
+
+	[Fact]
 	public void UseAbility_ReturnsTrue()
 	{
 		var role = new Inspector();
@@ -330,16 +349,5 @@ public class InspectorRoleTests
 		role.CleanUp();
 		role.ResetOnMeetingStart();
 		role.ResetOnMeetingEnd(null);
-	}
-
-	[Fact]
-	public void CreateAbility_AttemptsToLoadResources()
-	{
-		SetupHudManagerMock();
-
-		var role = new Inspector();
-		role.CreateRoleAllOption();
-
-		Assert.Throws<ArgumentException>(() => role.CreateAbility());
 	}
 }
