@@ -1,0 +1,355 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+
+namespace ExtremeRoles.Roles.Solo.Crewmate;
+
+#nullable enable
+
+public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
+{
+	public enum Option
+	{
+		ActiveTime,
+		Range,
+		IsVisibleAll,
+	}
+
+	public ExtremeAbilityButton? Button { get; set; }
+
+	private float range = 2.5f;
+	private bool isVisibleAll = true;
+	private int detectorCounter = 0;
+
+	private readonly List<DetectorData> activeDetectors = new();
+	private readonly List<DetectorLogGroup> archivedDetectorLogs = new();
+
+	private readonly ExtremeConsoleSystem consoleSystem = ExtremeConsoleSystem.Create();
+
+	private bool wasCommsActive = false;
+	private bool wasSabotageActive = false;
+
+	public sealed class DetectorLogGroup
+	{
+		public int IndexNumber { get; }
+		public List<string> Logs { get; } = new();
+
+		public DetectorLogGroup(int indexNumber)
+		{
+			this.IndexNumber = indexNumber;
+		}
+
+		public DetectorLogGroup(int indexNumber, List<string> logs)
+		{
+			this.IndexNumber = indexNumber;
+			this.Logs = new List<string>(logs);
+		}
+	}
+
+	public sealed class DetectorData
+	{
+		public int IndexNumber { get; }
+		public Vector2 Position { get; }
+		public ExtremeConsole Console { get; }
+		public DetectorLogGroup LogGroup { get; }
+		public HashSet<byte> PlayersInRange { get; } = new();
+
+		public DetectorData(int indexNumber, Vector2 position, ExtremeConsole console)
+		{
+			this.IndexNumber = indexNumber;
+			this.Position = position;
+			this.Console = console;
+			this.LogGroup = new DetectorLogGroup(indexNumber);
+		}
+	}
+
+	public sealed class DetectorBehavior : ExtremeConsole.IBehavior
+	{
+		private readonly LoggerRole ownerRole;
+		private readonly DetectorData detector;
+
+		public float CoolTime => 0.0f;
+		public bool IsCheckWall => false;
+
+		public DetectorBehavior(LoggerRole ownerRole, DetectorData detector)
+		{
+			this.ownerRole = ownerRole;
+			this.detector = detector;
+		}
+
+		public bool CanUse(NetworkedPlayerInfo pc)
+		{
+			return PlayerControl.LocalPlayer != null &&
+				pc.PlayerId == PlayerControl.LocalPlayer.PlayerId &&
+				pc.Object != null && pc.Object.CanMove && !pc.IsDead;
+		}
+
+		public void Use()
+		{
+			this.ownerRole.RemoveDetector(this.detector);
+		}
+	}
+
+	public LoggerRole() : base(
+		RoleArgs.BuildCrewmate(
+			ExtremeRoleId.Logger,
+			ColorPalette.LoggerGreen))
+	{
+	}
+
+	public void CreateAbility()
+	{
+		var fastSettings = HudManager.Instance.UseButton.fastUseSettings;
+		Sprite buttonImage = fastSettings.TryGetValue(ImageNames.AdminMapButton, out var value) && value != null
+			? value.Image
+			: fastSettings[ImageNames.UseButton].Image;
+
+		this.CreateActivatingAbilityCountButton(
+			"LoggerDetectorButton",
+			buttonImage);
+		this.Button?.SetLabelToCrewmate();
+	}
+
+	public bool IsAbilityUse()
+	{
+		return IRoleAbility.IsCommonUse() && Minigame.Instance == null;
+	}
+
+	public bool UseAbility()
+	{
+		Vector2 pos = PlayerControl.LocalPlayer.GetTruePosition();
+		this.CreateDetector(pos);
+		return true;
+	}
+
+	public void Update(PlayerControl rolePlayer)
+	{
+		if (!GameProgressSystem.IsTaskPhase || rolePlayer != PlayerControl.LocalPlayer)
+		{
+			return;
+		}
+
+		this.checkSabotageState();
+		this.checkPlayerPositions();
+	}
+
+	private void CreateDetector(Vector2 pos)
+	{
+		this.detectorCounter++;
+		int detectorIndex = this.detectorCounter;
+
+		var objConsole = this.consoleSystem.CreateConsoleObj(pos, $"LoggerDetector_{detectorIndex}");
+		var data = new DetectorData(detectorIndex, pos, objConsole);
+		var behavior = new DetectorBehavior(this, data);
+		objConsole.Behavior = behavior;
+
+		if (!this.isVisibleAll)
+		{
+			objConsole.gameObject.SetActive(false);
+		}
+
+		this.activeDetectors.Add(data);
+	}
+
+	public void RemoveDetector(DetectorData detector)
+	{
+		if (this.activeDetectors.Remove(detector))
+		{
+			this.archivedDetectorLogs.Add(detector.LogGroup);
+
+			if (detector.Console != null && detector.Console.gameObject != null)
+			{
+				UnityEngine.Object.Destroy(detector.Console.gameObject);
+			}
+
+			if (this.Button != null && this.Button.Behavior is ICountBehavior countBehavior)
+			{
+				countBehavior.SetAbilityCount(countBehavior.AbilityCount + 1);
+			}
+		}
+	}
+
+	private void checkSabotageState()
+	{
+		bool isCommsNow = isCommsSabotageActive();
+		bool isAnySaboNow = isAnySabotageActive();
+
+		if (!this.wasCommsActive && isCommsNow)
+		{
+			this.AddCommsLogAll();
+		}
+		else if (!this.wasSabotageActive && isAnySaboNow && !isCommsNow)
+		{
+			this.AddSabotageLogAll();
+		}
+
+		this.wasCommsActive = isCommsNow;
+		this.wasSabotageActive = isAnySaboNow;
+	}
+
+	private void AddCommsLogAll()
+	{
+		string logEntry = Tr.GetString("LoggerLogNoData");
+		foreach (var det in this.activeDetectors)
+		{
+			det.LogGroup.Logs.Add(logEntry);
+		}
+	}
+
+	private void AddSabotageLogAll()
+	{
+		string logEntry = Tr.GetString("LoggerLogSabotage");
+		foreach (var det in this.activeDetectors)
+		{
+			det.LogGroup.Logs.Add(logEntry);
+		}
+	}
+
+	private void checkPlayerPositions()
+	{
+		bool isCommsActive = isCommsSabotageActive();
+
+		foreach (var det in this.activeDetectors)
+		{
+			foreach (var player in PlayerControl.AllPlayerControls)
+			{
+				if (player == null || player.Data == null || player.Data.IsDead || player.inVent)
+				{
+					det.PlayersInRange.Remove(player.PlayerId);
+					continue;
+				}
+
+				float dist = Vector2.Distance(player.GetTruePosition(), det.Position);
+				if (dist <= this.range)
+				{
+					if (det.PlayersInRange.Add(player.PlayerId))
+					{
+						if (!isCommsActive)
+						{
+							string template = Tr.GetString("LoggerLogPlayerPass");
+							string logEntry = string.Format(template, player.Data.PlayerName);
+							det.LogGroup.Logs.Add(logEntry);
+						}
+					}
+				}
+				else
+				{
+					det.PlayersInRange.Remove(player.PlayerId);
+				}
+			}
+		}
+	}
+
+	private static bool isCommsSabotageActive()
+	{
+		if (ShipStatus.Instance != null && ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Comms, out var system) && system != null)
+		{
+			if (system.TryCast<HudOverrideSystemType>() is HudOverrideSystemType hudSabo)
+			{
+				return hudSabo.IsActive;
+			}
+			if (system.TryCast<HqHudSystemType>() is HqHudSystemType hqSabo)
+			{
+				return hqSabo.IsActive;
+			}
+		}
+		return false;
+	}
+
+	private static bool isAnySabotageActive()
+	{
+		if (ShipStatus.Instance != null && ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Sabotage, out var system) && system != null)
+		{
+			if (system.TryCast<SabotageSystemType>() is SabotageSystemType saboSystem)
+			{
+				return saboSystem.AnyActive;
+			}
+		}
+		return false;
+	}
+
+	public void ResetOnMeetingStart()
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer == null || localPlayer.Data == null || localPlayer.Data.IsDead)
+		{
+			return;
+		}
+
+		var allGroups = new List<DetectorLogGroup>();
+		foreach (var det in this.activeDetectors)
+		{
+			allGroups.Add(det.LogGroup);
+		}
+		allGroups.AddRange(this.archivedDetectorLogs);
+
+		allGroups.Sort((a, b) => a.IndexNumber.CompareTo(b.IndexNumber));
+
+		foreach (var group in allGroups)
+		{
+			string headerTemplate = Tr.GetString("LoggerDetectorHeader");
+			string header = string.Format(headerTemplate, group.IndexNumber);
+			MeetingReporter.Instance.AddMeetingChatReport(header);
+
+			if (group.Logs.Count == 0)
+			{
+				string noLog = Tr.GetString("LoggerLogNone");
+				MeetingReporter.Instance.AddMeetingChatReport(noLog);
+			}
+			else
+			{
+				foreach (var log in group.Logs)
+				{
+					MeetingReporter.Instance.AddMeetingChatReport(log);
+				}
+			}
+		}
+
+		foreach (var det in this.activeDetectors)
+		{
+			det.LogGroup.Logs.Clear();
+		}
+		this.archivedDetectorLogs.Clear();
+	}
+
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
+	{
+	}
+
+	protected override void CreateSpecificOption(
+		AutoParentSetOptionCategoryFactory factory)
+	{
+		IRoleAbility.CreateAbilityCountOption(factory, 2, 20, 3.0f);
+		factory.CreateFloatOption(Option.ActiveTime, 3.0f, 0.0f, 10.0f, 0.5f, format: OptionUnit.Second);
+		factory.CreateFloatOption(Option.Range, 2.5f, 0.5f, 10.0f, 0.5f);
+		factory.CreateBoolOption(Option.IsVisibleAll, true);
+	}
+
+	protected override void RoleSpecificInit()
+	{
+		var loader = this.Loader;
+		float activeTime = loader.GetValue<Option, float>(Option.ActiveTime);
+		this.range = loader.GetValue<Option, float>(Option.Range);
+		this.isVisibleAll = loader.GetValue<Option, bool>(Option.IsVisibleAll);
+
+		if (this.Button != null && this.Button.Behavior is IActivatingBehavior activeBehavior)
+		{
+			activeBehavior.ActiveTime = activeTime;
+		}
+	}
+}
