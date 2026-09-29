@@ -17,7 +17,7 @@ public class ModdedShapeShifterMinigameWrapper
 	public bool IsOpen { get; private set; }
 	private ShapeshifterMinigame? prefab = null;
 
-	public bool Open<T>() where T : ModdedShapeShifterMinigameBase
+	public bool Open<T>(Action<T>? onCreated = null) where T : ModdedShapeShifterMinigameBase
 	{
 		if (this.prefab == null)
 		{
@@ -34,6 +34,7 @@ public class ModdedShapeShifterMinigameWrapper
 
 		var minigameBase = MinigameSystem.Create(this.prefab);
 		var minigame = minigameBase.gameObject.TryAddComponent<T>();
+		onCreated?.Invoke(minigame);
 		minigame.Begin(null);
 		minigame.CloseAction += () => this.IsOpen = false;
 		this.IsOpen = true;
@@ -198,6 +199,8 @@ public class ModdedShapeShifterMinigameBase(IntPtr ptr) : Minigame(ptr)
 [Il2CppRegister]
 public class ScannerScanSelectorMinigame(IntPtr ptr) : ModdedShapeShifterMinigameBase(ptr)
 {
+	public Action<SystemTypes>? OnSelectRoom { get; set; }
+
 	protected override IEnumerable<ShapeshifterPanel> CreateButton(ShapeShifterGameProp prop)
 	{
 		foreach (var room in ShipStatus.Instance.AllRooms)
@@ -210,6 +213,7 @@ public class ScannerScanSelectorMinigame(IntPtr ptr) : ModdedShapeShifterMinigam
 
 	private void SetScanRoom(SystemTypes roomId)
 	{
-		// ここにロジックを書く
+		this.OnSelectRoom?.Invoke(roomId);
+		Hide();
 	}
 }
