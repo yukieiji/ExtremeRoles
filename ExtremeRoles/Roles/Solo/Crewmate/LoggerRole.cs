@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 
 using Hazel;
 using UnityEngine;
@@ -43,7 +44,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 	private readonly List<DetectorData> activeDetectors = new List<DetectorData>();
 	private readonly List<DetectorLogGroup> archivedDetectorLogs = new List<DetectorLogGroup>();
-	private static readonly Dictionary<int, ExtremeConsole> remoteConsoleMap = new Dictionary<int, ExtremeConsole>();
+	private static readonly Dictionary<int, GameObject> remoteDetectorMap = new Dictionary<int, GameObject>();
 
 	private readonly ExtremeConsoleSystem consoleSystem = ExtremeConsoleSystem.Create();
 
@@ -185,20 +186,31 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 				float y = reader.ReadSingle();
 				Vector2 pos = new Vector2(x, y);
 
-				var consoleSystem = ExtremeConsoleSystem.Create();
-				var console = consoleSystem.CreateConsoleObj(pos, $"LoggerDetector_{index}");
-				remoteConsoleMap[index] = console;
+				if (PlayerControl.LocalPlayer != null &&
+					ExtremeRoleManager.TryGetRole(PlayerControl.LocalPlayer.PlayerId, out var localRole) &&
+					localRole is not LoggerRole)
+				{
+					var obj = new GameObject($"LoggerDetectorVisual_{index}");
+					obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+					var sr = obj.AddComponent<SpriteRenderer>();
+					var fastSettings = HudManager.Instance.UseButton.fastUseSettings;
+					if (fastSettings.TryGetValue(ImageNames.AdminMapButton, out var val) && val != null)
+					{
+						sr.sprite = val.Image;
+					}
+					remoteDetectorMap[index] = obj;
+				}
 				break;
 
 			case RpcType.RemoveDetector:
 				int removeIndex = reader.ReadInt32();
-				if (remoteConsoleMap.TryGetValue(removeIndex, out var removeConsole))
+				if (remoteDetectorMap.TryGetValue(removeIndex, out var removeObj))
 				{
-					if (removeConsole != null && removeConsole.gameObject != null)
+					if (removeObj != null)
 					{
-						Object.Destroy(removeConsole.gameObject);
+						Object.Destroy(removeObj);
 					}
-					remoteConsoleMap.Remove(removeIndex);
+					remoteDetectorMap.Remove(removeIndex);
 				}
 				break;
 		}
@@ -221,14 +233,6 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		var data = new DetectorData(detectorIndex, pos, objConsole);
 		var behavior = new DetectorBehavior(this, data);
 		objConsole.Behavior = behavior;
-
-		if (!this.isVisibleAll)
-		{
-			if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId != (byte)this.GameControlId)
-			{
-				objConsole.gameObject.SetActive(false);
-			}
-		}
 
 		this.activeDetectors.Add(data);
 	}
@@ -377,25 +381,33 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 		allGroups.Sort((a, b) => a.IndexNumber.CompareTo(b.IndexNumber));
 
+		if (allGroups.Count == 0)
+		{
+			return;
+		}
+
+		var sb = new StringBuilder();
 		foreach (var group in allGroups)
 		{
 			string headerTemplate = Tr.GetString("LoggerDetectorHeader");
 			string header = string.Format(headerTemplate, group.IndexNumber);
-			MeetingReporter.Instance.AddMeetingChatReport(header);
+			sb.AppendLine(header);
 
 			if (group.Logs.Count == 0)
 			{
 				string noLog = Tr.GetString("LoggerLogNone");
-				MeetingReporter.Instance.AddMeetingChatReport(noLog);
+				sb.AppendLine(noLog);
 			}
 			else
 			{
 				foreach (var log in group.Logs)
 				{
-					MeetingReporter.Instance.AddMeetingChatReport(log);
+					sb.AppendLine(log);
 				}
 			}
 		}
+
+		MeetingReporter.Instance.AddMeetingChatReport(sb.ToString().TrimEnd());
 
 		foreach (var det in this.activeDetectors)
 		{
@@ -419,6 +431,21 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 	protected override void RoleSpecificInit()
 	{
+		this.detectorCounter = 0;
+		this.activeDetectors.Clear();
+		this.archivedDetectorLogs.Clear();
+		this.wasCommsActive = false;
+		this.wasSabotageActive = false;
+
+		foreach (var remoteObj in remoteDetectorMap.Values)
+		{
+			if (remoteObj != null)
+			{
+				Object.Destroy(remoteObj);
+			}
+		}
+		remoteDetectorMap.Clear();
+
 		var loader = this.Loader;
 		float activeTime = loader.GetValue<Option, float>(Option.ActiveTime);
 		this.range = loader.GetValue<Option, float>(Option.Range);
