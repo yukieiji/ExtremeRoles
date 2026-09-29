@@ -44,7 +44,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 	private readonly List<DetectorData> activeDetectors = new List<DetectorData>();
 	private readonly List<DetectorLogGroup> archivedDetectorLogs = new List<DetectorLogGroup>();
-	private static readonly Dictionary<(byte ownerPlayerId, int detectorIndex), GameObject> remoteDetectorMap = new Dictionary<(byte, int), GameObject>();
+	private readonly Dictionary<int, GameObject> remoteDetectorMap = new Dictionary<int, GameObject>();
 
 	private readonly ExtremeConsoleSystem consoleSystem = ExtremeConsoleSystem.Create();
 
@@ -179,41 +179,56 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	public static void RpcOps(MessageReader reader)
 	{
 		RpcType type = (RpcType)reader.ReadByte();
+		byte ownerPlayerId = reader.ReadByte();
+
+		if (!ExtremeRoleManager.TryGetSafeCastedRole<LoggerRole>(ownerPlayerId, out var ownerLogger) || ownerLogger == null)
+		{
+			return;
+		}
+
 		switch (type)
 		{
 			case RpcType.SetDetector:
-				byte ownerPlayerId = reader.ReadByte();
 				int index = reader.ReadInt32();
 				float x = reader.ReadSingle();
 				float y = reader.ReadSingle();
 				Vector2 pos = new Vector2(x, y);
 
-				if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId != ownerPlayerId)
-				{
-					var obj = new GameObject($"LoggerDetectorVisual_{ownerPlayerId}_{index}");
-					obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
-					var sr = obj.AddComponent<SpriteRenderer>();
-					var fastSettings = HudManager.Instance.UseButton.fastUseSettings;
-					if (fastSettings.TryGetValue(ImageNames.AdminMapButton, out var val) && val != null)
-					{
-						sr.sprite = val.Image;
-					}
-					remoteDetectorMap[(ownerPlayerId, index)] = obj;
-				}
+				ownerLogger.OnRpcSetDetector(index, pos);
 				break;
 
 			case RpcType.RemoveDetector:
-				byte removeOwnerId = reader.ReadByte();
 				int removeIndex = reader.ReadInt32();
-				if (remoteDetectorMap.TryGetValue((removeOwnerId, removeIndex), out var removeObj))
-				{
-					if (removeObj != null)
-					{
-						Object.Destroy(removeObj);
-					}
-					remoteDetectorMap.Remove((removeOwnerId, removeIndex));
-				}
+				ownerLogger.OnRpcRemoveDetector(removeIndex);
 				break;
+		}
+	}
+
+	public void OnRpcSetDetector(int index, Vector2 pos)
+	{
+		if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId != (byte)this.GameControlId)
+		{
+			var obj = new GameObject($"LoggerDetectorVisual_{this.GameControlId}_{index}");
+			obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+			var sr = obj.AddComponent<SpriteRenderer>();
+			var fastSettings = HudManager.Instance.UseButton.fastUseSettings;
+			if (fastSettings.TryGetValue(ImageNames.AdminMapButton, out var val) && val != null)
+			{
+				sr.sprite = val.Image;
+			}
+			this.remoteDetectorMap[index] = obj;
+		}
+	}
+
+	public void OnRpcRemoveDetector(int removeIndex)
+	{
+		if (this.remoteDetectorMap.TryGetValue(removeIndex, out var removeObj))
+		{
+			if (removeObj != null)
+			{
+				Object.Destroy(removeObj);
+			}
+			this.remoteDetectorMap.Remove(removeIndex);
 		}
 	}
 
@@ -439,14 +454,14 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		this.wasCommsActive = false;
 		this.wasSabotageActive = false;
 
-		foreach (var remoteObj in remoteDetectorMap.Values)
+		foreach (var remoteObj in this.remoteDetectorMap.Values)
 		{
 			if (remoteObj != null)
 			{
 				Object.Destroy(remoteObj);
 			}
 		}
-		remoteDetectorMap.Clear();
+		this.remoteDetectorMap.Clear();
 
 		var loader = this.Loader;
 		float activeTime = loader.GetValue<Option, float>(Option.ActiveTime);
