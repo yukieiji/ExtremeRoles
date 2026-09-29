@@ -58,15 +58,6 @@ public class InspectorRoleTests
 			Hazel.MockMessageWriterGetHelper.Instance = mockGet.Object;
 		}
 
-		if (Hazel.MockMessageReaderGetHelper.Instance == null)
-		{
-			var mockReaderHelper = new Mock<Hazel.MockMessageReaderGetHelper>();
-			var mockReader = new Mock<MessageReader>();
-			mockReaderHelper.Setup(g => g.Invoke(It.IsAny<Il2CppStructArray<byte>>()))
-				.Returns(mockReader.Object);
-			Hazel.MockMessageReaderGetHelper.Instance = mockReaderHelper.Object;
-		}
-
 		if (InnerNet.MockMessageExtensionsWriteNetObjectHelper.Instance == null)
 		{
 			var mockWriteNetObj = new Mock<InnerNet.MockMessageExtensionsWriteNetObjectHelper>();
@@ -98,6 +89,21 @@ public class InspectorRoleTests
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>())).Returns("TestString");
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>())).Returns("TestString");
 		mockTranslation.Setup(t => t.GetString(It.IsAny<StringNames>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>())).Returns("TestString");
+	}
+
+	private static void SetupMessageReaderMock(InspectorInspectSystem.Ops ops)
+	{
+		var mockReaderHelper = new Mock<Hazel.MockMessageReaderGetHelper>();
+		mockReaderHelper.Setup(g => g.Invoke(It.IsAny<Il2CppStructArray<byte>>()))
+			.Returns(() =>
+			{
+				var mockReader = new Mock<MessageReader>();
+				mockReader.SetupSequence(r => r.ReadByte())
+					.Returns((byte)ExtremeSystemType.InspectorInspect)
+					.Returns((byte)ops);
+				return mockReader.Object;
+			});
+		Hazel.MockMessageReaderGetHelper.Instance = mockReaderHelper.Object;
 	}
 
 	[Fact]
@@ -174,13 +180,26 @@ public class InspectorRoleTests
 	}
 
 	[Fact]
-	public void UseAbility_ReturnsTrue()
+	public void UseAbility_StartsInspectInInspectorInspectSystem_AndReturnsTrue()
 	{
+		SetupMessageReaderMock(InspectorInspectSystem.Ops.StartInspect);
+
 		var role = new Inspector();
+		role.CreateRoleAllOption();
+		role.Initialize();
+
+		Assert.True(ExtremeSystemTypeManager.Instance.TryGet<InspectorInspectSystem>(ExtremeSystemType.InspectorInspect, out var system));
+		Assert.NotNull(system);
+
+		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
 		bool result = role.UseAbility();
 
 		Assert.True(result);
+
+		var allTargetField = typeof(InspectorInspectSystem).GetField("allTarget", BindingFlags.NonPublic | BindingFlags.Instance);
+		var allTarget = (IDictionary)allTargetField!.GetValue(system)!;
+		Assert.True(allTarget.Contains(localPlayerId));
 	}
 
 	[Fact]
@@ -225,14 +244,63 @@ public class InspectorRoleTests
 	}
 
 	[Fact]
-	public void CleanUp_And_ResetOnMeetingStart_And_ResetOnMeetingEnd_ExecuteWithoutThrowing()
+	public void CleanUp_EndsInspectForLocalPlayerInSystem()
 	{
+		SetupMessageReaderMock(InspectorInspectSystem.Ops.StartInspect);
+
 		var role = new Inspector();
 		role.CreateRoleAllOption();
 		role.Initialize();
 
+		Assert.True(ExtremeSystemTypeManager.Instance.TryGet<InspectorInspectSystem>(ExtremeSystemType.InspectorInspect, out var system));
+		Assert.NotNull(system);
+
+		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+
+		role.UseAbility();
+
+		var allTargetField = typeof(InspectorInspectSystem).GetField("allTarget", BindingFlags.NonPublic | BindingFlags.Instance);
+		var allTarget = (IDictionary)allTargetField!.GetValue(system)!;
+		Assert.True(allTarget.Contains(localPlayerId));
+
+		SetupMessageReaderMock(InspectorInspectSystem.Ops.EndInspect);
+
 		role.CleanUp();
+
+		Assert.False(allTarget.Contains(localPlayerId));
+	}
+
+	[Fact]
+	public void ResetOnMeetingStart_CallsCleanUp_AndEndsInspectForLocalPlayer()
+	{
+		SetupMessageReaderMock(InspectorInspectSystem.Ops.StartInspect);
+
+		var role = new Inspector();
+		role.CreateRoleAllOption();
+		role.Initialize();
+
+		Assert.True(ExtremeSystemTypeManager.Instance.TryGet<InspectorInspectSystem>(ExtremeSystemType.InspectorInspect, out var system));
+		Assert.NotNull(system);
+
+		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+
+		role.UseAbility();
+
+		var allTargetField = typeof(InspectorInspectSystem).GetField("allTarget", BindingFlags.NonPublic | BindingFlags.Instance);
+		var allTarget = (IDictionary)allTargetField!.GetValue(system)!;
+		Assert.True(allTarget.Contains(localPlayerId));
+
+		SetupMessageReaderMock(InspectorInspectSystem.Ops.EndInspect);
+
 		role.ResetOnMeetingStart();
+
+		Assert.False(allTarget.Contains(localPlayerId));
+	}
+
+	[Fact]
+	public void ResetOnMeetingEnd_ExecutesWithoutError()
+	{
+		var role = new Inspector();
 		role.ResetOnMeetingEnd(null);
 	}
 }
