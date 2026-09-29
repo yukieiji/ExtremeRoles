@@ -1,8 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
+
+using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -10,10 +11,8 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -21,7 +20,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 #nullable enable
 
-public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
+public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleResetMeeting
 {
 	public enum Option
 	{
@@ -30,14 +29,21 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		IsVisibleAll,
 	}
 
+	public enum RpcType : byte
+	{
+		SetDetector,
+		RemoveDetector,
+	}
+
 	public ExtremeAbilityButton? Button { get; set; }
 
 	private float range = 2.5f;
 	private bool isVisibleAll = true;
 	private int detectorCounter = 0;
 
-	private readonly List<DetectorData> activeDetectors = new();
-	private readonly List<DetectorLogGroup> archivedDetectorLogs = new();
+	private readonly List<DetectorData> activeDetectors = new List<DetectorData>();
+	private readonly List<DetectorLogGroup> archivedDetectorLogs = new List<DetectorLogGroup>();
+	private static readonly Dictionary<int, ExtremeConsole> remoteConsoleMap = new Dictionary<int, ExtremeConsole>();
 
 	private readonly ExtremeConsoleSystem consoleSystem = ExtremeConsoleSystem.Create();
 
@@ -47,11 +53,12 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	public sealed class DetectorLogGroup
 	{
 		public int IndexNumber { get; }
-		public List<string> Logs { get; } = new();
+		public List<string> Logs { get; }
 
 		public DetectorLogGroup(int indexNumber)
 		{
 			this.IndexNumber = indexNumber;
+			this.Logs = new List<string>();
 		}
 
 		public DetectorLogGroup(int indexNumber, List<string> logs)
@@ -67,7 +74,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		public Vector2 Position { get; }
 		public ExtremeConsole Console { get; }
 		public DetectorLogGroup LogGroup { get; }
-		public HashSet<byte> PlayersInRange { get; } = new();
+		public HashSet<byte> PlayersInRange { get; }
 
 		public DetectorData(int indexNumber, Vector2 position, ExtremeConsole console)
 		{
@@ -75,6 +82,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 			this.Position = position;
 			this.Console = console;
 			this.LogGroup = new DetectorLogGroup(indexNumber);
+			this.PlayersInRange = new HashSet<byte>();
 		}
 	}
 
@@ -94,9 +102,14 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 		public bool CanUse(NetworkedPlayerInfo pc)
 		{
-			return PlayerControl.LocalPlayer != null &&
-				pc.PlayerId == PlayerControl.LocalPlayer.PlayerId &&
-				pc.Object != null && pc.Object.CanMove && !pc.IsDead;
+			if (PlayerControl.LocalPlayer == null || pc.Object == null)
+			{
+				return false;
+			}
+
+			return pc.PlayerId == PlayerControl.LocalPlayer.PlayerId &&
+				pc.Object.CanMove &&
+				!pc.IsDead;
 		}
 
 		public void Use()
@@ -122,7 +135,11 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		this.CreateActivatingAbilityCountButton(
 			"LoggerDetectorButton",
 			buttonImage);
-		this.Button?.SetLabelToCrewmate();
+
+		if (this.Button != null)
+		{
+			this.Button.SetLabelToCrewmate();
+		}
 	}
 
 	public bool IsAbilityUse()
@@ -132,9 +149,59 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 	public bool UseAbility()
 	{
+		if (PlayerControl.LocalPlayer == null)
+		{
+			return false;
+		}
+
 		Vector2 pos = PlayerControl.LocalPlayer.GetTruePosition();
-		this.CreateDetector(pos);
+
+		this.detectorCounter++;
+		int detectorIndex = this.detectorCounter;
+
+		if (this.isVisibleAll)
+		{
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.LoggerOps))
+			{
+				caller.WriteByte((byte)RpcType.SetDetector);
+				caller.WriteInt(detectorIndex);
+				caller.WriteFloat(pos.x);
+				caller.WriteFloat(pos.y);
+			}
+		}
+
+		this.CreateDetector(detectorIndex, pos);
 		return true;
+	}
+
+	public static void RpcOps(MessageReader reader)
+	{
+		RpcType type = (RpcType)reader.ReadByte();
+		switch (type)
+		{
+			case RpcType.SetDetector:
+				int index = reader.ReadInt32();
+				float x = reader.ReadSingle();
+				float y = reader.ReadSingle();
+				Vector2 pos = new Vector2(x, y);
+
+				var consoleSystem = ExtremeConsoleSystem.Create();
+				var console = consoleSystem.CreateConsoleObj(pos, $"LoggerDetector_{index}");
+				remoteConsoleMap[index] = console;
+				break;
+
+			case RpcType.RemoveDetector:
+				int removeIndex = reader.ReadInt32();
+				if (remoteConsoleMap.TryGetValue(removeIndex, out var removeConsole))
+				{
+					if (removeConsole != null && removeConsole.gameObject != null)
+					{
+						Object.Destroy(removeConsole.gameObject);
+					}
+					remoteConsoleMap.Remove(removeIndex);
+				}
+				break;
+		}
 	}
 
 	public void Update(PlayerControl rolePlayer)
@@ -148,11 +215,8 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		this.checkPlayerPositions();
 	}
 
-	private void CreateDetector(Vector2 pos)
+	private void CreateDetector(int detectorIndex, Vector2 pos)
 	{
-		this.detectorCounter++;
-		int detectorIndex = this.detectorCounter;
-
 		var objConsole = this.consoleSystem.CreateConsoleObj(pos, $"LoggerDetector_{detectorIndex}");
 		var data = new DetectorData(detectorIndex, pos, objConsole);
 		var behavior = new DetectorBehavior(this, data);
@@ -160,7 +224,10 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 		if (!this.isVisibleAll)
 		{
-			objConsole.gameObject.SetActive(false);
+			if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId != (byte)this.GameControlId)
+			{
+				objConsole.gameObject.SetActive(false);
+			}
 		}
 
 		this.activeDetectors.Add(data);
@@ -172,9 +239,18 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		{
 			this.archivedDetectorLogs.Add(detector.LogGroup);
 
+			if (this.isVisibleAll)
+			{
+				using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.LoggerOps))
+				{
+					caller.WriteByte((byte)RpcType.RemoveDetector);
+					caller.WriteInt(detector.IndexNumber);
+				}
+			}
+
 			if (detector.Console != null && detector.Console.gameObject != null)
 			{
-				UnityEngine.Object.Destroy(detector.Console.gameObject);
+				Object.Destroy(detector.Console.gameObject);
 			}
 
 			if (this.Button != null && this.Button.Behavior is ICountBehavior countBehavior)
@@ -191,18 +267,18 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 		if (!this.wasCommsActive && isCommsNow)
 		{
-			this.AddCommsLogAll();
+			this.addCommsLogAll();
 		}
 		else if (!this.wasSabotageActive && isAnySaboNow && !isCommsNow)
 		{
-			this.AddSabotageLogAll();
+			this.addSabotageLogAll();
 		}
 
 		this.wasCommsActive = isCommsNow;
 		this.wasSabotageActive = isAnySaboNow;
 	}
 
-	private void AddCommsLogAll()
+	private void addCommsLogAll()
 	{
 		string logEntry = Tr.GetString("LoggerLogNoData");
 		foreach (var det in this.activeDetectors)
@@ -211,7 +287,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		}
 	}
 
-	private void AddSabotageLogAll()
+	private void addSabotageLogAll()
 	{
 		string logEntry = Tr.GetString("LoggerLogSabotage");
 		foreach (var det in this.activeDetectors)
@@ -259,11 +335,12 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	{
 		if (ShipStatus.Instance != null && ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Comms, out var system) && system != null)
 		{
-			if (system.TryCast<HudOverrideSystemType>() is HudOverrideSystemType hudSabo)
+			if (system.IsTryCast<HudOverrideSystemType>(out var hudSabo) && hudSabo != null)
 			{
 				return hudSabo.IsActive;
 			}
-			if (system.TryCast<HqHudSystemType>() is HqHudSystemType hqSabo)
+
+			if (system.IsTryCast<HqHudSystemType>(out var hqSabo) && hqSabo != null)
 			{
 				return hqSabo.IsActive;
 			}
@@ -275,7 +352,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	{
 		if (ShipStatus.Instance != null && ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Sabotage, out var system) && system != null)
 		{
-			if (system.TryCast<SabotageSystemType>() is SabotageSystemType saboSystem)
+			if (system.IsTryCast<SabotageSystemType>(out var saboSystem) && saboSystem != null)
 			{
 				return saboSystem.AnyActive;
 			}
