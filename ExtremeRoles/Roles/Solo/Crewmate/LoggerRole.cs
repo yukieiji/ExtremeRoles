@@ -44,7 +44,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 	private readonly List<DetectorData> activeDetectors = new List<DetectorData>();
 	private readonly List<DetectorLogGroup> archivedDetectorLogs = new List<DetectorLogGroup>();
-	private static readonly Dictionary<int, GameObject> remoteDetectorMap = new Dictionary<int, GameObject>();
+	private static readonly Dictionary<(byte ownerPlayerId, int detectorIndex), GameObject> remoteDetectorMap = new Dictionary<(byte, int), GameObject>();
 
 	private readonly ExtremeConsoleSystem consoleSystem = ExtremeConsoleSystem.Create();
 
@@ -165,6 +165,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.LoggerOps))
 			{
 				caller.WriteByte((byte)RpcType.SetDetector);
+				caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 				caller.WriteInt(detectorIndex);
 				caller.WriteFloat(pos.x);
 				caller.WriteFloat(pos.y);
@@ -181,16 +182,15 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		switch (type)
 		{
 			case RpcType.SetDetector:
+				byte ownerPlayerId = reader.ReadByte();
 				int index = reader.ReadInt32();
 				float x = reader.ReadSingle();
 				float y = reader.ReadSingle();
 				Vector2 pos = new Vector2(x, y);
 
-				if (PlayerControl.LocalPlayer != null &&
-					ExtremeRoleManager.TryGetRole(PlayerControl.LocalPlayer.PlayerId, out var localRole) &&
-					localRole is not LoggerRole)
+				if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId != ownerPlayerId)
 				{
-					var obj = new GameObject($"LoggerDetectorVisual_{index}");
+					var obj = new GameObject($"LoggerDetectorVisual_{ownerPlayerId}_{index}");
 					obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 					var sr = obj.AddComponent<SpriteRenderer>();
 					var fastSettings = HudManager.Instance.UseButton.fastUseSettings;
@@ -198,19 +198,20 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 					{
 						sr.sprite = val.Image;
 					}
-					remoteDetectorMap[index] = obj;
+					remoteDetectorMap[(ownerPlayerId, index)] = obj;
 				}
 				break;
 
 			case RpcType.RemoveDetector:
+				byte removeOwnerId = reader.ReadByte();
 				int removeIndex = reader.ReadInt32();
-				if (remoteDetectorMap.TryGetValue(removeIndex, out var removeObj))
+				if (remoteDetectorMap.TryGetValue((removeOwnerId, removeIndex), out var removeObj))
 				{
 					if (removeObj != null)
 					{
 						Object.Destroy(removeObj);
 					}
-					remoteDetectorMap.Remove(removeIndex);
+					remoteDetectorMap.Remove((removeOwnerId, removeIndex));
 				}
 				break;
 		}
@@ -243,11 +244,12 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		{
 			this.archivedDetectorLogs.Add(detector.LogGroup);
 
-			if (this.isVisibleAll)
+			if (this.isVisibleAll && PlayerControl.LocalPlayer != null)
 			{
 				using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.LoggerOps))
 				{
 					caller.WriteByte((byte)RpcType.RemoveDetector);
+					caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 					caller.WriteInt(detector.IndexNumber);
 				}
 			}
