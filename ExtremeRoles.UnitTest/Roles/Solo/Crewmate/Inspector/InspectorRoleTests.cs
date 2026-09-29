@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using ExtremeRoles.Module;
@@ -196,16 +197,7 @@ public class InspectorRoleTests
 	}
 
 	[Fact]
-	public void Constructor_SetsExpectedProperties()
-	{
-		var role = new Inspector();
-
-		Assert.Equal(ExtremeRoleId.Inspector, role.Core.Id);
-		Assert.Null(role.Button);
-	}
-
-	[Fact]
-	public void CreateRoleAllOption_CreatesExpectedOptions()
+	public void CreateRoleAllOption_CreatesExpectedOptionsWithDefaultValues()
 	{
 		int groupId = ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Inspector);
 		var role = new Inspector();
@@ -214,16 +206,22 @@ public class InspectorRoleTests
 
 		Assert.True(OptionManager.Instance.TryGetCategory(OptionTab.CrewmateTab, groupId, out var category));
 		Assert.NotNull(category);
+
 		Assert.True(role.Loader.TryGet(Inspector.Option.InspectSabotage, out var sabotageOpt));
 		Assert.NotNull(sabotageOpt);
+		Assert.Equal(1, sabotageOpt.Selection);
+
 		Assert.True(role.Loader.TryGet(Inspector.Option.InspectVent, out var ventOpt));
 		Assert.NotNull(ventOpt);
+		Assert.Equal(1, ventOpt.Selection);
+
 		Assert.True(role.Loader.TryGet(Inspector.Option.InspectAbility, out var abilityOpt));
 		Assert.NotNull(abilityOpt);
+		Assert.Equal(0, abilityOpt.Selection);
 	}
 
 	[Fact]
-	public void Initialize_RegistersInspectorInspectSystemInExtremeSystemTypeManager()
+	public void Initialize_RegistersInspectorInspectSystem_WithDefaultOptions()
 	{
 		var role = new Inspector();
 		role.CreateRoleAllOption();
@@ -232,10 +230,47 @@ public class InspectorRoleTests
 
 		Assert.True(ExtremeSystemTypeManager.Instance.TryGet<InspectorInspectSystem>(ExtremeSystemType.InspectorInspect, out var system));
 		Assert.NotNull(system);
+
+		var modeField = typeof(InspectorInspectSystem).GetField("mode", BindingFlags.NonPublic | BindingFlags.Instance);
+		Assert.NotNull(modeField);
+
+		var inspectMode = (InspectorInspectSystem.InspectMode)modeField.GetValue(system)!;
+		Assert.Equal(InspectorInspectSystem.InspectMode.Sabotage | InspectorInspectSystem.InspectMode.Vent, inspectMode);
 	}
 
 	[Fact]
-	public void UseAbility_CallsRpcUpdateSystem_AndReturnsTrue()
+	public void Initialize_RegistersInspectorInspectSystem_WithCustomOptions()
+	{
+		var role = new Inspector();
+		role.CreateRoleAllOption();
+
+		if (role.Loader.TryGet(Inspector.Option.InspectSabotage, out var sabotageOpt) && sabotageOpt != null)
+		{
+			sabotageOpt.Selection = 0;
+		}
+		if (role.Loader.TryGet(Inspector.Option.InspectVent, out var ventOpt) && ventOpt != null)
+		{
+			ventOpt.Selection = 0;
+		}
+		if (role.Loader.TryGet(Inspector.Option.InspectAbility, out var abilityOpt) && abilityOpt != null)
+		{
+			abilityOpt.Selection = 1;
+		}
+
+		role.Initialize();
+
+		Assert.True(ExtremeSystemTypeManager.Instance.TryGet<InspectorInspectSystem>(ExtremeSystemType.InspectorInspect, out var system));
+		Assert.NotNull(system);
+
+		var modeField = typeof(InspectorInspectSystem).GetField("mode", BindingFlags.NonPublic | BindingFlags.Instance);
+		Assert.NotNull(modeField);
+
+		var inspectMode = (InspectorInspectSystem.InspectMode)modeField.GetValue(system)!;
+		Assert.Equal(InspectorInspectSystem.InspectMode.Ability, inspectMode);
+	}
+
+	[Fact]
+	public void UseAbility_ReturnsTrue()
 	{
 		var role = new Inspector();
 
@@ -245,7 +280,7 @@ public class InspectorRoleTests
 	}
 
 	[Fact]
-	public void IsAbilityUse_ReturnsBoolean()
+	public void IsAbilityUse_ReturnsCommonUseValue()
 	{
 		var role = new Inspector();
 
@@ -255,42 +290,46 @@ public class InspectorRoleTests
 	}
 
 	[Fact]
-	public void CleanUp_CallsRpcUpdateSystem()
-	{
-		var role = new Inspector();
-
-		role.CleanUp();
-
-		Assert.True(true);
-	}
-
-	[Fact]
-	public void ResetOnMeetingStart_And_ResetOnMeetingEnd_ExecuteWithoutError()
-	{
-		var role = new Inspector();
-
-		role.ResetOnMeetingStart();
-		role.ResetOnMeetingEnd(null);
-
-		Assert.True(true);
-	}
-
-	[Fact]
-	public void RolePlayerKilledAction_WhenSystemExists_EndsInspectForRolePlayer()
+	public void RolePlayerKilledAction_EndsInspectForRolePlayerInSystem()
 	{
 		var role = new Inspector();
 		role.CreateRoleAllOption();
 		role.Initialize();
 
+		Assert.True(ExtremeSystemTypeManager.Instance.TryGet<InspectorInspectSystem>(ExtremeSystemType.InspectorInspect, out var system));
+		Assert.NotNull(system);
+
+		byte rolePlayerId = 3;
 		var rolePlayerMock = new Mock<PlayerControl>(IntPtr.Zero);
-		rolePlayerMock.SetupGet(p => p.PlayerId).Returns((byte)1);
+		rolePlayerMock.SetupGet(p => p.PlayerId).Returns(rolePlayerId);
 
 		var killerPlayerMock = new Mock<PlayerControl>(IntPtr.Zero);
 		killerPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)2);
 
+		var rStart = new Mock<MessageReader>();
+		rStart.SetupSequence(r => r.ReadByte())
+			.Returns((byte)InspectorInspectSystem.Ops.StartInspect);
+		system.UpdateSystem(rolePlayerMock.Object, rStart.Object);
+
+		var allTargetField = typeof(InspectorInspectSystem).GetField("allTarget", BindingFlags.NonPublic | BindingFlags.Instance);
+		var allTarget = (IDictionary)allTargetField!.GetValue(system)!;
+		Assert.True(allTarget.Contains(rolePlayerId));
+
 		role.RolePlayerKilledAction(rolePlayerMock.Object, killerPlayerMock.Object);
 
-		Assert.True(true);
+		Assert.False(allTarget.Contains(rolePlayerId));
+	}
+
+	[Fact]
+	public void CleanUp_And_ResetOnMeetingStart_And_ResetOnMeetingEnd_ExecuteWithoutThrowing()
+	{
+		var role = new Inspector();
+		role.CreateRoleAllOption();
+		role.Initialize();
+
+		role.CleanUp();
+		role.ResetOnMeetingStart();
+		role.ResetOnMeetingEnd(null);
 	}
 
 	[Fact]

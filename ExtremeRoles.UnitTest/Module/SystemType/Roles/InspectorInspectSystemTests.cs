@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Reflection;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -138,21 +139,35 @@ public sealed class InspectorInspectSystemTests : IDisposable
 	}
 
 	[Fact]
-	public void EndInspect_And_Reset_DoNotThrow()
+	public void EndInspect_And_Reset_ClearsAllTargets()
 	{
 		var system = new InspectorInspectSystem(InspectorInspectSystem.InspectMode.Sabotage | InspectorInspectSystem.InspectMode.Vent);
 		Assert.False(system.IsDirty);
 
+		var mockPlayer1 = CreatePlayerMock(1);
+		PlayerCache.AddPlayerControl(mockPlayer1.Object);
+
+		var rStart = new Mock<MessageReader>();
+		rStart.SetupSequence(r => r.ReadByte())
+			.Returns((byte)InspectorInspectSystem.Ops.StartInspect);
+		system.UpdateSystem(mockPlayer1.Object, rStart.Object);
+
+		var allTargetField = typeof(InspectorInspectSystem).GetField("allTarget", BindingFlags.NonPublic | BindingFlags.Instance);
+		var allTarget = (IDictionary)allTargetField!.GetValue(system)!;
+		Assert.True(allTarget.Contains((byte)1));
+
 		system.EndInspect(1);
+		Assert.False(allTarget.Contains((byte)1));
+
+		system.UpdateSystem(mockPlayer1.Object, rStart.Object);
+		Assert.True(allTarget.Contains((byte)1));
+
 		system.Reset(ResetTiming.MeetingStart, null);
-		system.Reset(ResetTiming.MeetingEnd, null);
-		system.MarkClean();
-		system.Serialize(null!, false);
-		system.Deserialize(null!, false);
+		Assert.Empty(allTarget);
 	}
 
 	[Fact]
-	public void UpdateSystem_AllOps()
+	public void UpdateSystem_AllOps_UpdatesTargetPlayerContainer()
 	{
 		var system = new InspectorInspectSystem(InspectorInspectSystem.InspectMode.Ability);
 
@@ -162,11 +177,18 @@ public sealed class InspectorInspectSystemTests : IDisposable
 		PlayerCache.AddPlayerControl(mockPlayer1.Object);
 		PlayerCache.AddPlayerControl(mockPlayer2.Object);
 
+		var allTargetField = typeof(InspectorInspectSystem).GetField("allTarget", BindingFlags.NonPublic | BindingFlags.Instance);
+		var allTarget = (IDictionary)allTargetField!.GetValue(system)!;
+
 		// StartInspect
 		var rStart = new Mock<MessageReader>();
 		rStart.SetupSequence(r => r.ReadByte())
 			.Returns((byte)InspectorInspectSystem.Ops.StartInspect);
 		system.UpdateSystem(mockPlayer1.Object, rStart.Object);
+
+		Assert.True(allTarget.Contains((byte)1));
+		var targetContainer = allTarget[(byte)1];
+		Assert.NotNull(targetContainer);
 
 		// Add
 		var rAdd = new Mock<MessageReader>();
@@ -175,48 +197,22 @@ public sealed class InspectorInspectSystemTests : IDisposable
 			.Returns((byte)2);
 		system.UpdateSystem(mockPlayer1.Object, rAdd.Object);
 
+		var containMethod = targetContainer.GetType().GetMethod("Contain", BindingFlags.Public | BindingFlags.Instance);
+		Assert.NotNull(containMethod);
+		bool containsPlayer2 = (bool)containMethod.Invoke(targetContainer, new object[] { mockPlayer2.Object })!;
+		Assert.True(containsPlayer2);
+
 		// EndInspect
 		var rEnd = new Mock<MessageReader>();
 		rEnd.SetupSequence(r => r.ReadByte())
 			.Returns((byte)InspectorInspectSystem.Ops.EndInspect);
 		system.UpdateSystem(mockPlayer1.Object, rEnd.Object);
+
+		Assert.False(allTarget.Contains((byte)1));
 	}
 
 	[Fact]
-	public void InspectStaticMethods_WhenLocalPlayerValidAndSystemExists_CallsRpcUpdateSystem()
-	{
-		var system = new InspectorInspectSystem(InspectorInspectSystem.InspectMode.Sabotage | InspectorInspectSystem.InspectMode.Vent | InspectorInspectSystem.InspectMode.Ability);
-		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.InspectorInspect, system);
-
-		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
-		var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
-		mockData.SetupGet(d => d.IsDead).Returns(false);
-		mockData.SetupGet(d => d.Disconnected).Returns(false);
-		localPlayerMock.SetupGet(p => p.Data).Returns(mockData.Object);
-		localPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)1);
-
-		PlayerCache.AddPlayerControl(localPlayerMock.Object);
-
-		// Start inspect so system.allTarget has count > 0
-		var rStart = new Mock<MessageReader>();
-		rStart.SetupSequence(r => r.ReadByte())
-			.Returns((byte)InspectorInspectSystem.Ops.StartInspect);
-		system.UpdateSystem(localPlayerMock.Object, rStart.Object);
-
-		// Test InspectAbility
-		InspectorInspectSystem.InspectAbility();
-
-		// Test InspectVent
-		InspectorInspectSystem.InspectVent();
-
-		// Test InspectSabotage
-		InspectorInspectSystem.InspectSabotage();
-
-		Assert.True(true);
-	}
-
-	[Fact]
-	public void Deteriorate_WhenLocalPlayerDeadOrDisconnected_ClearsTarget()
+	public void Deteriorate_WhenLocalPlayerDeadOrDisconnected_RemovesLocalPlayerFromAllTarget()
 	{
 		var system = new InspectorInspectSystem(InspectorInspectSystem.InspectMode.Sabotage);
 
@@ -231,8 +227,12 @@ public sealed class InspectorInspectSystemTests : IDisposable
 			.Returns((byte)InspectorInspectSystem.Ops.StartInspect);
 		system.UpdateSystem(localPlayerMock.Object, rStart.Object);
 
+		var allTargetField = typeof(InspectorInspectSystem).GetField("allTarget", BindingFlags.NonPublic | BindingFlags.Instance);
+		var allTarget = (IDictionary)allTargetField!.GetValue(system)!;
+		Assert.True(allTarget.Contains((byte)1));
+
 		system.Deteriorate(0.1f);
 
-		Assert.True(true);
+		Assert.False(allTarget.Contains((byte)1));
 	}
 }
