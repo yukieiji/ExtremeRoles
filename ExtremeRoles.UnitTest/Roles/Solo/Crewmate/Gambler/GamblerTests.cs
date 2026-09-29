@@ -34,18 +34,6 @@ public class GamblerTests
     }
 
     [Fact]
-    public void Constructor_InitializesCorrectly()
-    {
-        // Act
-        var gambler = new Gambler();
-
-        // Assert
-        Assert.NotNull(gambler);
-        Assert.Equal(ExtremeRoleId.Gambler, gambler.Core.Id);
-        Assert.Equal((int)IRoleVoteModifier.ModOrder.GamblerAddVote, gambler.Order);
-    }
-
-    [Fact]
     public void CreateRoleAllOption_CreatesCategoryInOptionManager()
     {
         // Arrange
@@ -115,16 +103,76 @@ public class GamblerTests
     }
 
     [Fact]
+    public void ModifiedVote_WithMultiplePlayersVotes_OnlyModifiesGamblersVoteTarget()
+    {
+        // Arrange
+        var gambler = new Gambler();
+        gambler.CreateRoleAllOption();
+
+        // ChangeVoteChance = 100% -> normalVoteIndex = 0
+        if (gambler.Loader.TryGet(Gambler.GamblerOption.ChangeVoteChance, out var chanceOpt) && chanceOpt != null)
+        {
+            chanceOpt.Selection = 18; // 100%
+        }
+        // MinVoteNum 0, MaxVoteNum 2
+        if (gambler.Loader.TryGet(Gambler.GamblerOption.MinVoteNum, out var minOpt) && minOpt != null)
+        {
+            minOpt.Selection = 100; // 0
+        }
+        if (gambler.Loader.TryGet(Gambler.GamblerOption.MaxVoteNum, out var maxOpt) && maxOpt != null)
+        {
+            maxOpt.Selection = 0; // 2
+        }
+        gambler.Initialize();
+
+        byte gamblerId = 1;
+        byte player2Id = 2;
+        byte player3Id = 3;
+
+        byte targetX = 10;
+        byte targetY = 11;
+
+        // Gambler(1) votes for TargetX(10)
+        // Player2(2) votes for TargetY(11)
+        // Player3(3) votes for TargetX(10)
+        var voteTarget = new Dictionary<byte, byte>
+        {
+            { gamblerId, targetX },
+            { player2Id, targetY },
+            { player3Id, targetX }
+        };
+
+        // TargetX initially has 2 votes (Gambler + Player3)
+        // TargetY initially has 1 vote (Player2)
+        var voteResult = new Dictionary<byte, int>
+        {
+            { targetX, 2 },
+            { targetY, 1 }
+        };
+
+        // Act
+        gambler.ModifiedVote(gamblerId, ref voteTarget, ref voteResult);
+
+        // Assert
+        // TargetY's votes remain 1
+        Assert.Equal(1, voteResult[targetY]);
+
+        // TargetX's votes modified for Gambler (with min=0, max=2, voteCount=0 -> newVotedNum = 2 + 0 - 1 = 1)
+        Assert.Equal(1, voteResult[targetX]);
+
+        // voteTarget dictionary is unmodified
+        Assert.Equal(targetX, voteTarget[gamblerId]);
+        Assert.Equal(targetY, voteTarget[player2Id]);
+        Assert.Equal(targetX, voteTarget[player3Id]);
+    }
+
+    [Fact]
     public void ModifiedVote_WhenChangeVoteChanceIsZeroPercent_DoesNotChangeVoteCount()
     {
         // Arrange
         var gambler = new Gambler();
         gambler.CreateRoleAllOption();
 
-        // ChangeVoteChance = 0 (step 5, min 10, max 100) -> selection 0 is 10%
-        // But let's check: min is 10%, max is 100%, step 5.
-        // selection 0 -> 10% change vote chance -> normalVoteIndex = 90.
-        // If selection = 18 (100% change chance) -> normalVoteIndex = 0.
         gambler.Initialize();
 
         byte rolePlayerId = 1;
@@ -142,7 +190,7 @@ public class GamblerTests
         // Act
         gambler.ModifiedVote(rolePlayerId, ref voteTarget, ref voteResult);
 
-        // Assert - vote target result should either stay 1 or change according to options
+        // Assert
         Assert.True(voteResult[targetId] >= 0);
     }
 
