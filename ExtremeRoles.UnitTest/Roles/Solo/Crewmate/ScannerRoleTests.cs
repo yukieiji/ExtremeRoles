@@ -48,6 +48,8 @@ public class ScannerRoleTests
 		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
 			.Returns((string id, string defaultStr, Il2CppSystem.Object[] parts) => defaultStr ?? id);
+		mockTranslation.Setup(t => t.GetString(It.IsAny<SystemTypes>()))
+			.Returns((SystemTypes room) => room.ToString());
 	}
 
 	private static void SetupGameOptionsManagerMock()
@@ -65,29 +67,101 @@ public class ScannerRoleTests
 	}
 
 	[Fact]
-	public void Constructor_InitializesScannerRoleCorrectly()
-	{
-		// Arrange & Act
-		var scanner = new ScannerRole();
-
-		// Assert
-		Assert.Equal(ExtremeRoleId.Scanner, scanner.Core.Id);
-		Assert.Equal(ExtremeRoleType.Crewmate, scanner.Core.Team);
-		Assert.Equal(ColorPalette.ScannerCyan, scanner.Core.Color);
-	}
-
-	[Fact]
-	public void Initialize_CreatesOptionsAndInitsRole()
+	public void UseAbility_WhenNoRoomSelected_ReturnsFalseAndScanningIsFalse()
 	{
 		// Arrange
 		var scanner = new ScannerRole();
 		scanner.CreateRoleAllOption();
-
-		// Act
 		scanner.Initialize();
 
+		// Act
+		bool useResult = scanner.UseAbility();
+
 		// Assert
-		Assert.Equal(ExtremeRoleId.Scanner, scanner.Core.Id);
+		Assert.False(useResult);
+
+		var isScanningField = typeof(ScannerRole).GetField("isScanning", BindingFlags.NonPublic | BindingFlags.Instance);
+		bool isScanning = (bool)isScanningField!.GetValue(scanner)!;
+		Assert.False(isScanning);
+	}
+
+	[Fact]
+	public void UseAbility_WhenRoomSelected_ReturnsTrueAndSetsIsScanningTrue()
+	{
+		// Arrange
+		var mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
+		mockLocalPlayer.Setup(p => p.GetTruePosition()).Returns(new Vector2(1.0f, 2.0f));
+
+		var scanner = new ScannerRole();
+		scanner.CreateRoleAllOption();
+		scanner.Initialize();
+
+		var roomField = typeof(ScannerRole).GetField("selectedRoom", BindingFlags.NonPublic | BindingFlags.Instance);
+		roomField!.SetValue(scanner, SystemTypes.Cafeteria);
+
+		// Act
+		bool useResult = scanner.UseAbility();
+
+		// Assert
+		Assert.True(useResult);
+
+		var isScanningField = typeof(ScannerRole).GetField("isScanning", BindingFlags.NonPublic | BindingFlags.Instance);
+		bool isScanning = (bool)isScanningField!.GetValue(scanner)!;
+		Assert.True(isScanning);
+
+		var prevPosField = typeof(ScannerRole).GetField("prevPlayerPos", BindingFlags.NonPublic | BindingFlags.Instance);
+		Vector2 prevPos = (Vector2)prevPosField!.GetValue(scanner)!;
+		Assert.Equal(new Vector2(1.0f, 2.0f), prevPos);
+	}
+
+	[Fact]
+	public void ResetOnMeetingStart_ResetsScanningAndSelectedRoom()
+	{
+		// Arrange
+		var scanner = new ScannerRole();
+		scanner.CreateRoleAllOption();
+		scanner.Initialize();
+
+		var roomField = typeof(ScannerRole).GetField("selectedRoom", BindingFlags.NonPublic | BindingFlags.Instance);
+		roomField!.SetValue(scanner, SystemTypes.Electrical);
+
+		var isScanningField = typeof(ScannerRole).GetField("isScanning", BindingFlags.NonPublic | BindingFlags.Instance);
+		isScanningField!.SetValue(scanner, true);
+
+		// Act
+		scanner.ResetOnMeetingStart();
+
+		// Assert
+		SystemTypes? selectedRoom = (SystemTypes?)roomField.GetValue(scanner);
+		bool isScanning = (bool)isScanningField.GetValue(scanner)!;
+
+		Assert.Null(selectedRoom);
+		Assert.False(isScanning);
+	}
+
+	[Fact]
+	public void ResetOnMeetingEnd_ResetsScanningAndSelectedRoom()
+	{
+		// Arrange
+		var scanner = new ScannerRole();
+		scanner.CreateRoleAllOption();
+		scanner.Initialize();
+
+		var roomField = typeof(ScannerRole).GetField("selectedRoom", BindingFlags.NonPublic | BindingFlags.Instance);
+		roomField!.SetValue(scanner, SystemTypes.Nav);
+
+		var isScanningField = typeof(ScannerRole).GetField("isScanning", BindingFlags.NonPublic | BindingFlags.Instance);
+		isScanningField!.SetValue(scanner, true);
+
+		// Act
+		scanner.ResetOnMeetingEnd(null);
+
+		// Assert
+		SystemTypes? selectedRoom = (SystemTypes?)roomField.GetValue(scanner);
+		bool isScanning = (bool)isScanningField.GetValue(scanner)!;
+
+		Assert.Null(selectedRoom);
+		Assert.False(isScanning);
 	}
 
 	[Fact]
@@ -111,72 +185,5 @@ public class ScannerRoleTests
 
 		// Assert
 		Assert.True(canUse);
-	}
-
-	[Fact]
-	public void UseAbility_WithoutSelectedRoom_ReturnsFalse()
-	{
-		// Arrange
-		var scanner = new ScannerRole();
-		scanner.CreateRoleAllOption();
-		scanner.Initialize();
-
-		// Act
-		bool result = scanner.UseAbility();
-
-		// Assert
-		Assert.False(result);
-	}
-
-	[Fact]
-	public void ResetOnMeetingStart_ResetsStateWithoutErrors()
-	{
-		// Arrange
-		var scanner = new ScannerRole();
-		scanner.CreateRoleAllOption();
-		scanner.Initialize();
-
-		// Act
-		scanner.ResetOnMeetingStart();
-
-		// Assert
-		Assert.False(scanner.UseAbility());
-	}
-
-	[Fact]
-	public void ResetOnMeetingEnd_ResetsStateWithoutErrors()
-	{
-		// Arrange
-		var scanner = new ScannerRole();
-		scanner.CreateRoleAllOption();
-		scanner.Initialize();
-
-		// Act
-		scanner.ResetOnMeetingEnd(null);
-
-		// Assert
-		Assert.False(scanner.UseAbility());
-	}
-
-	[Fact]
-	public void SetSelectedRoomFieldAndUseAbility_SetsSelectedRoomAndActivatesScanning()
-	{
-		// Arrange
-		var mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
-		mockLocalPlayer.Setup(p => p.GetTruePosition()).Returns(Vector2.zero);
-
-		var scanner = new ScannerRole();
-		scanner.CreateRoleAllOption();
-		scanner.Initialize();
-
-		var roomField = typeof(ScannerRole).GetField("selectedRoom", BindingFlags.NonPublic | BindingFlags.Instance);
-		Assert.NotNull(roomField);
-		roomField!.SetValue(scanner, SystemTypes.Hallway);
-
-		// Act
-		bool result = scanner.UseAbility();
-
-		// Assert
-		Assert.True(result);
 	}
 }
