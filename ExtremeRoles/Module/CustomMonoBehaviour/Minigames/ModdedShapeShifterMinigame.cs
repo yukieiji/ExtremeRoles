@@ -12,7 +12,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 #nullable enable
 
-public class ModdedShapeShifterMinigameWrapperBase
+public class ModdedShapeShifterMinigameWrapper
 {
 	public bool IsOpen { get; private set; }
 	private ShapeshifterMinigame? prefab = null;
@@ -204,11 +204,11 @@ public class ScannerScanSelectorMinigame(IntPtr ptr) : ModdedShapeShifterMinigam
 		{
 			var id = room.RoomId;
 			yield return CreatePanel(
-				TranslationController.Instance.GetString(id), () => this.ScanPlayer(id));
+				TranslationController.Instance.GetString(id), () => this.SetScanRoom(id));
 		}
 	}
 
-	private void ScanPlayer(SystemTypes roomId)
+	private void SetScanRoom(SystemTypes roomId)
 	{
 		// ここにロジックを書く
 	}
