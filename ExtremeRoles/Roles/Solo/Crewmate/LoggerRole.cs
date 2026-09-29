@@ -354,6 +354,11 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 	private static bool isCommsSabotageActive()
 	{
+		if (PlayerControl.LocalPlayer != null && PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer))
+		{
+			return true;
+		}
+
 		if (ShipStatus.Instance != null && ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Comms, out var system) && system != null)
 		{
 			if (system.IsTryCast<HudOverrideSystemType>(out var hudSabo) && hudSabo != null)
