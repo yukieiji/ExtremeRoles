@@ -1614,4 +1614,38 @@ Button ability "Spirit Channeling":
   <data name="ScreamerExile4" xml:space="preserve">
     <value> "TAKENOKO IS THE BEST!!!!"</value>
   </data>
+  <data name="Scanner" xml:space="preserve">
+    <value>Scanner</value>
+  </data>
+  <data name="ScannerAbilityCoolTime" xml:space="preserve">
+    <value>Scan Cooldown</value>
+  </data>
+  <data name="ScannerAbilityActiveTime" xml:space="preserve">
+    <value>Scan Duration</value>
+  </data>
+  <data name="ScannerAbilityCount" xml:space="preserve">
+    <value>Scan Uses</value>
+  </data>
+  <data name="ScannerIntroDescription" xml:space="preserve">
+    <value>Identify players in selected rooms</value>
+  </data>
+  <data name="ScannerShortDescription" xml:space="preserve">
+    <value>Find player names in chosen room</value>
+  </data>
+  <data name="ScannerFullDescription" xml:space="preserve">
+    <value>Crewmate role that can scan a chosen room to list players present inside.</value>
+  </data>
+  <data name="scannerScan" xml:space="preserve">
+    <value>Scan</value>
+  </data>
+  <data name="scanningText" xml:space="preserve">
+    <value>Scanning</value>
+  </data>
+  <data name="scanResultFound" xml:space="preserve">
+    <value>Scan completed for 「{0}」
+{1}</value>
+  </data>
+  <data name="scanResultEmpty" xml:space="preserve">
+    <value>Scan completed for 「{0}」 but nobody was there</value>
+  </data>
 </root>

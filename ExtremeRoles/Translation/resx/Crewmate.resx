@@ -1682,4 +1682,42 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="ScreamerExile4" xml:space="preserve">
     <value>犯人はたけのこ派の・・・・・</value>
   </data>
+  <data name="Scanner" xml:space="preserve">
+    <value>スキャナー</value>
+  </data>
+  <data name="ScannerAbilityCoolTime" xml:space="preserve">
+    <value>「スキャン」のクールタイム</value>
+  </data>
+  <data name="ScannerAbilityActiveTime" xml:space="preserve">
+    <value>「スキャン」の持続時間</value>
+  </data>
+  <data name="ScannerAbilityCount" xml:space="preserve">
+    <value>「スキャン」の使用回数</value>
+  </data>
+  <data name="ScannerIntroDescription" xml:space="preserve">
+    <value>指定した部屋のプレイヤーを特定せよ</value>
+  </data>
+  <data name="ScannerShortDescription" xml:space="preserve">
+    <value>指定した部屋のプレイヤー名が分かる</value>
+  </data>
+  <data name="ScannerFullDescription" xml:space="preserve">
+    <value>指定した部屋のプレイヤー名が分かるクルー役職
+
+ボタン能力「スキャン」:
+　ボタンを押して対象の部屋を選択し、一定時間静止することで
+　その部屋にいる生存プレイヤー名を取得し画面左下に表示する</value>
+  </data>
+  <data name="scannerScan" xml:space="preserve">
+    <value>スキャン</value>
+  </data>
+  <data name="scanningText" xml:space="preserve">
+    <value>スキャン中</value>
+  </data>
+  <data name="scanResultFound" xml:space="preserve">
+    <value>「{0}」のスキャンが完了した
+{1}</value>
+  </data>
+  <data name="scanResultEmpty" xml:space="preserve">
+    <value>「{0}」のスキャンが完了したが誰もいなかった</value>
+  </data>
 </root>
