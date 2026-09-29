@@ -42,8 +42,8 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	private bool isVisibleAll = true;
 	private int detectorCounter = 0;
 
-	private readonly List<DetectorData> activeDetectors = new List<DetectorData>();
-	private readonly List<DetectorData> archivedDetectors = new List<DetectorData>();
+	private readonly List<DetectorBehavior> activeDetectors = new List<DetectorBehavior>();
+	private readonly List<DetectorData> archivedDetectorLogs = new List<DetectorData>();
 	private readonly Dictionary<int, GameObject> remoteDetectorMap = new Dictionary<int, GameObject>();
 
 	private readonly ExtremeConsoleSystem consoleSystem = ExtremeConsoleSystem.Create();
@@ -54,33 +54,41 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	public sealed class DetectorData
 	{
 		public int IndexNumber { get; }
-		public Vector2 Position { get; }
 		public List<string> Logs { get; }
-		public HashSet<byte> PlayersInRange { get; }
 
-		public DetectorData(int indexNumber, Vector2 position)
+		public DetectorData(int indexNumber)
 		{
 			this.IndexNumber = indexNumber;
-			this.Position = position;
 			this.Logs = new List<string>();
-			this.PlayersInRange = new HashSet<byte>();
+		}
+
+		public DetectorData(int indexNumber, List<string> logs)
+		{
+			this.IndexNumber = indexNumber;
+			this.Logs = new List<string>(logs);
 		}
 	}
 
 	public sealed class DetectorBehavior : ExtremeConsole.IBehavior
 	{
 		private readonly LoggerRole ownerRole;
-		private readonly DetectorData detectorData;
-		private readonly GameObject gameObject;
+		private readonly GameObject detectorObject;
+
+		public int IndexNumber { get; }
+		public Vector2 Position => this.detectorObject.transform.position;
+		public List<string> Logs { get; }
+		public HashSet<byte> PlayersInRange { get; }
 
 		public float CoolTime => 0.0f;
 		public bool IsCheckWall => false;
 
-		public DetectorBehavior(LoggerRole ownerRole, DetectorData detectorData, GameObject gameObject)
+		public DetectorBehavior(LoggerRole ownerRole, int indexNumber, GameObject detectorObject)
 		{
 			this.ownerRole = ownerRole;
-			this.detectorData = detectorData;
-			this.gameObject = gameObject;
+			this.IndexNumber = indexNumber;
+			this.detectorObject = detectorObject;
+			this.Logs = new List<string>();
+			this.PlayersInRange = new HashSet<byte>();
 		}
 
 		public bool CanUse(NetworkedPlayerInfo pc)
@@ -97,7 +105,17 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 		public void Use()
 		{
-			this.ownerRole.RemoveDetector(this.detectorData, this.gameObject);
+			var data = new DetectorData(this.IndexNumber, this.Logs);
+			this.ownerRole.OnDetectorCollected(this, data);
+			Object.Destroy(this.detectorObject);
+		}
+
+		public void DestroyObject()
+		{
+			if (this.detectorObject != null)
+			{
+				Object.Destroy(this.detectorObject);
+			}
 		}
 	}
 
@@ -228,18 +246,17 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	private void CreateDetector(int detectorIndex, Vector2 pos)
 	{
 		var objConsole = this.consoleSystem.CreateConsoleObj(pos, $"LoggerDetector_{detectorIndex}");
-		var data = new DetectorData(detectorIndex, pos);
-		var behavior = new DetectorBehavior(this, data, objConsole.gameObject);
+		var behavior = new DetectorBehavior(this, detectorIndex, objConsole.gameObject);
 		objConsole.Behavior = behavior;
 
-		this.activeDetectors.Add(data);
+		this.activeDetectors.Add(behavior);
 	}
 
-	public void RemoveDetector(DetectorData detector, GameObject consoleObj)
+	public void OnDetectorCollected(DetectorBehavior detector, DetectorData archivedData)
 	{
 		if (this.activeDetectors.Remove(detector))
 		{
-			this.archivedDetectors.Add(detector);
+			this.archivedDetectorLogs.Add(archivedData);
 
 			if (this.isVisibleAll && PlayerControl.LocalPlayer != null)
 			{
@@ -249,11 +266,6 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 					caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 					caller.WriteInt(detector.IndexNumber);
 				}
-			}
-
-			if (consoleObj != null)
-			{
-				Object.Destroy(consoleObj);
 			}
 
 			if (this.Button != null && this.Button.Behavior is ICountBehavior countBehavior)
@@ -376,32 +388,38 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 			return;
 		}
 
-		var allDetectors = new List<DetectorData>();
-		allDetectors.AddRange(this.activeDetectors);
-		allDetectors.AddRange(this.archivedDetectors);
+		var allReports = new List<(int IndexNumber, List<string> Logs)>();
+		foreach (var det in this.activeDetectors)
+		{
+			allReports.Add((det.IndexNumber, det.Logs));
+		}
+		foreach (var archived in this.archivedDetectorLogs)
+		{
+			allReports.Add((archived.IndexNumber, archived.Logs));
+		}
 
-		allDetectors.Sort((a, b) => a.IndexNumber.CompareTo(b.IndexNumber));
+		allReports.Sort((a, b) => a.IndexNumber.CompareTo(b.IndexNumber));
 
-		if (allDetectors.Count == 0)
+		if (allReports.Count == 0)
 		{
 			return;
 		}
 
 		var sb = new StringBuilder();
-		foreach (var det in allDetectors)
+		foreach (var report in allReports)
 		{
 			string headerTemplate = Tr.GetString("LoggerDetectorHeader");
-			string header = string.Format(headerTemplate, det.IndexNumber);
+			string header = string.Format(headerTemplate, report.IndexNumber);
 			sb.AppendLine(header);
 
-			if (det.Logs.Count == 0)
+			if (report.Logs.Count == 0)
 			{
 				string noLog = Tr.GetString("LoggerLogNone");
 				sb.AppendLine(noLog);
 			}
 			else
 			{
-				foreach (var log in det.Logs)
+				foreach (var log in report.Logs)
 				{
 					sb.AppendLine(log);
 				}
@@ -414,7 +432,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		{
 			det.Logs.Clear();
 		}
-		this.archivedDetectors.Clear();
+		this.archivedDetectorLogs.Clear();
 	}
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
@@ -433,8 +451,14 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	protected override void RoleSpecificInit()
 	{
 		this.detectorCounter = 0;
+
+		foreach (var activeDet in this.activeDetectors)
+		{
+			activeDet.DestroyObject();
+		}
 		this.activeDetectors.Clear();
-		this.archivedDetectors.Clear();
+		this.archivedDetectorLogs.Clear();
+
 		this.wasCommsActive = false;
 		this.wasSabotageActive = false;
 
