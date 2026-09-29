@@ -103,7 +103,7 @@ public class GamblerTests
     }
 
     [Fact]
-    public void ModifiedVote_WithMultiplePlayersVotes_OnlyModifiesGamblersVoteTarget()
+    public void ModifiedVote_WithMultipleVoteTargetsAndMultipleVoteResults_OnlyModifiesGamblersVoteTarget()
     {
         // Arrange
         var gambler = new Gambler();
@@ -114,7 +114,7 @@ public class GamblerTests
         {
             chanceOpt.Selection = 18; // 100%
         }
-        // MinVoteNum 0, MaxVoteNum 2
+        // MinVoteNum 0, MaxVoteNum 2 -> voteCount = 0
         if (gambler.Loader.TryGet(Gambler.GamblerOption.MinVoteNum, out var minOpt) && minOpt != null)
         {
             minOpt.Selection = 100; // 0
@@ -128,42 +128,53 @@ public class GamblerTests
         byte gamblerId = 1;
         byte player2Id = 2;
         byte player3Id = 3;
+        byte player4Id = 4;
 
-        byte targetX = 10;
-        byte targetY = 11;
+        byte targetA = 10;
+        byte targetB = 11;
+        byte targetC = 12;
 
-        // Gambler(1) votes for TargetX(10)
-        // Player2(2) votes for TargetY(11)
-        // Player3(3) votes for TargetX(10)
+        // Multiple entries in voteTarget
+        // Gambler(1) -> TargetA(10)
+        // Player2(2) -> TargetB(11)
+        // Player3(3) -> TargetA(10)
+        // Player4(4) -> TargetC(12)
         var voteTarget = new Dictionary<byte, byte>
         {
-            { gamblerId, targetX },
-            { player2Id, targetY },
-            { player3Id, targetX }
+            { gamblerId, targetA },
+            { player2Id, targetB },
+            { player3Id, targetA },
+            { player4Id, targetC }
         };
 
-        // TargetX initially has 2 votes (Gambler + Player3)
-        // TargetY initially has 1 vote (Player2)
+        // Multiple entries in voteResult
+        // TargetA: 2 votes (Gambler + Player3)
+        // TargetB: 1 vote (Player2)
+        // TargetC: 1 vote (Player4)
         var voteResult = new Dictionary<byte, int>
         {
-            { targetX, 2 },
-            { targetY, 1 }
+            { targetA, 2 },
+            { targetB, 1 },
+            { targetC, 1 }
         };
 
         // Act
         gambler.ModifiedVote(gamblerId, ref voteTarget, ref voteResult);
 
         // Assert
-        // TargetY's votes remain 1
-        Assert.Equal(1, voteResult[targetY]);
+        // TargetA's votes modified for Gambler (with min=0, max=2, voteCount=0 -> newVotedNum = 2 + 0 - 1 = 1)
+        Assert.Equal(1, voteResult[targetA]);
 
-        // TargetX's votes modified for Gambler (with min=0, max=2, voteCount=0 -> newVotedNum = 2 + 0 - 1 = 1)
-        Assert.Equal(1, voteResult[targetX]);
+        // Other vote targets in voteResult remain unchanged
+        Assert.Equal(1, voteResult[targetB]);
+        Assert.Equal(1, voteResult[targetC]);
 
-        // voteTarget dictionary is unmodified
-        Assert.Equal(targetX, voteTarget[gamblerId]);
-        Assert.Equal(targetY, voteTarget[player2Id]);
-        Assert.Equal(targetX, voteTarget[player3Id]);
+        // voteTarget dictionary remains intact
+        Assert.Equal(4, voteTarget.Count);
+        Assert.Equal(targetA, voteTarget[gamblerId]);
+        Assert.Equal(targetB, voteTarget[player2Id]);
+        Assert.Equal(targetA, voteTarget[player3Id]);
+        Assert.Equal(targetC, voteTarget[player4Id]);
     }
 
     [Fact]
