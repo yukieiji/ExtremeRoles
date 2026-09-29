@@ -69,6 +69,7 @@ public static class ColorPalette
 	public readonly static Color ChargerElectricYellow = new Color32(255, 230, 0, byte.MaxValue);
 	public readonly static Color MayorOchre = new Color32(140, 95, 20, byte.MaxValue);
 	public readonly static Color ForestallerGreen = new Color32(34, 139, 34, byte.MaxValue);
+	public readonly static Color ScannerCyan = new Color32(0, 200, 220, byte.MaxValue);
 
 	public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
 	public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
