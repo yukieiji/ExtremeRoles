@@ -40,6 +40,7 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 	private PlayerControl? target;
 	private float range;
 	private bool multipleBlackmail;
+	private bool hasBlackmailedThisRound;
 	private BlackmailerSystem? system;
 
 	public Blackmailer() : base(
@@ -87,17 +88,14 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 			return false;
 		}
 
-		if (this.system != null)
+		if (!this.multipleBlackmail && this.hasBlackmailedThisRound)
 		{
-			if (!this.multipleBlackmail && this.system.HasBlackmailedAny)
-			{
-				return false;
-			}
+			return false;
+		}
 
-			if (this.system.IsBlackmailed(this.tmpTarget.PlayerId))
-			{
-				return false;
-			}
+		if (this.system != null && this.system.IsBlackmailed(this.tmpTarget.PlayerId))
+		{
+			return false;
 		}
 
 		return IRoleAbility.IsCommonUse();
@@ -112,6 +110,7 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 				this.system.RpcClearBlackmail();
 			}
 			this.system.RpcAddBlackmail(this.target.PlayerId);
+			this.hasBlackmailedThisRound = true;
 		}
 		this.target = null;
 	}
@@ -125,7 +124,9 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 	{ }
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
-	{ }
+	{
+		this.hasBlackmailedThisRound = false;
+	}
 
 	public void Update(PlayerControl rolePlayer)
 	{ }
@@ -161,6 +162,7 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 		var cate = this.Loader;
 		this.range = cate.GetValue<BlackmailerOption, float>(BlackmailerOption.Range);
 		this.multipleBlackmail = cate.GetValue<BlackmailerOption, bool>(BlackmailerOption.MultipleBlackmail);
+		this.hasBlackmailedThisRound = false;
 
 		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<BlackmailerSystem>(
 			ExtremeSystemType.BlackmailerSystem);
