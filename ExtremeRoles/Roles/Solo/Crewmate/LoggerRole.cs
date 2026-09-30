@@ -16,6 +16,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Extension.Vector;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -25,7 +26,6 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 {
 	public enum Option
 	{
-		ActiveTime,
 		Range,
 		IsVisibleAll,
 	}
@@ -46,68 +46,44 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	private readonly List<DetectorData> archivedDetectorLogs = new List<DetectorData>();
 	private readonly Dictionary<int, GameObject> remoteDetectorMap = new Dictionary<int, GameObject>();
 
-	private readonly ExtremeConsoleSystem consoleSystem = ExtremeConsoleSystem.Create();
+	private Vector2 playerPos;
+
+	private ExtremeConsoleSystem? consoleSystem;
 
 	private bool wasCommsActive = false;
 	private bool wasSabotageActive = false;
 
-	public sealed class DetectorData
+	public readonly record struct DetectorData(int IndexNumber, List<string> Logs)
 	{
-		public int IndexNumber { get; }
-		public List<string> Logs { get; }
+		public readonly List<string> Logs { get; } = [..Logs];
 
-		public DetectorData(int indexNumber)
+		public DetectorData(int indexNumber) : this(indexNumber, [])
 		{
-			this.IndexNumber = indexNumber;
-			this.Logs = new List<string>();
-		}
-
-		public DetectorData(int indexNumber, List<string> logs)
-		{
-			this.IndexNumber = indexNumber;
-			this.Logs = new List<string>(logs);
 		}
 	}
 
-	public sealed class DetectorBehavior : ExtremeConsole.IBehavior
+	public sealed class DetectorBehavior(LoggerRole ownerRole, int indexNumber, GameObject detectorObject) : ExtremeConsole.IBehavior
 	{
-		private readonly LoggerRole ownerRole;
-		private readonly GameObject detectorObject;
+		private readonly LoggerRole ownerRole = ownerRole;
+		private readonly GameObject detectorObject = detectorObject;
 
-		public int IndexNumber { get; }
+		public int IndexNumber { get; } = indexNumber;
 		public Vector2 Position => this.detectorObject.transform.position;
-		public List<string> Logs { get; }
-		public HashSet<byte> PlayersInRange { get; }
+		public List<string> Logs { get; } = [];
+		public HashSet<byte> PlayersInRange { get; } = [];
 
 		public float CoolTime => 0.0f;
-		public bool IsCheckWall => false;
-
-		public DetectorBehavior(LoggerRole ownerRole, int indexNumber, GameObject detectorObject)
-		{
-			this.ownerRole = ownerRole;
-			this.IndexNumber = indexNumber;
-			this.detectorObject = detectorObject;
-			this.Logs = new List<string>();
-			this.PlayersInRange = new HashSet<byte>();
-		}
+		public bool IsCheckWall => true;
 
 		public bool CanUse(NetworkedPlayerInfo pc)
-		{
-			if (PlayerControl.LocalPlayer == null || pc.Object == null)
-			{
-				return false;
-			}
-
-			return pc.PlayerId == PlayerControl.LocalPlayer.PlayerId &&
-				pc.Object.CanMove &&
-				!pc.IsDead;
-		}
+			=> pc.PlayerId == PlayerControl.LocalPlayer.PlayerId &&
+				pc.Object.CanMove && !pc.IsDead;
 
 		public void Use()
 		{
 			var data = new DetectorData(this.IndexNumber, this.Logs);
 			this.ownerRole.OnDetectorCollected(this, data);
-			Object.Destroy(this.detectorObject);
+			DestroyObject();
 		}
 
 		public void DestroyObject()
@@ -135,27 +111,34 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 		this.CreateActivatingAbilityCountButton(
 			"LoggerDetectorButton",
-			buttonImage);
-
-		if (this.Button != null)
-		{
-			this.Button.SetLabelToCrewmate();
-		}
+			buttonImage,
+			IsActivating,
+			CleanUp,
+			() => { });
+		this.Button?.SetLabelToCrewmate();
 	}
 
 	public bool IsAbilityUse()
-	{
-		return IRoleAbility.IsCommonUse() && Minigame.Instance == null;
-	}
+		=> IRoleAbility.IsCommonUse() && Minigame.Instance == null;
 
-	public bool UseAbility()
+	public bool IsActivating()
 	{
-		if (PlayerControl.LocalPlayer == null)
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer == null)
 		{
 			return false;
 		}
 
-		Vector2 pos = PlayerControl.LocalPlayer.GetTruePosition();
+		return this.playerPos.IsCloseTo(localPlayer.GetTruePosition());
+	}
+
+	public void CleanUp()
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer == null)
+		{
+			return;
+		}
 
 		this.detectorCounter++;
 		int detectorIndex = this.detectorCounter;
@@ -165,14 +148,25 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.LoggerOps))
 			{
 				caller.WriteByte((byte)RpcType.SetDetector);
-				caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+				caller.WriteByte(localPlayer.PlayerId);
 				caller.WriteInt(detectorIndex);
-				caller.WriteFloat(pos.x);
-				caller.WriteFloat(pos.y);
+				caller.WriteFloat(this.playerPos.x);
+				caller.WriteFloat(this.playerPos.y);
 			}
 		}
 
-		this.CreateDetector(detectorIndex, pos);
+		this.CreateDetector(detectorIndex, this.playerPos);
+	}
+
+	public bool UseAbility()
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer == null)
+		{
+			return false;
+		}
+
+		this.playerPos = localPlayer.GetTruePosition();
 		return true;
 	}
 
@@ -194,7 +188,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 				float y = reader.ReadSingle();
 				Vector2 pos = new Vector2(x, y);
 
-				ownerLogger.OnRpcSetDetector(index, pos);
+				ownerLogger.OnRpcSetDetector(index, pos, ownerPlayerId);
 				break;
 
 			case RpcType.RemoveDetector:
@@ -204,32 +198,31 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		}
 	}
 
-	public void OnRpcSetDetector(int index, Vector2 pos)
+	public void OnRpcSetDetector(int index, Vector2 pos, byte rolePlayerId)
 	{
-		if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId != (byte)this.GameControlId)
+		var local = PlayerControl.LocalPlayer;
+		if (local == null || local.PlayerId == rolePlayerId)
 		{
-			var obj = new GameObject($"LoggerDetectorVisual_{this.GameControlId}_{index}");
-			obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
-			var sr = obj.AddComponent<SpriteRenderer>();
-			var fastSettings = HudManager.Instance.UseButton.fastUseSettings;
-			if (fastSettings.TryGetValue(ImageNames.AdminMapButton, out var val) && val != null)
-			{
-				sr.sprite = val.Image;
-			}
-			this.remoteDetectorMap[index] = obj;
+			return;
 		}
+		var obj = new GameObject($"LoggerDetectorVisual_{this.GameControlId}_{index}");
+		obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+		var sr = obj.AddComponent<SpriteRenderer>();
+		setSprite(sr);
+		this.remoteDetectorMap[index] = obj;
 	}
 
 	public void OnRpcRemoveDetector(int removeIndex)
 	{
-		if (this.remoteDetectorMap.TryGetValue(removeIndex, out var removeObj))
+		if (!this.remoteDetectorMap.TryGetValue(removeIndex, out var removeObj))
 		{
-			if (removeObj != null)
-			{
-				Object.Destroy(removeObj);
-			}
-			this.remoteDetectorMap.Remove(removeIndex);
+			return;
 		}
+		if (removeObj != null)
+		{
+			Object.Destroy(removeObj);
+		}
+		this.remoteDetectorMap.Remove(removeIndex);
 	}
 
 	public void Update(PlayerControl rolePlayer)
@@ -245,40 +238,61 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 	private void CreateDetector(int detectorIndex, Vector2 pos)
 	{
-		var objConsole = this.consoleSystem.CreateConsoleObj(pos, $"LoggerDetector_{detectorIndex}");
+		if (this.consoleSystem is null)
+		{
+			return;
+		}
+
+		var objConsole = this.consoleSystem.CreateConsoleObj(new Vector3(pos.x, pos.y, pos.y / 1000.0f), $"LoggerDetector_{detectorIndex}");
 		var behavior = new DetectorBehavior(this, detectorIndex, objConsole.gameObject);
 		objConsole.Behavior = behavior;
+		setSprite(objConsole.Image!);
+
+		var colider = objConsole.gameObject.AddComponent<CircleCollider2D>();
+		colider.isTrigger = true;
+		colider.radius = 0.25f;
 
 		this.activeDetectors.Add(behavior);
 	}
 
+	private void setSprite(SpriteRenderer sr)
+	{
+		var fastSettings = HudManager.Instance.UseButton.fastUseSettings;
+		if (fastSettings.TryGetValue(ImageNames.AdminMapButton, out var val) && val != null)
+		{
+			sr.sprite = val.Image;
+		}
+	}
+
 	public void OnDetectorCollected(DetectorBehavior detector, DetectorData archivedData)
 	{
-		if (this.activeDetectors.Remove(detector))
+		if (!this.activeDetectors.Remove(detector))
 		{
-			this.archivedDetectorLogs.Add(archivedData);
+			return;
+		}
 
-			if (this.isVisibleAll && PlayerControl.LocalPlayer != null)
-			{
-				using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.LoggerOps))
-				{
-					caller.WriteByte((byte)RpcType.RemoveDetector);
-					caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
-					caller.WriteInt(detector.IndexNumber);
-				}
-			}
+		this.archivedDetectorLogs.Add(archivedData);
 
-			if (this.Button != null && this.Button.Behavior is ICountBehavior countBehavior)
+		if (this.isVisibleAll && PlayerControl.LocalPlayer != null)
+		{
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.LoggerOps))
 			{
-				countBehavior.SetAbilityCount(countBehavior.AbilityCount + 1);
+				caller.WriteByte((byte)RpcType.RemoveDetector);
+				caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+				caller.WriteInt(detector.IndexNumber);
 			}
+		}
+
+		if (this.Button?.Behavior is ICountBehavior countBehavior)
+		{
+			countBehavior.SetAbilityCount(countBehavior.AbilityCount + 1);
 		}
 	}
 
 	private void checkSabotageState()
 	{
-		bool isCommsNow = isCommsSabotageActive();
-		bool isAnySaboNow = isAnySabotageActive();
+		bool isCommsNow = isCommsSabotageActive;
+		bool isAnySaboNow = isAnySabotageActive;
 
 		if (!this.wasCommsActive && isCommsNow)
 		{
@@ -313,13 +327,18 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 	private void checkPlayerPositions()
 	{
-		bool isCommsActive = isCommsSabotageActive();
+		bool isCommsActive = isCommsSabotageActive;
 
 		foreach (var det in this.activeDetectors)
 		{
 			foreach (var player in PlayerControl.AllPlayerControls)
 			{
-				if (player == null || player.Data == null || player.Data.IsDead || player.inVent)
+				if (player == null)
+				{
+					continue;
+				}
+
+				if (player.IsInValid() || player.inVent)
 				{
 					det.PlayersInRange.Remove(player.PlayerId);
 					continue;
@@ -328,14 +347,11 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 				float dist = Vector2.Distance(player.GetTruePosition(), det.Position);
 				if (dist <= this.range)
 				{
-					if (det.PlayersInRange.Add(player.PlayerId))
+					if (det.PlayersInRange.Add(player.PlayerId) &&
+						!isCommsActive)
 					{
-						if (!isCommsActive)
-						{
-							string template = Tr.GetString("LoggerLogPlayerPass");
-							string logEntry = string.Format(template, player.Data.PlayerName);
-							det.Logs.Add(logEntry);
-						}
+						string logEntry = Tr.GetString("LoggerLogPlayerPass", player.Data.DefaultOutfit.PlayerName);
+						det.Logs.Add(logEntry);
 					}
 				}
 				else
@@ -346,39 +362,13 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		}
 	}
 
-	private static bool isCommsSabotageActive()
-	{
-		if (PlayerControl.LocalPlayer != null && PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer))
-		{
-			return true;
-		}
+	private static bool isCommsSabotageActive
+		=> PlayerControl.LocalPlayer != null && PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer);
 
-		if (ShipStatus.Instance != null && ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Comms, out var system) && system != null)
-		{
-			if (system.IsTryCast<HudOverrideSystemType>(out var hudSabo) && hudSabo != null)
-			{
-				return hudSabo.IsActive;
-			}
-
-			if (system.IsTryCast<HqHudSystemType>(out var hqSabo) && hqSabo != null)
-			{
-				return hqSabo.IsActive;
-			}
-		}
-		return false;
-	}
-
-	private static bool isAnySabotageActive()
-	{
-		if (ShipStatus.Instance != null && ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Sabotage, out var system) && system != null)
-		{
-			if (system.IsTryCast<SabotageSystemType>(out var saboSystem) && saboSystem != null)
-			{
-				return saboSystem.AnyActive;
-			}
-		}
-		return false;
-	}
+	private static bool isAnySabotageActive
+		=> ShipStatus.Instance != null &&
+			ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Sabotage, out var system) &&
+			system.IsTryCast<SabotageSystemType>(out var saboSystem) ? saboSystem.AnyActive : false;
 
 	public void ResetOnMeetingStart()
 	{
@@ -388,15 +378,12 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 			return;
 		}
 
-		var allReports = new List<(int IndexNumber, List<string> Logs)>();
+		var allReports = new List<DetectorData>();
 		foreach (var det in this.activeDetectors)
 		{
-			allReports.Add((det.IndexNumber, det.Logs));
+			allReports.Add(new (det.IndexNumber, det.Logs));
 		}
-		foreach (var archived in this.archivedDetectorLogs)
-		{
-			allReports.Add((archived.IndexNumber, archived.Logs));
-		}
+		allReports.AddRange(this.archivedDetectorLogs);
 
 		allReports.Sort((a, b) => a.IndexNumber.CompareTo(b.IndexNumber));
 
@@ -408,8 +395,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		var sb = new StringBuilder();
 		foreach (var report in allReports)
 		{
-			string headerTemplate = Tr.GetString("LoggerDetectorHeader");
-			string header = string.Format(headerTemplate, report.IndexNumber);
+			string header = Tr.GetString("LoggerDetectorHeader", report.IndexNumber);
 			sb.AppendLine(header);
 
 			if (report.Logs.Count == 0)
@@ -419,7 +405,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 			}
 			else
 			{
-				foreach (var log in report.Logs)
+				foreach (string log in report.Logs)
 				{
 					sb.AppendLine(log);
 				}
@@ -443,7 +429,6 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		AutoParentSetOptionCategoryFactory factory)
 	{
 		IRoleAbility.CreateAbilityCountOption(factory, 2, 20, 3.0f);
-		factory.CreateFloatOption(Option.ActiveTime, 3.0f, 0.0f, 10.0f, 0.5f, format: OptionUnit.Second);
 		factory.CreateFloatOption(Option.Range, 2.5f, 0.5f, 10.0f, 0.5f);
 		factory.CreateBoolOption(Option.IsVisibleAll, true);
 	}
@@ -452,33 +437,13 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	{
 		this.detectorCounter = 0;
 
-		foreach (var activeDet in this.activeDetectors)
-		{
-			activeDet.DestroyObject();
-		}
-		this.activeDetectors.Clear();
-		this.archivedDetectorLogs.Clear();
-
 		this.wasCommsActive = false;
 		this.wasSabotageActive = false;
 
-		foreach (var remoteObj in this.remoteDetectorMap.Values)
-		{
-			if (remoteObj != null)
-			{
-				Object.Destroy(remoteObj);
-			}
-		}
-		this.remoteDetectorMap.Clear();
+		this.consoleSystem = ExtremeConsoleSystem.Create();
 
 		var loader = this.Loader;
-		float activeTime = loader.GetValue<Option, float>(Option.ActiveTime);
 		this.range = loader.GetValue<Option, float>(Option.Range);
 		this.isVisibleAll = loader.GetValue<Option, bool>(Option.IsVisibleAll);
-
-		if (this.Button != null && this.Button.Behavior is IActivatingBehavior activeBehavior)
-		{
-			activeBehavior.ActiveTime = activeTime;
-		}
 	}
 }
