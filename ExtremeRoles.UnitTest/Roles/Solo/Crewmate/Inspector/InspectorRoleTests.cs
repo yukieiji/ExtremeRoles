@@ -84,10 +84,13 @@ public class InspectorRoleTests
 
 	private static void SetupTranslationControllerMock()
 	{
+		MockDestroyableSingletonget_InstanceHelper<TranslationController>.Instance = null;
 		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 		mockTranslation.Setup(t => t.GetString(It.IsAny<StringNames>())).Returns("TestString");
-		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>())).Returns("TestString");
-		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>())).Returns("TestString");
+		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>()))
+			.Returns((string id, string defaultStr, Il2CppReferenceArray<Il2CppSystem.Object> parts) => !string.IsNullOrEmpty(defaultStr) ? defaultStr : id);
+		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
+			.Returns((string id, string defaultStr, Il2CppSystem.Object[] parts) => !string.IsNullOrEmpty(defaultStr) ? defaultStr : id);
 		mockTranslation.Setup(t => t.GetString(It.IsAny<StringNames>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>())).Returns("TestString");
 	}
 
@@ -205,6 +208,9 @@ public class InspectorRoleTests
 	[Fact]
 	public void IsAbilityUse_ReturnsCommonUseValue()
 	{
+		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
+		localPlayerMock.SetupGet(p => p.CanMove).Returns(false);
+
 		var role = new Inspector();
 
 		bool result = role.IsAbilityUse();

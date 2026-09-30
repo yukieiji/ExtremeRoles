@@ -63,6 +63,7 @@ public class AgencyTests
 		SetupHarmony();
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
+		PlayerCache.RemovePlayerControl(_ => true);
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 		MockSetupHelper.SetupGameDataMock();
 		SetupHudManagerMock();

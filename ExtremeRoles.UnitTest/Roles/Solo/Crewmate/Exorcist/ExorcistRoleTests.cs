@@ -27,6 +27,7 @@ public class ExorcistRoleTests
     public ExorcistRoleTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupPaletteHelpers();
         MockSetupHelper.SetupObjectImplicitHelpers();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);
@@ -112,13 +113,10 @@ public class ExorcistRoleTests
             MockConstantsget_PlayersOnlyMaskHelper.Instance = mockMask.Object;
         }
 
-        if (UnityEngine.MockPhysics2DOverlapCircleAllHelper.Instance == null)
-        {
-            var mockOverlap = new Mock<UnityEngine.MockPhysics2DOverlapCircleAllHelper>();
-            mockOverlap.Setup(m => m.Invoke(It.IsAny<Vector2>(), It.IsAny<float>(), It.IsAny<int>()))
-                .Returns(Array.Empty<Collider2D>());
-            UnityEngine.MockPhysics2DOverlapCircleAllHelper.Instance = mockOverlap.Object;
-        }
+        var mockOverlap = new Mock<UnityEngine.MockPhysics2DOverlapCircleAllHelper>();
+        mockOverlap.Setup(m => m.Invoke(It.IsAny<Vector2>(), It.IsAny<float>(), It.IsAny<int>()))
+            .Returns(Array.Empty<Collider2D>());
+        UnityEngine.MockPhysics2DOverlapCircleAllHelper.Instance = mockOverlap.Object;
     }
 
     [Theory]
@@ -196,7 +194,13 @@ public class ExorcistRoleTests
     public void IsAbilityUse_WhenCurTargetIsNull_SetsTmpTargetToNullAndReturnsFalse()
     {
         // Arrange
-        MockSetupHelper.SetupPlayerControlMocks();
+        MockPlayerControlget_LocalPlayerHelper.Instance = null;
+        var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
+        mockPlayer.SetupGet(p => p.CanMove).Returns(true);
+        var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+        mockData.SetupGet(d => d.IsDead).Returns(false);
+        mockPlayer.SetupGet(p => p.Data).Returns(mockData.Object);
+
         var role = new ExorcistRole();
         role.CreateRoleAllOption();
         role.Initialize();
@@ -215,7 +219,13 @@ public class ExorcistRoleTests
     public void IsAbilityActive_WhenTargetMatchesCurTarget_ReturnsTrue_OtherwiseReturnsFalse()
     {
         // Arrange
-        MockSetupHelper.SetupPlayerControlMocks();
+        MockPlayerControlget_LocalPlayerHelper.Instance = null;
+        var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
+        mockPlayer.SetupGet(p => p.CanMove).Returns(true);
+        var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+        mockData.SetupGet(d => d.IsDead).Returns(false);
+        mockPlayer.SetupGet(p => p.Data).Returns(mockData.Object);
+
         var role = new ExorcistRole();
         role.CreateRoleAllOption();
         role.Initialize();
@@ -248,6 +258,7 @@ public class ExorcistRoleTests
         Assert.False(result);
 
         // Clean up
+        MockPlayerControlget_LocalPlayerHelper.Instance = null;
         MockSetupHelper.SetupPlayerControlMocks();
     }
 

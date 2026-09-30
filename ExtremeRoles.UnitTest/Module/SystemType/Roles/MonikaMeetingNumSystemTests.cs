@@ -15,7 +15,7 @@ public class MonikaMeetingNumSystemTests
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 		MockSetupHelper.SetupGameDataMock();
 
-		var mockNormalOptions = new Mock<NormalGameOptionsV11>(System.IntPtr.Zero);
+		var mockNormalOptions = new Mock<NormalGameOptionsV12>(System.IntPtr.Zero);
 		mockNormalOptions.SetupGet(o => o.NumEmergencyMeetings).Returns(1);
 
 		var mockOptionsMgr = new Mock<GameOptionsManager>(System.IntPtr.Zero);

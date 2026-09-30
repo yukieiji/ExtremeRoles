@@ -37,6 +37,7 @@ public class BakerySystemTests : IDisposable
 		MockSetupHelper.SetupObjectImplicitHelpers();
 		MockSetupHelper.SetupPaletteHelpers();
 		MockSetupHelper.SetupAmongUsClientMock();
+		MockPlayerControlget_LocalPlayerHelper.Instance = null;
 		MockSetupHelper.SetupPlayerControlMocks();
 		SetupShipStatusMock();
 		SetupMeetingAndExileMocks();
@@ -57,6 +58,7 @@ public class BakerySystemTests : IDisposable
 
 	private static void SetupTranslationControllerMock()
 	{
+		MockDestroyableSingletonget_InstanceHelper<TranslationController>.Instance = null;
 		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppReferenceArray<Il2CppSystem.Object>>()))
 			.Returns((string id, string defaultStr, Il2CppReferenceArray<Il2CppSystem.Object> parts) => !string.IsNullOrEmpty(defaultStr) ? defaultStr : id);
@@ -66,33 +68,21 @@ public class BakerySystemTests : IDisposable
 
 	private static void SetupMeetingAndExileMocks()
 	{
-		if (MockMeetingHudget_InstanceHelper.Instance == null)
-		{
-			var mockMeetingHudHelper = new Mock<MockMeetingHudget_InstanceHelper>();
-			mockMeetingHudHelper.Setup(x => x.Invoke()).Returns((MeetingHud)null!);
-			MockMeetingHudget_InstanceHelper.Instance = mockMeetingHudHelper.Object;
-		}
+		var mockMeetingHudHelper = new Mock<MockMeetingHudget_InstanceHelper>();
+		mockMeetingHudHelper.Setup(x => x.Invoke()).Returns((MeetingHud)null!);
+		MockMeetingHudget_InstanceHelper.Instance = mockMeetingHudHelper.Object;
 
-		if (MockDestroyableSingletonget_InstanceHelper<MeetingHud>.Instance == null)
-		{
-			var mockDestroyableMeetingHelper = new Mock<MockDestroyableSingletonget_InstanceHelper<MeetingHud>>();
-			mockDestroyableMeetingHelper.Setup(x => x.Invoke()).Returns((MeetingHud)null!);
-			MockDestroyableSingletonget_InstanceHelper<MeetingHud>.Instance = mockDestroyableMeetingHelper.Object;
-		}
+		var mockDestroyableMeetingHelper = new Mock<MockDestroyableSingletonget_InstanceHelper<MeetingHud>>();
+		mockDestroyableMeetingHelper.Setup(x => x.Invoke()).Returns((MeetingHud)null!);
+		MockDestroyableSingletonget_InstanceHelper<MeetingHud>.Instance = mockDestroyableMeetingHelper.Object;
 
-		if (MockExileControllerget_InstanceHelper.Instance == null)
-		{
-			var mockExileControllerHelper = new Mock<MockExileControllerget_InstanceHelper>();
-			mockExileControllerHelper.Setup(x => x.Invoke()).Returns((ExileController)null!);
-			MockExileControllerget_InstanceHelper.Instance = mockExileControllerHelper.Object;
-		}
+		var mockExileControllerHelper = new Mock<MockExileControllerget_InstanceHelper>();
+		mockExileControllerHelper.Setup(x => x.Invoke()).Returns((ExileController)null!);
+		MockExileControllerget_InstanceHelper.Instance = mockExileControllerHelper.Object;
 
-		if (MockDestroyableSingletonget_InstanceHelper<ExileController>.Instance == null)
-		{
-			var mockDestroyableExileHelper = new Mock<MockDestroyableSingletonget_InstanceHelper<ExileController>>();
-			mockDestroyableExileHelper.Setup(x => x.Invoke()).Returns((ExileController)null!);
-			MockDestroyableSingletonget_InstanceHelper<ExileController>.Instance = mockDestroyableExileHelper.Object;
-		}
+		var mockDestroyableExileHelper = new Mock<MockDestroyableSingletonget_InstanceHelper<ExileController>>();
+		mockDestroyableExileHelper.Setup(x => x.Invoke()).Returns((ExileController)null!);
+		MockDestroyableSingletonget_InstanceHelper<ExileController>.Instance = mockDestroyableExileHelper.Object;
 	}
 
 	private static void SetupShipStatusMock()

@@ -28,6 +28,7 @@ public class ExtremeRoleAssignDataBuilderTests
         MockSetupHelper.SetupGameOptionsManagerMock();
 
         MockSetupHelper.SetupOptionManager();
+        OptionCreator.Create();
     }
 
     [Fact]
