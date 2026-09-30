@@ -1638,7 +1638,7 @@ Ability "Detector":
   <data name="LoggerAbilityCount" xml:space="preserve">
     <value>Detector Charges</value>
   </data>
-  <data name="LoggerActiveTime" xml:space="preserve">
+  <data name="LoggerAbilityActiveTime" xml:space="preserve">
     <value>Detector Cast Time</value>
   </data>
   <data name="LoggerRange" xml:space="preserve">
