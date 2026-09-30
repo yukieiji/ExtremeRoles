@@ -191,6 +191,10 @@ public static class MeetingHudUpdatePatch
 			if (localPlayer != null && system.IsBlackmailed(localPlayer.PlayerId))
 			{
 				hud.SkipVoteButton.gameObject.SetActive(false);
+				if (HudManager.InstanceExists && HudManager.Instance.Chat != null)
+				{
+					HudManager.Instance.Chat.gameObject.SetActive(false);
+				}
 			}
 		}
 	}
