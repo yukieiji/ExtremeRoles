@@ -260,6 +260,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.EchoOps:
 				RPCOperator.EchoRpcOps(reader);
 				break;
+			case RPCOperator.Command.LoggerOps:
+				RPCOperator.LoggerRpcOps(reader);
+				break;
 			case RPCOperator.Command.CarrierAbility:
 				byte carrierCarryOpCallPlayerId = reader.ReadByte();
 				float carrierPlayerPosX = reader.ReadSingle();

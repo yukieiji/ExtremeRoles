@@ -1614,4 +1614,55 @@ Button ability "Spirit Channeling":
   <data name="ScreamerExile4" xml:space="preserve">
     <value> "TAKENOKO IS THE BEST!!!!"</value>
   </data>
+  <data name="Logger" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoggerIntroDescription" xml:space="preserve">
+    <value>Place detectors to detect nearby players</value>
+  </data>
+  <data name="LoggerShortDescription" xml:space="preserve">
+    <value>Place detectors to collect logs</value>
+  </data>
+  <data name="LoggerFullDescription" xml:space="preserve">
+    <value>A Crewmate role that places detectors to log players passing nearby or sabotages occurring.
+
+Ability "Detector":
+  - Places a detector after cast time
+  - Logs nearby passing players and sabotage events ("NO DATA" during Comms Sabotage)
+  - Reports collected logs at the start of meetings
+  - Can be picked up by interacting with Use button near the detector</value>
+  </data>
+  <data name="LoggerAbilityCoolTime" xml:space="preserve">
+    <value>Detector Cooldown</value>
+  </data>
+  <data name="LoggerAbilityCount" xml:space="preserve">
+    <value>Detector Charges</value>
+  </data>
+  <data name="LoggerAbilityActiveTime" xml:space="preserve">
+    <value>Detector Cast Time</value>
+  </data>
+  <data name="LoggerRange" xml:space="preserve">
+    <value>Detection Range</value>
+  </data>
+  <data name="LoggerIsVisibleAll" xml:space="preserve">
+    <value>Visible to Everyone</value>
+  </data>
+  <data name="LoggerDetectorButton" xml:space="preserve">
+    <value>Detector</value>
+  </data>
+  <data name="LoggerDetectorHeader" xml:space="preserve">
+    <value>Logs from Detector {0}</value>
+  </data>
+  <data name="LoggerLogPlayerPass" xml:space="preserve">
+    <value> - "{0}" passed nearby</value>
+  </data>
+  <data name="LoggerLogSabotage" xml:space="preserve">
+    <value> - Sabotage occurred</value>
+  </data>
+  <data name="LoggerLogNoData" xml:space="preserve">
+    <value> - NO DATA</value>
+  </data>
+  <data name="LoggerLogNone" xml:space="preserve">
+    <value> - No Detection</value>
+  </data>
 </root>

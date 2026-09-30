@@ -1682,4 +1682,59 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="ScreamerExile4" xml:space="preserve">
     <value>犯人はたけのこ派の・・・・・</value>
   </data>
+  <data name="Logger" xml:space="preserve">
+    <value>ロガー</value>
+  </data>
+  <data name="LoggerIntroDescription" xml:space="preserve">
+    <value>検知器を設置してログを収集せよ</value>
+  </data>
+  <data name="LoggerShortDescription" xml:space="preserve">
+    <value>検知器を設置/回収し、様々なログを収集せよ</value>
+  </data>
+  <data name="LoggerFullDescription" xml:space="preserve">
+    <value>検知器で近くを通過したプレイヤーやサボタージュを
+記録できるクルー役職
+
+ボタン能力「検知器」:
+  - 一定時間経過後に「検知器」を設置する
+  - セットされた「検知器」近くを通ったプレイヤーや
+発生したサボタージュを記録する
+  - 通信サボタージュ時は「NO DATA」と記録される
+  - 記録は会議の開始時に報告される
+  - 検知器に近づいて使用ボタンを押すことで回収
+　できる。回収後使用回数が増える</value>
+  </data>
+  <data name="LoggerAbilityCoolTime" xml:space="preserve">
+    <value>「検知器」のクールタイム</value>
+  </data>
+  <data name="LoggerAbilityCount" xml:space="preserve">
+    <value>「検知器」の所持数</value>
+  </data>
+  <data name="LoggerAbilityActiveTime" xml:space="preserve">
+    <value>「検知器」の設置にかかる時間</value>
+  </data>
+  <data name="LoggerRange" xml:space="preserve">
+    <value>「検知器」の検知範囲</value>
+  </data>
+  <data name="LoggerIsVisibleAll" xml:space="preserve">
+    <value>全員に「検知器」を可視化するか</value>
+  </data>
+  <data name="LoggerDetectorButton" xml:space="preserve">
+    <value>検知器</value>
+  </data>
+  <data name="LoggerDetectorHeader" xml:space="preserve">
+    <value>「検知器 {0}」からのログ</value>
+  </data>
+  <data name="LoggerLogPlayerPass" xml:space="preserve">
+    <value> - 「{0}」が近くを通過しました</value>
+  </data>
+  <data name="LoggerLogSabotage" xml:space="preserve">
+    <value> - サボタージュが発生しました</value>
+  </data>
+  <data name="LoggerLogNoData" xml:space="preserve">
+    <value> - NO DATA</value>
+  </data>
+  <data name="LoggerLogNone" xml:space="preserve">
+    <value> - 検知なし</value>
+  </data>
 </root>
