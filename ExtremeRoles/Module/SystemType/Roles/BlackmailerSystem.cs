@@ -140,19 +140,6 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 		}
 	}
 
-	public void InitializeButton(PlayerVoteArea[] buttons)
-	{
-		foreach (var pva in buttons)
-		{
-			if (pva == null || pva.AmDead || !IsBlackmailed(pva.PlayerId))
-			{
-				continue;
-			}
-			pva.Background.color = Palette.ImpostorRed;
-			pva.XMark.gameObject.SetActive(true);
-		}
-	}
-
 	public bool IsBlackmailed(byte playerId)
 		=> this.blackmailedPlayers.Contains(playerId);
 

@@ -185,8 +185,6 @@ public static class MeetingHudUpdatePatch
 	{
 		if (BlackmailerSystem.TryGet(out var system))
 		{
-			system.InitializeButton(hud.playerStates);
-
 			var localPlayer = PlayerControl.LocalPlayer;
 			if (localPlayer != null && system.IsBlackmailed(localPlayer.PlayerId))
 			{

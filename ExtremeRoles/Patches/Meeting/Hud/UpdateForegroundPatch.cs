@@ -15,12 +15,14 @@ public static class MeetingHudUpdateButtonsPatchHelper
 		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
 			monikaTrashUpdate(__instance);
+			blackmailerUpdate(__instance);
 			MeetingHudUpdateForegroundPatchHelper.Patch(__instance);
 			return;
 		}
 		if (!system.IsActiveMeeting<MonikaLoveTargetMeeting>())
 		{
 			monikaTrashUpdate(__instance);
+			blackmailerUpdate(__instance);
 		}
 
 		var meeting = HudManager.Instance.MeetingPrefab;
@@ -75,6 +77,26 @@ public static class MeetingHudUpdateButtonsPatchHelper
 			{
 				continue;
 			}
+			activeObject(pva.XMark.gameObject);
+		}
+	}
+
+	private static void blackmailerUpdate(MeetingHud hud)
+	{
+		if (!BlackmailerSystem.TryGet(out var system))
+		{
+			return;
+		}
+
+		foreach (var pva in hud.playerStates)
+		{
+			if (pva == null ||
+				pva.AmDead ||
+				!system.IsBlackmailed(pva.PlayerId))
+			{
+				continue;
+			}
+			pva.Background.color = Palette.ImpostorRed;
 			activeObject(pva.XMark.gameObject);
 		}
 	}
