@@ -1,3 +1,11 @@
+using System;
+using System.Linq;
+
+using HarmonyLib;
+using Il2CppSystem.Collections.Generic;
+using Il2CppSystem.Linq;
+using InnerNet;
+
 using AmongUs.GameOptions;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.GameMode;
@@ -8,13 +16,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using HarmonyLib;
-using Il2CppSystem.Collections.Generic;
-using Il2CppSystem.Linq;
-using InnerNet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using UnityHelper = ExtremeRoles.Helper.Unity;
 
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
