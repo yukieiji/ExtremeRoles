@@ -19,6 +19,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 
@@ -44,6 +45,7 @@ public class ItakoRoleTests
 		MockSetupHelper.SetupOptionManager();
 		SetupGameOptionsManagerMock();
 		SetupConstantsMock();
+		SetupSpriteCacheMock();
 
 		var shipStateField = typeof(ExtremeRolesPlugin).GetField("<ShipState>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
 		shipStateField?.SetValue(null, new ExtremeShipStatus());
@@ -91,6 +93,16 @@ public class ItakoRoleTests
 			mockOverlap.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<float>(), It.IsAny<int>()))
 				.Returns(Array.Empty<Collider2D>());
 			UnityEngine.MockPhysics2DOverlapCircleAllHelper.Instance = mockOverlap.Object;
+		}
+	}
+
+	private static void SetupSpriteCacheMock()
+	{
+		string spriteKey = $"{ObjectPath.TestButton}115";
+		if (!LruCache<string, Sprite>.TryGetValue(spriteKey, out _))
+		{
+			var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+			LruCache<string, Sprite>.Add(spriteKey, mockSprite.Object);
 		}
 	}
 
@@ -158,12 +170,21 @@ public class ItakoRoleTests
 	public void InheritTargetRole_SetsAnotherRoleAndOverwritesPreviousRole()
 	{
 		// Arrange
+		SetupHudManagerMock();
+
 		byte itakoId = 1;
 		byte targetId = 2;
+
+		var localPlayerMock = new Mock<PlayerControl>(IntPtr.Zero);
+		localPlayerMock.SetupGet(p => p.PlayerId).Returns(itakoId);
+		var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
+		mockLocalHelper.Setup(h => h.Invoke()).Returns(localPlayerMock.Object);
+		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
 
 		var itako = new ItakoRole();
 		itako.CreateRoleAllOption();
 		itako.Initialize();
+		itako.CreateAbility();
 
 		var sheriff = new Sheriff();
 		sheriff.CreateRoleAllOption();
