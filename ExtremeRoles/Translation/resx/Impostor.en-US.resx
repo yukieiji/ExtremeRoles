@@ -1730,4 +1730,26 @@ Teleporting consumes 1 ability count.</value>
   <data name="YoYoTeleportLocation" xml:space="preserve">
     <value>Teleport</value>
   </data>
+  <data name="Blackmailer" xml:space="preserve">
+    <value>Blackmailer</value>
+  </data>
+  <data name="BlackmailerFullDescription" xml:space="preserve">
+    <value>An Impostor who blackmail players.
+The blackmailed player cannot speak, chat, or vote in the next meeting.</value>
+  </data>
+  <data name="BlackmailerShortDescription" xml:space="preserve">
+    <value>Blackmail players to deprive them of voting and speaking rights in the next meeting</value>
+  </data>
+  <data name="BlackmailerIntroDescription" xml:space="preserve">
+    <value>Blackmail players and silence them in meetings</value>
+  </data>
+  <data name="BlackmailerRange" xml:space="preserve">
+    <value>Blackmail Range</value>
+  </data>
+  <data name="BlackmailerMultipleBlackmail" xml:space="preserve">
+    <value>Multiple Blackmail</value>
+  </data>
+  <data name="blackmail" xml:space="preserve">
+    <value>Blackmail</value>
+  </data>
 </root>

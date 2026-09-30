@@ -51,6 +51,12 @@ public static class MeetingHudSelectPatch
 				return false;
 			}
 
+			if (BlackmailerSystem.TryGet(out var blackmailerSystem) &&
+				blackmailerSystem.IsBlackmailed(localPlayer.PlayerId))
+			{
+				return false;
+			}
+
 			return true;
 		}
 

@@ -150,6 +150,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Imitater,
             ExtremeRoleId.Yandere,
             ExtremeRoleId.Yoko,
+			ExtremeRoleId.Blackmailer,
             ExtremeRoleId.Totocalcio,
             ExtremeRoleId.Miner,
             ExtremeRoleId.Eater,
