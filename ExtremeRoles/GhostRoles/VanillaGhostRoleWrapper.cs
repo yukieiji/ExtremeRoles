@@ -24,7 +24,8 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         switch (vanillaRoleId)
         {
             case RoleTypes.GuardianAngel:
-            case RoleTypes.CrewmateGhost:
+			case RoleTypes.SpiritGuide:
+			case RoleTypes.CrewmateGhost:
                 this.HasTask = true;
                 this.Team = Roles.API.ExtremeRoleType.Crewmate;
                 this.Color = Palette.White;
@@ -43,7 +44,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
     {
         string addText = this.vanillaRoleId switch
         {
-            RoleTypes.GuardianAngel or RoleTypes.CrewmateGhost =>
+            RoleTypes.GuardianAngel or RoleTypes.CrewmateGhost or RoleTypes.SpiritGuide =>
                 Tr.GetString("crewImportantText"),
             RoleTypes.ImpostorGhost =>
                 Tr.GetString("impImportantText"),

@@ -261,9 +261,10 @@ public static class MeetingHudPopulateResultsPatch
 
 	private static bool isVoteSeeBlock(SingleRoleBase role)
 	{
+		var localPlayer = PlayerControl.LocalPlayer;
 		if (ExtremeGhostRoleManager.GameRole.ContainsKey(
 				PlayerControl.LocalPlayer.PlayerId) ||
-			PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+			ExtremeGhostRoleManager.IsVanillaGhostRole(localPlayer.Data.Role.Role))
 		{
 			return true;
 		}

@@ -49,7 +49,7 @@ public sealed class OtherPlayerVisualUpdater(
 
 		private bool isBlockCondition(SingleRoleBase role)
 		{
-			if (this.data.Role.Role == RoleTypes.GuardianAngel)
+			if (ExtremeGhostRoleManager.IsVanillaGhostRole(this.data.Role.Role))
 			{
 				return true;
 			}
