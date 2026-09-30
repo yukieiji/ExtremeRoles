@@ -140,6 +140,8 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 		}
 	}
 
+	public bool HasBlackmailedAny => this.blackmailedPlayers.Count > 0;
+
 	public bool IsBlackmailed(byte playerId)
 		=> this.blackmailedPlayers.Contains(playerId);
 

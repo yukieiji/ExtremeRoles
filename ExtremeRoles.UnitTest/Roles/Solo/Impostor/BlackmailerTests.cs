@@ -93,6 +93,7 @@ public sealed class BlackmailerTests
 
 		system.Reset(ResetTiming.MeetingEnd);
 		Assert.False(system.IsBlackmailed(2));
+		Assert.False(system.HasBlackmailedAny);
 
 		var rAdd = new Mock<MessageReader>();
 		rAdd.SetupSequence(r => r.ReadByte())
@@ -101,9 +102,11 @@ public sealed class BlackmailerTests
 
 		system.UpdateSystem(null!, rAdd.Object);
 		Assert.True(system.IsBlackmailed(2));
+		Assert.True(system.HasBlackmailedAny);
 
 		system.Reset(ResetTiming.MeetingEnd);
 		Assert.False(system.IsBlackmailed(2));
+		Assert.False(system.HasBlackmailedAny);
 	}
 
 	[Fact]

@@ -50,7 +50,7 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 
 	public void CreateAbility()
 	{
-		this.CreateNormalActivatingAbilityButton(
+		this.CreateActivatingAbilityCountButton(
 			"blackmail",
 			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton),
 			IsAbilityCheck,
@@ -87,11 +87,17 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 			return false;
 		}
 
-		if (this.system != null &&
-			!this.multipleBlackmail &&
-			this.system.IsBlackmailed(this.tmpTarget.PlayerId))
+		if (this.system != null)
 		{
-			return false;
+			if (!this.multipleBlackmail && this.system.HasBlackmailedAny)
+			{
+				return false;
+			}
+
+			if (this.system.IsBlackmailed(this.tmpTarget.PlayerId))
+			{
+				return false;
+			}
 		}
 
 		return IRoleAbility.IsCommonUse();
@@ -139,7 +145,11 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 			BlackmailerOption.Range,
 			1.0f, 0.1f, 4.0f, 0.1f);
 
-		IRoleAbility.CreateCommonAbilityOption(factory, 3.0f);
+		IRoleAbility.CreateAbilityCountOption(
+			factory,
+			defaultAbilityCount: 3,
+			maxAbilityCount: 15,
+			defaultActiveTime: 3.0f);
 
 		factory.CreateBoolOption(
 			BlackmailerOption.MultipleBlackmail,
