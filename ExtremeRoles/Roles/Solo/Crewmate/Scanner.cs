@@ -48,7 +48,8 @@ public sealed class ScannerRole :
 
 	public void CreateAbility()
 	{
-		var img = UnityObjectLoader.LoadFromResources(ExtremeRoleId.Scanner);
+		// var img = UnityObjectLoader.LoadFromResources(ExtremeRoleId.Scanner);
+		var img = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton);
 		string name = Tr.GetString("scannerScan");
 
 		var beha = new ChargingAndReclickCountBehavior(
@@ -96,6 +97,14 @@ public sealed class ScannerRole :
 
 	public void Update(PlayerControl rolePlayer)
 	{
+		if (!GameProgressSystem.IsTaskPhase ||
+			Minigame.Instance != null ||
+			!rolePlayer.CanMove)
+		{
+			cancelScan();
+			return;
+		}
+
 		if (this.abilityText == null)
 		{
 			this.abilityText = Object.Instantiate(
@@ -108,14 +117,6 @@ public sealed class ScannerRole :
 		if (!this.isScanning)
 		{
 			this.abilityText.gameObject.SetActive(false);
-			return;
-		}
-
-		if (!GameProgressSystem.IsTaskPhase ||
-			Minigame.Instance != null ||
-			!rolePlayer.CanMove)
-		{
-			cancelScan();
 			return;
 		}
 
@@ -152,20 +153,13 @@ public sealed class ScannerRole :
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
-		this.textPopUp?.Clear();
-		if (this.abilityText != null)
-		{
-			this.abilityText.gameObject.SetActive(false);
-		}
-		this.minigameWrapper?.Reset();
-		this.isScanning = false;
-		this.selectedRoom = null;
+
 	}
 
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
-		IRoleAbility.CreateCommonAbilityOption(factory);
+		IRoleAbility.CreateAbilityCountOption(factory, 3, 10, 5);
 	}
 
 	protected override void RoleSpecificInit()

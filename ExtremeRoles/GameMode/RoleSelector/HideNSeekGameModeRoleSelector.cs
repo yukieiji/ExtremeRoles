@@ -72,6 +72,7 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Logger,
 			ExtremeRoleId.Charger,
 			ExtremeRoleId.Forestaller,
+			ExtremeRoleId.Scanner,
 
 			ExtremeRoleId.BountyHunter,
             ExtremeRoleId.Bomber,
