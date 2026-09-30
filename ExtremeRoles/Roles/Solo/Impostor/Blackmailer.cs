@@ -21,7 +21,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialSetUp, IRoleUpdate
+public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
 	public enum BlackmailerOption
 	{
@@ -41,9 +41,6 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSp
 	private float range;
 	private bool multipleBlackmail;
 	private BlackmailerSystem? system;
-
-	private Dictionary<byte, PoolablePlayer> playerIcons = new();
-	private GridArrange? grid;
 
 	public Blackmailer() : base(
 		RoleArgs.BuildImpostor(
@@ -118,49 +115,22 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSp
 		this.target = null;
 	}
 
-	public void IntroBeginSetUp()
-	{ }
-
-	public void IntroEndSetUp()
-	{
-		GameObject bottomLeft = new GameObject("BlackmailIcons");
-		bottomLeft.transform.SetParent(
-			HudManager.Instance.UseButton.transform.parent.parent);
-		AspectPosition aspectPosition = bottomLeft.AddComponent<AspectPosition>();
-		aspectPosition.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
-		aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
-		aspectPosition.DistanceFromEdge = new Vector3(0.375f, 0.35f);
-		aspectPosition.AdjustPosition();
-
-		this.grid = bottomLeft.AddComponent<GridArrange>();
-		this.grid.CellSize = new Vector2(0.5f, 0.75f);
-		this.grid.MaxColumns = 14;
-		this.grid.Alignment = GridArrange.StartAlign.Right;
-		this.grid.cells = new();
-
-		this.playerIcons = Helper.Player.CreatePlayerIcon(
-			bottomLeft.transform, Vector3.one * 0.275f);
-		updateShowIcon(true);
-	}
-
 	public void ResetOnMeetingStart()
-	{
-		foreach (var (_, poolPlayer) in this.playerIcons)
-		{
-			poolPlayer.gameObject.SetActive(false);
-		}
-	}
+	{ }
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{ }
 
 	public void Update(PlayerControl rolePlayer)
+	{ }
+
+	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 	{
-		if (!GameProgressSystem.IsTaskPhase)
+		if (this.system != null && this.system.IsBlackmailed(targetPlayerId))
 		{
-			return;
+			return $"{base.GetRolePlayerNameTag(targetRole, targetPlayerId)}<color=#FF0000>({Tr.GetString("blackmailMark")})</color>";
 		}
-		updateShowIcon();
+		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -177,34 +147,12 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSp
 	}
 
 	protected override void RoleSpecificInit()
-	{		var cate = this.Loader;
+	{
+		var cate = this.Loader;
 		this.range = cate.GetValue<BlackmailerOption, float>(BlackmailerOption.Range);
 		this.multipleBlackmail = cate.GetValue<BlackmailerOption, bool>(BlackmailerOption.MultipleBlackmail);
 
 		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<BlackmailerSystem>(
 			ExtremeSystemType.BlackmailerSystem);
-	}
-
-	private void updateShowIcon(bool forceUpdate = false)
-	{
-		bool updateNeeded = forceUpdate;
-		foreach (var (playerId, poolPlayer) in this.playerIcons)
-		{
-			bool isBlackmailed = this.system != null && this.system.IsBlackmailed(playerId);
-			NetworkedPlayerInfo? player = GameData.Instance.GetPlayerById(playerId);
-
-			bool shouldShow = isBlackmailed && player != null && !player.IsDead && !player.Disconnected;
-
-			if (poolPlayer.gameObject.activeSelf != shouldShow)
-			{
-				poolPlayer.gameObject.SetActive(shouldShow);
-				updateNeeded = true;
-			}
-		}
-
-		if (updateNeeded && this.grid != null)
-		{
-			this.grid.ArrangeChilds();
-		}
 	}
 }

@@ -1752,4 +1752,7 @@ The blackmailed player cannot speak, chat, or vote in the next meeting.</value>
   <data name="blackmail" xml:space="preserve">
     <value>Blackmail</value>
   </data>
+  <data name="blackmailMark" xml:space="preserve">
+    <value>Blackmailed</value>
+  </data>
 </root>
