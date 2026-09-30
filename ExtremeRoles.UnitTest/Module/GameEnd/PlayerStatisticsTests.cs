@@ -11,6 +11,7 @@ public sealed class PlayerStatisticsTests
     public PlayerStatisticsTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupPaletteHelpers();
     }
 
     [Fact]

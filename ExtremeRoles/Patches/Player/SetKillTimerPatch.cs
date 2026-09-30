@@ -19,7 +19,7 @@ public class PlayerControlSetKillTimerPatchBody(IGameProgress progress, IGameRun
 	public bool Prefix(PlayerControl __instance, float time)
 	{
 		if (!(
-				_progress.IsTaskPhase && 
+				_progress.IsRoleSetUpEnd && 
 				_runtime.TryGetGameContext(out var ctx) && 
 				ctx.Roles.TryGetRole(__instance.PlayerId, out var role)
 			))

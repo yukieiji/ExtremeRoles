@@ -41,6 +41,8 @@ public class MapCountOverlayUpdatePatchBodyTests : IDisposable
 	private static void ResetState()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupPaletteHelpers();
+		MockSetupHelper.SetupOptionManager();
 		MockSetupHelper.SetupTimeHelpers();
 		MockSetupHelper.SetupPlayerControlMocks();
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();

@@ -36,6 +36,7 @@ public class WinnerProcessorTests
     public WinnerProcessorTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupPaletteHelpers();
         MockSetupHelper.SetupLogger("WinnerProcessorTests");
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);

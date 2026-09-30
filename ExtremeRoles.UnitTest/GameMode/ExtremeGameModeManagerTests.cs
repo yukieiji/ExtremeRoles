@@ -24,10 +24,7 @@ public class ExtremeGameModeManagerTests
         MockSetupHelper.SetupDebugMode();
         MockSetupHelper.SetupMockConfig(plugin);
 
-        if (ClientOption.Instance == null || !OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.RandomOption, out _))
-        {
-            OptionCreator.Create();
-        }
+        MockSetupHelper.SetupOptionManager();
 
         ResetInstance();
     }

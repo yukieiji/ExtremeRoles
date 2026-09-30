@@ -340,7 +340,7 @@ public sealed class OtherPlayerMeetingVisualUpdateEvent(
 		NetworkedPlayerInfo local,
 		SingleRoleBase role)
 	{
-		if (local.Role.Role is RoleTypes.GuardianAngel)
+		if (ExtremeGhostRoleManager.IsVanillaGhostRole(local.Role.Role))
 		{
 			return true;
 		}

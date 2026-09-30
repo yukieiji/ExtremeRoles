@@ -34,6 +34,8 @@ public class CustomServerAPITests
     public CustomServerAPITests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupConstantsHelpers();
+        MockSetupHelper.SetupJsonHelpers();
         MockSetupHelper.SetupLogger();
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockHttps(plugin);

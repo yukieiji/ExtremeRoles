@@ -25,10 +25,7 @@ public class RoleAssignFilterModelUpdaterTests
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
 
-        if (ClientOption.Instance == null)
-        {
-            OptionCreator.Create();
-        }
+        MockSetupHelper.SetupOptionManager();
     }
 
     [Fact]

@@ -16,6 +16,7 @@ public class LiberalMoneyHistoryTests
     public LiberalMoneyHistoryTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupPaletteHelpers();
         var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
         mockTranslation.Setup(t => t.GetString(
             It.IsAny<string>(),

@@ -183,6 +183,8 @@ public sealed class SubmergedIntegratorTests : IDisposable
 	{
 		globalOptionsHelper.Setup(h => h.Invoke()).Returns(globalGameOptionsManager);
 		MockGameOptionsManagerget_InstanceHelper.Instance = globalOptionsHelper.Object;
+		MockSetupHelper.SetupOptionManager();
+		MockSetupHelper.SetupAmongUsClientMock();
 
 		VentPatchData.InTransitionValue = false;
 		FloorHandler.HandlerInstance = null;

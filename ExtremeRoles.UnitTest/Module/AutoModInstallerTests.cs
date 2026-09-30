@@ -40,6 +40,7 @@ public class AutoModInstallerTests
     public AutoModInstallerTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupJsonHelpers();
 
 		MockSetupHelper.SetupLogger();
 

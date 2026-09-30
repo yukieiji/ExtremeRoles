@@ -72,12 +72,10 @@ public static class ExtremeGhostRoleManager
 			{ ExtremeGhostRoleId.Foras    , new Foras()   },
         };
 
-    private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
-    {
-        RoleTypes.GuardianAngel,
-    };
-
 	private const int roleIdOffset = 512;
+
+	public static bool IsVanillaGhostRole(RoleTypes roleTypes)
+		=> roleTypes is RoleTypes.GuardianAngel or RoleTypes.SpiritGuide;
 
 	public static int GetRoleGroupId(ExtremeGhostRoleId roleId)
 		=> roleIdOffset + (int)roleId;
@@ -88,7 +86,7 @@ public static class ExtremeGhostRoleManager
         SingleRoleBase baseRole = ExtremeRoleManager.GameRole[player.PlayerId];
         int controlId = baseRole.GameControlId + IdOffset;
 
-        if (vanillaGhostRole.Contains(roleType))
+        if (IsVanillaGhostRole(roleType))
         {
             rpcSetSingleGhostRoleToPlayerId(
                 player, controlId, roleType,
@@ -322,7 +320,7 @@ public static class ExtremeGhostRoleManager
         RoleTypes roleType = (RoleTypes)vanillaRoleId;
         ExtremeGhostRoleId ghostRoleId = (ExtremeGhostRoleId)roleId;
 
-        if (vanillaGhostRole.Contains(roleType) &&
+        if (IsVanillaGhostRole(roleType) &&
             ghostRoleId == ExtremeGhostRoleId.VanillaRole)
         {
             lock (GameRole)

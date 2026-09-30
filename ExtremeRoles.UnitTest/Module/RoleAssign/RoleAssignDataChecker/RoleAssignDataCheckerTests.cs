@@ -26,10 +26,7 @@ public class RoleAssignDataCheckerTests
         MockSetupHelper.SetupLogger();
         MockSetupHelper.SetupDebugMode();
 
-        if (ClientOption.Instance == null)
-        {
-            OptionCreator.Create();
-        }
+        MockSetupHelper.SetupOptionManager();
     }
 
     [Fact]

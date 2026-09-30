@@ -16,6 +16,7 @@ public class WinnerBuilderTests
     public WinnerBuilderTests()
     {
         MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupPaletteHelpers();
         MockSetupHelper.SetupLogger("WinnerBuilderTests");
         var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
         MockSetupHelper.SetupMockConfig(plugin);

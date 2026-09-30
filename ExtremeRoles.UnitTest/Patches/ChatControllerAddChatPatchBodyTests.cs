@@ -57,6 +57,7 @@ public class ChatControllerAddChatPatchBodyTests : IDisposable
 		MockMeetingHudget_InstanceHelper.Instance = null;
 
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupOptionManager();
 		MockSetupHelper.SetupTimeHelpers();
 		MockSetupHelper.SetupPlayerControlMocks();
 		MockSetupHelper.SetupObjectImplicitHelpers();

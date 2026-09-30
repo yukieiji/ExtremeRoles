@@ -27,7 +27,7 @@ namespace ExtremeRoles.Helper;
 public static class GameSystem
 {
 	public static int VanillaMaxPlayerNum =>
-		CompatModManager.Instance.TryGetMod<CrowdedMod>(CompatModType.CrowdedMod, out var mod) ?
+		CompatModManager.Instance != null && CompatModManager.Instance.TryGetMod<CrowdedMod>(CompatModType.CrowdedMod, out var mod) ?
 		mod.MaxPlayerNum : 15;
 
 	public static int MaxImposterNum => VanillaMaxPlayerNum - 1;

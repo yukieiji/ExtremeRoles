@@ -107,8 +107,17 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 	private static void ResetState()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupPaletteHelpers();
+		MockSetupHelper.SetupOptionManager();
 		MockSetupHelper.SetupTimeHelpers();
 		MockSetupHelper.SetupPlayerControlMocks();
+
+		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
+		mockTranslation.Setup(t => t.GetString(
+			It.IsAny<string>(),
+			It.IsAny<string>(),
+			It.IsAny<Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object>>()))
+			.Returns((string id, string defaultStr, Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Il2CppSystem.Object> parts) => defaultStr ?? id);
 		ExtremeRoleManager.GameRole.Clear();
 		PlayerCache.RemovePlayerControl(_ => true);
 		ExtremeGameModeManager.Create(GameModes.Normal);

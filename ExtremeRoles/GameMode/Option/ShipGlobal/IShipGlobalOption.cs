@@ -62,6 +62,7 @@ public enum GhostRoleGlobalOption : int
 {
 	HauntMinigameMaxSpeed,
 	IsAssignNeutralToVanillaCrewGhostRole,
+	IsAssignLiberalToVanillaCrewGhostRole,
 	IsBlockGAAbilityReport,
 }
 

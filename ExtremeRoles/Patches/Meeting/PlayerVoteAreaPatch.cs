@@ -2,10 +2,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Core.Abstract;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Meeting;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance;
@@ -25,11 +22,12 @@ using UnityEngine;
 
 namespace ExtremeRoles.Patches.Meeting;
 
-public class PlayerVoteAreaSelectPatchBody(IGameProgress progress, IGameRuntime runtime, IModLogger logger)
+public class PlayerVoteAreaSelectPatchBody(IGameProgress progress, IGameRuntime runtime, IIl2CppObjectProvider objectProvider, IModLogger logger)
 {
 	private readonly IGameProgress _progress = progress;
 	private readonly IGameRuntime _runtime = runtime;
 	private readonly IModLogger _logger = logger;
+	private readonly IIl2CppObjectProvider _objectProvider = objectProvider;
 
 	private readonly Dictionary<byte, PlayerVoteAreaButtonContainer> meetingButton = new Dictionary<byte, PlayerVoteAreaButtonContainer>(PlayerCache.AllPlayerControl.Count);
 
@@ -60,7 +58,7 @@ public class PlayerVoteAreaSelectPatchBody(IGameProgress progress, IGameRuntime 
 					x => x.Compute()).ToArray())
 		);
 
-		var selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
+		var selectableElements = _objectProvider.GetList<UiElement>();
 		foreach (var btn in buttonEnumerable)
 		{
 			selectableElements.Add(btn.Element);

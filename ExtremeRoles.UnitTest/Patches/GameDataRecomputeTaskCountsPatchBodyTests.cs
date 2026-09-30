@@ -41,6 +41,7 @@ public class GameDataRecomputeTaskCountsPatchBodyTests : IDisposable
 	private static void ResetState()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupPaletteHelpers();
 		MockSetupHelper.SetupTimeHelpers();
 		MockSetupHelper.SetupPlayerControlMocks();
 		ExtremeRoleManager.GameRole.Clear();

@@ -16,6 +16,7 @@ public sealed class LogicOptionsSyncOptionsPatchTests
 	{
 		// Arrange
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupAprilFoolsHelpers();
 		MockAmongUsClientget_InstanceHelper.Instance = new Mock<MockAmongUsClientget_InstanceHelper>().Object;
 
 		// Act
@@ -77,6 +78,9 @@ public sealed class LogicOptionsSyncOptionsPatchTests
 	{
 		// Arrange
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupAprilFoolsHelpers();
+		MockSetupHelper.SetupPlayerControlMocks();
+
 		var mockClient = new Mock<AmongUsClient>(IntPtr.Zero);
 		mockClient.SetupGet(c => c.AmHost).Returns(true);
 
@@ -103,6 +107,9 @@ public sealed class LogicOptionsSyncOptionsPatchTests
 	{
 		// Arrange
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupAprilFoolsHelpers();
+		MockSetupHelper.SetupPlayerControlMocks();
+
 		var mockClient = new Mock<AmongUsClient>(IntPtr.Zero);
 		mockClient.SetupGet(c => c.AmHost).Returns(true);
 
@@ -110,9 +117,12 @@ public sealed class LogicOptionsSyncOptionsPatchTests
 		mockClientHelper.Setup(h => h.Invoke()).Returns(mockClient.Object);
 		MockAmongUsClientget_InstanceHelper.Instance = mockClientHelper.Object;
 
+		var mockGameOptions = new Mock<IGameOptions>(IntPtr.Zero);
 		var mockGameOptionsFactory = new Mock<GameOptionsFactory>(IntPtr.Zero);
+		mockGameOptionsFactory.Setup(f => f.ToBytes(It.IsAny<IGameOptions>(), It.IsAny<bool>())).Returns((Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>)null!);
 		var mockLogicOptions = new Mock<LogicOptions>(IntPtr.Zero);
 		mockLogicOptions.SetupGet(l => l.gameOptionsFactory).Returns(mockGameOptionsFactory.Object);
+		mockLogicOptions.SetupGet(l => l.currentGameOptions).Returns(mockGameOptions.Object);
 
 		var mockGameManager = new Mock<GameManager>(IntPtr.Zero);
 		mockGameManager.SetupGet(g => g.LogicOptions).Returns(mockLogicOptions.Object);

@@ -29,6 +29,8 @@ public class CounterAreaUpdatePatchBodyTests : IDisposable
 	private static void ResetState()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupPaletteHelpers();
+		MockSetupHelper.SetupOptionManager();
 		MockSetupHelper.SetupTimeHelpers();
 		MockSetupHelper.SetupPlayerControlMocks();
 

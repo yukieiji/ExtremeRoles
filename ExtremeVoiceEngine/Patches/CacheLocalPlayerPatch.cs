@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.Extension.Controller;
 
@@ -6,7 +6,7 @@ using ExtremeVoiceEngine.Extension;
 
 namespace ExtremeVoiceEngine.Patches;
 
-[HarmonyPatch(typeof(PlayerControl._Start_d__82), nameof(PlayerControl._Start_d__82.MoveNext))]
+[HarmonyPatch(typeof(PlayerControl._Start_d__85), nameof(PlayerControl._Start_d__85.MoveNext))]
 public static class ChatCurrentSettingPatch
 {
     public static bool Chated { get; set; } = false;
