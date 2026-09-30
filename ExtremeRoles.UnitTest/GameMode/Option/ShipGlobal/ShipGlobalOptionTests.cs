@@ -162,7 +162,7 @@ public class ShipGlobalOptionTests
 
         // Ghost Role
         Assert.Equal(4.0f, classic.GhostRole.HauntMinigameMaxSpeed);
-        Assert.True(classic.GhostRole.IsAssignNeutralToVanillaCrewGhostRole);
+        Assert.True(classic.GhostRole.AssignToVanillaCrewmateGhostRole.HasFlag(VanillaCrewmateGhostRoleAssign.NeutalOk));
         Assert.False(classic.GhostRole.IsBlockGAAbilityReport);
 
         // Task & Map Options

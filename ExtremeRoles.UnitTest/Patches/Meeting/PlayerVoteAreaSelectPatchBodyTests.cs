@@ -152,7 +152,7 @@ public class PlayerVoteAreaSelectPatchBodyTests : IDisposable
 	private static void SetupGameOptionsManagerMock()
 	{
 		var mockOptions = new Mock<IGameOptions>(IntPtr.Zero);
-		var mockNormalOptions = new Mock<NormalGameOptionsV11>(IntPtr.Zero);
+		var mockNormalOptions = new Mock<NormalGameOptionsV12>(IntPtr.Zero);
 
 		var mockOptionsMgr = new Mock<GameOptionsManager>(IntPtr.Zero);
 		mockOptionsMgr.SetupGet(m => m.CurrentGameOptions).Returns(mockOptions.Object);
