@@ -98,7 +98,8 @@ public sealed class GetAuOption : IRequestHandler
 						RoleTypes.Tracker or
 						RoleTypes.Noisemaker or
 						RoleTypes.Detective or
-						RoleTypes.Judge => intedRoleId + 128,
+						RoleTypes.Judge or
+						RoleTypes.SpiritGuide => intedRoleId + 128,
 
 						RoleTypes.Shapeshifter or
 						RoleTypes.Phantom or

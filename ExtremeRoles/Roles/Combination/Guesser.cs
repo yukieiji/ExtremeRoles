@@ -166,7 +166,8 @@ public sealed class Guesser :
 					role is 
 						RoleTypes.GuardianAngel or
 						RoleTypes.CrewmateGhost or
-						RoleTypes.ImpostorGhost)
+						RoleTypes.ImpostorGhost or 
+						RoleTypes.SpiritGuide)
 				{
 					continue;
 				}
