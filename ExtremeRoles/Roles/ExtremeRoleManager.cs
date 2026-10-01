@@ -140,6 +140,7 @@ public enum ExtremeRoleId : int
 	Legislator,
 	RemoteKiller,
 	YoYo,
+	Blackmailer,
 
 	Alice,
     Jackal,
@@ -186,8 +187,6 @@ public enum ExtremeRoleId : int
 	Encloser,
 	Scapeactor,
 	Delta,
-
-	Blackmailer,
 
 	Xion,
 }

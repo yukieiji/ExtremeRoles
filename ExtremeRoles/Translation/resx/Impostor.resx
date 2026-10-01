@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -65,20 +65,20 @@
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1763,8 +1763,12 @@ Lv2能力「ビームセーバー」
     <value>ブラックメーラー</value>
   </data>
   <data name="BlackmailerFullDescription" xml:space="preserve">
-    <value>プレイヤーを恐喝するインポスター。
-恐喝されたプレイヤーは次の会議中に発言およびチャット、投票を行うことが不可能になる。</value>
+    <value>プレイヤーを恐喝することで会議を有利に進めるインポスター
+
+ボタン能力「恐喝」
+ - プレイヤー一人の近くで発動(一定時間近くにいる必要あり)
+ - そのプレイヤーは次の会議中(だけ)に発言およびチャット
+　投票を行うことが不可能になる</value>
   </data>
   <data name="BlackmailerShortDescription" xml:space="preserve">
     <value>プレイヤーを恐喝し、次の会議で発言権と投票権を奪え</value>
@@ -1773,15 +1777,36 @@ Lv2能力「ビームセーバー」
     <value>プレイヤーを恐喝し会議での発言権を封殺しろ</value>
   </data>
   <data name="BlackmailerRange" xml:space="preserve">
-    <value>恐喝有効距離</value>
+    <value>「恐喝」が発動できる距離</value>
   </data>
   <data name="BlackmailerMultipleBlackmail" xml:space="preserve">
-    <value>複数人恐喝可能</value>
+    <value>複数人に対して「恐喝」できるか</value>
   </data>
   <data name="blackmail" xml:space="preserve">
     <value>恐喝</value>
   </data>
-  <data name="blackmailMark" xml:space="preserve">
-    <value>恐喝中</value>
+  <data name="RemoteKillerAbilityCoolTime" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="RemoteKillerAbilityActiveTime" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="RemoteKillerAbilityCount" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="YoYoAbilityCoolTime" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="YoYoAbilityCount" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="BlackmailerAbilityCoolTime" xml:space="preserve">
+    <value>「恐喝」のクールタイム</value>
+  </data>
+  <data name="BlackmailerAbilityActiveTime" xml:space="preserve">
+    <value>「恐喝」にかかる時間</value>
+  </data>
+  <data name="BlackmailerAbilityCount" xml:space="preserve">
+    <value>「恐喝」の使用回数</value>
   </data>
 </root>

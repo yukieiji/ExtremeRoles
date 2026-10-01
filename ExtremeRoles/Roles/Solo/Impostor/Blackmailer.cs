@@ -117,7 +117,7 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 			this.system != null && 
 			this.system.IsBlackmailedBy(localPlayer.PlayerId, targetPlayerId))
 		{
-			return $" {Design.ColoredString(Palette.ImpostorRed, "")}";
+			return $" {Design.ColoredString(Palette.ImpostorRed, "◆")}";
 		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
@@ -125,10 +125,7 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		IRoleAbility.CreateAbilityCountOption(
-			factory,
-			defaultAbilityCount: 3,
-			maxAbilityCount: 15,
-			defaultActiveTime: 3.0f);
+			factory, 1, 15, 3.0f);
 
 		factory.CreateFloatOption(
 			BlackmailerOption.Range,

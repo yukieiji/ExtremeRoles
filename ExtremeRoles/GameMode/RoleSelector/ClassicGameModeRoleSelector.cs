@@ -141,6 +141,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Legislator,
 			ExtremeRoleId.RemoteKiller,
 			ExtremeRoleId.YoYo,
+			ExtremeRoleId.Blackmailer,
 
 			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,
@@ -150,7 +151,6 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Imitater,
             ExtremeRoleId.Yandere,
             ExtremeRoleId.Yoko,
-			ExtremeRoleId.Blackmailer,
             ExtremeRoleId.Totocalcio,
             ExtremeRoleId.Miner,
             ExtremeRoleId.Eater,

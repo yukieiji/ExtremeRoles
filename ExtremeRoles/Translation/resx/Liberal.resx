@@ -406,4 +406,13 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>タスク完了数差分1つあたりの
 ボーナス資金</value>
   </data>
+  <data name="ScapeactorExiledMoney" xml:space="preserve">
+    <value>追放時の資金ボーナス</value>
+  </data>
+  <data name="DeltaAbilityCoolTime" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="DeltaAbilityCount" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
 </root>
