@@ -15,6 +15,7 @@ public sealed class BlackmailerSystemTests
 {
 	private readonly Mock<AmongUsClient> mockClient;
 	private readonly Mock<PlayerControl> mockLocalPlayer;
+	private readonly Mock<MessageWriter> mockWriter;
 
 	public BlackmailerSystemTests()
 	{
@@ -22,9 +23,11 @@ public sealed class BlackmailerSystemTests
 		MockSetupHelper.SetupUnityCommonMocks();
 
 		this.mockClient = MockSetupHelper.SetupAmongUsClientMock();
-		var mockWriter = new Mock<MessageWriter>(IntPtr.Zero);
+		this.mockWriter = new Mock<MessageWriter>(IntPtr.Zero);
+		this.mockWriter.Setup(w => w.ToByteArray(It.IsAny<bool>())).Returns((Il2CppStructArray<byte>)null!);
+
 		this.mockClient.Setup(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<SendOption>(), It.IsAny<int>()))
-			.Returns(mockWriter.Object);
+			.Returns(this.mockWriter.Object);
 
 		this.mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		this.mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
@@ -32,27 +35,16 @@ public sealed class BlackmailerSystemTests
 		if (Hazel.MockMessageWriterGetHelper.Instance == null)
 		{
 			var mockGet = new Mock<Hazel.MockMessageWriterGetHelper>();
-			mockGet.Setup(g => g.Invoke(It.IsAny<SendOption>())).Returns(mockWriter.Object);
+			mockGet.Setup(g => g.Invoke(It.IsAny<SendOption>())).Returns(this.mockWriter.Object);
 			Hazel.MockMessageWriterGetHelper.Instance = mockGet.Object;
 		}
 
 		if (Hazel.MockMessageReaderGetHelper.Instance == null)
 		{
 			var mockReaderHelper = new Mock<Hazel.MockMessageReaderGetHelper>();
+			var mockReader = new Mock<MessageReader>();
 			mockReaderHelper.Setup(g => g.Invoke(It.IsAny<Il2CppStructArray<byte>>()))
-				.Returns((Il2CppStructArray<byte> buffer) =>
-				{
-					var mockReader = new Mock<MessageReader>();
-					if (buffer != null && buffer.Length >= 1)
-					{
-						var seq = mockReader.SetupSequence(r => r.ReadByte());
-						for (int i = 0; i < buffer.Length; i++)
-						{
-							seq.Returns(buffer[i]);
-						}
-					}
-					return mockReader.Object;
-				});
+				.Returns(mockReader.Object);
 			Hazel.MockMessageReaderGetHelper.Instance = mockReaderHelper.Object;
 		}
 
@@ -65,24 +57,31 @@ public sealed class BlackmailerSystemTests
 	}
 
 	[Fact]
-	public void GetOrRegister_And_TryGet_ReturnsSystemInstance()
+	public void GetOrRegister_ReturnsSystemInstance()
 	{
 		// Act
 		var system = BlackmailerSystem.GetOrRegister();
 
 		// Assert
 		Assert.NotNull(system);
+	}
+
+	[Fact]
+	public void TryGet_ReturnsTrueAndInstance()
+	{
+		// Arrange
+		var expectedSystem = BlackmailerSystem.GetOrRegister();
 
 		// Act
 		bool success = BlackmailerSystem.TryGet(out var retrievedSystem);
 
 		// Assert
 		Assert.True(success);
-		Assert.Same(system, retrievedSystem);
+		Assert.Same(expectedSystem, retrievedSystem);
 	}
 
 	[Fact]
-	public void AddBlackmail_And_IsBlackmailed_IsBlackmailedBy_WorksCorrectly()
+	public void AddBlackmail_UpdatesSystemState()
 	{
 		// Arrange
 		var system = new BlackmailerSystem();
@@ -104,23 +103,13 @@ public sealed class BlackmailerSystemTests
 		// Act
 		system.UpdateSystem(null!, readerMock.Object);
 
-		// Assert: Byte checks
-		bool isTargetBlackmailed = system.IsBlackmailed(targetId);
-		bool isOtherBlackmailed = system.IsBlackmailed(3);
-		bool isBlackmailedBy1 = system.IsBlackmailedBy(1, targetId);
-		bool isBlackmailedByOtherBM = system.IsBlackmailedBy(9, targetId);
-
-		Assert.True(isTargetBlackmailed);
-		Assert.False(isOtherBlackmailed);
-		Assert.True(isBlackmailedBy1);
-		Assert.False(isBlackmailedByOtherBM);
-
-		// Assert: PlayerControl checks
-		bool isTargetPlayerBlackmailed = system.IsBlackmailed(mockTargetPlayer.Object);
-		bool isOtherPlayerBlackmailed = system.IsBlackmailed(mockOtherPlayer.Object);
-
-		Assert.True(isTargetPlayerBlackmailed);
-		Assert.False(isOtherPlayerBlackmailed);
+		// Assert
+		Assert.True(system.IsBlackmailed(targetId));
+		Assert.False(system.IsBlackmailed(3));
+		Assert.True(system.IsBlackmailedBy(1, targetId));
+		Assert.False(system.IsBlackmailedBy(9, targetId));
+		Assert.True(system.IsBlackmailed(mockTargetPlayer.Object));
+		Assert.False(system.IsBlackmailed(mockOtherPlayer.Object));
 	}
 
 	[Fact]
@@ -152,15 +141,12 @@ public sealed class BlackmailerSystemTests
 		system.UpdateSystem(null!, clearReader.Object);
 
 		// Assert
-		bool is10Blackmailed = system.IsBlackmailed(10);
-		bool is20Blackmailed = system.IsBlackmailed(20);
-
-		Assert.False(is10Blackmailed);
-		Assert.True(is20Blackmailed);
+		Assert.False(system.IsBlackmailed(10));
+		Assert.True(system.IsBlackmailed(20));
 	}
 
 	[Fact]
-	public void Reset_WhenMeetingEndOrExiledEnd_ClearsMapAndSetsDirtyFlag()
+	public void Reset_WhenMeetingStart_DoesNotClearMap()
 	{
 		// Arrange
 		var system = new BlackmailerSystem();
@@ -171,45 +157,75 @@ public sealed class BlackmailerSystemTests
 			.Returns((byte)10);
 		system.UpdateSystem(null!, addReader.Object);
 
-		// Act: MeetingStart (should not reset)
+		// Act
 		system.Reset(ResetTiming.MeetingStart, null);
 
 		// Assert
-		bool is10BlackmailedBeforeMeetingEnd = system.IsBlackmailed(10);
-		Assert.True(is10BlackmailedBeforeMeetingEnd);
-
-		// Act: MeetingEnd
-		system.Reset(ResetTiming.MeetingEnd, null);
-
-		// Assert
-		bool is10BlackmailedAfterMeetingEnd = system.IsBlackmailed(10);
-		Assert.False(is10BlackmailedAfterMeetingEnd);
-		Assert.True(system.IsDirty);
-
-		// Re-add blackmail
-		var addReader2 = new Mock<MessageReader>();
-		addReader2.SetupSequence(r => r.ReadByte())
-			.Returns((byte)BlackmailerSystem.Ops.AddBlackmail)
-			.Returns((byte)1)
-			.Returns((byte)10);
-		system.UpdateSystem(null!, addReader2.Object);
-
-		// Act: ExiledEnd
-		system.Reset(ResetTiming.ExiledEnd, null);
-
-		// Assert
-		bool is10BlackmailedAfterExiledEnd = system.IsBlackmailed(10);
-		Assert.False(is10BlackmailedAfterExiledEnd);
+		Assert.True(system.IsBlackmailed(10));
 	}
 
 	[Fact]
-	public void RpcAddBlackmail_And_RpcClearBlackmail_ExecutesWithoutError()
+	public void Reset_WhenMeetingEnd_ClearsMapAndSetsDirtyFlag()
+	{
+		// Arrange
+		var system = new BlackmailerSystem();
+		var addReader = new Mock<MessageReader>();
+		addReader.SetupSequence(r => r.ReadByte())
+			.Returns((byte)BlackmailerSystem.Ops.AddBlackmail)
+			.Returns((byte)1)
+			.Returns((byte)10);
+		system.UpdateSystem(null!, addReader.Object);
+
+		// Act
+		system.Reset(ResetTiming.MeetingEnd, null);
+
+		// Assert
+		Assert.False(system.IsBlackmailed(10));
+		Assert.True(system.IsDirty);
+	}
+
+	[Fact]
+	public void Reset_WhenExiledEnd_ClearsMap()
+	{
+		// Arrange
+		var system = new BlackmailerSystem();
+		var addReader = new Mock<MessageReader>();
+		addReader.SetupSequence(r => r.ReadByte())
+			.Returns((byte)BlackmailerSystem.Ops.AddBlackmail)
+			.Returns((byte)1)
+			.Returns((byte)10);
+		system.UpdateSystem(null!, addReader.Object);
+
+		// Act
+		system.Reset(ResetTiming.ExiledEnd, null);
+
+		// Assert
+		Assert.False(system.IsBlackmailed(10));
+	}
+
+	[Fact]
+	public void RpcAddBlackmail_CallsStartRpcImmediately()
 	{
 		// Arrange
 		var system = new BlackmailerSystem();
 
-		// Act & Assert
+		// Act
 		system.RpcAddBlackmail(1, 2);
+
+		// Assert
+		this.mockClient.Verify(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<SendOption>(), It.IsAny<int>()), Times.AtLeastOnce);
+	}
+
+	[Fact]
+	public void RpcClearBlackmail_CallsStartRpcImmediately()
+	{
+		// Arrange
+		var system = new BlackmailerSystem();
+
+		// Act
 		system.RpcClearBlackmail(1);
+
+		// Assert
+		this.mockClient.Verify(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<SendOption>(), It.IsAny<int>()), Times.AtLeastOnce);
 	}
 }
