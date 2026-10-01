@@ -645,9 +645,7 @@ public static class RPCOperator
 	{
 		byte chargerId = reader.ReadByte();
 		byte targetId = reader.ReadByte();
-		int addCount = reader.ReadInt32();
-		bool restoreKillCool = reader.ReadBoolean();
-		Roles.Solo.Crewmate.Charger.Charged(chargerId, targetId, addCount, restoreKillCool);
+		Roles.Solo.Crewmate.Charger.Charged(chargerId, targetId);
 	}
 
 	public static void CarrierAbility(

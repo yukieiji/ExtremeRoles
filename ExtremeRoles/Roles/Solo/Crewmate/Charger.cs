@@ -66,8 +66,7 @@ public sealed class Charger :
 			ColorPalette.ChargerElectricYellow))
 	{ }
 
-	public static void Charged(
-		byte chargerId, byte targetId, int addCount, bool restoreKillCool)
+	public static void Charged(byte chargerId, byte targetId)
 	{
 		if (!Player.TryGetPlayerControl(targetId, out var targetPlayer) ||
 			targetPlayer.IsInValid() ||
@@ -78,6 +77,14 @@ public sealed class Charger :
 
 		if (PlayerControl.LocalPlayer.PlayerId == targetId)
 		{
+			int addCount = 1;
+			bool restoreKillCool = false;
+			if (ExtremeRoleManager.TryGetSafeCastedRole<Charger>(chargerId, out var chargerRole))
+			{
+				addCount = chargerRole.addAbilityCount;
+				restoreKillCool = chargerRole.restoreKillCooldown;
+			}
+
 			ApplyChargeEffect(addCount, restoreKillCool);
 		}
 	}
@@ -165,11 +172,9 @@ public sealed class Charger :
 			{
 				caller.WriteByte(chargerId);
 				caller.WriteByte(targetId);
-				caller.WriteInt(this.addAbilityCount);
-				caller.WriteBoolean(this.restoreKillCooldown);
 			}
 
-			Charged(chargerId, targetId, this.addAbilityCount, this.restoreKillCooldown);
+			Charged(chargerId, targetId);
 		}
 		ResetTarget();
 	}
