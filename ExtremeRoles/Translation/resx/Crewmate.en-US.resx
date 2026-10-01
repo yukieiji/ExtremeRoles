@@ -1671,7 +1671,7 @@ Ability "Detector":
   <data name="ChargerFullDescription" xml:space="preserve">
     <value>Task Awakening Role
 Forcibly restores cooldown and ability uses of target player.
-If used on non-Crewmate, boosts enemy and suicides.</value>
+If used on non-Crewmate, boosts enemy team.</value>
   </data>
   <data name="ChargerShortDescription" xml:space="preserve">
     <value>Charge abilities of target player</value>

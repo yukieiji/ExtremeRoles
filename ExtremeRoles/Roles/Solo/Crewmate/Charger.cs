@@ -112,7 +112,7 @@ public sealed class Charger :
 		}
 
 		var localRole = ExtremeRoleManager.GetLocalPlayerRole();
-		if (restoreKillCool || localRole.IsImpostor() || localRole.HasOtherKillCool)
+		if (restoreKillCool && (localRole.IsImpostor() || localRole.HasOtherKillCool))
 		{
 			PlayerControl.LocalPlayer.killTimer = 0.1f;
 		}

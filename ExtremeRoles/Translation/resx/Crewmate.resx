@@ -1743,7 +1743,7 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="ChargerFullDescription" xml:space="preserve">
     <value>タスク覚醒役職
 他プレイヤーのボタン能力のクールタイムと使用回数を強制的に回復させる
-ただし、他陣営に対して発動すると敵を強化し、自身は自滅する</value>
+ただし、他陣営に対して発動すると敵を強化してしまう</value>
   </data>
   <data name="ChargerShortDescription" xml:space="preserve">
     <value>他プレイヤーの能力を「チャージ」せよ</value>
