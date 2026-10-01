@@ -58,7 +58,6 @@ public sealed class Charger :
 	private bool awakeHasOtherVision;
 
 	private ExtremeAbilityButton abilityButton;
-	private PlayerControl currentTargetPlayer;
 	private byte currentTargetPlayerId = byte.MaxValue;
 
 	public Charger() : base(
@@ -134,7 +133,6 @@ public sealed class Charger :
 	{
 		if (Player.TryGetClosestPlayerInRange(this, this.chargeRange, out var target))
 		{
-			this.currentTargetPlayer = target;
 			this.currentTargetPlayerId = target.PlayerId;
 			return true;
 		}
@@ -143,16 +141,15 @@ public sealed class Charger :
 
 	public bool CheckAbility()
 	{
-		if (this.currentTargetPlayer == null ||
-			this.currentTargetPlayer.IsInValid() ||
-			this.currentTargetPlayer.PlayerId != this.currentTargetPlayerId)
+		if (!Player.TryGetPlayerControl(this.currentTargetPlayerId, out var targetPlayer) ||
+			targetPlayer.IsInValid())
 		{
 			return false;
 		}
 
 		return Player.IsPlayerInRangeAndDrawOutLine(
 			PlayerControl.LocalPlayer,
-			this.currentTargetPlayer,
+			targetPlayer,
 			this,
 			this.chargeRange);
 	}
@@ -179,7 +176,6 @@ public sealed class Charger :
 
 	private void ResetTarget()
 	{
-		this.currentTargetPlayer = null;
 		this.currentTargetPlayerId = byte.MaxValue;
 	}
 
