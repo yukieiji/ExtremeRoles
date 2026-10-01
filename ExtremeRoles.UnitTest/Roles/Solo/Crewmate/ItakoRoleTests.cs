@@ -42,6 +42,7 @@ public class ItakoRoleTests
 		MockSetupHelper.SetupPlayerControlMocks();
 		MockSetupHelper.SetupGameDataMock();
 		MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
+		MockSetupHelper.SetupDestroyableSingletonMock<RoleManager>();
 		MockSetupHelper.SetupOptionManager();
 		SetupGameOptionsManagerMock();
 		SetupConstantsMock();
