@@ -104,6 +104,7 @@ public enum ExtremeRoleId : int
 	Itako,
 	Screamer,
 	Logger,
+	Charger,
 
 	SpecialImpostor,
     Evolver,
@@ -357,6 +358,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Itako       , new ItakoRole()},
 			{(int)ExtremeRoleId.Screamer    , new Screamer()},
 			{(int)ExtremeRoleId.Logger      , new LoggerRole()},
+			{(int)ExtremeRoleId.Charger     , new Charger()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
