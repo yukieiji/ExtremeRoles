@@ -53,14 +53,12 @@ public sealed class Delta : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	public bool IsAbilityUse()
 	{
 		this.currentTarget = byte.MaxValue;
-
-		PlayerControl? target = Player.GetClosestPlayerInRange(PlayerControl.LocalPlayer, this, this.range);
-		if (target != null)
+		if (Player.TryGetClosestPlayerInRange(PlayerControl.LocalPlayer, this, this.range, out var target))
 		{
 			this.currentTarget = target.PlayerId;
 		}
 
-		return IRoleAutoBuildAbility.IsCommonUse() && this.currentTarget != byte.MaxValue;
+		return IRoleAbility.IsCommonUse() && this.currentTarget != byte.MaxValue;
 	}
 
 	public bool UseAbility()

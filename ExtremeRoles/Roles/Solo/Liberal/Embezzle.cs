@@ -85,16 +85,12 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 		{
 			return false;
 		}
-
-		PlayerControl? target = Player.GetClosestPlayerInRange(
-			PlayerControl.LocalPlayer, this, this.range);
-
-		if (target != null)
+		if (Player.TryGetClosestPlayerInRange(PlayerControl.LocalPlayer, this, this.range, out var target))
 		{
 			this.currentTarget = target.PlayerId;
 		}
 
-		return IRoleAutoBuildAbility.IsCommonUse() &&
+		return IRoleAbility.IsCommonUse() &&
 			this.currentTarget != byte.MaxValue &&
 			!this.targetedPlayers.Contains(this.currentTarget);
 	}

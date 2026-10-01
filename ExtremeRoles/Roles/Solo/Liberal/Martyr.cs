@@ -74,7 +74,7 @@ public sealed class Martyr : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 	public bool IsAbilityUse()
-		=> IRoleAutoBuildAbility.IsCommonUse();
+		=> IRoleAbility.IsCommonUse();
 
 	public void ResetOnMeetingStart()
 	{
