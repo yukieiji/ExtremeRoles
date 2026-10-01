@@ -58,7 +58,7 @@ public sealed class Charger :
 	private bool awakeHasOtherVision;
 
 	private ExtremeAbilityButton abilityButton;
-	private byte currentTargetPlayerId = byte.MaxValue;
+	private PlayerControl currentTargetPlayer;
 
 	public Charger() : base(
 		RoleArgs.BuildCrewmate(
@@ -133,7 +133,7 @@ public sealed class Charger :
 	{
 		if (Player.TryGetClosestPlayerInRange(this, this.chargeRange, out var target))
 		{
-			this.currentTargetPlayerId = target.PlayerId;
+			this.currentTargetPlayer = target;
 			return true;
 		}
 		return false;
@@ -141,25 +141,25 @@ public sealed class Charger :
 
 	public bool CheckAbility()
 	{
-		if (!Player.TryGetPlayerControl(this.currentTargetPlayerId, out var targetPlayer) ||
-			targetPlayer.IsInValid())
+		if (this.currentTargetPlayer == null ||
+			this.currentTargetPlayer.IsInValid())
 		{
 			return false;
 		}
 
 		return Player.IsPlayerInRangeAndDrawOutLine(
 			PlayerControl.LocalPlayer,
-			targetPlayer,
+			this.currentTargetPlayer,
 			this,
 			this.chargeRange);
 	}
 
 	public void CleanUp()
 	{
-		if (this.currentTargetPlayerId != byte.MaxValue)
+		if (this.currentTargetPlayer != null)
 		{
 			byte chargerId = PlayerControl.LocalPlayer.PlayerId;
-			byte targetId = this.currentTargetPlayerId;
+			byte targetId = this.currentTargetPlayer.PlayerId;
 
 			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ChargerCharge))
 			{
@@ -176,7 +176,7 @@ public sealed class Charger :
 
 	private void ResetTarget()
 	{
-		this.currentTargetPlayerId = byte.MaxValue;
+		this.currentTargetPlayer = null;
 	}
 
 	public void Update(PlayerControl rolePlayer)
