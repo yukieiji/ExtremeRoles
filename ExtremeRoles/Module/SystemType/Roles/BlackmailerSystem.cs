@@ -3,20 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using Hazel;
-using UnityEngine;
-
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Resources;
 
 #nullable enable
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class BlackmailerSystem : IDirtableSystemType
+public sealed class BlackmailerSystem : IExtremeSystemType
 {
 	public bool IsDirty { get; set; } = false;
 
@@ -57,72 +50,6 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 			});
 	}
 
-	public void MarkClean()
-	{
-		this.IsDirty = false;
-	}
-
-	public void Deteriorate(float deltaTime)
-	{
-		if (!GameProgressSystem.IsTaskPhase || this.blackmailedMap.Count == 0)
-		{
-			return;
-		}
-
-		List<byte> deadBlackmailers = new();
-
-		foreach (byte blackmailerId in this.blackmailedMap.Keys)
-		{
-			var player = GameData.Instance.GetPlayerById(blackmailerId);
-			if (player == null || player.IsDead || player.Disconnected)
-			{
-				deadBlackmailers.Add(blackmailerId);
-			}
-		}
-
-		foreach (byte blackmailerId in deadBlackmailers)
-		{
-			clearBlackmail(blackmailerId);
-			if (AmongUsClient.Instance.AmHost)
-			{
-				RpcClearBlackmail(blackmailerId);
-			}
-		}
-	}
-
-	public void Serialize(MessageWriter writer, bool initialState)
-	{
-		writer.WritePacked(this.blackmailedMap.Count);
-		foreach (var (blackmailerId, targets) in this.blackmailedMap)
-		{
-			writer.Write(blackmailerId);
-			writer.WritePacked(targets.Count);
-			foreach (byte targetId in targets)
-			{
-				writer.Write(targetId);
-			}
-		}
-		this.IsDirty = initialState;
-	}
-
-	public void Deserialize(MessageReader reader, bool initialState)
-	{
-		this.blackmailedMap.Clear();
-		int bmCount = reader.ReadPackedInt32();
-		for (int i = 0; i < bmCount; i++)
-		{
-			byte blackmailerId = reader.ReadByte();
-			int targetCount = reader.ReadPackedInt32();
-			var targets = new HashSet<byte>();
-			for (int j = 0; j < targetCount; j++)
-			{
-				byte targetId = reader.ReadByte();
-				targets.Add(targetId);
-			}
-			this.blackmailedMap[blackmailerId] = targets;
-		}
-	}
-
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
 		if (timing is ResetTiming.MeetingEnd or ResetTiming.ExiledEnd)
@@ -144,7 +71,7 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 				break;
 			case Ops.ClearBlackmail:
 				byte bmIdToClear = msgReader.ReadByte();
-				clearBlackmail(bmIdToClear);
+				ClearBlackmail(bmIdToClear);
 				break;
 		}
 	}
@@ -167,9 +94,6 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 	public bool IsBlackmailed(PlayerControl player)
 		=> IsBlackmailed(player.PlayerId);
 
-	public bool IsBlackmailed(NetworkedPlayerInfo player)
-		=> IsBlackmailed(player.PlayerId);
-
 	private void addBlackmail(byte blackmailerId, byte targetPlayerId)
 	{
 		if (!this.blackmailedMap.TryGetValue(blackmailerId, out var targets))
@@ -178,14 +102,10 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 			this.blackmailedMap[blackmailerId] = targets;
 		}
 		targets.Add(targetPlayerId);
-		this.IsDirty = true;
 	}
 
-	private void clearBlackmail(byte blackmailerId)
+	public void ClearBlackmail(byte blackmailerId)
 	{
-		if (this.blackmailedMap.Remove(blackmailerId))
-		{
-			this.IsDirty = true;
-		}
+		this.blackmailedMap.Remove(blackmailerId);
 	}
 }

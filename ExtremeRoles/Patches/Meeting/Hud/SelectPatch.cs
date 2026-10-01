@@ -46,13 +46,13 @@ public static class MeetingHudSelectPatch
 		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
 			if (MonikaTrashSystem.TryGet(out var monika) &&
-				monika.InvalidPlayer(localPlayer.PlayerId))
+				monika.InvalidPlayer(localPlayer))
 			{
 				return false;
 			}
 
 			if (BlackmailerSystem.TryGet(out var blackmailerSystem) &&
-				blackmailerSystem.IsBlackmailed(localPlayer.PlayerId))
+				blackmailerSystem.IsBlackmailed(localPlayer))
 			{
 				return false;
 			}

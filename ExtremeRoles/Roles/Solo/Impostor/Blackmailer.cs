@@ -1,27 +1,16 @@
-using System;
-using System.Collections.Generic;
-
-using UnityEngine;
-
-using ExtremeRoles.Extension.Player;
-using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
+public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset
 {
 	public enum BlackmailerOption
 	{
@@ -29,13 +18,8 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 		MultipleBlackmail,
 	}
 
-	public ExtremeAbilityButton Button
-	{
-		get => this.blackmailAbilityButton!;
-		set => this.blackmailAbilityButton = value;
-	}
+	public ExtremeAbilityButton? Button { get; set; }
 
-	private ExtremeAbilityButton? blackmailAbilityButton;
 	private PlayerControl? tmpTarget;
 	private PlayerControl? target;
 	private float range;
@@ -60,17 +44,12 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 	}
 
 	public bool IsAbilityCheck()
-	{
-		if (this.target == null)
-		{
-			return false;
-		}
-		return Helper.Player.IsPlayerInRangeAndDrawOutLine(
-			PlayerControl.LocalPlayer,
-			this.target,
-			this,
-			this.range);
-	}
+		=> this.target != null &&
+			Player.IsPlayerInRangeAndDrawOutLine(
+				PlayerControl.LocalPlayer,
+				this.target,
+				this,
+				this.range);
 
 	public bool UseAbility()
 	{
@@ -80,32 +59,22 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 
 	public bool IsAbilityUse()
 	{
-		this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
-			PlayerControl.LocalPlayer, this, this.range);
-
-		if (this.tmpTarget == null)
-		{
-			return false;
-		}
-
-		if (!this.multipleBlackmail && this.hasBlackmailedThisRound)
-		{
-			return false;
-		}
-
-		if (this.system != null && this.system.IsBlackmailedBy(PlayerControl.LocalPlayer.PlayerId, this.tmpTarget.PlayerId))
-		{
-			return false;
-		}
-
-		return IRoleAbility.IsCommonUse();
+		var localPlayer = PlayerControl.LocalPlayer;
+		this.tmpTarget = Player.GetClosestPlayerInRange(localPlayer, this, this.range);
+		return
+			this.tmpTarget != null &&
+			(this.multipleBlackmail || !this.hasBlackmailedThisRound) &&
+			this.system != null && 
+			!this.system.IsBlackmailedBy(localPlayer.PlayerId, this.tmpTarget.PlayerId) &&
+			IRoleAbility.IsCommonUse();
 	}
 
 	public void CleanUp()
 	{
-		if (this.target != null && this.system != null)
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (this.target != null && localPlayer != null && this.system != null)
 		{
-			byte localId = PlayerControl.LocalPlayer.PlayerId;
+			byte localId = localPlayer.PlayerId;
 			if (!this.multipleBlackmail)
 			{
 				this.system.RpcClearBlackmail(localId);
@@ -132,26 +101,38 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 	public void Update(PlayerControl rolePlayer)
 	{ }
 
+	public override void ExiledAction(
+		PlayerControl rolePlayer)
+		=> AllReset(rolePlayer);
+
+	public override void RolePlayerKilledAction(
+		PlayerControl rolePlayer,
+		PlayerControl killerPlayer)
+		=> AllReset(rolePlayer);
+
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 	{
-		if (this.system != null && this.system.IsBlackmailedBy(PlayerControl.LocalPlayer.PlayerId, targetPlayerId))
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer != null &&
+			this.system != null && 
+			this.system.IsBlackmailedBy(localPlayer.PlayerId, targetPlayerId))
 		{
-			return $"{base.GetRolePlayerNameTag(targetRole, targetPlayerId)}<color=#FF0000>({Tr.GetString("blackmailMark")})</color>";
+			return $" {Design.ColoredString(Palette.ImpostorRed, "")}";
 		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		factory.CreateFloatOption(
-			BlackmailerOption.Range,
-			1.0f, 0.1f, 4.0f, 0.1f);
-
 		IRoleAbility.CreateAbilityCountOption(
 			factory,
 			defaultAbilityCount: 3,
 			maxAbilityCount: 15,
 			defaultActiveTime: 3.0f);
+
+		factory.CreateFloatOption(
+			BlackmailerOption.Range,
+			1.0f, 0.1f, 4.0f, 0.1f);
 
 		factory.CreateBoolOption(
 			BlackmailerOption.MultipleBlackmail,
@@ -167,5 +148,10 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 
 		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<BlackmailerSystem>(
 			ExtremeSystemType.BlackmailerSystem);
+	}
+
+	public void AllReset(PlayerControl rolePlayer)
+	{
+		this.system?.ClearBlackmail(rolePlayer.PlayerId);
 	}
 }

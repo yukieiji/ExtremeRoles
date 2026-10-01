@@ -88,6 +88,14 @@ public static class MeetingHudUpdateButtonsPatchHelper
 			return;
 		}
 
+		var localPc = PlayerControl.LocalPlayer;
+		if (localPc.IsAlive() &&
+			system.IsBlackmailed(localPc))
+		{
+			// 後でテクスチャ入れる
+			// hud.Glass.sprite = system.MeetingBackground;
+		}
+
 		foreach (var pva in hud.playerStates)
 		{
 			if (pva == null ||

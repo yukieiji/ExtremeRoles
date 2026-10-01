@@ -183,17 +183,19 @@ public static class MeetingHudUpdatePatch
 
 	private static void blackmailerSystemUpdate(MeetingHud hud)
 	{
-		if (BlackmailerSystem.TryGet(out var system))
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (!BlackmailerSystem.TryGet(out var system) ||
+			localPlayer == null || 
+			!system.IsBlackmailed(localPlayer))
 		{
-			var localPlayer = PlayerControl.LocalPlayer;
-			if (localPlayer != null && system.IsBlackmailed(localPlayer.PlayerId))
-			{
-				hud.SkipVoteButton.gameObject.SetActive(false);
-				if (HudManager.InstanceExists && HudManager.Instance.Chat != null)
-				{
-					HudManager.Instance.Chat.gameObject.SetActive(false);
-				}
-			}
+			return;
+		}
+
+		hud.SkipVoteButton.gameObject.SetActive(false);
+		var hudmanager = HudManager.Instance;
+		if (hudmanager != null && hudmanager.Chat != null)
+		{
+			hudmanager.Chat.gameObject.SetActive(false);
 		}
 	}
 

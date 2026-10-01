@@ -77,11 +77,6 @@ public class ChatControllerAddChatPatchBody(IModLogger logger, IGameProgress pro
 		bool isMonikaOn = MonikaTrashSystem.TryGet(out var monikaSystem);
 		bool isBlackmailerOn = BlackmailerSystem.TryGet(out var blackmailerSystem);
 
-		if (isBlackmailerOn && blackmailerSystem!.IsBlackmailed(source.Id))
-		{
-			return false;
-		}
-
 		if ((
 				!isOneMan && (source.IsDead && !local.IsDead)
 			)
