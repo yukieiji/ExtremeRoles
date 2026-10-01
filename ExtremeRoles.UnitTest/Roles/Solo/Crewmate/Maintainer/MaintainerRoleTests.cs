@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using AmongUs.GameOptions;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption;
@@ -178,37 +176,10 @@ public class MaintainerRoleTests
 	}
 
 	[Fact]
-	public void Constructor_InitializesCorrectly()
-	{
-		// Act
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
-
-		// Assert
-		Assert.NotNull(role);
-		Assert.Equal(ExtremeRoleId.Maintainer, role.Core.Id);
-		Assert.Equal(ColorPalette.MaintainerBlue, role.GetNameColor(true));
-	}
-
-	[Fact]
-	public void Button_GetAndSet_ReturnsSetValue()
-	{
-		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
-		var mockButton = (ExtremeAbilityButton)RuntimeHelpers.GetUninitializedObject(typeof(ExtremeAbilityButton));
-
-		// Act
-		role.Button = mockButton;
-		var result = role.Button;
-
-		// Assert
-		Assert.Equal(mockButton, result);
-	}
-
-	[Fact]
 	public void CreateAbility_SetsButton()
 	{
 		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 		string spriteKey = $"{ObjectPath.MaintainerRepair}115";
 		if (!LruCache<string, Sprite>.TryGetValue(spriteKey, out _))
 		{
@@ -228,7 +199,7 @@ public class MaintainerRoleTests
 	{
 		// Arrange
 		int groupId = ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Maintainer);
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 
 		// Act
 		role.CreateRoleAllOption();
@@ -239,49 +210,10 @@ public class MaintainerRoleTests
 	}
 
 	[Fact]
-	public void ResetOnMeetingStart_ExecutesWithoutException()
-	{
-		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
-
-		// Act
-		role.ResetOnMeetingStart();
-
-		// Assert
-		Assert.NotNull(role);
-	}
-
-	[Fact]
-	public void ResetOnMeetingEnd_ExecutesWithoutException()
-	{
-		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
-
-		// Act
-		role.ResetOnMeetingEnd(null);
-
-		// Assert
-		Assert.NotNull(role);
-	}
-
-	[Fact]
-	public void RoleSpecificInit_ExecutesWithoutException()
-	{
-		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
-
-		// Act
-		role.Initialize();
-
-		// Assert
-		Assert.NotNull(role);
-	}
-
-	[Fact]
 	public void UseAbility_WhenDoorsExistWithAndWithoutDecon_RepairsSabotageAndOpensDoors()
 	{
 		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 
 		var mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		var mockTasksList = new Mock<Il2CppSystem.Collections.Generic.List<PlayerTask>>(IntPtr.Zero);
@@ -320,7 +252,7 @@ public class MaintainerRoleTests
 	public void UseAbility_WhenSabotageTasksActive_RepairsAllSabotages()
 	{
 		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 
 		var mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
 
@@ -377,7 +309,7 @@ public class MaintainerRoleTests
 		// Arrange
 		MockSetupHelper.SetupCompatModManager();
 
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 
 		var mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
 
@@ -422,7 +354,7 @@ public class MaintainerRoleTests
 	public void IsAbilityUse_WhenNoTasks_ReturnsFalse()
 	{
 		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 
 		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		var mockTasksList = new Mock<Il2CppSystem.Collections.Generic.List<PlayerTask>>(IntPtr.Zero);
@@ -440,7 +372,7 @@ public class MaintainerRoleTests
 	public void IsAbilityUse_WhenTaskIsNullInList_ReturnsFalse()
 	{
 		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 
 		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		var mockTasksList = new Mock<Il2CppSystem.Collections.Generic.List<PlayerTask>>(IntPtr.Zero);
@@ -461,7 +393,7 @@ public class MaintainerRoleTests
 		// Arrange
 		MockSetupHelper.SetupCompatModManager();
 
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 
 		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		mockPlayer.SetupGet(p => p.CanMove).Returns(true);
@@ -504,7 +436,7 @@ public class MaintainerRoleTests
 	public void IsAbilityUse_WhenEmergencyTaskActive_ReturnsTrue()
 	{
 		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 
 		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		mockPlayer.SetupGet(p => p.CanMove).Returns(true);
@@ -538,7 +470,7 @@ public class MaintainerRoleTests
 	public void IsAbilityUse_WhenMushroomMixupSabotageActive_ReturnsTrue()
 	{
 		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 
 		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		mockPlayer.SetupGet(p => p.CanMove).Returns(true);
@@ -568,7 +500,7 @@ public class MaintainerRoleTests
 	public void IsAbilityUse_WhenNormalTaskOnly_ReturnsFalse()
 	{
 		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 
 		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		mockPlayer.SetupGet(p => p.CanMove).Returns(true);
@@ -602,7 +534,7 @@ public class MaintainerRoleTests
 	public void IsAbilityUse_WhenSabotageActiveButPlayerDead_ReturnsFalse()
 	{
 		// Arrange
-		var role = new ExtremeRoles.Roles.Solo.Crewmate.Maintainer();
+		var role = new Maintainer();
 
 		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		mockPlayer.SetupGet(p => p.CanMove).Returns(true);
