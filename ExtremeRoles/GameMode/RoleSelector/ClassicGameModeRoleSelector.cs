@@ -105,6 +105,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Itako,
 			ExtremeRoleId.Screamer,
 			ExtremeRoleId.Logger,
+			ExtremeRoleId.Charger,
 
 			ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,

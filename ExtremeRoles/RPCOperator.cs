@@ -81,6 +81,7 @@ public static class RPCOperator
 		CEOOps,
 		EchoOps,
 		LoggerOps,
+		ChargerCharge,
 
 		// インポスター
 		CarrierAbility,
@@ -638,6 +639,15 @@ public static class RPCOperator
 	public static void LoggerRpcOps(in MessageReader reader)
 	{
 		Roles.Solo.Crewmate.LoggerRole.RpcOps(reader);
+	}
+
+	public static void ChargerCharge(ref MessageReader reader)
+	{
+		byte chargerId = reader.ReadByte();
+		byte targetId = reader.ReadByte();
+		int addCount = reader.ReadInt32();
+		bool restoreKillCool = reader.ReadBoolean();
+		Roles.Solo.Crewmate.Charger.Charged(chargerId, targetId, addCount, restoreKillCool);
 	}
 
 	public static void CarrierAbility(

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -65,20 +65,20 @@
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1618,7 +1618,7 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>口寄せ</value>
   </data>
   <data name="ItakoIntroDescription" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="ItakoShortDescription" xml:space="preserve">
     <value>「死体」に「口寄せ」して役職を引き継げ</value>
@@ -1736,5 +1736,43 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   </data>
   <data name="LoggerLogNone" xml:space="preserve">
     <value> - 検知なし</value>
+  </data>
+  <data name="Charger" xml:space="preserve">
+    <value>チャージャー</value>
+  </data>
+  <data name="ChargerFullDescription" xml:space="preserve">
+    <value>タスク覚醒役職
+他プレイヤーのボタン能力のクールタイムと使用回数を強制的に回復させる
+ただし、他陣営に対して発動すると敵を強化し、自身は自滅する</value>
+  </data>
+  <data name="ChargerShortDescription" xml:space="preserve">
+    <value>他プレイヤーの能力を「チャージ」せよ</value>
+  </data>
+  <data name="ChargerIntroDescription" xml:space="preserve">
+    <value>仲間の能力を急速チャージせよ</value>
+  </data>
+  <data name="ChargerRestoreKillCooldown" xml:space="preserve">
+    <value>キルボタンのクールタイムも回復させるか</value>
+  </data>
+  <data name="ChargerAwakeTaskGage" xml:space="preserve">
+    <value>覚醒するタスク進捗率</value>
+  </data>
+  <data name="ChargerAddAbilityCount" xml:space="preserve">
+    <value>「チャージ」による使用回数の追加量</value>
+  </data>
+  <data name="ChargerChargeRange" xml:space="preserve">
+    <value>「チャージ」の発動範囲</value>
+  </data>
+  <data name="ChargerChargeTime" xml:space="preserve">
+    <value>「チャージ」にかかる時間</value>
+  </data>
+  <data name="ChargerAbilityCoolTime" xml:space="preserve">
+    <value>「チャージ」のクールタイム</value>
+  </data>
+  <data name="ChargerAbilityCount" xml:space="preserve">
+    <value>「チャージ」の使用回数</value>
+  </data>
+  <data name="charge" xml:space="preserve">
+    <value>チャージ</value>
   </data>
 </root>

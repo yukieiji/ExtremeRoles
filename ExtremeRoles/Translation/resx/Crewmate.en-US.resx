@@ -1665,4 +1665,42 @@ Ability "Detector":
   <data name="LoggerLogNone" xml:space="preserve">
     <value> - No Detection</value>
   </data>
+  <data name="Charger" xml:space="preserve">
+    <value>Charger</value>
+  </data>
+  <data name="ChargerFullDescription" xml:space="preserve">
+    <value>Task Awakening Role
+Forcibly restores cooldown and ability uses of target player.
+If used on non-Crewmate, boosts enemy and suicides.</value>
+  </data>
+  <data name="ChargerShortDescription" xml:space="preserve">
+    <value>Charge abilities of target player</value>
+  </data>
+  <data name="ChargerIntroDescription" xml:space="preserve">
+    <value>Rapidly charge your crewmates' abilities</value>
+  </data>
+  <data name="ChargerRestoreKillCooldown" xml:space="preserve">
+    <value>Restore Kill Button Cooldown</value>
+  </data>
+  <data name="ChargerAwakeTaskGage" xml:space="preserve">
+    <value>Task progress required for awakening</value>
+  </data>
+  <data name="ChargerAddAbilityCount" xml:space="preserve">
+    <value>Ability count added on Charge</value>
+  </data>
+  <data name="ChargerChargeRange" xml:space="preserve">
+    <value>Charge Range</value>
+  </data>
+  <data name="ChargerChargeTime" xml:space="preserve">
+    <value>Time required for Charge</value>
+  </data>
+  <data name="ChargerAbilityCoolTime" xml:space="preserve">
+    <value>Charge Cooldown</value>
+  </data>
+  <data name="ChargerAbilityCount" xml:space="preserve">
+    <value>Charge Charges</value>
+  </data>
+  <data name="charge" xml:space="preserve">
+    <value>CHARGE</value>
+  </data>
 </root>
