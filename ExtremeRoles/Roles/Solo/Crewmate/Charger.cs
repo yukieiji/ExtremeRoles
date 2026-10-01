@@ -21,13 +21,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 public sealed class Charger :
 	SingleRoleBase,
 	IRoleAutoBuildAbility,
-	IRoleAwake<RoleTypes>,
-	IRoleUpdate
+	IRoleAwake<RoleTypes>
 {
 	public enum ChargerOption
 	{
 		AwakeTaskGage,
-		ChargeTime,
 		ChargeRange,
 		AddAbilityCount,
 		RestoreKillCooldown,
@@ -53,6 +51,7 @@ public sealed class Charger :
 	private int addAbilityCount;
 	private bool restoreKillCooldown;
 	private bool awakeHasOtherVision;
+	private PlayerControl? tmpPlayer;
 	private PlayerControl? currentTargetPlayer;
 
 	public Charger() : base(
@@ -63,8 +62,9 @@ public sealed class Charger :
 
 	public static void Charged(byte chargerId, byte targetId)
 	{
-		if (PlayerControl.LocalPlayer != null &&
-			PlayerControl.LocalPlayer.PlayerId == targetId &&
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer != null &&
+			localPlayer.PlayerId == targetId &&
 			Player.TryGetPlayerControl(targetId, out var targetPlayer) &&
 			targetPlayer.IsAlive() &&
 			ExtremeRoleManager.TryGetSafeCastedRole<Charger>(chargerId, out var chargerRole))
@@ -118,15 +118,11 @@ public sealed class Charger :
 	public bool IsAbilityUse()
 		=> this.IsAwake &&
 			IRoleAbility.IsCommonUse() &&
-			Player.TryGetClosestPlayerInRange(this, this.chargeRange, out _);
+			Player.TryGetClosestPlayerInRange(this, this.chargeRange, out this.tmpPlayer);
 
 	public bool UseAbility()
 	{
-		if (Player.TryGetClosestPlayerInRange(this, this.chargeRange, out var target))
-		{
-			this.currentTargetPlayer = target;
-			return true;
-		}
+		this.currentTargetPlayer = this.tmpPlayer;
 		return false;
 	}
 
@@ -140,7 +136,7 @@ public sealed class Charger :
 
 	public void CleanUp()
 	{
-		if (this.currentTargetPlayer != null)
+		if (this.currentTargetPlayer != null && PlayerControl.LocalPlayer != null)
 		{
 			byte chargerId = PlayerControl.LocalPlayer.PlayerId;
 			byte targetId = this.currentTargetPlayer.PlayerId;
@@ -175,20 +171,15 @@ public sealed class Charger :
 
 		this.awakeRole = true;
 		this.HasOtherVision = this.awakeHasOtherVision;
-		if (this.Button != null)
-		{
-			this.Button.SetButtonShow(true);
-		}
+		this.Button?.SetButtonShow(true);
 	}
 
 	public void ResetOnMeetingStart()
 	{
-		ResetTarget();
 	}
 
-	public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
-		ResetTarget();
 	}
 
 	public override string GetColoredRoleName(bool isTruthColor = false)
@@ -272,7 +263,7 @@ public sealed class Charger :
 
 		factory.CreateFloatOption(
 			ChargerOption.ChargeRange,
-			2.5f, 0.5f, 5.0f, 0.5f);
+			0.75f, 0.25f, 3.5f, 0.25f);
 
 		factory.CreateIntOption(
 			ChargerOption.AddAbilityCount,
@@ -304,7 +295,5 @@ public sealed class Charger :
 			this.awakeRole = false;
 			this.HasOtherVision = false;
 		}
-
-		ResetTarget();
 	}
 }

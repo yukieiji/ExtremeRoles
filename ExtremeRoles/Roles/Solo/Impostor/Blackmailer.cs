@@ -60,9 +60,8 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 	public bool IsAbilityUse()
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
-		this.tmpTarget = Player.GetClosestPlayerInRange(localPlayer, this, this.range);
 		return
-			this.tmpTarget != null &&
+			Player.TryGetClosestPlayerInRange(localPlayer, this, this.range, out this.tmpTarget) &&
 			(this.multipleBlackmail || !this.hasBlackmailedThisRound) &&
 			this.system != null && 
 			!this.system.IsBlackmailedBy(localPlayer.PlayerId, this.tmpTarget.PlayerId) &&
@@ -129,7 +128,7 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 
 		factory.CreateFloatOption(
 			BlackmailerOption.Range,
-			1.0f, 0.1f, 4.0f, 0.1f);
+			0.75f, 0.25f, 3.5f, 0.25f);
 
 		factory.CreateBoolOption(
 			BlackmailerOption.MultipleBlackmail,

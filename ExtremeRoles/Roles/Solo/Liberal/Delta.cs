@@ -103,7 +103,7 @@ public sealed class Delta : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		IRoleAbility.CreateAbilityCountOption(factory, 2, 5);
 		factory.CreateFloatOption(
 			DeltaOption.Range,
-			1.5f, 0.5f, 5.0f, 0.25f);
+			0.75f, 0.25f, 3.5f, 0.25f);
 		factory.CreateIntOption(
 			DeltaOption.MoneyPerTaskDiff,
 			10, 1, 100, 1);

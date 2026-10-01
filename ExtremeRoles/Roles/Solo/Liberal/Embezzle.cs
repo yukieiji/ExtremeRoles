@@ -184,7 +184,7 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 			2, 1, 5, 1);
 		factory.CreateFloatOption(
 			EmbezzleOption.Range,
-			1.0f, 0.5f, 3.5f, 0.25f);
+			0.75f, 0.25f, 3.5f, 0.25f);
 		factory.CreateBoolOption(
 			EmbezzleOption.AllowMultipleTargetsPerPhase,
 			false);
