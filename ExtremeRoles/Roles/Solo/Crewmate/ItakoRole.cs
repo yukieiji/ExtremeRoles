@@ -104,13 +104,14 @@ public sealed class ItakoRole :
 
 	public void CleanUp()
 	{
-		if (this.targetBody == null || PlayerControl.LocalPlayer == null)
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (this.targetBody == null || localPlayer == null)
 		{
 			ForceCleanUp();
 			return;
 		}
 
-		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+		byte localPlayerId = localPlayer.PlayerId;
 		byte targetPlayerId = this.targetBody.PlayerId;
 
 		if (ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) && 
@@ -118,7 +119,7 @@ public sealed class ItakoRole :
 			this.IsCrewmate() &&
 			TryGetExtractInheritedRole(targetRole, out _))
 		{
-			float myTaskRate = Player.GetPlayerTaskGage(PlayerControl.LocalPlayer);
+			float myTaskRate = Player.GetPlayerTaskGage(localPlayer);
 			if (myTaskRate < this.requiredTaskRate)
 			{
 				Player.RpcCleanDeadBody(targetPlayerId);
@@ -231,9 +232,10 @@ public sealed class ItakoRole :
 		}
 
 		var newRole = inheritedRole.Clone();
+		var localPlayer = PlayerControl.LocalPlayer;
 
-		if (PlayerControl.LocalPlayer != null &&
-			PlayerControl.LocalPlayer.PlayerId == itakoPlayerId)
+		if (localPlayer != null &&
+			localPlayer.PlayerId == itakoPlayerId)
 		{
 			if (newRole is IRoleAbility newAbility)
 			{
@@ -243,9 +245,10 @@ public sealed class ItakoRole :
 					newAbility.Button.HotKey = KeyCode.C;
 				}
 			}
-			if (HudManager.InstanceExists && HudManager.Instance.UseButton != null)
+			var hud = HudManager.Instance;
+			if (hud != null && hud.UseButton != null)
 			{
-				HudManager.Instance.ReGridButtons();
+				hud.ReGridButtons();
 			}
 		}
 

@@ -187,6 +187,8 @@ public enum ExtremeRoleId : int
 	Scapeactor,
 	Delta,
 
+	Blackmailer,
+
 	Xion,
 }
 
@@ -392,6 +394,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Legislator     , new Legislator()},
 			{(int)ExtremeRoleId.RemoteKiller   , new RemoteKillerRole()},
 			{(int)ExtremeRoleId.YoYo           , new YoYo()},
+			{(int)ExtremeRoleId.Blackmailer    , new Blackmailer()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new JackalRole()},

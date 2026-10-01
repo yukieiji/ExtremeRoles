@@ -1759,4 +1759,29 @@ Lv2能力「ビームセーバー」
   <data name="YoYoTeleportLocation" xml:space="preserve">
     <value>テレポート</value>
   </data>
+  <data name="Blackmailer" xml:space="preserve">
+    <value>ブラックメーラー</value>
+  </data>
+  <data name="BlackmailerFullDescription" xml:space="preserve">
+    <value>プレイヤーを恐喝するインポスター。
+恐喝されたプレイヤーは次の会議中に発言およびチャット、投票を行うことが不可能になる。</value>
+  </data>
+  <data name="BlackmailerShortDescription" xml:space="preserve">
+    <value>プレイヤーを恐喝し、次の会議で発言権と投票権を奪え</value>
+  </data>
+  <data name="BlackmailerIntroDescription" xml:space="preserve">
+    <value>プレイヤーを恐喝し会議での発言権を封殺しろ</value>
+  </data>
+  <data name="BlackmailerRange" xml:space="preserve">
+    <value>恐喝有効距離</value>
+  </data>
+  <data name="BlackmailerMultipleBlackmail" xml:space="preserve">
+    <value>複数人恐喝可能</value>
+  </data>
+  <data name="blackmail" xml:space="preserve">
+    <value>恐喝</value>
+  </data>
+  <data name="blackmailMark" xml:space="preserve">
+    <value>恐喝中</value>
+  </data>
 </root>

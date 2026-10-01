@@ -41,6 +41,7 @@ public static class MeetingHudUpdatePatch
 		disableSkip(__instance);
 		meetingReportUpdate();
 		updateButtons(__instance);
+		blackmailerSystemUpdate(__instance);
 	}
 
 	private static void infoOverlayBlockUpdate(MeetingHud __instance)
@@ -178,6 +179,24 @@ public static class MeetingHudUpdatePatch
 			return;
 		}
 		hud.SkipVoteButton.gameObject.SetActive(false);
+	}
+
+	private static void blackmailerSystemUpdate(MeetingHud hud)
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (!BlackmailerSystem.TryGet(out var system) ||
+			localPlayer == null || 
+			!system.IsBlackmailed(localPlayer))
+		{
+			return;
+		}
+
+		hud.SkipVoteButton.gameObject.SetActive(false);
+		var hudmanager = HudManager.Instance;
+		if (hudmanager != null && hudmanager.Chat != null)
+		{
+			hudmanager.Chat.gameObject.SetActive(false);
+		}
 	}
 
 	private static void tryCreateHandRaiseButton()

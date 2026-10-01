@@ -120,6 +120,14 @@ public class PlayerVoteAreaSelectPatchBody(IGameProgress progress, IGameRuntime 
 			return false;
 		}
 
+		if (BlackmailerSystem.TryGet(out var blackmailerSystem) &&
+			blackmailerSystem.IsBlackmailed(localPlayer))
+		{
+			result = null;
+			_logger.LogTrace($"LocalPlayerId : {localPlayer.PlayerId} is Blackmailed now");
+			return false;
+		}
+
 		var multiRole = role as MultiAssignRoleBase;
 		if (overruleButton != null &&
 			IsMultiedJudgeRole(pva, role, out var judge, out var vanillaRole, out var exrMeetingButtonRole))
