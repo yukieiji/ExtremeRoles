@@ -150,17 +150,11 @@ public sealed class Charger :
 			return false;
 		}
 
-		Vector2 myPos = PlayerControl.LocalPlayer.GetTruePosition();
-		Vector2 targetPos = this.currentTargetPlayer.GetTruePosition();
-
-		if (Vector2.Distance(myPos, targetPos) > this.chargeRange)
-		{
-			return false;
-		}
-
-		PlayerOutLine.SetOutline(this.currentTargetPlayer, this.GetNameColor());
-
-		return true;
+		return Player.IsPlayerInRangeAndDrawOutLine(
+			PlayerControl.LocalPlayer,
+			this.currentTargetPlayer,
+			this,
+			this.chargeRange);
 	}
 
 	public void CleanUp()
