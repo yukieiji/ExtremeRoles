@@ -26,7 +26,7 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 		ClearBlackmail,
 	}
 
-	private readonly HashSet<byte> blackmailedPlayers = new();
+	private readonly Dictionary<byte, HashSet<byte>> blackmailedMap = new();
 
 	public static bool TryGet([NotNullWhen(true)] out BlackmailerSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.BlackmailerSystem, out system);
@@ -34,24 +34,26 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 	public static BlackmailerSystem GetOrRegister()
 		=> ExtremeSystemTypeManager.Instance.CreateOrGet<BlackmailerSystem>(ExtremeSystemType.BlackmailerSystem);
 
-	public void RpcAddBlackmail(byte targetPlayerId)
+	public void RpcAddBlackmail(byte blackmailerId, byte targetPlayerId)
 	{
 		ExtremeSystemTypeManager.RpcUpdateSystem(
 			ExtremeSystemType.BlackmailerSystem,
 			x =>
 			{
 				x.Write((byte)Ops.AddBlackmail);
+				x.Write(blackmailerId);
 				x.Write(targetPlayerId);
 			});
 	}
 
-	public void RpcClearBlackmail()
+	public void RpcClearBlackmail(byte blackmailerId)
 	{
 		ExtremeSystemTypeManager.RpcUpdateSystem(
 			ExtremeSystemType.BlackmailerSystem,
 			x =>
 			{
 				x.Write((byte)Ops.ClearBlackmail);
+				x.Write(blackmailerId);
 			});
 	}
 
@@ -62,58 +64,62 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 
 	public void Deteriorate(float deltaTime)
 	{
-		// 役職者（ブラックメーラー）が生存しているか確認。死亡していたら即解除
-		if (!GameProgressSystem.IsTaskPhase)
+		if (!GameProgressSystem.IsTaskPhase || this.blackmailedMap.Count == 0)
 		{
 			return;
 		}
 
-		if (this.blackmailedPlayers.Count > 0)
-		{
-			bool isBlackmailerAlive = false;
-			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
-			{
-				if (player == null || player.IsDead || player.Disconnected)
-				{
-					continue;
-				}
-				if (ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
-					role.Core.Id is ExtremeRoleId.Blackmailer)
-				{
-					isBlackmailerAlive = true;
-					break;
-				}
-			}
+		List<byte> deadBlackmailers = new();
 
-			if (!isBlackmailerAlive)
+		foreach (byte blackmailerId in this.blackmailedMap.Keys)
+		{
+			var player = GameData.Instance.GetPlayerById(blackmailerId);
+			if (player == null || player.IsDead || player.Disconnected)
 			{
-				clearBlackmail();
-				if (AmongUsClient.Instance.AmHost)
-				{
-					RpcClearBlackmail();
-				}
+				deadBlackmailers.Add(blackmailerId);
+			}
+		}
+
+		foreach (byte blackmailerId in deadBlackmailers)
+		{
+			clearBlackmail(blackmailerId);
+			if (AmongUsClient.Instance.AmHost)
+			{
+				RpcClearBlackmail(blackmailerId);
 			}
 		}
 	}
 
 	public void Serialize(MessageWriter writer, bool initialState)
 	{
-		writer.WritePacked(this.blackmailedPlayers.Count);
-		foreach (byte id in this.blackmailedPlayers)
+		writer.WritePacked(this.blackmailedMap.Count);
+		foreach (var (blackmailerId, targets) in this.blackmailedMap)
 		{
-			writer.Write(id);
+			writer.Write(blackmailerId);
+			writer.WritePacked(targets.Count);
+			foreach (byte targetId in targets)
+			{
+				writer.Write(targetId);
+			}
 		}
 		this.IsDirty = initialState;
 	}
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{
-		this.blackmailedPlayers.Clear();
-		int count = reader.ReadPackedInt32();
-		for (int i = 0; i < count; i++)
+		this.blackmailedMap.Clear();
+		int bmCount = reader.ReadPackedInt32();
+		for (int i = 0; i < bmCount; i++)
 		{
-			byte id = reader.ReadByte();
-			this.blackmailedPlayers.Add(id);
+			byte blackmailerId = reader.ReadByte();
+			int targetCount = reader.ReadPackedInt32();
+			var targets = new HashSet<byte>();
+			for (int j = 0; j < targetCount; j++)
+			{
+				byte targetId = reader.ReadByte();
+				targets.Add(targetId);
+			}
+			this.blackmailedMap[blackmailerId] = targets;
 		}
 	}
 
@@ -121,7 +127,8 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 	{
 		if (timing is ResetTiming.MeetingEnd or ResetTiming.ExiledEnd)
 		{
-			clearBlackmail();
+			this.blackmailedMap.Clear();
+			this.IsDirty = true;
 		}
 	}
 
@@ -131,17 +138,31 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 		switch (ops)
 		{
 			case Ops.AddBlackmail:
-				byte target = msgReader.ReadByte();
-				addBlackmail(target);
+				byte blackmailerId = msgReader.ReadByte();
+				byte targetId = msgReader.ReadByte();
+				addBlackmail(blackmailerId, targetId);
 				break;
 			case Ops.ClearBlackmail:
-				clearBlackmail();
+				byte bmIdToClear = msgReader.ReadByte();
+				clearBlackmail(bmIdToClear);
 				break;
 		}
 	}
 
-	public bool IsBlackmailed(byte playerId)
-		=> this.blackmailedPlayers.Contains(playerId);
+	public bool IsBlackmailed(byte targetPlayerId)
+	{
+		foreach (var targets in this.blackmailedMap.Values)
+		{
+			if (targets.Contains(targetPlayerId))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public bool IsBlackmailedBy(byte blackmailerId, byte targetPlayerId)
+		=> this.blackmailedMap.TryGetValue(blackmailerId, out var targets) && targets.Contains(targetPlayerId);
 
 	public bool IsBlackmailed(PlayerControl player)
 		=> IsBlackmailed(player.PlayerId);
@@ -149,15 +170,22 @@ public sealed class BlackmailerSystem : IDirtableSystemType
 	public bool IsBlackmailed(NetworkedPlayerInfo player)
 		=> IsBlackmailed(player.PlayerId);
 
-	private void addBlackmail(byte targetPlayerId)
+	private void addBlackmail(byte blackmailerId, byte targetPlayerId)
 	{
-		this.blackmailedPlayers.Add(targetPlayerId);
+		if (!this.blackmailedMap.TryGetValue(blackmailerId, out var targets))
+		{
+			targets = new HashSet<byte>();
+			this.blackmailedMap[blackmailerId] = targets;
+		}
+		targets.Add(targetPlayerId);
 		this.IsDirty = true;
 	}
 
-	private void clearBlackmail()
+	private void clearBlackmail(byte blackmailerId)
 	{
-		this.blackmailedPlayers.Clear();
-		this.IsDirty = true;
+		if (this.blackmailedMap.Remove(blackmailerId))
+		{
+			this.IsDirty = true;
+		}
 	}
 }

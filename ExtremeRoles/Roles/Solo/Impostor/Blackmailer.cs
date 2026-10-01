@@ -93,7 +93,7 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 			return false;
 		}
 
-		if (this.system != null && this.system.IsBlackmailed(this.tmpTarget.PlayerId))
+		if (this.system != null && this.system.IsBlackmailedBy(PlayerControl.LocalPlayer.PlayerId, this.tmpTarget.PlayerId))
 		{
 			return false;
 		}
@@ -105,11 +105,12 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 	{
 		if (this.target != null && this.system != null)
 		{
+			byte localId = PlayerControl.LocalPlayer.PlayerId;
 			if (!this.multipleBlackmail)
 			{
-				this.system.RpcClearBlackmail();
+				this.system.RpcClearBlackmail(localId);
 			}
-			this.system.RpcAddBlackmail(this.target.PlayerId);
+			this.system.RpcAddBlackmail(localId, this.target.PlayerId);
 			this.hasBlackmailedThisRound = true;
 		}
 		this.target = null;
@@ -133,7 +134,7 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 	{
-		if (this.system != null && this.system.IsBlackmailed(targetPlayerId))
+		if (this.system != null && this.system.IsBlackmailedBy(PlayerControl.LocalPlayer.PlayerId, targetPlayerId))
 		{
 			return $"{base.GetRolePlayerNameTag(targetRole, targetPlayerId)}<color=#FF0000>({Tr.GetString("blackmailMark")})</color>";
 		}

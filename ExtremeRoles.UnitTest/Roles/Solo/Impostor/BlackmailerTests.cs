@@ -93,30 +93,41 @@ public sealed class BlackmailerTests
 
 		system.Reset(ResetTiming.MeetingEnd);
 		Assert.False(system.IsBlackmailed(2));
+		Assert.False(system.IsBlackmailedBy(1, 2));
 
 		var rAdd = new Mock<MessageReader>();
 		rAdd.SetupSequence(r => r.ReadByte())
 			.Returns((byte)BlackmailerSystem.Ops.AddBlackmail)
-			.Returns((byte)2);
+			.Returns((byte)1) // blackmailerId
+			.Returns((byte)2); // targetId
 
 		system.UpdateSystem(null!, rAdd.Object);
 		Assert.True(system.IsBlackmailed(2));
+		Assert.True(system.IsBlackmailedBy(1, 2));
+		Assert.False(system.IsBlackmailedBy(3, 2));
 
-		system.Reset(ResetTiming.MeetingEnd);
+		var rClear = new Mock<MessageReader>();
+		rClear.SetupSequence(r => r.ReadByte())
+			.Returns((byte)BlackmailerSystem.Ops.ClearBlackmail)
+			.Returns((byte)1);
+
+		system.UpdateSystem(null!, rClear.Object);
 		Assert.False(system.IsBlackmailed(2));
+		Assert.False(system.IsBlackmailedBy(1, 2));
 	}
 
 	[Fact]
-	public void GetRolePlayerNameTag_WhenTargetIsBlackmailed_ReturnsTagWithBlackmailMark()
+	public void GetRolePlayerNameTag_WhenTargetIsBlackmailedBySelf_ReturnsTagWithBlackmailMark()
 	{
 		var role = new Blackmailer();
-		InitializeRole(role);
+		InitializeRole(role, playerId: 1);
 
 		var system = BlackmailerSystem.GetOrRegister();
 		var rAdd = new Mock<MessageReader>();
 		rAdd.SetupSequence(r => r.ReadByte())
 			.Returns((byte)BlackmailerSystem.Ops.AddBlackmail)
-			.Returns((byte)2);
+			.Returns((byte)1) // blackmailerId = 1 (local player)
+			.Returns((byte)2); // targetId
 
 		system.UpdateSystem(null!, rAdd.Object);
 
