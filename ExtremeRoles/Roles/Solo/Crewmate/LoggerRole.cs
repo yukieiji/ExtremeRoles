@@ -114,7 +114,8 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 			buttonImage,
 			IsActivating,
 			CleanUp,
-			() => { });
+			() => { },
+			isReduceOnActive: true);
 		this.Button?.SetLabelToCrewmate();
 	}
 

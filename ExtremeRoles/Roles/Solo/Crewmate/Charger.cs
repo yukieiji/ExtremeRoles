@@ -77,9 +77,9 @@ public sealed class Charger :
 
 	public static void ApplyChargeEffect(int addCount, bool restoreKillCool)
 	{
-		var (ability1, ability2) = ExtremeRoleManager.GetLocalRoleAbility<IRoleAbility>();
+		var (ability1, ability2) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleAbility>();
 
-		if (ability1 != null && ability1.Button != null)
+		if (ability1?.Button != null)
 		{
 			ability1.Button.SetCooldownTimer(0.1f);
 			if (ability1.Button.Behavior is ICountBehavior countBehavior)
@@ -88,7 +88,7 @@ public sealed class Charger :
 			}
 		}
 
-		if (ability2 != null && ability2.Button != null)
+		if (ability2?.Button != null)
 		{
 			ability2.Button.SetCooldownTimer(0.1f);
 			if (ability2.Button.Behavior is ICountBehavior countBehavior)
@@ -111,7 +111,8 @@ public sealed class Charger :
 			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.OverLoaderOverLoad),
 			checkAbility: CheckAbility,
 			abilityOff: CleanUp,
-			forceAbilityOff: ResetTarget);
+			forceAbilityOff: () => { },
+			isReduceOnActive: true);
 		this.Button?.SetLabelToCrewmate();
 	}
 
@@ -123,7 +124,7 @@ public sealed class Charger :
 	public bool UseAbility()
 	{
 		this.currentTargetPlayer = this.tmpPlayer;
-		return false;
+		return true;
 	}
 
 	public bool CheckAbility()

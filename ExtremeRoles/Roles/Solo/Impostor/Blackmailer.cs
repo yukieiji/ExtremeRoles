@@ -40,7 +40,8 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton),
 			IsAbilityCheck,
 			CleanUp,
-			ForceCleanUp);
+			ForceCleanUp,
+			isReduceOnActive: true);
 	}
 
 	public bool IsAbilityCheck()
