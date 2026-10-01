@@ -8,11 +8,13 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.State;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -43,22 +45,15 @@ public sealed class Charger :
 
 	public string GetFakeOptionString() => "";
 
-	public ExtremeAbilityButton Button
-	{
-		get => this.abilityButton;
-		set => this.abilityButton = value;
-	}
+	public ExtremeAbilityButton? Button { get; set; }
 
 	private bool awakeRole = false;
 	private float awakeTaskGage;
-	private float chargeTime;
 	private float chargeRange;
 	private int addAbilityCount;
 	private bool restoreKillCooldown;
 	private bool awakeHasOtherVision;
-
-	private ExtremeAbilityButton abilityButton;
-	private PlayerControl currentTargetPlayer;
+	private PlayerControl? currentTargetPlayer;
 
 	public Charger() : base(
 		RoleArgs.BuildCrewmate(
@@ -68,24 +63,15 @@ public sealed class Charger :
 
 	public static void Charged(byte chargerId, byte targetId)
 	{
-		if (!Player.TryGetPlayerControl(targetId, out var targetPlayer) ||
-			targetPlayer.IsInValid() ||
-			!ExtremeRoleManager.TryGetRole(targetId, out _))
+		if (PlayerControl.LocalPlayer != null &&
+			PlayerControl.LocalPlayer.PlayerId == targetId &&
+			Player.TryGetPlayerControl(targetId, out var targetPlayer) &&
+			targetPlayer.IsAlive() &&
+			ExtremeRoleManager.TryGetSafeCastedRole<Charger>(chargerId, out var chargerRole))
 		{
-			return;
-		}
-
-		if (PlayerControl.LocalPlayer.PlayerId == targetId)
-		{
-			int addCount = 1;
-			bool restoreKillCool = false;
-			if (ExtremeRoleManager.TryGetSafeCastedRole<Charger>(chargerId, out var chargerRole))
-			{
-				addCount = chargerRole.addAbilityCount;
-				restoreKillCool = chargerRole.restoreKillCooldown;
-			}
-
-			ApplyChargeEffect(addCount, restoreKillCool);
+			ApplyChargeEffect(
+				chargerRole.addAbilityCount,
+				chargerRole.restoreKillCooldown);
 		}
 	}
 
@@ -112,7 +98,7 @@ public sealed class Charger :
 		}
 
 		var localRole = ExtremeRoleManager.GetLocalPlayerRole();
-		if (restoreKillCool && (localRole.IsImpostor() || localRole.HasOtherKillCool))
+		if (restoreKillCool && localRole.CanKill())
 		{
 			PlayerControl.LocalPlayer.killTimer = 0.1f;
 		}
@@ -126,15 +112,13 @@ public sealed class Charger :
 			checkAbility: CheckAbility,
 			abilityOff: CleanUp,
 			forceAbilityOff: ResetTarget);
-		this.Button.SetLabelToCrewmate();
+		this.Button?.SetLabelToCrewmate();
 	}
 
 	public bool IsAbilityUse()
-	{
-		return this.IsAwake &&
+		=> this.IsAwake &&
 			IRoleAbility.IsCommonUse() &&
 			Player.TryGetClosestPlayerInRange(this, this.chargeRange, out _);
-	}
 
 	public bool UseAbility()
 	{
@@ -147,19 +131,12 @@ public sealed class Charger :
 	}
 
 	public bool CheckAbility()
-	{
-		if (this.currentTargetPlayer == null ||
-			this.currentTargetPlayer.IsInValid())
-		{
-			return false;
-		}
-
-		return Player.IsPlayerInRangeAndDrawOutLine(
-			PlayerControl.LocalPlayer,
-			this.currentTargetPlayer,
-			this,
-			this.chargeRange);
-	}
+		=> this.currentTargetPlayer.IsAlive() &&
+			Player.IsPlayerInRangeAndDrawOutLine(
+				PlayerControl.LocalPlayer,
+				this.currentTargetPlayer,
+				this,
+				this.chargeRange);
 
 	public void CleanUp()
 	{
@@ -173,8 +150,6 @@ public sealed class Charger :
 				caller.WriteByte(chargerId);
 				caller.WriteByte(targetId);
 			}
-
-			Charged(chargerId, targetId);
 		}
 		ResetTarget();
 	}
@@ -186,21 +161,23 @@ public sealed class Charger :
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (!this.awakeRole)
+		if (this.awakeRole)
 		{
-			if (this.Button != null)
-			{
-				this.Button.SetButtonShow(false);
-			}
-			if (Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
-			{
-				this.awakeRole = true;
-				this.HasOtherVision = this.awakeHasOtherVision;
-				if (this.Button != null)
-				{
-					this.Button.SetButtonShow(true);
-				}
-			}
+			return;
+		}
+
+		this.Button?.SetButtonShow(false);
+
+		if (Player.GetPlayerTaskGage(rolePlayer) < this.awakeTaskGage)
+		{
+			return;
+		}
+
+		this.awakeRole = true;
+		this.HasOtherVision = this.awakeHasOtherVision;
+		if (this.Button != null)
+		{
+			this.Button.SetButtonShow(true);
 		}
 	}
 
@@ -287,10 +264,11 @@ public sealed class Charger :
 			50, 0, 100, 10,
 			format: OptionUnit.Percentage);
 
-		factory.CreateFloatOption(
-			ChargerOption.ChargeTime,
-			3.0f, 0.5f, 10.0f, 0.5f,
-			format: OptionUnit.Second);
+		IRoleAbility.CreateAbilityCountOption(
+			factory,
+			defaultAbilityCount: 3,
+			maxAbilityCount: 10,
+			defaultActiveTime: 3.0f);
 
 		factory.CreateFloatOption(
 			ChargerOption.ChargeRange,
@@ -304,19 +282,12 @@ public sealed class Charger :
 		factory.CreateBoolOption(
 			ChargerOption.RestoreKillCooldown,
 			false);
-
-		IRoleAbility.CreateAbilityCountOption(
-			factory,
-			defaultAbilityCount: 3,
-			maxAbilityCount: 10,
-			defaultActiveTime: 3.0f);
 	}
 
 	protected override void RoleSpecificInit()
 	{
 		var loader = this.Loader;
 		this.awakeTaskGage = loader.GetValue<ChargerOption, int>(ChargerOption.AwakeTaskGage) / 100.0f;
-		this.chargeTime = loader.GetValue<ChargerOption, float>(ChargerOption.ChargeTime);
 		this.chargeRange = loader.GetValue<ChargerOption, float>(ChargerOption.ChargeRange);
 		this.addAbilityCount = loader.GetValue<ChargerOption, int>(ChargerOption.AddAbilityCount);
 		this.restoreKillCooldown = loader.GetValue<ChargerOption, bool>(ChargerOption.RestoreKillCooldown);
@@ -332,11 +303,6 @@ public sealed class Charger :
 		{
 			this.awakeRole = false;
 			this.HasOtherVision = false;
-		}
-
-		if (this.Button != null && this.Button.Behavior is IActivatingBehavior activatingBehavior)
-		{
-			activatingBehavior.ActiveTime = this.chargeTime;
 		}
 
 		ResetTarget();
