@@ -132,10 +132,10 @@ public sealed class BlackmailerTests
 		system.UpdateSystem(null!, rAdd.Object);
 
 		string tag = role.GetRolePlayerNameTag(role, 2);
-		Assert.Contains("blackmailMark", tag);
+		Assert.Contains("◆", tag);
 
 		system.Reset(ResetTiming.MeetingEnd);
 		string normalTag = role.GetRolePlayerNameTag(role, 2);
-		Assert.DoesNotContain("blackmailMark", normalTag);
+		Assert.DoesNotContain("◆", normalTag);
 	}
 }
