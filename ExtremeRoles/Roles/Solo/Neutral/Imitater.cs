@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-using ExtremeRoles.Extension;
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
@@ -14,7 +13,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
-using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Roles.API.Extension.State;
 
 #nullable enable
 
@@ -110,20 +109,11 @@ public sealed class Imitater :
 	}
 
 	public bool CheckAbility()
-	{
-		if (this.targetPlayer == null ||
-			!this.targetPlayer.IsAlive() ||
-			!PlayerControl.LocalPlayer.IsAlive() ||
-			MeetingHud.Instance != null)
-		{
-			return false;
-		}
-
-		float dist = Vector2.Distance(
-			PlayerControl.LocalPlayer.GetTruePosition(),
-			this.targetPlayer.GetTruePosition());
-		return dist <= this.range;
-	}
+		=>
+			this.targetPlayer.IsAlive() &&
+			PlayerControl.LocalPlayer.IsAlive() &&
+			Player.IsPlayerInRangeAndDrawOutLine(PlayerControl.LocalPlayer, this.targetPlayer, this, this.range) &&
+			MeetingHud.Instance == null;
 
 	public void CleanUp()
 	{
@@ -132,17 +122,8 @@ public sealed class Imitater :
 			!PlayerControl.LocalPlayer.IsAlive() ||
 			MeetingHud.Instance != null ||
 			!ExtremeRoleManager.TryGetRole(this.targetPlayer.PlayerId, out var targetRole) ||
-			!targetRole.CanKill ||
+			!targetRole.CanKill() ||
 			!TryGetExtractInheritedRole(targetRole, out _))
-		{
-			ForceCleanUp();
-			return;
-		}
-
-		float dist = Vector2.Distance(
-			PlayerControl.LocalPlayer.GetTruePosition(),
-			this.targetPlayer.GetTruePosition());
-		if (dist > this.range)
 		{
 			ForceCleanUp();
 			return;
@@ -166,25 +147,13 @@ public sealed class Imitater :
 
 	public static void KyugenKill(byte killerId, byte targetId)
 	{
-		PlayerControl killer = Player.GetPlayerControlById(killerId);
-		PlayerControl target = Player.GetPlayerControlById(targetId);
-
-		if (killer == null || target == null)
+		if (Player.TryGetPlayerControl(killerId, out var killer) && 
+			Player.TryGetPlayerControl(targetId, out var target) &&
+			ExtremeRoleManager.TryGetRole(killer.PlayerId, out var killerRole) &&
+			KillButtonDoClickPatch.CheckPreKillConditionWithBool(killerRole, killer, target))
 		{
-			return;
+			Player.RpcUncheckMurderPlayer(killerId, targetId, byte.MaxValue);
 		}
-
-		if (!ExtremeRoleManager.TryGetRole(killer.PlayerId, out var killerRole))
-		{
-			return;
-		}
-
-		if (!KillButtonDoClickPatch.CheckPreKillConditionWithBool(killerRole, killer, target))
-		{
-			return;
-		}
-
-		Player.RpcUncheckMurderPlayer(killerId, targetId, byte.MaxValue);
 	}
 
 	public static void InheritTargetRole(byte imitaterPlayerId, byte targetPlayerId)
@@ -204,7 +173,7 @@ public sealed class Imitater :
 
 		if (Player.TryGetPlayerControl(imitaterPlayerId, out var imitaterPlayer) && RoleManager.InstanceExists)
 		{
-			if (inheritedRole is Solo.VanillaRoleWrapper vanillaRole)
+			if (inheritedRole is VanillaRoleWrapper vanillaRole)
 			{
 				RoleManager.Instance.SetRole(imitaterPlayer, vanillaRole.VanilaRoleId);
 			}
