@@ -1691,9 +1691,6 @@ If used on non-Crewmate, boosts enemy team.</value>
   <data name="ChargerChargeRange" xml:space="preserve">
     <value>Charge Range</value>
   </data>
-  <data name="ChargerChargeTime" xml:space="preserve">
-    <value>Time required for Charge</value>
-  </data>
   <data name="ChargerAbilityCoolTime" xml:space="preserve">
     <value>Charge Cooldown</value>
   </data>

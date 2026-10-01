@@ -1766,9 +1766,6 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="ChargerChargeRange" xml:space="preserve">
     <value>「チャージ」が発動できる範囲</value>
   </data>
-  <data name="ChargerChargeTime" xml:space="preserve">
-    <value>「チャージ」にかかる時間</value>
-  </data>
   <data name="ChargerAbilityCoolTime" xml:space="preserve">
     <value>「チャージ」のクールタイム</value>
   </data>
@@ -1777,5 +1774,8 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   </data>
   <data name="charge" xml:space="preserve">
     <value>チャージ</value>
+  </data>
+  <data name="ChargerAbilityActiveTime" xml:space="preserve">
+    <value>「チャージ」にかかる時間</value>
   </data>
 </root>
