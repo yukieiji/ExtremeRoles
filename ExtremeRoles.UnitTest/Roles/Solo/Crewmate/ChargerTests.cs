@@ -266,20 +266,17 @@ public class ChargerTests : IDisposable
 
 		// Assert
 		var awakeTaskGageField = typeof(Charger).GetField("awakeTaskGage", BindingFlags.NonPublic | BindingFlags.Instance);
-		var chargeTimeField = typeof(Charger).GetField("chargeTime", BindingFlags.NonPublic | BindingFlags.Instance);
 		var chargeRangeField = typeof(Charger).GetField("chargeRange", BindingFlags.NonPublic | BindingFlags.Instance);
 		var addAbilityCountField = typeof(Charger).GetField("addAbilityCount", BindingFlags.NonPublic | BindingFlags.Instance);
 		var restoreKillCooldownField = typeof(Charger).GetField("restoreKillCooldown", BindingFlags.NonPublic | BindingFlags.Instance);
 
 		float awakeTaskGage = (float)awakeTaskGageField?.GetValue(charger)!;
-		float chargeTime = (float)chargeTimeField?.GetValue(charger)!;
 		float chargeRange = (float)chargeRangeField?.GetValue(charger)!;
 		int addAbilityCount = (int)addAbilityCountField?.GetValue(charger)!;
 		bool restoreKillCooldown = (bool)restoreKillCooldownField?.GetValue(charger)!;
 
 		Assert.Equal(0.5f, awakeTaskGage);
-		Assert.Equal(3.0f, chargeTime);
-		Assert.Equal(2.5f, chargeRange);
+		Assert.Equal(0.75f, chargeRange);
 		Assert.Equal(1, addAbilityCount);
 		Assert.False(restoreKillCooldown);
 	}
@@ -368,56 +365,6 @@ public class ChargerTests : IDisposable
 		Assert.True(charger.IsAwake);
 	}
 
-	[Fact]
-	public void UseAbility_WhenTargetFound_SetsCurrentTargetPlayerAndReturnsTrue()
-	{
-		// Arrange
-		SetLobbyMode(false);
-		var charger = new Charger();
-
-		var mockTarget = new Mock<PlayerControl>(IntPtr.Zero);
-		mockTarget.SetupGet(p => p.PlayerId).Returns((byte)2);
-
-		var tryGetTargetMethod = typeof(global::ExtremeRoles.Helper.Player).GetMethod(nameof(global::ExtremeRoles.Helper.Player.TryGetClosestPlayerInRange), new[] { typeof(SingleRoleBase), typeof(float), typeof(PlayerControl).MakeByRefType() })!;
-		var hookDelegate = new TryGetClosestPlayerHook((TryGetClosestPlayerOrig orig, SingleRoleBase r, float range, out PlayerControl? target) =>
-		{
-			target = mockTarget.Object;
-			return true;
-		});
-		using var hook = new Hook(tryGetTargetMethod, hookDelegate);
-
-		// Act
-		bool result = charger.UseAbility();
-
-		// Assert
-		Assert.True(result);
-		var targetField = typeof(Charger).GetField("currentTargetPlayer", BindingFlags.NonPublic | BindingFlags.Instance)!;
-		Assert.Equal(mockTarget.Object, targetField.GetValue(charger));
-	}
-
-	[Fact]
-	public void UseAbility_WhenTargetNotFound_ReturnsFalse()
-	{
-		// Arrange
-		SetLobbyMode(false);
-		var charger = new Charger();
-
-		var tryGetTargetMethod = typeof(global::ExtremeRoles.Helper.Player).GetMethod(nameof(global::ExtremeRoles.Helper.Player.TryGetClosestPlayerInRange), new[] { typeof(SingleRoleBase), typeof(float), typeof(PlayerControl).MakeByRefType() })!;
-		var hookDelegate = new TryGetClosestPlayerHook((TryGetClosestPlayerOrig orig, SingleRoleBase r, float range, out PlayerControl? target) =>
-		{
-			target = null;
-			return false;
-		});
-		using var hook = new Hook(tryGetTargetMethod, hookDelegate);
-
-		// Act
-		bool result = charger.UseAbility();
-
-		// Assert
-		Assert.False(result);
-		var targetField = typeof(Charger).GetField("currentTargetPlayer", BindingFlags.NonPublic | BindingFlags.Instance)!;
-		Assert.Null(targetField.GetValue(charger));
-	}
 
 	[Fact]
 	public void CheckAbility_WhenCurrentTargetPlayerNull_ReturnsFalse()
@@ -506,7 +453,7 @@ public class ChargerTests : IDisposable
 	}
 
 	[Fact]
-	public void ResetOnMeetingStart_And_ResetOnMeetingEnd_ClearsTarget()
+	public void ResetOnMeetingStart_And_ResetOnMeetingEnd_DoesNotClearTarget()
 	{
 		// Arrange
 		var charger = new Charger();
@@ -518,14 +465,13 @@ public class ChargerTests : IDisposable
 		charger.ResetOnMeetingStart();
 
 		// Assert 1
-		Assert.Null(targetField.GetValue(charger));
+		Assert.Equal(mockTarget.Object, targetField.GetValue(charger));
 
 		// Act 2
-		targetField.SetValue(charger, mockTarget.Object);
 		charger.ResetOnMeetingEnd(null);
 
 		// Assert 2
-		Assert.Null(targetField.GetValue(charger));
+		Assert.Equal(mockTarget.Object, targetField.GetValue(charger));
 	}
 
 	[Fact]
