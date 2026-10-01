@@ -102,6 +102,7 @@ public sealed class Charger :
 		{
 			PlayerControl.LocalPlayer.killTimer = 0.1f;
 		}
+		// SEを後で付ける
 	}
 
 	public void CreateAbility()
