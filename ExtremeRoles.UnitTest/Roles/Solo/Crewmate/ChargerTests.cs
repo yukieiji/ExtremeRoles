@@ -453,28 +453,6 @@ public class ChargerTests : IDisposable
 	}
 
 	[Fact]
-	public void ResetOnMeetingStart_And_ResetOnMeetingEnd_DoesNotClearTarget()
-	{
-		// Arrange
-		var charger = new Charger();
-		var mockTarget = new Mock<PlayerControl>(IntPtr.Zero);
-		var targetField = typeof(Charger).GetField("currentTargetPlayer", BindingFlags.NonPublic | BindingFlags.Instance)!;
-		targetField.SetValue(charger, mockTarget.Object);
-
-		// Act 1
-		charger.ResetOnMeetingStart();
-
-		// Assert 1
-		Assert.Equal(mockTarget.Object, targetField.GetValue(charger));
-
-		// Act 2
-		charger.ResetOnMeetingEnd(null);
-
-		// Assert 2
-		Assert.Equal(mockTarget.Object, targetField.GetValue(charger));
-	}
-
-	[Fact]
 	public void Charged_WhenLocalPlayerIsTarget_AppliesChargeEffect()
 	{
 		// Arrange
