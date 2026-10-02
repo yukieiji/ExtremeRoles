@@ -92,8 +92,10 @@ public sealed class BlackmailerTests : IDisposable
 		this.mockClient = MockSetupHelper.SetupAmongUsClientMock();
 		this.mockClient.SetupGet(c => c.AmHost).Returns(true);
 
+		var writtenBytes = new List<byte>();
 		var mockWriter = new Mock<MessageWriter>(IntPtr.Zero);
-		mockWriter.Setup(w => w.ToByteArray(It.IsAny<bool>())).Returns((Il2CppStructArray<byte>)null!);
+		mockWriter.Setup(w => w.Write(It.IsAny<byte>())).Callback((byte b) => writtenBytes.Add(b));
+		mockWriter.Setup(w => w.ToByteArray(It.IsAny<bool>())).Returns(new Mock<Il2CppStructArray<byte>>(IntPtr.Zero).Object);
 
 		this.mockClient.Setup(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<SendOption>(), It.IsAny<int>()))
 			.Returns(mockWriter.Object);
@@ -146,15 +148,17 @@ public sealed class BlackmailerTests : IDisposable
 
 		var mockReaderHelper = new Mock<Hazel.MockMessageReaderGetHelper>();
 		mockReaderHelper.Setup(g => g.Invoke(It.IsAny<Il2CppStructArray<byte>>()))
-			.Returns((Il2CppStructArray<byte> buffer) =>
+			.Returns(() =>
 			{
 				var mockReader = new Mock<MessageReader>();
-				if (buffer != null && buffer.Length >= 1)
+				if (writtenBytes.Count > 0)
 				{
+					var bytesCopy = new List<byte>(writtenBytes);
+					writtenBytes.Clear();
 					var seq = mockReader.SetupSequence(r => r.ReadByte());
-					for (int i = 0; i < buffer.Length; i++)
+					foreach (var b in bytesCopy)
 					{
-						seq.Returns(buffer[i]);
+						seq.Returns(b);
 					}
 				}
 				return mockReader.Object;
@@ -497,11 +501,15 @@ public sealed class BlackmailerTests : IDisposable
 	}
 
 	[Fact]
-	public void CleanUp_WhenMultipleBlackmailDisabled_ResetsTargetAndSetsHasBlackmailed()
+	public void CleanUp_WhenMultipleBlackmailDisabled_ClearsPreviousAndAddsNewBlackmail()
 	{
 		// Arrange
 		var role = new Blackmailer();
 		InitializeRole(role, playerId: 1);
+
+		var system = BlackmailerSystem.GetOrRegister();
+		system.Reset(ResetTiming.MeetingEnd);
+		system.RpcAddBlackmail(1, 3); // 既存のブラックメールを追加
 
 		var target = CreateTargetPlayer(2);
 
@@ -514,11 +522,13 @@ public sealed class BlackmailerTests : IDisposable
 		// Assert
 		var hasBlackmailedField = typeof(Blackmailer).GetField("hasBlackmailedThisRound", BindingFlags.NonPublic | BindingFlags.Instance);
 		Assert.Null(targetField.GetValue(role));
+		Assert.False(system.IsBlackmailedBy(1, 3)); // 前回分が削除されている
+		Assert.True(system.IsBlackmailedBy(1, 2)); // 今回分が追加されている
 		Assert.True((bool)hasBlackmailedField!.GetValue(role)!);
 	}
 
 	[Fact]
-	public void CleanUp_WhenMultipleBlackmailEnabled_ResetsTargetAndSetsHasBlackmailed()
+	public void CleanUp_WhenMultipleBlackmailEnabled_AddsNewBlackmailWithoutClearingPrevious()
 	{
 		// Arrange
 		var role = new Blackmailer();
@@ -527,6 +537,10 @@ public sealed class BlackmailerTests : IDisposable
 		var multipleBlackmailField = typeof(Blackmailer).GetField("multipleBlackmail", BindingFlags.NonPublic | BindingFlags.Instance);
 		multipleBlackmailField!.SetValue(role, true);
 
+		var system = BlackmailerSystem.GetOrRegister();
+		system.Reset(ResetTiming.MeetingEnd);
+		system.RpcAddBlackmail(1, 3); // 既存のブラックメールを追加
+
 		var target = CreateTargetPlayer(2);
 
 		var targetField = typeof(Blackmailer).GetField("target", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -538,6 +552,8 @@ public sealed class BlackmailerTests : IDisposable
 		// Assert
 		var hasBlackmailedField = typeof(Blackmailer).GetField("hasBlackmailedThisRound", BindingFlags.NonPublic | BindingFlags.Instance);
 		Assert.Null(targetField.GetValue(role));
+		Assert.True(system.IsBlackmailedBy(1, 3)); // 前回分が保持されている
+		Assert.True(system.IsBlackmailedBy(1, 2)); // 今回分が追加されている
 		Assert.True((bool)hasBlackmailedField!.GetValue(role)!);
 	}
 
@@ -585,13 +601,7 @@ public sealed class BlackmailerTests : IDisposable
 
 		var system = BlackmailerSystem.GetOrRegister();
 		system.Reset(ResetTiming.MeetingEnd);
-
-		var rAdd = new Mock<MessageReader>();
-		rAdd.SetupSequence(r => r.ReadByte())
-			.Returns((byte)BlackmailerSystem.Ops.AddBlackmail)
-			.Returns((byte)1)
-			.Returns((byte)2);
-		system.UpdateSystem(null!, rAdd.Object);
+		system.RpcAddBlackmail(1, 2);
 
 		var rolePlayerMock = new Mock<PlayerControl>();
 		rolePlayerMock.SetupGet(p => p.PlayerId).Returns((byte)1);
@@ -612,13 +622,7 @@ public sealed class BlackmailerTests : IDisposable
 
 		var system = BlackmailerSystem.GetOrRegister();
 		system.Reset(ResetTiming.MeetingEnd);
-
-		var rAdd = new Mock<MessageReader>();
-		rAdd.SetupSequence(r => r.ReadByte())
-			.Returns((byte)BlackmailerSystem.Ops.AddBlackmail)
-			.Returns((byte)1)
-			.Returns((byte)2);
-		system.UpdateSystem(null!, rAdd.Object);
+		system.RpcAddBlackmail(1, 2);
 
 		var rolePlayerMock = new Mock<PlayerControl>();
 		rolePlayerMock.SetupGet(p => p.PlayerId).Returns((byte)1);
@@ -640,13 +644,7 @@ public sealed class BlackmailerTests : IDisposable
 
 		var system = BlackmailerSystem.GetOrRegister();
 		system.Reset(ResetTiming.MeetingEnd);
-
-		var rAdd = new Mock<MessageReader>();
-		rAdd.SetupSequence(r => r.ReadByte())
-			.Returns((byte)BlackmailerSystem.Ops.AddBlackmail)
-			.Returns((byte)1)
-			.Returns((byte)2);
-		system.UpdateSystem(null!, rAdd.Object);
+		system.RpcAddBlackmail(1, 2);
 
 		var targetRole = new SpecialCrew();
 
@@ -674,15 +672,5 @@ public sealed class BlackmailerTests : IDisposable
 
 		// Assert
 		Assert.DoesNotContain("◆", normalTag);
-	}
-
-	private static MessageReader createAddMessageReader(byte blackmailerId, byte targetId)
-	{
-		var readerMock = new Mock<MessageReader>();
-		readerMock.SetupSequence(r => r.ReadByte())
-			.Returns((byte)BlackmailerSystem.Ops.AddBlackmail)
-			.Returns(blackmailerId)
-			.Returns(targetId);
-		return readerMock.Object;
 	}
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Hazel;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using InnerNet;
@@ -23,8 +24,11 @@ public sealed class BlackmailerSystemTests
 		MockSetupHelper.SetupUnityCommonMocks();
 
 		this.mockClient = MockSetupHelper.SetupAmongUsClientMock();
+
+		var writtenBytes = new List<byte>();
 		this.mockWriter = new Mock<MessageWriter>(IntPtr.Zero);
-		this.mockWriter.Setup(w => w.ToByteArray(It.IsAny<bool>())).Returns((Il2CppStructArray<byte>)null!);
+		this.mockWriter.Setup(w => w.Write(It.IsAny<byte>())).Callback((byte b) => writtenBytes.Add(b));
+		this.mockWriter.Setup(w => w.ToByteArray(It.IsAny<bool>())).Returns(new Mock<Il2CppStructArray<byte>>(IntPtr.Zero).Object);
 
 		this.mockClient.Setup(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<SendOption>(), It.IsAny<int>()))
 			.Returns(this.mockWriter.Object);
@@ -42,9 +46,22 @@ public sealed class BlackmailerSystemTests
 		if (Hazel.MockMessageReaderGetHelper.Instance == null)
 		{
 			var mockReaderHelper = new Mock<Hazel.MockMessageReaderGetHelper>();
-			var mockReader = new Mock<MessageReader>();
 			mockReaderHelper.Setup(g => g.Invoke(It.IsAny<Il2CppStructArray<byte>>()))
-				.Returns(mockReader.Object);
+				.Returns(() =>
+				{
+					var mockReader = new Mock<MessageReader>();
+					if (writtenBytes.Count > 0)
+					{
+						var bytesCopy = new List<byte>(writtenBytes);
+						writtenBytes.Clear();
+						var seq = mockReader.SetupSequence(r => r.ReadByte());
+						foreach (var b in bytesCopy)
+						{
+							seq.Returns(b);
+						}
+					}
+					return mockReader.Object;
+				});
 			Hazel.MockMessageReaderGetHelper.Instance = mockReaderHelper.Object;
 		}
 
@@ -204,28 +221,33 @@ public sealed class BlackmailerSystemTests
 	}
 
 	[Fact]
-	public void RpcAddBlackmail_CallsStartRpcImmediately()
+	public void RpcAddBlackmail_AddsBlackmailToSystemState()
 	{
 		// Arrange
-		var system = new BlackmailerSystem();
+		var system = BlackmailerSystem.GetOrRegister();
+		system.Reset(ResetTiming.MeetingEnd);
+		byte blackmailerId = 1;
+		byte targetId = 2;
 
 		// Act
-		system.RpcAddBlackmail(1, 2);
+		system.RpcAddBlackmail(blackmailerId, targetId);
 
 		// Assert
-		this.mockClient.Verify(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<SendOption>(), It.IsAny<int>()), Times.AtLeastOnce);
+		Assert.True(system.IsBlackmailedBy(blackmailerId, targetId));
 	}
 
 	[Fact]
-	public void RpcClearBlackmail_CallsStartRpcImmediately()
+	public void RpcClearBlackmail_ClearsBlackmailFromSystemState()
 	{
 		// Arrange
-		var system = new BlackmailerSystem();
+		var system = BlackmailerSystem.GetOrRegister();
+		system.Reset(ResetTiming.MeetingEnd);
+		system.RpcAddBlackmail(1, 2);
 
 		// Act
 		system.RpcClearBlackmail(1);
 
 		// Assert
-		this.mockClient.Verify(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<SendOption>(), It.IsAny<int>()), Times.AtLeastOnce);
+		Assert.False(system.IsBlackmailedBy(1, 2));
 	}
 }
