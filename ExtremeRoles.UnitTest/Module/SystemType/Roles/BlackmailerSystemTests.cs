@@ -36,34 +36,28 @@ public sealed class BlackmailerSystemTests
 		this.mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
 		this.mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
 
-		if (Hazel.MockMessageWriterGetHelper.Instance == null)
-		{
-			var mockGet = new Mock<Hazel.MockMessageWriterGetHelper>();
-			mockGet.Setup(g => g.Invoke(It.IsAny<SendOption>())).Returns(this.mockWriter.Object);
-			Hazel.MockMessageWriterGetHelper.Instance = mockGet.Object;
-		}
+		var mockGet = new Mock<Hazel.MockMessageWriterGetHelper>();
+		mockGet.Setup(g => g.Invoke(It.IsAny<SendOption>())).Returns(this.mockWriter.Object);
+		Hazel.MockMessageWriterGetHelper.Instance = mockGet.Object;
 
-		if (Hazel.MockMessageReaderGetHelper.Instance == null)
-		{
-			var mockReaderHelper = new Mock<Hazel.MockMessageReaderGetHelper>();
-			mockReaderHelper.Setup(g => g.Invoke(It.IsAny<Il2CppStructArray<byte>>()))
-				.Returns(() =>
+		var mockReaderHelper = new Mock<Hazel.MockMessageReaderGetHelper>();
+		mockReaderHelper.Setup(g => g.Invoke(It.IsAny<Il2CppStructArray<byte>>()))
+			.Returns(() =>
+			{
+				var mockReader = new Mock<MessageReader>();
+				if (writtenBytes.Count > 0)
 				{
-					var mockReader = new Mock<MessageReader>();
-					if (writtenBytes.Count > 0)
+					var bytesCopy = new List<byte>(writtenBytes);
+					writtenBytes.Clear();
+					var seq = mockReader.SetupSequence(r => r.ReadByte());
+					foreach (var b in bytesCopy)
 					{
-						var bytesCopy = new List<byte>(writtenBytes);
-						writtenBytes.Clear();
-						var seq = mockReader.SetupSequence(r => r.ReadByte());
-						foreach (var b in bytesCopy)
-						{
-							seq.Returns(b);
-						}
+						seq.Returns(b);
 					}
-					return mockReader.Object;
-				});
-			Hazel.MockMessageReaderGetHelper.Instance = mockReaderHelper.Object;
-		}
+				}
+				return mockReader.Object;
+			});
+		Hazel.MockMessageReaderGetHelper.Instance = mockReaderHelper.Object;
 
 		if (InnerNet.MockMessageExtensionsWriteNetObjectHelper.Instance == null)
 		{
