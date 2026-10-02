@@ -32,9 +32,6 @@ mkdir -Path workspace/bepinex_x64/BepInEx/plugins -Force
 
 
 Write-Host "Create x86 package"
-New-Item workspace/bepinex_x86/steam_appid.txt
-Set-Content workspace/bepinex_x86/steam_appid.txt '945360'
-
 Copy-Item -Path ExtremeRoles/Resources/Config/*.cfg -Destination workspace/bepinex_x86/BepInEx/config -Force -Recurse
 
 Copy-Item -Path workspace/bepinex_x86 -Destination workspace/Itch_ExtremeRoles -Force -Recurse
@@ -48,6 +45,9 @@ Copy-Item -Path ExtremeSkins/bin/Release/net6.0/ExtremeSkins.dll -Destination wo
 
 
 Write-Host "Create x64 package"
+New-Item workspace/bepinex_x64/steam_appid.txt
+Set-Content workspace/bepinex_x64/steam_appid.txt '945360'
+
 Copy-Item -Path ExtremeRoles/Resources/Config/*.cfg -Destination workspace/bepinex_x64/BepInEx/config -Force -Recurse
 
 Copy-Item -Path workspace/bepinex_x64 -Destination workspace/ExtremeRoles -Force -Recurse
