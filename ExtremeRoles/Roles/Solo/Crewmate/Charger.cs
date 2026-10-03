@@ -102,14 +102,14 @@ public sealed class Charger :
 		{
 			PlayerControl.LocalPlayer.killTimer = 0.1f;
 		}
-		// SEを後で付ける
+		Sound.PlaySound(Sound.Type.ChargerCharge, 0.75f);
 	}
 
 	public void CreateAbility()
 	{
 		this.CreateActivatingAbilityCountButton(
 			"charge",
-			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.OverLoaderOverLoad),
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Charger),
 			checkAbility: CheckAbility,
 			abilityOff: CleanUp,
 			forceAbilityOff: () => { },
@@ -138,9 +138,10 @@ public sealed class Charger :
 
 	public void CleanUp()
 	{
-		if (this.currentTargetPlayer != null && PlayerControl.LocalPlayer != null)
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (this.currentTargetPlayer != null && localPlayer != null)
 		{
-			byte chargerId = PlayerControl.LocalPlayer.PlayerId;
+			byte chargerId = localPlayer.PlayerId;
 			byte targetId = this.currentTargetPlayer.PlayerId;
 
 			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ChargerCharge))

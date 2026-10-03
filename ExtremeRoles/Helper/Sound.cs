@@ -29,6 +29,7 @@ public static class Sound
 		ScavengerFireNormalGun,
 		ScavengerFireBeam,
 		BoxerStraight,
+		ChargerCharge,
 
 		MinerMineSE,
 
