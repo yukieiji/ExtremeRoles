@@ -56,8 +56,7 @@ public sealed class Embezzle : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 	{
 		this.CreateAbilityCountButton(
 			"DisguisedAccounting",
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
-				ObjectPath.AgencyTakeTask));
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Embezzle));
 		this.Button.SetLabelToCrewmate();
 	}
 
