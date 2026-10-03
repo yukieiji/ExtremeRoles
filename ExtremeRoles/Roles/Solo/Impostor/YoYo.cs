@@ -158,12 +158,14 @@ public sealed class YoYo :
         RoleArgs.BuildImpostor(ExtremeRoleId.YoYo))
     { }
 
-    public void CreateAbility()
+	private static Sprite markSprite => UnityObjectLoader.LoadFromButtonIcon(ExtremeRoleId.YoYo, "Mark");
+
+	public void CreateAbility()
     {
         this.behavior = new YoYoAbilityBehavior(
             Tr.GetString("YoYoSaveLocation"),
-            UnityObjectLoader.LoadFromResources(ExtremeRoleId.YoYo),
-            IsAbilityUse,
+			markSprite,
+			IsAbilityUse,
             UseAbility);
 
         this.Button = new ExtremeAbilityButton(
@@ -214,7 +216,7 @@ public sealed class YoYo :
         if (this.SavedPosition.HasValue)
         {
             Vector2 targetPos = this.SavedPosition.Value;
-            Helper.Player.RpcUncheckSnap(localPlayer.PlayerId, targetPos);
+            Player.RpcUncheckSnap(localPlayer.PlayerId, targetPos);
             this.ClearMark();
             return true;
         }
@@ -242,15 +244,15 @@ public sealed class YoYo :
             this.markerObject.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 
             SpriteRenderer renderer = this.markerObject.AddComponent<SpriteRenderer>();
-            renderer.sprite = UnityObjectLoader.LoadFromResources(ExtremeRoleId.YoYo);
-            renderer.color = new Color(1.0f, 1.0f, 1.0f, 0.6f);
+            renderer.sprite = markSprite;
+			renderer.color = new Color(1.0f, 1.0f, 1.0f, 0.6f);
         }
 
         if (this.behavior != null)
         {
             string newText = Tr.GetString("YoYoTeleportLocation");
             this.behavior.SetButtonText(newText);
-            this.behavior.SetGraphic(newText, UnityObjectLoader.LoadFromResources(ExtremeRoleId.YoYo));
+            this.behavior.SetGraphic(newText, UnityObjectLoader.LoadFromButtonIcon(ExtremeRoleId.YoYo, "Teleport"));
         }
     }
 
@@ -268,7 +270,7 @@ public sealed class YoYo :
         {
             string newText = Tr.GetString("YoYoSaveLocation");
             this.behavior.SetButtonText(newText);
-            this.behavior.SetGraphic(newText, UnityObjectLoader.LoadFromResources(ExtremeRoleId.YoYo));
+            this.behavior.SetGraphic(newText, markSprite);
         }
     }
 

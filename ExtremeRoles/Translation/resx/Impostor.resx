@@ -1740,21 +1740,22 @@ Lv2能力「ビームセーバー」
     <value>ヨーヨー</value>
   </data>
   <data name="YoYoFullDescription" xml:space="preserve">
-    <value>保存した場所へテレポートできるインポスター
-保存できる場所は1箇所で使い切り(一方通行)
-テレポートを行うと能力使用回数が消費される</value>
+    <value>「マーク」した場所へ「テレポート」できるインポスター
+
+「マーク」出来る箇所は1つのみで一方通行の使い切り
+「テレポート」を行うと能力使用回数が1つ消費される</value>
   </data>
   <data name="YoYoShortDescription" xml:space="preserve">
-    <value>場所を保存し、瞬時にテレポートせよ</value>
+    <value>スロー、スリープ、キャッチ</value>
   </data>
   <data name="YoYoIntroDescription" xml:space="preserve">
-    <value>保存した場所へ瞬時にテレポートしろ</value>
+    <value>「マーク」した場所へ瞬時に「テレポート」</value>
   </data>
   <data name="YoYoIsResetMarkOnMeeting" xml:space="preserve">
-    <value>会議開始時に保存位置をリセットするか</value>
+    <value>会議開始時に「マーク」位置をリセットするか</value>
   </data>
   <data name="YoYoSaveLocation" xml:space="preserve">
-    <value>位置保存</value>
+    <value>マーク</value>
   </data>
   <data name="YoYoTeleportLocation" xml:space="preserve">
     <value>テレポート</value>
@@ -1795,10 +1796,10 @@ Lv2能力「ビームセーバー」
     <value>STRMISS</value>
   </data>
   <data name="YoYoAbilityCoolTime" xml:space="preserve">
-    <value>STRMISS</value>
+    <value>「マーク」と「テレポート」のクールタイム</value>
   </data>
   <data name="YoYoAbilityCount" xml:space="preserve">
-    <value>STRMISS</value>
+    <value>「テレポート」の使用回数</value>
   </data>
   <data name="BlackmailerAbilityCoolTime" xml:space="preserve">
     <value>「恐喝」のクールタイム</value>
