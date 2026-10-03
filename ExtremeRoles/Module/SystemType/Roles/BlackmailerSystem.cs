@@ -1,9 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+
 using Hazel;
+using UnityEngine;
+
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles;
+
 
 #nullable enable
 
@@ -12,6 +17,11 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 public sealed class BlackmailerSystem : IExtremeSystemType
 {
 	public bool IsDirty { get; set; } = false;
+
+	public Sprite MeetingBk =>
+			UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
+				ExtremeRoleId.Blackmailer,
+				ObjectPath.GetRoleImgPath(ExtremeRoleId.Blackmailer, ObjectPath.MeetingBk));
 
 	public enum Ops : byte
 	{

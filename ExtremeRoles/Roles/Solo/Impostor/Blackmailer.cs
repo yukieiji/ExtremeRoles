@@ -37,7 +37,7 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 	{
 		this.CreateActivatingAbilityCountButton(
 			"blackmail",
-			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton),
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Blackmailer),
 			IsAbilityCheck,
 			CleanUp,
 			ForceCleanUp,

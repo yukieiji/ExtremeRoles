@@ -92,8 +92,7 @@ public static class MeetingHudUpdateButtonsPatchHelper
 		if (localPc.IsAlive() &&
 			system.IsBlackmailed(localPc))
 		{
-			// 後でテクスチャ入れる
-			// hud.Glass.sprite = system.MeetingBackground;
+			hud.Glass.sprite = system.MeetingBk;
 		}
 
 		foreach (var pva in hud.playerStates)
