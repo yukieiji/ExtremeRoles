@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using AmongUs.GameOptions;
-using HarmonyLib;
 using Hazel;
 using Moq;
 using UnityEngine;
@@ -32,8 +30,6 @@ namespace ExtremeRoles.UnitTest.Roles.Solo.Crewmate;
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ItakoRoleTests
 {
-	private static Harmony? harmony;
-
 	public ItakoRoleTests()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
@@ -51,7 +47,6 @@ public class ItakoRoleTests
 		SetupGameOptionsManagerMock();
 		SetupConstantsMock();
 		SetupSpriteCacheMock();
-		SetupHarmonyPatch();
 
 		var shipStateField = typeof(ExtremeRolesPlugin).GetField("<ShipState>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
 		shipStateField?.SetValue(null, new ExtremeShipStatus());
@@ -110,30 +105,6 @@ public class ItakoRoleTests
 			var mockSprite = new Mock<Sprite>(IntPtr.Zero);
 			LruCache<string, Sprite>.Add(spriteKey, mockSprite.Object);
 		}
-	}
-
-	private static void SetupHarmonyPatch()
-	{
-		if (harmony == null)
-		{
-			harmony = new Harmony("test.itako.unityobjectloader");
-			var targetMethod = typeof(UnityObjectLoader)
-				.GetMethod(nameof(UnityObjectLoader.LoadFromResources), new[] { typeof(string), typeof(string), typeof(Assembly) })
-				?.MakeGenericMethod(typeof(Sprite));
-			var prefixMethod = typeof(ItakoRoleTests)
-				.GetMethod(nameof(LoadFromResourcesPrefix), BindingFlags.NonPublic | BindingFlags.Static);
-			if (targetMethod != null && prefixMethod != null)
-			{
-				harmony.Patch(targetMethod, prefix: new HarmonyMethod(prefixMethod));
-			}
-		}
-	}
-
-	private static bool LoadFromResourcesPrefix(ref Sprite __result)
-	{
-		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
-		__result = mockSprite.Object;
-		return false;
 	}
 
 	[Fact]
@@ -206,7 +177,7 @@ public class ItakoRoleTests
 		byte targetId = 2;
 
 		var localPlayerMock = new Mock<PlayerControl>(IntPtr.Zero);
-		localPlayerMock.SetupGet(p => p.PlayerId).Returns(itakoId);
+		localPlayerMock.SetupGet(p => p.PlayerId).Returns((byte)0);
 		var mockLocalHelper = new Mock<MockPlayerControlget_LocalPlayerHelper>();
 		mockLocalHelper.Setup(h => h.Invoke()).Returns(localPlayerMock.Object);
 		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
@@ -214,7 +185,6 @@ public class ItakoRoleTests
 		var itako = new ItakoRole();
 		itako.CreateRoleAllOption();
 		itako.Initialize();
-		itako.CreateAbility();
 
 		var sheriff = new Sheriff();
 		sheriff.CreateRoleAllOption();
