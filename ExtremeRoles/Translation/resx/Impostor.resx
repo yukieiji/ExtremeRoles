@@ -1706,20 +1706,31 @@ Lv2能力「ビームセーバー」
     <value>リモートキラー</value>
   </data>
   <data name="RemoteKillerFullDescription" xml:space="preserve">
-    <value>相手に接近して「奪う」で執行対象に加える。
-執行対象が存在する場合、「執行」で遠隔キルが可能（実行中は移動不可・名前が赤くなる）。</value>
+    <value>「執行」によって遠隔キルが出来るプレイヤー
+
+ボタン能力「執行」:
+ - プレイヤーを選択して発動
+ - 一定時間移動不可 + 名前が赤くなって(全プレイヤーから見える)
+そのプレイヤーをキルする
+ - 「執行」出来るプレイヤーは「奪う」を行ったプレイヤーのみ
+
+ボタン能力「奪う」:
+ - プレイヤー一人の近くで発動(一定時間近くにいる必要あり)
+ - そのプレイヤーを「執行」出来る対象に加える
+ - そのプレイヤーが会議まで生存している場合、そのプレイヤーに
+役職のプレイヤーを含む接触したプレイヤーがランダムに報告される</value>
   </data>
   <data name="RemoteKillerShortDescription" xml:space="preserve">
-    <value>相手の手帳を奪い遠隔で粛清・執行せよ</value>
+    <value>相手の手帳を「奪って」遠隔で「執行」せよ</value>
   </data>
   <data name="RemoteKillerIntroDescription" xml:space="preserve">
-    <value>ふふふ…お前の名前はもう手帳に書かれている…</value>
+    <value>僕は"新世界"の神となる</value>
   </data>
   <data name="RemoteKillerRobRange" xml:space="preserve">
     <value>「奪う」が発動できる範囲</value>
   </data>
   <data name="RemoteKillerContactPlayerCount" xml:space="preserve">
-    <value>接触したクルーの表示数</value>
+    <value>接触したプレイヤーの報告数</value>
   </data>
   <data name="RemoteKillerRobActiveTime" xml:space="preserve">
     <value>「奪う」にかかる時間</value>
@@ -1731,7 +1742,8 @@ Lv2能力「ビームセーバー」
     <value>執行</value>
   </data>
   <data name="remoteKillerNotebookStolenReport" xml:space="preserve">
-    <value>手帳が奪われた！仲間に報告しよう！ あいつに接触された気がする・・・</value>
+    <value>手帳が奪われた！仲間に報告しよう！ 
+あいつに接触された気がする・・・</value>
   </data>
   <data name="YoYo" xml:space="preserve">
     <value>ヨーヨー</value>
