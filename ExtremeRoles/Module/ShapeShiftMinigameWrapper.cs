@@ -18,7 +18,7 @@ public sealed class ShapeShiftMinigameWrapper
 	public bool IsOpen { get; private set; }
 	private ShapeshifterMinigame? prefab = null;
 
-	public bool OpenUi(System.Action<PlayerControl> playerSelectAction, IReadOnlySet<byte>? playerTagets= null)
+	public bool OpenUi(System.Action<PlayerControl> playerSelectAction, IReadOnlySet<byte>? playerTagets = null)
 	{
 		if (this.prefab == null)
 		{
@@ -33,12 +33,15 @@ public sealed class ShapeShiftMinigameWrapper
 			this.prefab.gameObject.SetActive(false);
 		}
 
-		var game = MinigameSystem.Open(this.prefab);
+		var game = MinigameSystem.Create(this.prefab);
+		Minigame newMinigame;
 		if (playerTagets is null)
 		{
 			var overider = game.gameObject.TryAddComponent<DefaultButtonShapeshifterMinigameShapeshiftOverride>();
 			overider.SelectedAction = playerSelectAction;
 			overider.CloseAction += () => this.IsOpen = false;
+			overider.Awake();
+			newMinigame = overider;
 		}
 		else
 		{
@@ -46,7 +49,11 @@ public sealed class ShapeShiftMinigameWrapper
 			overider.SelectedAction = playerSelectAction;
 			overider.Target = playerTagets;
 			overider.CloseAction += () => this.IsOpen = false;
+			overider.Awake();
+			newMinigame = overider;
 		}
+		newMinigame.Begin(null);
+
 		this.IsOpen = true;
 
 		return true;

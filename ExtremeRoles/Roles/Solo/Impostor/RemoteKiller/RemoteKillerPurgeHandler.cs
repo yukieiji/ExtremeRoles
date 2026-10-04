@@ -17,7 +17,7 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 	private ShapeShiftMinigameWrapper? minigame;
 	private PlayerControl? selectedPurgeTarget;
 
-	public ChargingAndActivatingCountBehaviour CreateBehavior(float coolTime, int purgeCount)
+	public ChargingAndActivatingCountBehaviour CreateBehavior(float coolTime, float purgeTime, int purgeCount)
 	{
 		var behavior = new ChargingAndActivatingCountBehaviour(
 			text: Tr.GetString("remoteKillerPurge"),
@@ -33,7 +33,7 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 
 		behavior.SetCoolTime(coolTime);
 		behavior.ChargeTime = float.MaxValue;
-		behavior.ActiveTime = this.status.PurgeTime;
+		behavior.ActiveTime = purgeTime;
 		behavior.SetAbilityCount(purgeCount);
 
 		return behavior;
@@ -92,15 +92,13 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 			caller.WriteByte((byte)RemoteKillerRole.RemoteKillerRpc.PurgeStart);
 			caller.WriteByte(localId);
 		}
-
+		this.status.SetPurging(true);
 		return true;
 	}
 
 	public bool IsPurgeCheck()
-		=> this.status.IsPurging &&
-			this.selectedPurgeTarget.IsAlive() &&
-			PlayerControl.LocalPlayer.IsAlive() &&
-			MeetingHud.Instance != null;
+		=> this.selectedPurgeTarget.IsAlive() &&
+			PlayerControl.LocalPlayer.IsAlive();
 
 	public void PurgeCleanUp()
 	{
@@ -122,23 +120,20 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 			// 執行対象リストから除外
 			this.status.RemoveExecutionTarget(targetId);
 		}
-
+		this.status.SetPurging(false);
 		this.selectedPurgeTarget = null;
 	}
 
 	public void PurgeForceCleanUp()
 	{
-		if (this.status.IsPurging)
+		byte localId = PlayerControl.LocalPlayer.PlayerId;
+
+		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
 		{
-			byte localId = PlayerControl.LocalPlayer.PlayerId;
-
-			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RemoteKillerOps))
-			{
-				caller.WriteByte((byte)RemoteKillerRole.RemoteKillerRpc.PurgeCancel);
-				caller.WriteByte(localId);
-			}
+			caller.WriteByte((byte)RemoteKillerRole.RemoteKillerRpc.PurgeCancel);
+			caller.WriteByte(localId);
 		}
-
+		this.status.SetPurging(false);
 		this.selectedPurgeTarget = null;
 	}
 

@@ -10,9 +10,7 @@ public sealed class RemoteKillerStatusModel : IStatusModel, IStatusMovable
 	public bool IsPurging { get; private set; } = false;
 
 	public float RobRange { get; }
-	public float RobActiveTime { get; }
 	public int ContactPlayerCount { get; }
-	public float PurgeTime { get; }
 
 	public IReadOnlySet<byte> ExecutionTargets => this.executionTargets;
 	public IReadOnlyDictionary<byte, HashSet<byte>> TaskPhaseContacts => this.taskPhaseContacts;
@@ -20,12 +18,10 @@ public sealed class RemoteKillerStatusModel : IStatusModel, IStatusMovable
 	private readonly HashSet<byte> executionTargets = new HashSet<byte>();
 	private readonly Dictionary<byte, HashSet<byte>> taskPhaseContacts = new Dictionary<byte, HashSet<byte>>();
 
-	public RemoteKillerStatusModel(float robRange, float robActiveTime, int contactPlayerCount, float purgeTime)
+	public RemoteKillerStatusModel(float robRange, int contactPlayerCount)
 	{
 		this.RobRange = robRange;
-		this.RobActiveTime = robActiveTime;
 		this.ContactPlayerCount = contactPlayerCount;
-		this.PurgeTime = purgeTime;
 	}
 
 	public void SetPurging(bool purging)

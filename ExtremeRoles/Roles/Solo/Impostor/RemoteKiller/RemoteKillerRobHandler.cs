@@ -19,7 +19,7 @@ public sealed class RemoteKillerRobHandler(RemoteKillerStatusModel status, Remot
 	private PlayerControl? currentRobTarget;
 	private PlayerControl? tmpTarget;
 
-	public ReusableActivatingBehavior CreateBehavior(float coolTime)
+	public ReusableActivatingBehavior CreateBehavior(float coolTime, float robActiveTime)
 	{
 		var behavior = new ReusableActivatingBehavior(
 			text: Tr.GetString("remoteKillerRob"),
@@ -31,7 +31,7 @@ public sealed class RemoteKillerRobHandler(RemoteKillerStatusModel status, Remot
 			forceAbilityOff: RobForceCleanUp);
 
 		behavior.SetCoolTime(coolTime);
-		behavior.ActiveTime = this.status.RobActiveTime;
+		behavior.ActiveTime = robActiveTime;
 
 		return behavior;
 	}

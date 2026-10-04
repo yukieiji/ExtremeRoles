@@ -34,7 +34,6 @@ public sealed class RemoteKillerRole :
 		RobRange,
 		RobActiveTime,
 		ContactPlayerCount,
-		PurgeTime,
 	}
 
 	public enum RemoteKillerRpc : byte
@@ -149,11 +148,14 @@ public sealed class RemoteKillerRole :
 
 		float coolTime = loader.GetValue<RoleAbilityCommonOption, float>(
 			RoleAbilityCommonOption.AbilityCoolTime);
+		float robActiveTime = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.RobActiveTime);
+		var robBehavior = this.robHandler!.CreateBehavior(coolTime, robActiveTime);
+
+
 		int purgeCount = loader.GetValue<RoleAbilityCommonOption, int>(
 			RoleAbilityCommonOption.AbilityCount);
-
-		var robBehavior = this.robHandler!.CreateBehavior(coolTime);
-		var purgeBehavior = this.purgeHandler!.CreateBehavior(coolTime, purgeCount);
+		float purgeTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime);
+		var purgeBehavior = this.purgeHandler!.CreateBehavior(coolTime, purgeTime, purgeCount);
 
 		this.Button = new ExtremeMultiModalAbilityButton(
 			new RoleButtonActivator(),
@@ -187,7 +189,7 @@ public sealed class RemoteKillerRole :
 		foreach (byte targetId in this.statusModel.ExecutionTargets.ToList())
 		{
 			var target = Player.GetPlayerControlById(targetId);
-			if (!target.IsInValid() ||
+			if (target.IsInValid() ||
 				!this.statusModel.TaskPhaseContacts.TryGetValue(targetId, out var contactSet))
 			{
 				continue;
@@ -267,14 +269,23 @@ public sealed class RemoteKillerRole :
 
 	protected override void RoleSpecificInit()
 	{
+		if (this.statusModel != null && this.robHandler != null && this.purgeHandler != null)
+		{
+			return;
+		}
+
 		var loader = this.Loader;
 		float robRange = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.RobRange);
-		float robActiveTime = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.RobActiveTime);
 		int contactPlayerCount = loader.GetValue<RemoteKillerOption, int>(RemoteKillerOption.ContactPlayerCount);
-		float purgeTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime);
 
-		this.statusModel = new RemoteKillerStatusModel(robRange, robActiveTime, contactPlayerCount, purgeTime);
+		this.statusModel = new RemoteKillerStatusModel(robRange, contactPlayerCount);
 		this.robHandler = new RemoteKillerRobHandler(this.statusModel, this);
 		this.purgeHandler = new RemoteKillerPurgeHandler(this.statusModel, this);
+	}
+
+	// 勝手に読み込みが入って色々と上書きされておかしくなるので読み込みだけ無効にして、セットアップ処理だけ入れとく
+	public void RoleAbilityInit()
+	{
+		this.Button?.OnMeetingEnd();
 	}
 }

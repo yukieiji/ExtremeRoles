@@ -153,7 +153,7 @@ public class ModdedShapeShifterMinigameBase(IntPtr ptr) : Minigame(ptr)
 			return this.prop;
 		}
 
-		return new(
+		this.prop = new(
 			shapeshifter.PanelPrefab,
 			shapeshifter.BackButton,
 			shapeshifter.DefaultButtonSelected,
@@ -161,6 +161,7 @@ public class ModdedShapeShifterMinigameBase(IntPtr ptr) : Minigame(ptr)
 			shapeshifter.XOffset,
 			shapeshifter.YStart,
 			shapeshifter.YOffset);
+		return this.prop;
 	}
 }
 
