@@ -1,24 +1,22 @@
+
+using Hazel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Extension.Player;
-using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+
 
 #nullable enable
 
@@ -186,7 +184,11 @@ public sealed class RemoteKillerRole :
 
 	public void ResetOnMeetingStart()
 	{
-		if (this.statusModel == null)
+		var localPlayer = PlayerControl.LocalPlayer;
+
+		if (MeetingHud.Instance == null || 
+			this.statusModel == null || 
+			localPlayer == null)
 		{
 			return;
 		}
@@ -198,37 +200,24 @@ public sealed class RemoteKillerRole :
 
 		this.purgeHandler?.ResetMinigame();
 
-		bool shouldSendReport = PlayerControl.LocalPlayer.PlayerId == this.GameControlId || AmongUsClient.Instance.AmHost;
-
 		foreach (byte targetId in this.statusModel.ExecutionTargets.ToList())
 		{
 			var target = Player.GetPlayerControlById(targetId);
-			if (target.IsAlive() && this.statusModel.IsPendingReport(targetId))
+			if (!target.IsInValid() ||
+				!this.statusModel.TaskPhaseContacts.TryGetValue(targetId, out var contactSet))
 			{
-				if (shouldSendReport)
-				{
-					if (this.statusModel.TaskPhaseContacts.TryGetValue(targetId, out var contactSet))
-					{
-						var pickedIds = contactSet
-							.OrderBy(_ => RandomGenerator.Instance.Next())
-							.Take(this.statusModel.ContactPlayerCount)
-							.ToList();
-
-						MeetingReporter.RpcAddTargetMeetingChatReport(
-							targetId, new RemoteKillerReportSerializer(pickedIds));
-					}
-					else
-					{
-						MeetingReporter.RpcAddTargetMeetingChatReport(
-							targetId, new RemoteKillerReportSerializer(new List<byte>()));
-					}
-				}
-
-				this.statusModel.RemovePendingReport(targetId);
+				continue;
 			}
 
-			this.statusModel.ClearTaskPhaseContacts(targetId);
+			var pickedIds = contactSet
+				.OrderBy(_ => RandomGenerator.Instance.Next())
+				.Take(this.statusModel.ContactPlayerCount)
+				.ToList();
+
+			MeetingReporter.RpcAddTargetMeetingChatReport(
+				targetId, new RemoteKillerReportSerializer(pickedIds));
 		}
+		this.statusModel.ClearTaskPhaseContacts();
 	}
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
@@ -254,7 +243,7 @@ public sealed class RemoteKillerRole :
 			return p == null || p.IsDead || p.Disconnected;
 		}).ToList();
 
-		foreach (var deadId in deadTargets)
+		foreach (byte deadId in deadTargets)
 		{
 			this.statusModel.RemoveExecutionTarget(deadId);
 		}

@@ -15,11 +15,9 @@ public sealed class RemoteKillerStatusModel : IStatusModel, IStatusMovable
 	public float PurgeTime { get; }
 
 	public IReadOnlyCollection<byte> ExecutionTargets => this.executionTargets;
-	public IReadOnlyCollection<byte> PendingReports => this.pendingReports;
 	public IReadOnlyDictionary<byte, HashSet<byte>> TaskPhaseContacts => this.taskPhaseContacts;
 
 	private readonly HashSet<byte> executionTargets = new HashSet<byte>();
-	private readonly HashSet<byte> pendingReports = new HashSet<byte>();
 	private readonly Dictionary<byte, HashSet<byte>> taskPhaseContacts = new Dictionary<byte, HashSet<byte>>();
 
 	public RemoteKillerStatusModel(float robRange, float robActiveTime, int contactPlayerCount, float purgeTime)
@@ -37,39 +35,32 @@ public sealed class RemoteKillerStatusModel : IStatusModel, IStatusMovable
 
 	public bool HasExecutionTarget(byte targetId) => this.executionTargets.Contains(targetId);
 
-	public void AddExecutionTarget(byte targetId)
+	public void AddExecutionTarget(byte targetId, byte rolePlayerId)
 	{
 		this.executionTargets.Add(targetId);
-		this.pendingReports.Add(targetId);
+		this.RecordContact(targetId, rolePlayerId); // リモートキラーは確実に接触したプレイヤーを記録するため、ここで初期化する
 	}
 
 	public void RemoveExecutionTarget(byte targetId)
 	{
 		this.executionTargets.Remove(targetId);
-		this.pendingReports.Remove(targetId);
 		this.taskPhaseContacts.Remove(targetId);
 	}
 
-	public void RemovePendingReport(byte targetId)
+	public void ClearTaskPhaseContacts()
 	{
-		this.pendingReports.Remove(targetId);
-	}
-
-	public bool IsPendingReport(byte targetId) => this.pendingReports.Contains(targetId);
-
-	public void ClearTaskPhaseContacts(byte targetId)
-	{
-		if (this.taskPhaseContacts.TryGetValue(targetId, out var set))
+		foreach (var set in this.taskPhaseContacts.Values)
 		{
 			set.Clear();
 		}
+		this.taskPhaseContacts.Clear();
 	}
 
 	public void RecordContact(byte targetId, byte contactPlayerId)
 	{
 		if (!this.taskPhaseContacts.TryGetValue(targetId, out var set))
 		{
-			set = new HashSet<byte>();
+			set = [];
 			this.taskPhaseContacts[targetId] = set;
 		}
 		set.Add(contactPlayerId);
@@ -80,7 +71,6 @@ public sealed class RemoteKillerStatusModel : IStatusModel, IStatusMovable
 		this.CanMove = true;
 		this.IsPurging = false;
 		this.executionTargets.Clear();
-		this.pendingReports.Clear();
 		this.taskPhaseContacts.Clear();
 	}
 }

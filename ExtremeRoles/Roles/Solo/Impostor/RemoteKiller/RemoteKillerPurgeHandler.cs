@@ -1,11 +1,10 @@
 using System.Linq;
-using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
@@ -42,16 +41,6 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 
 	public bool IsUsePurgeCheck(bool isCharging, float chargeGage)
 	{
-		var isSab = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer);
-		if (isSab)
-		{
-			if (isCharging && Minigame.Instance != null)
-			{
-				Minigame.Instance.ForceClose();
-			}
-			return false;
-		}
-
 		if (isCharging)
 		{
 			return this.role.IsAbilityUseWithMinigame();
@@ -65,7 +54,7 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 		return this.status.ExecutionTargets.Any(id =>
 		{
 			var p = Player.GetPlayerControlById(id);
-			return p != null && p.Data != null && !p.Data.IsDead && !p.Data.Disconnected;
+			return p.IsAlive();
 		});
 	}
 
@@ -75,12 +64,12 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 		this.minigame ??= new ShapeShiftMinigameWrapper();
 		return this.minigame.IsOpen || this.minigame.OpenUi(
 			OnPurgeTargetSelected,
-			p => p != null && p.Data != null && !p.Data.IsDead && !p.Data.Disconnected && this.status.HasExecutionTarget(p.PlayerId));
+			p => p.IsAlive() && this.status.HasExecutionTarget(p.PlayerId));
 	}
 
 	public void OnPurgeTargetSelected(PlayerControl target)
 	{
-		if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected)
+		if (target.IsAlive())
 		{
 			return;
 		}
@@ -98,7 +87,8 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 		}
 		this.minigame?.Reset();
 
-		if (this.role.Button != null && this.role.Button.Transform.TryGetComponent<PassiveButton>(out var button))
+		if (this.role.Button != null && 
+			this.role.Button.Transform.TryGetComponent<PassiveButton>(out var button))
 		{
 			button.OnClick.Invoke();
 		}
@@ -123,23 +113,14 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 	}
 
 	public bool IsPurgeCheck()
-	{
-		if (this.selectedPurgeTarget == null ||
-			this.selectedPurgeTarget.Data == null ||
-			this.selectedPurgeTarget.Data.IsDead ||
-			this.selectedPurgeTarget.Data.Disconnected ||
-			PlayerControl.LocalPlayer.Data.IsDead ||
-			MeetingHud.Instance != null)
-		{
-			return false;
-		}
-
-		return true;
-	}
+		=> this.status.IsPurging &&
+			this.selectedPurgeTarget.IsAlive() &&
+			PlayerControl.LocalPlayer.IsAlive() &&
+			MeetingHud.Instance != null;
 
 	public void PurgeCleanUp()
 	{
-		if (this.selectedPurgeTarget != null)
+		if (this.selectedPurgeTarget.IsAlive())
 		{
 			byte localId = PlayerControl.LocalPlayer.PlayerId;
 			byte targetId = this.selectedPurgeTarget.PlayerId;
