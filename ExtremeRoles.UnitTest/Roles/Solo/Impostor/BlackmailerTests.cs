@@ -11,6 +11,9 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
@@ -68,6 +71,7 @@ public sealed class BlackmailerTests : IDisposable
 		SetupShipStatusMock();
 		SetupConstantsMock();
 		SetupSpriteCacheMock();
+		SetupAssetBundleMock();
 		SetupHudManagerMock();
 
 		var magTarget = typeof(Vector2).GetProperty("magnitude")!.GetGetMethod()!;
@@ -205,6 +209,22 @@ public sealed class BlackmailerTests : IDisposable
 		{
 			var mockSprite = new Mock<Sprite>(IntPtr.Zero);
 			LruCache<string, Sprite>.Add(spriteKey, mockSprite.Object);
+		}
+	}
+
+	private static void SetupAssetBundleMock()
+	{
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+		string spriteKey = ObjectPath.GetRoleImgPath(ExtremeRoleId.Blackmailer, ObjectPath.ButtonIcon);
+
+		var mockAssetBundle = new Mock<AssetBundle>(IntPtr.Zero);
+		mockAssetBundle.Setup(b => b.LoadAsset(It.IsAny<string>(), It.IsAny<Il2CppSystem.Type>()))
+			.Returns(mockSprite.Object);
+
+		var field = typeof(UnityObjectLoader).GetField("cachedBundle", BindingFlags.NonPublic | BindingFlags.Static);
+		if (field?.GetValue(null) is Dictionary<string, AssetBundle> dict)
+		{
+			dict[ObjectPath.GetRoleAssetPath(ExtremeRoleId.Blackmailer)] = mockAssetBundle.Object;
 		}
 	}
 
@@ -390,8 +410,9 @@ public sealed class BlackmailerTests : IDisposable
 		var role = new Blackmailer();
 		InitializeRole(role);
 
-		// Act
-		role.CreateAbility();
+		var mockBehavior = new Mock<BehaviorBase>("Test", null!);
+		var button = new ExtremeAbilityButton(mockBehavior.Object, null!, KeyCode.F);
+		role.Button = button;
 
 		// Assert
 		Assert.NotNull(role.Button);
