@@ -182,9 +182,14 @@ public class ItakoRoleTests
 		mockLocalHelper.Setup(h => h.Invoke()).Returns(localPlayerMock.Object);
 		MockPlayerControlget_LocalPlayerHelper.Instance = mockLocalHelper.Object;
 
+		var mockBehavior = new Mock<BehaviorBase>("Test", null!);
+		var mockActivator = new Mock<IButtonAutoActivator>();
+		var button = new ExtremeAbilityButton(mockBehavior.Object, mockActivator.Object, KeyCode.F);
+
 		var itako = new ItakoRole();
 		itako.CreateRoleAllOption();
 		itako.Initialize();
+		itako.Button = button;
 
 		var sheriff = new Sheriff();
 		sheriff.CreateRoleAllOption();
