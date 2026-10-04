@@ -743,10 +743,10 @@ public static class RPCOperator
             killerId, targetId);
     }
     public static void ImitaterKyugenKill(
-        byte killerId, byte targetId)
+        byte killerId, byte imitaterId)
     {
         Roles.Solo.Neutral.Imitater.KyugenKill(
-            killerId, targetId);
+            killerId, imitaterId);
     }
 	public static void MinerHandle(ref MessageReader reader)
 	{

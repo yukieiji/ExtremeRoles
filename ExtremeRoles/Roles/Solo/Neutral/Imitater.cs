@@ -62,7 +62,7 @@ public sealed class Imitater :
 
 	public ExtremeAbilityButton? Button { get; set; }
 
-	private readonly ImitaterAbilityHandler abilityHandler;
+	private ImitaterAbilityHandler? abilityHandler;
 	private PlayerControl? targetPlayer;
 	private PlayerControl? tmpTargetPlayer;
 	private float range;
@@ -73,15 +73,14 @@ public sealed class Imitater :
 			ColorPalette.NeutralColor,
 			RolePropPresets.OptionalDefault))
 	{
-		this.abilityHandler = new ImitaterAbilityHandler();
-		this.AbilityClass = this.abilityHandler;
+		
 	}
 
 	public void CreateAbility()
 	{
 		this.CreateActivatingAbilityCountButton(
 			"ImitaterAbility",
-			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton),
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Imitater),
 			checkAbility: CheckAbility,
 			abilityOff: CleanUp,
 			forceAbilityOff: ForceCleanUp,
@@ -92,11 +91,9 @@ public sealed class Imitater :
 		this.IsNeutralSameTeam(targetRole);
 
 	public bool IsAbilityUse()
-	{
-		this.tmpTargetPlayer = Player.GetClosestPlayerInRange(
-			PlayerControl.LocalPlayer, this, this.range);
-		return IRoleAbility.IsCommonUse() && this.tmpTargetPlayer != null;
-	}
+		=> IRoleAbility.IsCommonUse() && 
+		Player.TryGetClosestPlayerInRange(
+			PlayerControl.LocalPlayer, this, this.range, out this.tmpTargetPlayer);
 
 	public bool UseAbility()
 	{
@@ -117,9 +114,10 @@ public sealed class Imitater :
 
 	public void CleanUp()
 	{
+		var localPlayer = PlayerControl.LocalPlayer;
 		if (this.targetPlayer == null ||
 			!this.targetPlayer.IsAlive() ||
-			!PlayerControl.LocalPlayer.IsAlive() ||
+			!localPlayer.IsAlive() ||
 			MeetingHud.Instance != null ||
 			!ExtremeRoleManager.TryGetRole(this.targetPlayer.PlayerId, out var targetRole) ||
 			!targetRole.CanKill() ||
@@ -132,9 +130,9 @@ public sealed class Imitater :
 		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ImitaterKyugenKill))
 		{
 			caller.WriteByte(this.targetPlayer.PlayerId);
-			caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+			caller.WriteByte(localPlayer.PlayerId);
 		}
-		KyugenKill(this.targetPlayer.PlayerId, PlayerControl.LocalPlayer.PlayerId);
+		KyugenKill(this.targetPlayer.PlayerId, localPlayer.PlayerId);
 
 		ForceCleanUp();
 	}
@@ -145,14 +143,15 @@ public sealed class Imitater :
 		this.tmpTargetPlayer = null;
 	}
 
-	public static void KyugenKill(byte killerId, byte targetId)
+	public static void KyugenKill(byte killerId, byte imitaterId)
 	{
-		if (Player.TryGetPlayerControl(killerId, out var killer) && 
-			Player.TryGetPlayerControl(targetId, out var target) &&
+		if (PlayerControl.LocalPlayer.PlayerId != killerId &&
+			Player.TryGetPlayerControl(killerId, out var killer) && 
+			Player.TryGetPlayerControl(imitaterId, out var target) &&
 			ExtremeRoleManager.TryGetRole(killer.PlayerId, out var killerRole) &&
 			KillButtonDoClickPatch.CheckPreKillConditionWithBool(killerRole, killer, target))
 		{
-			Player.RpcUncheckMurderPlayer(killerId, targetId, byte.MaxValue);
+			Player.RpcUncheckMurderPlayer(killerId, imitaterId, byte.MaxValue);
 		}
 	}
 
@@ -171,19 +170,21 @@ public sealed class Imitater :
 		IRoleSpecialReset.ResetRole(imitaterPlayerId);
 		IRoleSpecialReset.ResetLover(imitaterPlayerId);
 
-		if (Player.TryGetPlayerControl(imitaterPlayerId, out var imitaterPlayer) && RoleManager.InstanceExists)
+
+		var mng = RoleManager.Instance;
+		if (Player.TryGetPlayerControl(imitaterPlayerId, out var imitaterPlayer) && mng != null)
 		{
 			if (inheritedRole is VanillaRoleWrapper vanillaRole)
 			{
-				RoleManager.Instance.SetRole(imitaterPlayer, vanillaRole.VanilaRoleId);
+				mng.SetRole(imitaterPlayer, vanillaRole.VanilaRoleId);
 			}
 			else if (inheritedRole.IsImpostor())
 			{
-				RoleManager.Instance.SetRole(imitaterPlayer, AmongUs.GameOptions.RoleTypes.Impostor);
+				mng.SetRole(imitaterPlayer, AmongUs.GameOptions.RoleTypes.Impostor);
 			}
 			else
 			{
-				RoleManager.Instance.SetRole(imitaterPlayer, AmongUs.GameOptions.RoleTypes.Crewmate);
+				mng.SetRole(imitaterPlayer, AmongUs.GameOptions.RoleTypes.Crewmate);
 			}
 		}
 
@@ -271,5 +272,8 @@ public sealed class Imitater :
 	{
 		var loader = this.Loader;
 		this.range = loader.GetValue<Option, float>(Option.Range);
+
+		this.abilityHandler = new ImitaterAbilityHandler();
+		this.AbilityClass = this.abilityHandler;
 	}
 }

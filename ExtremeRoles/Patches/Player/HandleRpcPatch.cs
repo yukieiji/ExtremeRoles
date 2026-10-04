@@ -359,9 +359,9 @@ public static class PlayerControlHandleRpcPatch
 				break;
 			case RPCOperator.Command.ImitaterKyugenKill:
 				byte kyugenKillerId = reader.ReadByte();
-				byte kyugenTargetId = reader.ReadByte();
+				byte imitaterId = reader.ReadByte();
 				RPCOperator.ImitaterKyugenKill(
-					kyugenKillerId, kyugenTargetId);
+					kyugenKillerId, imitaterId);
 				break;
 			case RPCOperator.Command.YandereSetOneSidedLover:
 				byte yanderePlayerId = reader.ReadByte();
