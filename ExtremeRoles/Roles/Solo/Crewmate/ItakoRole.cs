@@ -70,8 +70,7 @@ public sealed class ItakoRole :
 	{
 		this.CreateActivatingAbilityCountButton(
 			"ItakoAbility",
-			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton),
-			// UnityObjectLoader.LoadFromResources(ExtremeRoleId.Itako),
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Itako),
 			checkAbility: CheckAbility,
 			abilityOff: CleanUp,
 			forceAbilityOff: ForceCleanUp,
@@ -240,10 +239,7 @@ public sealed class ItakoRole :
 			if (newRole is IRoleAbility newAbility)
 			{
 				newAbility.CreateAbility();
-				if (newAbility.Button != null)
-				{
-					newAbility.Button.HotKey = KeyCode.C;
-				}
+				newAbility.Button?.HotKey = KeyCode.C;
 			}
 			var hud = HudManager.Instance;
 			if (hud != null && hud.UseButton != null)
