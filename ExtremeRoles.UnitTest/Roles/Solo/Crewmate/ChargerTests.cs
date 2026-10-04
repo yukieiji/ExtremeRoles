@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using AmongUs.GameOptions;
@@ -11,7 +12,9 @@ using UnityEngine;
 using Xunit;
 
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
@@ -157,7 +160,49 @@ public class ChargerTests : IDisposable
 			this.setOutlineHook = new Hook(setOutlineTarget, setOutlineDelegate);
 		}
 
+		SetupAssetBundleAndSoundMocks();
+
 		SetLobbyMode(false);
+	}
+
+	private static void SetupAssetBundleAndSoundMocks()
+	{
+		var mockAssetBundle = new Mock<AssetBundle>(IntPtr.Zero);
+		var mockAudioClip = new Mock<AudioClip>(IntPtr.Zero);
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+
+		mockAssetBundle.Setup(b => b.LoadAsset(It.IsAny<string>(), It.IsAny<Il2CppSystem.Type>()))
+			.Returns((string name, Il2CppSystem.Type type) =>
+			{
+				if (type == Il2CppSystem.Type.GetType("UnityEngine.Sprite, UnityEngine.CoreModule"))
+					return mockSprite.Object;
+				return mockAudioClip.Object;
+			});
+
+		var field = typeof(UnityObjectLoader).GetField("cachedBundle", BindingFlags.NonPublic | BindingFlags.Static);
+		if (field?.GetValue(null) is Dictionary<string, AssetBundle> dict)
+		{
+			dict[ObjectPath.SoundEffect] = mockAssetBundle.Object;
+		}
+
+		var cachedAudioField = typeof(Sound).GetField("cachedAudio", BindingFlags.NonPublic | BindingFlags.Static);
+		if (cachedAudioField?.GetValue(null) is Dictionary<Sound.Type, AudioClip> cachedAudio)
+		{
+			cachedAudio[Sound.Type.ChargerCharge] = mockAudioClip.Object;
+		}
+
+		var mockSoundManager = new Mock<SoundManager>(IntPtr.Zero);
+		var mockAudioSource = new Mock<AudioSource>(IntPtr.Zero);
+		mockSoundManager.Setup(s => s.PlaySound(It.IsAny<AudioClip>(), It.IsAny<bool>(), It.IsAny<float>(), null))
+			.Returns(mockAudioSource.Object);
+
+		var mockSoundInstanceHelper = new Mock<MockSoundManagerget_InstanceHelper>();
+		mockSoundInstanceHelper.Setup(x => x.Invoke()).Returns(mockSoundManager.Object);
+		MockSoundManagerget_InstanceHelper.Instance = mockSoundInstanceHelper.Object;
+
+		var mockSfxHelper = new Mock<MockConstantsShouldPlaySfxHelper>();
+		mockSfxHelper.Setup(x => x.Invoke()).Returns(true);
+		MockConstantsShouldPlaySfxHelper.Instance = mockSfxHelper.Object;
 	}
 
 	public void Dispose()
