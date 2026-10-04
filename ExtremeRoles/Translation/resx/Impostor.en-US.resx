@@ -1709,9 +1709,6 @@ When execution targets exist, use "Purge" for remote kills (movement is restrict
   <data name="RemoteKillerRobActiveTime" xml:space="preserve">
     <value>"Rob" channel time</value>
   </data>
-  <data name="RemoteKillerPurgeTime" xml:space="preserve">
-    <value>"Purge" channel time</value>
-  </data>
   <data name="remoteKillerRob" xml:space="preserve">
     <value>Rob</value>
   </data>

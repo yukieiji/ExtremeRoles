@@ -14,7 +14,7 @@ public sealed class RemoteKillerStatusModel : IStatusModel, IStatusMovable
 	public int ContactPlayerCount { get; }
 	public float PurgeTime { get; }
 
-	public IReadOnlyCollection<byte> ExecutionTargets => this.executionTargets;
+	public IReadOnlySet<byte> ExecutionTargets => this.executionTargets;
 	public IReadOnlyDictionary<byte, HashSet<byte>> TaskPhaseContacts => this.taskPhaseContacts;
 
 	private readonly HashSet<byte> executionTargets = new HashSet<byte>();
@@ -31,6 +31,7 @@ public sealed class RemoteKillerStatusModel : IStatusModel, IStatusMovable
 	public void SetPurging(bool purging)
 	{
 		this.IsPurging = purging;
+		this.CanMove = !purging;
 	}
 
 	public bool HasExecutionTarget(byte targetId) => this.executionTargets.Contains(targetId);

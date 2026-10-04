@@ -1724,9 +1724,6 @@ Lv2能力「ビームセーバー」
   <data name="RemoteKillerRobActiveTime" xml:space="preserve">
     <value>「奪う」にかかる時間</value>
   </data>
-  <data name="RemoteKillerPurgeTime" xml:space="preserve">
-    <value>「執行」にかかる時間</value>
-  </data>
   <data name="remoteKillerRob" xml:space="preserve">
     <value>奪う</value>
   </data>
@@ -1787,13 +1784,13 @@ Lv2能力「ビームセーバー」
     <value>恐喝</value>
   </data>
   <data name="RemoteKillerAbilityCoolTime" xml:space="preserve">
-    <value>STRMISS</value>
+    <value>「執行」と「奪う」のクールタイム</value>
   </data>
   <data name="RemoteKillerAbilityActiveTime" xml:space="preserve">
-    <value>STRMISS</value>
+    <value>「執行」にかかる時間</value>
   </data>
   <data name="RemoteKillerAbilityCount" xml:space="preserve">
-    <value>STRMISS</value>
+    <value>「執行」が発動できる回数</value>
   </data>
   <data name="YoYoAbilityCoolTime" xml:space="preserve">
     <value>「マーク」と「テレポート」のクールタイム</value>

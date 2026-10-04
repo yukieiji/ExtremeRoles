@@ -3,6 +3,8 @@ using Hazel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+
 using UnityEngine;
 
 using ExtremeRoles.Extension.Player;
@@ -25,8 +27,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
 public sealed class RemoteKillerRole :
 	SingleRoleBase,
 	IRoleAbility,
-	IRoleUpdate,
-	IRoleResetMeeting
+	IRoleUpdate
 {
 	public enum RemoteKillerOption
 	{
@@ -83,22 +84,18 @@ public sealed class RemoteKillerRole :
 				return header;
 			}
 
-			List<string> names = new List<string>();
+			var builder = new StringBuilder(header);
+
 			foreach (byte pId in this.contactPlayerIds)
 			{
 				var p = Player.GetPlayerControlById(pId);
 				if (p != null && p.Data != null)
 				{
-					names.Add(p.Data.PlayerName);
+					builder.AppendLine($" - {p.Data.DefaultOutfit.PlayerName}");
 				}
 			}
 
-			if (names.Count == 0)
-			{
-				return header;
-			}
-
-			return $"{header}\n{string.Join("\n", names)}";
+			return builder.ToString();
 		}
 	}
 
@@ -133,32 +130,19 @@ public sealed class RemoteKillerRole :
 	{
 		RemoteKillerRpc ops = (RemoteKillerRpc)reader.ReadByte();
 		byte rolePlayerId = reader.ReadByte();
-
-		var remoteKiller = ExtremeRoleManager.GetSafeCastedRole<RemoteKillerRole>(rolePlayerId);
-		if (remoteKiller is null || remoteKiller.statusModel is null)
+		if (!ExtremeRoleManager.TryGetSafeCastedRole<RemoteKillerRole>(rolePlayerId, out var remoteKiller))
 		{
 			return;
 		}
 
-		switch (ops)
-		{
-			case RemoteKillerRpc.PurgeStart:
-				remoteKiller.statusModel.SetPurging(true);
-				remoteKiller.statusModel.CanMove = false;
-				break;
-
-			case RemoteKillerRpc.PurgeCancel:
-				remoteKiller.statusModel.SetPurging(false);
-				remoteKiller.statusModel.CanMove = true;
-				break;
-		}
+		remoteKiller.statusModel?.SetPurging(ops is RemoteKillerRpc.PurgeStart);
 	}
 
 	public void CreateAbility()
 	{
 		if (this.robHandler == null || this.purgeHandler == null)
 		{
-			return;
+			this.RoleSpecificInit();
 		}
 
 		var loader = this.Loader;
@@ -168,8 +152,8 @@ public sealed class RemoteKillerRole :
 		int purgeCount = loader.GetValue<RoleAbilityCommonOption, int>(
 			RoleAbilityCommonOption.AbilityCount);
 
-		var robBehavior = this.robHandler.CreateBehavior(coolTime);
-		var purgeBehavior = this.purgeHandler.CreateBehavior(coolTime, purgeCount);
+		var robBehavior = this.robHandler!.CreateBehavior(coolTime);
+		var purgeBehavior = this.purgeHandler!.CreateBehavior(coolTime, purgeCount);
 
 		this.Button = new ExtremeMultiModalAbilityButton(
 			new RoleButtonActivator(),
@@ -222,16 +206,12 @@ public sealed class RemoteKillerRole :
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
-		if (this.statusModel != null)
-		{
-			this.statusModel.CanMove = true;
-			this.statusModel.SetPurging(false);
-		}
+		this.statusModel?.SetPurging(false);
 	}
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (this.statusModel == null || this.robHandler == null)
+		if (this.statusModel is null || this.robHandler is null)
 		{
 			return;
 		}
@@ -240,7 +220,7 @@ public sealed class RemoteKillerRole :
 		var deadTargets = this.statusModel.ExecutionTargets.Where(id =>
 		{
 			var p = GameData.Instance.GetPlayerById(id);
-			return p == null || p.IsDead || p.Disconnected;
+			return p.IsInValid();
 		}).ToList();
 
 		foreach (byte deadId in deadTargets)
@@ -269,7 +249,7 @@ public sealed class RemoteKillerRole :
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
-		IRoleAbility.CreateAbilityCountOption(factory, 2, 15, 1f);
+		IRoleAbility.CreateAbilityCountOption(factory, 2, 15, 5f);
 
 		factory.CreateFloatOption(
 			RemoteKillerOption.RobRange,
@@ -283,11 +263,6 @@ public sealed class RemoteKillerRole :
 		factory.CreateIntOption(
 			RemoteKillerOption.ContactPlayerCount,
 			1, 1, 15, 1);
-
-		factory.CreateFloatOption(
-			RemoteKillerOption.PurgeTime,
-			5.0f, 0.5f, 30.0f, 0.5f,
-			format: OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
@@ -296,7 +271,7 @@ public sealed class RemoteKillerRole :
 		float robRange = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.RobRange);
 		float robActiveTime = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.RobActiveTime);
 		int contactPlayerCount = loader.GetValue<RemoteKillerOption, int>(RemoteKillerOption.ContactPlayerCount);
-		float purgeTime = loader.GetValue<RemoteKillerOption, float>(RemoteKillerOption.PurgeTime);
+		float purgeTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime);
 
 		this.statusModel = new RemoteKillerStatusModel(robRange, robActiveTime, contactPlayerCount, purgeTime);
 		this.robHandler = new RemoteKillerRobHandler(this.statusModel, this);

@@ -21,7 +21,7 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 	{
 		var behavior = new ChargingAndActivatingCountBehaviour(
 			text: Tr.GetString("remoteKillerPurge"),
-			img: UnityObjectLoader.LoadSpriteFromResources(ObjectPath.SucideSprite),
+			img: HudManager.Instance.KillButton.graphic.sprite,
 			isUse: IsUsePurgeCheck,
 			ability: PurgeStartAbility,
 			onCharge: PurgeOpenMenu,
@@ -63,33 +63,17 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 		this.selectedPurgeTarget = null;
 		this.minigame ??= new ShapeShiftMinigameWrapper();
 		return this.minigame.IsOpen || this.minigame.OpenUi(
-			OnPurgeTargetSelected,
-			p => p.IsAlive() && this.status.HasExecutionTarget(p.PlayerId));
+			OnPurgeTargetSelected, this.status.ExecutionTargets);
 	}
 
 	public void OnPurgeTargetSelected(PlayerControl target)
 	{
-		if (target.IsAlive())
-		{
-			return;
-		}
-
-		if (!this.status.HasExecutionTarget(target.PlayerId))
-		{
-			return;
-		}
-
-		this.selectedPurgeTarget = target;
-
-		if (Minigame.Instance != null)
-		{
-			Minigame.Instance.Close();
-		}
-		this.minigame?.Reset();
-
-		if (this.role.Button != null && 
+		if (target.IsAlive() &&
+			this.status.HasExecutionTarget(target.PlayerId) &&
+			this.role.Button != null &&
 			this.role.Button.Transform.TryGetComponent<PassiveButton>(out var button))
 		{
+			this.selectedPurgeTarget = target;
 			button.OnClick.Invoke();
 		}
 	}
