@@ -6,17 +6,16 @@ using UnityEngine;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.Player;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Extension.Vector;
+using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -104,14 +103,9 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 	public void CreateAbility()
 	{
-		var fastSettings = HudManager.Instance.UseButton.fastUseSettings;
-		Sprite buttonImage = fastSettings.TryGetValue(ImageNames.AdminMapButton, out var value) && value != null
-			? value.Image
-			: fastSettings[ImageNames.UseButton].Image;
-
 		this.CreateActivatingAbilityCountButton(
 			"LoggerDetectorButton",
-			buttonImage,
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Logger),
 			IsActivating,
 			CleanUp,
 			() => { },
@@ -258,11 +252,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
 	private void setSprite(SpriteRenderer sr)
 	{
-		var fastSettings = HudManager.Instance.UseButton.fastUseSettings;
-		if (fastSettings.TryGetValue(ImageNames.AdminMapButton, out var val) && val != null)
-		{
-			sr.sprite = val.Image;
-		}
+		sr.sprite = UnityObjectLoader.LoadFromResources(ExtremeRoleId.Logger);
 	}
 
 	public void OnDetectorCollected(DetectorBehavior detector, DetectorData archivedData)
