@@ -63,9 +63,14 @@ public static class ColorPalette
 	public readonly static Color CEOTzuShuiChing = new Color32(203, 175, 214, byte.MaxValue);
 	public readonly static Color EchoDarkAliceblue = new Color32(220, 228, 255, byte.MaxValue);
 	public readonly static Color InspectorAmberYellow = new Color32(255, 191, 0, byte.MaxValue);
+	public readonly static Color ItakoSkyBlue = new Color32(65, 140, 194, byte.MaxValue);
+	public readonly static Color ScreamerColor = new Color32(255, 99, 71, byte.MaxValue);
+	public readonly static Color LoggerGreen = new Color32(46, 139, 87, byte.MaxValue);
+	public readonly static Color ChargerElectricYellow = new Color32(255, 230, 0, byte.MaxValue);
 
 	public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
 	public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
+	public readonly static Color PunisherDarkGold = new Color32(77, 65, 0, byte.MaxValue);
 	public readonly static Color MissionaryBlue = new Color32(103, 118, 161, byte.MaxValue);
 	public readonly static Color JesterPink = new Color32(245, 125, 167, byte.MaxValue);
 	public readonly static Color YandereVioletRed = new Color32(199, 21, 133, byte.MaxValue);

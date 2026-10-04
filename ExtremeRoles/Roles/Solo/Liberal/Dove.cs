@@ -35,6 +35,9 @@ public sealed class Dove : SingleRoleBase, IRoleUpdate
 		this.handler.ClearTask(rolePlayer);
 	}
 
+	public override string GetRoleTag()
+		=> "Do";
+
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 

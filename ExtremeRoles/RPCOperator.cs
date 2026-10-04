@@ -80,6 +80,8 @@ public static class RPCOperator
 		ExorcistOps,
 		CEOOps,
 		EchoOps,
+		LoggerOps,
+		ChargerCharge,
 
 		// インポスター
 		CarrierAbility,
@@ -96,18 +98,23 @@ public static class RPCOperator
 		ThiefAddDeadbodyEffect,
 		BoxerRpcOps,
 		LegislatorAbility,
+		RemoteKillerOps,
 
 		// ニュートラル
 		AliceShipBroken,
         JesterOutburstKill,
+        ImitaterKyugenKill,
         YandereSetOneSidedLover,
         TotocalcioSetBetPlayer,
 		MinerHandle,
 		MadmateToFakeImpostor,
 		ArtistRpcOps,
 
-        // 幽霊役職
-        SetGhostRole,
+		// リベラル
+		EncloserOps,
+
+		// 幽霊役職
+		SetGhostRole,
         UseGhostRoleAbility,
 
         XionAbility,
@@ -629,6 +636,18 @@ public static class RPCOperator
 		Roles.Solo.Crewmate.Echo.Rpc(reader);
 	}
 
+	public static void LoggerRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Crewmate.LoggerRole.RpcOps(reader);
+	}
+
+	public static void ChargerCharge(ref MessageReader reader)
+	{
+		byte chargerId = reader.ReadByte();
+		byte targetId = reader.ReadByte();
+		Roles.Solo.Crewmate.Charger.Charged(chargerId, targetId);
+	}
+
 	public static void CarrierAbility(
         byte callerId, float x, float y,
         byte targetId, bool deadBodyPickUp)
@@ -706,6 +725,11 @@ public static class RPCOperator
 	{
 		Roles.Solo.Impostor.Legislator.UseAbility(ref reader);
 	}
+
+	public static void RemoteKillerRpcOps(ref MessageReader reader)
+	{
+		Roles.Solo.Impostor.RemoteKiller.RemoteKillerRole.RpcHandle(ref reader);
+	}
 	public static void AliceShipBroken(
         byte callerId, byte targetPlayerId, List<int> taskId)
     {
@@ -717,6 +741,12 @@ public static class RPCOperator
     {
         Roles.Solo.Neutral.Jester.OutburstKill(
             killerId, targetId);
+    }
+    public static void ImitaterKyugenKill(
+        byte killerId, byte imitaterId)
+    {
+        Roles.Solo.Neutral.Imitater.KyugenKill(
+            killerId, imitaterId);
     }
 	public static void MinerHandle(ref MessageReader reader)
 	{
@@ -741,6 +771,11 @@ public static class RPCOperator
 	public static void ArtistDrawOps(in MessageReader reader)
 	{
 		Roles.Solo.Neutral.Artist.DrawOps(reader);
+	}
+
+	public static void EncloserRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Liberal.Encloser.EncloserRole.RpcOps(reader);
 	}
 
 	public static void SetGhostRole(

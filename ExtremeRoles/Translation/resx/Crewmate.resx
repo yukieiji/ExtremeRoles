@@ -1611,4 +1611,171 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="inspectSystem" xml:space="preserve">
     <value>の発動が監視されている・・・</value>
   </data>
+  <data name="Itako" xml:space="preserve">
+    <value>イタコ</value>
+  </data>
+  <data name="ItakoAbility" xml:space="preserve">
+    <value>口寄せ</value>
+  </data>
+  <data name="ItakoIntroDescription" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ItakoShortDescription" xml:space="preserve">
+    <value>「死体」に「口寄せ」して役職を引き継げ</value>
+  </data>
+  <data name="ItakoFullDescription" xml:space="preserve">
+    <value>「死体」に「口寄せ」することでその役職を引き継ぐクルー役職
+
+ボタン能力「口寄せ」
+　・「死体」に使用することでその役職を引き継ぐ
+　・クルー陣営以外の「死体」に「口寄せ」した場合は自爆し、両方の死体が消滅する
+　・設定されたタスク進捗率に満たない場合、「死体」は消滅する</value>
+  </data>
+  <data name="ItakoRange" xml:space="preserve">
+    <value>「口寄せ」が発動できる死体からの距離</value>
+  </data>
+  <data name="ItakoRequiredTaskRate" xml:space="preserve">
+    <value>「死体」が消えないようになるタスク進捗率</value>
+  </data>
+  <data name="ItakoAbilityCoolTime" xml:space="preserve">
+    <value>「口寄せ」のクールタイム</value>
+  </data>
+  <data name="ItakoAbilityActiveTime" xml:space="preserve">
+    <value>「口寄せ」が完了するまでの時間</value>
+  </data>
+  <data name="ItakoAbilityCount" xml:space="preserve">
+    <value>「口寄せ」の使用回数</value>
+  </data>
+  <data name="Screamer" xml:space="preserve">
+    <value>スクリーマー</value>
+  </data>
+  <data name="ScreamerFullDescription" xml:space="preserve">
+    <value>死亡時や追放時にメッセージを出すクルー役職
+
+メッセージは各プレイヤーごとにランダムな文章が
+選出されます</value>
+  </data>
+  <data name="ScreamerShortDescription" xml:space="preserve">
+    <value>最期(いのち)の叫びを聞け！</value>
+  </data>
+  <data name="ScreamerIntroDescription" xml:space="preserve">
+    <value>叫びとともに散れ</value>
+  </data>
+  <data name="ScreamerIsScreamOnKill" xml:space="preserve">
+    <value>キルされたときのメッセージ</value>
+  </data>
+  <data name="ScreamerScreamImageSize" xml:space="preserve">
+    <value>メッセージのサイズ</value>
+  </data>
+  <data name="ScreamerExile0" xml:space="preserve">
+    <value>出荷よーーーーーーーーーーーーー！！！！！！！！</value>
+  </data>
+  <data name="ScreamerExile1" xml:space="preserve">
+    <value>きのこ派、絶対に許さんぞおおおおおお！！</value>
+  </data>
+  <data name="ScreamerExile2" xml:space="preserve">
+    <value>まともなのは僕だけか……！？僕は……僕は悪くない！！</value>
+  </data>
+  <data name="ScreamerExile3" xml:space="preserve">
+    <value>終わりやこんな村ああああああ！！！！</value>
+  </data>
+  <data name="ScreamerExile4" xml:space="preserve">
+    <value>犯人はたけのこ派の・・・・・</value>
+  </data>
+  <data name="Logger" xml:space="preserve">
+    <value>ロガー</value>
+  </data>
+  <data name="LoggerIntroDescription" xml:space="preserve">
+    <value>検知器を設置してログを収集せよ</value>
+  </data>
+  <data name="LoggerShortDescription" xml:space="preserve">
+    <value>検知器を設置/回収し、様々なログを収集せよ</value>
+  </data>
+  <data name="LoggerFullDescription" xml:space="preserve">
+    <value>検知器で近くを通過したプレイヤーやサボタージュを
+記録できるクルー役職
+
+ボタン能力「検知器」:
+  - 一定時間経過後に「検知器」を設置する
+  - セットされた「検知器」近くを通ったプレイヤーや
+発生したサボタージュを記録する
+  - 通信サボタージュ時は「NO DATA」と記録される
+  - 記録は会議の開始時に報告される
+  - 検知器に近づいて使用ボタンを押すことで回収
+　できる。回収後使用回数が増える</value>
+  </data>
+  <data name="LoggerAbilityCoolTime" xml:space="preserve">
+    <value>「検知器」のクールタイム</value>
+  </data>
+  <data name="LoggerAbilityCount" xml:space="preserve">
+    <value>「検知器」の所持数</value>
+  </data>
+  <data name="LoggerAbilityActiveTime" xml:space="preserve">
+    <value>「検知器」の設置にかかる時間</value>
+  </data>
+  <data name="LoggerRange" xml:space="preserve">
+    <value>「検知器」の検知範囲</value>
+  </data>
+  <data name="LoggerIsVisibleAll" xml:space="preserve">
+    <value>全員に「検知器」を可視化するか</value>
+  </data>
+  <data name="LoggerDetectorButton" xml:space="preserve">
+    <value>検知器</value>
+  </data>
+  <data name="LoggerDetectorHeader" xml:space="preserve">
+    <value>「検知器 {0}」からのログ</value>
+  </data>
+  <data name="LoggerLogPlayerPass" xml:space="preserve">
+    <value> - 「{0}」が近くを通過しました</value>
+  </data>
+  <data name="LoggerLogSabotage" xml:space="preserve">
+    <value> - サボタージュが発生しました</value>
+  </data>
+  <data name="LoggerLogNoData" xml:space="preserve">
+    <value> - NO DATA</value>
+  </data>
+  <data name="LoggerLogNone" xml:space="preserve">
+    <value> - 検知なし</value>
+  </data>
+  <data name="Charger" xml:space="preserve">
+    <value>チャージャー</value>
+  </data>
+  <data name="ChargerFullDescription" xml:space="preserve">
+    <value>ボタン能力をクールタイムや使用回数を回復させるクルー役職
+
+ボタン能力「チャージ」:
+ - 他プレイヤーに対して使用(一定時間近くにいる必要あり)
+ - そのプレイヤーのボタン能力のクールタイムと使用回数を
+   強制的に回復させる</value>
+  </data>
+  <data name="ChargerShortDescription" xml:space="preserve">
+    <value>仲間の能力を「チャージ」せよ</value>
+  </data>
+  <data name="ChargerIntroDescription" xml:space="preserve">
+    <value>ボタン一つで急速チャージ、チャージャー!!</value>
+  </data>
+  <data name="ChargerRestoreKillCooldown" xml:space="preserve">
+    <value>キルボタンのクールタイムも回復させるか</value>
+  </data>
+  <data name="ChargerAwakeTaskGage" xml:space="preserve">
+    <value>覚醒するタスク進捗率</value>
+  </data>
+  <data name="ChargerAddAbilityCount" xml:space="preserve">
+    <value>「チャージ」による使用回数の追加量</value>
+  </data>
+  <data name="ChargerChargeRange" xml:space="preserve">
+    <value>「チャージ」が発動できる範囲</value>
+  </data>
+  <data name="ChargerAbilityCoolTime" xml:space="preserve">
+    <value>「チャージ」のクールタイム</value>
+  </data>
+  <data name="ChargerAbilityCount" xml:space="preserve">
+    <value>「チャージ」の使用回数</value>
+  </data>
+  <data name="charge" xml:space="preserve">
+    <value>チャージ</value>
+  </data>
+  <data name="ChargerAbilityActiveTime" xml:space="preserve">
+    <value>「チャージ」にかかる時間</value>
+  </data>
 </root>

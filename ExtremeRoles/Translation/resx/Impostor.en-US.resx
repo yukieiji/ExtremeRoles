@@ -1614,7 +1614,14 @@ Button ability "TIME BREAK":
     <value>"STRAIGHT" : Ability Charges</value>
   </data>
   <data name="BoxerFullDescription" xml:space="preserve">
-    <value>An Impostor who can kill Crewmates by launching them with "STRAIGHT".&#xA;&#xA;Button Ability "STRAIGHT":&#xA;- When activated, charging begins.&#xA;- If a player is nearby during charging, you can press it again.&#xA;- When pressed again, it launches that player.&#xA;- If the launched player hits a wall above a certain speed, they are killed.&#xA;- Launch speed varies depending on the charge rate.</value>
+    <value>An Impostor who can kill Crewmates by launching them with "STRAIGHT".
+
+Button Ability "STRAIGHT":
+- When activated, charging begins.
+- If a player is nearby during charging, you can press it again.
+- When pressed again, it launches that player.
+- If the launched player hits a wall above a certain speed, they are killed.
+- Launch speed varies depending on the charge rate.</value>
   </data>
   <data name="BoxerIntroDescription" xml:space="preserve">
     <value>Deliver a lethal "STRAIGHT" punch</value>
@@ -1656,7 +1663,13 @@ Button ability "TIME BREAK":
     <value>Default number of negative votes</value>
   </data>
   <data name="LegislatorFullDescription" xml:space="preserve">
-    <value>An Impostor who accumulates others' votes and can cancel out the target's votes.&#xA;&#xA;Meeting Ability: "Negative Vote"&#xA;- Activate by selecting a player during a meeting.&#xA;- Cancels out that player's votes by the number of "Negative Votes".&#xA;- Negative votes increase based on votes cast for anyone except the person this role voted for.&#xA;  Increase amount: (Total votes for others) x Set conversion rate</value>
+    <value>An Impostor who accumulates others' votes and can cancel out the target's votes.
+
+Meeting Ability: "Negative Vote"
+- Activate by selecting a player during a meeting.
+- Cancels out that player's votes by the number of "Negative Votes".
+- Negative votes increase based on votes cast for anyone except the person this role voted for.
+  Increase amount: (Total votes for others) x Set conversion rate</value>
   </data>
   <data name="LegislatorIncludeSkipVote" xml:space="preserve">
     <value>Count skip votes as negative votes</value>
@@ -1671,6 +1684,86 @@ Button ability "TIME BREAK":
     <value>Weapon synthesis possible with "Alt" key</value>
   </data>
   <data name="legislatorVoteStatus" xml:space="preserve">
-    <value>Ability active: {0}&#xA;Current negative votes: {1}</value>
+    <value>Ability active: {0}
+Current negative votes: {1}</value>
+  </data>
+  <data name="RemoteKiller" xml:space="preserve">
+    <value>Remote Killer</value>
+  </data>
+  <data name="RemoteKillerFullDescription" xml:space="preserve">
+    <value>Approach a target and use "Rob" to mark them for execution.
+When execution targets exist, use "Purge" for remote kills (movement is restricted and name turns red during channel).</value>
+  </data>
+  <data name="RemoteKillerShortDescription" xml:space="preserve">
+    <value>Steal notebooks and execute targets remotely</value>
+  </data>
+  <data name="RemoteKillerIntroDescription" xml:space="preserve">
+    <value>Your name is already written in my notebook...</value>
+  </data>
+  <data name="RemoteKillerRobRange" xml:space="preserve">
+    <value>"Rob" activation range</value>
+  </data>
+  <data name="RemoteKillerContactPlayerCount" xml:space="preserve">
+    <value>Max contact players shown</value>
+  </data>
+  <data name="RemoteKillerRobActiveTime" xml:space="preserve">
+    <value>"Rob" channel time</value>
+  </data>
+  <data name="RemoteKillerPurgeTime" xml:space="preserve">
+    <value>"Purge" channel time</value>
+  </data>
+  <data name="remoteKillerRob" xml:space="preserve">
+    <value>Rob</value>
+  </data>
+  <data name="remoteKillerPurge" xml:space="preserve">
+    <value>Purge</value>
+  </data>
+  <data name="remoteKillerNotebookStolenReport" xml:space="preserve">
+    <value>My notebook was stolen! I should report to my crew... I feel like someone touched me...</value>
+  </data>
+  <data name="YoYo" xml:space="preserve">
+    <value>YoYo</value>
+  </data>
+  <data name="YoYoFullDescription" xml:space="preserve">
+    <value>An Impostor who can teleport to a saved location.
+Only 1 location can be saved at a time and is single-use.
+Teleporting consumes 1 ability count.</value>
+  </data>
+  <data name="YoYoShortDescription" xml:space="preserve">
+    <value>Save a location and teleport instantly</value>
+  </data>
+  <data name="YoYoIntroDescription" xml:space="preserve">
+    <value>Teleport to your saved location instantly</value>
+  </data>
+  <data name="YoYoIsResetMarkOnMeeting" xml:space="preserve">
+    <value>Reset saved location when meeting starts</value>
+  </data>
+  <data name="YoYoSaveLocation" xml:space="preserve">
+    <value>Save Location</value>
+  </data>
+  <data name="YoYoTeleportLocation" xml:space="preserve">
+    <value>Teleport</value>
+  </data>
+  <data name="Blackmailer" xml:space="preserve">
+    <value>Blackmailer</value>
+  </data>
+  <data name="BlackmailerFullDescription" xml:space="preserve">
+    <value>An Impostor who blackmail players.
+The blackmailed player cannot speak, chat, or vote in the next meeting.</value>
+  </data>
+  <data name="BlackmailerShortDescription" xml:space="preserve">
+    <value>Blackmail players to deprive them of voting and speaking rights in the next meeting</value>
+  </data>
+  <data name="BlackmailerIntroDescription" xml:space="preserve">
+    <value>Blackmail players and silence them in meetings</value>
+  </data>
+  <data name="BlackmailerRange" xml:space="preserve">
+    <value>Blackmail Range</value>
+  </data>
+  <data name="BlackmailerMultipleBlackmail" xml:space="preserve">
+    <value>Multiple Blackmail</value>
+  </data>
+  <data name="blackmail" xml:space="preserve">
+    <value>Blackmail</value>
   </data>
 </root>

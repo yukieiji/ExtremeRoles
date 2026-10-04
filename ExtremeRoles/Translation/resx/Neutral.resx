@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -58,7 +58,7 @@
 			: using a System.ComponentModel.TypeConverter
 			: and then encoded with base64 encoding.
 	-->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -1540,5 +1540,73 @@
   </data>
   <data name="HereticMeetingButtonTaskGage" xml:space="preserve">
     <value>「緊急会議」ボタンが使用可能になる&lt;br&gt;タスク進捗率</value>
+  </data>
+  <data name="Punisher" xml:space="preserve">
+    <value>パニッシャー</value>
+  </data>
+  <data name="PunisherFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件
+　1. インポスターをキルする
+    2. インポスター及びキル能力を持つ第三陣営が
+全滅しており、生存者の半数以上が同じ陣営。
+
+インポスター以外をキルすると、キルクールが永続増加
+タスクをすることでキルボタンが使用できたり、キルクール
+が短くなる</value>
+  </data>
+  <data name="PunisherShortDescription" xml:space="preserve">
+    <value>インポスターを探して成敗せよ</value>
+  </data>
+  <data name="PunisherIntroDescription" xml:space="preserve">
+    <value>インポスターをキルして勝利を目指せ</value>
+  </data>
+  <data name="PunisherCanUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="PunisherRequiredTaskNumToKill" xml:space="preserve">
+    <value>キルが可能になるタスク量</value>
+  </data>
+  <data name="PunisherNonImpostorKillCoolIncrease" xml:space="preserve">
+    <value>インポスター以外をキルしたときの
+キルクール増加量</value>
+  </data>
+  <data name="PunisherTaskCompletionKillCoolReduce" xml:space="preserve">
+    <value>タスク完了時のキルクール減少量</value>
+  </data>
+  <data name="Imitater" xml:space="preserve">
+    <value>イミテイター</value>
+  </data>
+  <data name="ImitaterAbility" xml:space="preserve">
+    <value>求源</value>
+  </data>
+  <data name="ImitaterRange" xml:space="preserve">
+    <value>「求源」を発動できる距離</value>
+  </data>
+  <data name="ImitaterAbilityCoolTime" xml:space="preserve">
+    <value>「求源」のクールタイム</value>
+  </data>
+  <data name="ImitaterAbilityActiveTime" xml:space="preserve">
+    <value>「求源」後キルが発生するまでの時間</value>
+  </data>
+  <data name="ImitaterAbilityCount" xml:space="preserve">
+    <value>「求源」の使用上限</value>
+  </data>
+  <data name="ImitaterIntroDescription" xml:space="preserve">
+    <value>自分を殺したものの能力を模倣しろ</value>
+  </data>
+  <data name="ImitaterShortDescription" xml:space="preserve">
+    <value>自身に対してキル能力を使用したプレイヤーの役職に変化する</value>
+  </data>
+  <data name="ImitaterFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+
+勝利条件: なし
+
+・自身に対してキル能力が使用された場合、
+そのキルを無効化し相手の役職に変化する
+
+・ボタン能力「求源」
+対象のキルを暴発させることができる</value>
   </data>
 </root>

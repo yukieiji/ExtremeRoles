@@ -1442,4 +1442,13 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="SpiritGuide" xml:space="preserve">
     <value>インフルエンサー</value>
   </data>
+  <data name="liberalIntroHide0" xml:space="preserve">
+    <value>この中に革新を否定する、裏切り者がいる</value>
+  </data>
+  <data name="liberalIntroHide1" xml:space="preserve">
+    <value>この中にいる変革を拒絶する者へ、正義の鉄槌を</value>
+  </data>
+  <data name="liberalIntroHide2" xml:space="preserve">
+    <value>この中に潜んでいる同志へ、革命の灯火を掲げろ</value>
+  </data>
 </root>

@@ -105,6 +105,7 @@ public sealed class NeutralSeparateTeamBuilder()
 			ExtremeRoleId.Queen or ExtremeRoleId.Servant => NeutralSeparateTeam.Queen,
 			ExtremeRoleId.Delinquent => NeutralSeparateTeam.Kids,
 			ExtremeRoleId.Tucker or ExtremeRoleId.Chimera => NeutralSeparateTeam.Tucker,
+			ExtremeRoleId.Punisher => NeutralSeparateTeam.Punisher,
 			_ => NeutralSeparateTeam.None,
 		};
 

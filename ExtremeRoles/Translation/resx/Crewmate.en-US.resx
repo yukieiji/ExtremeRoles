@@ -1546,4 +1546,158 @@ Passive Ability "Stress":
   <data name="inspectSystem" xml:space="preserve">
     <value> usage is being monitored...</value>
   </data>
+  <data name="Itako" xml:space="preserve">
+    <value>Itako</value>
+  </data>
+  <data name="ItakoAbility" xml:space="preserve">
+    <value>Spirit Channeling</value>
+  </data>
+  <data name="ItakoIntroDescription" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="ItakoShortDescription" xml:space="preserve">
+    <value>Channel dead bodies to inherit their role</value>
+  </data>
+  <data name="ItakoFullDescription" xml:space="preserve">
+    <value>A Crewmate role that can channel dead bodies to inherit their role.
+
+Button ability "Spirit Channeling":
+- Inherits the role of the dead body when used.
+- If used on a non-Crewmate dead body, Itako self-destructs and both dead bodies vanish.
+- If below the required task progress rate, the dead body vanishes after channeling.</value>
+  </data>
+  <data name="ItakoRange" xml:space="preserve">
+    <value>"SPIRIT CHANNELING" : Range from dead body</value>
+  </data>
+  <data name="ItakoRequiredTaskRate" xml:space="preserve">
+    <value>"SPIRIT CHANNELING" : Task progress rate to keep dead body</value>
+  </data>
+  <data name="ItakoAbilityCoolTime" xml:space="preserve">
+    <value>"SPIRIT CHANNELING" : Ability Cooldown</value>
+  </data>
+  <data name="ItakoAbilityActiveTime" xml:space="preserve">
+    <value>"SPIRIT CHANNELING" : Time required</value>
+  </data>
+  <data name="ItakoAbilityCount" xml:space="preserve">
+    <value>"SPIRIT CHANNELING" : Ability Charges</value>
+  </data>
+  <data name="Screamer" xml:space="preserve">
+    <value>Screamer</value>
+  </data>
+  <data name="ScreamerFullDescription" xml:space="preserve">
+    <value>A role that screams loudly upon death or exile.</value>
+  </data>
+  <data name="ScreamerShortDescription" xml:space="preserve">
+    <value>Hear my final scream!</value>
+  </data>
+  <data name="ScreamerIntroDescription" xml:space="preserve">
+    <value>Scatter with a scream</value>
+  </data>
+  <data name="ScreamerIsScreamOnKill" xml:space="preserve">
+    <value>Scream when killed</value>
+  </data>
+  <data name="ScreamerScreamImageSize" xml:space="preserve">
+    <value>Scream Image Size</value>
+  </data>
+  <data name="ScreamerExile0" xml:space="preserve">
+    <value> "AAAAAAAAAAAAAAAAAAAAA!!!!"</value>
+  </data>
+  <data name="ScreamerExile1" xml:space="preserve">
+    <value> "GYAAAAAAAAAAAAAAAAAAA!!!!"</value>
+  </data>
+  <data name="ScreamerExile2" xml:space="preserve">
+    <value> "UWAAAAAAAAAAAAAAAAAAA!!!!"</value>
+  </data>
+  <data name="ScreamerExile3" xml:space="preserve">
+    <value> "HELP MEEEEEEEEEEEEEEEE!!!!"</value>
+  </data>
+  <data name="ScreamerExile4" xml:space="preserve">
+    <value> "TAKENOKO IS THE BEST!!!!"</value>
+  </data>
+  <data name="Logger" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoggerIntroDescription" xml:space="preserve">
+    <value>Place detectors to detect nearby players</value>
+  </data>
+  <data name="LoggerShortDescription" xml:space="preserve">
+    <value>Place detectors to collect logs</value>
+  </data>
+  <data name="LoggerFullDescription" xml:space="preserve">
+    <value>A Crewmate role that places detectors to log players passing nearby or sabotages occurring.
+
+Ability "Detector":
+  - Places a detector after cast time
+  - Logs nearby passing players and sabotage events ("NO DATA" during Comms Sabotage)
+  - Reports collected logs at the start of meetings
+  - Can be picked up by interacting with Use button near the detector</value>
+  </data>
+  <data name="LoggerAbilityCoolTime" xml:space="preserve">
+    <value>Detector Cooldown</value>
+  </data>
+  <data name="LoggerAbilityCount" xml:space="preserve">
+    <value>Detector Charges</value>
+  </data>
+  <data name="LoggerAbilityActiveTime" xml:space="preserve">
+    <value>Detector Cast Time</value>
+  </data>
+  <data name="LoggerRange" xml:space="preserve">
+    <value>Detection Range</value>
+  </data>
+  <data name="LoggerIsVisibleAll" xml:space="preserve">
+    <value>Visible to Everyone</value>
+  </data>
+  <data name="LoggerDetectorButton" xml:space="preserve">
+    <value>Detector</value>
+  </data>
+  <data name="LoggerDetectorHeader" xml:space="preserve">
+    <value>Logs from Detector {0}</value>
+  </data>
+  <data name="LoggerLogPlayerPass" xml:space="preserve">
+    <value> - "{0}" passed nearby</value>
+  </data>
+  <data name="LoggerLogSabotage" xml:space="preserve">
+    <value> - Sabotage occurred</value>
+  </data>
+  <data name="LoggerLogNoData" xml:space="preserve">
+    <value> - NO DATA</value>
+  </data>
+  <data name="LoggerLogNone" xml:space="preserve">
+    <value> - No Detection</value>
+  </data>
+  <data name="Charger" xml:space="preserve">
+    <value>Charger</value>
+  </data>
+  <data name="ChargerFullDescription" xml:space="preserve">
+    <value>Task Awakening Role
+Forcibly restores cooldown and ability uses of target player.
+If used on non-Crewmate, boosts enemy team.</value>
+  </data>
+  <data name="ChargerShortDescription" xml:space="preserve">
+    <value>Charge abilities of target player</value>
+  </data>
+  <data name="ChargerIntroDescription" xml:space="preserve">
+    <value>Rapidly charge your crewmates' abilities</value>
+  </data>
+  <data name="ChargerRestoreKillCooldown" xml:space="preserve">
+    <value>Restore Kill Button Cooldown</value>
+  </data>
+  <data name="ChargerAwakeTaskGage" xml:space="preserve">
+    <value>Task progress required for awakening</value>
+  </data>
+  <data name="ChargerAddAbilityCount" xml:space="preserve">
+    <value>Ability count added on Charge</value>
+  </data>
+  <data name="ChargerChargeRange" xml:space="preserve">
+    <value>Charge Range</value>
+  </data>
+  <data name="ChargerAbilityCoolTime" xml:space="preserve">
+    <value>Charge Cooldown</value>
+  </data>
+  <data name="ChargerAbilityCount" xml:space="preserve">
+    <value>Charge Charges</value>
+  </data>
+  <data name="charge" xml:space="preserve">
+    <value>CHARGE</value>
+  </data>
 </root>
