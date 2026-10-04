@@ -70,7 +70,7 @@ public sealed class Imitater :
 	public Imitater() : base(
 		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Imitater,
-			ColorPalette.NeutralColor,
+			ColorPalette.ImitaterColor,
 			RolePropPresets.OptionalDefault))
 	{
 		
