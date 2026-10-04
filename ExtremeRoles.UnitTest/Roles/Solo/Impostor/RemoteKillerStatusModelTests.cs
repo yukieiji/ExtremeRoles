@@ -9,13 +9,11 @@ public sealed class RemoteKillerStatusModelTests
 	public void Constructor_SetsOptionPropertiesCorrectly()
 	{
 		// Arrange & Act
-		var status = new RemoteKillerStatusModel(1.5f, 3.0f, 5, 4.0f);
+		var status = new RemoteKillerStatusModel(1.5f, 5);
 
 		// Assert
 		Assert.Equal(1.5f, status.RobRange);
-		Assert.Equal(3.0f, status.RobActiveTime);
 		Assert.Equal(5, status.ContactPlayerCount);
-		Assert.Equal(4.0f, status.PurgeTime);
 		Assert.True(status.CanMove);
 		Assert.False(status.IsPurging);
 	}
@@ -24,7 +22,7 @@ public sealed class RemoteKillerStatusModelTests
 	public void SetPurging_UpdatesIsPurgingProperty()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.0f, 2.0f, 1, 5.0f);
+		var status = new RemoteKillerStatusModel(1.0f, 1);
 
 		// Act
 		status.SetPurging(true);
@@ -43,23 +41,16 @@ public sealed class RemoteKillerStatusModelTests
 	public void ExecutionTargets_AddAndRemove_WorksAsExpected()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.0f, 2.0f, 1, 5.0f);
+		var status = new RemoteKillerStatusModel(1.0f, 1);
 		byte targetId = 2;
+		byte rolePlayerId = 1;
 
 		// Act: Add
-		status.AddExecutionTarget(targetId);
+		status.AddExecutionTarget(targetId, rolePlayerId);
 
 		// Assert
 		Assert.True(status.HasExecutionTarget(targetId));
 		Assert.Contains(targetId, status.ExecutionTargets);
-		Assert.True(status.IsPendingReport(targetId));
-
-		// Act: RemovePendingReport
-		status.RemovePendingReport(targetId);
-
-		// Assert
-		Assert.False(status.IsPendingReport(targetId));
-		Assert.True(status.HasExecutionTarget(targetId));
 
 		// Act: RemoveExecutionTarget
 		status.RemoveExecutionTarget(targetId);
@@ -73,7 +64,7 @@ public sealed class RemoteKillerStatusModelTests
 	public void RecordContactAndClear_ManagesContactsCorrectly()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.0f, 2.0f, 1, 5.0f);
+		var status = new RemoteKillerStatusModel(1.0f, 1);
 		byte targetId = 2;
 		byte contactId = 3;
 
@@ -85,20 +76,20 @@ public sealed class RemoteKillerStatusModelTests
 		Assert.Contains(contactId, contacts);
 
 		// Act: Clear
-		status.ClearTaskPhaseContacts(targetId);
+		status.ClearTaskPhaseContacts();
 
 		// Assert
-		Assert.Empty(status.TaskPhaseContacts[targetId]);
+		Assert.Empty(status.TaskPhaseContacts);
 	}
 
 	[Fact]
 	public void Reset_ResetsAllFieldsToInitialState()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.0f, 2.0f, 1, 5.0f);
+		var status = new RemoteKillerStatusModel(1.0f, 1);
 		status.SetPurging(true);
 		status.CanMove = false;
-		status.AddExecutionTarget(2);
+		status.AddExecutionTarget(2, 1);
 		status.RecordContact(2, 3);
 
 		// Act
@@ -108,7 +99,6 @@ public sealed class RemoteKillerStatusModelTests
 		Assert.True(status.CanMove);
 		Assert.False(status.IsPurging);
 		Assert.Empty(status.ExecutionTargets);
-		Assert.Empty(status.PendingReports);
 		Assert.Empty(status.TaskPhaseContacts);
 	}
 }

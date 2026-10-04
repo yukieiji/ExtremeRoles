@@ -6,7 +6,9 @@ using ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
 using Hazel;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Moq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using Xunit;
 
 namespace ExtremeRoles.UnitTest.Roles.Solo.Impostor;
@@ -20,6 +22,7 @@ public sealed class RemoteKillerHandlerTests
 	public RemoteKillerHandlerTests()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupObjectImplicitHelpers();
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
 
@@ -53,6 +56,25 @@ public sealed class RemoteKillerHandlerTests
 		mockLocalPlayer.SetupGet(p => p.myTasks).Returns(emptyTasks);
 
 		MockSetupHelper.SetupGameDataMock();
+	}
+
+	private static Mock<PlayerControl> SetupMockTargetPlayer(byte playerId)
+	{
+		var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+		mockPlayer.SetupGet(p => p.PlayerId).Returns(playerId);
+
+		var mockPhysics = new Mock<PlayerPhysics>(IntPtr.Zero);
+		mockPhysics.SetupGet(p => p.DoingCustomAnimation).Returns(false);
+		mockPlayer.SetupGet(p => p.MyPhysics).Returns(mockPhysics.Object);
+
+		var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		mockData.SetupGet(d => d.IsDead).Returns(false);
+		mockData.SetupGet(d => d.Disconnected).Returns(false);
+		mockData.SetupGet(d => d.Object).Returns(mockPlayer.Object);
+		mockPlayer.SetupGet(p => p.Data).Returns(mockData.Object);
+		mockPlayer.SetupGet(p => p.CanMove).Returns(true);
+
+		return mockPlayer;
 	}
 
 	private static void SetupTranslationControllerMock()
@@ -120,6 +142,78 @@ public sealed class RemoteKillerHandlerTests
 
 	private static void SetupHudManagerMock()
 	{
+		if (MockVector3get_oneHelper.Instance == null)
+		{
+			var mockOne = new Mock<MockVector3get_oneHelper>();
+			mockOne.Setup(x => x.Invoke()).Returns(new Vector3(1f, 1f, 1f));
+			MockVector3get_oneHelper.Instance = mockOne.Object;
+		}
+
+		var mockObjectImplicitInt = new Mock<Il2CppSystem.MockObjectop_ImplicitHelper6>();
+		mockObjectImplicitInt.Setup(x => x.Invoke(It.IsAny<int>())).Returns(new Mock<Il2CppSystem.Object>(IntPtr.Zero).Object);
+		Il2CppSystem.MockObjectop_ImplicitHelper6.Instance = mockObjectImplicitInt.Object;
+
+		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
+		mockGameObject.Setup(g => g.SetActive(It.IsAny<bool>()));
+
+		var mockGridArrange = new Mock<GridArrange>(IntPtr.Zero);
+		mockGridArrange.Setup(g => g.ArrangeChilds());
+
+		var mockParentGameObject = new Mock<GameObject>(IntPtr.Zero);
+		mockParentGameObject.Setup(g => g.GetComponent<GridArrange>()).Returns(mockGridArrange.Object);
+
+		var mockParentTransform = new Mock<Transform>(IntPtr.Zero);
+		mockParentTransform.SetupGet(t => t.gameObject).Returns(mockParentGameObject.Object);
+
+		var mockTransform = new Mock<Transform>(IntPtr.Zero);
+		mockTransform.SetupGet(t => t.parent).Returns(mockParentTransform.Object);
+		mockTransform.Setup(t => t.FindChild(It.IsAny<string>())).Returns((Transform)null!);
+
+		var mockMaterial = new Mock<Material>(IntPtr.Zero);
+		mockMaterial.Setup(m => m.SetFloat(It.IsAny<string>(), It.IsAny<float>()));
+
+		var mockSpriteRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+		mockSpriteRenderer.SetupProperty(s => s.sprite);
+		mockSpriteRenderer.SetupProperty(s => s.color);
+		mockSpriteRenderer.SetupProperty(s => s.enabled);
+		mockSpriteRenderer.SetupGet(s => s.material).Returns(mockMaterial.Object);
+
+		var mockLabelText = new Mock<TextMeshPro>(IntPtr.Zero);
+		mockLabelText.SetupProperty(t => t.color);
+		mockLabelText.SetupProperty(t => t.fontMaterial);
+		mockLabelText.SetupProperty(t => t.text);
+		mockLabelText.SetupGet(t => t.transform).Returns(mockTransform.Object);
+
+		var mockCoolText = new Mock<TextMeshPro>(IntPtr.Zero);
+		mockCoolText.SetupProperty(t => t.color);
+		mockCoolText.SetupProperty(t => t.enableWordWrapping);
+		mockCoolText.SetupProperty(t => t.text);
+		mockCoolText.SetupGet(t => t.gameObject).Returns(mockGameObject.Object);
+		mockCoolText.SetupGet(t => t.transform).Returns(mockTransform.Object);
+
+		var mockPersistentCallGroup = new Mock<PersistentCallGroup>(IntPtr.Zero);
+		mockPersistentCallGroup.Setup(p => p.Clear());
+
+		var mockOnClick = new Mock<UnityEngine.UI.Button.ButtonClickedEvent>(IntPtr.Zero);
+		mockOnClick.Setup(e => e.RemoveAllListeners());
+		mockOnClick.Setup(e => e.AddListener(It.IsAny<UnityAction>()));
+		mockOnClick.SetupGet(e => e.m_PersistentCalls).Returns(mockPersistentCallGroup.Object);
+
+		var mockPassiveButton = new Mock<PassiveButton>(IntPtr.Zero);
+		mockPassiveButton.SetupGet(p => p.OnClick).Returns(mockOnClick.Object);
+
+		var mockKillButton = new Mock<KillButton>(IntPtr.Zero);
+		mockKillButton.SetupGet(b => b.transform).Returns(mockTransform.Object);
+		mockKillButton.SetupGet(b => b.gameObject).Returns(mockGameObject.Object);
+		mockKillButton.SetupGet(b => b.graphic).Returns(mockSpriteRenderer.Object);
+		mockKillButton.SetupGet(b => b.buttonLabelText).Returns(mockLabelText.Object);
+		mockKillButton.SetupGet(b => b.cooldownTimerText).Returns(mockCoolText.Object);
+		mockKillButton.Setup(b => b.GetComponent<PassiveButton>()).Returns(mockPassiveButton.Object);
+		mockKillButton.SetupGet(b => b.isActiveAndEnabled).Returns(true);
+		mockKillButton.Setup(b => b.OverrideText(It.IsAny<string>()));
+		mockKillButton.Setup(b => b.SetCoolDown(It.IsAny<float>(), It.IsAny<float>()));
+		mockKillButton.Setup(b => b.SetCooldownFill(It.IsAny<float>()));
+
 		var mockChat = new Mock<ChatController>(IntPtr.Zero);
 		mockChat.SetupGet(c => c.IsOpenOrOpening).Returns(false);
 
@@ -134,18 +228,19 @@ public sealed class RemoteKillerHandlerTests
 		mockHud.SetupGet(h => h.KillOverlay).Returns(mockKillOverlay.Object);
 		mockHud.SetupGet(h => h.GameMenu).Returns(mockGameMenu.Object);
 		mockHud.SetupGet(h => h.IsIntroDisplayed).Returns(false);
+		mockHud.SetupGet(h => h.KillButton).Returns(mockKillButton.Object);
 	}
 
 	[Fact]
 	public void RobHandler_CreateBehavior_ConfiguresActiveTimeCorrectly()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 5.0f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerRobHandler(status, role);
 
 		// Act
-		var behavior = handler.CreateBehavior(30.0f);
+		var behavior = handler.CreateBehavior(30.0f, 2.5f);
 
 		// Assert
 		Assert.NotNull(behavior);
@@ -156,7 +251,7 @@ public sealed class RemoteKillerHandlerTests
 	public void RobHandler_IsUseRob_WhenNoPlayerInRange_ReturnsFalse()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 5.0f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerRobHandler(status, role);
 
@@ -171,7 +266,7 @@ public sealed class RemoteKillerHandlerTests
 	public void RobHandler_IsRobCheck_WhenCurrentTargetIsNull_ReturnsFalse()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 5.0f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerRobHandler(status, role);
 
@@ -186,7 +281,7 @@ public sealed class RemoteKillerHandlerTests
 	public void RobHandler_RobCleanUp_AddsTargetToExecutionTargets()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 5.0f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerRobHandler(status, role);
 
@@ -207,7 +302,7 @@ public sealed class RemoteKillerHandlerTests
 	public void RobHandler_RobForceCleanUp_ClearsTarget()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 5.0f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerRobHandler(status, role);
 
@@ -227,7 +322,7 @@ public sealed class RemoteKillerHandlerTests
 	public void RobHandler_RecordTargetContacts_WhenTargetNullOrDead_ReturnsEarly()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 5.0f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerRobHandler(status, role);
 
@@ -239,12 +334,12 @@ public sealed class RemoteKillerHandlerTests
 	public void PurgeHandler_CreateBehavior_ConfiguresActiveTimeAndCountCorrectly()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 4.5f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerPurgeHandler(status, role);
 
 		// Act
-		var behavior = handler.CreateBehavior(30.0f, 3);
+		var behavior = handler.CreateBehavior(30.0f, 4.5f, 3);
 
 		// Assert
 		Assert.NotNull(behavior);
@@ -256,7 +351,7 @@ public sealed class RemoteKillerHandlerTests
 	public void PurgeHandler_IsUsePurgeCheck_WhenCharging_CallsIsAbilityUseWithMinigame()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 4.5f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerPurgeHandler(status, role);
 
@@ -271,7 +366,7 @@ public sealed class RemoteKillerHandlerTests
 	public void PurgeHandler_IsPurgeCheck_WhenTargetNull_ReturnsFalse()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 4.5f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerPurgeHandler(status, role);
 
@@ -286,7 +381,7 @@ public sealed class RemoteKillerHandlerTests
 	public void PurgeHandler_PurgeStartAbility_WhenTargetNull_ReturnsFalse()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 4.5f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerPurgeHandler(status, role);
 
@@ -301,12 +396,11 @@ public sealed class RemoteKillerHandlerTests
 	public void PurgeHandler_PurgeStartAbility_WhenTargetSelected_TriggersRpcAndReturnsTrue()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 4.5f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerPurgeHandler(status, role);
 
-		var mockTarget = new Mock<PlayerControl>(IntPtr.Zero);
-		mockTarget.SetupGet(p => p.PlayerId).Returns((byte)2);
+		var mockTarget = SetupMockTargetPlayer((byte)2);
 
 		var field = typeof(RemoteKillerPurgeHandler).GetField("selectedPurgeTarget", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 		field?.SetValue(handler, mockTarget.Object);
@@ -325,14 +419,13 @@ public sealed class RemoteKillerHandlerTests
 	public void PurgeHandler_PurgeCleanUp_RemovesExecutionTargetFromStatus()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 4.5f);
-		status.AddExecutionTarget(2);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
+		status.AddExecutionTarget(2, 1);
 
 		var role = new RemoteKillerRole();
 		var handler = new RemoteKillerPurgeHandler(status, role);
 
-		var mockTarget = new Mock<PlayerControl>(IntPtr.Zero);
-		mockTarget.SetupGet(p => p.PlayerId).Returns((byte)2);
+		var mockTarget = SetupMockTargetPlayer((byte)2);
 
 		var field = typeof(RemoteKillerPurgeHandler).GetField("selectedPurgeTarget", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 		field?.SetValue(handler, mockTarget.Object);
@@ -351,7 +444,7 @@ public sealed class RemoteKillerHandlerTests
 	public void PurgeHandler_PurgeForceCleanUp_WhenPurging_SendsRpcAndResetsTarget()
 	{
 		// Arrange
-		var status = new RemoteKillerStatusModel(1.5f, 2.5f, 1, 4.5f);
+		var status = new RemoteKillerStatusModel(1.5f, 1);
 		status.SetPurging(true);
 
 		var role = new RemoteKillerRole();
