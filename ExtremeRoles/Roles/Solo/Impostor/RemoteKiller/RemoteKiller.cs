@@ -203,31 +203,28 @@ public sealed class RemoteKillerRole :
 		foreach (byte targetId in this.statusModel.ExecutionTargets.ToList())
 		{
 			var target = Player.GetPlayerControlById(targetId);
-			if (target != null && target.Data != null && !target.Data.IsDead && !target.Data.Disconnected)
+			if (target.IsAlive() && this.statusModel.IsPendingReport(targetId))
 			{
-				if (this.statusModel.IsPendingReport(targetId))
+				if (shouldSendReport)
 				{
-					if (shouldSendReport)
+					if (this.statusModel.TaskPhaseContacts.TryGetValue(targetId, out var contactSet))
 					{
-						if (this.statusModel.TaskPhaseContacts.TryGetValue(targetId, out var contactSet))
-						{
-							var pickedIds = contactSet
-								.OrderBy(_ => RandomGenerator.Instance.Next())
-								.Take(this.statusModel.ContactPlayerCount)
-								.ToList();
+						var pickedIds = contactSet
+							.OrderBy(_ => RandomGenerator.Instance.Next())
+							.Take(this.statusModel.ContactPlayerCount)
+							.ToList();
 
-							MeetingReporter.RpcAddTargetMeetingChatReport(
-								targetId, new RemoteKillerReportSerializer(pickedIds));
-						}
-						else
-						{
-							MeetingReporter.RpcAddTargetMeetingChatReport(
-								targetId, new RemoteKillerReportSerializer(new List<byte>()));
-						}
+						MeetingReporter.RpcAddTargetMeetingChatReport(
+							targetId, new RemoteKillerReportSerializer(pickedIds));
 					}
-
-					this.statusModel.RemovePendingReport(targetId);
+					else
+					{
+						MeetingReporter.RpcAddTargetMeetingChatReport(
+							targetId, new RemoteKillerReportSerializer(new List<byte>()));
+					}
 				}
+
+				this.statusModel.RemovePendingReport(targetId);
 			}
 
 			this.statusModel.ClearTaskPhaseContacts(targetId);
@@ -276,13 +273,9 @@ public sealed class RemoteKillerRole :
 	}
 
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
-	{
-		if (this.statusModel != null && this.statusModel.HasExecutionTarget(targetPlayerId))
-		{
-			return Design.ColoredString(Palette.ImpostorRed, " ▼");
-		}
-		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
-	}
+		=> this.statusModel != null && this.statusModel.HasExecutionTarget(targetPlayerId) ?
+			Design.ColoredString(Palette.ImpostorRed, " ▼") :
+			base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
