@@ -13,9 +13,11 @@ public sealed class RemoteKillerStatusModel : IStatusModel, IStatusMovable
 	public int ContactPlayerCount { get; }
 
 	public IReadOnlySet<byte> ExecutionTargets => this.executionTargets;
+	public IReadOnlySet<byte> ChatSendedPlayerId => this.sended;
 	public IReadOnlyDictionary<byte, HashSet<byte>> TaskPhaseContacts => this.taskPhaseContacts;
 
-	private readonly HashSet<byte> executionTargets = new HashSet<byte>();
+	private readonly HashSet<byte> sended = [];
+	private readonly HashSet<byte> executionTargets = [];
 	private readonly Dictionary<byte, HashSet<byte>> taskPhaseContacts = new Dictionary<byte, HashSet<byte>>();
 
 	public RemoteKillerStatusModel(float robRange, int contactPlayerCount)
@@ -38,8 +40,14 @@ public sealed class RemoteKillerStatusModel : IStatusModel, IStatusMovable
 		this.RecordContact(targetId, rolePlayerId); // リモートキラーは確実に接触したプレイヤーを記録するため、ここで初期化する
 	}
 
+	public bool IsChatSended(byte targetId) => this.sended.Contains(targetId);
+
+	public bool AddChatSended(byte targetId)
+		=> this.sended.Add(targetId);
+
 	public void RemoveExecutionTarget(byte targetId)
 	{
+		this.sended.Remove(targetId);
 		this.executionTargets.Remove(targetId);
 		this.taskPhaseContacts.Remove(targetId);
 	}

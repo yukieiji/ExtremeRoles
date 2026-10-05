@@ -190,6 +190,7 @@ public sealed class RemoteKillerRole :
 		{
 			var target = Player.GetPlayerControlById(targetId);
 			if (target.IsInValid() ||
+				!this.statusModel.AddChatSended(targetId) ||
 				!this.statusModel.TaskPhaseContacts.TryGetValue(targetId, out var contactSet))
 			{
 				continue;
@@ -239,6 +240,10 @@ public sealed class RemoteKillerRole :
 		// タスクフェーズ中、各執行対象の近くに接近した他プレイヤーを記録（会議開始時の報告用）
 		foreach (byte targetId in this.statusModel.ExecutionTargets)
 		{
+			if (this.statusModel.IsChatSended(targetId))
+			{
+				continue;
+			}
 			this.robHandler.RecordTargetContacts(targetId);
 		}
 	}
