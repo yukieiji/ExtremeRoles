@@ -162,7 +162,7 @@ public sealed class RemoteKillerTests
 		InitializeRole(role, 1);
 
 		var status = (RemoteKillerStatusModel)role.Status!;
-		status.AddExecutionTarget(2);
+		status.AddExecutionTarget(2, 1);
 
 		var targetRole = new SpecialCrew();
 
