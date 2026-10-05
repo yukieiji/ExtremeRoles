@@ -363,13 +363,15 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>スケープアクター</value>
   </data>
   <data name="ScapeactorFullDescription" xml:space="preserve">
-    <value>STRMISS</value>
+    <value>タイプ : ドーヴ
+
+追放時にも資金を得ることが出来るリベラル</value>
   </data>
   <data name="ScapeactorShortDescription" xml:space="preserve">
-    <value>STRMISS</value>
+    <value>追放されて多額の資金を獲得せよ</value>
   </data>
   <data name="ScapeactorIntroDescription" xml:space="preserve">
-    <value>STRMISS</value>
+    <value>早くこの哀れな主役に『追放』の合図を</value>
   </data>
   <data name="ScapeactorTaskCompletedMoney" xml:space="preserve">
     <value>資金ボーナス/1タスク完了あたり</value>
@@ -386,21 +388,23 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="DeltaFullDescription" xml:space="preserve">
     <value>タイプ : ドーヴ
 
-他人のタスク完了数と自分のタスク完了数を比較してその差分だけ資金を得る
-自分のタスク完了数は現在のタスクリストの完了数を見る
-
-以下のいずれか状況の場合、能力発動に失敗し自爆する
+ボタン能力「ディスパリティ」:
+- 他人のタスク完了数と自分のタスク完了数を比較し
+その差分だけ資金を得る
+- 自分のタスク完了数は現在のタスクリストの完了数を
+参照する
+- 以下のいずれかの場合、能力発動に失敗し自爆する
  - どちらかのタスク完了数が0
  - 対象が同じ陣営の場合</value>
   </data>
   <data name="DeltaShortDescription" xml:space="preserve">
-    <value>タスク完了数をコントロールして多額資金を獲得せよ</value>
+    <value>タスク完了数を制御して多額資金を獲得せよ</value>
   </data>
   <data name="DeltaIntroDescription" xml:space="preserve">
-    <value>他人のタスク完了数と自分のタスク完了数を比較してその差分だけ資金を得る</value>
+    <value>埋めようのない格差(デルタ)を見せてやる</value>
   </data>
   <data name="DeltaRange" xml:space="preserve">
-    <value>射程</value>
+    <value>「ディスパリティ」が発動できる範囲</value>
   </data>
   <data name="DeltaMoneyPerTaskDiff" xml:space="preserve">
     <value>タスク完了数差分1つあたりの
@@ -410,9 +414,12 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>追放時の資金ボーナス</value>
   </data>
   <data name="DeltaAbilityCoolTime" xml:space="preserve">
-    <value>STRMISS</value>
+    <value>「ディスパリティ」のクールタイム</value>
   </data>
   <data name="DeltaAbilityCount" xml:space="preserve">
-    <value>STRMISS</value>
+    <value>「ディスパリティ」の使用回数</value>
+  </data>
+  <data name="DeltaAbilityName" xml:space="preserve">
+    <value>ディスパリティ</value>
   </data>
 </root>

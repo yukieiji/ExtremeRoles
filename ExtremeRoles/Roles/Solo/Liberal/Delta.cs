@@ -44,9 +44,8 @@ public sealed class Delta : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	public void CreateAbility()
 	{
 		this.CreateAbilityCountButton(
-			"STRMISS",
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
-				ObjectPath.AgencyTakeTask));
+			"DeltaAbilityName",
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Delta));
 		this.Button.SetLabelToCrewmate();
 	}
 
