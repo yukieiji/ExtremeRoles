@@ -84,6 +84,7 @@ public sealed class RemoteKillerRole :
 			}
 
 			var builder = new StringBuilder(header);
+			builder.AppendLine();
 
 			foreach (byte pId in this.contactPlayerIds)
 			{
