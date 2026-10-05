@@ -190,8 +190,10 @@ public sealed class Imitater :
 
 		var newRole = inheritedRole.Clone();
 
-		if (PlayerControl.LocalPlayer != null &&
-			PlayerControl.LocalPlayer.PlayerId == imitaterPlayerId)
+		var localPlayer = PlayerControl.LocalPlayer;
+
+		if (localPlayer != null &&
+			localPlayer.PlayerId == imitaterPlayerId)
 		{
 			if (newRole is IRoleAbility newAbility &&
 				HudManager.InstanceExists)
@@ -212,6 +214,13 @@ public sealed class Imitater :
 		newRole.Initialize();
 
 		ExtremeRoleManager.SetNewRole(imitaterPlayerId, newRole);
+
+		if (localPlayer != null && localPlayer.PlayerId == imitaterPlayerId &&
+			newRole is IRoleSpecialSetUp setUp)
+		{
+			setUp.IntroBeginSetUp();
+			setUp.IntroEndSetUp();
+		}
 	}
 
 	public static bool TryGetExtractInheritedRole(SingleRoleBase? targetRole, [NotNullWhen(true)] out SingleRoleBase? role)

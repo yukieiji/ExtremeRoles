@@ -262,5 +262,12 @@ public sealed class ItakoRole :
 			multiItako.CanHasAnotherRole = true;
 			ExtremeRoleManager.SetNewAnothorRole(itakoPlayerId, newRole);
 		}
+
+		if (localPlayer != null && localPlayer.PlayerId == itakoPlayerId &&
+			newRole is IRoleSpecialSetUp setUp)
+		{
+			setUp.IntroBeginSetUp();
+			setUp.IntroEndSetUp();
+		}
 	}
 }
