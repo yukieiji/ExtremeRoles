@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using AmongUs.GameOptions;
+using HarmonyLib;
 using Hazel;
 using Moq;
 using UnityEngine;
@@ -27,9 +28,21 @@ using ExtremeRoles.Roles.Solo.Impostor;
 
 namespace ExtremeRoles.UnitTest.Roles.Solo.Crewmate;
 
+public static class UnityObjectLoaderLoadFromResourcesPatch
+{
+	public static bool Prefix(ref Sprite __result)
+	{
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+		__result = mockSprite.Object;
+		return false;
+	}
+}
+
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class ItakoRoleTests
 {
+	private static bool isHarmonyPatched = false;
+
 	public ItakoRoleTests()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
@@ -47,6 +60,7 @@ public class ItakoRoleTests
 		SetupGameOptionsManagerMock();
 		SetupConstantsMock();
 		SetupSpriteCacheMock();
+		SetupHarmony();
 
 		var shipStateField = typeof(ExtremeRolesPlugin).GetField("<ShipState>k__BackingField", BindingFlags.NonPublic | BindingFlags.Static);
 		shipStateField?.SetValue(null, new ExtremeShipStatus());
@@ -64,6 +78,23 @@ public class ItakoRoleTests
 		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
 			.Returns((string id, string defaultStr, Il2CppSystem.Object[] parts) => defaultStr ?? id);
+	}
+
+	private static void SetupHarmony()
+	{
+		if (!isHarmonyPatched)
+		{
+			var harmony = new Harmony("test.itako.loadfromresources");
+			var targetMethod = typeof(UnityObjectLoader)
+				.GetMethod(nameof(UnityObjectLoader.LoadFromResources), new[] { typeof(string), typeof(string), typeof(Assembly) })
+				?.MakeGenericMethod(typeof(Sprite));
+			var prefixMethod = typeof(UnityObjectLoaderLoadFromResourcesPatch).GetMethod(nameof(UnityObjectLoaderLoadFromResourcesPatch.Prefix));
+			if (targetMethod != null && prefixMethod != null)
+			{
+				harmony.Patch(targetMethod, prefix: new HarmonyMethod(prefixMethod));
+			}
+			isHarmonyPatched = true;
+		}
 	}
 
 	private static void SetupGameOptionsManagerMock()
