@@ -28,9 +28,7 @@ public sealed class Blackmailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUp
 	private BlackmailerSystem? system;
 
 	public Blackmailer() : base(
-		RoleArgs.BuildImpostor(
-			ExtremeRoleId.Blackmailer,
-			RolePropPresets.OptionalDefault))
+		RoleArgs.BuildImpostor(ExtremeRoleId.Blackmailer))
 	{ }
 
 	public void CreateAbility()
