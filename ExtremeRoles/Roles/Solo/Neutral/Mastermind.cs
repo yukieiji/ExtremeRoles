@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using UnityEngine;
-
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.Player;
@@ -52,7 +50,7 @@ public sealed class Mastermind :
 		Liberal = 1 << 2,
 	}
 
-	public int Order => (int)IRoleVoteModifier.ModOrder.CaptainSpecialVote;
+	public int Order => (int)IRoleVoteModifier.ModOrder.MastermindSpecialVote;
 
 	public Sprite AbilityImage => UnityObjectLoader.LoadSpriteFromResources(
 		ObjectPath.CaptainSpecialVote);
@@ -139,8 +137,7 @@ public sealed class Mastermind :
 	{
 		if (this.voteTarget != byte.MaxValue)
 		{
-			int usedVotes = (int)Math.Floor(this.curChargedVote);
-			this.curChargedVote -= usedVotes;
+			this.curChargedVote = 0;
 		}
 		this.voteTarget = byte.MaxValue;
 		this.voteCheckMark.Clear();
@@ -154,7 +151,7 @@ public sealed class Mastermind :
 		void setTarget()
 		{
 			using (var caller = RPCOperator.CreateCaller(
-					RPCOperator.Command.MastermindAbility))
+				RPCOperator.Command.MastermindAbility))
 			{
 				caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 				caller.WriteByte(instance.PlayerId);
@@ -171,7 +168,7 @@ public sealed class Mastermind :
 
 			if (!this.voteCheckMark.TryGetValue(
 					instance.PlayerId,
-					out SpriteRenderer checkMark) ||
+					out var checkMark) ||
 				checkMark == null)
 			{
 				checkMark = UnityEngine.Object.Instantiate(
@@ -196,10 +193,10 @@ public sealed class Mastermind :
 
 	public void IntroEndSetUp()
 	{
-		GameObject bottomLeft = new GameObject("BottomLeft");
+		var bottomLeft = new GameObject("BottomLeft");
 		bottomLeft.transform.SetParent(
 			HudManager.Instance.UseButton.transform.parent.parent);
-		AspectPosition aspectPosition = bottomLeft.AddComponent<AspectPosition>();
+		var aspectPosition = bottomLeft.AddComponent<AspectPosition>();
 		aspectPosition.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
 		aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
 		aspectPosition.DistanceFromEdge = new Vector3(0.375f, 0.35f);
@@ -218,9 +215,12 @@ public sealed class Mastermind :
 
 	public void ResetOnMeetingStart()
 	{
-		foreach (var (_, poolPlayer) in this.playerIcons)
+		foreach (var poolPlayer in this.playerIcons.Values)
 		{
-			poolPlayer.gameObject.SetActive(false);
+			if (poolPlayer != null)
+			{
+				poolPlayer.gameObject.SetActive(false);
+			}
 		}
 	}
 
@@ -251,12 +251,7 @@ public sealed class Mastermind :
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (!rolePlayer.AmOwner)
-		{
-			return;
-		}
-
-		if (MeetingHud.Instance)
+		if (MeetingHud.Instance != null)
 		{
 			if (meetingVoteText == null)
 			{
@@ -294,7 +289,7 @@ public sealed class Mastermind :
 
 		if (this.waitTimer >= 0.0f)
 		{
-			this.waitTimer -= UnityEngine.Time.deltaTime;
+			this.waitTimer -= Time.deltaTime;
 			return;
 		}
 
@@ -321,35 +316,39 @@ public sealed class Mastermind :
 			this.curChargedVote += this.voteGainPerTask * newCompletedNum;
 		}
 
-		this.oldTaskComplete = new HashSet<uint>(curTaskComplete);
+		this.oldTaskComplete = [..curTaskComplete];
 
-		if (this.taskAddProgressThreshold.HasValue)
+		if (!this.taskAddProgressThreshold.HasValue)
 		{
-			float gage = Player.GetPlayerTaskGage(cachePlayer);
-			if (gage >= this.taskAddProgressThreshold.Value)
-			{
-				byte playerId = cachePlayer.PlayerId;
-				for (int i = 0; i < cachePlayer.Tasks.Count; ++i)
-				{
-					int taskTarget = RandomGenerator.Instance.Next(0, this.allTaskNum);
-					int taskIndex;
-					if (taskTarget < this.shortTask)
-					{
-						taskIndex = GameSystem.GetRandomShortTaskId();
-					}
-					else if (taskTarget < this.shortTask + this.normalTask)
-					{
-						taskIndex = GameSystem.GetRandomCommonTaskId();
-					}
-					else
-					{
-						taskIndex = GameSystem.GetRandomLongTask();
-					}
-					GameSystem.RpcReplaceNewTask(playerId, i, taskIndex);
-				}
-				this.oldTaskComplete.Clear();
-			}
+			return;
 		}
+		
+		float gage = Player.GetPlayerTaskGage(cachePlayer);
+		if (gage < this.taskAddProgressThreshold.Value)
+		{
+			return;
+		}
+
+		byte playerId = cachePlayer.PlayerId;
+		for (int i = 0; i < cachePlayer.Tasks.Count; ++i)
+		{
+			int taskTarget = RandomGenerator.Instance.Next(0, this.allTaskNum);
+			int taskIndex;
+			if (taskTarget < this.shortTask)
+			{
+				taskIndex = GameSystem.GetRandomShortTaskId();
+			}
+			else if (taskTarget < this.normalTask)
+			{
+				taskIndex = GameSystem.GetRandomCommonTaskId();
+			}
+			else
+			{
+				taskIndex = GameSystem.GetRandomLongTask();
+			}
+			GameSystem.RpcReplaceNewTask(playerId, i, taskIndex);
+		}
+		this.oldTaskComplete.Clear();
 	}
 
 	public void ModifiedWinPlayer(
@@ -357,33 +356,37 @@ public sealed class Mastermind :
 		GameOverReason reason,
 		in WinnerContainer winner)
 	{
-		if (rolePlayerInfo.IsDead || rolePlayerInfo.Disconnected) { return; }
-
-		int aliveCount = 0;
-		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+		if (rolePlayerInfo.IsDead || rolePlayerInfo.Disconnected)
 		{
-			if (player != null && !player.IsDead && !player.Disconnected)
+			return;
+		}
+
+		var allPlayers = GameData.Instance.AllPlayers;
+		int aliveCount = 0;
+		foreach (var player in allPlayers.GetFastEnumerator())
+		{
+			if (player.IsAlive())
 			{
 				aliveCount++;
 			}
 		}
 
-		if (aliveCount <= 3)
+		if (aliveCount > 3)
 		{
-			winner.AllClear();
-			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
-			{
-				if (player != null && !player.IsDead && !player.Disconnected)
-				{
-					if (ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) && role.Core.Id == ExtremeRoleId.Mastermind)
-					{
-						winner.Add(player);
-					}
-				}
-			}
-			ExtremeRolesPlugin.ShipState.SetGameOverReason(
-				(GameOverReason)RoleGameOverReason.MastermindAlive);
+			return;
 		}
+
+		winner.AllClear();
+		foreach (var player in allPlayers.GetFastEnumerator())
+		{
+			if (player.IsAlive() &&
+				ExtremeRoleManager.TryGetSafeCastedRole<Mastermind>(player.PlayerId, out var _))
+			{
+				winner.Add(player);
+			}
+		}
+		ExtremeRolesPlugin.ShipState.SetGameOverReason(
+			(GameOverReason)RoleGameOverReason.MastermindAlive);
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -399,8 +402,8 @@ public sealed class Mastermind :
 
 		factory.CreateIntOption(
 			MastermindOption.TaskAddProgressThreshold,
-			100, 0, 100, 5,
-			activator: new ParentActive(infiniteTaskOpt),
+			50, 0, 100, 10,
+			new InvertActive(infiniteTaskOpt),
 			format: OptionUnit.Percentage);
 
 		factory.CreateBoolOption(
@@ -422,15 +425,9 @@ public sealed class Mastermind :
 
 		this.voteGainPerTask = loader.GetValue<MastermindOption, float>(MastermindOption.VoteGainPerTask);
 
-		bool infiniteTasks = loader.GetValue<MastermindOption, bool>(MastermindOption.InfiniteTasks);
-		if (infiniteTasks)
-		{
-			this.taskAddProgressThreshold = loader.GetValue<MastermindOption, int>(MastermindOption.TaskAddProgressThreshold) / 100.0f;
-		}
-		else
-		{
-			this.taskAddProgressThreshold = null;
-		}
+		this.taskAddProgressThreshold =
+			loader.GetValue<MastermindOption, bool>(MastermindOption.InfiniteTasks) ?
+			loader.GetValue<MastermindOption, int>(MastermindOption.TaskAddProgressThreshold) / 100.0f : null;
 
 		this.visionFlags = RoleVisionFlags.None;
 		if (loader.GetValue<MastermindOption, bool>(MastermindOption.CanSeeImpostor))
@@ -448,8 +445,8 @@ public sealed class Mastermind :
 
 		var option = GameOptionsManager.Instance.CurrentGameOptions;
 		this.shortTask = option.GetInt(Int32OptionNames.NumShortTasks);
-		this.normalTask = option.GetInt(Int32OptionNames.NumCommonTasks);
-		this.allTaskNum = this.shortTask + this.normalTask + option.GetInt(Int32OptionNames.NumLongTasks);
+		this.normalTask = this.shortTask + option.GetInt(Int32OptionNames.NumCommonTasks);
+		this.allTaskNum = this.normalTask + option.GetInt(Int32OptionNames.NumLongTasks);
 
 		this.curChargedVote = 0.0f;
 		this.voteTarget = byte.MaxValue;
@@ -457,19 +454,15 @@ public sealed class Mastermind :
 		this.playerIcons = new Dictionary<byte, PoolablePlayer>();
 		this.oldTaskComplete = new HashSet<uint>();
 
-		MastermindNoticeSystem.CreateOrGet();
+		_ = MastermindNoticeSystem.CreateOrGet();
 	}
 
 	private void updateShowIcon()
 	{
 		foreach (var (playerId, poolPlayer) in this.playerIcons)
 		{
-			if (playerId == PlayerControl.LocalPlayer.PlayerId)
-			{
-				continue;
-			}
-
-			if (!ExtremeRoleManager.TryGetRole(playerId, out var role))
+			if (playerId == PlayerControl.LocalPlayer.PlayerId ||
+				!ExtremeRoleManager.TryGetRole(playerId, out var role))
 			{
 				continue;
 			}
@@ -478,14 +471,14 @@ public sealed class Mastermind :
 						(role.IsNeutral() && this.visionFlags.HasFlag(RoleVisionFlags.Neutral)) ||
 						(role.IsLiberal() && this.visionFlags.HasFlag(RoleVisionFlags.Liberal));
 
-			if (!show)
-			{
-				poolPlayer.gameObject.SetActive(false);
-			}
-			else
+			if (show)
 			{
 				poolPlayer.transform.localScale = Vector3.one * 0.275f;
 				poolPlayer.gameObject.SetActive(true);
+			}
+			else
+			{
+				poolPlayer.gameObject.SetActive(false);
 			}
 		}
 		if (this.grid == null)
