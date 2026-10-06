@@ -27,6 +27,7 @@ public sealed class MastermindNoticeSystem : IExtremeSystemType
 		public MastermindStringSerializer(uint aliveMastermindCount)
 		{
 			this.aliveMastermindCount = aliveMastermindCount;
+			IsRpc = true;
 		}
 
 		public void Deserialize(MessageReader reader)
