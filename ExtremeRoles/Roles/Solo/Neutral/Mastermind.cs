@@ -80,7 +80,7 @@ public sealed class Mastermind :
 		RoleArgs.BuildNeutral(
 			ExtremeRoleId.Mastermind,
 			ColorPalette.MastermindSlateBlue,
-			RoleProp.CanCallMeeting | RoleProp.CanUseAdmin))
+			RolePropPresets.OptionalDefault | RoleProp.HasTask))
 	{ }
 
 	public static void UseAbility(ref Hazel.MessageReader reader)
