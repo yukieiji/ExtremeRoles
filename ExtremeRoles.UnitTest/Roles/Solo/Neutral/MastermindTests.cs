@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AmongUs.GameOptions;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -124,8 +125,8 @@ public sealed class MastermindTests
 		InitializeRole(liberalRole, 4);
 
 		Assert.Equal(Palette.ImpostorRed, mastermind.GetTargetRoleSeeColor(impRole, 2));
-		Assert.Equal(Palette.White, mastermind.GetTargetRoleSeeColor(neutralRole, 3));
-		Assert.Equal(Palette.White, mastermind.GetTargetRoleSeeColor(liberalRole, 4));
+		Assert.Equal(ColorPalette.NeutralColor, mastermind.GetTargetRoleSeeColor(neutralRole, 3));
+		Assert.Equal(ColorPalette.LiberalColor, mastermind.GetTargetRoleSeeColor(liberalRole, 4));
 	}
 
 	[Fact]

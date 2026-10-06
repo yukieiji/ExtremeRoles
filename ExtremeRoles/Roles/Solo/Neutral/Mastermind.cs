@@ -43,17 +43,23 @@ public sealed class Mastermind :
 		CanSeeLiberal,
 	}
 
+	[Flags]
+	public enum RoleVisionFlags : byte
+	{
+		None = 0,
+		Impostor = 1 << 0,
+		Neutral = 1 << 1,
+		Liberal = 1 << 2,
+	}
+
 	public int Order => (int)IRoleVoteModifier.ModOrder.CaptainSpecialVote;
 
 	public Sprite AbilityImage => UnityObjectLoader.LoadSpriteFromResources(
 		ObjectPath.CaptainSpecialVote);
 
 	private float voteGainPerTask;
-	private bool infiniteTasks;
-	private float taskAddProgressThreshold;
-	private bool canSeeImpostor;
-	private bool canSeeNeutral;
-	private bool canSeeLiberal;
+	private float? taskAddProgressThreshold;
+	private RoleVisionFlags visionFlags;
 
 	private int shortTask;
 	private int normalTask;
@@ -227,15 +233,15 @@ public sealed class Mastermind :
 		SingleRoleBase targetRole,
 		byte targetPlayerId)
 	{
-		if (targetRole.IsImpostor() && this.canSeeImpostor)
+		if (targetRole.IsImpostor() && this.visionFlags.HasFlag(RoleVisionFlags.Impostor))
 		{
 			return Palette.ImpostorRed;
 		}
-		else if (targetRole.IsNeutral() && this.canSeeNeutral)
+		else if (targetRole.IsNeutral() && this.visionFlags.HasFlag(RoleVisionFlags.Neutral))
 		{
 			return ColorPalette.NeutralColor;
 		}
-		else if (targetRole.IsLiberal() && this.canSeeLiberal)
+		else if (targetRole.IsLiberal() && this.visionFlags.HasFlag(RoleVisionFlags.Liberal))
 		{
 			return ColorPalette.LiberalColor;
 		}
@@ -317,10 +323,10 @@ public sealed class Mastermind :
 
 		this.oldTaskComplete = new HashSet<uint>(curTaskComplete);
 
-		if (this.infiniteTasks)
+		if (this.taskAddProgressThreshold.HasValue)
 		{
 			float gage = Player.GetPlayerTaskGage(cachePlayer);
-			if (gage >= this.taskAddProgressThreshold)
+			if (gage >= this.taskAddProgressThreshold.Value)
 			{
 				byte playerId = cachePlayer.PlayerId;
 				for (int i = 0; i < cachePlayer.Tasks.Count; ++i)
@@ -341,6 +347,7 @@ public sealed class Mastermind :
 					}
 					GameSystem.RpcReplaceNewTask(playerId, i, taskIndex);
 				}
+				this.oldTaskComplete.Clear();
 			}
 		}
 	}
@@ -388,7 +395,7 @@ public sealed class Mastermind :
 
 		var infiniteTaskOpt = factory.CreateBoolOption(
 			MastermindOption.InfiniteTasks,
-			false);
+			true);
 
 		factory.CreateIntOption(
 			MastermindOption.TaskAddProgressThreshold,
@@ -402,11 +409,11 @@ public sealed class Mastermind :
 
 		factory.CreateBoolOption(
 			MastermindOption.CanSeeNeutral,
-			false);
+			true);
 
 		factory.CreateBoolOption(
 			MastermindOption.CanSeeLiberal,
-			false);
+			true);
 	}
 
 	protected override void RoleSpecificInit()
@@ -414,19 +421,35 @@ public sealed class Mastermind :
 		var loader = this.Loader;
 
 		this.voteGainPerTask = loader.GetValue<MastermindOption, float>(MastermindOption.VoteGainPerTask);
-		this.infiniteTasks = loader.GetValue<MastermindOption, bool>(MastermindOption.InfiniteTasks);
-		this.taskAddProgressThreshold = loader.GetValue<MastermindOption, int>(MastermindOption.TaskAddProgressThreshold) / 100.0f;
-		this.canSeeImpostor = loader.GetValue<MastermindOption, bool>(MastermindOption.CanSeeImpostor);
-		this.canSeeNeutral = loader.GetValue<MastermindOption, bool>(MastermindOption.CanSeeNeutral);
-		this.canSeeLiberal = loader.GetValue<MastermindOption, bool>(MastermindOption.CanSeeLiberal);
 
-		if (GameOptionsManager.Instance != null && GameOptionsManager.Instance.CurrentGameOptions != null)
+		bool infiniteTasks = loader.GetValue<MastermindOption, bool>(MastermindOption.InfiniteTasks);
+		if (infiniteTasks)
 		{
-			var option = GameOptionsManager.Instance.CurrentGameOptions;
-			this.shortTask = option.GetInt(Int32OptionNames.NumShortTasks);
-			this.normalTask = option.GetInt(Int32OptionNames.NumCommonTasks);
-			this.allTaskNum = this.shortTask + this.normalTask + option.GetInt(Int32OptionNames.NumLongTasks);
+			this.taskAddProgressThreshold = loader.GetValue<MastermindOption, int>(MastermindOption.TaskAddProgressThreshold) / 100.0f;
 		}
+		else
+		{
+			this.taskAddProgressThreshold = null;
+		}
+
+		this.visionFlags = RoleVisionFlags.None;
+		if (loader.GetValue<MastermindOption, bool>(MastermindOption.CanSeeImpostor))
+		{
+			this.visionFlags |= RoleVisionFlags.Impostor;
+		}
+		if (loader.GetValue<MastermindOption, bool>(MastermindOption.CanSeeNeutral))
+		{
+			this.visionFlags |= RoleVisionFlags.Neutral;
+		}
+		if (loader.GetValue<MastermindOption, bool>(MastermindOption.CanSeeLiberal))
+		{
+			this.visionFlags |= RoleVisionFlags.Liberal;
+		}
+
+		var option = GameOptionsManager.Instance.CurrentGameOptions;
+		this.shortTask = option.GetInt(Int32OptionNames.NumShortTasks);
+		this.normalTask = option.GetInt(Int32OptionNames.NumCommonTasks);
+		this.allTaskNum = this.shortTask + this.normalTask + option.GetInt(Int32OptionNames.NumLongTasks);
 
 		this.curChargedVote = 0.0f;
 		this.voteTarget = byte.MaxValue;
@@ -451,9 +474,9 @@ public sealed class Mastermind :
 				continue;
 			}
 
-			bool show = (role.IsImpostor() && this.canSeeImpostor) ||
-						(role.IsNeutral() && this.canSeeNeutral) ||
-						(role.IsLiberal() && this.canSeeLiberal);
+			bool show = (role.IsImpostor() && this.visionFlags.HasFlag(RoleVisionFlags.Impostor)) ||
+						(role.IsNeutral() && this.visionFlags.HasFlag(RoleVisionFlags.Neutral)) ||
+						(role.IsLiberal() && this.visionFlags.HasFlag(RoleVisionFlags.Liberal));
 
 			if (!show)
 			{
