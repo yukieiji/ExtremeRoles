@@ -176,6 +176,7 @@ public enum ExtremeRoleId : int
 	Pawn,
 	Punisher,
 	Imitater,
+	Mastermind,
 
 	Leader,
 	Dove,
@@ -268,6 +269,8 @@ public enum RoleGameOverReason
 	PunisherKilledImpostor,
 	PunisherKillAllOther,
 
+	MastermindAlive,
+
 	AllJackalWin,
 	AllYandereWin,
 	AllQueenWin,
@@ -318,6 +321,7 @@ public static class ExtremeRoleManager
 		ExtremeRoleId.Yandere,
 		ExtremeRoleId.Hatter,
 		ExtremeRoleId.Monika,
+		ExtremeRoleId.Mastermind,
 	};
 
     public static readonly ImmutableDictionary<int, SingleRoleBase> NormalRole =
@@ -424,6 +428,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
 			{(int)ExtremeRoleId.Punisher  , new Punisher()},
 			{(int)ExtremeRoleId.Imitater  , new Imitater()},
+			{(int)ExtremeRoleId.Mastermind, new Mastermind()},
 
 			{(int)ExtremeRoleId.SpecialDove    , new SpecialDove()},
 			{(int)ExtremeRoleId.SpecialMilitant, new SpecialMilitant()},

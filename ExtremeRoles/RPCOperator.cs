@@ -109,6 +109,7 @@ public static class RPCOperator
 		MinerHandle,
 		MadmateToFakeImpostor,
 		ArtistRpcOps,
+		MastermindAbility,
 
 		// リベラル
 		EncloserOps,
@@ -596,6 +597,11 @@ public static class RPCOperator
     {
         Roles.Solo.Crewmate.Captain.UseAbility(ref reader);
     }
+
+	public static void MastermindTargetVote(ref MessageReader reader)
+	{
+		Roles.Solo.Neutral.Mastermind.UseAbility(ref reader);
+	}
 
     public static void ResurrecterRpc(ref MessageReader reader)
     {

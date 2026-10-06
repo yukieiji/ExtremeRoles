@@ -228,6 +228,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.CaptainAbility:
 				RPCOperator.CaptainTargetVote(ref reader);
 				break;
+			case RPCOperator.Command.MastermindAbility:
+				RPCOperator.MastermindTargetVote(ref reader);
+				break;
 			case RPCOperator.Command.ResurrecterRpc:
 				RPCOperator.ResurrecterRpc(ref reader);
 				break;
