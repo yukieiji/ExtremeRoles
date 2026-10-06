@@ -1,8 +1,11 @@
 using System;
+using System.Runtime.CompilerServices;
 using AmongUs.GameOptions;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using InnerNet;
 using Moq;
@@ -23,11 +26,27 @@ public class JailerRoleTests
 		MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupObjectImplicitHelpers();
 
+		var mockShipStatus = new Mock<ShipStatus>(IntPtr.Zero);
+		var mockShipStatusHelper = new Mock<MockShipStatusget_InstanceHelper>();
+		mockShipStatusHelper.Setup(x => x.Invoke()).Returns(mockShipStatus.Object);
+		MockShipStatusget_InstanceHelper.Instance = mockShipStatusHelper.Object;
+
+		var mockAllPlayers = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>>(IntPtr.Zero);
+		mockAllPlayers.SetupGet(a => a.Count).Returns(0);
+
+		var mockGameData = new Mock<GameData>(IntPtr.Zero);
+		mockGameData.SetupGet(g => g.AllPlayers).Returns(mockAllPlayers.Object);
+
+		var mockGameDataHelper = new Mock<MockGameDataget_InstanceHelper>();
+		mockGameDataHelper.Setup(x => x.Invoke()).Returns(mockGameData.Object);
+		MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
+
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
 		MockSetupHelper.SetupPlayerControlMocks();
 		MockSetupHelper.SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
+		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 
 		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
@@ -104,6 +123,61 @@ public class JailerRoleTests
 
 		// Assert
 		Assert.Equal(expectedIsAwake, isAwake);
+	}
+
+	[Fact]
+	public void IsAbilityUse_WhenNoPlayerInRange_ReturnsFalse()
+	{
+		// Arrange
+		var jailer = new Jailer();
+
+		// Act
+		bool result = jailer.IsAbilityUse();
+
+		// Assert
+		Assert.False(result);
+	}
+
+	[Fact]
+	public void UseAbility_WhenButtonOrRoleNull_ReturnsFalse()
+	{
+		// Arrange
+		var jailer = new Jailer();
+
+		// Act
+		bool result = jailer.UseAbility();
+
+		// Assert
+		Assert.False(result);
+	}
+
+	[Fact]
+	public void NotCrewmateToYardbird_WhenTargetPlayerNotFound_DoesNotThrow()
+	{
+		// Arrange & Act & Assert
+		Jailer.NotCrewmateToYardbird(1, 2);
+	}
+
+	[Fact]
+	public void ToLawbreaker_WhenJailerRoleNotFound_DoesNotThrow()
+	{
+		// Arrange & Act & Assert
+		Jailer.ToLawbreaker(1);
+	}
+
+	[Fact]
+	public void Update_WhenNotInTaskPhase_DoesNothing()
+	{
+		// Arrange
+		SetLobbyMode(false);
+		var jailer = new Jailer();
+		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
+
+		// Act
+		jailer.Update(mockPlayer.Object);
+
+		// Assert
+		Assert.False(jailer.IsAwake);
 	}
 
 	[Theory]
