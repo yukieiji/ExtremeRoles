@@ -377,6 +377,13 @@ public static class EndGameManagerSetUpPatch
 				RoleGameOverReason.MonikaThisGameIsMine =>
 				new(ExtremeRoleId.Monika, ColorPalette.MonikaRoseSaumon),
 
+			RoleGameOverReason.PunisherKilledImpostor or 
+				RoleGameOverReason.PunisherKillAllOther =>
+				new(ExtremeRoleId.Punisher, ColorPalette.PunisherDarkGold),
+
+			RoleGameOverReason.MastermindAlive =>
+				new(ExtremeRoleId.Mastermind, ColorPalette.MastermindSlateBlue),
+
 			RoleGameOverReason.AllJackalWin =>
 				new(RoleGameOverReason.AllJackalWin, ColorPalette.JackalBlue),
 			RoleGameOverReason.AllYandereWin =>
