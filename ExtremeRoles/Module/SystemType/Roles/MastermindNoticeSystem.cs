@@ -13,10 +13,6 @@ public sealed class MastermindNoticeSystem : IExtremeSystemType
 	public static MastermindNoticeSystem CreateOrGet()
 		=> ExtremeSystemTypeManager.Instance.CreateOrGet<MastermindNoticeSystem>(Type);
 
-	public void Deserialize(Hazel.MessageReader reader, bool initialState) { }
-	public void Deteriorate(float deltaTime) { }
-	public void MarkClean() { }
-	public void Serialize(Hazel.MessageWriter writer, bool initialState) { }
 	public void UpdateSystem(PlayerControl player, Hazel.MessageReader msgReader) { }
 
 	public void Reset(ResetTiming timing, PlayerControl? player)

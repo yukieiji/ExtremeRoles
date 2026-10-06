@@ -108,7 +108,7 @@ public sealed class Mastermind :
 		ref Dictionary<byte, byte> voteTarget,
 		ref Dictionary<byte, int> voteResult)
 	{
-		if (this.voteTarget == PlayerVoteArea.HasNotVoted)
+		if (this.voteTarget == byte.MaxValue)
 		{
 			return;
 		}
@@ -127,7 +127,7 @@ public sealed class Mastermind :
 	public IEnumerable<VoteInfo> GetModdedVoteInfo(
 		VoteInfoCollector collector, NetworkedPlayerInfo rolePlayer)
 	{
-		if (this.voteTarget == PlayerVoteArea.HasNotVoted)
+		if (this.voteTarget == byte.MaxValue)
 		{
 			yield break;
 		}
@@ -141,12 +141,12 @@ public sealed class Mastermind :
 
 	public void ResetModifier()
 	{
-		if (this.voteTarget != PlayerVoteArea.HasNotVoted)
+		if (this.voteTarget != byte.MaxValue)
 		{
 			int usedVotes = (int)Math.Floor(this.curChargedVote);
 			this.curChargedVote -= usedVotes;
 		}
-		this.voteTarget = PlayerVoteArea.HasNotVoted;
+		this.voteTarget = byte.MaxValue;
 		this.voteCheckMark.Clear();
 	}
 
@@ -431,13 +431,16 @@ public sealed class Mastermind :
 		this.canSeeNeutral = loader.GetValue<MastermindOption, bool>(MastermindOption.CanSeeNeutral);
 		this.canSeeLiberal = loader.GetValue<MastermindOption, bool>(MastermindOption.CanSeeLiberal);
 
-		var option = GameOptionsManager.Instance.CurrentGameOptions;
-		this.shortTask = option.GetInt(Int32OptionNames.NumShortTasks);
-		this.normalTask = option.GetInt(Int32OptionNames.NumCommonTasks);
-		this.allTaskNum = this.shortTask + this.normalTask + option.GetInt(Int32OptionNames.NumLongTasks);
+		if (GameOptionsManager.Instance != null && GameOptionsManager.Instance.CurrentGameOptions != null)
+		{
+			var option = GameOptionsManager.Instance.CurrentGameOptions;
+			this.shortTask = option.GetInt(Int32OptionNames.NumShortTasks);
+			this.normalTask = option.GetInt(Int32OptionNames.NumCommonTasks);
+			this.allTaskNum = this.shortTask + this.normalTask + option.GetInt(Int32OptionNames.NumLongTasks);
+		}
 
 		this.curChargedVote = 0.0f;
-		this.voteTarget = PlayerVoteArea.HasNotVoted;
+		this.voteTarget = byte.MaxValue;
 		this.voteCheckMark = new Dictionary<byte, SpriteRenderer>();
 		this.playerIcons = new Dictionary<byte, PoolablePlayer>();
 		this.oldTaskComplete = new HashSet<uint>();
