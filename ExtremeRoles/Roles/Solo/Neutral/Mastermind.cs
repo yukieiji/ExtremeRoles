@@ -296,9 +296,8 @@ public sealed class Mastermind :
 		this.waitTimer = 1.0f;
 
 		List<uint> curTaskComplete = [];
-		for (int i = 0; i < cachePlayer.Tasks.Count; ++i)
+		foreach (var task in cachePlayer.Tasks)
 		{
-			var task = cachePlayer.Tasks[i];
 			if (task.Complete)
 			{
 				curTaskComplete.Add(task.Id);
@@ -316,7 +315,7 @@ public sealed class Mastermind :
 			this.curChargedVote += this.voteGainPerTask * newCompletedNum;
 		}
 
-		this.oldTaskComplete = [..curTaskComplete];
+		this.oldTaskComplete = new HashSet<uint>(curTaskComplete);
 
 		if (!this.taskAddProgressThreshold.HasValue)
 		{
@@ -356,7 +355,7 @@ public sealed class Mastermind :
 		GameOverReason reason,
 		in WinnerContainer winner)
 	{
-		if (rolePlayerInfo.IsDead || rolePlayerInfo.Disconnected)
+		if (rolePlayerInfo.IsInValid())
 		{
 			return;
 		}
@@ -370,7 +369,6 @@ public sealed class Mastermind :
 				aliveCount++;
 			}
 		}
-
 		if (aliveCount > 3)
 		{
 			return;
