@@ -16,6 +16,10 @@ public class DefaultResourcesProvider : IResourcesProvider
 	public Sprite LoadSprite(string objName)
 		=> UnityObjectLoader.LoadFromResources<Sprite>(objName);
 
+
+	public Sprite LoadButtonIcon<TEnum>(TEnum id, string iconName) where TEnum : Enum
+		=> UnityObjectLoader.LoadFromButtonIcon(id, iconName);
+
 	public Sprite LoadRoleSprite<TEnum>(TEnum id, string imageName) where TEnum : Enum
 		=> UnityObjectLoader.LoadFromResources<Sprite, TEnum>(id, imageName);
 }

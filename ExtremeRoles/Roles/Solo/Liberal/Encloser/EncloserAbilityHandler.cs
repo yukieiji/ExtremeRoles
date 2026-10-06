@@ -27,10 +27,11 @@ public sealed class EncloserAbilityHandler(
 
 	public void CreateAbility()
 	{
-		Sprite bombSprite = this.resourcesProvider.LoadSprite(ObjectPath.Bomb);
+		var stakeSprite = this.resourcesProvider.LoadRoleSprite(ExtremeRoleId.Encloser, "Stake");
+		var stakeGraphic = new ButtonGraphic(Tr.GetString("Stake"), stakeSprite);
 
-		var stakeGraphic = new ButtonGraphic(Tr.GetString("Stake"), bombSprite);
-		var metsuGraphic = new ButtonGraphic(Tr.GetString("Metsu"), bombSprite);
+		var metsuSprite = this.resourcesProvider.LoadRoleSprite(ExtremeRoleId.Encloser, "Metsu");
+		var metsuGraphic = new ButtonGraphic(Tr.GetString("Metsu"), metsuSprite);
 
 		this.Button = RoleAbilityFactory.CreateCountAbility(
 			stakeGraphic.Text,
@@ -71,7 +72,7 @@ public sealed class EncloserAbilityHandler(
 			return false;
 		}
 
-		PlayerControl localPlayer = PlayerControl.LocalPlayer;
+		var localPlayer = PlayerControl.LocalPlayer;
 		bool isCommonUse = localPlayer != null && localPlayer.IsAlive() && localPlayer.CanMove;
 
 		return this.currentMode switch
