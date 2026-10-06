@@ -355,6 +355,7 @@ public sealed class PlayerStatistics() : IPlayerStatistics
 				ExtremeRoleId.Yandere => new YandereWinChecker(),
 				ExtremeRoleId.Hatter => new HatterWinChecker(),
 				ExtremeRoleId.Monika => new MonikaAliveWinChecker(),
+				ExtremeRoleId.Mastermind => new MastermindWinChecker(),
 				_ => null,
 			};
 			if (winChecker is not null)

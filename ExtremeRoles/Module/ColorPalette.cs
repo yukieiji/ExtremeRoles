@@ -88,6 +88,7 @@ public static class ColorPalette
 	public readonly static Color IronMateAluminium = new Color32(128, 140, 136, byte.MaxValue);
 	public readonly static Color MonikaRoseSaumon = new Color32(
 		244, 155, 131, byte.MaxValue);
+	public readonly static Color MastermindSlateBlue = new Color32(106, 90, 205, byte.MaxValue);
 	public readonly static Color ImitaterColor = NeutralColor;
 
 

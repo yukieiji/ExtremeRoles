@@ -45,6 +45,7 @@ public interface IRoleVoteModifier
     public enum ModOrder : int
     {
         CaptainSpecialVote = 0,
+		MastermindSpecialVote,
 		GamblerAddVote,
 
 		LegislatorSpecialVote,
