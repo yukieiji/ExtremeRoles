@@ -43,11 +43,6 @@ public sealed class Mastermind :
 		CanSeeLiberal,
 	}
 
-	public enum AbilityType : byte
-	{
-		SetVoteTarget,
-	}
-
 	public int Order => (int)IRoleVoteModifier.ModOrder.CaptainSpecialVote;
 
 	public Sprite AbilityImage => UnityObjectLoader.LoadSpriteFromResources(
@@ -86,16 +81,11 @@ public sealed class Mastermind :
 
 	public static void UseAbility(ref Hazel.MessageReader reader)
 	{
-		AbilityType type = (AbilityType)reader.ReadByte();
 		byte rolePlayerId = reader.ReadByte();
+		byte targetPlayerId = reader.ReadByte();
 
 		Mastermind? mastermind = ExtremeRoleManager.GetSafeCastedRole<Mastermind>(rolePlayerId);
-
-		if (type == AbilityType.SetVoteTarget)
-		{
-			byte targetPlayerId = reader.ReadByte();
-			mastermind?.SetTargetVote(targetPlayerId);
-		}
+		mastermind?.SetTargetVote(targetPlayerId);
 	}
 
 	public void SetTargetVote(byte targetPlayerId)
@@ -160,7 +150,6 @@ public sealed class Mastermind :
 			using (var caller = RPCOperator.CreateCaller(
 					RPCOperator.Command.MastermindAbility))
 			{
-				caller.WriteByte((byte)AbilityType.SetVoteTarget);
 				caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 				caller.WriteByte(instance.PlayerId);
 			}
@@ -342,7 +331,7 @@ public sealed class Mastermind :
 					{
 						taskIndex = GameSystem.GetRandomShortTaskId();
 					}
-					else if (taskTarget < this.normalTask)
+					else if (taskTarget < this.shortTask + this.normalTask)
 					{
 						taskIndex = GameSystem.GetRandomCommonTaskId();
 					}
