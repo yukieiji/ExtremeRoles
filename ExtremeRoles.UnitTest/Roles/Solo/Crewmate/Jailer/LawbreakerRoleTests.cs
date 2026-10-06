@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using AmongUs.GameOptions;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.GameResult;
@@ -38,7 +36,6 @@ public class LawbreakerRoleTests
 	[Fact]
 	public void Constructor_WithKillEnabledAndHasOtherKillSettings_InitializesProperties()
 	{
-		// Arrange
 		var option = new Lawbreaker.Option(
 			Kill: true,
 			HasOtherKillCool: true,
@@ -49,10 +46,8 @@ public class LawbreakerRoleTests
 			Sab: true
 		);
 
-		// Act
 		var lawbreaker = new Lawbreaker(optionLoaderMock.Object, option);
 
-		// Assert
 		Assert.NotNull(lawbreaker);
 		Assert.Equal(ExtremeRoleId.Lawbreaker, lawbreaker.Core.Id);
 		Assert.True(lawbreaker.CanKill);
@@ -67,7 +62,6 @@ public class LawbreakerRoleTests
 	[Fact]
 	public void Constructor_WithKillDisabled_SetsDefaultKillProperties()
 	{
-		// Arrange
 		var option = new Lawbreaker.Option(
 			Kill: false,
 			HasOtherKillCool: false,
@@ -78,10 +72,8 @@ public class LawbreakerRoleTests
 			Sab: false
 		);
 
-		// Act
 		var lawbreaker = new Lawbreaker(optionLoaderMock.Object, option);
 
-		// Assert
 		Assert.False(lawbreaker.CanKill);
 		Assert.False(lawbreaker.UseVent);
 		Assert.False(lawbreaker.UseSabotage);
@@ -95,7 +87,6 @@ public class LawbreakerRoleTests
 	[InlineData(GameOverReason.CrewmateDisconnect, false)]
 	public void ModifiedWinPlayer_AppliesWinnerBasedOnGameOverReason(GameOverReason reason, bool shouldAddWinner)
 	{
-		// Arrange
 		var option = new Lawbreaker.Option(true, true, 20f, false, 0, true, true);
 		var lawbreaker = new Lawbreaker(optionLoaderMock.Object, option);
 
@@ -104,10 +95,8 @@ public class LawbreakerRoleTests
 
 		var winnerContainer = new WinnerContainer();
 
-		// Act
 		lawbreaker.ModifiedWinPlayer(playerInfoMock.Object, reason, winnerContainer);
 
-		// Assert
 		bool isWinnerAdded = winnerContainer.PlusedWinner.Contains(playerInfoMock.Object);
 		Assert.Equal(shouldAddWinner, isWinnerAdded);
 	}

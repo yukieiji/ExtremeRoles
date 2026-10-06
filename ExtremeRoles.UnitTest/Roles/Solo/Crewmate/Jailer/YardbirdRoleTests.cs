@@ -59,7 +59,6 @@ public class YardbirdRoleTests
 	[Fact]
 	public void Constructor_WhenLocalPlayerIsTarget_InitializesTasksAndMoveSpeed()
 	{
-		// Arrange
 		byte localPlayerId = 1;
 		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
 		localPlayerMock.SetupGet(p => p.PlayerId).Returns(localPlayerId);
@@ -76,10 +75,8 @@ public class YardbirdRoleTests
 			Sab: true
 		);
 
-		// Act
 		var yardbird = new Yardbird(optionLoaderMock.Object, localPlayerId, option);
 
-		// Assert
 		Assert.NotNull(yardbird);
 		Assert.Equal(ExtremeRoleId.Yardbird, yardbird.Core.Id);
 		Assert.Equal(1.2f, yardbird.MoveSpeed);
@@ -93,7 +90,6 @@ public class YardbirdRoleTests
 	[Fact]
 	public void Constructor_WhenOtherPlayerIsTarget_DoesNotInitializeTasksForLocal()
 	{
-		// Arrange
 		byte localPlayerId = 1;
 		byte targetPlayerId = 2;
 		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
@@ -111,10 +107,8 @@ public class YardbirdRoleTests
 			Sab: false
 		);
 
-		// Act
 		var yardbird = new Yardbird(optionLoaderMock.Object, targetPlayerId, option);
 
-		// Assert
 		Assert.NotNull(yardbird);
 		Assert.Equal(0.8f, yardbird.MoveSpeed);
 		Assert.False(yardbird.CanUseAdmin);
@@ -127,7 +121,6 @@ public class YardbirdRoleTests
 	[Fact]
 	public void Update_WhenOtherPlayerTarget_HasEmptyTasks_DoesNothing()
 	{
-		// Arrange
 		byte localPlayerId = 1;
 		byte otherPlayerId = 2;
 		var localPlayerMock = MockSetupHelper.SetupPlayerControlMocks();
@@ -139,7 +132,6 @@ public class YardbirdRoleTests
 		var mockOtherPlayer = new Mock<PlayerControl>(IntPtr.Zero);
 		mockOtherPlayer.SetupGet(p => p.PlayerId).Returns(otherPlayerId);
 
-		// Act & Assert (Tasks is empty, returns early)
 		yardbird.Update(mockOtherPlayer.Object);
 	}
 }
