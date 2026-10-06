@@ -30,6 +30,7 @@ public class YardbirdRoleTests
 		MockSetupHelper.SetupPlayerControlMocks();
 		MockSetupHelper.SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
+		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 
 		var mockTranslation = MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 		mockTranslation.Setup(t => t.GetString(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
@@ -43,7 +44,7 @@ public class YardbirdRoleTests
 		mockShipStatus.SetupGet(s => s.LongTasks).Returns(emptyLongTasks);
 
 		var emptyShortTasks = new Il2CppReferenceArray<NormalPlayerTask>(0);
-		mockShipStatus.SetupGet(s => s.NormalTasks).Returns(emptyShortTasks);
+		mockShipStatus.SetupGet(s => s.ShortTasks).Returns(emptyShortTasks);
 
 		var mockShipStatusHelper = new Mock<MockShipStatusget_InstanceHelper>();
 		mockShipStatusHelper.Setup(x => x.Invoke()).Returns(mockShipStatus.Object);

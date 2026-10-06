@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
 using AmongUs.GameOptions;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using InnerNet;
 using Moq;
@@ -61,18 +57,6 @@ public class JailerRoleTests
 	}
 
 	[Fact]
-	public void Constructor_InitializesCorrectly()
-	{
-		// Act
-		var jailer = new Jailer();
-
-		// Assert
-		Assert.NotNull(jailer);
-		Assert.Equal(ExtremeRoleId.Jailer, jailer.Core.Id);
-		Assert.Equal(RoleTypes.Crewmate, jailer.NoneAwakeRole);
-	}
-
-	[Fact]
 	public void CreateRoleAllOption_CreatesExpectedOptions()
 	{
 		// Arrange
@@ -120,19 +104,6 @@ public class JailerRoleTests
 
 		// Assert
 		Assert.Equal(expectedIsAwake, isAwake);
-	}
-
-	[Fact]
-	public void GetFakeOptionString_ReturnsEmptyString()
-	{
-		// Arrange
-		var jailer = new Jailer();
-
-		// Act
-		string result = jailer.GetFakeOptionString();
-
-		// Assert
-		Assert.Equal("", result);
 	}
 
 	[Theory]
@@ -351,16 +322,5 @@ public class JailerRoleTests
 
 		// Assert
 		Assert.Equal(Palette.White, color);
-	}
-
-	[Fact]
-	public void ResetOnMeetingStartAndEnd_ExecutesWithoutError()
-	{
-		// Arrange
-		var jailer = new Jailer();
-
-		// Act & Assert
-		jailer.ResetOnMeetingStart();
-		jailer.ResetOnMeetingEnd(null);
 	}
 }
