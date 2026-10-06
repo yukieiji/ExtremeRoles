@@ -24,7 +24,7 @@ Extreme Rolesにおける役職作成の全体像と、推奨される設計指�
 
 ## 推奨されるディレクトリ構成
 
-既存の `Loner` (孤独な人) や `CEO` のコードが非常に参考になります。
+既存の `Loner` や `CEO` のコードが非常に参考になります。
 
 ```
 ExtremeRoles/Roles/Solo/Crewmate/MyRole/
