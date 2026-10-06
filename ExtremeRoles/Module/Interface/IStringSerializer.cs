@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 
 using Hazel;
 
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.GhostRoles.Crewmate;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Module.Interface;
 
@@ -13,12 +14,10 @@ namespace ExtremeRoles.Module.Interface;
 public enum StringSerializerType : byte
 {
 	PhotographerPhoto,
-
 	SlaveDriverHarassment,
-
 	ShutterPhoto,
-
 	RemoteKillerNotebookStolen,
+	MastermindReport,
 }
 
 public interface IStringSerializer
@@ -45,6 +44,7 @@ public interface IStringSerializer
 			StringSerializerType.SlaveDriverHarassment => new SlaveDriver.HarassmentReportSerializer(),
 			StringSerializerType.ShutterPhoto => new Shutter.GhostPhotoSerializer(),
 			StringSerializerType.RemoteKillerNotebookStolen => new ExtremeRoles.Roles.Solo.Impostor.RemoteKiller.RemoteKillerRole.RemoteKillerReportSerializer(),
+			StringSerializerType.MastermindReport => new MastermindNoticeSystem.MastermindStringSerializer(),
 			_ => throw new ArgumentException("Invalided Type"),
 		};
 
