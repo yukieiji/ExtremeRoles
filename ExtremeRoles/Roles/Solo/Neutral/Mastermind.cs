@@ -328,7 +328,7 @@ public sealed class Mastermind :
 
 		this.oldTaskComplete = new HashSet<uint>(curTaskComplete);
 
-		if (this.infiniteTasks && this.oldTaskComplete.Count == cachePlayer.Tasks.Count)
+		if (this.infiniteTasks)
 		{
 			float gage = Player.GetPlayerTaskGage(cachePlayer);
 			if (gage >= this.taskAddProgressThreshold)
