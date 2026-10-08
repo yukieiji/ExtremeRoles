@@ -94,6 +94,8 @@ public sealed class DeepOneFrogsControlSystem(
 	private readonly Dictionary<int, Frog> frogs = new Dictionary<int, Frog>();
 	private int nextFrogId = 0;
 
+	public bool HasFrog => this.frogs.Count > 0;
+
 	public int GetRequiredClicks(byte frogPlayerKey)
 	{
 		int activeCount = this.playerFrogs.TryGetValue(frogPlayerKey, out var frogSet) ? frogSet.Count : 0;
@@ -203,11 +205,16 @@ public sealed class DeepOneFrogsControlSystem(
 		this.playerFrogs[frogPlayerKey] = frogSet;
 	}
 
+	internal void AddFrogForTest(int id)
+	{
+		this.frogs[id] = null!;
+	}
+
 	private void destroyFrog(int id)
 	{
 		if (this.frogs.TryGetValue(id, out var frog))
 		{
-			frog.Clear();
+			frog?.Clear();
 			this.frogs.Remove(id);
 		}
 
