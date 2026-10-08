@@ -12,7 +12,12 @@ public static class LiberalMoneyHistory
 	public enum Reason
 	{
 		AddOnTask,
-		AddOnKill
+		AddOnKill,
+		
+		DisguisedAccounting,
+		SelfBomb,
+		AddOnExile,
+		STRMISS,
 	}
 
 	public readonly record struct MoneyHistory(Reason Reason, byte PlayerId, float Amount);

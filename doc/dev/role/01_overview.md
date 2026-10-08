@@ -5,6 +5,7 @@ Extreme Rolesにおける役職作成の全体像と、推奨される設計指�
 ## 役職の基本構造
 
 新しい役職を作成する際は、以下の3つのクラスに役割を分割して実装することが推奨されます。これにより、コードの可読性とメンテナンス性が向上します。
+また、これらを使うことでPatch周りのコードを一切変更せずに役職を実装できます、Patch周りのコードの変更がある役職は基本的にバットパターンです
 
 ### 1. Roleクラス (XXXRole)
 `SingleRoleBase`を継承したクラスです。役職の「定義」を担います。
@@ -24,7 +25,7 @@ Extreme Rolesにおける役職作成の全体像と、推奨される設計指�
 
 ## 推奨されるディレクトリ構成
 
-既存の `Loner` (孤独な人) や `CEO` のコードが非常に参考になります。
+既存の `Loner` や `CEO` のコードが非常に参考になります。
 
 ```
 ExtremeRoles/Roles/Solo/Crewmate/MyRole/
@@ -40,7 +41,8 @@ ExtremeRoles/Roles/Solo/Crewmate/MyRole/
 3.  **能力の実装**: [04_ability_handler.md](./04_ability_handler.md)
 4.  **状態管理の実装**: [05_status_model.md](./05_status_model.md)
 5.  **インターフェースの活用**: [07_interfaces.md](./07_interfaces.md) / [08_methods.md](./08_methods.md)
-6.  **役職の登録**: [98_registration.md](./98_registration.md)
-7.  **翻訳の追加**: [99_translation.md](./99_translation.md)
+6.  **特殊勝利・勝者決定の実装**: [20_win.md](./20_win.md)
+7.  **役職の登録**: [98_registration.md](./98_registration.md)
+8.  **翻訳の追加**: [99_translation.md](./99_translation.md)
 
 各ステップの詳細は、番号順の各ドキュメントを参照してください。

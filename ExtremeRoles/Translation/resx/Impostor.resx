@@ -1702,4 +1702,121 @@ Lv2能力「ビームセーバー」
     <value>能力の発動: {0}
 現在の反対票数: {1}</value>
   </data>
+  <data name="RemoteKiller" xml:space="preserve">
+    <value>リモートキラー</value>
+  </data>
+  <data name="RemoteKillerFullDescription" xml:space="preserve">
+    <value>「執行」によって遠隔キルが出来るプレイヤー
+
+ボタン能力「執行」:
+ - プレイヤーを選択して発動
+ - 一定時間移動不可 + 名前が赤くなって(全プレイヤーから見える)
+そのプレイヤーをキルする
+ - 「執行」出来るプレイヤーは「奪う」を行ったプレイヤーのみ
+
+ボタン能力「奪う」:
+ - プレイヤー一人の近くで発動(一定時間近くにいる必要あり)
+ - そのプレイヤーを「執行」出来る対象に加える
+ - そのプレイヤーが会議まで生存している場合、そのプレイヤーに
+役職のプレイヤーを含む接触したプレイヤーがランダムに報告される</value>
+  </data>
+  <data name="RemoteKillerShortDescription" xml:space="preserve">
+    <value>相手の手帳を「奪って」遠隔で「執行」せよ</value>
+  </data>
+  <data name="RemoteKillerIntroDescription" xml:space="preserve">
+    <value>僕は"新世界"の神となる</value>
+  </data>
+  <data name="RemoteKillerRobRange" xml:space="preserve">
+    <value>「奪う」が発動できる範囲</value>
+  </data>
+  <data name="RemoteKillerContactPlayerCount" xml:space="preserve">
+    <value>接触したプレイヤーの報告数</value>
+  </data>
+  <data name="RemoteKillerRobActiveTime" xml:space="preserve">
+    <value>「奪う」にかかる時間</value>
+  </data>
+  <data name="remoteKillerRob" xml:space="preserve">
+    <value>奪う</value>
+  </data>
+  <data name="remoteKillerPurge" xml:space="preserve">
+    <value>執行</value>
+  </data>
+  <data name="remoteKillerNotebookStolenReport" xml:space="preserve">
+    <value>手帳が奪われた！仲間に報告しよう！ 
+あいつに接触された気がする・・・</value>
+  </data>
+  <data name="YoYo" xml:space="preserve">
+    <value>ヨーヨー</value>
+  </data>
+  <data name="YoYoFullDescription" xml:space="preserve">
+    <value>「マーク」した場所へ「テレポート」できるインポスター
+
+「マーク」出来る箇所は1つのみで一方通行の使い切り
+「テレポート」を行うと能力使用回数が1つ消費される</value>
+  </data>
+  <data name="YoYoShortDescription" xml:space="preserve">
+    <value>スロー、スリープ、キャッチ</value>
+  </data>
+  <data name="YoYoIntroDescription" xml:space="preserve">
+    <value>「マーク」した場所へ瞬時に「テレポート」</value>
+  </data>
+  <data name="YoYoIsResetMarkOnMeeting" xml:space="preserve">
+    <value>会議開始時に「マーク」位置をリセットするか</value>
+  </data>
+  <data name="YoYoSaveLocation" xml:space="preserve">
+    <value>マーク</value>
+  </data>
+  <data name="YoYoTeleportLocation" xml:space="preserve">
+    <value>テレポート</value>
+  </data>
+  <data name="Blackmailer" xml:space="preserve">
+    <value>ブラックメイラー</value>
+  </data>
+  <data name="BlackmailerFullDescription" xml:space="preserve">
+    <value>プレイヤーを恐喝することで会議を有利に進めるインポスター
+
+ボタン能力「恐喝」
+ - プレイヤー一人の近くで発動(一定時間近くにいる必要あり)
+ - そのプレイヤーは次の会議中(だけ)に発言およびチャット
+　投票を行うことが不可能になる</value>
+  </data>
+  <data name="BlackmailerShortDescription" xml:space="preserve">
+    <value>プレイヤーを恐喝し、次の会議で発言権と投票権を奪え</value>
+  </data>
+  <data name="BlackmailerIntroDescription" xml:space="preserve">
+    <value>プレイヤーを恐喝し会議での発言権を封殺しろ</value>
+  </data>
+  <data name="BlackmailerRange" xml:space="preserve">
+    <value>「恐喝」が発動できる距離</value>
+  </data>
+  <data name="BlackmailerMultipleBlackmail" xml:space="preserve">
+    <value>複数人に対して「恐喝」できるか</value>
+  </data>
+  <data name="blackmail" xml:space="preserve">
+    <value>恐喝</value>
+  </data>
+  <data name="RemoteKillerAbilityCoolTime" xml:space="preserve">
+    <value>「執行」と「奪う」のクールタイム</value>
+  </data>
+  <data name="RemoteKillerAbilityActiveTime" xml:space="preserve">
+    <value>「執行」にかかる時間</value>
+  </data>
+  <data name="RemoteKillerAbilityCount" xml:space="preserve">
+    <value>「執行」が発動できる回数</value>
+  </data>
+  <data name="YoYoAbilityCoolTime" xml:space="preserve">
+    <value>「マーク」と「テレポート」のクールタイム</value>
+  </data>
+  <data name="YoYoAbilityCount" xml:space="preserve">
+    <value>「テレポート」の使用回数</value>
+  </data>
+  <data name="BlackmailerAbilityCoolTime" xml:space="preserve">
+    <value>「恐喝」のクールタイム</value>
+  </data>
+  <data name="BlackmailerAbilityActiveTime" xml:space="preserve">
+    <value>「恐喝」にかかる時間</value>
+  </data>
+  <data name="BlackmailerAbilityCount" xml:space="preserve">
+    <value>「恐喝」の使用回数</value>
+  </data>
 </root>

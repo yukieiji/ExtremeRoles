@@ -12,6 +12,8 @@ namespace ExtremeRoles.GameMode.RoleSelector;
 
 public enum LiberalGlobalSetting
 {
+	CanSeeOtherLiberal,
+
 	WinMoney,
 	TaskCompletedMoney,
 	KillMoney,
@@ -54,6 +56,7 @@ public enum LiberalGlobalSetting
 public interface ILiberalOptionLoader : IOptionLoader
 {
 	public string RoleSpawnSetting { get; }
+	public bool CanSeeOtherLiberal { get; }
 	public IReadOnlyList<IOption> GlobalOption { get; }
 	public IReadOnlyList<IOption> LeaderOption { get; }
 	public IReadOnlyList<IOption> MilitantOption { get; }
@@ -64,6 +67,8 @@ public sealed class LiberalDefaultOptionLoader : ILiberalOptionLoader
 	public IReadOnlyList<IOption> GlobalOption { get; }
 	public IReadOnlyList<IOption> LeaderOption { get; }
 	public IReadOnlyList<IOption> MilitantOption { get; }
+
+	public bool CanSeeOtherLiberal => GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.CanSeeOtherLiberal);
 
 	private readonly OptionCategory category;
 
@@ -94,6 +99,7 @@ public sealed class LiberalDefaultOptionLoader : ILiberalOptionLoader
 		this.category = category;
 
 		this.GlobalOption = [
+			this.category.Get(LiberalGlobalSetting.CanSeeOtherLiberal),
 			this.category.Get(LiberalGlobalSetting.WinMoney),
 			this.category.Get(LiberalGlobalSetting.TaskCompletedMoney),
 			this.category.Get(LiberalGlobalSetting.KillMoney),
@@ -161,6 +167,8 @@ public static class LiberalOption
 	{
 		var factory = new AutoActivatorSetFactory(globalFactory);
 		factory.Activator = new LiberalSettingCheck(liberalMaxNumSetting, 1);
+
+		factory.CreateBoolOption(LiberalGlobalSetting.CanSeeOtherLiberal, true);
 
 		factory.CreateIntOption(LiberalGlobalSetting.WinMoney, 100, 1, 1000, 1);
 		factory.CreateIntOption(LiberalGlobalSetting.TaskCompletedMoney, 5, 1, 1000, 1);

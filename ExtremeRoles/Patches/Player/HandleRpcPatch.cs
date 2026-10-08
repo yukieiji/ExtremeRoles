@@ -228,6 +228,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.CaptainAbility:
 				RPCOperator.CaptainTargetVote(ref reader);
 				break;
+			case RPCOperator.Command.MastermindAbility:
+				RPCOperator.MastermindTargetVote(ref reader);
+				break;
 			case RPCOperator.Command.ResurrecterRpc:
 				RPCOperator.ResurrecterRpc(ref reader);
 				break;
@@ -259,6 +262,12 @@ public static class PlayerControlHandleRpcPatch
 				break;
 			case RPCOperator.Command.EchoOps:
 				RPCOperator.EchoRpcOps(reader);
+				break;
+			case RPCOperator.Command.LoggerOps:
+				RPCOperator.LoggerRpcOps(reader);
+				break;
+			case RPCOperator.Command.ChargerCharge:
+				RPCOperator.ChargerCharge(ref reader);
 				break;
 			case RPCOperator.Command.CarrierAbility:
 				byte carrierCarryOpCallPlayerId = reader.ReadByte();
@@ -328,6 +337,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.LegislatorAbility:
 				RPCOperator.LegislatorTargetVote(ref reader);
 				break;
+			case RPCOperator.Command.RemoteKillerOps:
+				RPCOperator.RemoteKillerRpcOps(ref reader);
+				break;
 			case RPCOperator.Command.AliceShipBroken:
 				byte alicePlayerId = reader.ReadByte();
 				byte newTaskSetPlayerId = reader.ReadByte();
@@ -347,6 +359,12 @@ public static class PlayerControlHandleRpcPatch
 				byte killTargetId = reader.ReadByte();
 				RPCOperator.JesterOutburstKill(
 					outburstKillerId, killTargetId);
+				break;
+			case RPCOperator.Command.ImitaterKyugenKill:
+				byte kyugenKillerId = reader.ReadByte();
+				byte imitaterId = reader.ReadByte();
+				RPCOperator.ImitaterKyugenKill(
+					kyugenKillerId, imitaterId);
 				break;
 			case RPCOperator.Command.YandereSetOneSidedLover:
 				byte yanderePlayerId = reader.ReadByte();
@@ -370,6 +388,9 @@ public static class PlayerControlHandleRpcPatch
 				break;
 			case RPCOperator.Command.ArtistRpcOps:
 				RPCOperator.ArtistDrawOps(reader);
+				break;
+			case RPCOperator.Command.EncloserOps:
+				RPCOperator.EncloserRpcOps(reader);
 				break;
 			case RPCOperator.Command.SetGhostRole:
 				RPCOperator.SetGhostRole(

@@ -14,6 +14,7 @@
 - **Act と Assert を同時に行わない（完全分離）**:
   - Act（テスト対象の実行）と Assert（検証）を同一行や同一のメソッド呼び出し内で行うことを厳しく禁止する
   - 必ず Arrange, Act, Assert の各フェーズを明確に分けて記述する
+    - Actで実行した内容に対してAssertを行うこと
 - **意味のある Assert の検証**:
   - Assert では単に例外が発生しないことや処理が完了したことの確認ではなく、内部状態の変更や戻り値に対する意味のある検証を行う
 
@@ -23,6 +24,10 @@
 // ✕ BAD: ActとAssertを同時に実行している
 Assert.That(calculator.Add(1, 2), Is.EqualTo(3));
 Assert.IsTrue(userService.IsValidUser(user));
+
+// ✕ BAD: Assertがないを同時に実行している
+role.Invoke() // ChekkingNoThrow
+
 
 // ◯ GOOD: ActとAssertを明確に分離して記述している
 // Act

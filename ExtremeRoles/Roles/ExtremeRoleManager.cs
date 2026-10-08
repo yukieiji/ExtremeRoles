@@ -14,18 +14,21 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Combination.Guesser;
 using ExtremeRoles.Roles.Combination.Avalon;
 using ExtremeRoles.Roles.Combination.Barter;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Combination.InvestigatorOffice;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
+using ExtremeRoles.Roles.Solo.Liberal;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 using ExtremeRoles.Roles.Solo.Crewmate.Fencer;
 using ExtremeRoles.Roles.Solo.Crewmate.Loner;
 using ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Roles.Solo.Impostor;
+using ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
 using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Neutral.IronMate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
@@ -35,6 +38,7 @@ using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using ExtremeRoles.Roles.Solo.Neutral.Yoko;
+using ExtremeRoles.Roles.Solo.Liberal.Encloser;
 
 
 namespace ExtremeRoles.Roles;
@@ -98,6 +102,10 @@ public enum ExtremeRoleId : int
 	CEO,
 	Echo,
 	Inspector,
+	Itako,
+	Screamer,
+	Logger,
+	Charger,
 
 	SpecialImpostor,
     Evolver,
@@ -132,6 +140,9 @@ public enum ExtremeRoleId : int
 	Scavenger,
 	Boxer,
 	Legislator,
+	RemoteKiller,
+	YoYo,
+	Blackmailer,
 
 	Alice,
     Jackal,
@@ -164,10 +175,21 @@ public enum ExtremeRoleId : int
 	Surrogator,
 	Knight,
 	Pawn,
+	Punisher,
+	Imitater,
+	Mastermind,
 
 	Leader,
 	Dove,
 	Militant,
+	SpecialDove,
+	SpecialMilitant,
+	Embezzle,
+	Addict,
+	Martyr,
+	Encloser,
+	Scapeactor,
+	Delta,
 
 	Xion,
 }
@@ -245,6 +267,11 @@ public enum RoleGameOverReason
 	MonikaThisGameIsMine,
 	MonikaIamTheOnlyOne,
 
+	PunisherKilledImpostor,
+	PunisherKillAllOther,
+
+	MastermindAlive,
+
 	AllJackalWin,
 	AllYandereWin,
 	AllQueenWin,
@@ -271,6 +298,7 @@ public enum NeutralSeparateTeam
     Kids,
 	Tucker,
 	Monika,
+	Punisher,
 
 	JackalSub,
 	YandereSub,
@@ -294,6 +322,7 @@ public static class ExtremeRoleManager
 		ExtremeRoleId.Yandere,
 		ExtremeRoleId.Hatter,
 		ExtremeRoleId.Monika,
+		ExtremeRoleId.Mastermind,
 	};
 
     public static readonly ImmutableDictionary<int, SingleRoleBase> NormalRole =
@@ -331,6 +360,10 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.CEO         , new CEO()},
 			{(int)ExtremeRoleId.Echo        , new Echo()},
 			{(int)ExtremeRoleId.Inspector   , new Inspector()},
+			{(int)ExtremeRoleId.Itako       , new ItakoRole()},
+			{(int)ExtremeRoleId.Screamer    , new Screamer()},
+			{(int)ExtremeRoleId.Logger      , new LoggerRole()},
+			{(int)ExtremeRoleId.Charger     , new Charger()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -365,6 +398,9 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Scavenger      , new Scavenger()},
 			{(int)ExtremeRoleId.Boxer          , new Boxer()},
 			{(int)ExtremeRoleId.Legislator     , new Legislator()},
+			{(int)ExtremeRoleId.RemoteKiller   , new RemoteKillerRole()},
+			{(int)ExtremeRoleId.YoYo           , new YoYo()},
+			{(int)ExtremeRoleId.Blackmailer    , new Blackmailer()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new JackalRole()},
@@ -391,6 +427,18 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Surrogator, new SurrogatorRole()},
 			{(int)ExtremeRoleId.Knight    , new KnightRole()},
 			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
+			{(int)ExtremeRoleId.Punisher  , new Punisher()},
+			{(int)ExtremeRoleId.Imitater  , new Imitater()},
+			{(int)ExtremeRoleId.Mastermind, new Mastermind()},
+
+			{(int)ExtremeRoleId.SpecialDove    , new SpecialDove()},
+			{(int)ExtremeRoleId.SpecialMilitant, new SpecialMilitant()},
+			{(int)ExtremeRoleId.Embezzle       , new Embezzle()},
+			{(int)ExtremeRoleId.Addict         , new Addict()},
+			{(int)ExtremeRoleId.Martyr         , new Martyr()},
+			{(int)ExtremeRoleId.Encloser       , new EncloserRole()},
+			{(int)ExtremeRoleId.Scapeactor     , new Scapeactor()},
+			{(int)ExtremeRoleId.Delta          , new Delta()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
@@ -436,6 +484,8 @@ public static class ExtremeRoleManager
 		ForceRelaceToChimera,
 		RemoveChimera,
 		RebornJackal,
+		ItakoInherit,
+		ImitaterInherit,
 	}
 
 	private static IRoleProvider? provider;
@@ -639,6 +689,12 @@ public static class ExtremeRoleManager
 			case ReplaceOperation.RebornJackal:
 				FurryRole.BecomeToJackal(caller, targetId);
 				break;
+			case ReplaceOperation.ItakoInherit:
+				ItakoRole.InheritTargetRole(caller, targetId);
+				break;
+			case ReplaceOperation.ImitaterInherit:
+				Imitater.InheritTargetRole(caller, targetId);
+				break;
 			default:
                 break;
         }
@@ -803,6 +859,12 @@ public static class ExtremeRoleManager
     {
 		TryGetRole(playerId, out var checkRole);
 		return dualSafeCast<T>(checkRole);
+	}
+
+	public static bool TrySafeCast<T>(SingleRoleBase role, [NotNullWhen(true)] out T? castedRole) where T : SingleRoleBase
+	{
+		castedRole = safeCast<T>(role);
+		return castedRole is not null;
 	}
 
 
