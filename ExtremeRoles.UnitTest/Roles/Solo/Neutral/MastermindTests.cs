@@ -166,6 +166,6 @@ public sealed class MastermindTests
 
 		mastermind.ModifiedWinPlayer(mockMastermindInfo.Object, GameOverReason.CrewmatesByTask, winners);
 
-		Assert.Equal(RoleGameOverReason.MastermindAlive, (RoleGameOverReason)ExtremeRolesPlugin.ShipState.EndReason);
+		Assert.Equal(RoleGameOverReason.MastermindDeathGame, (RoleGameOverReason)ExtremeRolesPlugin.ShipState.EndReason);
 	}
 }

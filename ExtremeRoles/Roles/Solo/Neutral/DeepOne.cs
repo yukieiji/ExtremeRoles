@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Extension.Player;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
@@ -18,18 +18,36 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
+using ExtremeRoles.Roles.API.Interface.Status;
+
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class DeepOneAbilityHandler(DeepOne role) : IAbility, IInvincible
+public sealed class DeepOneAbilityHandler(
+	DeepOneFrogsControlSystem system,
+	DeepOneStatus status) : IAbility, IInvincible
 {
-	private readonly DeepOne role = role;
+	private readonly DeepOneStatus status = status;
+	private readonly DeepOneFrogsControlSystem system = system;
+
+	public bool UseAbility()
+	{
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer.IsInValid())
+		{
+			return false;
+		}
+
+		Vector2 pos = localPlayer.GetTruePosition();
+		this.system.PlaceFrogLocally(pos);
+		return true;
+	}
 
 	public bool IsBlockKillFrom(byte? fromPlayer)
 	{
-		return this.role.IsBlockKill;
+		return this.status.IsBlockKill;
 	}
 
 	public bool IsValidKillFromSource(byte source)
@@ -40,6 +58,49 @@ public sealed class DeepOneAbilityHandler(DeepOne role) : IAbility, IInvincible
 	public bool IsValidAbilitySource(byte source)
 	{
 		return !IsBlockKillFrom(source);
+	}
+}
+
+public sealed class DeepOneStatus(
+	bool enableKillBlock,
+	bool enableExileBlock,
+	bool enableVentUnlock,
+	bool enableMaxSpeed
+) : IStatusModel
+{
+	public bool IsBlockKill => this.enableKillBlock && this.currentStatus >= DeepOne.FrogsStatus.BlockKill;
+	public bool IsBlockExile => this.enableExileBlock && this.currentStatus >= DeepOne.FrogsStatus.BlockExile;
+	public bool UseVent => this.enableVentUnlock && this.currentStatus >= DeepOne.FrogsStatus.UseVent;
+	public bool IsSpeedUp => this.enableMaxSpeed && this.currentStatus >= DeepOne.FrogsStatus.SpeedUp;
+
+	private readonly bool enableKillBlock = enableKillBlock;
+	private readonly bool enableExileBlock = enableExileBlock;
+	private readonly bool enableVentUnlock = enableVentUnlock;
+	private readonly bool enableMaxSpeed = enableMaxSpeed;
+
+	private DeepOne.FrogsStatus currentStatus = DeepOne.FrogsStatus.None;
+	private int prevFrogCount = 0;
+
+	public void ResetStatus()
+	{
+		this.currentStatus = DeepOne.FrogsStatus.None;
+	}
+
+	public bool UpdateStatus(int frogCount)
+	{
+		int prevNum = this.prevFrogCount;
+		this.prevFrogCount = frogCount;
+
+		this.currentStatus = frogCount switch
+		{
+			>= 5 => DeepOne.FrogsStatus.Multiplier,
+			>= 4 => DeepOne.FrogsStatus.SpeedUp,
+			>= 3 => DeepOne.FrogsStatus.UseVent,
+			>= 2 => DeepOne.FrogsStatus.BlockExile,
+			>= 1 => DeepOne.FrogsStatus.BlockKill,
+			_ => DeepOne.FrogsStatus.None
+		};
+		return prevNum > frogCount;
 	}
 }
 
@@ -54,6 +115,7 @@ public sealed class DeepOne :
 	{
 		RequiredClicks,
 		RequiredWinFrogs,
+		FrogsRemovePenalty,
 		DeathCooldownReduction,
 		EnableKillBlock,
 		EnableExileBlock,
@@ -62,19 +124,27 @@ public sealed class DeepOne :
 		EnableClickMultiplier,
 	}
 
-	public int Order => 100;
+	public enum FrogsStatus : byte
+	{
+		None,
+		BlockKill,
+		BlockExile,
+		UseVent,
+		SpeedUp,
+		Multiplier,
+	}
+
+	public int Order => 114514;
 
 	public ExtremeAbilityButton? Button { get; set; }
+	public override IStatusModel? Status => this.status;
 
-	public bool IsBlockKill { get; set; } = false;
-	public bool IsBlockExile { get; set; } = false;
+	private DeepOneAbilityHandler? abilityHandler;
+	private DeepOneStatus? status;
 
-	public DeepOneSystem System { get; private set; }
-
-	private readonly DeepOneAbilityHandler abilityHandler;
-
-	private float baseCooldown = 15.0f;
 	private float deathCooldownReduction = 0.0f;
+	private float removeFrogsPenalty = 0.0f;
+	private int requiredWinFrogs = 0;
 
 	public DeepOne() : base(
 		RoleArgs.BuildNeutral(
@@ -82,9 +152,29 @@ public sealed class DeepOne :
 			ColorPalette.DeepOneDarkGreen,
 			RolePropPresets.OptionalDefault))
 	{
-		this.System = new DeepOneSystem(5, 5, true, true, true, true, true);
-		this.abilityHandler = new DeepOneAbilityHandler(this);
-		this.AbilityClass = this.abilityHandler;
+		
+	}
+
+	public void UpdateFrogs(int frogCount)
+	{
+		if (this.status is null)
+		{
+			return;
+		}
+
+		if (this.status.UpdateStatus(frogCount) &&
+			this.Button is not null)
+		{
+			// クールタイムのリセットとクールタイムの追加
+			this.Button.OnMeetingStart();
+			this.Button.OnMeetingEnd();
+			this.Button.SetCooldownTimer(this.Button.Timer + this.removeFrogsPenalty);
+		}
+		this.UseVent = this.status.UseVent;
+		if (frogCount >= this.requiredWinFrogs)
+		{
+			this.IsWin = true;
+		}
 	}
 
 	public void CreateAbility()
@@ -97,25 +187,10 @@ public sealed class DeepOne :
 	}
 
 	public bool IsAbilityUse()
-	{
-		return IRoleAbility.IsCommonUse();
-	}
+		=> IRoleAbility.IsCommonUse();
 
 	public bool UseAbility()
-	{
-		PlayerControl localPlayer = PlayerControl.LocalPlayer;
-		if (localPlayer.IsInValid() ||
-			localPlayer.inVent ||
-			localPlayer.inMovingPlat ||
-			localPlayer.onLadder)
-		{
-			return false;
-		}
-
-		Vector2 pos = localPlayer.GetTruePosition();
-		this.System.PlaceFrogLocally(pos);
-		return true;
-	}
+		=> this.abilityHandler?.UseAbility() ?? false;
 
 	public void CleanUp()
 	{
@@ -124,40 +199,52 @@ public sealed class DeepOne :
 	public void AllReset(PlayerControl rolePlayer)
 	{
 		this.IsWin = false;
-		this.IsBlockKill = false;
-		this.IsBlockExile = false;
-		this.MoveSpeed = 1.0f;
+		this.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+			FloatOptionNames.PlayerSpeedMod);
+		this.status?.ResetStatus();
 		this.UseVent = false;
 	}
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (rolePlayer == null || rolePlayer.Data == null)
+		if (rolePlayer.IsInValid() ||
+			this.Button is null ||
+			this.status is null)
 		{
 			return;
 		}
 
+		if (this.status.IsSpeedUp)
+		{
+			this.IsBoost = true;
+			this.MoveSpeed = 3.0f;
+		}
+		else
+		{
+			this.IsBoost = false;
+			this.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+				FloatOptionNames.PlayerSpeedMod);
+		}
+
+
 		int deadCount = 0;
 		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			if (player != null && (player.IsDead || player.Disconnected))
+			if (player.IsInValid())
 			{
 				deadCount++;
 			}
 		}
 
 		float reduction = deadCount * this.deathCooldownReduction;
-		float calculatedCooldown = Math.Max(0.5f, this.baseCooldown * (1.0f - reduction));
+		float calculatedCooldown = Math.Max(0.5f, this.Button.Timer * (1.0f - reduction));
 
-		if (this.Button != null && this.Button.Behavior != null)
-		{
-			this.Button.Behavior.SetCoolTime(calculatedCooldown);
-		}
+		this.Button?.SetCooldownTimer(calculatedCooldown);
 	}
 
 	public void ModifiedVote(byte rolePlayerId, ref Dictionary<byte, byte> voteTarget, ref Dictionary<byte, int> voteResult)
 	{
-		if (!this.IsBlockExile || voteResult.Count <= 0 || OnemanMeetingSystemManager.IsActive)
+		if (this.status is null || this.status.IsBlockExile || voteResult.Count <= 0 || OnemanMeetingSystemManager.IsActive)
 		{
 			return;
 		}
@@ -166,7 +253,7 @@ public sealed class DeepOne :
 
 	public IEnumerable<VoteInfo> GetModdedVoteInfo(VoteInfoCollector collector, NetworkedPlayerInfo rolePlayer)
 	{
-		if (!this.IsBlockExile || OnemanMeetingSystemManager.IsActive)
+		if (this.status is null || this.status.IsBlockExile || OnemanMeetingSystemManager.IsActive)
 		{
 			yield break;
 		}
@@ -193,9 +280,7 @@ public sealed class DeepOne :
 	}
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
-	{
-		return this.IsNeutralSameTeam(targetRole);
-	}
+		=> this.IsNeutralSameTeam(targetRole);
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
@@ -207,11 +292,16 @@ public sealed class DeepOne :
 
 		factory.CreateIntOption(
 			DeepOneOption.RequiredWinFrogs,
-			5, 1, 20, 1);
+			5, 1, 10, 1);
 
 		factory.CreateFloatOption(
-			DeepOneOption.DeathCooldownReduction,
+			DeepOneOption.FrogsRemovePenalty,
 			1.0f, 0.0f, 10.0f, 0.5f,
+			format: OptionUnit.Percentage);
+
+		factory.CreateIntOption(
+			DeepOneOption.DeathCooldownReduction,
+			1, 0, 100, 1,
 			format: OptionUnit.Percentage);
 
 		factory.CreateBoolOption(
@@ -239,44 +329,28 @@ public sealed class DeepOne :
 	{
 		var loader = this.Loader;
 
-		this.baseCooldown = loader.GetValue<RoleAbilityCommonOption, float>(
-			RoleAbilityCommonOption.AbilityCoolTime);
-		this.deathCooldownReduction = loader.GetValue<DeepOneOption, float>(
+		this.deathCooldownReduction = loader.GetValue<DeepOneOption, int>(
 			DeepOneOption.DeathCooldownReduction) / 100.0f;
+		this.removeFrogsPenalty = loader.GetValue<DeepOneOption, float>(
+			DeepOneOption.FrogsRemovePenalty);
+		this.requiredWinFrogs = loader.GetValue<DeepOneOption, int>(DeepOneOption.RequiredWinFrogs);
 
-		bool enableKillBlock = loader.GetValue<DeepOneOption, bool>(
-			DeepOneOption.EnableKillBlock);
-		bool enableExileBlock = loader.GetValue<DeepOneOption, bool>(
-			DeepOneOption.EnableExileBlock);
-		bool enableVentUnlock = loader.GetValue<DeepOneOption, bool>(
-			DeepOneOption.EnableVentUnlock);
-		bool enableMaxSpeed = loader.GetValue<DeepOneOption, bool>(
-			DeepOneOption.EnableMaxSpeed);
+		this.status = new DeepOneStatus(
+			enableKillBlock: loader.GetValue<DeepOneOption, bool>(DeepOneOption.EnableKillBlock),
+			enableExileBlock: loader.GetValue<DeepOneOption, bool>(DeepOneOption.EnableExileBlock),
+			enableVentUnlock: loader.GetValue<DeepOneOption, bool>(DeepOneOption.EnableVentUnlock),
+			enableMaxSpeed: loader.GetValue<DeepOneOption, bool>(DeepOneOption.EnableMaxSpeed));
 
-		this.System = ExtremeSystemTypeManager.Instance.CreateOrGet(
-			ExtremeSystemType.DeepOneSystem,
-			() => new DeepOneSystem(
+		var system = ExtremeSystemTypeManager.Instance.CreateOrGet(
+			ExtremeSystemType.DeepOneFrogsControlSystem,
+			() => new DeepOneFrogsControlSystem(
 				loader.GetValue<DeepOneOption, int>(DeepOneOption.RequiredClicks),
-				loader.GetValue<DeepOneOption, int>(DeepOneOption.RequiredWinFrogs),
-				loader.GetValue<DeepOneOption, bool>(DeepOneOption.EnableClickMultiplier),
-				enableKillBlock,
-				enableExileBlock,
-				enableVentUnlock,
-				enableMaxSpeed));
+				loader.GetValue<DeepOneOption, bool>(DeepOneOption.EnableClickMultiplier)));
 
-		this.System.UpdateOptions(
-			loader.GetValue<DeepOneOption, int>(DeepOneOption.RequiredClicks),
-			loader.GetValue<DeepOneOption, int>(DeepOneOption.RequiredWinFrogs),
-			loader.GetValue<DeepOneOption, bool>(DeepOneOption.EnableClickMultiplier),
-			enableKillBlock,
-			enableExileBlock,
-			enableVentUnlock,
-			enableMaxSpeed);
+		this.abilityHandler = new DeepOneAbilityHandler(system, this.status);
+		this.AbilityClass = this.abilityHandler;
 
 		this.UseVent = false;
-		this.IsBlockKill = false;
-		this.IsBlockExile = false;
-		this.MoveSpeed = 1.0f;
 		this.IsWin = false;
 	}
 }

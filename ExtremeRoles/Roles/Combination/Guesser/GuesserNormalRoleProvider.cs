@@ -1,5 +1,7 @@
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
@@ -48,6 +50,11 @@ public sealed class GuesserNormalRoleProvider : IGuesserNormalRoleProvider
 		// Queen and Jackal are added later in neutralized list
 		if (exId != ExtremeRoleId.Queen && exId != ExtremeRoleId.Jackal)
 		{
+			if (exId == ExtremeRoleId.DeepOne && IsDeepOneFrogPlaced())
+			{
+				return;
+			}
+
 			container.Add(exId, team);
 			container.AddSeparatedRoleId(team, exId);
 		}
@@ -201,4 +208,10 @@ public sealed class GuesserNormalRoleProvider : IGuesserNormalRoleProvider
 
 	public static bool IsInvestigatorOffice(byte checkId)
 		=> checkId == (byte)CombinationRoleType.InvestigatorOffice;
+
+	public static bool IsDeepOneFrogPlaced()
+	{
+		return ExtremeSystemTypeManager.Instance.TryGet<DeepOneFrogsControlSystem>(
+			ExtremeSystemType.DeepOneFrogsControlSystem, out var system) && system.HasFrog;
+	}
 }
