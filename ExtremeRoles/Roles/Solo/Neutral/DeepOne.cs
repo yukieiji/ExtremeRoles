@@ -290,6 +290,10 @@ public sealed class DeepOne :
 			DeepOneOption.RequiredClicks,
 			5, 1, 10, 1);
 
+		factory.CreateIntOption(
+			DeepOneOption.RequiredWinFrogs,
+			5, 1, 10, 1);
+
 		factory.CreateFloatOption(
 			DeepOneOption.FrogsRemovePenalty,
 			1.0f, 0.0f, 10.0f, 0.5f,
@@ -325,7 +329,7 @@ public sealed class DeepOne :
 	{
 		var loader = this.Loader;
 
-		this.deathCooldownReduction = loader.GetValue<DeepOneOption, float>(
+		this.deathCooldownReduction = loader.GetValue<DeepOneOption, int>(
 			DeepOneOption.DeathCooldownReduction) / 100.0f;
 		this.removeFrogsPenalty = loader.GetValue<DeepOneOption, float>(
 			DeepOneOption.FrogsRemovePenalty);
