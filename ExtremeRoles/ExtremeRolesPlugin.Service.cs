@@ -98,6 +98,7 @@ public partial class ExtremeRolesPlugin
 
 		// Guesser Role Info Creator
 		collection
+			.AddTransient<IGuesserRoleInfoContainer, GuesserRoleInfoContainer>()
 			.AddTransient<IGuesserVanillaRoleProvider, GuesserVanillaRoleProvider>()
 			.AddTransient<IGuesserNormalRoleProvider, GuesserNormalRoleProvider>()
 			.AddTransient<IGuesserCombRoleProvider, GuesserCombRoleProvider>()

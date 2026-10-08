@@ -30,22 +30,23 @@ public class GuesserRoleInfoCreatorTests
 
 	private static void SetupGameOptionsManagerMock()
 	{
-		if (MockGameOptionsManagerget_InstanceHelper.Instance == null)
-		{
-			var mockGameOptions = new Mock<IGameOptions>(IntPtr.Zero);
-			var mockGameOptionsManager = new Mock<GameOptionsManager>(IntPtr.Zero);
-			mockGameOptionsManager.SetupGet(g => g.CurrentGameOptions).Returns(mockGameOptions.Object);
+		var mockRoleOptions = new Mock<IRoleOptionsCollection>(IntPtr.Zero);
+		var mockGameOptions = new Mock<IGameOptions>(IntPtr.Zero);
+		mockGameOptions.SetupGet(g => g.RoleOptions).Returns(mockRoleOptions.Object);
 
-			var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
-			mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockGameOptionsManager.Object);
-			MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
-		}
+		var mockGameOptionsManager = new Mock<GameOptionsManager>(IntPtr.Zero);
+		mockGameOptionsManager.SetupGet(g => g.CurrentGameOptions).Returns(mockGameOptions.Object);
+
+		var mockOptionsMgrHelper = new Mock<MockGameOptionsManagerget_InstanceHelper>();
+		mockOptionsMgrHelper.Setup(h => h.Invoke()).Returns(mockGameOptionsManager.Object);
+		MockGameOptionsManagerget_InstanceHelper.Instance = mockOptionsMgrHelper.Object;
 	}
 
 	[Fact]
 	public void Create_CallsSubProvidersAndReturnsCombinedRoleInfoList()
 	{
 		// Arrange
+		var container = new GuesserRoleInfoContainer();
 		var vanillaMock = new Mock<IGuesserVanillaRoleProvider>();
 		var normalMock = new Mock<IGuesserNormalRoleProvider>();
 		var combMock = new Mock<IGuesserCombRoleProvider>();
@@ -54,39 +55,37 @@ public class GuesserRoleInfoCreatorTests
 		var assignState = new GuesserNormalRoleAssignState();
 
 		vanillaMock.Setup(v => v.AddVanillaRoles(
-			It.IsAny<List<GuessBehaviour.RoleInfo>>(),
-			It.IsAny<Dictionary<ExtremeRoleType, List<ExtremeRoleId>>>(),
+			container,
 			true,
 			Guesser.DefaultGuessRole.Crewmate,
 			It.IsAny<bool>(),
 			It.IsAny<bool>()))
-			.Callback<List<GuessBehaviour.RoleInfo>, Dictionary<ExtremeRoleType, List<ExtremeRoleId>>, bool, Guesser.DefaultGuessRole, bool, bool>(
-				(list, dict, inc, def, lib, mil) =>
+			.Callback<IGuesserRoleInfoContainer, bool, Guesser.DefaultGuessRole, bool, bool>(
+				(cnt, inc, def, lib, mil) =>
 				{
-					list.Add(new GuessBehaviour.RoleInfo { Id = (ExtremeRoleId)RoleTypes.Crewmate, Team = ExtremeRoleType.Crewmate });
+					cnt.Add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
 				});
 
 		normalMock.Setup(n => n.AddExRNormalRoles(
-			It.IsAny<List<GuessBehaviour.RoleInfo>>(),
-			It.IsAny<Dictionary<ExtremeRoleType, List<ExtremeRoleId>>>(),
+			container,
 			out assignState))
-			.Callback((List<GuessBehaviour.RoleInfo> list, Dictionary<ExtremeRoleType, List<ExtremeRoleId>> dict, out GuesserNormalRoleAssignState state) =>
+			.Callback((IGuesserRoleInfoContainer cnt, out GuesserNormalRoleAssignState state) =>
 			{
 				state = new GuesserNormalRoleAssignState();
-				list.Add(new GuessBehaviour.RoleInfo { Id = ExtremeRoleId.Sheriff, Team = ExtremeRoleType.Crewmate });
+				cnt.Add(ExtremeRoleId.Sheriff, ExtremeRoleType.Crewmate);
 			});
 
 		combMock.Setup(c => c.AddExRCombRoles(
-			It.IsAny<List<GuessBehaviour.RoleInfo>>(),
-			It.IsAny<Dictionary<ExtremeRoleType, List<ExtremeRoleId>>>(),
+			container,
 			It.IsAny<GuesserNormalRoleAssignState>()))
-			.Callback<List<GuessBehaviour.RoleInfo>, Dictionary<ExtremeRoleType, List<ExtremeRoleId>>, GuesserNormalRoleAssignState>(
-				(list, dict, st) =>
+			.Callback<IGuesserRoleInfoContainer, GuesserNormalRoleAssignState>(
+				(cnt, st) =>
 				{
-					list.Add(new GuessBehaviour.RoleInfo { Id = ExtremeRoleId.Lover, Team = ExtremeRoleType.Crewmate });
+					cnt.Add(ExtremeRoleId.Lover, ExtremeRoleType.Crewmate);
 				});
 
 		var creator = new GuesserRoleInfoCreator(
+			container,
 			vanillaMock.Object,
 			normalMock.Object,
 			combMock.Object,
@@ -103,25 +102,20 @@ public class GuesserRoleInfoCreatorTests
 		Assert.Equal(ExtremeRoleId.Lover, result[2].Id);
 
 		vanillaMock.Verify(v => v.AddVanillaRoles(
-			It.IsAny<List<GuessBehaviour.RoleInfo>>(),
-			It.IsAny<Dictionary<ExtremeRoleType, List<ExtremeRoleId>>>(),
+			container,
 			true,
 			Guesser.DefaultGuessRole.Crewmate,
 			It.IsAny<bool>(),
 			It.IsAny<bool>()), Times.Once);
 
-		vanillaMock.Verify(v => v.AddAmongUsRoles(
-			It.IsAny<List<GuessBehaviour.RoleInfo>>(),
-			It.IsAny<Dictionary<ExtremeRoleType, List<ExtremeRoleId>>>()), Times.Once);
+		vanillaMock.Verify(v => v.AddAmongUsRoles(container), Times.Once);
 
 		normalMock.Verify(n => n.AddExRNormalRoles(
-			It.IsAny<List<GuessBehaviour.RoleInfo>>(),
-			It.IsAny<Dictionary<ExtremeRoleType, List<ExtremeRoleId>>>(),
+			container,
 			out assignState), Times.Once);
 
 		combMock.Verify(c => c.AddExRCombRoles(
-			It.IsAny<List<GuessBehaviour.RoleInfo>>(),
-			It.IsAny<Dictionary<ExtremeRoleType, List<ExtremeRoleId>>>(),
+			container,
 			It.IsAny<GuesserNormalRoleAssignState>()), Times.Once);
 	}
 }

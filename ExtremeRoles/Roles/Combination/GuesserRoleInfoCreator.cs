@@ -10,17 +10,20 @@ namespace ExtremeRoles.Roles.Combination;
 
 public sealed class GuesserRoleInfoCreator : IGuesserRoleInfoCreator
 {
+	private readonly IGuesserRoleInfoContainer container;
 	private readonly IGuesserVanillaRoleProvider vanillaRoleProvider;
 	private readonly IGuesserNormalRoleProvider normalRoleProvider;
 	private readonly IGuesserCombRoleProvider combRoleProvider;
 	private readonly LiberalDefaultOptionLoader liberalOptionLoader;
 
 	public GuesserRoleInfoCreator(
+		IGuesserRoleInfoContainer container,
 		IGuesserVanillaRoleProvider vanillaRoleProvider,
 		IGuesserNormalRoleProvider normalRoleProvider,
 		IGuesserCombRoleProvider combRoleProvider,
 		LiberalDefaultOptionLoader liberalOptionLoader)
 	{
+		this.container = container;
 		this.vanillaRoleProvider = vanillaRoleProvider;
 		this.normalRoleProvider = normalRoleProvider;
 		this.combRoleProvider = combRoleProvider;
@@ -31,42 +34,32 @@ public sealed class GuesserRoleInfoCreator : IGuesserRoleInfoCreator
 		bool includeNoneRole,
 		Guesser.DefaultGuessRole defaultRole)
 	{
-		var result = new List<GuessBehaviour.RoleInfo>();
-
-		var separatedRoleId = new Dictionary<ExtremeRoleType, List<ExtremeRoleId>>()
-		{
-			{ ExtremeRoleType.Crewmate, [] },
-			{ ExtremeRoleType.Impostor, [] },
-			{ ExtremeRoleType.Neutral, [] },
-			{ ExtremeRoleType.Liberal, [] },
-		};
-
 		bool liberalOn = this.liberalOptionLoader.Get(LiberalGlobalSetting.WinMoney).IsViewActive;
 		bool militantOn = this.liberalOptionLoader.Get(LiberalGlobalSetting.LiberalMilitantMini).IsViewActive;
 
 		this.vanillaRoleProvider.AddVanillaRoles(
-			result,
-			separatedRoleId,
+			this.container,
 			includeNoneRole,
 			defaultRole,
 			liberalOn,
 			militantOn);
 
-		separatedRoleId[ExtremeRoleType.Crewmate].Add((ExtremeRoleId)AmongUs.GameOptions.RoleTypes.Crewmate);
-		separatedRoleId[ExtremeRoleType.Impostor].Add((ExtremeRoleId)AmongUs.GameOptions.RoleTypes.Impostor);
+		this.container.AddSeparatedRoleId(ExtremeRoleType.Crewmate, (ExtremeRoleId)AmongUs.GameOptions.RoleTypes.Crewmate);
+		this.container.AddSeparatedRoleId(ExtremeRoleType.Impostor, (ExtremeRoleId)AmongUs.GameOptions.RoleTypes.Impostor);
+
 		if (liberalOn)
 		{
-			separatedRoleId[ExtremeRoleType.Liberal].Add(ExtremeRoleId.Dove);
+			this.container.AddSeparatedRoleId(ExtremeRoleType.Liberal, ExtremeRoleId.Dove);
 			if (militantOn)
 			{
-				separatedRoleId[ExtremeRoleType.Liberal].Add(ExtremeRoleId.Militant);
+				this.container.AddSeparatedRoleId(ExtremeRoleType.Liberal, ExtremeRoleId.Militant);
 			}
 		}
 
-		this.vanillaRoleProvider.AddAmongUsRoles(result, separatedRoleId);
-		this.normalRoleProvider.AddExRNormalRoles(result, separatedRoleId, out var assignState);
-		this.combRoleProvider.AddExRCombRoles(result, separatedRoleId, assignState);
+		this.vanillaRoleProvider.AddAmongUsRoles(this.container);
+		this.normalRoleProvider.AddExRNormalRoles(this.container, out var assignState);
+		this.combRoleProvider.AddExRCombRoles(this.container, assignState);
 
-		return result;
+		return this.container.Result;
 	}
 }

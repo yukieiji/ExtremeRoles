@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-
-using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Combination;
@@ -10,8 +8,7 @@ namespace ExtremeRoles.Roles.Combination;
 public sealed class GuesserCombRoleProvider : IGuesserCombRoleProvider
 {
 	public void AddExRCombRoles(
-		List<GuessBehaviour.RoleInfo> result,
-		Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separatedRoleId,
+		IGuesserRoleInfoContainer container,
 		GuesserNormalRoleAssignState assignState)
 	{
 		foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
@@ -31,115 +28,125 @@ public sealed class GuesserCombRoleProvider : IGuesserCombRoleProvider
 				continue;
 			}
 
-			bool isNotTraitor = id != (byte)CombinationRoleType.Traitor;
-
-			if (roleMng is FlexibleCombinationRoleManagerBase flexMng &&
-				isNotTraitor)
-			{
-				ExtremeRoleType team = flexMng.BaseRole.Core.Team;
-				ExtremeRoleId baseRoleId = flexMng.BaseRole.Core.Id;
-
-				if (multiAssign)
-				{
-					if (loader.TryGetValue(
-							CombinationRoleCommonOption.IsAssignImposter,
-							out bool isImp) && isImp)
-					{
-						listAddTargetTeam(
-							result,
-							separatedRoleId,
-							baseRoleId,
-							ExtremeRoleType.Crewmate,
-							ExtremeRoleType.Crewmate);
-						listAddTargetTeam(
-							result,
-							separatedRoleId,
-							baseRoleId,
-							ExtremeRoleType.Impostor,
-							ExtremeRoleType.Impostor);
-					}
-					else
-					{
-						listAddTargetTeam(result, separatedRoleId, baseRoleId, team, team);
-					}
-				}
-				else
-				{
-					add(result, baseRoleId, team);
-				}
-				if (assignState.IsJackalOn &&
-					!assignState.IsJackalForceReplaceLover &&
-					baseRoleId == ExtremeRoleId.Lover)
-				{
-					add(result, baseRoleId, ExtremeRoleType.Neutral, ExtremeRoleId.Sidekick);
-				}
-			}
-			else if (multiAssign && isNotTraitor)
-			{
-				foreach (var role in roleMng.Roles)
-				{
-					ExtremeRoleType team = role.Core.Team;
-					listAdd(result, role.Core.Id, team, separatedRoleId[team]);
-				}
-				// 見習い捜査官の追加
-				if (isInvestigatorOffice(id))
-				{
-					listAdd(result, ExtremeRoleId.InvestigatorApprentice, ExtremeRoleType.Crewmate, separatedRoleId[ExtremeRoleType.Crewmate]);
-				}
-			}
-			else
-			{
-				foreach (var role in roleMng.Roles)
-				{
-					add(result, role.Core.Id, role.Core.Team);
-				}
-
-				// 見習い捜査官の追加
-				if (isInvestigatorOffice(id))
-				{
-					add(result, ExtremeRoleId.InvestigatorApprentice, ExtremeRoleType.Crewmate);
-				}
-			}
+			ProcessCombRoleManager(container, id, roleMng, multiAssign, assignState);
 		}
 	}
 
-	private static bool isInvestigatorOffice(byte checkId)
-		=> checkId == (byte)CombinationRoleType.InvestigatorOffice;
-
-	private static void add(
-		List<GuessBehaviour.RoleInfo> result,
-		ExtremeRoleId id,
-		ExtremeRoleType team,
-		ExtremeRoleId another = ExtremeRoleId.Null)
+	public static void ProcessCombRoleManager(
+		IGuesserRoleInfoContainer container,
+		byte id,
+		CombinationRoleManagerBase roleMng,
+		bool multiAssign,
+		GuesserNormalRoleAssignState assignState)
 	{
-		result.Add(
-			new GuessBehaviour.RoleInfo()
-			{
-				Id = id,
-				AnothorId = another,
-				Team = team,
-			});
-	}
+		bool isNotTraitor = id != (byte)CombinationRoleType.Traitor;
 
-	private static void listAdd(
-		List<GuessBehaviour.RoleInfo> result,
-		ExtremeRoleId baseId,
-		ExtremeRoleType team,
-		List<ExtremeRoleId> list)
-	{
-		foreach (var roleId in list)
+		if (roleMng is FlexibleCombinationRoleManagerBase flexMng && isNotTraitor)
 		{
-			add(result, baseId, team, roleId);
+			ProcessFlexibleCombRole(container, flexMng, multiAssign, assignState);
+		}
+		else if (multiAssign && isNotTraitor)
+		{
+			ProcessMultiAssignCombRole(container, id, roleMng);
+		}
+		else
+		{
+			ProcessSingleAssignCombRole(container, id, roleMng);
 		}
 	}
 
-	private static void listAddTargetTeam(
-		List<GuessBehaviour.RoleInfo> result,
-		Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separatedRoleId,
-		ExtremeRoleId baseId,
-		ExtremeRoleType team,
-		ExtremeRoleType targetType)
+	public static void ProcessFlexibleCombRole(
+		IGuesserRoleInfoContainer container,
+		FlexibleCombinationRoleManagerBase flexMng,
+		bool multiAssign,
+		GuesserNormalRoleAssignState assignState)
 	{
-		listAdd(result, baseId, team, separatedRoleId[targetType]);
+		ExtremeRoleType team = flexMng.BaseRole.Core.Team;
+		ExtremeRoleId baseRoleId = flexMng.BaseRole.Core.Id;
+
+		if (multiAssign)
+		{
+			bool isAssignImp = flexMng.Loader.TryGetValue(
+				CombinationRoleCommonOption.IsAssignImposter,
+				out bool isImp) && isImp;
+
+			ProcessFlexibleMultiAssign(container, baseRoleId, team, isAssignImp);
+		}
+		else
+		{
+			container.Add(baseRoleId, team);
+		}
+
+		if (assignState.IsJackalOn &&
+			!assignState.IsJackalForceReplaceLover &&
+			baseRoleId == ExtremeRoleId.Lover)
+		{
+			container.Add(baseRoleId, ExtremeRoleType.Neutral, ExtremeRoleId.Sidekick);
+		}
 	}
+
+	public static void ProcessFlexibleMultiAssign(
+		IGuesserRoleInfoContainer container,
+		ExtremeRoleId baseRoleId,
+		ExtremeRoleType team,
+		bool isAssignImp)
+	{
+		if (isAssignImp)
+		{
+			container.ListAddTargetTeam(
+				baseRoleId,
+				ExtremeRoleType.Crewmate,
+				ExtremeRoleType.Crewmate);
+			container.ListAddTargetTeam(
+				baseRoleId,
+				ExtremeRoleType.Impostor,
+				ExtremeRoleType.Impostor);
+		}
+		else
+		{
+			container.ListAddTargetTeam(baseRoleId, team, team);
+		}
+	}
+
+	public static void ProcessMultiAssignCombRole(
+		IGuesserRoleInfoContainer container,
+		byte id,
+		CombinationRoleManagerBase roleMng)
+	{
+		foreach (var role in roleMng.Roles)
+		{
+			ExtremeRoleType team = role.Core.Team;
+			if (container.SeparatedRoleId.TryGetValue(team, out var list))
+			{
+				container.ListAdd(role.Core.Id, team, list);
+			}
+		}
+
+		if (IsInvestigatorOffice(id))
+		{
+			if (container.SeparatedRoleId.TryGetValue(ExtremeRoleType.Crewmate, out var crewList))
+			{
+				container.ListAdd(ExtremeRoleId.InvestigatorApprentice, ExtremeRoleType.Crewmate, crewList);
+			}
+		}
+	}
+
+	public static void ProcessSingleAssignCombRole(
+		IGuesserRoleInfoContainer container,
+		byte id,
+		CombinationRoleManagerBase roleMng)
+	{
+		foreach (var role in roleMng.Roles)
+		{
+			container.Add(role.Core.Id, role.Core.Team);
+		}
+
+		if (IsInvestigatorOffice(id))
+		{
+			container.Add(ExtremeRoleId.InvestigatorApprentice, ExtremeRoleType.Crewmate);
+		}
+	}
+
+	public static bool IsInvestigatorOffice(byte checkId)
+		=> checkId == (byte)CombinationRoleType.InvestigatorOffice;
 }

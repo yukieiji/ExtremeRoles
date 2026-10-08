@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -8,31 +6,26 @@ namespace ExtremeRoles.Roles.Combination;
 public interface IGuesserVanillaRoleProvider
 {
 	void AddVanillaRoles(
-		List<GuessBehaviour.RoleInfo> result,
-		Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separatedRoleId,
+		IGuesserRoleInfoContainer container,
 		bool includeNoneRole,
 		Guesser.DefaultGuessRole defaultRole,
 		bool liberalOn,
 		bool militantOn);
 
-	void AddAmongUsRoles(
-		List<GuessBehaviour.RoleInfo> result,
-		Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separatedRoleId);
+	void AddAmongUsRoles(IGuesserRoleInfoContainer container);
 }
 
 public interface IGuesserNormalRoleProvider
 {
 	void AddExRNormalRoles(
-		List<GuessBehaviour.RoleInfo> result,
-		Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separatedRoleId,
+		IGuesserRoleInfoContainer container,
 		out GuesserNormalRoleAssignState assignState);
 }
 
 public interface IGuesserCombRoleProvider
 {
 	void AddExRCombRoles(
-		List<GuessBehaviour.RoleInfo> result,
-		Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separatedRoleId,
+		IGuesserRoleInfoContainer container,
 		GuesserNormalRoleAssignState assignState);
 }
 
