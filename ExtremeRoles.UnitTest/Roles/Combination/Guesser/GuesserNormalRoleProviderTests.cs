@@ -1,6 +1,8 @@
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Combination.Guesser;
@@ -319,5 +321,46 @@ public class GuesserNormalRoleProviderTests
 		// Assert
 		Assert.True(isInvestigator);
 		Assert.False(isOther);
+	}
+
+	[Fact]
+	public void ProcessNormalRole_WhenDeepOneAndNoFrogs_AddsDeepOneToContainer()
+	{
+		// Arrange
+		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
+		var container = new GuesserRoleInfoContainer();
+		var assignState = new GuesserNormalRoleAssignState();
+
+		var system = new DeepOneFrogsControlSystem(5, false);
+		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.DeepOneFrogsControlSystem, system);
+
+		// Act
+		GuesserNormalRoleProvider.ProcessNormalRole(container, ExtremeRoleId.DeepOne, ExtremeRoleType.Neutral, assignState);
+
+		// Assert
+		Assert.Single(container.Result);
+		Assert.Equal(ExtremeRoleId.DeepOne, container.Result[0].Id);
+		Assert.Equal(ExtremeRoleType.Neutral, container.Result[0].Team);
+		Assert.Contains(ExtremeRoleId.DeepOne, container.SeparatedRoleId[ExtremeRoleType.Neutral]);
+	}
+
+	[Fact]
+	public void ProcessNormalRole_WhenDeepOneAndFrogPlaced_DoesNotAddDeepOneToContainer()
+	{
+		// Arrange
+		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
+		var container = new GuesserRoleInfoContainer();
+		var assignState = new GuesserNormalRoleAssignState();
+
+		var system = new DeepOneFrogsControlSystem(5, false);
+		system.AddFrogForTest(1);
+		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.DeepOneFrogsControlSystem, system);
+
+		// Act
+		GuesserNormalRoleProvider.ProcessNormalRole(container, ExtremeRoleId.DeepOne, ExtremeRoleType.Neutral, assignState);
+
+		// Assert
+		Assert.Empty(container.Result);
+		Assert.DoesNotContain(ExtremeRoleId.DeepOne, container.SeparatedRoleId[ExtremeRoleType.Neutral]);
 	}
 }
