@@ -13,6 +13,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Liberal;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Roles.API.Interface.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -122,6 +123,17 @@ public sealed class Shooter :
                 rpcPlayKillSound();
                 return;
             }
+			// 無敵の人を打つと自爆する
+			else if (ExtremeRoleManager.TryGetRole(
+				instance.PlayerId, out var role) &&
+				role.AbilityClass is IInvincible invincible &&
+				invincible.IsBlockKillFrom(localPlayer.PlayerId))
+			{
+				Player.RpcUncheckMurderPlayer(
+					localPlayer.PlayerId,
+					localPlayer.PlayerId, byte.MinValue);
+				return;
+			}
 
             Player.RpcUncheckMurderPlayer(
                 localPlayer.PlayerId,
