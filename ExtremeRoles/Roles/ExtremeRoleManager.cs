@@ -271,7 +271,9 @@ public enum RoleGameOverReason
 	PunisherKilledImpostor,
 	PunisherKillAllOther,
 
-	MastermindAlive,
+	MastermindDeathGame,
+
+	DeepOneBecomeGod,
 
 	AllJackalWin,
 	AllYandereWin,

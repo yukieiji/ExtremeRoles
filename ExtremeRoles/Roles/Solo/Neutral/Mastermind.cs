@@ -384,7 +384,7 @@ public sealed class Mastermind :
 			}
 		}
 		ExtremeRolesPlugin.ShipState.SetGameOverReason(
-			(GameOverReason)RoleGameOverReason.MastermindAlive);
+			(GameOverReason)RoleGameOverReason.MastermindDeathGame);
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)

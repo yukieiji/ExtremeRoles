@@ -66,7 +66,7 @@ public enum ExtremeSystemType : byte
 	LiberalMoneyBank,
 	BlackmailerSystem,
 	MastermindNotice,
-	DeepOneSystem,
+	DeepOneFrogsControlSystem,
 }
 
 public enum ResetTiming : byte

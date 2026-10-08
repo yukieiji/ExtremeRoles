@@ -381,8 +381,11 @@ public static class EndGameManagerSetUpPatch
 				RoleGameOverReason.PunisherKillAllOther =>
 				new(ExtremeRoleId.Punisher, ColorPalette.PunisherDarkGold),
 
-			RoleGameOverReason.MastermindAlive =>
+			RoleGameOverReason.MastermindDeathGame =>
 				new(ExtremeRoleId.Mastermind, ColorPalette.MastermindSlateBlue),
+
+			RoleGameOverReason.DeepOneBecomeGod =>
+				new(ExtremeRoleId.DeepOne, ColorPalette.DeepOneDarkGreen),
 
 			RoleGameOverReason.AllJackalWin =>
 				new(RoleGameOverReason.AllJackalWin, ColorPalette.JackalBlue),
