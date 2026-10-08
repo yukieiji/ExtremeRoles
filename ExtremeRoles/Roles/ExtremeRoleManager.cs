@@ -14,6 +14,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Combination.Guesser;
 using ExtremeRoles.Roles.Combination.Avalon;
 using ExtremeRoles.Roles.Combination.Barter;
 using ExtremeRoles.Roles.Combination.HeroAcademia;

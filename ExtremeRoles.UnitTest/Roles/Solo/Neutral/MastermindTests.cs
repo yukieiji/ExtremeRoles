@@ -135,9 +135,32 @@ public sealed class MastermindTests
 		var mastermind = new Mastermind();
 		InitializeRole(mastermind, 1);
 
+		var mockPlayerControl = MockSetupHelper.SetupPlayerControlMocks();
+
 		var mockMastermindInfo = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 		mockMastermindInfo.SetupGet(p => p.PlayerId).Returns((byte)1);
 		mockMastermindInfo.SetupGet(p => p.IsDead).Returns(false);
+		mockMastermindInfo.SetupGet(p => p.Disconnected).Returns(false);
+		mockMastermindInfo.SetupGet(p => p.Object).Returns(mockPlayerControl.Object);
+
+		var mockGameData = MockSetupHelper.SetupGameDataMock();
+
+		var players = new[] { mockMastermindInfo.Object };
+		var mockList = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>>(IntPtr.Zero);
+		mockList.SetupGet(l => l.Count).Returns(players.Length);
+		mockList.Setup(l => l[It.IsAny<int>()]).Returns((int i) => players[i]);
+
+		var mockEnum = new Mock<Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>.Enumerator>(IntPtr.Zero);
+		int enumIndex = -1;
+		mockEnum.Setup(e => e.MoveNext()).Returns(() =>
+		{
+			enumIndex++;
+			return enumIndex < players.Length;
+		});
+		mockEnum.SetupGet(e => e.Current).Returns(() => players[enumIndex]);
+		mockList.Setup(l => l.GetEnumerator()).Returns(mockEnum.Object);
+
+		mockGameData.SetupGet(g => g.AllPlayers).Returns(mockList.Object);
 
 		var winners = new WinnerContainer();
 
