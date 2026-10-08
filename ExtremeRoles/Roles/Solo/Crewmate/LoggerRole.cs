@@ -1,21 +1,20 @@
-using System.Collections.Generic;
-using System.Text;
-
-using Hazel;
-using UnityEngine;
-
+using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Extension.Vector;
-using ExtremeRoles.Resources;
+using Hazel;
+using System.Collections.Generic;
+using System.Text;
+using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -204,6 +203,12 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 		var sr = obj.AddComponent<SpriteRenderer>();
 		setSprite(sr);
+
+		if (CompatModManager.Instance.TryGetModMap(out var modMap))
+		{
+			modMap.AddCustomComponent(obj, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+		}
+
 		this.remoteDetectorMap[index] = obj;
 	}
 
@@ -246,6 +251,11 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		var colider = objConsole.gameObject.AddComponent<CircleCollider2D>();
 		colider.isTrigger = true;
 		colider.radius = 0.25f;
+
+		if (CompatModManager.Instance.TryGetModMap(out var modMap))
+		{
+			modMap.AddCustomComponent(objConsole.gameObject, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+		}
 
 		this.activeDetectors.Add(behavior);
 	}
