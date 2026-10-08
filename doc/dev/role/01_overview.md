@@ -41,7 +41,8 @@ ExtremeRoles/Roles/Solo/Crewmate/MyRole/
 3.  **能力の実装**: [04_ability_handler.md](./04_ability_handler.md)
 4.  **状態管理の実装**: [05_status_model.md](./05_status_model.md)
 5.  **インターフェースの活用**: [07_interfaces.md](./07_interfaces.md) / [08_methods.md](./08_methods.md)
-6.  **役職の登録**: [98_registration.md](./98_registration.md)
-7.  **翻訳の追加**: [99_translation.md](./99_translation.md)
+6.  **特殊勝利・勝者決定の実装**: [20_win.md](./20_win.md)
+7.  **役職の登録**: [98_registration.md](./98_registration.md)
+8.  **翻訳の追加**: [99_translation.md](./99_translation.md)
 
 各ステップの詳細は、番号順の各ドキュメントを参照してください。
