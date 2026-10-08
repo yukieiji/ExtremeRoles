@@ -5,7 +5,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
 
-namespace ExtremeRoles.Roles.Combination;
+namespace ExtremeRoles.Roles.Combination.Guesser;
 
 public sealed class GuesserNormalRoleProvider : IGuesserNormalRoleProvider
 {

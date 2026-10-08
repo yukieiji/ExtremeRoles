@@ -20,6 +20,7 @@ using ExtremeRoles.Patches.Player;
 using ExtremeRoles.Patches.Role;
 using ExtremeRoles.Patches.Ship;
 using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Combination.Guesser;
 using ExtremeRoles.Roles.Solo.Liberal;
 using Microsoft.Extensions.DependencyInjection;
 using System;

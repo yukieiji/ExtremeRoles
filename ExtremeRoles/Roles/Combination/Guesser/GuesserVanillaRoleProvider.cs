@@ -4,7 +4,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
-namespace ExtremeRoles.Roles.Combination;
+namespace ExtremeRoles.Roles.Combination.Guesser;
 
 public sealed class GuesserVanillaRoleProvider : IGuesserVanillaRoleProvider
 {

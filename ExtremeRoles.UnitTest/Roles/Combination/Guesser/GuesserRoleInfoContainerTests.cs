@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Combination.Guesser;
 using Xunit;
 
 #nullable enable
 
-namespace ExtremeRoles.UnitTest.Roles.Combination;
+namespace ExtremeRoles.UnitTest.Roles.Combination.Guesser;
 
 public class GuesserRoleInfoContainerTests
 {

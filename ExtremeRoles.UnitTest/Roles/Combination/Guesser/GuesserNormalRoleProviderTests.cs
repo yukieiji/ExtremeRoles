@@ -1,14 +1,27 @@
+using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Combination.Guesser;
+using ExtremeRoles.Roles.Solo.Neutral.Jackal;
 using Xunit;
 
 #nullable enable
 
-namespace ExtremeRoles.UnitTest.Roles.Combination;
+namespace ExtremeRoles.UnitTest.Roles.Combination.Guesser;
 
+[Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class GuesserNormalRoleProviderTests
 {
+	public GuesserNormalRoleProviderTests()
+	{
+		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupObjectImplicitHelpers();
+		MockSetupHelper.SetupPaletteHelpers();
+		MockSetupHelper.SetupOptionManager();
+	}
+
 	[Fact]
 	public void ProcessNormalRole_WhenGenericRole_AddsToResultAndSeparatedDict()
 	{
@@ -24,6 +37,36 @@ public class GuesserNormalRoleProviderTests
 		Assert.Equal(ExtremeRoleId.Sheriff, container.Result[0].Id);
 		Assert.Equal(ExtremeRoleType.Crewmate, container.Result[0].Team);
 		Assert.Contains(ExtremeRoleId.Sheriff, container.SeparatedRoleId[ExtremeRoleType.Crewmate]);
+	}
+
+	[Fact]
+	public void ProcessNormalRole_WhenJackal_SetsJackalStateAndDoesNotAddJackalDirectly()
+	{
+		// Arrange
+		var container = new GuesserRoleInfoContainer();
+		var assignState = new GuesserNormalRoleAssignState();
+
+		// Act
+		GuesserNormalRoleProvider.ProcessNormalRole(container, ExtremeRoleId.Jackal, ExtremeRoleType.Neutral, assignState);
+
+		// Assert
+		Assert.Empty(container.Result);
+		Assert.True(assignState.IsJackalOn);
+	}
+
+	[Fact]
+	public void ProcessNormalRole_WhenQueen_SetsQueenStateAndDoesNotAddQueenDirectly()
+	{
+		// Arrange
+		var container = new GuesserRoleInfoContainer();
+		var assignState = new GuesserNormalRoleAssignState();
+
+		// Act
+		GuesserNormalRoleProvider.ProcessNormalRole(container, ExtremeRoleId.Queen, ExtremeRoleType.Neutral, assignState);
+
+		// Assert
+		Assert.Empty(container.Result);
+		Assert.True(assignState.IsQueenOn);
 	}
 
 	[Fact]
@@ -45,17 +88,82 @@ public class GuesserNormalRoleProviderTests
 	}
 
 	[Fact]
-	public void ProcessNormalRole_WhenQueen_SetsIsQueenOnAndDoesNotAddQueenDirectly()
+	public void ProcessNormalRole_WhenJailer_CallsProcessJailer()
 	{
 		// Arrange
 		var container = new GuesserRoleInfoContainer();
 		var assignState = new GuesserNormalRoleAssignState();
 
 		// Act
-		GuesserNormalRoleProvider.ProcessNormalRole(container, ExtremeRoleId.Queen, ExtremeRoleType.Neutral, assignState);
+		GuesserNormalRoleProvider.ProcessNormalRole(container, ExtremeRoleId.Jailer, ExtremeRoleType.Crewmate, assignState);
 
 		// Assert
-		Assert.Empty(container.Result);
+		Assert.Equal(3, container.Result.Count);
+		Assert.Equal(ExtremeRoleId.Jailer, container.Result[0].Id);
+		Assert.Equal(ExtremeRoleId.Yardbird, container.Result[1].Id);
+		Assert.Equal(ExtremeRoleId.Lawbreaker, container.Result[2].Id);
+	}
+
+	[Fact]
+	public void ProcessNormalRole_WhenTucker_CallsProcessTucker()
+	{
+		// Arrange
+		var container = new GuesserRoleInfoContainer();
+		var assignState = new GuesserNormalRoleAssignState();
+
+		// Act
+		GuesserNormalRoleProvider.ProcessNormalRole(container, ExtremeRoleId.Tucker, ExtremeRoleType.Neutral, assignState);
+
+		// Assert
+		Assert.Equal(2, container.Result.Count);
+		Assert.Equal(ExtremeRoleId.Tucker, container.Result[0].Id);
+		Assert.Equal(ExtremeRoleId.Chimera, container.Result[1].Id);
+	}
+
+	[Fact]
+	public void ProcessNormalRole_WhenDefaultRole_AddsGenericRoleOnly()
+	{
+		// Arrange
+		var container = new GuesserRoleInfoContainer();
+		var assignState = new GuesserNormalRoleAssignState();
+
+		// Act
+		GuesserNormalRoleProvider.ProcessNormalRole(container, ExtremeRoleId.Bait, ExtremeRoleType.Crewmate, assignState);
+
+		// Assert
+		Assert.Single(container.Result);
+		Assert.Equal(ExtremeRoleId.Bait, container.Result[0].Id);
+	}
+
+	[Fact]
+	public void ProcessJackal_SetsJackalStateFromOptionManager()
+	{
+		// Arrange
+		var assignState = new GuesserNormalRoleAssignState();
+
+		// Act
+		GuesserNormalRoleProvider.ProcessJackal(assignState);
+
+		// Assert
+		Assert.True(assignState.IsJackalOn);
+		Assert.Equal(
+			OptionManager.Instance.TryGetCategory(
+				OptionTab.NeutralTab,
+				ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Jackal),
+				out var cate) && cate.GetValue<JackalRole.JackalOption, bool>(JackalRole.JackalOption.ForceReplaceLover),
+			assignState.IsJackalForceReplaceLover);
+	}
+
+	[Fact]
+	public void ProcessQueen_SetsQueenStateTrue()
+	{
+		// Arrange
+		var assignState = new GuesserNormalRoleAssignState();
+
+		// Act
+		GuesserNormalRoleProvider.ProcessQueen(assignState);
+
+		// Assert
 		Assert.True(assignState.IsQueenOn);
 	}
 
@@ -167,6 +275,38 @@ public class GuesserNormalRoleProviderTests
 
 		// Assert
 		Assert.Empty(container.Result);
+	}
+
+	[Fact]
+	public void ProcessQueenAndServant_WhenQueenOnTrueAndNeutralCountLessThanTwo_AddsQueenWithoutServantAlone()
+	{
+		// Arrange
+		var container = new GuesserRoleInfoContainer();
+		var assignState = new GuesserNormalRoleAssignState { IsQueenOn = true };
+
+		// Act
+		GuesserNormalRoleProvider.ProcessQueenAndServant(container, assignState);
+
+		// Assert
+		Assert.Contains(container.Result, r => r.Id == ExtremeRoleId.Queen);
+		Assert.DoesNotContain(container.Result, r => r.Id == ExtremeRoleId.Servant && r.AnothorId == ExtremeRoleId.Null);
+	}
+
+	[Fact]
+	public void ProcessQueenAndServant_WhenQueenOnTrueAndNeutralCountMoreThanOne_AddsServantAlone()
+	{
+		// Arrange
+		var container = new GuesserRoleInfoContainer();
+		container.AddSeparatedRoleId(ExtremeRoleType.Neutral, ExtremeRoleId.Marlin);
+		container.AddSeparatedRoleId(ExtremeRoleType.Neutral, ExtremeRoleId.Jackal);
+		var assignState = new GuesserNormalRoleAssignState { IsQueenOn = true };
+
+		// Act
+		GuesserNormalRoleProvider.ProcessQueenAndServant(container, assignState);
+
+		// Assert
+		Assert.Contains(container.Result, r => r.Id == ExtremeRoleId.Queen);
+		Assert.Contains(container.Result, r => r.Id == ExtremeRoleId.Servant && r.AnothorId == ExtremeRoleId.Null);
 	}
 
 	[Fact]

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 
-namespace ExtremeRoles.Roles.Combination;
+namespace ExtremeRoles.Roles.Combination.Guesser;
 
 public interface IGuesserRoleInfoCreator
 {

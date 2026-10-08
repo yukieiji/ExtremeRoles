@@ -1,12 +1,14 @@
 using AmongUs.GameOptions;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Combination.Guesser;
 using Xunit;
+
+using GuesserRole = ExtremeRoles.Roles.Combination.Guesser.Guesser;
 
 #nullable enable
 
-namespace ExtremeRoles.UnitTest.Roles.Combination;
+namespace ExtremeRoles.UnitTest.Roles.Combination.Guesser;
 
 public class GuesserVanillaRoleProviderTests
 {
@@ -86,7 +88,7 @@ public class GuesserVanillaRoleProviderTests
 		var container = new GuesserRoleInfoContainer();
 
 		// Act
-		GuesserVanillaRoleProvider.AddCrewmateDefaultRole(container, Guesser.DefaultGuessRole.Crewmate);
+		GuesserVanillaRoleProvider.AddCrewmateDefaultRole(container, GuesserRole.DefaultGuessRole.Crewmate);
 
 		// Assert
 		Assert.Single(container.Result);
@@ -100,7 +102,7 @@ public class GuesserVanillaRoleProviderTests
 		var container = new GuesserRoleInfoContainer();
 
 		// Act
-		GuesserVanillaRoleProvider.AddCrewmateDefaultRole(container, Guesser.DefaultGuessRole.None);
+		GuesserVanillaRoleProvider.AddCrewmateDefaultRole(container, GuesserRole.DefaultGuessRole.None);
 
 		// Assert
 		Assert.Empty(container.Result);
@@ -113,7 +115,7 @@ public class GuesserVanillaRoleProviderTests
 		var container = new GuesserRoleInfoContainer();
 
 		// Act
-		GuesserVanillaRoleProvider.AddImpostorDefaultRole(container, Guesser.DefaultGuessRole.Impostor);
+		GuesserVanillaRoleProvider.AddImpostorDefaultRole(container, GuesserRole.DefaultGuessRole.Impostor);
 
 		// Assert
 		Assert.Single(container.Result);
@@ -127,7 +129,7 @@ public class GuesserVanillaRoleProviderTests
 		var container = new GuesserRoleInfoContainer();
 
 		// Act
-		GuesserVanillaRoleProvider.AddDoveDefaultRole(container, Guesser.DefaultGuessRole.Dove);
+		GuesserVanillaRoleProvider.AddDoveDefaultRole(container, GuesserRole.DefaultGuessRole.Dove);
 
 		// Assert
 		Assert.Single(container.Result);
@@ -142,7 +144,7 @@ public class GuesserVanillaRoleProviderTests
 		var container = new GuesserRoleInfoContainer();
 
 		// Act
-		GuesserVanillaRoleProvider.AddMilitantDefaultRole(container, Guesser.DefaultGuessRole.Militant, militantOn: true);
+		GuesserVanillaRoleProvider.AddMilitantDefaultRole(container, GuesserRole.DefaultGuessRole.Militant, militantOn: true);
 
 		// Assert
 		Assert.Single(container.Result);
@@ -156,7 +158,7 @@ public class GuesserVanillaRoleProviderTests
 		var container = new GuesserRoleInfoContainer();
 
 		// Act
-		GuesserVanillaRoleProvider.AddMilitantDefaultRole(container, Guesser.DefaultGuessRole.Militant, militantOn: false);
+		GuesserVanillaRoleProvider.AddMilitantDefaultRole(container, GuesserRole.DefaultGuessRole.Militant, militantOn: false);
 
 		// Assert
 		Assert.Empty(container.Result);
@@ -170,7 +172,7 @@ public class GuesserVanillaRoleProviderTests
 		var container = new GuesserRoleInfoContainer();
 
 		// Act
-		provider.AddVanillaRoles(container, includeNoneRole: false, Guesser.DefaultGuessRole.Crewmate, liberalOn: true, militantOn: true);
+		provider.AddVanillaRoles(container, includeNoneRole: false, GuesserRole.DefaultGuessRole.Crewmate, liberalOn: true, militantOn: true);
 
 		// Assert
 		Assert.Empty(container.Result);
@@ -187,7 +189,7 @@ public class GuesserVanillaRoleProviderTests
 		provider.AddVanillaRoles(
 			container,
 			includeNoneRole: true,
-			defaultRole: Guesser.DefaultGuessRole.Crewmate | Guesser.DefaultGuessRole.Impostor | Guesser.DefaultGuessRole.Dove | Guesser.DefaultGuessRole.Militant,
+			defaultRole: GuesserRole.DefaultGuessRole.Crewmate | GuesserRole.DefaultGuessRole.Impostor | GuesserRole.DefaultGuessRole.Dove | GuesserRole.DefaultGuessRole.Militant,
 			liberalOn: true,
 			militantOn: true);
 
@@ -206,7 +208,7 @@ public class GuesserVanillaRoleProviderTests
 		provider.AddVanillaRoles(
 			container,
 			includeNoneRole: true,
-			defaultRole: Guesser.DefaultGuessRole.Crewmate | Guesser.DefaultGuessRole.Dove,
+			defaultRole: GuesserRole.DefaultGuessRole.Crewmate | GuesserRole.DefaultGuessRole.Dove,
 			liberalOn: false,
 			militantOn: true);
 

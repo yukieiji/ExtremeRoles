@@ -1,7 +1,7 @@
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
-namespace ExtremeRoles.Roles.Combination;
+namespace ExtremeRoles.Roles.Combination.Guesser;
 
 public interface IGuesserVanillaRoleProvider
 {

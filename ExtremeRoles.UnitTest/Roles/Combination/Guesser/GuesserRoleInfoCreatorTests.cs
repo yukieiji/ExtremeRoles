@@ -6,13 +6,15 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Combination.Guesser;
 using Moq;
 using Xunit;
 
+using GuesserRole = ExtremeRoles.Roles.Combination.Guesser.Guesser;
+
 #nullable enable
 
-namespace ExtremeRoles.UnitTest.Roles.Combination;
+namespace ExtremeRoles.UnitTest.Roles.Combination.Guesser;
 
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class GuesserRoleInfoCreatorTests
@@ -57,10 +59,10 @@ public class GuesserRoleInfoCreatorTests
 		vanillaMock.Setup(v => v.AddVanillaRoles(
 			container,
 			true,
-			Guesser.DefaultGuessRole.Crewmate,
+			GuesserRole.DefaultGuessRole.Crewmate,
 			It.IsAny<bool>(),
 			It.IsAny<bool>()))
-			.Callback<IGuesserRoleInfoContainer, bool, Guesser.DefaultGuessRole, bool, bool>(
+			.Callback<IGuesserRoleInfoContainer, bool, GuesserRole.DefaultGuessRole, bool, bool>(
 				(cnt, inc, def, lib, mil) =>
 				{
 					cnt.Add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
@@ -92,7 +94,7 @@ public class GuesserRoleInfoCreatorTests
 			optionLoader);
 
 		// Act
-		var result = creator.Create(true, Guesser.DefaultGuessRole.Crewmate);
+		var result = creator.Create(true, GuesserRole.DefaultGuessRole.Crewmate);
 
 		// Assert
 		Assert.NotNull(result);
@@ -104,7 +106,7 @@ public class GuesserRoleInfoCreatorTests
 		vanillaMock.Verify(v => v.AddVanillaRoles(
 			container,
 			true,
-			Guesser.DefaultGuessRole.Crewmate,
+			GuesserRole.DefaultGuessRole.Crewmate,
 			It.IsAny<bool>(),
 			It.IsAny<bool>()), Times.Once);
 

@@ -20,8 +20,9 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
 using Microsoft.Extensions.DependencyInjection;
 using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Roles.Combination.Guesser;
 
-namespace ExtremeRoles.Roles.Combination;
+namespace ExtremeRoles.Roles.Combination.Guesser;
 
 public sealed class GuesserManager : FlexibleCombinationRoleManagerBase
 {
@@ -339,7 +340,7 @@ public sealed class Guesser :
         var guessMode = (GuessMode)loader.GetValue<GuesserOption, int>(
             GuesserOption.GuessDefaultRoleMode);
 
-        this.canGuessNoneRole = 
+        this.canGuessNoneRole =
             (
                 guessMode == GuessMode.BothGuesser
             )
@@ -351,7 +352,7 @@ public sealed class Guesser :
             (
                 guessMode == GuessMode.EvilGuesserOnly && this.IsImpostor()
             );
-		
+
 		this.defaultGuessRole = DefaultGuessRole.None;
 		if (loader.GetValue<GuesserOption, bool>(
 			GuesserOption.CanCrewmate))

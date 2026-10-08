@@ -6,7 +6,7 @@ using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
-namespace ExtremeRoles.Roles.Combination;
+namespace ExtremeRoles.Roles.Combination.Guesser;
 
 public sealed class GuesserRoleInfoCreator : IGuesserRoleInfoCreator
 {

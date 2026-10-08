@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Combination.Guesser;
 using ExtremeRoles.Roles.Combination.InvestigatorOffice;
 using Xunit;
 
 #nullable enable
 
-namespace ExtremeRoles.UnitTest.Roles.Combination;
+namespace ExtremeRoles.UnitTest.Roles.Combination.Guesser;
 
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public class GuesserCombRoleProviderTests
