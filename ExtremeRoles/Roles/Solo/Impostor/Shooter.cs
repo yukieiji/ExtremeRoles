@@ -14,6 +14,7 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Liberal;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Ability;
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -132,6 +133,7 @@ public sealed class Shooter :
 				Player.RpcUncheckMurderPlayer(
 					localPlayer.PlayerId,
 					localPlayer.PlayerId, byte.MinValue);
+				ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(localPlayer.PlayerId, ExtremeShipStatus.PlayerStatus.Retaliate);
 				return;
 			}
 
