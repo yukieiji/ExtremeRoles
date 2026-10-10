@@ -143,6 +143,7 @@ public enum ExtremeRoleId : int
 	RemoteKiller,
 	YoYo,
 	Blackmailer,
+	Flasher,
 
 	Alice,
     Jackal,
@@ -401,6 +402,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.RemoteKiller   , new RemoteKillerRole()},
 			{(int)ExtremeRoleId.YoYo           , new YoYo()},
 			{(int)ExtremeRoleId.Blackmailer    , new Blackmailer()},
+			{(int)ExtremeRoleId.Flasher        , new Flasher()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new JackalRole()},

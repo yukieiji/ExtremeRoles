@@ -1763,4 +1763,41 @@ The blackmailed player cannot speak, chat, or vote in the next meeting.</value>
   <data name="blackmail" xml:space="preserve">
     <value>Blackmail</value>
   </data>
+  <data name="Flasher" xml:space="preserve">
+    <value>Flasher</value>
+  </data>
+  <data name="FlasherFullDescription" xml:space="preserve">
+    <value>An Impostor role that blinds surrounding players with a white flash for a certain duration.
+Button Ability "Flash":
+ - Pressing the button starts charging.
+ - Pressing the button again triggers the flash, displaying a white screen to players within range.
+ - Aftereffects occur depending on the charged duration.</value>
+  </data>
+  <data name="FlasherShortDescription" xml:space="preserve">
+    <value>Blind surrounding players with a flash</value>
+  </data>
+  <data name="FlasherIntroDescription" xml:space="preserve">
+    <value>Flash the screen white and blind surrounding players</value>
+  </data>
+  <data name="FlasherAbility" xml:space="preserve">
+    <value>FLASH</value>
+  </data>
+  <data name="FlasherAffectTeammates" xml:space="preserve">
+    <value>Affect Teammate Impostors</value>
+  </data>
+  <data name="FlasherEffectRadius" xml:space="preserve">
+    <value>Flash Effect Radius</value>
+  </data>
+  <data name="FlasherChargeTime" xml:space="preserve">
+    <value>"FLASH" : Charging Time</value>
+  </data>
+  <data name="FlasherAbilityCoolTime" xml:space="preserve">
+    <value>"FLASH" : Ability Cooldown</value>
+  </data>
+  <data name="FlasherAbilityActiveTime" xml:space="preserve">
+    <value>"FLASH" : White Screen Active Time</value>
+  </data>
+  <data name="FlasherAbilityCount" xml:space="preserve">
+    <value>"FLASH" : Ability Charges</value>
+  </data>
 </root>

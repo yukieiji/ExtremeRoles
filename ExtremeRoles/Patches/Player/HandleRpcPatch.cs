@@ -340,6 +340,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.RemoteKillerOps:
 				RPCOperator.RemoteKillerRpcOps(ref reader);
 				break;
+			case RPCOperator.Command.FlasherFlash:
+				RPCOperator.FlasherFlash(reader);
+				break;
 			case RPCOperator.Command.AliceShipBroken:
 				byte alicePlayerId = reader.ReadByte();
 				byte newTaskSetPlayerId = reader.ReadByte();
