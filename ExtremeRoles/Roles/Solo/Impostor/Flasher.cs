@@ -32,7 +32,7 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 
 	private float effectRadius;
 	private bool affectTeammates;
-	private static FlasherScreenEffect? currentFlasher;
+	private FlasherScreenEffect? flasherEffect;
 
 	public ExtremeAbilityButton? Button { get; set; }
 
@@ -140,22 +140,19 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 		}
 
 		float aftereffectTime = MaxAftereffectTime * Mathf.Clamp01(chargeGauge);
-		float fadeInTime = 0.01f;
-		float holdTime = activeTime;
 		float fadeOutTime = Mathf.Max(0.01f, aftereffectTime);
-		float shakeAmount = Mathf.Lerp(0.2f, 1.0f, chargeGauge);
 
-		if (currentFlasher != null)
+		if (ExtremeRoleManager.TryGetSafeCastedRole<Flasher>(callerId, out var flasherRole) &&
+			flasherRole.flasherEffect != null)
 		{
-			currentFlasher.Hide();
+			flasherRole.flasherEffect.Flash(fadeOutTime);
 		}
-
-		currentFlasher = new FlasherScreenEffect(
-			fadeInTime: fadeInTime,
-			holdTime: holdTime,
-			fadeOutTime: fadeOutTime,
-			maxShakeAmount: shakeAmount);
-		currentFlasher.Flash();
+		else
+		{
+			float holdTime = activeTime > 0.0f ? activeTime : 3.0f;
+			var fallbackEffect = new FlasherScreenEffect(Color.white, holdTime, 0.5f);
+			fallbackEffect.Flash(fadeOutTime);
+		}
 	}
 
 	protected override void CreateSpecificOption(
@@ -186,21 +183,29 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 		var loader = this.Loader;
 		this.effectRadius = loader.GetValue<FlasherOption, float>(FlasherOption.EffectRadius);
 		this.affectTeammates = loader.GetValue<FlasherOption, bool>(FlasherOption.AffectTeammates);
+
+		float activeTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime);
+		if (activeTime <= 0.0f)
+		{
+			activeTime = 3.0f;
+		}
+
+		this.flasherEffect = new FlasherScreenEffect(Color.white, activeTime, 0.5f);
 	}
 
 	public void ResetOnMeetingStart()
 	{
-		if (currentFlasher != null)
+		if (this.flasherEffect != null)
 		{
-			currentFlasher.Hide();
+			this.flasherEffect.Hide();
 		}
 	}
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
-		if (currentFlasher != null)
+		if (this.flasherEffect != null)
 		{
-			currentFlasher.Hide();
+			this.flasherEffect.Hide();
 		}
 	}
 }

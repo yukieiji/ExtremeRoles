@@ -448,10 +448,18 @@ public sealed class FlasherTests : IDisposable
 	}
 
 	[Fact]
-	public void FlasherScreenEffect_CanInstantiateAndHideWithoutError()
+	public void FlasherScreenEffect_ThrowsException_WhenHoldTimeInvalid()
+	{
+		// Arrange, Act & Assert
+		Assert.Throws<ArgumentOutOfRangeException>(() => new FlasherScreenEffect(Color.white, 0.0f, 0.5f));
+		Assert.Throws<ArgumentOutOfRangeException>(() => new FlasherScreenEffect(Color.white, -1.0f, 0.5f));
+	}
+
+	[Fact]
+	public void FlasherScreenEffect_FlashAndHide_ExecutesSuccessfully()
 	{
 		// Arrange
-		var effect = new FlasherScreenEffect(0.01f, 2.0f, 0.5f, 0.8f);
+		var effect = new FlasherScreenEffect(Color.white, 2.0f, 0.8f);
 
 		// Act & Assert
 		effect.Hide();

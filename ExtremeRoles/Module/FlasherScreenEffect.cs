@@ -10,42 +10,39 @@ namespace ExtremeRoles.Module;
 
 public sealed class FlasherScreenEffect
 {
-	private readonly struct TimeLineInfo(float fadeInTime, float holdTime, float fadeOutTime)
+	private readonly struct TimeLineInfo(float fadeInTime, float holdTime, float maxShakeAmount)
 	{
 		public readonly float FadeIn = fadeInTime;
 		public readonly float Hold = fadeInTime + holdTime;
-		public readonly float FadeOutLength = fadeOutTime;
-		public readonly float Total = fadeInTime + holdTime + fadeOutTime;
+		public readonly float MaxShakeAmount = maxShakeAmount;
 	}
+
+	private const float fixedFadeInTime = 0.01f;
 
 	private SpriteRenderer? renderer;
 	private Coroutine? activeCoroutine;
-	private readonly Color defaultColor = Color.white;
+	private readonly Color defaultColor;
 	private readonly float maxAlpha = 1.0f;
 	private readonly TimeLineInfo timeLine;
-	private readonly float maxShakeAmount;
 
-	public FlasherScreenEffect(float fadeInTime, float holdTime, float fadeOutTime, float maxShakeAmount)
+	public FlasherScreenEffect(Color defaultColor, float holdTime, float maxShakeAmount)
 	{
-		if (fadeInTime <= 0.0f)
+		if (holdTime <= 0.0f)
 		{
-			fadeInTime = 0.01f;
+			throw new ArgumentOutOfRangeException(nameof(holdTime), "must be positive.");
 		}
+
+		this.defaultColor = defaultColor;
+		this.timeLine = new TimeLineInfo(fixedFadeInTime, holdTime, maxShakeAmount);
+	}
+
+	public void Flash(float fadeOutTime)
+	{
 		if (fadeOutTime <= 0.0f)
 		{
 			fadeOutTime = 0.01f;
 		}
-		if (holdTime < 0.0f)
-		{
-			holdTime = 0.0f;
-		}
 
-		this.timeLine = new TimeLineInfo(fadeInTime, holdTime, fadeOutTime);
-		this.maxShakeAmount = maxShakeAmount;
-	}
-
-	public void Flash()
-	{
 		var hudManager = HudManager.Instance;
 		if (hudManager == null)
 		{
@@ -70,6 +67,8 @@ public sealed class FlasherScreenEffect
 
 		FollowerCamera? followerCamera = getFollowerCamera(hudManager);
 
+		float totalTime = this.timeLine.Hold + fadeOutTime;
+
 		Action<float> lerpAction = (p) =>
 		{
 			if (this.renderer == null)
@@ -77,26 +76,26 @@ public sealed class FlasherScreenEffect
 				return;
 			}
 
-			float elapsed = p * this.timeLine.Total;
+			float elapsed = p * totalTime;
 			float alpha = 0f;
 			float currentShake = 0f;
 
 			if (elapsed < this.timeLine.FadeIn)
 			{
 				alpha = (elapsed / this.timeLine.FadeIn) * this.maxAlpha;
-				currentShake = this.maxShakeAmount;
+				currentShake = this.timeLine.MaxShakeAmount;
 			}
 			else if (elapsed < this.timeLine.Hold)
 			{
 				alpha = this.maxAlpha;
-				currentShake = this.maxShakeAmount;
+				currentShake = this.timeLine.MaxShakeAmount;
 			}
 			else
 			{
 				float fadeOutElapsed = elapsed - this.timeLine.Hold;
-				float fadeOutProgress = 1.0f - (fadeOutElapsed / this.timeLine.FadeOutLength);
+				float fadeOutProgress = 1.0f - (fadeOutElapsed / fadeOutTime);
 				alpha = fadeOutProgress * this.maxAlpha;
-				currentShake = fadeOutProgress * this.maxShakeAmount;
+				currentShake = fadeOutProgress * this.timeLine.MaxShakeAmount;
 			}
 
 			this.renderer.color = new Color(this.defaultColor.r, this.defaultColor.g, this.defaultColor.b, Mathf.Clamp01(alpha));
@@ -116,7 +115,7 @@ public sealed class FlasherScreenEffect
 			}
 		};
 
-		this.activeCoroutine = hudManager.StartCoroutine(Effects.Lerp(this.timeLine.Total, lerpAction));
+		this.activeCoroutine = hudManager.StartCoroutine(Effects.Lerp(totalTime, lerpAction));
 	}
 
 	public void Hide()
@@ -152,26 +151,13 @@ public sealed class FlasherScreenEffect
 
 	private static FollowerCamera? getFollowerCamera(HudManager? hudManager)
 	{
-		FollowerCamera? followerCamera = null;
-		try
-		{
-			if (Camera.main != null)
-			{
-				followerCamera = Camera.main.GetComponent<FollowerCamera>();
-			}
-		}
-		catch
-		{
-		}
-
-		if (followerCamera == null &&
-			hudManager != null &&
+		if (hudManager != null &&
 			hudManager.transform != null &&
 			hudManager.transform.parent != null)
 		{
-			followerCamera = hudManager.transform.parent.GetComponent<FollowerCamera>();
+			return hudManager.transform.parent.GetComponent<FollowerCamera>();
 		}
 
-		return followerCamera;
+		return null;
 	}
 }
