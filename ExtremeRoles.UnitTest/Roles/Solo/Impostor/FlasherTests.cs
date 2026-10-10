@@ -446,4 +446,15 @@ public sealed class FlasherTests : IDisposable
 		role.ResetOnMeetingStart();
 		role.ResetOnMeetingEnd(null);
 	}
+
+	[Fact]
+	public void FlasherScreenEffect_CanInstantiateAndHideWithoutError()
+	{
+		// Arrange
+		var effect = new FlasherScreenEffect(0.01f, 2.0f, 0.5f, 0.8f);
+
+		// Act & Assert
+		effect.Hide();
+		effect.Reset();
+	}
 }

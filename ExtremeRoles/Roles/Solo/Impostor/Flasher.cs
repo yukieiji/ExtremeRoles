@@ -32,7 +32,7 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 
 	private float effectRadius;
 	private bool affectTeammates;
-	private static FullScreenFlasher? currentFlasher;
+	private static FlasherScreenEffect? currentFlasher;
 
 	public ExtremeAbilityButton? Button { get; set; }
 
@@ -143,34 +143,19 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 		float fadeInTime = 0.01f;
 		float holdTime = activeTime;
 		float fadeOutTime = Mathf.Max(0.01f, aftereffectTime);
+		float shakeAmount = Mathf.Lerp(0.2f, 1.0f, chargeGauge);
 
 		if (currentFlasher != null)
 		{
 			currentFlasher.Hide();
 		}
 
-		currentFlasher = new FullScreenFlasher(
-			Color.white,
-			maxAlpha: 1.0f,
+		currentFlasher = new FlasherScreenEffect(
 			fadeInTime: fadeInTime,
+			holdTime: holdTime,
 			fadeOutTime: fadeOutTime,
-			holdTime: holdTime);
+			maxShakeAmount: shakeAmount);
 		currentFlasher.Flash();
-
-		var followerCamera = Camera.main != null ? Camera.main.GetComponent<FollowerCamera>() : null;
-		if (followerCamera == null &&
-			HudManager.Instance != null &&
-			HudManager.Instance.transform != null &&
-			HudManager.Instance.transform.parent != null)
-		{
-			followerCamera = HudManager.Instance.transform.parent.GetComponent<FollowerCamera>();
-		}
-
-		if (followerCamera != null)
-		{
-			float shakeAmount = Mathf.Lerp(0.2f, 1.0f, chargeGauge);
-			followerCamera.shakeAmount = shakeAmount;
-		}
 	}
 
 	protected override void CreateSpecificOption(
