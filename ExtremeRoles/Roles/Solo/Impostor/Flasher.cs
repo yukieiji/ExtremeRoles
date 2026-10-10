@@ -180,8 +180,9 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 				continue;
 			}
 
-			float distance = Vector2.Distance(truePosition, target.GetTruePosition());
-			if (distance <= this.effectRadius)
+			Vector2 vector = target.GetTruePosition() - truePosition;
+			float magnitude = vector.magnitude;
+			if (magnitude <= this.effectRadius)
 			{
 				targetIds.Add(playerInfo.PlayerId);
 			}
