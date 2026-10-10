@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using Hazel;
 using UnityEngine;
@@ -14,6 +15,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance.Il2Cpp;
 
 #nullable enable
 
@@ -85,17 +87,18 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 			return false;
 		}
 
-		Vector2 pos = localPlayer.GetTruePosition();
+		List<byte> targetPlayerIds = getTargetsInRange(localPlayer);
 
 		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.FlasherFlash))
 		{
 			caller.WriteByte(localPlayer.PlayerId);
-			caller.WriteFloat(pos.x);
-			caller.WriteFloat(pos.y);
 			caller.WriteFloat(chargeGauge);
 			caller.WriteFloat(this.Button?.Behavior is IActivatingBehavior act ? act.ActiveTime : 0.0f);
-			caller.WriteFloat(this.effectRadius);
-			caller.WriteBoolean(this.affectTeammates);
+			caller.WritePackedInt(targetPlayerIds.Count);
+			foreach (byte targetId in targetPlayerIds)
+			{
+				caller.WriteByte(targetId);
+			}
 		}
 
 		return true;
@@ -104,12 +107,15 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 	public static void RpcFlash(in MessageReader reader)
 	{
 		byte callerId = reader.ReadByte();
-		float x = reader.ReadSingle();
-		float y = reader.ReadSingle();
 		float chargeGauge = reader.ReadSingle();
 		float activeTime = reader.ReadSingle();
-		float range = reader.ReadSingle();
-		bool affectTeammates = reader.ReadBoolean();
+		int targetCount = reader.ReadPackedInt32();
+
+		HashSet<byte> targetPlayerIds = new HashSet<byte>();
+		for (int i = 0; i < targetCount; ++i)
+		{
+			targetPlayerIds.Add(reader.ReadByte());
+		}
 
 		var localPlayer = PlayerControl.LocalPlayer;
 		if (localPlayer.IsInValid() ||
@@ -119,22 +125,7 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 			return;
 		}
 
-		if (localPlayer.PlayerId == callerId)
-		{
-			return;
-		}
-
-		Vector2 flasherPos = new Vector2(x, y);
-		Vector2 localPos = localPlayer.GetTruePosition();
-
-		if (Vector2.Distance(localPos, flasherPos) > range)
-		{
-			return;
-		}
-
-		if (!affectTeammates &&
-			localPlayer.Data.Role != null &&
-			localPlayer.Data.Role.IsImpostor)
+		if (!targetPlayerIds.Contains(localPlayer.PlayerId))
 		{
 			return;
 		}
@@ -153,6 +144,50 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 			var fallbackEffect = new FlasherScreenEffect(Color.white, holdTime, 0.5f);
 			fallbackEffect.Flash(fadeOutTime);
 		}
+	}
+
+	private List<byte> getTargetsInRange(PlayerControl sourcePlayer)
+	{
+		List<byte> targetIds = new List<byte>();
+		Vector2 truePosition = sourcePlayer.GetTruePosition();
+
+		foreach (NetworkedPlayerInfo playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
+		{
+			if (playerInfo == null ||
+				playerInfo.IsDead ||
+				playerInfo.Disconnected ||
+				playerInfo.Object == null)
+			{
+				continue;
+			}
+
+			PlayerControl target = playerInfo.Object;
+			if (target.PlayerId == sourcePlayer.PlayerId ||
+				target.inVent ||
+				target.inMovingPlat ||
+				target.onLadder)
+			{
+				continue;
+			}
+
+			if (!ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var targetRole))
+			{
+				continue;
+			}
+
+			if (this.IsSameTeam(targetRole) && !this.affectTeammates)
+			{
+				continue;
+			}
+
+			float distance = Vector2.Distance(truePosition, target.GetTruePosition());
+			if (distance <= this.effectRadius)
+			{
+				targetIds.Add(playerInfo.PlayerId);
+			}
+		}
+
+		return targetIds;
 	}
 
 	protected override void CreateSpecificOption(

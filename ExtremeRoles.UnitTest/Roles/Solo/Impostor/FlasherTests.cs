@@ -465,4 +465,26 @@ public sealed class FlasherTests : IDisposable
 		effect.Hide();
 		effect.Reset();
 	}
+
+	[Fact]
+	public void RpcFlash_WhenLocalPlayerInTargetList_ExecutesSuccessfully()
+	{
+		// Arrange
+		var role = new Flasher();
+		InitializeRole(role, playerId: 2);
+
+		var mockReader = new Mock<MessageReader>();
+		mockReader.SetupSequence(r => r.ReadByte()).Returns((byte)2); // callerId = 2
+		mockReader.SetupSequence(r => r.ReadSingle()).Returns(0.8f).Returns(3.0f); // chargeGauge, activeTime
+		mockReader.Setup(r => r.ReadPackedInt32()).Returns(1); // targetCount
+
+		var targetByteSeq = mockReader.SetupSequence(r => r.ReadByte());
+		targetByteSeq.Returns((byte)1); // targetId = 1 (local player)
+
+		// Act
+		Flasher.RpcFlash(mockReader.Object);
+
+		// Assert
+		Assert.Equal(ExtremeRoleId.Flasher, role.Core.Id);
+	}
 }
