@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -65,20 +65,20 @@
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1818,5 +1818,42 @@ Lv2能力「ビームセーバー」
   </data>
   <data name="BlackmailerAbilityCount" xml:space="preserve">
     <value>「恐喝」の使用回数</value>
+  </data>
+  <data name="Flasher" xml:space="preserve">
+    <value>フラッシャー</value>
+  </data>
+  <data name="FlasherFullDescription" xml:space="preserve">
+    <value>フラッシュで周りの視界を特定時間奪うインポスター役職
+ボタン能力「フラッシュ」：
+　・ボタンを押してチャージを開始する
+　・再度ボタンを押すと発動し、範囲内のプレイヤーに白い画面を表示する
+　・溜めた時間（チャージ率）に応じた余韻が発生する</value>
+  </data>
+  <data name="FlasherShortDescription" xml:space="preserve">
+    <value>フラッシュで周りの視界を特定時間奪え</value>
+  </data>
+  <data name="FlasherIntroDescription" xml:space="preserve">
+    <value>フラッシュで周りの視界を特定時間奪え</value>
+  </data>
+  <data name="FlasherAbility" xml:space="preserve">
+    <value>フラッシュ</value>
+  </data>
+  <data name="FlasherAffectTeammates" xml:space="preserve">
+    <value>仲間インポスターに影響を与えるか</value>
+  </data>
+  <data name="FlasherEffectRadius" xml:space="preserve">
+    <value>「フラッシュ」の影響範囲</value>
+  </data>
+  <data name="FlasherChargeTime" xml:space="preserve">
+    <value>「フラッシュ」のチャージ時間</value>
+  </data>
+  <data name="FlasherAbilityCoolTime" xml:space="preserve">
+    <value>「フラッシュ」のクールタイム</value>
+  </data>
+  <data name="FlasherAbilityActiveTime" xml:space="preserve">
+    <value>「フラッシュ」の白画面持続時間</value>
+  </data>
+  <data name="FlasherAbilityCount" xml:space="preserve">
+    <value>「フラッシュ」の使用回数</value>
   </data>
 </root>
