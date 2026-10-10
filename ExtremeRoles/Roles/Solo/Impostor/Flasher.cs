@@ -1,63 +1,71 @@
 using System;
 using System.Collections.Generic;
-
-using Hazel;
 using UnityEngine;
 
-using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance.Il2Cpp;
-
-#nullable enable
+using Hazel;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 {
-	public enum FlasherOption
+	public enum Option
 	{
-		ChargeTime,
+		HoldTimeMin,
+		HoldTimeMax,
 		EffectRadius,
 		AffectTeammates,
 	}
 
-	public const float MaxAftereffectTime = 1.0f;
+	private float holdTimeMin = 1.0f;
+	private float holdTimeMax = 5.0f;
+	private float effectRadius = 8.0f;
+	private bool affectTeammates = false;
 
-	private float effectRadius;
-	private bool affectTeammates;
-	private FlasherScreenEffect? flasherEffect;
+	private FlasherScreenEffect? currentEffect;
 
-	public ExtremeAbilityButton? Button { get; set; }
+	public ExtremeAbilityButton Button { get; set; } = null!;
 
 	public Flasher() : base(
 		RoleArgs.BuildImpostor(ExtremeRoleId.Flasher))
-	{ }
+	{
+	}
+
+	protected override void RoleSpecificInit()
+	{
+		var cate = this.Loader;
+		this.holdTimeMin = cate.GetValue<Option, float>(Option.HoldTimeMin);
+		this.holdTimeMax = cate.GetValue<Option, float>(Option.HoldTimeMax);
+		this.effectRadius = cate.GetValue<Option, float>(Option.EffectRadius);
+		this.affectTeammates = cate.GetValue<Option, bool>(Option.AffectTeammates);
+	}
 
 	public void CreateAbility()
 	{
-		var behavior = new ChargingAndActivatingCountBehaviour(
+		var behavior = new ChargingAndReclickCountBehavior(
 			Tr.GetString("FlasherAbility"),
 			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Flasher),
-			isUse: (isCharge, gage) =>
+			(isCharge, gage) =>
 			{
 				if (isCharge)
 				{
-					return IsAbilityUse() && gage > 0.0f;
+					return this.IsAbilityUse() && gage > 0.0f;
 				}
 				return IRoleAbility.IsCommonUse();
 			},
-			ability: UseChargedAbility,
-			onCharge: UseAbility,
-			reduceTiming: ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive);
+			this.UseAbility,
+			this.UseChargedAbility,
+			reduceOnCharge: false);
 
 		this.Button = new ExtremeAbilityButton(
 			behavior,
@@ -65,85 +73,110 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 			KeyCode.F);
 
 		((IRoleAbility)this).RoleAbilityInit();
-
-		behavior.ChargeTime = this.Loader.GetValue<FlasherOption, float>(FlasherOption.ChargeTime);
 	}
 
 	public bool IsAbilityUse()
 	{
-		return IRoleAbility.IsCommonUse();
+		return PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.CanMove && IRoleAbility.IsCommonUse();
 	}
 
-	public bool UseAbility()
-	{
-		return true;
-	}
+	public bool UseAbility() => true;
 
 	public bool UseChargedAbility(float chargeGauge)
 	{
-		var localPlayer = PlayerControl.LocalPlayer;
-		if (localPlayer == null || localPlayer.Data == null)
+		if (PlayerControl.LocalPlayer == null)
 		{
 			return false;
 		}
 
-		List<byte> targetPlayerIds = getTargetsInRange(localPlayer);
+		float clampedGauge = Mathf.Clamp01(chargeGauge);
+		float activeTime = Mathf.Lerp(this.holdTimeMin, this.holdTimeMax, clampedGauge);
 
-		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.FlasherFlash))
+		List<byte> targets = this.getTargetsInRange(PlayerControl.LocalPlayer);
+
+		MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+			PlayerControl.LocalPlayer.NetId,
+			(byte)RPCOperator.Command.FlasherFlash,
+			SendOption.Reliable);
+
+		writer.Write(PlayerControl.LocalPlayer.PlayerId);
+		writer.Write(clampedGauge);
+		writer.Write(activeTime);
+		writer.WritePacked(targets.Count);
+		foreach (byte targetId in targets)
 		{
-			caller.WriteByte(localPlayer.PlayerId);
-			caller.WriteFloat(chargeGauge);
-			caller.WriteFloat(this.Button?.Behavior is IActivatingBehavior act ? act.ActiveTime : 0.0f);
-			caller.WritePackedInt(targetPlayerIds.Count);
-			foreach (byte targetId in targetPlayerIds)
-			{
-				caller.WriteByte(targetId);
-			}
+			writer.Write(targetId);
 		}
+
+		AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+		this.TriggerFlashEffect(
+			targets,
+			PlayerControl.LocalPlayer.PlayerId,
+			clampedGauge,
+			activeTime);
 
 		return true;
 	}
 
-	public static void RpcFlash(in MessageReader reader)
+	public static void RpcFlash(MessageReader reader)
 	{
 		byte callerId = reader.ReadByte();
 		float chargeGauge = reader.ReadSingle();
 		float activeTime = reader.ReadSingle();
-		int targetCount = reader.ReadPackedInt32();
 
-		HashSet<byte> targetPlayerIds = new HashSet<byte>();
-		for (int i = 0; i < targetCount; ++i)
+		int count = reader.ReadPackedInt32();
+		List<byte> targets = new List<byte>(count);
+		for (int i = 0; i < count; i++)
 		{
-			targetPlayerIds.Add(reader.ReadByte());
+			targets.Add(reader.ReadByte());
 		}
 
-		var localPlayer = PlayerControl.LocalPlayer;
-		if (localPlayer.IsInValid() ||
-			localPlayer.Data == null ||
-			localPlayer.Data.IsDead)
+		if (ExtremeRoleManager.TryGetRole(callerId, out var callerRole) && callerRole is Flasher flasherRole)
 		{
-			return;
-		}
-
-		if (!targetPlayerIds.Contains(localPlayer.PlayerId))
-		{
-			return;
-		}
-
-		float aftereffectTime = MaxAftereffectTime * Mathf.Clamp01(chargeGauge);
-		float fadeOutTime = Mathf.Max(0.01f, aftereffectTime);
-
-		if (ExtremeRoleManager.TryGetSafeCastedRole<Flasher>(callerId, out var flasherRole) &&
-			flasherRole.flasherEffect != null)
-		{
-			flasherRole.flasherEffect.Flash(fadeOutTime);
+			flasherRole.TriggerFlashEffect(targets, callerId, chargeGauge, activeTime);
 		}
 		else
 		{
-			float holdTime = activeTime > 0.0f ? activeTime : 3.0f;
-			var fallbackEffect = new FlasherScreenEffect(Color.white, holdTime, 0.5f);
-			fallbackEffect.Flash(fadeOutTime);
+			if (PlayerControl.LocalPlayer != null && targets.Contains(PlayerControl.LocalPlayer.PlayerId))
+			{
+				var effect = new FlasherScreenEffect(Color.white, activeTime, 0.5f);
+				effect.Flash(chargeGauge);
+			}
 		}
+	}
+
+	public void TriggerFlashEffect(
+		List<byte> targetIds,
+		byte callerId,
+		float chargeGauge,
+		float activeTime)
+	{
+		if (PlayerControl.LocalPlayer == null)
+		{
+			return;
+		}
+
+		byte localId = PlayerControl.LocalPlayer.PlayerId;
+
+		if (targetIds.Contains(localId))
+		{
+			this.currentEffect?.Hide();
+			this.currentEffect = new FlasherScreenEffect(Color.white, activeTime, 0.5f);
+			this.currentEffect.Flash(chargeGauge);
+		}
+	}
+
+	public void ResetOnMeetingStart()
+	{
+		this.currentEffect?.Hide();
+		FlasherScreenEffect.Current?.Hide();
+	}
+
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
+	{
+		this.currentEffect?.Hide();
+		FlasherScreenEffect.Current?.Hide();
 	}
 
 	private List<byte> getTargetsInRange(PlayerControl sourcePlayer)
@@ -151,8 +184,10 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 		List<byte> targetIds = new List<byte>();
 		Vector2 truePosition = sourcePlayer.GetTruePosition();
 
-		foreach (NetworkedPlayerInfo playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
+		var allPlayers = GameData.Instance.AllPlayers;
+		for (int i = 0; i < allPlayers.Count; i++)
 		{
+			NetworkedPlayerInfo playerInfo = allPlayers[i];
 			if (playerInfo == null ||
 				playerInfo.IsDead ||
 				playerInfo.Disconnected ||
@@ -180,9 +215,12 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 				continue;
 			}
 
-			Vector2 vector = target.GetTruePosition() - truePosition;
-			float magnitude = vector.magnitude;
-			if (magnitude <= this.effectRadius)
+			Vector2 targetPos = target.GetTruePosition();
+			float dx = targetPos.x - truePosition.x;
+			float dy = targetPos.y - truePosition.y;
+			float distance = Mathf.Sqrt(dx * dx + dy * dy);
+
+			if (distance <= this.effectRadius)
 			{
 				targetIds.Add(playerInfo.PlayerId);
 			}
@@ -195,53 +233,18 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 		AutoParentSetOptionCategoryFactory factory)
 	{
 		IRoleAbility.CreateAbilityCountOption(
-			factory,
-			defaultAbilityCount: 3,
-			maxAbilityCount: 10,
-			defaultActiveTime: 3.0f);
+			factory, defaultAbilityCount: 3, maxAbilityCount: 10, minAbilityCount: 1);
 
 		factory.CreateFloatOption(
-			FlasherOption.ChargeTime,
-			3.0f, 0.5f, 10.0f, 0.5f,
-			format: OptionUnit.Second);
+			Option.HoldTimeMin, 1.0f, 0.5f, 10.0f, 0.5f, format: OptionUnit.Second);
 
 		factory.CreateFloatOption(
-			FlasherOption.EffectRadius,
-			10.0f, 1.0f, 50.0f, 0.5f);
+			Option.HoldTimeMax, 5.0f, 1.0f, 15.0f, 0.5f, format: OptionUnit.Second);
+
+		factory.CreateFloatOption(
+			Option.EffectRadius, 8.0f, 2.0f, 20.0f, 1.0f);
 
 		factory.CreateBoolOption(
-			FlasherOption.AffectTeammates,
-			false);
-	}
-
-	protected override void RoleSpecificInit()
-	{
-		var loader = this.Loader;
-		this.effectRadius = loader.GetValue<FlasherOption, float>(FlasherOption.EffectRadius);
-		this.affectTeammates = loader.GetValue<FlasherOption, bool>(FlasherOption.AffectTeammates);
-
-		float activeTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime);
-		if (activeTime <= 0.0f)
-		{
-			activeTime = 3.0f;
-		}
-
-		this.flasherEffect = new FlasherScreenEffect(Color.white, activeTime, 0.5f);
-	}
-
-	public void ResetOnMeetingStart()
-	{
-		if (this.flasherEffect != null)
-		{
-			this.flasherEffect.Hide();
-		}
-	}
-
-	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
-	{
-		if (this.flasherEffect != null)
-		{
-			this.flasherEffect.Hide();
-		}
+			Option.AffectTeammates, false);
 	}
 }

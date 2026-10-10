@@ -10,6 +10,8 @@ namespace ExtremeRoles.Module;
 
 public sealed class FlasherScreenEffect
 {
+	public static FlasherScreenEffect? Current { get; private set; }
+
 	private readonly struct TimeLineInfo(float fadeInTime, float holdTime, float maxShakeAmount)
 	{
 		public readonly float FadeIn = fadeInTime;
@@ -38,6 +40,8 @@ public sealed class FlasherScreenEffect
 
 	public void Flash(float fadeOutTime)
 	{
+		Current = this;
+
 		if (fadeOutTime <= 0.0f)
 		{
 			fadeOutTime = 0.01f;
@@ -120,6 +124,11 @@ public sealed class FlasherScreenEffect
 
 	public void Hide()
 	{
+		if (Current == this)
+		{
+			Current = null;
+		}
+
 		var hudManager = HudManager.Instance;
 		if (hudManager != null && this.activeCoroutine != null)
 		{
