@@ -156,6 +156,21 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 			fadeOutTime: fadeOutTime,
 			holdTime: holdTime);
 		currentFlasher.Flash();
+
+		var followerCamera = Camera.main != null ? Camera.main.GetComponent<FollowerCamera>() : null;
+		if (followerCamera == null &&
+			HudManager.Instance != null &&
+			HudManager.Instance.transform != null &&
+			HudManager.Instance.transform.parent != null)
+		{
+			followerCamera = HudManager.Instance.transform.parent.GetComponent<FollowerCamera>();
+		}
+
+		if (followerCamera != null)
+		{
+			float shakeAmount = Mathf.Lerp(0.2f, 1.0f, chargeGauge);
+			followerCamera.shakeAmount = shakeAmount;
+		}
 	}
 
 	protected override void CreateSpecificOption(
