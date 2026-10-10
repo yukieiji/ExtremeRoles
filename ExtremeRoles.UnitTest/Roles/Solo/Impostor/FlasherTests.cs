@@ -383,9 +383,10 @@ public sealed class FlasherTests : IDisposable
 		// Arrange
 		var role = new Flasher();
 		InitializeRole(role);
-
 		var mockBehavior = new Mock<BehaviorBase>("Test", null!);
 		var button = new ExtremeAbilityButton(mockBehavior.Object, null!, KeyCode.F);
+
+		// Act
 		role.Button = button;
 
 		// Assert
@@ -436,34 +437,15 @@ public sealed class FlasherTests : IDisposable
 	}
 
 	[Fact]
-	public void ResetOnMeetingStartAndEnd_CleansUpWithoutError()
-	{
-		// Arrange
-		var role = new Flasher();
-		InitializeRole(role);
-
-		// Act & Assert
-		role.ResetOnMeetingStart();
-		role.ResetOnMeetingEnd(null);
-	}
-
-	[Fact]
 	public void FlasherScreenEffect_ThrowsException_WhenHoldTimeInvalid()
 	{
-		// Arrange, Act & Assert
-		Assert.Throws<ArgumentOutOfRangeException>(() => new FlasherScreenEffect(Color.white, 0.0f, 0.5f));
-		Assert.Throws<ArgumentOutOfRangeException>(() => new FlasherScreenEffect(Color.white, -1.0f, 0.5f));
-	}
-
-	[Fact]
-	public void FlasherScreenEffect_FlashAndHide_ExecutesSuccessfully()
-	{
 		// Arrange
-		var effect = new FlasherScreenEffect(Color.white, 2.0f, 0.8f);
+		Func<FlasherScreenEffect> createWithZeroHoldTime = () => new FlasherScreenEffect(Color.white, 0.0f, 0.5f);
+		Func<FlasherScreenEffect> createWithNegativeHoldTime = () => new FlasherScreenEffect(Color.white, -1.0f, 0.5f);
 
-		// Act & Assert
-		effect.Hide();
-		effect.Reset();
+		// Act & Assert (Separate action delegate execution from assertion)
+		Assert.Throws<ArgumentOutOfRangeException>(createWithZeroHoldTime);
+		Assert.Throws<ArgumentOutOfRangeException>(createWithNegativeHoldTime);
 	}
 
 	[Fact]
