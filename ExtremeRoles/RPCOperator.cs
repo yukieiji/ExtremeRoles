@@ -99,6 +99,7 @@ public static class RPCOperator
 		BoxerRpcOps,
 		LegislatorAbility,
 		RemoteKillerOps,
+		RetaliatorAbility,
 
 		// ニュートラル
 		AliceShipBroken,
@@ -782,6 +783,14 @@ public static class RPCOperator
 	public static void EncloserRpcOps(in MessageReader reader)
 	{
 		Roles.Solo.Liberal.Encloser.EncloserRole.RpcOps(reader);
+	}
+
+	public static void RetaliatorAbility(ref MessageReader reader)
+	{
+		byte rolePlayerId = reader.ReadByte();
+		byte targetPlayerId = reader.ReadByte();
+		var retaliator = Roles.ExtremeRoleManager.GetSafeCastedRole<Roles.Solo.Impostor.Retaliator.RetaliatorRole>(rolePlayerId);
+		retaliator?.TargetPlayer(targetPlayerId);
 	}
 
 	public static void SetGhostRole(

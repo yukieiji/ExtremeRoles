@@ -18,6 +18,7 @@ public enum StringSerializerType : byte
 	ShutterPhoto,
 	RemoteKillerNotebookStolen,
 	MastermindReport,
+	RetaliatorTargetNotification,
 }
 
 public interface IStringSerializer
@@ -45,6 +46,7 @@ public interface IStringSerializer
 			StringSerializerType.ShutterPhoto => new Shutter.GhostPhotoSerializer(),
 			StringSerializerType.RemoteKillerNotebookStolen => new ExtremeRoles.Roles.Solo.Impostor.RemoteKiller.RemoteKillerRole.RemoteKillerReportSerializer(),
 			StringSerializerType.MastermindReport => new MastermindNoticeSystem.MastermindStringSerializer(),
+			StringSerializerType.RetaliatorTargetNotification => new ExtremeRoles.Roles.Solo.Impostor.Retaliator.RetaliatorRole.RetaliatorTargetReportSerializer(),
 			_ => throw new ArgumentException("Invalided Type"),
 		};
 
