@@ -1799,4 +1799,8 @@ The blackmailed player cannot speak, chat, or vote in the next meeting.</value>
   <data name="RetaliatorTargetTeamBothCrewAndNeutral" xml:space="preserve">
     <value>Both Crewmate &amp; Neutral</value>
   </data>
+  <data name="retaliatorUiInfo" xml:space="preserve">
+    <value>Remaining ability uses: {0}
+Targets allowed this meeting: {1}</value>
+  </data>
 </root>

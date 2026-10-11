@@ -16,7 +16,7 @@ using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Impostor.Retaliator;
 
-public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleMeetingButtonAbility, IRoleResetMeeting
+public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleMeetingButtonAbility, IRoleResetMeeting, IRoleUpdate
 {
     public sealed class RetaliatorTargetReportSerializer : IStringSerializer
     {
@@ -44,6 +44,7 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
     }
 
     private RetaliatorStatusModel? status;
+    private TMPro.TextMeshPro? meetingText;
 
     public override IStatusModel? Status => this.status;
 
@@ -61,6 +62,37 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
 
     public void Update(PlayerControl rolePlayer)
     {
+        var meeting = MeetingHud.Instance;
+        if (meeting != null &&
+            rolePlayer != null &&
+            rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId &&
+            this.IsAwake &&
+            this.status != null)
+        {
+            if (this.meetingText == null)
+            {
+                this.meetingText = UnityEngine.Object.Instantiate(
+                    HudManager.Instance.TaskPanel.taskText,
+                    meeting.transform);
+                this.meetingText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+                this.meetingText.transform.position = Vector3.zero;
+                this.meetingText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
+                this.meetingText.transform.localScale *= 0.9f;
+                this.meetingText.color = Palette.White;
+                this.meetingText.gameObject.SetActive(false);
+            }
+
+            int remainingMeetingTargets = Math.Max(0, this.status.MaxTargetPerMeeting - this.status.CurrentMeetingTargetCount);
+            this.meetingText.text = Tr.GetString(
+                "retaliatorUiInfo",
+                this.status.RemainingAbilityUses,
+                remainingMeetingTargets);
+            this.meetingText.gameObject.SetActive(true);
+        }
+        else if (this.meetingText != null)
+        {
+            this.meetingText.gameObject.SetActive(false);
+        }
     }
 
     protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -102,6 +134,8 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
             maxTargetPerMeeting,
             targetTeam,
             notifyTarget);
+
+        this.meetingText = null;
 
         this.AbilityClass = new RetaliatorAbilityHandler(this.status);
     }
@@ -161,6 +195,8 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
 
     public void ResetOnMeetingStart()
     {
+        this.meetingText = null;
+
         if (this.status == null)
         {
             return;
@@ -182,6 +218,7 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
+        this.meetingText = null;
     }
 
     public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)

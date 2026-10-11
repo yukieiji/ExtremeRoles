@@ -1855,4 +1855,8 @@ Lv2能力「ビームセーバー」
   <data name="RetaliatorTargetTeamBothCrewAndNeutral" xml:space="preserve">
     <value>クルー・ニュートラル両方</value>
   </data>
+  <data name="retaliatorUiInfo" xml:space="preserve">
+    <value>能力使用可能数：{0}回
+この会議で指定可能数：{1}人</value>
+  </data>
 </root>
