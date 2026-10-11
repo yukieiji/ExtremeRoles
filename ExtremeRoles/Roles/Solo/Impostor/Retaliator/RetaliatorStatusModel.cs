@@ -15,7 +15,12 @@ public enum RetaliatorTargetTeam
 public class RetaliatorStatusModel : IStatusModel
 {
     public bool IsAwake { get; private set; }
-    public int KillCount { get; private set; }
+	public bool CanUseAbility =>
+		IsAwake &&
+		RemainingAbilityUses > 0 &&
+		CurrentMeetingTargetCount > 0;
+
+	public int KillCount { get; private set; }
     public int AwakeKillCount { get; }
     public int RemainingAbilityUses { get; private set; }
     public int MaxAbilityUses { get; }
@@ -42,7 +47,7 @@ public class RetaliatorStatusModel : IStatusModel
         this.NotifyTargetNextMeeting = notifyTargetNextMeeting;
         this.IsAwake = awakeKillCount <= 0;
         this.KillCount = 0;
-        this.CurrentMeetingTargetCount = 0;
+        this.CurrentMeetingTargetCount = this.MaxTargetPerMeeting;
     }
 
     public void TargetPlayer(byte playerId)
@@ -50,7 +55,7 @@ public class RetaliatorStatusModel : IStatusModel
         if (this.targetedPlayerIds.Add(playerId))
         {
             this.RemainingAbilityUses--;
-            this.CurrentMeetingTargetCount++;
+            this.CurrentMeetingTargetCount--;
         }
     }
 
@@ -72,11 +77,7 @@ public class RetaliatorStatusModel : IStatusModel
 
     public void OnMeetingStart()
     {
-        this.CurrentMeetingTargetCount = 0;
-    }
-
-    public void ClearTargetedPlayers()
-    {
-        this.targetedPlayerIds.Clear();
-    }
+        this.CurrentMeetingTargetCount = this.MaxTargetPerMeeting;
+		this.targetedPlayerIds.Clear();
+	}
 }

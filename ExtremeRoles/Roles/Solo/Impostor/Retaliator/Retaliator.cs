@@ -147,29 +147,17 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
 
     public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
     {
-        if (this.status == null || !this.status.IsAwake)
-        {
-            return true;
-        }
-
-        if (this.status.RemainingAbilityUses <= 0 ||
-            this.status.CurrentMeetingTargetCount >= this.status.MaxTargetPerMeeting)
+		var localPlayer = PlayerControl.LocalPlayer;
+        if (localPlayer == null ||
+			this.status == null || 
+			!this.status.IsAwake ||
+			!this.status.CanUseAbility)
         {
             return true;
         }
 
         byte targetId = instance.PlayerId;
-        if (targetId == PlayerControl.LocalPlayer.PlayerId || this.status.IsTargeted(targetId))
-        {
-            return true;
-        }
-
-        if (!ExtremeRoleManager.TryGetRole(targetId, out _))
-        {
-            return true;
-        }
-
-        return false;
+        return targetId != localPlayer.PlayerId && !this.status.IsTargeted(targetId);
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
@@ -213,7 +201,6 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
         }
 
         this.status.OnMeetingStart();
-        this.status.ClearTargetedPlayers();
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
