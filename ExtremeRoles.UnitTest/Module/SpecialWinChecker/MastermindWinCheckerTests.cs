@@ -13,7 +13,7 @@ public sealed class MastermindWinCheckerTests
 	public void Reason_IsMastermindAlive()
 	{
 		var checker = new MastermindWinChecker();
-		Assert.Equal(RoleGameOverReason.MastermindAlive, checker.Reason);
+		Assert.Equal(RoleGameOverReason.MastermindDeathGame, checker.Reason);
 	}
 
 	[Fact]

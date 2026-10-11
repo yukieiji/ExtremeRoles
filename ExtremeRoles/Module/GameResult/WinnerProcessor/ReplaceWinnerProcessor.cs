@@ -235,9 +235,13 @@ public sealed class ReplaceWinnerProcessor(int winGameControlId) : IWinnerProces
 				processor.ReplaceWinnerToSpecificNeutralRolePlayer(
 					ExtremeRoleId.Punisher);
 				break;
-			case RoleGameOverReason.MastermindAlive:
+			case RoleGameOverReason.MastermindDeathGame:
 				processor.ReplaceWinnerToSpecificNeutralRolePlayer(
 					true, ExtremeRoleId.Mastermind);
+				break;
+			case RoleGameOverReason.DeepOneBecomeGod:
+				processor.ReplaceWinnerToSpecificNeutralRolePlayer(
+					ExtremeRoleId.DeepOne);
 				break;
 			case RoleGameOverReason.AllJackalWin:
 				processor.ReplaceWinnerToSpecificNeutralRolePlayer(

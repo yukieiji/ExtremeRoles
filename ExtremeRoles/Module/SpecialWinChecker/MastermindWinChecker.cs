@@ -7,7 +7,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker;
 
 public sealed class MastermindWinChecker : IWinChecker
 {
-	public RoleGameOverReason Reason => RoleGameOverReason.MastermindAlive;
+	public RoleGameOverReason Reason => RoleGameOverReason.MastermindDeathGame;
 
 	private int aliveNum = 0;
 

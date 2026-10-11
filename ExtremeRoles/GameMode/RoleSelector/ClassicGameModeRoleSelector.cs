@@ -172,6 +172,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Punisher,
 			ExtremeRoleId.Imitater,
 			ExtremeRoleId.Mastermind,
+			ExtremeRoleId.DeepOne,
 
 			ExtremeRoleId.SpecialDove,
 			ExtremeRoleId.SpecialMilitant,
