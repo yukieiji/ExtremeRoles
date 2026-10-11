@@ -141,15 +141,8 @@ public class AgencyTests
 
 	private static void SetupVector2Helpers()
 	{
-		var mockSub = new Mock<MockVector2op_SubtractionHelper>();
-		mockSub.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<Vector2>()))
-			.Returns((Vector2 a, Vector2 b) => new Vector2(a.x - b.x, a.y - b.y));
-		MockVector2op_SubtractionHelper.Instance = mockSub.Object;
-
-		var mockMag = new Mock<MockVector3MagnitudeHelper>();
-		mockMag.Setup(x => x.Invoke(It.IsAny<Vector3>()))
-			.Returns((Vector3 v) => MathF.Sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
-		MockVector3MagnitudeHelper.Instance = mockMag.Object;
+		MockSetupHelper.SetupVector2Helpers();
+		MockSetupHelper.SetupVector3Helpers();
 	}
 
 	private static void SetupPhysicsHelpers()
