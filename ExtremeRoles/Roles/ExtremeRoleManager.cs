@@ -178,6 +178,7 @@ public enum ExtremeRoleId : int
 	Punisher,
 	Imitater,
 	Mastermind,
+	DeepOne,
 
 	Leader,
 	Dove,
@@ -270,7 +271,9 @@ public enum RoleGameOverReason
 	PunisherKilledImpostor,
 	PunisherKillAllOther,
 
-	MastermindAlive,
+	MastermindDeathGame,
+
+	DeepOneBecomeGod,
 
 	AllJackalWin,
 	AllYandereWin,
@@ -430,6 +433,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Punisher  , new Punisher()},
 			{(int)ExtremeRoleId.Imitater  , new Imitater()},
 			{(int)ExtremeRoleId.Mastermind, new Mastermind()},
+			{(int)ExtremeRoleId.DeepOne   , new DeepOne()},
 
 			{(int)ExtremeRoleId.SpecialDove    , new SpecialDove()},
 			{(int)ExtremeRoleId.SpecialMilitant, new SpecialMilitant()},
