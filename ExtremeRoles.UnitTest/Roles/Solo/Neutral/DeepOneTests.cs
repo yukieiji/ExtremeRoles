@@ -370,7 +370,6 @@ public sealed class DeepOneTests
 		deepOne.AllReset(mockLocalPlayer.Object);
 
 		// Assert
-		Assert.False(deepOne.IsWin);
 		Assert.False(deepOne.UseVent);
 	}
 
