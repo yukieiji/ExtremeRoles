@@ -34,6 +34,16 @@ public static class MockSetupHelper
         SetupTimeHelpers();
         SetupRandomHelpers();
         SetupGameObjectExtensionsHelpers();
+        SetupSecurityLogHelpers();
+    }
+
+    public static void SetupSecurityLogHelpers()
+    {
+        if (MockSecurityLogEntryCtorHelper.Instance == null)
+        {
+            var mockCtor = new Mock<MockSecurityLogEntryCtorHelper>();
+            MockSecurityLogEntryCtorHelper.Instance = mockCtor.Object;
+        }
     }
 
     public static void SetupGameObjectExtensionsHelpers()
