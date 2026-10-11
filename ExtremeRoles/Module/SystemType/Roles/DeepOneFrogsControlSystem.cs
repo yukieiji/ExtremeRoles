@@ -92,6 +92,7 @@ public sealed class DeepOneFrogsControlSystem(
 	private readonly int baseRequiredClicks = baseRequiredClicks;
 	private readonly bool enableClickMultiplier = enableClickMultiplier;
 
+	private readonly ExtremeConsoleSystem consoleSystem = ExtremeConsoleSystem.Create();
 	private readonly Dictionary<byte, HashSet<int>> playerFrogs = new Dictionary<byte, HashSet<int>>();
 	private readonly Dictionary<int, Frog> frogs = new Dictionary<int, Frog>();
 	private int nextFrogId = 0;
@@ -167,7 +168,6 @@ public sealed class DeepOneFrogsControlSystem(
 			return;
 		}
 
-		var consoleSystem = ExtremeConsoleSystem.Create();
 		var console = consoleSystem.CreateConsoleObj(pos, $"DeepOneFrog_{id}");
 
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
@@ -205,6 +205,11 @@ public sealed class DeepOneFrogsControlSystem(
 		}
 		frogSet.Add(id);
 		this.playerFrogs[frogPlayerKey] = frogSet;
+
+
+		var colider = console.gameObject.AddComponent<CircleCollider2D>();
+		colider.isTrigger = true;
+		colider.radius = 0.25f;
 	}
 
 	internal void AddFrogForTest(int id)
