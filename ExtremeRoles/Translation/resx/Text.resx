@@ -1451,4 +1451,13 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="liberalIntroHide2" xml:space="preserve">
     <value>この中に潜んでいる同志へ、革命の灯火を掲げろ</value>
   </data>
+  <data name="RetaliatorRetaliate" xml:space="preserve">
+    <value>反撃</value>
+  </data>
+  <data name="RetaliatorTargetTag" xml:space="preserve">
+    <value>反撃</value>
+  </data>
+  <data name="RetaliatorTargetedNotification" xml:space="preserve">
+    <value>前回のタスクフェーズ中、リタリエイターの能力対象にされていました。</value>
+  </data>
 </root>

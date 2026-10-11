@@ -29,6 +29,7 @@ using ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
+using ExtremeRoles.Roles.Solo.Impostor.Retaliator;
 using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Neutral.IronMate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
@@ -143,6 +144,7 @@ public enum ExtremeRoleId : int
 	RemoteKiller,
 	YoYo,
 	Blackmailer,
+	Retaliator,
 
 	Alice,
     Jackal,
@@ -404,6 +406,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.RemoteKiller   , new RemoteKillerRole()},
 			{(int)ExtremeRoleId.YoYo           , new YoYo()},
 			{(int)ExtremeRoleId.Blackmailer    , new Blackmailer()},
+			{(int)ExtremeRoleId.Retaliator     , new RetaliatorRole()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new JackalRole()},

@@ -1819,4 +1819,40 @@ Lv2能力「ビームセーバー」
   <data name="BlackmailerAbilityCount" xml:space="preserve">
     <value>「恐喝」の使用回数</value>
   </data>
+  <data name="Retaliator" xml:space="preserve">
+    <value>リタリエイター</value>
+  </data>
+  <data name="RetaliatorFullDescription" xml:space="preserve">
+    <value>会議中にプレイヤーを選択し、次のタスクフェーズ中にそのプレイヤーが自分に対して行うキルを弾き返して返撃（自爆）させます。</value>
+  </data>
+  <data name="RetaliatorShortDescription" xml:space="preserve">
+    <value>キルを弾き返す</value>
+  </data>
+  <data name="RetaliatorIntroDescription" xml:space="preserve">
+    <value>会議中にプレイヤーを選択して、次のタスクフェーズ中そのプレイヤーからのキルを弾き返す</value>
+  </data>
+  <data name="RetaliatorOptionAwakeKillCount" xml:space="preserve">
+    <value>覚醒に必要なキル数</value>
+  </data>
+  <data name="RetaliatorOptionMaxAbilityUseCount" xml:space="preserve">
+    <value>最大能力使用回数</value>
+  </data>
+  <data name="RetaliatorOptionMaxTargetPerMeeting" xml:space="preserve">
+    <value>1回の会議で選択可能な人数の上限</value>
+  </data>
+  <data name="RetaliatorOptionTargetTeam" xml:space="preserve">
+    <value>弾き返せる対象陣営</value>
+  </data>
+  <data name="RetaliatorOptionNotifyTargetNextMeeting" xml:space="preserve">
+    <value>対象になっていたことを次の会議で通知する</value>
+  </data>
+  <data name="RetaliatorTargetTeamCrewmateOnly" xml:space="preserve">
+    <value>クルーのみ</value>
+  </data>
+  <data name="RetaliatorTargetTeamNeutralOnly" xml:space="preserve">
+    <value>ニュートラルのみ</value>
+  </data>
+  <data name="RetaliatorTargetTeamBothCrewAndNeutral" xml:space="preserve">
+    <value>クルー・ニュートラル両方</value>
+  </data>
 </root>

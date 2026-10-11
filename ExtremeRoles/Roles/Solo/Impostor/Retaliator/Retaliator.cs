@@ -1,0 +1,218 @@
+using System;
+using UnityEngine;
+using AmongUs.GameOptions;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
+
+#nullable enable
+
+namespace ExtremeRoles.Roles.Solo.Impostor.Retaliator;
+
+public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleMeetingButtonAbility, IRoleResetMeeting
+{
+    public enum RetaliatorOption
+    {
+        AwakeKillCount,
+        MaxAbilityUseCount,
+        MaxTargetPerMeeting,
+        TargetTeam,
+        NotifyTargetNextMeeting,
+    }
+
+    private RetaliatorStatusModel? status;
+
+    public override IStatusModel? Status => this.status;
+
+    public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
+
+    public bool IsAwake => GameSystem.IsLobby || (this.status != null && this.status.IsAwake);
+
+    public Sprite AbilityImage => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Retaliator);
+
+    public RetaliatorRole() : base(
+        RoleArgs.BuildImpostor(ExtremeRoleId.Retaliator))
+    { }
+
+    public string GetFakeOptionString() => "";
+
+    public void Update(PlayerControl rolePlayer)
+    {
+    }
+
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
+    {
+        factory.CreateIntOption(
+            RetaliatorOption.AwakeKillCount,
+            1, 0, 10, 1);
+
+        var maxAbilityUses = factory.CreateIntOption(
+            RetaliatorOption.MaxAbilityUseCount,
+            3, 1, 15, 1,
+            format: OptionUnit.Shot);
+
+        factory.CreateIntDynamicMaxOption(
+            RetaliatorOption.MaxTargetPerMeeting,
+            1, 1, 1, maxAbilityUses,
+            format: OptionUnit.Shot);
+
+        factory.CreateSelectionOption<RetaliatorOption, RetaliatorTargetTeam>(
+            RetaliatorOption.TargetTeam);
+
+        factory.CreateBoolOption(
+            RetaliatorOption.NotifyTargetNextMeeting,
+            true);
+    }
+
+    protected override void RoleSpecificInit()
+    {
+        var loader = this.Loader;
+        int awakeKillCount = loader.GetValue<RetaliatorOption, int>(RetaliatorOption.AwakeKillCount);
+        int maxAbilityUses = loader.GetValue<RetaliatorOption, int>(RetaliatorOption.MaxAbilityUseCount);
+        int maxTargetPerMeeting = loader.GetValue<RetaliatorOption, int>(RetaliatorOption.MaxTargetPerMeeting);
+        var targetTeam = (RetaliatorTargetTeam)loader.GetValue<RetaliatorOption, int>(RetaliatorOption.TargetTeam);
+        bool notifyTarget = loader.GetValue<RetaliatorOption, bool>(RetaliatorOption.NotifyTargetNextMeeting);
+
+        this.status = new RetaliatorStatusModel(
+            awakeKillCount,
+            maxAbilityUses,
+            maxTargetPerMeeting,
+            targetTeam,
+            notifyTarget);
+
+        this.AbilityClass = new RetaliatorAbilityHandler(this.status);
+    }
+
+    public void TargetPlayer(byte targetPlayerId)
+    {
+        this.status?.TargetPlayer(targetPlayerId);
+    }
+
+    public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
+    {
+        if (this.status == null || !this.IsAwake)
+        {
+            return true;
+        }
+
+        if (this.status.RemainingAbilityUses <= 0 ||
+            this.status.CurrentMeetingTargetCount >= this.status.MaxTargetPerMeeting)
+        {
+            return true;
+        }
+
+        byte targetId = instance.PlayerId;
+        if (targetId == PlayerControl.LocalPlayer.PlayerId || this.status.IsTargeted(targetId))
+        {
+            return true;
+        }
+
+        if (!ExtremeRoleManager.TryGetRole(targetId, out var targetRole))
+        {
+            return true;
+        }
+
+        bool isValidTeam = this.status.TargetTeam switch
+        {
+            RetaliatorTargetTeam.CrewmateOnly => targetRole.IsCrewmate(),
+            RetaliatorTargetTeam.NeutralOnly => targetRole.IsNeutral(),
+            RetaliatorTargetTeam.BothCrewAndNeutral => targetRole.IsCrewmate() || targetRole.IsNeutral(),
+            _ => false
+        };
+
+        return !isValidTeam;
+    }
+
+    public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
+        => IRoleMeetingButtonAbility.DefaultButtonMod(instance, abilityButton, "RetaliatorRetaliate");
+
+    public Action CreateAbilityAction(PlayerVoteArea instance)
+    {
+        byte rolePlayerId = PlayerControl.LocalPlayer.PlayerId;
+        byte targetPlayerId = instance.PlayerId;
+
+        void retaliateAction()
+        {
+            using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.RetaliatorAbility))
+            {
+                caller.WriteByte(rolePlayerId);
+                caller.WriteByte(targetPlayerId);
+            }
+            TargetPlayer(targetPlayerId);
+        }
+
+        return retaliateAction;
+    }
+
+    public void ResetOnMeetingStart()
+    {
+        if (this.status == null)
+        {
+            return;
+        }
+
+        this.status.OnMeetingStart();
+
+        byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+        foreach (var role in ExtremeRoleManager.GameRole.Values)
+        {
+            if (role is RetaliatorRole retaliator &&
+                retaliator.status != null &&
+                retaliator.status.NotifyTargetNextMeeting &&
+                retaliator.status.NotifiedTargetPlayerIds.Contains(localPlayerId))
+            {
+                if (HudManager.Instance != null && HudManager.Instance.Chat != null)
+                {
+                    HudManager.Instance.Chat.AddChat(
+                        PlayerControl.LocalPlayer,
+                        Tr.GetString("RetaliatorTargetedNotification"));
+                }
+                break;
+            }
+        }
+    }
+
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
+    {
+    }
+
+    public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
+    {
+        if (this.status != null && this.status.IsTargeted(targetPlayerId))
+        {
+            return $" ({Design.ColoredString(Palette.ImpostorRed, Tr.GetString("RetaliatorTargetTag"))})";
+        }
+        return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+    }
+
+    public override string GetColoredRoleName(bool isTruthColor = false)
+        => isTruthColor || IsAwake ?
+            base.GetColoredRoleName() : Design.ColoredString(
+                Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
+
+    public override string GetFullDescription()
+        => IsAwake ?
+            Tr.GetString($"{this.Core.Id}FullDescription") :
+            Tr.GetString($"{RoleTypes.Impostor}FullDescription");
+
+    public override string GetImportantText(bool isContainFakeTask = true)
+        => IsAwake ?
+            base.GetImportantText(isContainFakeTask) :
+            $"{TranslationController.Instance.GetString(
+                    StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>())}\r\n{Palette.ImpostorRed.ToTextColor()}{TranslationController.Instance.GetString(
+                    StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>())}</color>";
+
+    public override string GetIntroDescription()
+        => IsAwake ? base.GetIntroDescription() : Design.ColoredString(
+                Palette.ImpostorRed,
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
+
+    public override Color GetNameColor(bool isTruthColor = false)
+        => isTruthColor || IsAwake ?
+            base.GetNameColor(isTruthColor) : Palette.ImpostorRed;
+}
