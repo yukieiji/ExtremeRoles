@@ -186,6 +186,7 @@ public sealed class DeepOneFrogsControlSystem(
 			HudManager.Instance.KillButton.cooldownTimerText,
 			console.transform,
 			false);
+		textObj.gameObject.SetActive(true); // クールダウンが消えてる可能性があるのでtrueをセットする
 		textObj.transform.localPosition = new Vector3(0.0f, 0.4f, -1.0f);
 		textObj.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 		textObj.alignment = TextAlignmentOptions.Center;
