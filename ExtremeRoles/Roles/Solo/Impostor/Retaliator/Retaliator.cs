@@ -153,7 +153,7 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
         }
 
         byte targetId = instance.PlayerId;
-        return targetId != localPlayer.PlayerId && !this.status.IsTargeted(targetId);
+        return targetId == localPlayer.PlayerId || this.status.IsTargeted(targetId);
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)

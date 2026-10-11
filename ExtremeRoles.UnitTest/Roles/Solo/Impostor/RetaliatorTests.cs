@@ -211,9 +211,9 @@ public sealed class RetaliatorTests
         // Act
         bool isBlocked = role.IsBlockMeetingButtonAbility(mockPva.Object);
 
-        // Assert
-        Assert.True(isBlocked);
-    }
+		// Assert
+		Assert.False(isBlocked); // Allowed in meeting regardless of target team (no team leak)
+	}
 
     [Fact]
     public void RetaliatorRole_IsBlockMeetingButtonAbility_WhenTargetingSelf_BlocksAbility()
