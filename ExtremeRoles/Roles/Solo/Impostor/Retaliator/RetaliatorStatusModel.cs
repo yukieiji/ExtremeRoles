@@ -14,18 +14,18 @@ public enum RetaliatorTargetTeam
 
 public class RetaliatorStatusModel : IStatusModel
 {
-    public bool IsAwake { get; set; }
-    public int KillCount { get; set; }
-    public int AwakeKillCount { get; set; }
-    public int RemainingAbilityUses { get; set; }
-    public int MaxAbilityUses { get; set; }
-    public int MaxTargetPerMeeting { get; set; }
-    public int CurrentMeetingTargetCount { get; set; }
-    public RetaliatorTargetTeam TargetTeam { get; set; }
-    public bool NotifyTargetNextMeeting { get; set; }
+    public bool IsAwake { get; private set; }
+    public int KillCount { get; private set; }
+    public int AwakeKillCount { get; }
+    public int RemainingAbilityUses { get; private set; }
+    public int MaxAbilityUses { get; }
+    public int MaxTargetPerMeeting { get; }
+    public int CurrentMeetingTargetCount { get; private set; }
+    public RetaliatorTargetTeam TargetTeam { get; }
+    public bool NotifyTargetNextMeeting { get; }
 
-    public HashSet<byte> TargetedPlayerIds { get; } = new HashSet<byte>();
-    public HashSet<byte> NotifiedTargetPlayerIds { get; } = new HashSet<byte>();
+    private readonly HashSet<byte> targetedPlayerIds = new HashSet<byte>();
+    public IReadOnlyCollection<byte> TargetedPlayerIds => this.targetedPlayerIds;
 
     public RetaliatorStatusModel(
         int awakeKillCount,
@@ -47,23 +47,36 @@ public class RetaliatorStatusModel : IStatusModel
 
     public void TargetPlayer(byte playerId)
     {
-        if (this.TargetedPlayerIds.Add(playerId))
+        if (this.targetedPlayerIds.Add(playerId))
         {
             this.RemainingAbilityUses--;
             this.CurrentMeetingTargetCount++;
         }
     }
 
-    public bool IsTargeted(byte playerId) => this.TargetedPlayerIds.Contains(playerId);
+    public bool IsTargeted(byte playerId) => this.targetedPlayerIds.Contains(playerId);
+
+    public void IncrementKill()
+    {
+        if (this.IsAwake)
+        {
+            return;
+        }
+
+        this.KillCount++;
+        if (this.KillCount >= this.AwakeKillCount)
+        {
+            this.IsAwake = true;
+        }
+    }
 
     public void OnMeetingStart()
     {
         this.CurrentMeetingTargetCount = 0;
-        this.NotifiedTargetPlayerIds.Clear();
-        foreach (byte id in this.TargetedPlayerIds)
-        {
-            this.NotifiedTargetPlayerIds.Add(id);
-        }
-        this.TargetedPlayerIds.Clear();
+    }
+
+    public void ClearTargetedPlayers()
+    {
+        this.targetedPlayerIds.Clear();
     }
 }

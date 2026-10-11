@@ -3,8 +3,10 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -16,6 +18,22 @@ namespace ExtremeRoles.Roles.Solo.Impostor.Retaliator;
 
 public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleMeetingButtonAbility, IRoleResetMeeting
 {
+    public sealed class RetaliatorTargetReportSerializer : IStringSerializer
+    {
+        public StringSerializerType Type => StringSerializerType.RetaliatorTargetNotification;
+        public bool IsRpc { get; set; } = true;
+
+        public void Serialize(RPCOperator.RpcCaller caller)
+        {
+        }
+
+        public void Deserialize(Hazel.MessageReader reader)
+        {
+        }
+
+        public override string ToString() => Tr.GetString("RetaliatorTargetedNotification");
+    }
+
     public enum RetaliatorOption
     {
         AwakeKillCount,
@@ -95,7 +113,7 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
 
     public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
     {
-        if (this.status == null || !this.IsAwake)
+        if (this.status == null || !this.status.IsAwake)
         {
             return true;
         }
@@ -112,20 +130,12 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
             return true;
         }
 
-        if (!ExtremeRoleManager.TryGetRole(targetId, out var targetRole))
+        if (!ExtremeRoleManager.TryGetRole(targetId, out _))
         {
             return true;
         }
 
-        bool isValidTeam = this.status.TargetTeam switch
-        {
-            RetaliatorTargetTeam.CrewmateOnly => targetRole.IsCrewmate(),
-            RetaliatorTargetTeam.NeutralOnly => targetRole.IsNeutral(),
-            RetaliatorTargetTeam.BothCrewAndNeutral => targetRole.IsCrewmate() || targetRole.IsNeutral(),
-            _ => false
-        };
-
-        return !isValidTeam;
+        return false;
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
@@ -156,25 +166,18 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
             return;
         }
 
-        this.status.OnMeetingStart();
-
-        byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
-        foreach (var role in ExtremeRoleManager.GameRole.Values)
+        if (this.status.NotifyTargetNextMeeting)
         {
-            if (role is RetaliatorRole retaliator &&
-                retaliator.status != null &&
-                retaliator.status.NotifyTargetNextMeeting &&
-                retaliator.status.NotifiedTargetPlayerIds.Contains(localPlayerId))
+            foreach (byte targetId in this.status.TargetedPlayerIds)
             {
-                if (HudManager.Instance != null && HudManager.Instance.Chat != null)
-                {
-                    HudManager.Instance.Chat.AddChat(
-                        PlayerControl.LocalPlayer,
-                        Tr.GetString("RetaliatorTargetedNotification"));
-                }
-                break;
+                MeetingReporter.RpcAddTargetMeetingChatReport(
+                    targetId,
+                    new RetaliatorTargetReportSerializer());
             }
         }
+
+        this.status.OnMeetingStart();
+        this.status.ClearTargetedPlayers();
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)

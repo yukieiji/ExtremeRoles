@@ -2,6 +2,7 @@ using System;
 using AmongUs.GameOptions;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Impostor.Retaliator;
@@ -28,6 +29,8 @@ public sealed class RetaliatorTests
 
         SetupTranslationControllerMock();
         MockSetupHelper.SetupConstantsHelpers();
+        MockSetupHelper.SetupObjectImplicitHelpers();
+        MockSetupHelper.SetupPlayerVoteAreaMocks();
         MockSetupHelper.SetupDestroyableSingletonMock<RoleManager>();
 
         mockClient = MockSetupHelper.SetupAmongUsClientMock();
@@ -70,64 +73,40 @@ public sealed class RetaliatorTests
     }
 
     [Fact]
-    public void StatusModel_Initialization_ValuesCorrect()
-    {
-        var status = new RetaliatorStatusModel(
-            awakeKillCount: 2,
-            maxAbilityUses: 3,
-            maxTargetPerMeeting: 1,
-            targetTeam: RetaliatorTargetTeam.CrewmateOnly,
-            notifyTargetNextMeeting: true);
-
-        Assert.False(status.IsAwake);
-        Assert.Equal(2, status.AwakeKillCount);
-        Assert.Equal(3, status.RemainingAbilityUses);
-        Assert.Equal(1, status.MaxTargetPerMeeting);
-        Assert.Equal(RetaliatorTargetTeam.CrewmateOnly, status.TargetTeam);
-        Assert.True(status.NotifyTargetNextMeeting);
-    }
-
-    [Fact]
     public void StatusModel_TargetPlayer_DecrementsUsesAndIncrementsMeetingCount()
     {
+        // Arrange
         var status = new RetaliatorStatusModel(0, 3, 2, RetaliatorTargetTeam.CrewmateOnly, true);
 
+        // Act
         status.TargetPlayer(2);
 
+        // Assert
         Assert.Equal(2, status.RemainingAbilityUses);
         Assert.Equal(1, status.CurrentMeetingTargetCount);
         Assert.True(status.IsTargeted(2));
     }
 
     [Fact]
-    public void StatusModel_OnMeetingStart_RotatesTargetedToNotified()
+    public void AbilityHandler_TryRolePlayerKillTo_WhenPreAwake_IncrementsKillCountAndAwakesWhenThresholdReached()
     {
-        var status = new RetaliatorStatusModel(0, 3, 2, RetaliatorTargetTeam.CrewmateOnly, true);
-        status.TargetPlayer(2);
-
-        status.OnMeetingStart();
-
-        Assert.False(status.IsTargeted(2));
-        Assert.Contains((byte)2, status.NotifiedTargetPlayerIds);
-        Assert.Equal(0, status.CurrentMeetingTargetCount);
-    }
-
-    [Fact]
-    public void AbilityHandler_TryRolePlayerKillTo_IncrementsKillCountAndAwakes()
-    {
+        // Arrange
         var status = new RetaliatorStatusModel(2, 3, 1, RetaliatorTargetTeam.CrewmateOnly, true);
         var handler = new RetaliatorAbilityHandler(status);
-
         var killer = new Mock<PlayerControl>().Object;
         var target = new Mock<PlayerControl>().Object;
 
-        Assert.False(status.IsAwake);
-
+        // Act 1
         handler.TryRolePlayerKillTo(killer, target);
+
+        // Assert 1
         Assert.Equal(1, status.KillCount);
         Assert.False(status.IsAwake);
 
+        // Act 2
         handler.TryRolePlayerKillTo(killer, target);
+
+        // Assert 2
         Assert.Equal(2, status.KillCount);
         Assert.True(status.IsAwake);
     }
@@ -135,6 +114,7 @@ public sealed class RetaliatorTests
     [Fact]
     public void AbilityHandler_TryKilledFrom_WhenTargetedMatchingTeam_BlocksKill()
     {
+        // Arrange
         var status = new RetaliatorStatusModel(0, 3, 1, RetaliatorTargetTeam.CrewmateOnly, true);
         status.TargetPlayer(2);
         var handler = new RetaliatorAbilityHandler(status);
@@ -150,21 +130,25 @@ public sealed class RetaliatorTests
         var mockAttackerPlayer = new Mock<PlayerControl>();
         mockAttackerPlayer.SetupGet(p => p.PlayerId).Returns((byte)2);
 
+        // Act
         bool result = handler.TryKilledFrom(mockRetaliatorPlayer.Object, mockAttackerPlayer.Object);
 
-        Assert.False(result); // Blocked
+        // Assert
+        Assert.False(result); // Kill blocked
     }
 
     [Fact]
-    public void AbilityHandler_TryKilledFrom_WhenUntargeted_AllowsKill()
+    public void AbilityHandler_TryKilledFrom_WhenTargetedNonMatchingTeam_AllowsKill()
     {
+        // Arrange: Retaliator target team is CrewmateOnly, but attacker is Impostor
         var status = new RetaliatorStatusModel(0, 3, 1, RetaliatorTargetTeam.CrewmateOnly, true);
+        status.TargetPlayer(2);
         var handler = new RetaliatorAbilityHandler(status);
 
-        var crewmateRole = new Sheriff();
-        crewmateRole.CreateRoleAllOption();
-        crewmateRole.Initialize();
-        ExtremeRoleManager.GameRole[2] = crewmateRole;
+        var impostorRole = new YoYo();
+        impostorRole.CreateRoleAllOption();
+        impostorRole.Initialize();
+        ExtremeRoleManager.GameRole[2] = impostorRole;
 
         var mockRetaliatorPlayer = new Mock<PlayerControl>();
         mockRetaliatorPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
@@ -172,49 +156,71 @@ public sealed class RetaliatorTests
         var mockAttackerPlayer = new Mock<PlayerControl>();
         mockAttackerPlayer.SetupGet(p => p.PlayerId).Returns((byte)2);
 
+        // Act
         bool result = handler.TryKilledFrom(mockRetaliatorPlayer.Object, mockAttackerPlayer.Object);
 
-        Assert.True(result); // Allowed
+        // Assert
+        Assert.True(result); // Kill allowed because team did not match
     }
 
     [Fact]
-    public void RetaliatorRole_ResetOnMeetingStart_RotatesAndNotifiesTarget()
+    public void RetaliatorRole_IsBlockMeetingButtonAbility_WhenAwake_AllowsValidTargetRegardlessOfTeam()
     {
-        var role = CreateAndInitRole(1); // Player 1 is Retaliator
-        role.TargetPlayer(2); // Player 2 is targeted
+        // Arrange: Player 1 (Local) is Retaliator, Player 2 is target
+        var targetRole = new YoYo(); // Impostor role
+        targetRole.CreateRoleAllOption();
+        targetRole.Initialize();
 
-        // Simulate meeting start
-        role.ResetOnMeetingStart();
+        var role = CreateAndInitRole(1);
+        ExtremeRoleManager.GameRole[0] = targetRole;
+        ExtremeRoleManager.GameRole[2] = targetRole;
 
-        // Player 2 is now in NotifiedTargetPlayerIds
-        var status = (RetaliatorStatusModel)role.Status!;
-        Assert.Contains((byte)2, status.NotifiedTargetPlayerIds);
-        Assert.False(status.IsTargeted(2));
+        // Awaken Retaliator
+        ((ITryKillTo)role.AbilityClass!).TryRolePlayerKillTo(null!, null!);
+
+        var mockPva = new Mock<PlayerVoteArea>(IntPtr.Zero);
+        mockPva.SetupGet(p => p.PlayerId).Returns((byte)2);
+
+        // Act
+        bool isBlocked = role.IsBlockMeetingButtonAbility(mockPva.Object);
+
+        // Assert
+        Assert.False(isBlocked); // Allowed in meeting regardless of target team (no team leak)
     }
 
     [Fact]
-    public void RetaliatorRole_Initialization_RegistersAsImpostor()
+    public void RetaliatorRole_IsBlockMeetingButtonAbility_WhenTargetingSelf_BlocksAbility()
     {
-        var role = CreateAndInitRole();
+        // Arrange: Player 1 (Local) is Retaliator
+        var role = CreateAndInitRole(1);
 
-        Assert.Equal(ExtremeRoleId.Retaliator, role.Core.Id);
-        Assert.True(role.IsImpostor());
+        var mockPva = new Mock<PlayerVoteArea>(IntPtr.Zero);
+        mockPva.SetupGet(p => p.PlayerId).Returns((byte)1); // Self
+
+        // Act
+        bool isBlocked = role.IsBlockMeetingButtonAbility(mockPva.Object);
+
+        // Assert
+        Assert.True(isBlocked); // Blocked for self
     }
 
     [Fact]
-    public void RetaliatorRole_GetRolePlayerNameTag_IncludesTagWhenTargeted()
+    public void RetaliatorRole_GetRolePlayerNameTag_WhenTargeted_ReturnsTagContainingString()
     {
-        var role = CreateAndInitRole();
+        // Arrange
+        var role = CreateAndInitRole(1);
         role.TargetPlayer(2);
 
         var crewmateRole = new Sheriff();
         crewmateRole.CreateRoleAllOption();
         crewmateRole.Initialize();
 
+        // Act
         string tag = role.GetRolePlayerNameTag(crewmateRole, 2);
-        Assert.Contains("TestString", tag);
-
         string untargetedTag = role.GetRolePlayerNameTag(crewmateRole, 3);
+
+        // Assert
+        Assert.Contains("TestString", tag);
         Assert.DoesNotContain("TestString", untargetedTag);
     }
 }

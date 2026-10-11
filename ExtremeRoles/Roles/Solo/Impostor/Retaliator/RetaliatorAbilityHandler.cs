@@ -61,11 +61,7 @@ public class RetaliatorAbilityHandler(RetaliatorStatusModel status) : IAbility, 
     {
         if (!this.status.IsAwake)
         {
-            this.status.KillCount++;
-            if (this.status.KillCount >= this.status.AwakeKillCount)
-            {
-                this.status.IsAwake = true;
-            }
+            this.status.IncrementKill();
         }
         return true;
     }
