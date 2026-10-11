@@ -20,6 +20,16 @@ public class TuckerShadowSystemTests
 		var mockExileHelper = new Mock<MockExileControllerget_InstanceHelper>();
 		mockExileHelper.Setup(x => x.Invoke()).Returns((ExileController)null!);
 		MockExileControllerget_InstanceHelper.Instance = mockExileHelper.Object;
+
+		var mockDestroyableMeeting = new Mock<MockDestroyableSingletonget_InstanceHelper<MeetingHud>>();
+		mockDestroyableMeeting.Setup(x => x.Invoke()).Returns((MeetingHud)null!);
+		MockDestroyableSingletonget_InstanceHelper<MeetingHud>.Instance = mockDestroyableMeeting.Object;
+
+		var mockDestroyableExile = new Mock<MockDestroyableSingletonget_InstanceHelper<ExileController>>();
+		mockDestroyableExile.Setup(x => x.Invoke()).Returns((ExileController)null!);
+		MockDestroyableSingletonget_InstanceHelper<ExileController>.Instance = mockDestroyableExile.Object;
+
+		MockSetupHelper.SetupUnityObjectOperators();
 	}
 
 	[Fact]
