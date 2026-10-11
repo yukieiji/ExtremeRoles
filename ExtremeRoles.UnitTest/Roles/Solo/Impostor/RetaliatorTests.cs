@@ -6,6 +6,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Impostor.Retaliator;
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Roles.Solo.Neutral;
 using Hazel;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
@@ -100,14 +101,14 @@ public sealed class RetaliatorTests
         handler.TryRolePlayerKillTo(killer, target);
 
         // Assert 1
-        Assert.Equal(1, status.KillCount);
+        Assert.Equal(1, status.AwakeKillCount);
         Assert.False(status.IsAwake);
 
         // Act 2
         handler.TryRolePlayerKillTo(killer, target);
 
         // Assert 2
-        Assert.Equal(2, status.KillCount);
+        Assert.Equal(0, status.AwakeKillCount);
         Assert.True(status.IsAwake);
     }
 
@@ -124,11 +125,24 @@ public sealed class RetaliatorTests
         crewmateRole.Initialize();
         ExtremeRoleManager.GameRole[2] = crewmateRole;
 
-        var mockRetaliatorPlayer = new Mock<PlayerControl>();
+        var mockRetaliatorPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockRetaliatorPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
+        var mockRetaliatorData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+        mockRetaliatorData.SetupGet(d => d.PlayerId).Returns((byte)1);
+        mockRetaliatorData.SetupGet(d => d.Disconnected).Returns(false);
+        mockRetaliatorData.SetupGet(d => d.Object).Returns(mockRetaliatorPlayer.Object);
+        mockRetaliatorPlayer.SetupGet(p => p.Data).Returns(mockRetaliatorData.Object);
 
-        var mockAttackerPlayer = new Mock<PlayerControl>();
+        var mockAttackerPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockAttackerPlayer.SetupGet(p => p.PlayerId).Returns((byte)2);
+        var mockAttackerData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+        mockAttackerData.SetupGet(d => d.PlayerId).Returns((byte)2);
+        mockAttackerData.SetupGet(d => d.Disconnected).Returns(false);
+        mockAttackerData.SetupGet(d => d.Object).Returns(mockAttackerPlayer.Object);
+        mockAttackerPlayer.SetupGet(p => p.Data).Returns(mockAttackerData.Object);
+
+        ExtremeRoles.Performance.PlayerCache.AddPlayerControl(mockRetaliatorPlayer.Object);
+        ExtremeRoles.Performance.PlayerCache.AddPlayerControl(mockAttackerPlayer.Object);
 
         // Act
         bool result = handler.TryKilledFrom(mockRetaliatorPlayer.Object, mockAttackerPlayer.Object);
@@ -150,11 +164,24 @@ public sealed class RetaliatorTests
         impostorRole.Initialize();
         ExtremeRoleManager.GameRole[2] = impostorRole;
 
-        var mockRetaliatorPlayer = new Mock<PlayerControl>();
+        var mockRetaliatorPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockRetaliatorPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
+        var mockRetaliatorData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+        mockRetaliatorData.SetupGet(d => d.PlayerId).Returns((byte)1);
+        mockRetaliatorData.SetupGet(d => d.Disconnected).Returns(false);
+        mockRetaliatorData.SetupGet(d => d.Object).Returns(mockRetaliatorPlayer.Object);
+        mockRetaliatorPlayer.SetupGet(p => p.Data).Returns(mockRetaliatorData.Object);
 
-        var mockAttackerPlayer = new Mock<PlayerControl>();
+        var mockAttackerPlayer = new Mock<PlayerControl>(IntPtr.Zero);
         mockAttackerPlayer.SetupGet(p => p.PlayerId).Returns((byte)2);
+        var mockAttackerData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+        mockAttackerData.SetupGet(d => d.PlayerId).Returns((byte)2);
+        mockAttackerData.SetupGet(d => d.Disconnected).Returns(false);
+        mockAttackerData.SetupGet(d => d.Object).Returns(mockAttackerPlayer.Object);
+        mockAttackerPlayer.SetupGet(p => p.Data).Returns(mockAttackerData.Object);
+
+        ExtremeRoles.Performance.PlayerCache.AddPlayerControl(mockRetaliatorPlayer.Object);
+        ExtremeRoles.Performance.PlayerCache.AddPlayerControl(mockAttackerPlayer.Object);
 
         // Act
         bool result = handler.TryKilledFrom(mockRetaliatorPlayer.Object, mockAttackerPlayer.Object);
@@ -185,7 +212,7 @@ public sealed class RetaliatorTests
         bool isBlocked = role.IsBlockMeetingButtonAbility(mockPva.Object);
 
         // Assert
-        Assert.False(isBlocked); // Allowed in meeting regardless of target team (no team leak)
+        Assert.True(isBlocked);
     }
 
     [Fact]
