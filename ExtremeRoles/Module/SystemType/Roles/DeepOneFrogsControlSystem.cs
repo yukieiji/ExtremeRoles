@@ -19,13 +19,14 @@ using ExtremeRoles.Roles.Solo.Neutral;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class FrogBehavior(int frogId, int reqClicks, TextMeshPro textLabel) : ExtremeConsole.IBehavior
+public sealed class FrogBehavior(byte playerId, int frogId, int reqClicks, TextMeshPro textLabel) : ExtremeConsole.IBehavior
 {
 	public float CoolTime => 0.0f;
 	public bool IsCheckWall => false;
 
-	public int FrogId { get; } = frogId;
 	private readonly TextMeshPro textLabel = textLabel;
+	private readonly byte playerId = playerId;
+	private readonly int frogId = frogId;
 
 	private int reqClicks = reqClicks;
 
@@ -50,7 +51,8 @@ public sealed class FrogBehavior(int frogId, int reqClicks, TextMeshPro textLabe
 				writer =>
 				{
 					writer.Write((byte)DeepOneFrogsControlSystem.Ops.RemoveFrog);
-					writer.WritePacked(this.FrogId);
+					writer.Write(this.playerId);
+					writer.WritePacked(this.frogId);
 				});
 		}
 	}
@@ -73,7 +75,7 @@ public sealed class Frog(ExtremeConsole console, FrogBehavior frogBehavior)
 
 	public void Clear()
 	{
-		UnityEngine.Object.Destroy(this.obj);
+		Object.Destroy(this.obj);
 	}
 }
 
@@ -139,24 +141,22 @@ public sealed class DeepOneFrogsControlSystem(
 				{
 					return;
 				}
-				this.createFrog(player, newId, new Vector2(x, y));
-				this.onFrogCountChanged(player);
+				byte placerPlayerId = player.PlayerId;
+				this.createFrog(placerPlayerId, newId, new Vector2(x, y));
+				this.onFrogCountChanged(placerPlayerId);
 				break;
 			case Ops.RemoveFrog:
+				byte deepOnePlayerId = msgReader.ReadByte();
 				int id = msgReader.ReadPackedInt32();
-				if (player == null)
-				{
-					return;
-				}
 				this.destroyFrog(id);
-				this.onFrogCountChanged(player);
+				this.onFrogCountChanged(deepOnePlayerId);
 				break;
 			default:
 				break;
 		}
 	}
 
-	private void createFrog(PlayerControl player, int id, Vector2 pos)
+	private void createFrog(byte placerPlayerId, int id, Vector2 pos)
 	{
 		var hud = HudManager.Instance;
 		if (this.frogs.ContainsKey(id) ||
@@ -191,10 +191,12 @@ public sealed class DeepOneFrogsControlSystem(
 		textObj.alignment = TextAlignmentOptions.Center;
 		textObj.color = Color.white;
 
-		byte frogPlayerKey = ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin ? byte.MaxValue : player.PlayerId;
+		byte frogPlayerKey = ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin ? byte.MaxValue : placerPlayerId;
 
 		int reqClicks = this.GetRequiredClicks(frogPlayerKey);
-		var frogBehavior = new FrogBehavior(id, reqClicks, textObj);
+		var frogBehavior = new FrogBehavior(placerPlayerId, id, reqClicks, textObj);
+		
+		console.Behavior = frogBehavior;
 
 		this.frogs.Add(id, new Frog(console, frogBehavior));
 		if (!this.playerFrogs.TryGetValue(frogPlayerKey, out var frogSet))
@@ -224,9 +226,9 @@ public sealed class DeepOneFrogsControlSystem(
 		}
 	}
 
-	private void onFrogCountChanged(PlayerControl triggerPlayer)
+	private void onFrogCountChanged(byte deepOnePlayerId)
 	{
-		byte frogPlayerKey = ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin ? byte.MaxValue : triggerPlayer.PlayerId;
+		byte frogPlayerKey = ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin ? byte.MaxValue : deepOnePlayerId;
 		
 		int reqClicks = this.GetRequiredClicks(frogPlayerKey);
 		foreach (var frog in this.frogs.Values)
@@ -234,7 +236,7 @@ public sealed class DeepOneFrogsControlSystem(
 			frog.UpdateReqClicks(reqClicks);
 		}
 
-		if (ExtremeRoleManager.TryGetSafeCastedRole<DeepOne>(triggerPlayer.PlayerId, out var placerRole) &&
+		if (ExtremeRoleManager.TryGetSafeCastedRole<DeepOne>(deepOnePlayerId, out var placerRole) &&
 			this.playerFrogs.TryGetValue(frogPlayerKey, out var frogSet))
 		{
 			// 専用のパブリックメソッドを生やして勝利チェック、このクラスはあくまで🐸の管理だけを重点的にする

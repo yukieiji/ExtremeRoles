@@ -225,21 +225,6 @@ public sealed class DeepOne :
 			this.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
 				FloatOptionNames.PlayerSpeedMod);
 		}
-
-
-		int deadCount = 0;
-		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
-		{
-			if (player.IsInValid())
-			{
-				deadCount++;
-			}
-		}
-
-		float reduction = deadCount * this.deathCooldownReduction;
-		float calculatedCooldown = Math.Max(0.5f, this.Button.Timer * (1.0f - reduction));
-
-		this.Button?.SetCooldownTimer(calculatedCooldown);
 	}
 
 	public void ModifiedVote(byte rolePlayerId, ref Dictionary<byte, byte> voteTarget, ref Dictionary<byte, int> voteResult)
@@ -277,6 +262,25 @@ public sealed class DeepOne :
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
+		if (this.Button is null)
+		{
+			return;
+		}
+
+		// ボタンクールに入ってからこれが呼ばれるのでOK
+		int deadCount = 0;
+		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+		{
+			if (player.IsInValid())
+			{
+				deadCount++;
+			}
+		}
+
+		float reduction = deadCount * this.deathCooldownReduction;
+		float calculatedCooldown = Math.Max(0.5f, this.Button.Timer * (1.0f - reduction));
+
+		this.Button.SetCooldownTimer(calculatedCooldown);
 	}
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
