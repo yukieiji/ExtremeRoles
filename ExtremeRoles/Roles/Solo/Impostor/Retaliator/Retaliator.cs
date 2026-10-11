@@ -5,18 +5,18 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor.Retaliator;
 
-public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleMeetingButtonAbility, IRoleResetMeeting, IRoleUpdate
+public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleMeetingButtonAbility, IRoleResetMeeting
 {
     public sealed class RetaliatorTargetReportSerializer : IStringSerializer
     {
@@ -64,8 +64,7 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
     {
         var meeting = MeetingHud.Instance;
         if (meeting != null &&
-            rolePlayer != null &&
-            rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId &&
+            rolePlayer.IsAlive() &&
             this.IsAwake &&
             this.status != null)
         {
@@ -82,11 +81,10 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
                 this.meetingText.gameObject.SetActive(false);
             }
 
-            int remainingMeetingTargets = Math.Max(0, this.status.MaxTargetPerMeeting - this.status.CurrentMeetingTargetCount);
             this.meetingText.text = Tr.GetString(
                 "retaliatorUiInfo",
                 this.status.RemainingAbilityUses,
-                remainingMeetingTargets);
+				this.status.CurrentMeetingTargetCount);
             this.meetingText.gameObject.SetActive(true);
         }
         else if (this.meetingText != null)
@@ -135,8 +133,6 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
             targetTeam,
             notifyTarget);
 
-        this.meetingText = null;
-
         this.AbilityClass = new RetaliatorAbilityHandler(this.status);
     }
 
@@ -183,9 +179,7 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
 
     public void ResetOnMeetingStart()
     {
-        this.meetingText = null;
-
-        if (this.status == null)
+        if (this.status is null)
         {
             return;
         }
@@ -205,7 +199,6 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
-        this.meetingText = null;
     }
 
     public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)

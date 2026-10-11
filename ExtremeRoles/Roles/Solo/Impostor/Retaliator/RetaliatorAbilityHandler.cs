@@ -1,7 +1,6 @@
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 
@@ -17,27 +16,24 @@ public class RetaliatorAbilityHandler(RetaliatorStatusModel status) : IAbility, 
 
     public bool TryKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
-        if (fromPlayer == null || rolePlayer == null)
-        {
-            return true;
-        }
-
-        if (!this.status.IsTargeted(fromPlayer.PlayerId))
-        {
-            return true;
-        }
-
-        if (!ExtremeRoleManager.TryGetRole(fromPlayer.PlayerId, out var fromRole))
+        if (fromPlayer.IsInValid() || 
+			rolePlayer.IsInValid() ||
+			!this.status.IsTargeted(fromPlayer.PlayerId) ||
+			!ExtremeRoleManager.TryGetRole(fromPlayer.PlayerId, out var fromRole))
         {
             return true;
         }
 
         bool isValidTeam = this.status.TargetTeam switch
         {
+			RetaliatorTargetTeam.AllImpostorOther => !fromRole.IsImpostor(),
             RetaliatorTargetTeam.CrewmateOnly => fromRole.IsCrewmate(),
             RetaliatorTargetTeam.NeutralOnly => fromRole.IsNeutral(),
-            RetaliatorTargetTeam.BothCrewAndNeutral => fromRole.IsCrewmate() || fromRole.IsNeutral(),
-            _ => false
+			RetaliatorTargetTeam.LiberalOnly => fromRole.IsLiberal(),
+			RetaliatorTargetTeam.BothCrewAndNeutral => fromRole.IsCrewmate() || fromRole.IsNeutral(),
+			RetaliatorTargetTeam.BothCrewAndLiberal => fromRole.IsCrewmate() || fromRole.IsLiberal(),
+			RetaliatorTargetTeam.BothLiberalAndNeutral => fromRole.IsNeutral() || fromRole.IsLiberal(),
+			_ => false
         };
 
         if (!isValidTeam)

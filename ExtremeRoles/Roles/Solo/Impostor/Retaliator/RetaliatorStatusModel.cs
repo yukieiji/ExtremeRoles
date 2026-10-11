@@ -7,9 +7,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor.Retaliator;
 
 public enum RetaliatorTargetTeam
 {
-    CrewmateOnly,
+	AllImpostorOther,
+	CrewmateOnly,
     NeutralOnly,
+	LiberalOnly,
     BothCrewAndNeutral,
+	BothCrewAndLiberal,
+	BothLiberalAndNeutral,
 }
 
 public class RetaliatorStatusModel : IStatusModel
@@ -20,16 +24,15 @@ public class RetaliatorStatusModel : IStatusModel
 		RemainingAbilityUses > 0 &&
 		CurrentMeetingTargetCount > 0;
 
-	public int KillCount { get; private set; }
-    public int AwakeKillCount { get; }
+    public int AwakeKillCount { get; private set; }
     public int RemainingAbilityUses { get; private set; }
-    public int MaxAbilityUses { get; }
-    public int MaxTargetPerMeeting { get; }
     public int CurrentMeetingTargetCount { get; private set; }
     public RetaliatorTargetTeam TargetTeam { get; }
     public bool NotifyTargetNextMeeting { get; }
 
-    private readonly HashSet<byte> targetedPlayerIds = new HashSet<byte>();
+	private readonly int maxTargetPerMeeting;
+
+	private readonly HashSet<byte> targetedPlayerIds = new HashSet<byte>();
     public IReadOnlyCollection<byte> TargetedPlayerIds => this.targetedPlayerIds;
 
     public RetaliatorStatusModel(
@@ -40,14 +43,12 @@ public class RetaliatorStatusModel : IStatusModel
         bool notifyTargetNextMeeting)
     {
         this.AwakeKillCount = awakeKillCount;
-        this.MaxAbilityUses = maxAbilityUses;
         this.RemainingAbilityUses = maxAbilityUses;
-        this.MaxTargetPerMeeting = maxTargetPerMeeting;
+        this.maxTargetPerMeeting = maxTargetPerMeeting;
         this.TargetTeam = targetTeam;
         this.NotifyTargetNextMeeting = notifyTargetNextMeeting;
         this.IsAwake = awakeKillCount <= 0;
-        this.KillCount = 0;
-        this.CurrentMeetingTargetCount = this.MaxTargetPerMeeting;
+        this.CurrentMeetingTargetCount = this.maxTargetPerMeeting;
     }
 
     public void TargetPlayer(byte playerId)
@@ -68,8 +69,8 @@ public class RetaliatorStatusModel : IStatusModel
             return;
         }
 
-        this.KillCount++;
-        if (this.KillCount >= this.AwakeKillCount)
+		this.AwakeKillCount--;
+        if (this.AwakeKillCount <= 0)
         {
             this.IsAwake = true;
         }
@@ -77,7 +78,7 @@ public class RetaliatorStatusModel : IStatusModel
 
     public void OnMeetingStart()
     {
-        this.CurrentMeetingTargetCount = this.MaxTargetPerMeeting;
+        this.CurrentMeetingTargetCount = this.maxTargetPerMeeting;
 		this.targetedPlayerIds.Clear();
 	}
 }
