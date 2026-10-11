@@ -179,11 +179,9 @@ public sealed class DeepOne :
 
 	public void CreateAbility()
 	{
-		this.CreateNormalActivatingAbilityButton(
+		this.CreateNormalAbilityButton(
 			"sacrifice",
-			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton),
-			abilityOff: CleanUp,
-			forceAbilityOff: () => { });
+			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton));
 	}
 
 	public bool IsAbilityUse()
@@ -192,13 +190,8 @@ public sealed class DeepOne :
 	public bool UseAbility()
 		=> this.abilityHandler?.UseAbility() ?? false;
 
-	public void CleanUp()
-	{
-	}
-
 	public void AllReset(PlayerControl rolePlayer)
 	{
-		this.IsWin = false;
 		this.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
 			FloatOptionNames.PlayerSpeedMod);
 		this.status?.ResetStatus();
@@ -208,7 +201,6 @@ public sealed class DeepOne :
 	public void Update(PlayerControl rolePlayer)
 	{
 		if (rolePlayer.IsInValid() ||
-			this.Button is null ||
 			this.status is null)
 		{
 			return;
@@ -288,7 +280,7 @@ public sealed class DeepOne :
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		IRoleAbility.CreateCommonAbilityOption(factory, 15.0f);
+		IRoleAbility.CreateCommonAbilityOption(factory);
 
 		factory.CreateIntOption(
 			DeepOneOption.RequiredClicks,
@@ -301,7 +293,7 @@ public sealed class DeepOne :
 		factory.CreateFloatOption(
 			DeepOneOption.FrogsRemovePenalty,
 			1.0f, 0.0f, 10.0f, 0.5f,
-			format: OptionUnit.Percentage);
+			format: OptionUnit.Second);
 
 		factory.CreateIntOption(
 			DeepOneOption.DeathCooldownReduction,
