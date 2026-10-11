@@ -423,7 +423,7 @@ public sealed class DeepOneTests
 	{
 		// Arrange
 		var mockText = new Mock<TextMeshPro>();
-		var behavior = new FrogBehavior(frogId: 1, reqClicks: 3, textLabel: mockText.Object);
+		var behavior = new FrogBehavior(playerId: 1, frogId: 1, reqClicks: 3, textLabel: mockText.Object);
 
 		var mockPlayer = new Mock<NetworkedPlayerInfo>();
 		var mockPlayerControl = new Mock<PlayerControl>(IntPtr.Zero);
