@@ -215,12 +215,10 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 				continue;
 			}
 
-			Vector2 targetPos = target.GetTruePosition();
-			float dx = targetPos.x - truePosition.x;
-			float dy = targetPos.y - truePosition.y;
-			float distance = MathF.Sqrt(dx * dx + dy * dy);
+			Vector2 vector = target.GetTruePosition() - truePosition;
+			float magnitude = vector.magnitude;
 
-			if (distance <= this.effectRadius)
+			if (magnitude <= this.effectRadius)
 			{
 				targetIds.Add(playerInfo.PlayerId);
 			}

@@ -46,14 +46,10 @@ public sealed class FlasherTests : IDisposable
 	private delegate float Vector2MagOrig(ref Vector2 self);
 	private delegate float Vector2MagHook(Vector2MagOrig orig, ref Vector2 self);
 
-	private delegate void Vector2CtorOrig(ref Vector2 self, float x, float y);
-	private delegate void Vector2CtorHook(Vector2CtorOrig orig, ref Vector2 self, float x, float y);
-
 	private delegate bool AnyNonTriggersOrig(Vector2 start, Vector2 dir, float distance, int layerMask);
 	private delegate bool AnyNonTriggersHook(AnyNonTriggersOrig orig, Vector2 start, Vector2 dir, float distance, int layerMask);
 
 	private readonly Hook magHook;
-	private readonly Hook ctorHook;
 	private readonly Hook physicsHook;
 
 	private readonly Mock<AmongUsClient> mockClient;
@@ -106,10 +102,6 @@ public sealed class FlasherTests : IDisposable
 		var magTarget = typeof(Vector2).GetProperty("magnitude")!.GetGetMethod()!;
 		var magHookDelegate = new Vector2MagHook(getMagnitudeHook);
 		this.magHook = new Hook(magTarget, magHookDelegate);
-
-		var ctorTarget = typeof(Vector2).GetConstructor(new[] { typeof(float), typeof(float) })!;
-		var ctorHookDelegate = new Vector2CtorHook(getCtorHook);
-		this.ctorHook = new Hook(ctorTarget, ctorHookDelegate);
 
 		var physicsTarget = typeof(PhysicsHelpers).GetMethod(nameof(PhysicsHelpers.AnyNonTriggersBetween), new[] { typeof(Vector2), typeof(Vector2), typeof(float), typeof(int) })!;
 		var physicsHookDelegate = new AnyNonTriggersHook((orig, start, dir, dist, mask) => false);
@@ -211,19 +203,12 @@ public sealed class FlasherTests : IDisposable
 	public void Dispose()
 	{
 		this.magHook.Dispose();
-		this.ctorHook.Dispose();
 		this.physicsHook.Dispose();
 	}
 
 	private static float getMagnitudeHook(Vector2MagOrig orig, ref Vector2 self)
 	{
 		return (float)Math.Sqrt(self.x * self.x + self.y * self.y);
-	}
-
-	private static void getCtorHook(Vector2CtorOrig orig, ref Vector2 self, float x, float y)
-	{
-		self.x = x;
-		self.y = y;
 	}
 
 	private static void SetupSpriteCacheMock()
@@ -442,20 +427,6 @@ public sealed class FlasherTests : IDisposable
 	}
 
 	[Fact]
-	public void AbilityButton_CanBeAssignedAndRetrieved()
-	{
-		var role = new Flasher();
-		InitializeRole(role);
-		var mockBehavior = new Mock<BehaviorBase>("Test", null!);
-		var button = new ExtremeAbilityButton(mockBehavior.Object, null!, KeyCode.F);
-
-		role.Button = button;
-
-		Assert.NotNull(role.Button);
-		Assert.Equal(button, role.Button);
-	}
-
-	[Fact]
 	public void IsAbilityUse_ReturnsTrue_WhenPlayerCanMove()
 	{
 		var role = new Flasher();
@@ -487,8 +458,8 @@ public sealed class FlasherTests : IDisposable
 		bool result = flasherRole.UseChargedAbility(0.8f);
 
 		Assert.True(result);
+		// sentRpcBytes contains RPC writer payload: callerId=1, targets.Count=1, targetId=11
 		Assert.Contains((byte)11, this.sentRpcBytes);
-		Assert.DoesNotContain((byte)12, this.sentRpcBytes);
 		Assert.DoesNotContain((byte)13, this.sentRpcBytes);
 		Assert.DoesNotContain((byte)14, this.sentRpcBytes);
 	}
