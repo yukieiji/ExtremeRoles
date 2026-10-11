@@ -218,7 +218,7 @@ public sealed class Flasher : SingleRoleBase, IRoleAutoBuildAbility
 			Vector2 targetPos = target.GetTruePosition();
 			float dx = targetPos.x - truePosition.x;
 			float dy = targetPos.y - truePosition.y;
-			float distance = Mathf.Sqrt(dx * dx + dy * dy);
+			float distance = MathF.Sqrt(dx * dx + dy * dy);
 
 			if (distance <= this.effectRadius)
 			{

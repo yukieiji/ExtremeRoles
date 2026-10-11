@@ -20,6 +20,7 @@ using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
@@ -33,31 +34,38 @@ namespace ExtremeRoles.UnitTest.Roles.Solo.Impostor;
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class FlasherTests : IDisposable
 {
+	private sealed class TestDummyRole : SingleRoleBase
+	{
+		public TestDummyRole(RoleArgs args) : base(args) { }
+
+		protected override void RoleSpecificInit() { }
+
+		protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory) { }
+	}
+
 	private delegate float Vector2MagOrig(ref Vector2 self);
 	private delegate float Vector2MagHook(Vector2MagOrig orig, ref Vector2 self);
 
-	private delegate Vector2 Vector2NormOrig(ref Vector2 self);
-	private delegate Vector2 NormHook(Vector2NormOrig orig, ref Vector2 self);
+	private delegate void Vector2CtorOrig(ref Vector2 self, float x, float y);
+	private delegate void Vector2CtorHook(Vector2CtorOrig orig, ref Vector2 self, float x, float y);
 
 	private delegate bool AnyNonTriggersOrig(Vector2 start, Vector2 dir, float distance, int layerMask);
 	private delegate bool AnyNonTriggersHook(AnyNonTriggersOrig orig, Vector2 start, Vector2 dir, float distance, int layerMask);
 
-	private delegate void PlayerOutLineSetOutlineOrig(PlayerControl? target, Color color);
-	private delegate void PlayerOutLineSetOutlineHook(PlayerOutLineSetOutlineOrig orig, PlayerControl? target, Color color);
-
 	private readonly Hook magHook;
-	private readonly Hook normHook;
+	private readonly Hook ctorHook;
 	private readonly Hook physicsHook;
-	private readonly Hook? setOutlineHook;
 
 	private readonly Mock<AmongUsClient> mockClient;
 	private readonly Mock<PlayerControl> mockLocalPlayer;
 	private readonly List<NetworkedPlayerInfo> playerInfoList = new();
+	private readonly List<byte> sentRpcBytes = new();
 
 	public FlasherTests()
 	{
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupObjectImplicitHelpers();
 		MockSetupHelper.SetupVector3Helpers();
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
@@ -75,31 +83,43 @@ public sealed class FlasherTests : IDisposable
 		SetupAssetBundleMock();
 		SetupHudManagerMock();
 
+		var mockSqrt = new Mock<UnityEngine.MockMathfSqrtHelper>();
+		mockSqrt.Setup(x => x.Invoke(It.IsAny<float>())).Returns((float f) => MathF.Sqrt(f));
+		UnityEngine.MockMathfSqrtHelper.Instance = mockSqrt.Object;
+
+		var mockSub = new Mock<MockVector2op_SubtractionHelper>();
+		mockSub.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<Vector2>()))
+			.Returns((Vector2 a, Vector2 b) => new Vector2(a.x - b.x, a.y - b.y));
+		MockVector2op_SubtractionHelper.Instance = mockSub.Object;
+
+		var mockActionImplicit = new Mock<Il2CppSystem.MockActionop_ImplicitHelper<float>>();
+		mockActionImplicit.Setup(x => x.Invoke(It.IsAny<Action<float>>()))
+			.Returns((Action<float> act) => act != null ? new Il2CppSystem.Action<float>(IntPtr.Zero) : null!);
+		Il2CppSystem.MockActionop_ImplicitHelper<float>.Instance = mockActionImplicit.Object;
+
+		var mockIEnum = new Mock<Il2CppSystem.Collections.IEnumerator>(IntPtr.Zero);
+		var mockLerpHelper = new Mock<MockEffectsLerpHelper>();
+		mockLerpHelper.Setup(x => x.Invoke(It.IsAny<float>(), It.IsAny<Il2CppSystem.Action<float>>()))
+			.Returns(mockIEnum.Object);
+		MockEffectsLerpHelper.Instance = mockLerpHelper.Object;
+
 		var magTarget = typeof(Vector2).GetProperty("magnitude")!.GetGetMethod()!;
 		var magHookDelegate = new Vector2MagHook(getMagnitudeHook);
 		this.magHook = new Hook(magTarget, magHookDelegate);
 
-		var normTarget = typeof(Vector2).GetProperty("normalized")!.GetGetMethod()!;
-		var normHookDelegate = new NormHook(getNormalizedHook);
-		this.normHook = new Hook(normTarget, normHookDelegate);
+		var ctorTarget = typeof(Vector2).GetConstructor(new[] { typeof(float), typeof(float) })!;
+		var ctorHookDelegate = new Vector2CtorHook(getCtorHook);
+		this.ctorHook = new Hook(ctorTarget, ctorHookDelegate);
 
 		var physicsTarget = typeof(PhysicsHelpers).GetMethod(nameof(PhysicsHelpers.AnyNonTriggersBetween), new[] { typeof(Vector2), typeof(Vector2), typeof(float), typeof(int) })!;
 		var physicsHookDelegate = new AnyNonTriggersHook((orig, start, dir, dist, mask) => false);
 		this.physicsHook = new Hook(physicsTarget, physicsHookDelegate);
 
-		var setOutlineTarget = typeof(PlayerOutLine).GetMethod(nameof(PlayerOutLine.SetOutline), BindingFlags.Public | BindingFlags.Static);
-		if (setOutlineTarget != null)
-		{
-			var setOutlineDelegate = new PlayerOutLineSetOutlineHook((orig, target, color) => { });
-			this.setOutlineHook = new Hook(setOutlineTarget, setOutlineDelegate);
-		}
-
 		this.mockClient = MockSetupHelper.SetupAmongUsClientMock();
 		this.mockClient.SetupGet(c => c.AmHost).Returns(true);
 
-		var writtenBytes = new List<byte>();
 		var mockWriter = new Mock<MessageWriter>(IntPtr.Zero);
-		mockWriter.Setup(w => w.Write(It.IsAny<byte>())).Callback((byte b) => writtenBytes.Add(b));
+		mockWriter.Setup(w => w.Write(It.IsAny<byte>())).Callback((byte b) => this.sentRpcBytes.Add(b));
 		mockWriter.Setup(w => w.ToByteArray(It.IsAny<bool>())).Returns(new Mock<Il2CppStructArray<byte>>(IntPtr.Zero).Object);
 
 		this.mockClient.Setup(c => c.StartRpcImmediately(It.IsAny<uint>(), It.IsAny<byte>(), It.IsAny<SendOption>(), It.IsAny<int>()))
@@ -112,6 +132,11 @@ public sealed class FlasherTests : IDisposable
 		this.mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
 		this.mockLocalPlayer.SetupGet(p => p.CanMove).Returns(true);
 		this.mockLocalPlayer.Setup(p => p.GetTruePosition()).Returns(new Vector2(10f, 20f));
+
+		var mockLocalTransform = new Mock<Transform>(IntPtr.Zero);
+		cachedPtrField?.SetValue(mockLocalTransform.Object, (IntPtr)101);
+		mockLocalTransform.SetupGet(t => t.position).Returns(new Vector3(10f, 20f, 0f));
+		this.mockLocalPlayer.SetupGet(p => p.transform).Returns(mockLocalTransform.Object);
 
 		var mockLocalData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
 		cachedPtrField?.SetValue(mockLocalData.Object, (IntPtr)1);
@@ -156,10 +181,10 @@ public sealed class FlasherTests : IDisposable
 			.Returns(() =>
 			{
 				var mockReader = new Mock<MessageReader>();
-				if (writtenBytes.Count > 0)
+				if (this.sentRpcBytes.Count > 0)
 				{
-					var bytesCopy = new List<byte>(writtenBytes);
-					writtenBytes.Clear();
+					var bytesCopy = new List<byte>(this.sentRpcBytes);
+					this.sentRpcBytes.Clear();
 					var seq = mockReader.SetupSequence(r => r.ReadByte());
 					foreach (var b in bytesCopy)
 					{
@@ -186,9 +211,8 @@ public sealed class FlasherTests : IDisposable
 	public void Dispose()
 	{
 		this.magHook.Dispose();
-		this.normHook.Dispose();
+		this.ctorHook.Dispose();
 		this.physicsHook.Dispose();
-		this.setOutlineHook?.Dispose();
 	}
 
 	private static float getMagnitudeHook(Vector2MagOrig orig, ref Vector2 self)
@@ -196,11 +220,10 @@ public sealed class FlasherTests : IDisposable
 		return (float)Math.Sqrt(self.x * self.x + self.y * self.y);
 	}
 
-	private static Vector2 getNormalizedHook(Vector2NormOrig orig, ref Vector2 self)
+	private static void getCtorHook(Vector2CtorOrig orig, ref Vector2 self, float x, float y)
 	{
-		float mag = (float)Math.Sqrt(self.x * self.x + self.y * self.y);
-		if (mag < 1e-5f) return Vector2.zero;
-		return new Vector2(self.x / mag, self.y / mag);
+		self.x = x;
+		self.y = y;
 	}
 
 	private static void SetupSpriteCacheMock()
@@ -293,6 +316,9 @@ public sealed class FlasherTests : IDisposable
 		var mockTransform = new Mock<Transform>(IntPtr.Zero);
 		mockTransform.SetupGet(t => t.parent).Returns(mockParentTransform.Object);
 		mockTransform.Setup(t => t.FindChild(It.IsAny<string>())).Returns((Transform)null!);
+		mockTransform.SetupProperty(t => t.localPosition);
+		mockTransform.SetupProperty(t => t.position);
+		mockTransform.SetupProperty(t => t.localScale);
 
 		var mockMaterial = new Mock<Material>(IntPtr.Zero);
 		mockMaterial.Setup(m => m.SetFloat(It.IsAny<string>(), It.IsAny<float>()));
@@ -302,6 +328,8 @@ public sealed class FlasherTests : IDisposable
 		mockSpriteRenderer.SetupProperty(s => s.color);
 		mockSpriteRenderer.SetupProperty(s => s.enabled);
 		mockSpriteRenderer.SetupGet(s => s.material).Returns(mockMaterial.Object);
+		mockSpriteRenderer.SetupGet(s => s.gameObject).Returns(mockGameObject.Object);
+		mockSpriteRenderer.SetupGet(s => s.transform).Returns(mockTransform.Object);
 
 		var mockLabelText = new Mock<TMPro.TextMeshPro>(IntPtr.Zero);
 		mockLabelText.SetupProperty(t => t.color);
@@ -350,9 +378,16 @@ public sealed class FlasherTests : IDisposable
 			.Returns((UnityEngine.Object original, Transform parent) => original);
 		MockObjectInstantiateHelper10.Instance = mockInstantiate10.Object;
 
+		var mockCoroutine = new Mock<Coroutine>(IntPtr.Zero);
+
 		var mockHud = MockSetupHelper.SetupDestroyableSingletonMock<HudManager>();
 		mockHud.SetupGet(h => h.KillButton).Returns(mockKillButton.Object);
 		mockHud.SetupGet(h => h.UseButton).Returns(mockUseButton.Object);
+		mockHud.SetupGet(h => h.FullScreen).Returns(mockSpriteRenderer.Object);
+		mockHud.SetupGet(h => h.transform).Returns(mockTransform.Object);
+		mockHud.Setup(h => h.StartCoroutine(It.IsAny<Il2CppSystem.Collections.IEnumerator>()))
+			.Returns(mockCoroutine.Object);
+		mockHud.Setup(h => h.StopCoroutine(It.IsAny<Coroutine>()));
 	}
 
 	private static void InitializeRole(SingleRoleBase role, byte playerId = 1)
@@ -363,16 +398,45 @@ public sealed class FlasherTests : IDisposable
 		ExtremeRoleManager.GameRole[playerId] = role;
 	}
 
+	private Mock<PlayerControl> createTargetPlayer(byte playerId, Vector2 position, SingleRoleBase role, bool isDead = false, bool inVent = false)
+	{
+		var mockPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+		var cachedPtrField = typeof(UnityEngine.Object).GetField("m_CachedPtr", BindingFlags.NonPublic | BindingFlags.Instance);
+		cachedPtrField?.SetValue(mockPlayer.Object, (IntPtr)(playerId + 10));
+
+		mockPlayer.SetupGet(p => p.PlayerId).Returns(playerId);
+		mockPlayer.SetupGet(p => p.inVent).Returns(inVent);
+		mockPlayer.Setup(p => p.GetTruePosition()).Returns(position);
+
+		var mockTransform = new Mock<Transform>(IntPtr.Zero);
+		cachedPtrField?.SetValue(mockTransform.Object, (IntPtr)(playerId + 100));
+		mockTransform.SetupGet(t => t.position).Returns(new Vector3(position.x, position.y, 0f));
+		mockPlayer.SetupGet(p => p.transform).Returns(mockTransform.Object);
+
+		var mockData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		cachedPtrField?.SetValue(mockData.Object, (IntPtr)(playerId + 10));
+		mockData.SetupGet(d => d.PlayerId).Returns(playerId);
+		mockData.SetupGet(d => d.IsDead).Returns(isDead);
+		mockData.SetupGet(d => d.Disconnected).Returns(false);
+		mockData.SetupGet(d => d.Object).Returns(mockPlayer.Object);
+		mockPlayer.SetupGet(p => p.Data).Returns(mockData.Object);
+
+		this.playerInfoList.Add(mockData.Object);
+
+		role.CreateRoleAllOption();
+		role.Initialize();
+		ExtremeRoleManager.GameRole[playerId] = role;
+
+		return mockPlayer;
+	}
+
 	[Fact]
 	public void Initialize_RegistersFlasherRoleAndImpostorTeam()
 	{
-		// Arrange
 		var role = new Flasher();
 
-		// Act
 		InitializeRole(role);
 
-		// Assert
 		Assert.Equal(ExtremeRoleId.Flasher, role.Core.Id);
 		Assert.True(role.IsImpostor());
 	}
@@ -380,16 +444,13 @@ public sealed class FlasherTests : IDisposable
 	[Fact]
 	public void AbilityButton_CanBeAssignedAndRetrieved()
 	{
-		// Arrange
 		var role = new Flasher();
 		InitializeRole(role);
 		var mockBehavior = new Mock<BehaviorBase>("Test", null!);
 		var button = new ExtremeAbilityButton(mockBehavior.Object, null!, KeyCode.F);
 
-		// Act
 		role.Button = button;
 
-		// Assert
 		Assert.NotNull(role.Button);
 		Assert.Equal(button, role.Button);
 	}
@@ -397,76 +458,105 @@ public sealed class FlasherTests : IDisposable
 	[Fact]
 	public void IsAbilityUse_ReturnsTrue_WhenPlayerCanMove()
 	{
-		// Arrange
 		var role = new Flasher();
 		InitializeRole(role);
 
-		// Act
 		bool canUse = role.IsAbilityUse();
 
-		// Assert
 		Assert.True(canUse);
 	}
 
 	[Fact]
-	public void UseAbility_ReturnsTrue()
+	public void UseChargedAbility_SendsRpcWithOnlyValidCrewmatesInRange()
 	{
-		// Arrange
-		var role = new Flasher();
-		InitializeRole(role);
+		var flasherRole = new Flasher();
+		InitializeRole(flasherRole, playerId: 1);
 
-		// Act
-		bool result = role.UseAbility();
+		// Target 11: Crewmate in range (5f away, default radius 8f)
+		createTargetPlayer(11, new Vector2(15f, 20f), new TestDummyRole(RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white)));
 
-		// Assert
+		// Target 12: Crewmate far out of range (1000f away)
+		createTargetPlayer(12, new Vector2(1000f, 1000f), new TestDummyRole(RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white)));
+
+		// Target 13: Teammate Impostor in range
+		createTargetPlayer(13, new Vector2(12f, 20f), new TestDummyRole(RoleArgs.BuildImpostor(ExtremeRoleId.Assassin)));
+
+		// Target 14: Dead Crewmate in range
+		createTargetPlayer(14, new Vector2(11f, 20f), new TestDummyRole(RoleArgs.BuildCrewmate(ExtremeRoleId.Sheriff, Color.white)), isDead: true);
+
+		bool result = flasherRole.UseChargedAbility(0.8f);
+
 		Assert.True(result);
-	}
-
-	[Fact]
-	public void UseChargedAbility_SendsRpcCallerAndReturnsTrue()
-	{
-		// Arrange
-		var role = new Flasher();
-		InitializeRole(role);
-
-		// Act
-		bool result = role.UseChargedAbility(0.8f);
-
-		// Assert
-		Assert.True(result);
+		Assert.Contains((byte)11, this.sentRpcBytes);
+		Assert.DoesNotContain((byte)12, this.sentRpcBytes);
+		Assert.DoesNotContain((byte)13, this.sentRpcBytes);
+		Assert.DoesNotContain((byte)14, this.sentRpcBytes);
 	}
 
 	[Fact]
 	public void FlasherScreenEffect_ThrowsException_WhenHoldTimeInvalid()
 	{
-		// Arrange
 		Func<FlasherScreenEffect> createWithZeroHoldTime = () => new FlasherScreenEffect(Color.white, 0.0f, 0.5f);
 		Func<FlasherScreenEffect> createWithNegativeHoldTime = () => new FlasherScreenEffect(Color.white, -1.0f, 0.5f);
 
-		// Act & Assert (Separate action delegate execution from assertion)
 		Assert.Throws<ArgumentOutOfRangeException>(createWithZeroHoldTime);
 		Assert.Throws<ArgumentOutOfRangeException>(createWithNegativeHoldTime);
 	}
 
 	[Fact]
-	public void RpcFlash_WhenLocalPlayerInTargetList_ExecutesSuccessfully()
+	public void RpcFlash_TriggersScreenEffectForTargetLocalPlayer()
 	{
-		// Arrange
 		var role = new Flasher();
 		InitializeRole(role, playerId: 2);
 
 		var mockReader = new Mock<MessageReader>();
-		mockReader.SetupSequence(r => r.ReadByte()).Returns((byte)2); // callerId = 2
+		mockReader.SetupSequence(r => r.ReadByte()).Returns((byte)2).Returns((byte)1); // callerId = 2, targetId = 1
 		mockReader.SetupSequence(r => r.ReadSingle()).Returns(0.8f).Returns(3.0f); // chargeGauge, activeTime
-		mockReader.Setup(r => r.ReadPackedInt32()).Returns(1); // targetCount
+		mockReader.Setup(r => r.ReadPackedInt32()).Returns(1); // targetCount = 1
 
-		var targetByteSeq = mockReader.SetupSequence(r => r.ReadByte());
-		targetByteSeq.Returns((byte)1); // targetId = 1 (local player)
+		var mockHud = HudManager.Instance;
 
-		// Act
 		Flasher.RpcFlash(mockReader.Object);
 
-		// Assert
-		Assert.Equal(ExtremeRoleId.Flasher, role.Core.Id);
+		Mock.Get(mockHud).Verify(h => h.StartCoroutine(It.IsAny<Il2CppSystem.Collections.IEnumerator>()), Times.Once);
+	}
+
+	[Fact]
+	public void RpcFlash_DoesNotTriggerScreenEffect_WhenLocalPlayerNotInTargetList()
+	{
+		var role = new Flasher();
+		InitializeRole(role, playerId: 2);
+
+		var mockReader = new Mock<MessageReader>();
+		mockReader.SetupSequence(r => r.ReadByte()).Returns((byte)2).Returns((byte)3); // callerId = 2, targetId = 3
+		mockReader.SetupSequence(r => r.ReadSingle()).Returns(0.8f).Returns(3.0f); // chargeGauge, activeTime
+		mockReader.Setup(r => r.ReadPackedInt32()).Returns(1); // targetCount = 1
+
+		var mockHud = HudManager.Instance;
+
+		Flasher.RpcFlash(mockReader.Object);
+
+		Mock.Get(mockHud).Verify(h => h.StartCoroutine(It.IsAny<Il2CppSystem.Collections.IEnumerator>()), Times.Never);
+	}
+
+	[Fact]
+	public void ResetOnMeetingStartAndEnd_HidesActiveFlasherEffect()
+	{
+		var flasherRole = new Flasher();
+		InitializeRole(flasherRole, playerId: 1);
+
+		var mockHud = HudManager.Instance;
+
+		var mockReader = new Mock<MessageReader>();
+		mockReader.SetupSequence(r => r.ReadByte()).Returns((byte)1).Returns((byte)1); // callerId = 1, targetId = 1
+		mockReader.SetupSequence(r => r.ReadSingle()).Returns(1.0f).Returns(3.0f);
+		mockReader.Setup(r => r.ReadPackedInt32()).Returns(1);
+
+		Flasher.RpcFlash(mockReader.Object);
+
+		flasherRole.ResetOnMeetingStart();
+		flasherRole.ResetOnMeetingEnd(null);
+
+		Mock.Get(mockHud).Verify(h => h.StopCoroutine(It.IsAny<Coroutine>()), Times.AtLeastOnce());
 	}
 }
