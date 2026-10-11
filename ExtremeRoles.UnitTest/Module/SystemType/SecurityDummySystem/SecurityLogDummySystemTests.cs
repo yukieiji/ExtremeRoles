@@ -27,6 +27,7 @@ public class SecurityLogDummySystemTests : IDisposable
 		PlayerCache.RemovePlayerControl(_ => true);
 		MockShipStatusget_InstanceHelper.Instance = null;
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupSecurityLogHelpers();
 		MockSetupHelper.SetupLogger();
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 

@@ -34,7 +34,6 @@ public static class MockSetupHelper
         SetupTimeHelpers();
         SetupRandomHelpers();
         SetupGameObjectExtensionsHelpers();
-        SetupSecurityLogHelpers();
     }
 
     public static void SetupSecurityLogHelpers()
