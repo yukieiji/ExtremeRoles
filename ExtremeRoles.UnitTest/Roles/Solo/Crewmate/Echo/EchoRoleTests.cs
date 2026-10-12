@@ -729,4 +729,175 @@ public class EchoRoleTests
 		int count = (int)(countProp?.GetValue(resultList) ?? 0);
 		Assert.Equal(1, count);
 	}
+
+	[Fact]
+	public void EmitEchoLocation_WhenNoTargetsFound_YieldsBreak()
+	{
+		// Arrange
+		PlayerCache.RemovePlayerControl(_ => true);
+		var echoRole = CreateInitializedEcho();
+
+		var emitMethod = typeof(EchoRole).GetMethod("emitEchoLocation", BindingFlags.NonPublic | BindingFlags.Instance);
+		Assert.NotNull(emitMethod);
+
+		// Act
+		var enumerator = emitMethod.Invoke(echoRole, null) as IEnumerator;
+		Assert.NotNull(enumerator);
+
+		bool hasNext = enumerator.MoveNext();
+
+		// Assert
+		Assert.False(hasNext);
+	}
+
+	[Fact]
+	public void EmitEchoLocation_WhenTargetsFound_ExecutesPingPipeline()
+	{
+		// Arrange
+		PlayerCache.RemovePlayerControl(_ => true);
+
+		byte sourceId = 1;
+		byte targetId = 2;
+
+		var sourceData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		sourceData.SetupGet(d => d.IsDead).Returns(false);
+		sourceData.SetupGet(d => d.Disconnected).Returns(false);
+
+		var targetData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		targetData.SetupGet(d => d.IsDead).Returns(false);
+		targetData.SetupGet(d => d.Disconnected).Returns(false);
+
+		var sourceMock = MockSetupHelper.SetupPlayerControlMocks();
+		sourceMock.SetupGet(p => p.PlayerId).Returns(sourceId);
+		sourceMock.SetupGet(p => p.Data).Returns(sourceData.Object);
+		sourceMock.Setup(p => p.GetTruePosition()).Returns(new Vector2(0f, 0f));
+
+		var targetMock = new Mock<PlayerControl>(IntPtr.Zero);
+		targetMock.SetupGet(p => p.PlayerId).Returns(targetId);
+		targetMock.SetupGet(p => p.Data).Returns(targetData.Object);
+		targetMock.Setup(p => p.GetTruePosition()).Returns(new Vector2(2f, 2f));
+
+		sourceData.SetupGet(d => d.Object).Returns(sourceMock.Object);
+		targetData.SetupGet(d => d.Object).Returns(targetMock.Object);
+
+		PlayerCache.AddPlayerControl(sourceMock.Object);
+		PlayerCache.AddPlayerControl(targetMock.Object);
+
+		var echoRole = CreateInitializedEcho(range: 10.0f);
+		var mockPool = SetupMockPool(echoRole);
+
+		var mockPing = new Mock<PingBehaviour>(IntPtr.Zero);
+		var mockTransform = new Mock<Transform>(IntPtr.Zero);
+		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
+		mockPing.SetupGet(p => p.transform).Returns(mockTransform.Object);
+		mockPing.SetupGet(p => p.gameObject).Returns(mockGameObject.Object);
+
+		mockPool.Setup(p => p.Get<PingBehaviour>()).Returns(mockPing.Object);
+
+		var emitMethod = typeof(EchoRole).GetMethod("emitEchoLocation", BindingFlags.NonPublic | BindingFlags.Instance);
+		Assert.NotNull(emitMethod);
+
+		// Act
+		var enumerator = emitMethod.Invoke(echoRole, null) as IEnumerator;
+		Assert.NotNull(enumerator);
+
+		int steps = 0;
+		while (enumerator.MoveNext() && steps < 10)
+		{
+			steps++;
+		}
+
+		// Assert
+		Assert.True(steps > 0);
+	}
+
+	[Fact]
+	public void SetUpPing_CalculatesScaleAndSetsUpPingProperties()
+	{
+		// Arrange
+		var echoRole = CreateInitializedEcho();
+		var mockPool = SetupMockPool(echoRole);
+
+		var mockPing = new Mock<PingBehaviour>(IntPtr.Zero);
+		var mockTransform = new Mock<Transform>(IntPtr.Zero);
+		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
+		var mockSpriteRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+
+		mockPing.SetupGet(p => p.transform).Returns(mockTransform.Object);
+		mockPing.SetupGet(p => p.gameObject).Returns(mockGameObject.Object);
+		mockPing.Object.image = mockSpriteRenderer.Object;
+
+		mockPool.Setup(p => p.Get<PingBehaviour>()).Returns(mockPing.Object);
+
+		var locationInfoType = typeof(EchoRole).GetNestedType("LocationInfo", BindingFlags.NonPublic)!;
+		var locationInfo = Activator.CreateInstance(locationInfoType, new object[] { new Vector3(3f, 4f, 0f), false, 0.5f })!;
+
+		var setUpPingMethod = typeof(EchoRole).GetMethod("setUpPing", BindingFlags.NonPublic | BindingFlags.Instance);
+		Assert.NotNull(setUpPingMethod);
+
+		// Act
+		var pingResult = setUpPingMethod.Invoke(echoRole, new object[] { mockPool.Object, locationInfo }) as PingBehaviour;
+
+		// Assert
+		Assert.NotNull(pingResult);
+		mockPing.VerifySet(p => p.target = new Vector3(3f, 4f, 0f), Times.Once());
+		mockPing.VerifySet(p => p.AmSeeker = false, Times.Once());
+		mockPing.Verify(p => p.UpdatePosition(), Times.Once());
+		mockPing.Verify(p => p.SetImageEnabled(true), Times.Once());
+
+		float expectedScale = 0.9f * ((1.0f - 0.5f) * 0.8f + 0.2f); // 0.9 * 0.6 = 0.54
+		mockPing.VerifySet(p => p.MaxScale = It.Is<float>(s => Math.Abs(s - expectedScale) < 0.01f), Times.Once());
+	}
+
+	[Fact]
+	public void WaitNextTarget_ProcessesQueueAndYieldsWaitTime()
+	{
+		// Arrange
+		var locationInfoType = typeof(EchoRole).GetNestedType("LocationInfo", BindingFlags.NonPublic)!;
+		var locationInfo = Activator.CreateInstance(locationInfoType, new object[] { new Vector3(0f, 0f, 0f), false, 0.5f })!;
+
+		var queueType = typeof(Queue<>).MakeGenericType(typeof(EchoRole).GetNestedType("PingInfo", BindingFlags.NonPublic)!);
+		var queue = Activator.CreateInstance(queueType)!;
+
+		var waitMethod = typeof(EchoRole).GetMethod("waitNextTarget", BindingFlags.NonPublic | BindingFlags.Static);
+		Assert.NotNull(waitMethod);
+
+		// Act
+		var enumerator = waitMethod.Invoke(null, new object[] { locationInfo, queue }) as IEnumerator;
+		Assert.NotNull(enumerator);
+
+		bool step = enumerator.MoveNext();
+
+		// Assert
+		Assert.True(step);
+		Assert.NotNull(enumerator.Current);
+		Assert.IsType<WaitForSeconds>(enumerator.Current);
+	}
+
+	[Fact]
+	public void ShowMePing_HidesPingAfterDelay()
+	{
+		// Arrange
+		var echoRole = CreateInitializedEcho();
+		var mockPing = new Mock<PingBehaviour>(IntPtr.Zero);
+		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
+		mockPing.SetupGet(p => p.gameObject).Returns(mockGameObject.Object);
+
+		var showMePingMethod = typeof(EchoRole).GetMethod("showMePing", BindingFlags.NonPublic | BindingFlags.Instance);
+		Assert.NotNull(showMePingMethod);
+
+		// Act
+		var enumerator = showMePingMethod.Invoke(echoRole, new object[] { mockPing.Object }) as IEnumerator;
+		Assert.NotNull(enumerator);
+
+		bool step1 = enumerator.MoveNext(); // yield return WaitForSeconds
+		Assert.True(step1);
+
+		bool step2 = enumerator.MoveNext(); // hidePing -> false
+		Assert.False(step2);
+
+		// Assert
+		mockPing.Verify(p => p.SetImageEnabled(false), Times.Once());
+		mockGameObject.Verify(g => g.SetActive(false), Times.Once());
+	}
 }
