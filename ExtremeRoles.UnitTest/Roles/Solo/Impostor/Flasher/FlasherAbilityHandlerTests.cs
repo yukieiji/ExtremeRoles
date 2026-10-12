@@ -20,25 +20,15 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Impostor.Flasher;
 using ExtremeRoles.Roles.Solo.Neutral;
 
-using MonoMod.RuntimeDetour;
-
 namespace ExtremeRoles.UnitTest.Roles.Solo.Impostor.Flasher;
 
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public sealed class FlasherAbilityHandlerTests : IDisposable
+public sealed class FlasherAbilityHandlerTests
 {
-	private delegate float Vector2MagOrig(ref Vector2 self);
-	private delegate float Vector2MagHook(Vector2MagOrig orig, ref Vector2 self);
-
-	private delegate void Vector2CtorOrig(ref Vector2 self, float x, float y);
-	private delegate void Vector2CtorHook(Vector2CtorOrig orig, ref Vector2 self, float x, float y);
-
 	private const byte LocalPlayerId = 1;
 	private const byte TargetPlayerId = 2;
 	private const float ActiveTime = 1.5f;
 
-	private readonly Hook magHook;
-	private readonly Hook ctorHook;
 	private readonly Mock<AmongUsClient> mockClient;
 	private readonly Mock<PlayerControl> mockLocalPlayer;
 	private readonly Mock<NetworkedPlayerInfo> mockLocalPlayerInfo;
@@ -50,19 +40,6 @@ public sealed class FlasherAbilityHandlerTests : IDisposable
 	public FlasherAbilityHandlerTests()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
-
-		var magTarget = typeof(Vector2).GetProperty("magnitude")!.GetGetMethod()!;
-		var magHookDelegate = new Vector2MagHook((Vector2MagOrig orig, ref Vector2 self) =>
-			(float)Math.Sqrt(self.x * self.x + self.y * self.y));
-		this.magHook = new Hook(magTarget, magHookDelegate);
-
-		var ctorTarget = typeof(Vector2).GetConstructor(new[] { typeof(float), typeof(float) })!;
-		var ctorHookDelegate = new Vector2CtorHook((Vector2CtorOrig orig, ref Vector2 self, float x, float y) =>
-		{
-			self.x = x;
-			self.y = y;
-		});
-		this.ctorHook = new Hook(ctorTarget, ctorHookDelegate);
 		MockSetupHelper.SetupMathfHelpers();
 		MockSetupHelper.SetupPaletteHelpers();
 		MockSetupHelper.SetupVector2Helpers();
@@ -529,11 +506,5 @@ public sealed class FlasherAbilityHandlerTests : IDisposable
 
 		// Assert
 		this.mockScreenEffect.Verify(s => s.Stop(), Times.Once);
-	}
-
-	public void Dispose()
-	{
-		this.magHook.Dispose();
-		this.ctorHook.Dispose();
 	}
 }
