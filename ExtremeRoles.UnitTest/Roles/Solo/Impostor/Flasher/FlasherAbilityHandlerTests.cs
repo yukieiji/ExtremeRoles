@@ -128,7 +128,10 @@ public sealed class FlasherAbilityHandlerTests
 	private void CreateTarget(
 		Vector2 position, bool isDead, bool inVent, bool isImpostorTeam)
 	{
+		var cachedPtrField = typeof(UnityEngine.Object).GetField("m_CachedPtr", BindingFlags.NonPublic | BindingFlags.Instance);
+
 		var mockTarget = new Mock<PlayerControl>(IntPtr.Zero);
+		cachedPtrField?.SetValue(mockTarget.Object, (IntPtr)TargetPlayerId);
 		mockTarget.SetupGet(p => p.PlayerId).Returns(TargetPlayerId);
 		mockTarget.Setup(p => p.GetTruePosition()).Returns(position);
 		mockTarget.SetupGet(p => p.inVent).Returns(inVent);

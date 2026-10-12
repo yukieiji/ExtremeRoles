@@ -467,6 +467,12 @@ public static class MockSetupHelper
         if (UnityEngine.MockVector2CtorHelper.Instance == null)
         {
             var mockCtor = new Mock<UnityEngine.MockVector2CtorHelper>();
+            mockCtor.Setup(c => c.Invoke(ref It.Ref<Vector2>.IsAny, It.IsAny<float>(), It.IsAny<float>()))
+                .Callback((ref Vector2 v, float x, float y) =>
+                {
+                    v.x = x;
+                    v.y = y;
+                });
             UnityEngine.MockVector2CtorHelper.Instance = mockCtor.Object;
         }
 
