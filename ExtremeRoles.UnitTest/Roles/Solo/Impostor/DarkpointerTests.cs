@@ -4,8 +4,10 @@ using System.Reflection;
 
 using AmongUs.GameOptions;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
@@ -25,13 +27,29 @@ public sealed class DarkpointerTests
 {
 	private readonly Mock<AmongUsClient> mockClient;
 	private readonly Mock<PlayerControl> mockLocalPlayer;
+	private readonly Mock<IUnityObjectFactory> mockFactory;
 
 	public DarkpointerTests()
 	{
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupUnityObjectOperators();
 		MockSetupHelper.SetupVector3Helpers();
 		MockSetupHelper.SetupPaletteHelpers();
+
+		this.mockFactory = new Mock<IUnityObjectFactory>();
+		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
+		var mockTransform = new Mock<Transform>(IntPtr.Zero);
+		var mockSpriteRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+
+		mockGameObject.SetupGet(g => g.transform).Returns(mockTransform.Object);
+		mockGameObject.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockSpriteRenderer.Object);
+		this.mockFactory.Setup(f => f.CreateGameObject(It.IsAny<string>())).Returns(mockGameObject.Object);
+		this.mockFactory.Setup(f => f.LoadRoleSprite(It.IsAny<ExtremeRoleId>())).Returns(mockSprite.Object);
+
+		var system = new DarkpointerDarknessSystem(this.mockFactory.Object);
+		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.DarkpointerDarkness, system);
 
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
 		MockSetupHelper.SetupMockConfig(plugin);
@@ -44,6 +62,8 @@ public sealed class DarkpointerTests
 		MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 		MockSetupHelper.SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
+
+		SetupAssetBundleMock();
 
 		this.mockClient = MockSetupHelper.SetupAmongUsClientMock();
 		this.mockClient.SetupGet(c => c.AmHost).Returns(true);
@@ -75,7 +95,7 @@ public sealed class DarkpointerTests
 						seqByte.Returns(b);
 					}
 					var seqSingle = mockReader.SetupSequence(r => r.ReadSingle());
-					seqSingle.Returns(10f).Returns(20f).Returns(2.5f).Returns(15f);
+					seqSingle.Returns(10f).Returns(20f);
 				}
 				return mockReader.Object;
 			});
@@ -119,6 +139,21 @@ public sealed class DarkpointerTests
 		}
 	}
 
+	private static void SetupAssetBundleMock()
+	{
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+
+		var mockAssetBundle = new Mock<AssetBundle>(IntPtr.Zero);
+		mockAssetBundle.Setup(b => b.LoadAsset(It.IsAny<string>(), It.IsAny<Il2CppSystem.Type>()))
+			.Returns(mockSprite.Object);
+
+		var field = typeof(UnityObjectLoader).GetField("cachedBundle", BindingFlags.NonPublic | BindingFlags.Static);
+		if (field?.GetValue(null) is Dictionary<string, AssetBundle> dict)
+		{
+			dict[ObjectPath.GetRoleAssetPath(ExtremeRoleId.Darkpointer)] = mockAssetBundle.Object;
+		}
+	}
+
 	private static void InitializeRole(SingleRoleBase role, byte playerId = 1)
 	{
 		role.CreateRoleAllOption();
@@ -140,12 +175,13 @@ public sealed class DarkpointerTests
 	public void DarkpointerDarknessSystem_PlaceDarknessAndIsPlayerInDarkness()
 	{
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness);
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(this.mockFactory.Object));
 
 		system.Reset(ResetTiming.MeetingStart);
+		system.Range = 2.5f;
 
 		var pos = new Vector2(10f, 20f);
-		system.PlaceDarkness(pos, 2.5f, 15f);
+		system.PlaceDarkness(1, pos);
 
 		Assert.True(system.IsPlayerInDarkness(this.mockLocalPlayer.Object));
 
@@ -158,22 +194,22 @@ public sealed class DarkpointerTests
 	}
 
 	[Fact]
-	public void DarkpointerDarknessSystem_DeteriorateUpdatesLockAndTimer()
+	public void DarkpointerDarknessSystem_RemoveDarknessRemovesCircleAndUnlocksReport()
 	{
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness);
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(this.mockFactory.Object));
 
 		system.Reset(ResetTiming.MeetingStart);
+		system.Range = 2.5f;
 
 		var pos = new Vector2(10f, 20f);
-		system.PlaceDarkness(pos, 2.5f, 5f);
+		system.PlaceDarkness(1, pos);
 
-		// Deteriorate frame check locks report button when inside darkness
 		system.Deteriorate(1f);
 		Assert.True(ButtonLockSystem.IsReportButtonLock());
 
-		// Deteriorate past 5 seconds removes darkness and unlocks report button
-		system.Deteriorate(5f);
+		system.RemoveDarkness(1);
+		system.Deteriorate(1f);
 		Assert.False(system.IsPlayerInDarkness(this.mockLocalPlayer.Object));
 		Assert.False(ButtonLockSystem.IsReportButtonLock());
 	}
@@ -182,9 +218,10 @@ public sealed class DarkpointerTests
 	public void DarkpointerDarknessSystem_ResetOnMeetingStartClearsCirclesAndUnlocksReport()
 	{
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness);
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(this.mockFactory.Object));
 
-		system.PlaceDarkness(new Vector2(10f, 20f), 2.5f, 15f);
+		system.Range = 2.5f;
+		system.PlaceDarkness(1, new Vector2(10f, 20f));
 		system.Deteriorate(1f);
 		Assert.True(ButtonLockSystem.IsReportButtonLock());
 
@@ -194,19 +231,21 @@ public sealed class DarkpointerTests
 	}
 
 	[Fact]
-	public void DarkpointerRole_UseAbility_PlacesDarknessInSystem()
+	public void DarkpointerRole_UseAbilityAndCleanUp_PlacesAndRemovesDarkness()
 	{
 		var role = new DarkpointerRole();
 		InitializeRole(role);
 
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness);
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(this.mockFactory.Object));
 
 		system.Reset(ResetTiming.MeetingStart);
 
 		bool used = role.UseAbility();
-
 		Assert.True(used);
 		Assert.True(system.IsPlayerInDarkness(this.mockLocalPlayer.Object));
+
+		role.CleanUp();
+		Assert.False(system.IsPlayerInDarkness(this.mockLocalPlayer.Object));
 	}
 }

@@ -55,16 +55,26 @@ public sealed class DarkpointerRole :
 		if (!localPlayer.IsInValid() && this.system != null)
 		{
 			Vector2 pos = localPlayer.GetTruePosition();
-			this.system.RpcPlaceDarkness(pos, this.range, this.activeDuration);
+			this.system.RpcPlaceDarkness(localPlayer.PlayerId, pos);
 		}
 		return true;
 	}
 
 	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
-	public void CleanUp() { }
+	public void CleanUp()
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (!localPlayer.IsInValid() && this.system != null)
+		{
+			this.system.RpcRemoveDarkness(localPlayer.PlayerId);
+		}
+	}
 
-	public void ForceCleanUp() { }
+	public void ForceCleanUp()
+	{
+		CleanUp();
+	}
 
 	public void ResetOnMeetingStart() { }
 
@@ -87,5 +97,6 @@ public sealed class DarkpointerRole :
 
 		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
 			ExtremeSystemType.DarkpointerDarkness);
+		this.system.Range = this.range;
 	}
 }

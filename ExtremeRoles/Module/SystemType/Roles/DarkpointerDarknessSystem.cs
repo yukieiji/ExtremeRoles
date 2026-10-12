@@ -7,68 +7,53 @@ using UnityEngine;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles;
 
 #nullable enable
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class DarkpointerDarknessSystem : IDirtableSystemType
+public sealed class DarkpointerDarknessSystem : IExtremeSystemType
 {
 	public const ExtremeSystemType Type = ExtremeSystemType.DarkpointerDarkness;
 
 	public enum Ops : byte
 	{
 		PlaceDarkness,
+		RemoveDarkness,
 	}
 
 	public sealed class DarkCircle
 	{
-		public int Id { get; }
 		public Vector2 Position { get; }
 		public float Range { get; }
-		public float Timer { get; private set; }
 
 		private GameObject? visualObject;
 
-		public DarkCircle(int id, Vector2 position, float range, float duration)
+		public DarkCircle(byte playerId, Vector2 position, float range, IUnityObjectFactory factory)
 		{
-			this.Id = id;
 			this.Position = position;
 			this.Range = range;
-			this.Timer = duration;
 
-			createVisual();
+			createVisual(playerId, factory);
 		}
 
-		public void UpdateTimer(float deltaTime)
+		private void createVisual(byte playerId, IUnityObjectFactory factory)
 		{
-			this.Timer -= deltaTime;
-		}
+			this.visualObject = factory.CreateGameObject($"DarkCircle_{playerId}");
+			this.visualObject.transform.position = new Vector3(
+				this.Position.x,
+				this.Position.y,
+				this.Position.y / 1000f - 0.05f);
 
-		public bool IsExpired => this.Timer <= 0f;
+			var rend = this.visualObject.AddComponent<SpriteRenderer>();
+			rend.sprite = factory.LoadRoleSprite(ExtremeRoleId.Darkpointer);
+			rend.color = Color.black;
+			rend.sortingOrder = 32767;
 
-		private void createVisual()
-		{
-			try
-			{
-				this.visualObject = new GameObject($"DarkCircle_{this.Id}");
-				this.visualObject.transform.position = new Vector3(
-					this.Position.x,
-					this.Position.y,
-					this.Position.y / 1000f - 0.05f);
-
-				var rend = this.visualObject.AddComponent<SpriteRenderer>();
-				rend.sprite = GetBlackCircleSprite();
-				rend.color = Color.black;
-				rend.sortingOrder = 32767;
-
-				float diameter = this.Range * 2f;
-				this.visualObject.transform.localScale = new Vector3(diameter, diameter, 1f);
-			}
-			catch (Exception e)
-			{
-				Logging.Error($"Failed to create DarkCircle visual: {e}");
-			}
+			float diameter = this.Range * 2f;
+			this.visualObject.transform.localScale = new Vector3(diameter, diameter, 1f);
 		}
 
 		public void Remove()
@@ -81,52 +66,17 @@ public sealed class DarkpointerDarknessSystem : IDirtableSystemType
 		}
 	}
 
-	private static Sprite? blackCircleSprite;
+	public float Range { get; set; } = 2.5f;
 
-	public static Sprite GetBlackCircleSprite()
+	private readonly IUnityObjectFactory unityObjectFactory;
+	private readonly Dictionary<byte, DarkCircle> activeCircles = new();
+
+	public DarkpointerDarknessSystem() : this(new DefaultUnityObjectFactory())
+	{ }
+
+	public DarkpointerDarknessSystem(IUnityObjectFactory factory)
 	{
-		if (blackCircleSprite == null)
-		{
-			int size = 128;
-			Texture2D texture = new Texture2D(size, size, TextureFormat.ARGB32, false);
-			Color[] colors = new Color[size * size];
-			float radius = size / 2f;
-			Vector2 center = new Vector2(radius, radius);
-
-			for (int y = 0; y < size; y++)
-			{
-				for (int x = 0; x < size; x++)
-				{
-					float dist = Vector2.Distance(new Vector2(x, y), center);
-					if (dist <= radius)
-					{
-						colors[y * size + x] = Color.black;
-					}
-					else
-					{
-						colors[y * size + x] = Color.clear;
-					}
-				}
-			}
-			texture.SetPixels(colors);
-			texture.Apply();
-			blackCircleSprite = Sprite.Create(
-				texture,
-				new Rect(0, 0, size, size),
-				new Vector2(0.5f, 0.5f),
-				size);
-		}
-		return blackCircleSprite;
-	}
-
-	private readonly Dictionary<int, DarkCircle> activeCircles = new();
-	private int nextId = 0;
-
-	public bool IsDirty { get; private set; }
-
-	public void MarkClean()
-	{
-		this.IsDirty = false;
+		this.unityObjectFactory = factory;
 	}
 
 	public bool IsPlayerInDarkness(PlayerControl? player)
@@ -150,26 +100,49 @@ public sealed class DarkpointerDarknessSystem : IDirtableSystemType
 		return false;
 	}
 
-	public void PlaceDarkness(Vector2 position, float range, float duration)
+	public void PlaceDarkness(byte playerId, Vector2 position)
 	{
 		lock (this.activeCircles)
 		{
-			int circleId = this.nextId++;
-			var circle = new DarkCircle(circleId, position, range, duration);
-			this.activeCircles[circleId] = circle;
+			if (this.activeCircles.TryGetValue(playerId, out var oldCircle))
+			{
+				oldCircle.Remove();
+			}
+
+			var circle = new DarkCircle(playerId, position, this.Range, this.unityObjectFactory);
+			this.activeCircles[playerId] = circle;
 		}
-		this.IsDirty = true;
 	}
 
-	public void RpcPlaceDarkness(Vector2 position, float range, float duration)
+	public void RemoveDarkness(byte playerId)
+	{
+		lock (this.activeCircles)
+		{
+			if (this.activeCircles.TryGetValue(playerId, out var circle))
+			{
+				circle.Remove();
+				this.activeCircles.Remove(playerId);
+			}
+		}
+	}
+
+	public void RpcPlaceDarkness(byte playerId, Vector2 position)
 	{
 		ExtremeSystemTypeManager.RpcUpdateSystem(Type, writer =>
 		{
 			writer.Write((byte)Ops.PlaceDarkness);
+			writer.Write(playerId);
 			writer.Write(position.x);
 			writer.Write(position.y);
-			writer.Write(range);
-			writer.Write(duration);
+		});
+	}
+
+	public void RpcRemoveDarkness(byte playerId)
+	{
+		ExtremeSystemTypeManager.RpcUpdateSystem(Type, writer =>
+		{
+			writer.Write((byte)Ops.RemoveDarkness);
+			writer.Write(playerId);
 		});
 	}
 
@@ -178,29 +151,6 @@ public sealed class DarkpointerDarknessSystem : IDirtableSystemType
 		if (MeetingHud.Instance != null || ExileController.Instance != null)
 		{
 			return;
-		}
-
-		List<int> expired = new();
-		lock (this.activeCircles)
-		{
-			foreach (var (id, circle) in this.activeCircles)
-			{
-				circle.UpdateTimer(deltaTime);
-				if (circle.IsExpired)
-				{
-					expired.Add(id);
-				}
-			}
-
-			foreach (int id in expired)
-			{
-				if (this.activeCircles.TryGetValue(id, out var circle))
-				{
-					circle.Remove();
-					this.activeCircles.Remove(id);
-					this.IsDirty = true;
-				}
-			}
 		}
 
 		var reportLock = ButtonLockSystem.CreateOrGetReportButtonLock();
@@ -236,58 +186,15 @@ public sealed class DarkpointerDarknessSystem : IDirtableSystemType
 		switch (ops)
 		{
 			case Ops.PlaceDarkness:
+				byte playerId = msgReader.ReadByte();
 				float x = msgReader.ReadSingle();
 				float y = msgReader.ReadSingle();
-				float range = msgReader.ReadSingle();
-				float duration = msgReader.ReadSingle();
-				PlaceDarkness(new Vector2(x, y), range, duration);
+				PlaceDarkness(playerId, new Vector2(x, y));
 				break;
-		}
-	}
-
-	public void Serialize(MessageWriter writer, bool initialState)
-	{
-		lock (this.activeCircles)
-		{
-			writer.WritePacked(this.activeCircles.Count);
-			foreach (var circle in this.activeCircles.Values)
-			{
-				writer.WritePacked(circle.Id);
-				writer.Write(circle.Position.x);
-				writer.Write(circle.Position.y);
-				writer.Write(circle.Range);
-				writer.Write(circle.Timer);
-			}
-		}
-		this.IsDirty = initialState;
-	}
-
-	public void Deserialize(MessageReader reader, bool initialState)
-	{
-		lock (this.activeCircles)
-		{
-			foreach (var circle in this.activeCircles.Values)
-			{
-				circle.Remove();
-			}
-			this.activeCircles.Clear();
-
-			int count = reader.ReadPackedInt32();
-			for (int i = 0; i < count; i++)
-			{
-				int id = reader.ReadPackedInt32();
-				float x = reader.ReadSingle();
-				float y = reader.ReadSingle();
-				float range = reader.ReadSingle();
-				float timer = reader.ReadSingle();
-
-				var circle = new DarkCircle(id, new Vector2(x, y), range, timer);
-				this.activeCircles[id] = circle;
-				if (id >= this.nextId)
-				{
-					this.nextId = id + 1;
-				}
-			}
+			case Ops.RemoveDarkness:
+				byte removePlayerId = msgReader.ReadByte();
+				RemoveDarkness(removePlayerId);
+				break;
 		}
 	}
 }
