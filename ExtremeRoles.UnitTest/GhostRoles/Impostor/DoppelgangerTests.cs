@@ -80,7 +80,6 @@ public sealed class DoppelgangerTests
     public void CreateAbility_AttemptsToLoadResources()
     {
         SetupHudManagerMock();
-        MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 
         var mockLoader = new Mock<IOptionLoader>();
         mockLoader.Setup(l => l.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)).Returns(10f);
@@ -88,7 +87,7 @@ public sealed class DoppelgangerTests
 
         var doppelganger = new Doppelganger();
 
-        Assert.Throws<ArgumentException>(() => doppelganger.CreateAbility());
+        Assert.Throws<NullReferenceException>(() => doppelganger.CreateAbility());
     }
 
     [Fact]

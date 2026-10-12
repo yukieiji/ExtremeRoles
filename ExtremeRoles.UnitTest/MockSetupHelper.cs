@@ -196,12 +196,26 @@ public static class MockSetupHelper
         if (UnityEngine.MockVector3CtorHelper.Instance == null)
         {
             var mockCtor = new Mock<UnityEngine.MockVector3CtorHelper>();
+            mockCtor.Setup(c => c.Invoke(ref It.Ref<Vector3>.IsAny, It.IsAny<float>(), It.IsAny<float>(), It.IsAny<float>()))
+                .Callback((ref Vector3 v, float x, float y, float z) =>
+                {
+                    v.x = x;
+                    v.y = y;
+                    v.z = z;
+                });
             UnityEngine.MockVector3CtorHelper.Instance = mockCtor.Object;
         }
 
         if (UnityEngine.MockVector3CtorHelper2.Instance == null)
         {
             var mockCtor2 = new Mock<UnityEngine.MockVector3CtorHelper2>();
+            mockCtor2.Setup(c => c.Invoke(ref It.Ref<Vector3>.IsAny, It.IsAny<float>(), It.IsAny<float>()))
+                .Callback((ref Vector3 v, float x, float y) =>
+                {
+                    v.x = x;
+                    v.y = y;
+                    v.z = 0f;
+                });
             UnityEngine.MockVector3CtorHelper2.Instance = mockCtor2.Object;
         }
 
@@ -257,6 +271,14 @@ public static class MockSetupHelper
             mockSqrMag.Setup(x => x.Invoke(It.IsAny<Vector3>()))
                 .Returns((Vector3 v) => v.x * v.x + v.y * v.y + v.z * v.z);
             MockVector3SqrMagnitudeHelper.Instance = mockSqrMag.Object;
+        }
+
+        if (MockVector3get_sqrMagnitudeHelper.Instance == null)
+        {
+            var mockGetSqrMag = new Mock<MockVector3get_sqrMagnitudeHelper>();
+            mockGetSqrMag.Setup(x => x.Invoke(ref It.Ref<Vector3>.IsAny))
+                .Returns((ref Vector3 v) => v.x * v.x + v.y * v.y + v.z * v.z);
+            MockVector3get_sqrMagnitudeHelper.Instance = mockGetSqrMag.Object;
         }
 
         if (MockVector3DistanceHelper.Instance == null)

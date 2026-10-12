@@ -28,35 +28,17 @@ using EchoRole = ExtremeRoles.Roles.Solo.Crewmate.Echo;
 
 namespace ExtremeRoles.UnitTest.Roles.Solo.Crewmate.EchoTests;
 
-public static class MonoBehaviourExtensionsStartCoroutinePatch
-{
-	public static bool Prefix(ref Coroutine? __result)
-	{
-		__result = null;
-		return false;
-	}
-}
-
-public static class UnityObjectLoaderLoadFromResourcesPatch
-{
-	public static bool Prefix(ref Sprite __result)
-	{
-		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
-		__result = mockSprite.Object;
-		return false;
-	}
-}
-
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
-public class EchoRoleTests
+public class EchoRoleTests : IDisposable
 {
 	private readonly Mock<AmongUsClient> clientMock;
 	private readonly Mock<HudManager> hudMock;
-	private static bool isHarmonyPatched = false;
+	private readonly Harmony harmony;
 
 	public EchoRoleTests()
 	{
-		SetupHarmony();
+		this.harmony = new Harmony("test.echo.patches." + Guid.NewGuid().ToString());
+		SetupHarmony(this.harmony);
 		SetupIl2CppClassPointers();
 
 		MockSetupHelper.SetupUnityCommonMocks();
@@ -116,38 +98,54 @@ public class EchoRoleTests
 		catch { }
 	}
 
-	private static void SetupHarmony()
+	private static void SetupHarmony(Harmony instance)
 	{
-		if (!isHarmonyPatched)
+		try
 		{
-			try
+			var targetCoroutineMethod = typeof(BepInEx.Unity.IL2CPP.Utils.MonoBehaviourExtensions)
+				.GetMethod("StartCoroutine", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(MonoBehaviour), typeof(IEnumerator) }, null);
+			var prefixCoroutineMethod = typeof(EchoRoleTests)
+				.GetMethod(nameof(StartCoroutinePrefix), BindingFlags.NonPublic | BindingFlags.Static);
+
+			if (targetCoroutineMethod != null && prefixCoroutineMethod != null)
 			{
-				var harmony = new Harmony("test.echo.patches");
-
-				var targetCoroutineMethod = typeof(BepInEx.Unity.IL2CPP.Utils.MonoBehaviourExtensions)
-					.GetMethod("StartCoroutine", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(MonoBehaviour), typeof(IEnumerator) }, null);
-				var prefixCoroutineMethod = typeof(MonoBehaviourExtensionsStartCoroutinePatch)
-					.GetMethod(nameof(MonoBehaviourExtensionsStartCoroutinePatch.Prefix), BindingFlags.Public | BindingFlags.Static);
-
-				if (targetCoroutineMethod != null && prefixCoroutineMethod != null)
-				{
-					harmony.Patch(targetCoroutineMethod, prefix: new HarmonyMethod(prefixCoroutineMethod));
-				}
-
-				var targetLoaderMethod = typeof(UnityObjectLoader)
-					.GetMethod("LoadFromResources", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(string), typeof(string), typeof(Assembly) }, null)
-					?.MakeGenericMethod(typeof(Sprite));
-				var prefixLoaderMethod = typeof(UnityObjectLoaderLoadFromResourcesPatch)
-					.GetMethod(nameof(UnityObjectLoaderLoadFromResourcesPatch.Prefix), BindingFlags.Public | BindingFlags.Static);
-
-				if (targetLoaderMethod != null && prefixLoaderMethod != null)
-				{
-					harmony.Patch(targetLoaderMethod, prefix: new HarmonyMethod(prefixLoaderMethod));
-				}
+				instance.Patch(targetCoroutineMethod, prefix: new HarmonyMethod(prefixCoroutineMethod));
 			}
-			catch { }
-			isHarmonyPatched = true;
+
+			var targetLoaderMethod = typeof(UnityObjectLoader)
+				.GetMethod("LoadFromResources", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(string), typeof(string), typeof(Assembly) }, null)
+				?.MakeGenericMethod(typeof(Sprite));
+			var prefixLoaderMethod = typeof(EchoRoleTests)
+				.GetMethod(nameof(LoadFromResourcesPrefix), BindingFlags.NonPublic | BindingFlags.Static);
+
+			if (targetLoaderMethod != null && prefixLoaderMethod != null)
+			{
+				instance.Patch(targetLoaderMethod, prefix: new HarmonyMethod(prefixLoaderMethod));
+			}
 		}
+		catch { }
+	}
+
+	private static bool StartCoroutinePrefix(ref Coroutine? __result)
+	{
+		__result = null;
+		return false;
+	}
+
+	private static bool LoadFromResourcesPrefix(ref Sprite __result)
+	{
+		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+		__result = mockSprite.Object;
+		return false;
+	}
+
+	public void Dispose()
+	{
+		try
+		{
+			this.harmony.UnpatchSelf();
+		}
+		catch { }
 	}
 
 	private static Mock<HudManager> SetupHudManagerMock()
@@ -728,6 +726,67 @@ public class EchoRoleTests
 		var countProp = resultListType.GetProperty("Count");
 		int count = (int)(countProp?.GetValue(resultList) ?? 0);
 		Assert.Equal(1, count);
+	}
+
+	[Theory]
+	[InlineData(true, true)]   // canSeparatePlayer = true -> IsDeadbody = true
+	[InlineData(false, false)] // canSeparatePlayer = false -> IsDeadbody = false
+	public void AddDeadBodyLocationInfo_FiltersNearbyDeadBodiesAndSetsIsDeadbodyFlag(bool canSeparatePlayer, bool expectedIsDeadbody)
+	{
+		// Arrange
+		var mockFindObjects = new Mock<MockObjectFindObjectsOfTypeHelper3>();
+
+		var nearbyBodyTransform = new Mock<Transform>(IntPtr.Zero);
+		nearbyBodyTransform.SetupGet(t => t.position).Returns(new Vector3(2f, 2f, 0f));
+		var nearbyBody = new Mock<DeadBody>(IntPtr.Zero);
+		nearbyBody.SetupGet(b => b.transform).Returns(nearbyBodyTransform.Object);
+
+		var farBodyTransform = new Mock<Transform>(IntPtr.Zero);
+		farBodyTransform.SetupGet(t => t.position).Returns(new Vector3(200f, 200f, 0f));
+		var farBody = new Mock<DeadBody>(IntPtr.Zero);
+		farBody.SetupGet(b => b.transform).Returns(farBodyTransform.Object);
+
+		var deadBodies = new Il2CppReferenceArray<DeadBody>(new DeadBody[] { nearbyBody.Object, farBody.Object });
+		mockFindObjects.Setup(x => x.Invoke<DeadBody>()).Returns(deadBodies);
+		MockObjectFindObjectsOfTypeHelper3.Instance = mockFindObjects.Object;
+
+		MockSetupHelper.SetupVector3Helpers();
+
+		var mockSub = new Mock<MockVector3op_SubtractionHelper>();
+		mockSub.Setup(x => x.Invoke(It.IsAny<Vector3>(), It.IsAny<Vector3>()))
+			.Returns((Vector3 a, Vector3 b) => new Vector3(a.x - b.x, a.y - b.y, a.z - b.z));
+		MockVector3op_SubtractionHelper.Instance = mockSub.Object;
+
+		var mockSqrMag = new Mock<MockVector3SqrMagnitudeHelper>();
+		mockSqrMag.Setup(x => x.Invoke(It.IsAny<Vector3>()))
+			.Returns((Vector3 v) => v.x * v.x + v.y * v.y + v.z * v.z);
+		MockVector3SqrMagnitudeHelper.Instance = mockSqrMag.Object;
+
+		var echoRole = CreateInitializedEcho(range: 10.0f, isDetectDeadBody: true, canSeparatePlayer: canSeparatePlayer);
+
+		var addDeadBodyMethod = typeof(EchoRole).GetMethod("addDeadBodyLocationInfo", BindingFlags.NonPublic | BindingFlags.Instance);
+		Assert.NotNull(addDeadBodyMethod);
+
+		var locationInfoType = typeof(EchoRole).GetNestedType("LocationInfo", BindingFlags.NonPublic)!;
+		var resultListType = typeof(List<>).MakeGenericType(locationInfoType);
+		var resultList = Activator.CreateInstance(resultListType)!;
+
+		// Act
+		addDeadBodyMethod.Invoke(echoRole, new object[] { new Vector3(0f, 0f, 0f), resultList });
+
+		// Assert
+		var countProp = resultListType.GetProperty("Count");
+		int count = (int)(countProp?.GetValue(resultList) ?? 0);
+		Assert.Equal(1, count);
+
+		var indexer = resultListType.GetProperty("Item");
+		var firstItem = indexer?.GetValue(resultList, new object[] { 0 });
+		Assert.NotNull(firstItem);
+
+		var isDeadbodyProp = locationInfoType.GetProperty("IsDeadbody");
+		var isDeadbodyField = locationInfoType.GetField("IsDeadbody");
+		bool actualIsDeadbody = isDeadbodyProp != null ? (bool)isDeadbodyProp.GetValue(firstItem)! : (bool)isDeadbodyField!.GetValue(firstItem)!;
+		Assert.Equal(expectedIsDeadbody, actualIsDeadbody);
 	}
 
 	[Fact]
