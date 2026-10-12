@@ -64,10 +64,7 @@ public sealed class LonerAbilityHandlerTests : IDisposable
 		mockMinigameHelper.Setup(h => h.Invoke()).Returns((Minigame)null!);
 		MockMinigameget_InstanceHelper.Instance = mockMinigameHelper.Object;
 
-		var mockSub = new Mock<MockVector2op_SubtractionHelper>();
-		mockSub.Setup(x => x.Invoke(It.IsAny<Vector2>(), It.IsAny<Vector2>()))
-			.Returns((Vector2 a, Vector2 b) => new Vector2(a.x - b.x, a.y - b.y));
-		MockVector2op_SubtractionHelper.Instance = mockSub.Object;
+		MockSetupHelper.SetupVector2Helpers();
 
 		var mockTimeHelper = new Mock<MockTimeget_deltaTimeHelper>();
 		mockTimeHelper.Setup(h => h.Invoke()).Returns(1.0f);
