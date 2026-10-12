@@ -1859,4 +1859,47 @@ Lv2能力「ビームセーバー」
     <value>能力使用可能数：{0}回
 この会議で指定可能数：{1}人</value>
   </data>
+  <data name="Flasher" xml:space="preserve">
+    <value>フラッシャー</value>
+  </data>
+  <data name="FlasherFullDescription" xml:space="preserve">
+    <value>フラッシュで周囲の視界を奪うインポスター
+
+ボタン能力「フラッシュ」
+ - ボタンを押すとチャージ開始、もう一度押すと発動
+ - 範囲内のプレイヤーの画面をアクティブ時間だけ白または黒で塗りつぶす
+ - 壁越しでも当たるが、ベント内のプレイヤーには当たらない
+ - チャージした時間ぶん、余韻として画面が揺れ、色が残る
+ - 自身とインポスター仲間は影響を受けない</value>
+  </data>
+  <data name="FlasherShortDescription" xml:space="preserve">
+    <value>フラッシュで周囲の視界を奪え</value>
+  </data>
+  <data name="FlasherIntroDescription" xml:space="preserve">
+    <value>フラッシュで周囲の視界を奪い、混乱したところを襲え</value>
+  </data>
+  <data name="FlasherRange" xml:space="preserve">
+    <value>「フラッシュ」が当たる距離</value>
+  </data>
+  <data name="FlasherFlashColor" xml:space="preserve">
+    <value>「フラッシュ」の色</value>
+  </data>
+  <data name="FlasherColorWhite" xml:space="preserve">
+    <value>白</value>
+  </data>
+  <data name="FlasherColorBlack" xml:space="preserve">
+    <value>黒</value>
+  </data>
+  <data name="FlasherAbilityCoolTime" xml:space="preserve">
+    <value>「フラッシュ」のクールタイム</value>
+  </data>
+  <data name="FlasherAbilityActiveTime" xml:space="preserve">
+    <value>「フラッシュ」で画面が白くなる時間</value>
+  </data>
+  <data name="FlasherAbilityCount" xml:space="preserve">
+    <value>「フラッシュ」の使用回数</value>
+  </data>
+  <data name="FlasherFlash" xml:space="preserve">
+    <value>フラッシュ</value>
+  </data>
 </root>

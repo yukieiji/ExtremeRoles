@@ -100,6 +100,7 @@ public static class RPCOperator
 		LegislatorAbility,
 		RemoteKillerOps,
 		RetaliatorAbility,
+		FlasherOps,
 
 		// ニュートラル
 		AliceShipBroken,
@@ -736,6 +737,11 @@ public static class RPCOperator
 	public static void RemoteKillerRpcOps(ref MessageReader reader)
 	{
 		Roles.Solo.Impostor.RemoteKiller.RemoteKillerRole.RpcHandle(ref reader);
+	}
+
+	public static void FlasherRpcOps(in MessageReader reader)
+	{
+		Roles.Solo.Impostor.Flasher.FlasherRole.RpcOps(reader);
 	}
 	public static void AliceShipBroken(
         byte callerId, byte targetPlayerId, List<int> taskId)
