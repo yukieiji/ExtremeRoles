@@ -48,7 +48,7 @@ public sealed class DarkpointerTests
 		this.mockFactory.Setup(f => f.CreateGameObject(It.IsAny<string>())).Returns(mockGameObject.Object);
 		this.mockFactory.Setup(f => f.LoadRoleSprite(It.IsAny<ExtremeRoleId>())).Returns(mockSprite.Object);
 
-		var system = new DarkpointerDarknessSystem(this.mockFactory.Object);
+		var system = new DarkpointerDarknessSystem(2.5f, this.mockFactory.Object);
 		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.DarkpointerDarkness, system);
 
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
@@ -175,10 +175,9 @@ public sealed class DarkpointerTests
 	public void DarkpointerDarknessSystem_PlaceDarknessAndIsPlayerInDarkness()
 	{
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(this.mockFactory.Object));
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory.Object));
 
 		system.Reset(ResetTiming.MeetingStart);
-		system.Range = 2.5f;
 
 		var pos = new Vector2(10f, 20f);
 		system.PlaceDarkness(1, pos);
@@ -197,10 +196,9 @@ public sealed class DarkpointerTests
 	public void DarkpointerDarknessSystem_RemoveDarknessRemovesCircleAndUnlocksReport()
 	{
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(this.mockFactory.Object));
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory.Object));
 
 		system.Reset(ResetTiming.MeetingStart);
-		system.Range = 2.5f;
 
 		var pos = new Vector2(10f, 20f);
 		system.PlaceDarkness(1, pos);
@@ -218,9 +216,8 @@ public sealed class DarkpointerTests
 	public void DarkpointerDarknessSystem_ResetOnMeetingStartClearsCirclesAndUnlocksReport()
 	{
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(this.mockFactory.Object));
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory.Object));
 
-		system.Range = 2.5f;
 		system.PlaceDarkness(1, new Vector2(10f, 20f));
 		system.Deteriorate(1f);
 		Assert.True(ButtonLockSystem.IsReportButtonLock());
@@ -237,7 +234,7 @@ public sealed class DarkpointerTests
 		InitializeRole(role);
 
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(this.mockFactory.Object));
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory.Object));
 
 		system.Reset(ResetTiming.MeetingStart);
 

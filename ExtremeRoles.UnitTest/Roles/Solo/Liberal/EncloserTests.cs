@@ -159,6 +159,11 @@ public sealed class EncloserTests
 		{
 			return new Mock<Sprite>(IntPtr.Zero).Object;
 		}
+
+		public Sprite? LoadRoleSprite(ExtremeRoleId roleId, string img)
+		{
+			return new Mock<Sprite>(IntPtr.Zero).Object;
+		}
 	}
 
 	[Fact]
