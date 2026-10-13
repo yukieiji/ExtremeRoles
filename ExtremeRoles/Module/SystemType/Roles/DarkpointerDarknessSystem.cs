@@ -14,7 +14,7 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class DarkpointerDarknessSystem(float range, IUnityObjectFactory factory) : IExtremeSystemType
+public sealed class DarkpointerDarknessSystem(float range, IUnityObjectFactory factory) : IDirtableSystemType
 {
 	public const ExtremeSystemType Type = ExtremeSystemType.DarkpointerDarkness;
 
@@ -60,6 +60,8 @@ public sealed class DarkpointerDarknessSystem(float range, IUnityObjectFactory f
 	private readonly IUnityObjectFactory unityObjectFactory = factory;
 	private readonly Dictionary<byte, DarkCircle> activeCircles = new();
 	private readonly ButtonLockSystem locker = ButtonLockSystem.CreateOrGetReportButtonLock();
+
+	public bool IsDirty => false;
 
 	public DarkpointerDarknessSystem(float range) : this(range, new DefaultUnityObjectFactory())
 	{ }
@@ -169,5 +171,17 @@ public sealed class DarkpointerDarknessSystem(float range, IUnityObjectFactory f
 				RemoveDarkness(removePlayerId);
 				break;
 		}
+	}
+
+	public void MarkClean()
+	{
+	}
+
+	public void Serialize(MessageWriter writer, bool initialState)
+	{
+	}
+
+	public void Deserialize(MessageReader reader, bool initialState)
+	{
 	}
 }
