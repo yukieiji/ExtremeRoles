@@ -74,6 +74,7 @@ for (int i = 0; i < count; i++)
 #### アクセサビリティ & 変数
 - 変数スコープは可能な限り狭く保持する（`private` ファースト）。
 - 不必要な再代入を防ぐため `readonly` や Get 専用プロパティを積極的に活用する (`private readonly`, `public Git Git { get; }`)。
+  - publicのsetプロパティは使用禁止、必要なったらユーザーに許可を取ること
 - コレクションの公開や受け渡しには `IReadOnlyList<T>` や `IReadOnlyDictionary<TKey, TValue>` を使用する。
 
 #### クラス設計
@@ -86,7 +87,14 @@ for (int i = 0; i < count; i++)
 
 #### Unity特有のNullチェックルール
 - Unityの `UnityEngine.Object` 継承クラスは、算術比較演算子 (`!= null`, `== null`) を用いてNullチェックを行う。
-- Null条件演算子 (`?.`)、Null結合演算子 (`??`)、パターンマッチング (`is null`, `is not null`, `is Object`) によるUnityオブジェクトのNullチェックは正常に動作しないため絶対に行わないこと。
+- Null条件演算子 (`?.`)、Null結合演算子 (`??`)、パターンマッチング (`is null`, `is not null`, `is Object`) によるUnityオブジェクトのNullチェックは正常に動作しないため絶対に行わないこと。」
+
+#### RPC およびネットワーク同期のガイドライン
+- **RPCは最小限に:** 共有の必要性を十分に吟味し、データはスリムに保つ。計算は受信側ではなく送信側（事前）で済ませること。
+- **位置情報の扱い:** AmongUsは非同期なため、位置情報は送信前にローカルで計算を完了させておくこと。
+- **`IsDirty` は原則 `true` にしない:** 
+  - 高コストなシリアライズ・デシリアライズが発生するため、「全ユーザーの状態を完全に一致させる必要性」がある場合以外は設定しないこと。
+  - `UpdateSystem` で自動シンクロされるため、ホスト等の個別処理により不整合が生じる場合のみ使用する。
 
 ```csharp
 // ✕ BAD: Unityオブジェクトへの is / ?. / ?? / is null の使用
