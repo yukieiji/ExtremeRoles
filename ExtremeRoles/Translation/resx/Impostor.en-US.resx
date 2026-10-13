@@ -1846,4 +1846,25 @@ Ability button "Flash"
   <data name="FlasherFlash" xml:space="preserve">
     <value>Flash</value>
   </data>
+  <data name="Darkpointer" xml:space="preserve">
+    <value>Darkpointer</value>
+  </data>
+  <data name="DarkpointerFullDescription" xml:space="preserve">
+    <value>Deploys darkness that blocks vision and prevents reporting.</value>
+  </data>
+  <data name="DarkpointerShortDescription" xml:space="preserve">
+    <value>Deploys darkness that blocks vision and prevents reporting.</value>
+  </data>
+  <data name="DarkpointerIntroDescription" xml:space="preserve">
+    <value>Deploys darkness that blocks vision and prevents reporting.</value>
+  </data>
+  <data name="DarkpointerAbility" xml:space="preserve">
+    <value>Darkness</value>
+  </data>
+  <data name="DarkpointerRange" xml:space="preserve">
+    <value>Darkness Radius</value>
+  </data>
+  <data name="DarkpointerActiveDuration" xml:space="preserve">
+    <value>Darkness Duration</value>
+  </data>
 </root>
