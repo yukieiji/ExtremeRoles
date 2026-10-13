@@ -14,7 +14,7 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class DarkpointerDarknessSystem : IExtremeSystemType
+public sealed class DarkpointerDarknessSystem(float range, IUnityObjectFactory factory) : IExtremeSystemType
 {
 	public const ExtremeSystemType Type = ExtremeSystemType.DarkpointerDarkness;
 
@@ -27,20 +27,13 @@ public sealed class DarkpointerDarknessSystem : IExtremeSystemType
 	public sealed class DarkCircle
 	{
 		public Vector2 Position { get; }
-		public float Range { get; }
 
-		private GameObject? visualObject;
+		private readonly GameObject visualObject;
 
-		public DarkCircle(byte playerId, Vector2 position, float range, IUnityObjectFactory factory)
+		public DarkCircle(byte playerId, Vector2 position, float rnage, IUnityObjectFactory factory)
 		{
 			this.Position = position;
-			this.Range = range;
 
-			createVisual(playerId, factory);
-		}
-
-		private void createVisual(byte playerId, IUnityObjectFactory factory)
-		{
 			this.visualObject = factory.CreateGameObject($"DarkCircle_{playerId}");
 			this.visualObject.transform.position = new Vector3(
 				this.Position.x,
@@ -48,12 +41,10 @@ public sealed class DarkpointerDarknessSystem : IExtremeSystemType
 				this.Position.y / 1000f - 0.05f);
 
 			var rend = this.visualObject.AddComponent<SpriteRenderer>();
-			rend.sprite = factory.LoadRoleSprite(ExtremeRoleId.Darkpointer);
+			rend.sprite = factory.LoadRoleSprite(ExtremeRoleId.Darkpointer, "DarkImg");
 			rend.color = Color.black;
 			rend.sortingOrder = 32767;
-
-			float diameter = this.Range * 2f;
-			this.visualObject.transform.localScale = new Vector3(diameter, diameter, 1f);
+			this.visualObject.transform.localScale = new Vector3(rnage, rnage, 1f);
 		}
 
 		public void Remove()
@@ -61,23 +52,17 @@ public sealed class DarkpointerDarknessSystem : IExtremeSystemType
 			if (this.visualObject != null)
 			{
 				UnityEngine.Object.Destroy(this.visualObject);
-				this.visualObject = null;
 			}
 		}
 	}
 
-	public float Range { get; set; } = 2.5f;
-
-	private readonly IUnityObjectFactory unityObjectFactory;
+	private readonly float range = range;
+	private readonly IUnityObjectFactory unityObjectFactory = factory;
 	private readonly Dictionary<byte, DarkCircle> activeCircles = new();
+	private readonly ButtonLockSystem locker = ButtonLockSystem.CreateOrGetReportButtonLock();
 
-	public DarkpointerDarknessSystem() : this(new DefaultUnityObjectFactory())
+	public DarkpointerDarknessSystem(float range) : this(range, new DefaultUnityObjectFactory())
 	{ }
-
-	public DarkpointerDarknessSystem(IUnityObjectFactory factory)
-	{
-		this.unityObjectFactory = factory;
-	}
 
 	public bool IsPlayerInDarkness(PlayerControl? player)
 	{
@@ -89,7 +74,8 @@ public sealed class DarkpointerDarknessSystem : IExtremeSystemType
 		Vector2 pos = player.GetTruePosition();
 		foreach (var circle in this.activeCircles.Values)
 		{
-			if (Vector2.Distance(pos, circle.Position) <= circle.Range)
+			var diff = pos - circle.Position;
+			if (diff.magnitude <= this.range)
 			{
 				return true;
 			}
@@ -104,7 +90,7 @@ public sealed class DarkpointerDarknessSystem : IExtremeSystemType
 			oldCircle.Remove();
 		}
 
-		var circle = new DarkCircle(playerId, position, this.Range, this.unityObjectFactory);
+		var circle = new DarkCircle(playerId, position, this.range, this.unityObjectFactory);
 		this.activeCircles[playerId] = circle;
 	}
 
@@ -144,14 +130,13 @@ public sealed class DarkpointerDarknessSystem : IExtremeSystemType
 			return;
 		}
 
-		var reportLock = ButtonLockSystem.CreateOrGetReportButtonLock();
 		if (IsPlayerInDarkness(PlayerControl.LocalPlayer))
 		{
-			reportLock.Lock((int)ButtonLockSystem.ConditionId.Darkpointer);
+			this.locker.Lock((int)ButtonLockSystem.ConditionId.Darkpointer);
 		}
 		else
 		{
-			reportLock.UnLock((int)ButtonLockSystem.ConditionId.Darkpointer);
+			this.locker.UnLock((int)ButtonLockSystem.ConditionId.Darkpointer);
 		}
 	}
 
@@ -159,7 +144,7 @@ public sealed class DarkpointerDarknessSystem : IExtremeSystemType
 	{
 		if (timing is ResetTiming.MeetingStart or ResetTiming.ExiledEnd or ResetTiming.OnPlayer)
 		{
-			ButtonLockSystem.CreateOrGetReportButtonLock().UnLock((int)ButtonLockSystem.ConditionId.Darkpointer);
+			this.locker.UnLock((int)ButtonLockSystem.ConditionId.Darkpointer);
 			foreach (var circle in this.activeCircles.Values)
 			{
 				circle.Remove();

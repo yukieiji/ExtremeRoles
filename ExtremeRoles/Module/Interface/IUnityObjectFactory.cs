@@ -13,6 +13,7 @@ public interface IUnityObjectFactory
 	public Vector3 CreateMapPos(Vector2 target, float offset = 1000.0f);
 	public Mesh CreateMesh();
 	public Sprite? LoadRoleSprite(ExtremeRoleId roleId);
+	public Sprite? LoadRoleSprite(ExtremeRoleId roleId, string img);
 }
 
 public class DefaultUnityObjectFactory : IUnityObjectFactory
@@ -31,4 +32,7 @@ public class DefaultUnityObjectFactory : IUnityObjectFactory
 
 	public Sprite? LoadRoleSprite(ExtremeRoleId roleId)
 		=> UnityObjectLoader.LoadFromResources(roleId);
+
+	public Sprite? LoadRoleSprite(ExtremeRoleId roleId, string img)
+		=> UnityObjectLoader.LoadFromResources(roleId, img);
 }

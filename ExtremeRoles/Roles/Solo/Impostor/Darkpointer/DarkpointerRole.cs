@@ -27,9 +27,6 @@ public sealed class DarkpointerRole :
 	}
 
 	public ExtremeAbilityButton? Button { get; set; }
-
-	private float activeDuration;
-	private float range;
 	private DarkpointerDarknessSystem? system;
 
 	public DarkpointerRole() : base(
@@ -52,10 +49,10 @@ public sealed class DarkpointerRole :
 	public bool UseAbility()
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
-		if (!localPlayer.IsInValid() && this.system != null)
+		if (!localPlayer.IsInValid())
 		{
 			Vector2 pos = localPlayer.GetTruePosition();
-			this.system.RpcPlaceDarkness(localPlayer.PlayerId, pos);
+			this.system?.RpcPlaceDarkness(localPlayer.PlayerId, pos);
 		}
 		return true;
 	}
@@ -65,9 +62,9 @@ public sealed class DarkpointerRole :
 	public void CleanUp()
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
-		if (!localPlayer.IsInValid() && this.system != null)
+		if (!localPlayer.IsInValid())
 		{
-			this.system.RpcRemoveDarkness(localPlayer.PlayerId);
+			this.system?.RpcRemoveDarkness(localPlayer.PlayerId);
 		}
 	}
 
@@ -84,19 +81,14 @@ public sealed class DarkpointerRole :
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		IRoleAbility.CreateAbilityCountOption(factory, 1, 10);
-		factory.CreateFloatOption(Option.ActiveDuration, 15f, 5f, 60f, 1f, format: OptionUnit.Second);
+		IRoleAbility.CreateAbilityCountOption(factory, 1, 10, 10.0f);
 		factory.CreateFloatOption(Option.Range, 2.5f, 1.0f, 5.0f, 0.25f);
 	}
 
 	protected override void RoleSpecificInit()
 	{
-		var loader = this.Loader;
-		this.activeDuration = loader.GetValue<Option, float>(Option.ActiveDuration);
-		this.range = loader.GetValue<Option, float>(Option.Range);
-
-		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness);
-		this.system.Range = this.range;
+		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
+			ExtremeSystemType.DarkpointerDarkness,
+			() => new DarkpointerDarknessSystem(this.Loader.GetValue<Option, float>(Option.Range)));
 	}
 }
