@@ -87,14 +87,11 @@ public sealed class DarkpointerDarknessSystem : IExtremeSystemType
 		}
 
 		Vector2 pos = player.GetTruePosition();
-		lock (this.activeCircles)
+		foreach (var circle in this.activeCircles.Values)
 		{
-			foreach (var circle in this.activeCircles.Values)
+			if (Vector2.Distance(pos, circle.Position) <= circle.Range)
 			{
-				if (Vector2.Distance(pos, circle.Position) <= circle.Range)
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 		return false;
@@ -102,27 +99,21 @@ public sealed class DarkpointerDarknessSystem : IExtremeSystemType
 
 	public void PlaceDarkness(byte playerId, Vector2 position)
 	{
-		lock (this.activeCircles)
+		if (this.activeCircles.TryGetValue(playerId, out var oldCircle))
 		{
-			if (this.activeCircles.TryGetValue(playerId, out var oldCircle))
-			{
-				oldCircle.Remove();
-			}
-
-			var circle = new DarkCircle(playerId, position, this.Range, this.unityObjectFactory);
-			this.activeCircles[playerId] = circle;
+			oldCircle.Remove();
 		}
+
+		var circle = new DarkCircle(playerId, position, this.Range, this.unityObjectFactory);
+		this.activeCircles[playerId] = circle;
 	}
 
 	public void RemoveDarkness(byte playerId)
 	{
-		lock (this.activeCircles)
+		if (this.activeCircles.TryGetValue(playerId, out var circle))
 		{
-			if (this.activeCircles.TryGetValue(playerId, out var circle))
-			{
-				circle.Remove();
-				this.activeCircles.Remove(playerId);
-			}
+			circle.Remove();
+			this.activeCircles.Remove(playerId);
 		}
 	}
 
@@ -169,14 +160,11 @@ public sealed class DarkpointerDarknessSystem : IExtremeSystemType
 		if (timing is ResetTiming.MeetingStart or ResetTiming.ExiledEnd or ResetTiming.OnPlayer)
 		{
 			ButtonLockSystem.CreateOrGetReportButtonLock().UnLock((int)ButtonLockSystem.ConditionId.Darkpointer);
-			lock (this.activeCircles)
+			foreach (var circle in this.activeCircles.Values)
 			{
-				foreach (var circle in this.activeCircles.Values)
-				{
-					circle.Remove();
-				}
-				this.activeCircles.Clear();
+				circle.Remove();
 			}
+			this.activeCircles.Clear();
 		}
 	}
 
