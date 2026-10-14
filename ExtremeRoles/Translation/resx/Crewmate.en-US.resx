@@ -1700,4 +1700,34 @@ If used on non-Crewmate, boosts enemy team.</value>
   <data name="charge" xml:space="preserve">
     <value>CHARGE</value>
   </data>
+  <data name="Mayor" xml:space="preserve">
+    <value>Mayor</value>
+  </data>
+  <data name="MayorFullDescription" xml:space="preserve">
+    <value>Prove that you are a Crewmate by revealing yourself to others.</value>
+  </data>
+  <data name="MayorShortDescription" xml:space="preserve">
+    <value>Prove your crew identity to others</value>
+  </data>
+  <data name="MayorIntroDescription" xml:space="preserve">
+    <value>Reveal yourself as the Mayor</value>
+  </data>
+  <data name="MayorTargetRange" xml:space="preserve">
+    <value>"Reveal" Range</value>
+  </data>
+  <data name="mayorRevealToSelf" xml:space="preserve">
+    <value>Revealed to {0}</value>
+  </data>
+  <data name="mayorRevealToTarget" xml:space="preserve">
+    <value>{0}: "I am the Mayor."</value>
+  </data>
+  <data name="mayorReveal" xml:space="preserve">
+    <value>Reveal</value>
+  </data>
+  <data name="MayorAbilityCoolTime" xml:space="preserve">
+    <value>"Reveal" Cooldown</value>
+  </data>
+  <data name="MayorAbilityCount" xml:space="preserve">
+    <value>"Reveal" Charges</value>
+  </data>
 </root>

@@ -269,6 +269,11 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.ChargerCharge:
 				RPCOperator.ChargerCharge(ref reader);
 				break;
+			case RPCOperator.Command.MayorRevealAbility:
+				byte mayorPlayerId = reader.ReadByte();
+				byte mayorTargetPlayerId = reader.ReadByte();
+				RPCOperator.MayorRevealAbility(mayorPlayerId, mayorTargetPlayerId);
+				break;
 			case RPCOperator.Command.CarrierAbility:
 				byte carrierCarryOpCallPlayerId = reader.ReadByte();
 				float carrierPlayerPosX = reader.ReadSingle();

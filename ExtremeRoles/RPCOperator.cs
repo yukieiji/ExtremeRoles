@@ -82,6 +82,7 @@ public static class RPCOperator
 		EchoOps,
 		LoggerOps,
 		ChargerCharge,
+		MayorRevealAbility,
 
 		// インポスター
 		CarrierAbility,
@@ -654,6 +655,11 @@ public static class RPCOperator
 		byte chargerId = reader.ReadByte();
 		byte targetId = reader.ReadByte();
 		Roles.Solo.Crewmate.Charger.Charged(chargerId, targetId);
+	}
+
+	public static void MayorRevealAbility(byte mayorPlayerId, byte targetPlayerId)
+	{
+		Roles.Solo.Crewmate.Mayor.Reveal(mayorPlayerId, targetPlayerId);
 	}
 
 	public static void CarrierAbility(
