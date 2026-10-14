@@ -57,6 +57,7 @@ public sealed class NeutralAliveWinChecker(IPlayerStatistics statistics) : IGame
 				NeutralSeparateTeam.Queen => RoleGameOverReason.QueenKillAllOther,
 				NeutralSeparateTeam.Kids => RoleGameOverReason.KidsAliveAlone,
 				NeutralSeparateTeam.Tucker => RoleGameOverReason.TuckerShipIsExperimentStation,
+				NeutralSeparateTeam.Punisher => RoleGameOverReason.PunisherKillAllOther,
 
 				NeutralSeparateTeam.JackalSub => RoleGameOverReason.AllJackalWin,
 				NeutralSeparateTeam.YandereSub => RoleGameOverReason.AllYandereWin,

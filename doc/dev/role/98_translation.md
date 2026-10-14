@@ -29,6 +29,9 @@
 - **`{ExtremeRoleId}IntroDescription`**: ゲーム開始時の役職紹介画面で表示される説明
 - **`{ExtremeRoleId}ImportantText`**: ゲーム中に画面上部に表示される短い指示や説明
 
+日本語向けのキーは`add_role_translation_keys.py {role_id}`を使用して自動生成することができます。
+キーの一括追加は`translation_keys_adder.py`を使用すると楽です。
+
 ## 注意事項
 
 - 特殊文字（`<`, `>`, `&` など）を直接リソースファイルに入力する場合は、エスケープ（`&lt;`, `&gt;`, `&amp;`）が必要です（ResX Managerを使用する場合は自動で処理されます）。

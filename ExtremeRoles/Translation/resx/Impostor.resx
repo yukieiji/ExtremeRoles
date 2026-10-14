@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -65,20 +65,20 @@
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1701,5 +1701,226 @@ Lv2能力「ビームセーバー」
   <data name="legislatorVoteStatus" xml:space="preserve">
     <value>能力の発動: {0}
 現在の反対票数: {1}</value>
+  </data>
+  <data name="RemoteKiller" xml:space="preserve">
+    <value>リモートキラー</value>
+  </data>
+  <data name="RemoteKillerFullDescription" xml:space="preserve">
+    <value>「執行」によって遠隔キルが出来るプレイヤー
+
+ボタン能力「執行」:
+ - プレイヤーを選択して発動
+ - 一定時間移動不可 + 名前が赤くなって(全プレイヤーから見える)
+そのプレイヤーをキルする
+ - 「執行」出来るプレイヤーは「奪う」を行ったプレイヤーのみ
+
+ボタン能力「奪う」:
+ - プレイヤー一人の近くで発動(一定時間近くにいる必要あり)
+ - そのプレイヤーを「執行」出来る対象に加える
+ - そのプレイヤーが会議まで生存している場合、そのプレイヤーに
+役職のプレイヤーを含む接触したプレイヤーがランダムに報告される</value>
+  </data>
+  <data name="RemoteKillerShortDescription" xml:space="preserve">
+    <value>相手の手帳を「奪って」遠隔で「執行」せよ</value>
+  </data>
+  <data name="RemoteKillerIntroDescription" xml:space="preserve">
+    <value>僕は"新世界"の神となる</value>
+  </data>
+  <data name="RemoteKillerRobRange" xml:space="preserve">
+    <value>「奪う」が発動できる範囲</value>
+  </data>
+  <data name="RemoteKillerContactPlayerCount" xml:space="preserve">
+    <value>接触したプレイヤーの報告数</value>
+  </data>
+  <data name="RemoteKillerRobActiveTime" xml:space="preserve">
+    <value>「奪う」にかかる時間</value>
+  </data>
+  <data name="remoteKillerRob" xml:space="preserve">
+    <value>奪う</value>
+  </data>
+  <data name="remoteKillerPurge" xml:space="preserve">
+    <value>執行</value>
+  </data>
+  <data name="remoteKillerNotebookStolenReport" xml:space="preserve">
+    <value>手帳が奪われた！仲間に報告しよう！ 
+あいつに接触された気がする・・・</value>
+  </data>
+  <data name="YoYo" xml:space="preserve">
+    <value>ヨーヨー</value>
+  </data>
+  <data name="YoYoFullDescription" xml:space="preserve">
+    <value>「マーク」した場所へ「テレポート」できるインポスター
+
+「マーク」出来る箇所は1つのみで一方通行の使い切り
+「テレポート」を行うと能力使用回数が1つ消費される</value>
+  </data>
+  <data name="YoYoShortDescription" xml:space="preserve">
+    <value>スロー、スリープ、キャッチ</value>
+  </data>
+  <data name="YoYoIntroDescription" xml:space="preserve">
+    <value>「マーク」した場所へ瞬時に「テレポート」</value>
+  </data>
+  <data name="YoYoIsResetMarkOnMeeting" xml:space="preserve">
+    <value>会議開始時に「マーク」位置をリセットするか</value>
+  </data>
+  <data name="YoYoSaveLocation" xml:space="preserve">
+    <value>マーク</value>
+  </data>
+  <data name="YoYoTeleportLocation" xml:space="preserve">
+    <value>テレポート</value>
+  </data>
+  <data name="Blackmailer" xml:space="preserve">
+    <value>ブラックメイラー</value>
+  </data>
+  <data name="BlackmailerFullDescription" xml:space="preserve">
+    <value>プレイヤーを恐喝することで会議を有利に進めるインポスター
+
+ボタン能力「恐喝」
+ - プレイヤー一人の近くで発動(一定時間近くにいる必要あり)
+ - そのプレイヤーは次の会議中(だけ)に発言およびチャット
+　投票を行うことが不可能になる</value>
+  </data>
+  <data name="BlackmailerShortDescription" xml:space="preserve">
+    <value>プレイヤーを恐喝し、次の会議で発言権と投票権を奪え</value>
+  </data>
+  <data name="BlackmailerIntroDescription" xml:space="preserve">
+    <value>プレイヤーを恐喝し会議での発言権を封殺しろ</value>
+  </data>
+  <data name="BlackmailerRange" xml:space="preserve">
+    <value>「恐喝」が発動できる距離</value>
+  </data>
+  <data name="BlackmailerMultipleBlackmail" xml:space="preserve">
+    <value>複数人に対して「恐喝」できるか</value>
+  </data>
+  <data name="blackmail" xml:space="preserve">
+    <value>恐喝</value>
+  </data>
+  <data name="RemoteKillerAbilityCoolTime" xml:space="preserve">
+    <value>「執行」と「奪う」のクールタイム</value>
+  </data>
+  <data name="RemoteKillerAbilityActiveTime" xml:space="preserve">
+    <value>「執行」にかかる時間</value>
+  </data>
+  <data name="RemoteKillerAbilityCount" xml:space="preserve">
+    <value>「執行」が発動できる回数</value>
+  </data>
+  <data name="YoYoAbilityCoolTime" xml:space="preserve">
+    <value>「マーク」と「テレポート」のクールタイム</value>
+  </data>
+  <data name="YoYoAbilityCount" xml:space="preserve">
+    <value>「テレポート」の使用回数</value>
+  </data>
+  <data name="BlackmailerAbilityCoolTime" xml:space="preserve">
+    <value>「恐喝」のクールタイム</value>
+  </data>
+  <data name="BlackmailerAbilityActiveTime" xml:space="preserve">
+    <value>「恐喝」にかかる時間</value>
+  </data>
+  <data name="BlackmailerAbilityCount" xml:space="preserve">
+    <value>「恐喝」の使用回数</value>
+  </data>
+  <data name="Retaliator" xml:space="preserve">
+    <value>リタリエイター</value>
+  </data>
+  <data name="RetaliatorFullDescription" xml:space="preserve">
+    <value>会議中にプレイヤーを選択し、次のタスクフェーズ中にそのプレイヤーが自分に対して行うキルを弾き返して返撃（自爆）させます。</value>
+  </data>
+  <data name="RetaliatorShortDescription" xml:space="preserve">
+    <value>キルを弾き返す</value>
+  </data>
+  <data name="RetaliatorIntroDescription" xml:space="preserve">
+    <value>会議中にプレイヤーを選択して、次のタスクフェーズ中そのプレイヤーからのキルを弾き返す</value>
+  </data>
+  <data name="RetaliatorOptionAwakeKillCount" xml:space="preserve">
+    <value>覚醒に必要なキル数</value>
+  </data>
+  <data name="RetaliatorOptionMaxAbilityUseCount" xml:space="preserve">
+    <value>最大能力使用回数</value>
+  </data>
+  <data name="RetaliatorOptionMaxTargetPerMeeting" xml:space="preserve">
+    <value>1回の会議で選択可能な人数の上限</value>
+  </data>
+  <data name="RetaliatorOptionTargetTeam" xml:space="preserve">
+    <value>弾き返せる対象陣営</value>
+  </data>
+  <data name="RetaliatorOptionNotifyTargetNextMeeting" xml:space="preserve">
+    <value>対象になっていたことを次の会議で通知する</value>
+  </data>
+  <data name="RetaliatorTargetTeamCrewmateOnly" xml:space="preserve">
+    <value>クルーのみ</value>
+  </data>
+  <data name="RetaliatorTargetTeamNeutralOnly" xml:space="preserve">
+    <value>ニュートラルのみ</value>
+  </data>
+  <data name="RetaliatorTargetTeamBothCrewAndNeutral" xml:space="preserve">
+    <value>クルー・ニュートラル両方</value>
+  </data>
+  <data name="retaliatorUiInfo" xml:space="preserve">
+    <value>能力使用可能数：{0}回
+この会議で指定可能数：{1}人</value>
+  </data>
+  <data name="Flasher" xml:space="preserve">
+    <value>フラッシャー</value>
+  </data>
+  <data name="FlasherFullDescription" xml:space="preserve">
+    <value>フラッシュで周囲の視界を奪うインポスター
+
+ボタン能力「フラッシュ」
+ - ボタンを押すとチャージ開始、もう一度押すと発動
+ - 範囲内のプレイヤーの画面をアクティブ時間だけ白または黒で塗りつぶす
+ - 壁越しでも当たるが、ベント内のプレイヤーには当たらない
+ - チャージした時間ぶん、余韻として画面が揺れ、色が残る
+ - 自身とインポスター仲間は影響を受けない</value>
+  </data>
+  <data name="FlasherShortDescription" xml:space="preserve">
+    <value>フラッシュで周囲の視界を奪え</value>
+  </data>
+  <data name="FlasherIntroDescription" xml:space="preserve">
+    <value>フラッシュで周囲の視界を奪い、混乱したところを襲え</value>
+  </data>
+  <data name="FlasherRange" xml:space="preserve">
+    <value>「フラッシュ」が当たる距離</value>
+  </data>
+  <data name="FlasherFlashColor" xml:space="preserve">
+    <value>「フラッシュ」の色</value>
+  </data>
+  <data name="FlasherColorWhite" xml:space="preserve">
+    <value>白</value>
+  </data>
+  <data name="FlasherColorBlack" xml:space="preserve">
+    <value>黒</value>
+  </data>
+  <data name="FlasherAbilityCoolTime" xml:space="preserve">
+    <value>「フラッシュ」のクールタイム</value>
+  </data>
+  <data name="FlasherAbilityActiveTime" xml:space="preserve">
+    <value>「フラッシュ」で画面が白くなる時間</value>
+  </data>
+  <data name="FlasherAbilityCount" xml:space="preserve">
+    <value>「フラッシュ」の使用回数</value>
+  </data>
+  <data name="FlasherFlash" xml:space="preserve">
+    <value>フラッシュ</value>
+  </data>
+  <data name="Darkpointer" xml:space="preserve">
+    <value>ダークポインター</value>
+  </data>
+  <data name="DarkpointerFullDescription" xml:space="preserve">
+    <value>視界と通報を遮る「闇」を纏える</value>
+  </data>
+  <data name="DarkpointerShortDescription" xml:space="preserve">
+    <value>視界と通報を遮る「闇」を纏える</value>
+  </data>
+  <data name="DarkpointerIntroDescription" xml:space="preserve">
+    <value>視界と通報を遮る「闇」を纏える</value>
+  </data>
+  <data name="DarkpointerAbility" xml:space="preserve">
+    <value>闇</value>
+  </data>
+  <data name="DarkpointerRange" xml:space="preserve">
+    <value>闇の半径</value>
+  </data>
+  <data name="DarkpointerActiveDuration" xml:space="preserve">
+    <value>闇の持続時間</value>
   </data>
 </root>

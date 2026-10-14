@@ -29,11 +29,13 @@ public static class Sound
 		ScavengerFireNormalGun,
 		ScavengerFireBeam,
 		BoxerStraight,
+		ChargerCharge,
 
 		MinerMineSE,
 
 		ReplaceNewTask,
 		ChargeComplete,
+		MayorReveal,
     }
 
     private static readonly Dictionary<Type, AudioClip> cachedAudio =

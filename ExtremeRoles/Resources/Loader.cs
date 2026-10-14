@@ -181,14 +181,14 @@ public static class UnityObjectLoader
 {
 	public static void ResetCache()
 	{
-		foreach(var bundle in cachedBundle.Values)
+		foreach (var bundle in cachedBundle.Values)
 		{
 			bundle.Unload(false);
 		}
 		cachedBundle.Clear();
 	}
 
-    private static readonly Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
+	private static readonly Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
 
 	public static SimpleButton CreateSimpleButton(Transform parent)
 	{
@@ -202,7 +202,7 @@ public static class UnityObjectLoader
 	}
 
 	public static Sprite LoadSpriteFromResources(
-		string path, float pixelsPerUnit=115f)
+		string path, float pixelsPerUnit = 115f)
 	{
 		string key = $"{path}{pixelsPerUnit}";
 
@@ -226,6 +226,13 @@ public static class UnityObjectLoader
 
 		return sprite;
 	}
+
+
+	public static Sprite LoadFromButtonIcon<W>(W id, string name)
+		where W : Enum
+		=> LoadFromResources<Sprite>(
+			ObjectPath.GetRoleAssetPath(id),
+			ObjectPath.GetRoleImgPath(id, $"{ObjectPath.ButtonIcon}.{name}"));
 
 	public static Sprite LoadFromResources<W>(W id)
 		where W : Enum

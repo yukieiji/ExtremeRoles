@@ -29,6 +29,7 @@ public sealed class ExtremeGameModeManager
     public ILogicUsable Usable { get; private set; }
 
 	public bool EnableXion => this.isXionActive && this.RoleSelector.CanUseXion;
+	public bool CanSeeOtherLiberal { get; private set; }
 
 	private bool isXionActive = false;
 
@@ -72,6 +73,7 @@ public sealed class ExtremeGameModeManager
         Instance.ShipOption.Load();
 
 		isXionActive = IRoleSelector.RawXionUse;
+		CanSeeOtherLiberal = IRoleSelector.CanSeeOtherLiberal;
 	}
 
     public IIntroRunner? GetIntroRunner()

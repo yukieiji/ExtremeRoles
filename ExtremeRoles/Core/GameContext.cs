@@ -14,6 +14,8 @@ public class GameContext(IServiceScope provider) : IGameContext
 
 	public IShipGlobalOption GlobalOption => ExtremeGameModeManager.Instance.ShipOption;
 
+	public bool CanSeeOtherLiberal => ExtremeGameModeManager.Instance.CanSeeOtherLiberal;
+
 	public void Dispose()
 	{
 		_provider.Dispose();

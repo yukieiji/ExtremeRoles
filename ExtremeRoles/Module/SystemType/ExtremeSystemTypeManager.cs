@@ -64,6 +64,10 @@ public enum ExtremeSystemType : byte
 	MonikaMeetingNumSystem,
 	SurrogatorGurdSystem,
 	LiberalMoneyBank,
+	BlackmailerSystem,
+	MastermindNotice,
+	DeepOneFrogsControlSystem,
+	DarkpointerDarkness,
 }
 
 public enum ResetTiming : byte

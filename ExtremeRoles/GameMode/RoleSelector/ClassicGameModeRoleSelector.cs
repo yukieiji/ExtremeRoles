@@ -102,6 +102,11 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.CEO,
 			ExtremeRoleId.Echo,
 			ExtremeRoleId.Inspector,
+			ExtremeRoleId.Itako,
+			ExtremeRoleId.Screamer,
+			ExtremeRoleId.Logger,
+			ExtremeRoleId.Charger,
+			ExtremeRoleId.Mayor,
 
 			ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,
@@ -136,6 +141,11 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Scavenger,
 			ExtremeRoleId.Boxer,
 			ExtremeRoleId.Legislator,
+			ExtremeRoleId.RemoteKiller,
+			ExtremeRoleId.YoYo,
+			ExtremeRoleId.Blackmailer,
+			ExtremeRoleId.Retaliator,
+			ExtremeRoleId.Flasher,
 
 			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,
@@ -162,6 +172,19 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Surrogator,
 			ExtremeRoleId.Knight,
 			ExtremeRoleId.Pawn,
+			ExtremeRoleId.Punisher,
+			ExtremeRoleId.Imitater,
+			ExtremeRoleId.Mastermind,
+			ExtremeRoleId.DeepOne,
+
+			ExtremeRoleId.SpecialDove,
+			ExtremeRoleId.SpecialMilitant,
+			ExtremeRoleId.Addict,
+			ExtremeRoleId.Embezzle,
+			ExtremeRoleId.Martyr,
+			ExtremeRoleId.Encloser,
+			ExtremeRoleId.Scapeactor,
+			ExtremeRoleId.Delta,
 		];
 
     private CombinationRoleType[] getUseCombRoleType() =>
