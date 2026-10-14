@@ -24,7 +24,6 @@ public sealed class Mayor :
 
 	public ExtremeAbilityButton? Button { get; set; }
 
-	private PlayerControl? tmpPlayer;
 	private PlayerControl? targetPlayer;
 	private float targetRange;
 	private static TextPopUpper? popUpper;
@@ -48,48 +47,39 @@ public sealed class Mayor :
 
 	public bool IsAbilityUse()
 		=> IRoleAbility.IsCommonUse() &&
-			Player.TryGetClosestPlayerInRange(this, this.targetRange, out this.tmpPlayer);
+			Player.TryGetClosestPlayerInRange(this, this.targetRange, out this.targetPlayer);
 
 	public bool UseAbility()
 	{
-		if (this.tmpPlayer == null)
+		if (this.targetPlayer == null)
 		{
 			return false;
 		}
 
-		this.targetPlayer = this.tmpPlayer;
+		byte mayorId = PlayerControl.LocalPlayer.PlayerId;
+		byte targetId = this.targetPlayer.PlayerId;
+
+		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.MayorRevealAbility))
+		{
+			caller.WriteByte(mayorId);
+			caller.WriteByte(targetId);
+		}
+
+		Reveal(mayorId, targetId);
 		return true;
 	}
 
 	public bool CheckAbility()
-		=> this.targetPlayer != null &&
-			Player.IsPlayerInRangeAndDrawOutLine(
-				PlayerControl.LocalPlayer,
-				this.targetPlayer,
-				this,
-				this.targetRange);
+		=> IRoleAbility.IsCommonUse();
 
 	public void ForceAbilityOff()
 	{
-		this.targetPlayer = null;
+		ClearPopUp();
 	}
 
 	public void CleanUp()
 	{
-		if (this.targetPlayer != null)
-		{
-			byte mayorId = PlayerControl.LocalPlayer.PlayerId;
-			byte targetId = this.targetPlayer.PlayerId;
-
-			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.MayorRevealAbility))
-			{
-				caller.WriteByte(mayorId);
-				caller.WriteByte(targetId);
-			}
-
-			Reveal(mayorId, targetId);
-		}
-		this.targetPlayer = null;
+		ClearPopUp();
 	}
 
 	public static void Reveal(byte mayorId, byte targetId)
@@ -109,36 +99,42 @@ public sealed class Mayor :
 		if (localId == mayorId)
 		{
 			string message = string.Format(Tr.GetString("mayorRevealToSelf"), targetPlayer.Data.PlayerName);
-			ShowPopUp(message);
+			ShowPopUp(message, 60.0f);
 			Sound.PlaySound(Sound.Type.MayorReveal, 0.8f);
 		}
 		else if (localId == targetId)
 		{
 			string message = string.Format(Tr.GetString("mayorRevealToTarget"), mayorPlayer.Data.PlayerName);
-			ShowPopUp(message);
+			ShowPopUp(message, 3.0f);
 			Sound.PlaySound(Sound.Type.MayorReveal, 0.8f);
 		}
 	}
 
-	public static void ShowPopUp(string message)
+	public static void ShowPopUp(string message, float disappearTime = 60.0f)
 	{
-		popUpper ??= new TextPopUpper(
-			5, 5.0f,
+		ClearPopUp();
+		popUpper = new TextPopUpper(
+			1, disappearTime,
 			new Vector3(-3.75f, -3.5f, -250.0f),
 			TMPro.TextAlignmentOptions.BottomLeft);
 		popUpper.AddText(message);
 	}
 
-	public void ResetOnMeetingStart()
+	public static void ClearPopUp()
 	{
 		popUpper?.Clear();
 		popUpper = null;
 	}
 
+	public void ResetOnMeetingStart()
+	{
+		ClearPopUp();
+	}
+
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
-		this.tmpPlayer = null;
 		this.targetPlayer = null;
+		ClearPopUp();
 	}
 
 	protected override void CreateSpecificOption(
