@@ -35,6 +35,7 @@ public static class Sound
 
 		ReplaceNewTask,
 		ChargeComplete,
+		MayorReveal,
     }
 
     private static readonly Dictionary<Type, AudioClip> cachedAudio =
