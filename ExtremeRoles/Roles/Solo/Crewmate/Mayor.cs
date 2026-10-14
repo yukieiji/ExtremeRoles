@@ -24,6 +24,7 @@ public sealed class Mayor :
 
 	public ExtremeAbilityButton? Button { get; set; }
 
+	private PlayerControl? tmpPlayer;
 	private PlayerControl? targetPlayer;
 	private float targetRange;
 	private static TextPopUpper? popUpper;
@@ -36,34 +37,59 @@ public sealed class Mayor :
 
 	public void CreateAbility()
 	{
-		this.CreateAbilityCountButton(
+		this.CreateActivatingAbilityCountButton(
 			"mayorReveal",
-			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Mayor));
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Mayor),
+			checkAbility: CheckAbility,
+			abilityOff: CleanUp,
+			forceAbilityOff: ForceAbilityOff);
 		this.Button?.SetLabelToCrewmate();
 	}
 
 	public bool IsAbilityUse()
 		=> IRoleAbility.IsCommonUse() &&
-			Player.TryGetClosestPlayerInRange(this, this.targetRange, out this.targetPlayer);
+			Player.TryGetClosestPlayerInRange(this, this.targetRange, out this.tmpPlayer);
 
 	public bool UseAbility()
 	{
-		if (this.targetPlayer == null)
+		if (this.tmpPlayer == null)
 		{
 			return false;
 		}
 
-		byte mayorId = PlayerControl.LocalPlayer.PlayerId;
-		byte targetId = this.targetPlayer.PlayerId;
-
-		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.MayorRevealAbility))
-		{
-			caller.WriteByte(mayorId);
-			caller.WriteByte(targetId);
-		}
-
-		Reveal(mayorId, targetId);
+		this.targetPlayer = this.tmpPlayer;
 		return true;
+	}
+
+	public bool CheckAbility()
+		=> this.targetPlayer != null &&
+			Player.IsPlayerInRangeAndDrawOutLine(
+				PlayerControl.LocalPlayer,
+				this.targetPlayer,
+				this,
+				this.targetRange);
+
+	public void ForceAbilityOff()
+	{
+		this.targetPlayer = null;
+	}
+
+	public void CleanUp()
+	{
+		if (this.targetPlayer != null)
+		{
+			byte mayorId = PlayerControl.LocalPlayer.PlayerId;
+			byte targetId = this.targetPlayer.PlayerId;
+
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.MayorRevealAbility))
+			{
+				caller.WriteByte(mayorId);
+				caller.WriteByte(targetId);
+			}
+
+			Reveal(mayorId, targetId);
+		}
+		this.targetPlayer = null;
 	}
 
 	public static void Reveal(byte mayorId, byte targetId)
@@ -111,6 +137,7 @@ public sealed class Mayor :
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
+		this.tmpPlayer = null;
 		this.targetPlayer = null;
 	}
 
@@ -120,7 +147,8 @@ public sealed class Mayor :
 		IRoleAbility.CreateAbilityCountOption(
 			factory,
 			defaultAbilityCount: 1,
-			maxAbilityCount: 10);
+			maxAbilityCount: 10,
+			defaultActiveTime: 3.0f);
 
 		factory.CreateFloatOption(
 			MayorOption.TargetRange,

@@ -1809,4 +1809,7 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="MayorAbilityCount" xml:space="preserve">
     <value>「名乗り」が使える回数</value>
   </data>
+  <data name="MayorAbilityActiveTime" xml:space="preserve">
+    <value>「名乗り」にかかる時間</value>
+  </data>
 </root>
