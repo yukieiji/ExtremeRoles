@@ -68,6 +68,7 @@ public enum ExtremeSystemType : byte
 	MastermindNotice,
 	DeepOneFrogsControlSystem,
 	DarkpointerDarkness,
+	ForestallerSystem,
 }
 
 public enum ResetTiming : byte
