@@ -20,16 +20,7 @@ public sealed class ForestallerSystem : IExtremeSystemType
 
 	private readonly HashSet<byte> activeForestallers = new();
 
-	public bool IsForestallActive
-	{
-		get
-		{
-			lock (this.activeForestallers)
-			{
-				return this.activeForestallers.Count > 0;
-			}
-		}
-	}
+	public bool IsForestallActive => this.activeForestallers.Count > 0;
 
 	public static void StartForestall()
 	{
@@ -49,16 +40,13 @@ public sealed class ForestallerSystem : IExtremeSystemType
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
-		lock (this.activeForestallers)
+		if (timing == ResetTiming.OnPlayer && resetPlayer != null)
 		{
-			if (timing == ResetTiming.OnPlayer && resetPlayer != null)
-			{
-				this.activeForestallers.Remove(resetPlayer.PlayerId);
-			}
-			else
-			{
-				this.activeForestallers.Clear();
-			}
+			this.activeForestallers.Remove(resetPlayer.PlayerId);
+		}
+		else
+		{
+			this.activeForestallers.Clear();
 		}
 	}
 
@@ -67,17 +55,14 @@ public sealed class ForestallerSystem : IExtremeSystemType
 		var ops = (Ops)msgReader.ReadByte();
 		byte playerId = player.PlayerId;
 
-		lock (this.activeForestallers)
+		switch (ops)
 		{
-			switch (ops)
-			{
-				case Ops.StartForestall:
-					this.activeForestallers.Add(playerId);
-					break;
-				case Ops.EndForestall:
-					this.activeForestallers.Remove(playerId);
-					break;
-			}
+			case Ops.StartForestall:
+				this.activeForestallers.Add(playerId);
+				break;
+			case Ops.EndForestall:
+				this.activeForestallers.Remove(playerId);
+				break;
 		}
 	}
 }
