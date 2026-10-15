@@ -95,6 +95,7 @@ public static class ObjectPath
 
 	public const string ModeratorModerate = "ExtremeRoles.Resources.Moderate.png";
 	public const string PsychicPsychic = "ExtremeRoles.Resources.PsychicPsychic.png";
+	public const string ForestallerForestall = "ExtremeRoles.Resources.Forestall.png";
 
 	public const string SummonerSummon = "Summon";
 	public const string SummonerMarking = "Marking";
