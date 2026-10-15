@@ -1812,4 +1812,19 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="MayorAbilityActiveTime" xml:space="preserve">
     <value>「名乗り」にかかる時間</value>
   </data>
+  <data name="Forestaller" xml:space="preserve">
+    <value>フォレストーラー</value>
+  </data>
+  <data name="ForestallerFullDescription" xml:space="preserve">
+    <value>タスクをこなすことで覚醒し、一定時間サボタージュの発動を阻止するアビリティ「フォーストール」を使用できます。</value>
+  </data>
+  <data name="ForestallerShortDescription" xml:space="preserve">
+    <value>一定時間サボタージュの発動を阻止できます</value>
+  </data>
+  <data name="ForestallerIntroDescription" xml:space="preserve">
+    <value>サボタージュを阻止せよ</value>
+  </data>
+  <data name="ForestallerAwakeTaskGage" xml:space="preserve">
+    <value>覚醒に必要なタスク進捗率</value>
+  </data>
 </root>
