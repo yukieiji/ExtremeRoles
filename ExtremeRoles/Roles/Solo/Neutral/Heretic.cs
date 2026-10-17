@@ -186,7 +186,7 @@ public sealed class Heretic :
 		byte targetPlayerId = this.meetingTarget;
 
 		var player = Player.GetPlayerControlById(targetPlayerId);
-		if (!player.IsAlive())
+		if (player.IsInValid())
 		{
 			targetPlayerId = byte.MaxValue;
 		}
@@ -254,7 +254,7 @@ public sealed class Heretic :
 	public bool UseAbility()
 	{
 		ExtremeRolesPlugin.Logger.LogInfo($"AbilityMode: {this.killMode}");
-		if (this.target == null)
+		if (this.target.IsInValid())
 		{
 			return false;
 		}
@@ -263,7 +263,7 @@ public sealed class Heretic :
 		{
 			case KillMode.AbilityOnTaskPhase:
 				var killer = PlayerControl.LocalPlayer;
-				if (killer == null)
+				if (killer.IsInValid())
 				{
 					return false;
 				}
@@ -361,7 +361,7 @@ public sealed class Heretic :
 	}
 
 	public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
-		=> PlayerControl.LocalPlayer == null ||
+		=> PlayerControl.LocalPlayer.IsInValid() ||
 			instance.PlayerId == PlayerControl.LocalPlayer.PlayerId ||
 			!(this.killMode is KillMode.AbilityOnMeeting or KillMode.AbilityOnMeetingTarget);
 
