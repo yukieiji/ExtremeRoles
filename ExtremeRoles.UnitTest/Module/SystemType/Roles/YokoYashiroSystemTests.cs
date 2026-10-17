@@ -12,6 +12,7 @@ public class YokoYashiroSystemTests
 {
 	public YokoYashiroSystemTests()
 	{
+		MockSetupHelper.SetupUnityCommonMocks();
 		MockSetupHelper.SetupExtremeSystemTypeManagerMock();
 	}
 
