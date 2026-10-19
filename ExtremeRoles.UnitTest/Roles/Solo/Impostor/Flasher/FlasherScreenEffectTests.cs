@@ -71,6 +71,33 @@ public sealed class FlasherScreenEffectTests
 	}
 
 	[Fact]
+	public void GetAfterglowShakeOffset_HorizontalUsesPowerCurveAndVerticalIsScaledLinear()
+	{
+		// Arrange
+		const float AfterglowTime = 1.0f;
+		const float Elapsed = 0.5f; // progress = 0.5
+		float progress = Elapsed / AfterglowTime;
+
+		// Act
+		(float X, float Y) offset =
+			FlasherScreenTimeline.GetAfterglowShakeOffset(Elapsed, AfterglowTime);
+
+		// Expected
+		float expectedDecayX = 1.0f - (float)System.Math.Pow(progress, 6); // 1 - 0.5^6 = 0.984375
+		float expectedDecayY = 1.0f - progress; // 0.5
+		float expectedDistanceX = FlasherScreenTimeline.MaxShakeDistance * expectedDecayX;
+		float expectedDistanceY = (FlasherScreenTimeline.MaxShakeDistance / FlasherScreenTimeline.VerticalShakeDivider) * expectedDecayY;
+
+		float angle = Elapsed * 25.0f;
+		float expectedX = (float)System.Math.Cos(angle) * expectedDistanceX;
+		float expectedY = (float)System.Math.Sin(angle) * expectedDistanceY;
+
+		// Assert
+		Assert.Equal(expectedX, offset.X, 3);
+		Assert.Equal(expectedY, offset.Y, 3);
+	}
+
+	[Fact]
 	public void GetAfterglowShakeOffset_DecaysOverTime()
 	{
 		// Arrange
