@@ -139,6 +139,9 @@ public sealed class Snatcher : SingleRoleBase, IRoleUpdate
 	{
 	}
 
+	public override string GetRoleTag()
+		=> "Sn";
+
 	public void Update(PlayerControl rolePlayer)
 	{
 		this.handler?.Update(rolePlayer);

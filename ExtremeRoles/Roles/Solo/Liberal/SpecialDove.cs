@@ -27,6 +27,9 @@ public sealed class SpecialDove : SingleRoleBase, IRoleUpdate
 		this.handler?.Update(rolePlayer);
 	}
 
+	public override string GetRoleTag()
+		=> "Sd";
+
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
 		this.handler?.ClearTask(rolePlayer);

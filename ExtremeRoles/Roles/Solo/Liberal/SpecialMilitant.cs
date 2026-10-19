@@ -20,6 +20,9 @@ public sealed class SpecialMilitant : SingleRoleBase
 	{
 	}
 
+	public override string GetRoleTag()
+		=> "Sm";
+
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateBoolOption(SpecialMilitantOption.UseVent, false);
