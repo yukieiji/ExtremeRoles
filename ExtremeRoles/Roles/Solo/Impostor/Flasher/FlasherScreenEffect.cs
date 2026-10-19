@@ -49,10 +49,10 @@ public static class FlasherScreenTimeline
 	public const float AfterglowStartAlpha = 0.6f;
 
 	/// <summary>余韻開始時のシェイクの最大振幅</summary>
-	public const float MaxShakeDistance = 0.12f;
+	public const float MaxShakeDistance = 0.5f;
 
 	/// <summary>シェイクの振動数</summary>
-	private const float ShakeFrequency = 45.0f;
+	private const float ShakeFrequency = 75.0f;
 
 	/// <summary>
 	/// 余韻が終了したかどうかを返す。

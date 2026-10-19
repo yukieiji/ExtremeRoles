@@ -95,7 +95,7 @@ public sealed class FlasherRole : SingleRoleBase, IRoleAbility
 
 		factory.CreateFloatOption(
 			Option.Range,
-			1.5f, 0.5f, 5.0f, 0.1f);
+			5.0f, 0.5f, 25.0f, 0.1f);
 
 		factory.CreateSelectionOption<Option, FlasherColor>(
 			Option.FlashColor);

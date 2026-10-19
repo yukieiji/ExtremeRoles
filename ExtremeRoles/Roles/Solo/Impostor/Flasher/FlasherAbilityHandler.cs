@@ -70,9 +70,10 @@ public sealed class FlasherAbilityHandler(
 
 		List<PlayerControl> targets = getTargets(localPlayer);
 
+		// 0でも打たせる、人がいるって分かってしまうので
 		if (targets.Count == 0)
 		{
-			return false;
+			return true;
 		}
 
 		this.status.StartSequence(chargeGage);
