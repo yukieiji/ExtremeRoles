@@ -51,6 +51,9 @@ public static class FlasherScreenTimeline
 	/// <summary>余韻開始時のシェイクの最大振幅</summary>
 	public const float MaxShakeDistance = 1.5f;
 
+	/// <summary>縦方向の振幅の除数</summary>
+	public const float VerticalShakeDivider = 5.0f;
+
 	/// <summary>シェイクの振動数</summary>
 	private const float ShakeFrequency = 25.0f;
 
@@ -85,14 +88,19 @@ public static class FlasherScreenTimeline
 			return (0.0f, 0.0f);
 		}
 
-		float decay = 1.0f - (elapsed / afterglowTime);
+		float progress = elapsed / afterglowTime;
+		float decayX = 1.0f - (float)Math.Pow(progress, 6);
+		float decayY = 1.0f - progress;
+
+		float distanceX = MaxShakeDistance * decayX;
+		float distanceY = (MaxShakeDistance / VerticalShakeDivider) * decayY;
+
 		float angle = elapsed * ShakeFrequency;
-		float distance = MaxShakeDistance * decay;
 
 		// Unityの数学APIを使わないことで、演出の時間軸をテストから検証できるようにする
 		return (
-			(float)Math.Cos(angle) * distance,
-			(float)Math.Sin(angle) * distance);
+			(float)Math.Cos(angle) * distanceX,
+			(float)Math.Sin(angle) * distanceY);
 	}
 }
 
