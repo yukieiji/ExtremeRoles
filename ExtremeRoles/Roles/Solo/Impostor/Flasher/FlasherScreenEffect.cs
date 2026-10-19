@@ -6,6 +6,7 @@ using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Module.SystemType;
 
 #nullable enable
 
@@ -170,6 +171,12 @@ public sealed class FlasherScreenEffect : IFlashScreenEffect
 		while (true)
 		{
 			yield return null;
+
+			if (!GameProgressSystem.IsTaskPhase)
+			{
+				Stop();
+				yield break;
+			}
 
 			if (this.phase == Phase.None)
 			{
