@@ -186,6 +186,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Encloser,
 			ExtremeRoleId.Scapeactor,
 			ExtremeRoleId.Delta,
+			ExtremeRoleId.Snatcher
 		];
 
     private CombinationRoleType[] getUseCombRoleType() =>

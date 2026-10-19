@@ -198,6 +198,7 @@ public enum ExtremeRoleId : int
 	Encloser,
 	Scapeactor,
 	Delta,
+	Snatcher,
 
 	Xion,
 }
@@ -454,6 +455,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Encloser       , new EncloserRole()},
 			{(int)ExtremeRoleId.Scapeactor     , new Scapeactor()},
 			{(int)ExtremeRoleId.Delta          , new Delta()},
+			{(int)ExtremeRoleId.Snatcher       , new Snatcher()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
