@@ -17,7 +17,7 @@ public sealed class FlasherStatusModelTests
 
 	private static FlasherStatusModel CreateStartedStatus(float chargeGage)
 	{
-		var status = new FlasherStatusModel(1.5f, FlasherColor.FlasherColorWhite);
+		var status = new FlasherStatusModel(false, 1.5f, FlasherColor.FlasherColorWhite);
 		status.StartSequence(chargeGage);
 
 		return status;
@@ -27,7 +27,7 @@ public sealed class FlasherStatusModelTests
 	public void Constructor_KeepsRangeAndColor()
 	{
 		// Arrange & Act
-		var status = new FlasherStatusModel(2.5f, FlasherColor.FlasherColorBlack);
+		var status = new FlasherStatusModel(false, 2.5f, FlasherColor.FlasherColorBlack);
 
 		// Assert
 		Assert.Equal(2.5f, status.Range, 3);
@@ -61,7 +61,7 @@ public sealed class FlasherStatusModelTests
 	public void StartSequence_ClampsChargeGage(float chargeGage, float expected)
 	{
 		// Arrange
-		var status = new FlasherStatusModel(1.5f, FlasherColor.FlasherColorWhite);
+		var status = new FlasherStatusModel(false, 1.5f, FlasherColor.FlasherColorWhite);
 
 		// Act
 		status.StartSequence(chargeGage);
@@ -122,7 +122,7 @@ public sealed class FlasherStatusModelTests
 	public void CalculateAfterglowTime_WithoutSequence_IsZero()
 	{
 		// Arrange
-		var status = new FlasherStatusModel(1.5f, FlasherColor.FlasherColorWhite);
+		var status = new FlasherStatusModel(false, 1.5f, FlasherColor.FlasherColorWhite);
 
 		// Act
 		float afterglowTime = status.CalculateAfterglowTime();

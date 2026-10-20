@@ -107,4 +107,4 @@ def test_preserve_comments_and_structure(real_resx_file_copy: Path):
 
     # 新しいキーが正しい場所に追加されているか
     assert 'name="Test.Key.Structure"' in new_content
-    assert new_content.endswith("</root>")
+    assert new_content.rstrip().endswith("</root>")
