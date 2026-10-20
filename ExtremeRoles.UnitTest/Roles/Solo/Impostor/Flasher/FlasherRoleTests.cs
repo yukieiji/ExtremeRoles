@@ -129,7 +129,7 @@ public sealed class FlasherRoleTests
 		// Assert
 		Assert.True(role.Loader.TryGetValue<FlasherRole.Option, float>(
 			FlasherRole.Option.Range, out float range));
-		Assert.Equal(1.5f, range, 3);
+		Assert.Equal(5.0f, range, 3);
 		Assert.True(role.Loader.TryGetValue<FlasherRole.Option, int>(
 			FlasherRole.Option.FlashColor, out int flashColor));
 		Assert.Equal((int)FlasherColor.FlasherColorWhite, flashColor);
@@ -147,7 +147,7 @@ public sealed class FlasherRoleTests
 		// Assert
 		FlasherStatusModel? status = GetStatus(role);
 		Assert.NotNull(status);
-		Assert.Equal(1.5f, status!.Range, 3);
+		Assert.Equal(5.0f, status!.Range, 3);
 		Assert.Equal(FlasherColor.FlasherColorWhite, status.FlashColor);
 	}
 

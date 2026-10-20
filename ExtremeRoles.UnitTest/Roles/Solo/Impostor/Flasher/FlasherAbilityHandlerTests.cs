@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
+using AmongUs.Data;
+using AmongUs.Data.Settings;
 using AmongUs.GameOptions;
 
 using Hazel;
@@ -15,6 +17,7 @@ using UnityEngine;
 using Xunit;
 
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Impostor.Flasher;
@@ -52,6 +55,7 @@ public sealed class FlasherAbilityHandlerTests
 		}
 
 		SetupTranslationControllerMock();
+		SetupSoundCacheMock();
 
 		this.mockClient = MockSetupHelper.SetupAmongUsClientMock();
 		var mockWriter = new Mock<MessageWriter>(IntPtr.Zero);
@@ -100,6 +104,27 @@ public sealed class FlasherAbilityHandlerTests
 		mockTranslation.Setup(t => t.GetString(
 			It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Il2CppSystem.Object[]>()))
 			.Returns("TestString");
+	}
+
+	private static void SetupSoundCacheMock()
+	{
+		var mockSfxHelper = new Mock<MockConstantsShouldPlaySfxHelper>();
+		mockSfxHelper.Setup(x => x.Invoke()).Returns(true);
+		MockConstantsShouldPlaySfxHelper.Instance = mockSfxHelper.Object;
+
+		var mockSoundManager = new Mock<SoundManager>(IntPtr.Zero);
+		mockSoundManager.Setup(s => s.PlaySound(It.IsAny<AudioClip>(), It.IsAny<bool>(), It.IsAny<float>(), null))
+			.Returns(new Mock<AudioSource>(IntPtr.Zero).Object);
+		var mockSoundInstanceHelper = new Mock<MockSoundManagerget_InstanceHelper>();
+		mockSoundInstanceHelper.Setup(x => x.Invoke()).Returns(mockSoundManager.Object);
+		MockSoundManagerget_InstanceHelper.Instance = mockSoundInstanceHelper.Object;
+
+		var cachedAudioField = typeof(Sound).GetField("cachedAudio", BindingFlags.NonPublic | BindingFlags.Static);
+		if (cachedAudioField?.GetValue(null) is Dictionary<Sound.Type, AudioClip> cachedAudio)
+		{
+			var mockClip = new Mock<AudioClip>(IntPtr.Zero);
+			cachedAudio[Sound.Type.FlasherFlash] = mockClip.Object;
+		}
 	}
 
 	private static Mock<NetworkedPlayerInfo> createPlayerInfoMock(
@@ -153,10 +178,10 @@ public sealed class FlasherAbilityHandlerTests
 	private FlasherAbilityHandler CreateHandler(
 		FlasherRole role, FlasherColor flashColor)
 	{
-		var status = new FlasherStatusModel(1.5f, flashColor);
+		var status = new FlasherStatusModel(false, 1.5f, flashColor);
 
 		return new FlasherAbilityHandler(
-			status, role, this.mockScreenEffect.Object, ActiveTime);
+			status, role, this.mockScreenEffect.Object, ActiveTime, new Mock<ExtremeRoles.Module.Interface.IUnityObjectFactory>().Object);
 	}
 
 	private void ClearRpcRecords()
@@ -208,7 +233,7 @@ public sealed class FlasherAbilityHandlerTests
 	}
 
 	[Fact]
-	public void TryFlash_WhenNoTargetInRange_ReturnsFalseAndSendsNothing()
+	public void TryFlash_WhenNoTargetInRange_ReturnsTrueAndSendsNothing()
 	{
 		// Arrange
 		FlasherRole role = CreateRole();
@@ -219,12 +244,12 @@ public sealed class FlasherAbilityHandlerTests
 		bool result = handler.TryFlash(1.0f);
 
 		// Assert
-		Assert.False(result);
+		Assert.True(result);
 		VerifySendRpcCount(0);
 	}
 
 	[Fact]
-	public void TryFlash_WhenTargetOutOfRange_ReturnsFalseAndSendsNothing()
+	public void TryFlash_WhenTargetOutOfRange_ReturnsTrueAndSendsNothing()
 	{
 		// Arrange
 		FlasherRole role = CreateRole();
@@ -236,12 +261,12 @@ public sealed class FlasherAbilityHandlerTests
 		bool result = handler.TryFlash(1.0f);
 
 		// Assert
-		Assert.False(result);
+		Assert.True(result);
 		VerifySendRpcCount(0);
 	}
 
 	[Fact]
-	public void TryFlash_WhenTargetInVent_ReturnsFalseAndSendsNothing()
+	public void TryFlash_WhenTargetInVent_ReturnsTrueAndSendsNothing()
 	{
 		// Arrange
 		FlasherRole role = CreateRole();
@@ -253,12 +278,12 @@ public sealed class FlasherAbilityHandlerTests
 		bool result = handler.TryFlash(1.0f);
 
 		// Assert
-		Assert.False(result);
+		Assert.True(result);
 		VerifySendRpcCount(0);
 	}
 
 	[Fact]
-	public void TryFlash_WhenTargetIsDead_ReturnsFalseAndSendsNothing()
+	public void TryFlash_WhenTargetIsDead_ReturnsTrueAndSendsNothing()
 	{
 		// Arrange
 		FlasherRole role = CreateRole();
@@ -270,12 +295,12 @@ public sealed class FlasherAbilityHandlerTests
 		bool result = handler.TryFlash(1.0f);
 
 		// Assert
-		Assert.False(result);
+		Assert.True(result);
 		VerifySendRpcCount(0);
 	}
 
 	[Fact]
-	public void TryFlash_WhenTargetIsSameTeam_ReturnsFalseAndSendsNothing()
+	public void TryFlash_WhenTargetIsSameTeam_ReturnsTrueAndSendsNothing()
 	{
 		// Arrange
 		FlasherRole role = CreateRole();
@@ -287,7 +312,7 @@ public sealed class FlasherAbilityHandlerTests
 		bool result = handler.TryFlash(1.0f);
 
 		// Assert
-		Assert.False(result);
+		Assert.True(result);
 		VerifySendRpcCount(0);
 	}
 
