@@ -98,7 +98,7 @@ public sealed class FlasherRole : SingleRoleBase, IRoleAbility
 
 		factory.CreateFloatOption(
 			Option.Range,
-			5.0f, 0.5f, 25.0f, 0.1f);
+			15.0f, 1.0f, 75.0f, 0.5f);
 
 		factory.CreateBoolOption(Option.IsAffectImpostor, false);
 
