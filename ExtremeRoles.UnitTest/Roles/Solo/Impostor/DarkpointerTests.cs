@@ -7,6 +7,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -25,9 +26,34 @@ namespace ExtremeRoles.UnitTest.Roles.Solo.Impostor;
 [Collection(nameof(MockSetupHelper.SetupUnityCommonMocks))]
 public sealed class DarkpointerTests
 {
+	private sealed class MockUnityObjectFactory : IUnityObjectFactory
+	{
+		public readonly List<GameObject> CreatedGameObjects = new();
+
+		public GameObject CreateGameObject(string name)
+		{
+			var mockGo = new Mock<GameObject>(IntPtr.Zero);
+			var mockTrans = new Mock<Transform>(IntPtr.Zero);
+			var mockSr = new Mock<SpriteRenderer>(IntPtr.Zero);
+
+			mockGo.SetupGet(g => g.transform).Returns(mockTrans.Object);
+			mockGo.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockSr.Object);
+			mockGo.Setup(g => g.AddComponent(It.IsAny<Il2CppSystem.Type>())).Returns(mockSr.Object);
+
+			this.CreatedGameObjects.Add(mockGo.Object);
+			return mockGo.Object;
+		}
+
+		public Sprite LoadRoleSprite(ExtremeRoleId roleId) => new Mock<Sprite>(IntPtr.Zero).Object;
+		public Sprite LoadRoleSprite(ExtremeRoleId roleId, string img) => new Mock<Sprite>(IntPtr.Zero).Object;
+		public Material CreateSpriteMaterial() => new Mock<Material>(IntPtr.Zero).Object;
+		public Vector3 CreateMapPos(Vector2 target, float offset = 1000.0f) => new Vector3(target.x, target.y, target.y / offset);
+		public Mesh CreateMesh() => new Mock<Mesh>(IntPtr.Zero).Object;
+	}
+
 	private readonly Mock<AmongUsClient> mockClient;
 	private readonly Mock<PlayerControl> mockLocalPlayer;
-	private readonly Mock<IUnityObjectFactory> mockFactory;
+	private readonly MockUnityObjectFactory mockFactory;
 
 	public DarkpointerTests()
 	{
@@ -37,18 +63,33 @@ public sealed class DarkpointerTests
 		MockSetupHelper.SetupVector3Helpers();
 		MockSetupHelper.SetupPaletteHelpers();
 
-		this.mockFactory = new Mock<IUnityObjectFactory>();
-		var mockGameObject = new Mock<GameObject>(IntPtr.Zero);
-		var mockTransform = new Mock<Transform>(IntPtr.Zero);
-		var mockSpriteRenderer = new Mock<SpriteRenderer>(IntPtr.Zero);
-		var mockSprite = new Mock<Sprite>(IntPtr.Zero);
+		var cachedPtrField = typeof(UnityEngine.Object).GetField("m_CachedPtr", BindingFlags.NonPublic | BindingFlags.Instance);
 
-		mockGameObject.SetupGet(g => g.transform).Returns(mockTransform.Object);
-		mockGameObject.Setup(g => g.AddComponent<SpriteRenderer>()).Returns(mockSpriteRenderer.Object);
-		this.mockFactory.Setup(f => f.CreateGameObject(It.IsAny<string>())).Returns(mockGameObject.Object);
-		this.mockFactory.Setup(f => f.LoadRoleSprite(It.IsAny<ExtremeRoleId>())).Returns(mockSprite.Object);
+		MockPlayerControlget_LocalPlayerHelper.Instance = null!;
+		this.mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
+		cachedPtrField?.SetValue(this.mockLocalPlayer.Object, (IntPtr)1);
+		this.mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)0);
+		this.mockLocalPlayer.SetupGet(p => p.NetId).Returns((uint)1);
+		this.mockLocalPlayer.SetupGet(p => p.CanMove).Returns(true);
 
-		var system = new DarkpointerDarknessSystem(2.5f, this.mockFactory.Object);
+		var mockPlayerTransform = new Mock<Transform>(IntPtr.Zero);
+		this.mockLocalPlayer.SetupGet(p => p.transform).Returns(mockPlayerTransform.Object);
+		this.mockLocalPlayer.Setup(p => p.GetTruePosition()).Returns(new Vector2(0f, 0f));
+
+		var mockLocalData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		cachedPtrField?.SetValue(mockLocalData.Object, (IntPtr)1);
+		mockLocalData.SetupGet(d => d.PlayerId).Returns((byte)0);
+		mockLocalData.SetupGet(d => d.IsDead).Returns(false);
+		mockLocalData.SetupGet(d => d.Disconnected).Returns(false);
+		mockLocalData.SetupGet(d => d.Object).Returns(this.mockLocalPlayer.Object);
+		this.mockLocalPlayer.SetupGet(p => p.Data).Returns(mockLocalData.Object);
+
+		PlayerCache.RemovePlayerControl(_ => true);
+		PlayerCache.AddPlayerControl(this.mockLocalPlayer.Object);
+
+		this.mockFactory = new MockUnityObjectFactory();
+
+		var system = new DarkpointerDarknessSystem(2.5f, this.mockFactory);
 		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.DarkpointerDarkness, system);
 
 		var plugin = MockSetupHelper.SetupMockExtremeRolePlugin();
@@ -62,6 +103,9 @@ public sealed class DarkpointerTests
 		MockSetupHelper.SetupDestroyableSingletonMock<TranslationController>();
 		MockSetupHelper.SetupGameOptionsManagerMock();
 		MockSetupHelper.SetupOptionManager();
+
+		PlayerCache.RemovePlayerControl(_ => true);
+		PlayerCache.AddPlayerControl(this.mockLocalPlayer.Object);
 
 		SetupAssetBundleMock();
 
@@ -95,7 +139,7 @@ public sealed class DarkpointerTests
 						seqByte.Returns(b);
 					}
 					var seqSingle = mockReader.SetupSequence(r => r.ReadSingle());
-					seqSingle.Returns(10f).Returns(20f);
+					seqSingle.Returns(0f).Returns(0f);
 				}
 				return mockReader.Object;
 			});
@@ -112,23 +156,6 @@ public sealed class DarkpointerTests
 		var mockExileControllerHelper = new Mock<MockExileControllerget_InstanceHelper>();
 		mockExileControllerHelper.Setup(x => x.Invoke()).Returns((ExileController)null!);
 		MockExileControllerget_InstanceHelper.Instance = mockExileControllerHelper.Object;
-
-		var cachedPtrField = typeof(UnityEngine.Object).GetField("m_CachedPtr", BindingFlags.NonPublic | BindingFlags.Instance);
-
-		this.mockLocalPlayer = MockSetupHelper.SetupPlayerControlMocks();
-		cachedPtrField?.SetValue(this.mockLocalPlayer.Object, (IntPtr)1);
-		this.mockLocalPlayer.SetupGet(p => p.PlayerId).Returns((byte)1);
-		this.mockLocalPlayer.SetupGet(p => p.NetId).Returns((uint)1);
-		this.mockLocalPlayer.SetupGet(p => p.CanMove).Returns(true);
-		this.mockLocalPlayer.Setup(p => p.GetTruePosition()).Returns(new Vector2(10f, 20f));
-
-		var mockLocalData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
-		cachedPtrField?.SetValue(mockLocalData.Object, (IntPtr)1);
-		mockLocalData.SetupGet(d => d.PlayerId).Returns((byte)1);
-		mockLocalData.SetupGet(d => d.IsDead).Returns(false);
-		mockLocalData.SetupGet(d => d.Disconnected).Returns(false);
-		mockLocalData.SetupGet(d => d.Object).Returns(this.mockLocalPlayer.Object);
-		this.mockLocalPlayer.SetupGet(p => p.Data).Returns(mockLocalData.Object);
 
 		if (ExtremeRolesPlugin.ShipState == null)
 		{
@@ -154,7 +181,7 @@ public sealed class DarkpointerTests
 		}
 	}
 
-	private static void InitializeRole(SingleRoleBase role, byte playerId = 1)
+	private static void InitializeRole(SingleRoleBase role, byte playerId = 0)
 	{
 		role.CreateRoleAllOption();
 		role.Initialize();
@@ -174,13 +201,15 @@ public sealed class DarkpointerTests
 	[Fact]
 	public void DarkpointerDarknessSystem_PlaceDarknessAndIsPlayerInDarkness()
 	{
+		PlayerCache.RemovePlayerControl(_ => true);
+		PlayerCache.AddPlayerControl(this.mockLocalPlayer.Object);
+
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory.Object));
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory));
 
 		system.Reset(ResetTiming.MeetingStart);
 
-		var pos = new Vector2(10f, 20f);
-		system.PlaceDarkness(1, pos);
+		system.PlaceDarkness(0);
 
 		Assert.True(system.IsPlayerInDarkness(this.mockLocalPlayer.Object));
 
@@ -189,24 +218,26 @@ public sealed class DarkpointerTests
 		Assert.False(system.IsPlayerInDarkness(this.mockLocalPlayer.Object));
 
 		// Reset position
-		this.mockLocalPlayer.Setup(p => p.GetTruePosition()).Returns(new Vector2(10f, 20f));
+		this.mockLocalPlayer.Setup(p => p.GetTruePosition()).Returns(new Vector2(0f, 0f));
 	}
 
 	[Fact]
 	public void DarkpointerDarknessSystem_RemoveDarknessRemovesCircleAndUnlocksReport()
 	{
+		PlayerCache.RemovePlayerControl(_ => true);
+		PlayerCache.AddPlayerControl(this.mockLocalPlayer.Object);
+
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory.Object));
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory));
 
 		system.Reset(ResetTiming.MeetingStart);
 
-		var pos = new Vector2(10f, 20f);
-		system.PlaceDarkness(1, pos);
+		system.PlaceDarkness(0);
 
 		system.Deteriorate(1f);
 		Assert.True(ButtonLockSystem.IsReportButtonLock());
 
-		system.RemoveDarkness(1);
+		system.RemoveDarkness(0);
 		system.Deteriorate(1f);
 		Assert.False(system.IsPlayerInDarkness(this.mockLocalPlayer.Object));
 		Assert.False(ButtonLockSystem.IsReportButtonLock());
@@ -215,10 +246,13 @@ public sealed class DarkpointerTests
 	[Fact]
 	public void DarkpointerDarknessSystem_ResetOnMeetingStartClearsCirclesAndUnlocksReport()
 	{
-		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory.Object));
+		PlayerCache.RemovePlayerControl(_ => true);
+		PlayerCache.AddPlayerControl(this.mockLocalPlayer.Object);
 
-		system.PlaceDarkness(1, new Vector2(10f, 20f));
+		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory));
+
+		system.PlaceDarkness(0);
 		system.Deteriorate(1f);
 		Assert.True(ButtonLockSystem.IsReportButtonLock());
 
@@ -230,11 +264,14 @@ public sealed class DarkpointerTests
 	[Fact]
 	public void DarkpointerRole_UseAbilityAndCleanUp_PlacesAndRemovesDarkness()
 	{
+		PlayerCache.RemovePlayerControl(_ => true);
+		PlayerCache.AddPlayerControl(this.mockLocalPlayer.Object);
+
 		var role = new DarkpointerRole();
 		InitializeRole(role);
 
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<DarkpointerDarknessSystem>(
-			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory.Object));
+			ExtremeSystemType.DarkpointerDarkness, () => new DarkpointerDarknessSystem(2.5f, this.mockFactory));
 
 		system.Reset(ResetTiming.MeetingStart);
 
@@ -244,5 +281,50 @@ public sealed class DarkpointerTests
 
 		role.CleanUp();
 		Assert.False(system.IsPlayerInDarkness(this.mockLocalPlayer.Object));
+	}
+
+	[Fact]
+	public void DarkpointerDarknessSystem_PlaceDarkness_LocalPlayerPlacesCircle()
+	{
+		PlayerCache.RemovePlayerControl(_ => true);
+		PlayerCache.AddPlayerControl(this.mockLocalPlayer.Object);
+
+		var localFactory = new MockUnityObjectFactory();
+		var system = new DarkpointerDarknessSystem(2.5f, localFactory);
+
+		system.PlaceDarkness(0);
+
+		Assert.Single(localFactory.CreatedGameObjects);
+		Assert.True(system.IsPlayerInDarkness(this.mockLocalPlayer.Object));
+	}
+
+	[Fact]
+	public void DarkpointerDarknessSystem_PlaceDarkness_OtherPlayerPlacesCircle()
+	{
+		var cachedPtrField = typeof(UnityEngine.Object).GetField("m_CachedPtr", BindingFlags.NonPublic | BindingFlags.Instance);
+
+		var mockOtherPlayer = new Mock<PlayerControl>(IntPtr.Zero);
+		cachedPtrField?.SetValue(mockOtherPlayer.Object, (IntPtr)2);
+		mockOtherPlayer.SetupGet(p => p.PlayerId).Returns((byte)2);
+		mockOtherPlayer.SetupGet(p => p.NetId).Returns((uint)2);
+
+		var mockOtherTransform = new Mock<Transform>(IntPtr.Zero);
+		mockOtherPlayer.SetupGet(p => p.transform).Returns(mockOtherTransform.Object);
+		mockOtherPlayer.Setup(p => p.GetTruePosition()).Returns(new Vector2(30f, 30f));
+
+		var mockOtherData = new Mock<NetworkedPlayerInfo>(IntPtr.Zero);
+		cachedPtrField?.SetValue(mockOtherData.Object, (IntPtr)2);
+		mockOtherData.SetupGet(d => d.PlayerId).Returns((byte)2);
+		mockOtherData.SetupGet(d => d.Object).Returns(mockOtherPlayer.Object);
+		mockOtherPlayer.SetupGet(p => p.Data).Returns(mockOtherData.Object);
+
+		PlayerCache.AddPlayerControl(mockOtherPlayer.Object);
+
+		var localFactory = new MockUnityObjectFactory();
+		var system = new DarkpointerDarknessSystem(2.5f, localFactory);
+
+		system.PlaceDarkness(2);
+
+		Assert.Single(localFactory.CreatedGameObjects);
 	}
 }

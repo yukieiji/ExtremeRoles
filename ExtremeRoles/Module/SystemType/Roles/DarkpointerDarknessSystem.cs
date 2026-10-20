@@ -38,6 +38,12 @@ public sealed class DarkpointerDarknessSystem(float range, IUnityObjectFactory f
 
 			var rend = this.visualObject.AddComponent<SpriteRenderer>();
 			rend.sprite = factory.LoadRoleSprite(ExtremeRoleId.Darkpointer, "DarkImg");
+			if (PlayerControl.LocalPlayer != null && player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+			{
+				var color = rend.color;
+				color.a = 0.5f;
+				rend.color = color;
+			}
 			this.visualObject.transform.localScale = new Vector3(rnage, rnage, 1f);
 		}
 
