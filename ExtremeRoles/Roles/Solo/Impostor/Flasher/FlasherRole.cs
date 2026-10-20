@@ -8,6 +8,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Module.Interface;
 
 #nullable enable
 
@@ -124,6 +125,6 @@ public sealed class FlasherRole : SingleRoleBase, IRoleAbility
 			: DefaultActiveTime;
 
 		this.handler = new FlasherAbilityHandler(
-			this.status, this, new FlasherScreenEffect(), activeTime);
+			this.status, this, new FlasherScreenEffect(), activeTime, new DefaultUnityObjectFactory());
 	}
 }

@@ -7,6 +7,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Extension.Player;
+using System.Collections.Generic;
 
 #nullable enable
 
@@ -14,8 +16,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Mayor :
 	SingleRoleBase,
-	IRoleAutoBuildAbility,
-	IRoleResetMeeting
+	IRoleAutoBuildAbility
 {
 	public enum MayorOption
 	{
@@ -24,9 +25,12 @@ public sealed class Mayor :
 
 	public ExtremeAbilityButton? Button { get; set; }
 
+	public readonly record struct TextKey(byte MayorPlayerId, byte TargetPlayerId);
+
+	private Dictionary<TextKey, TextPopUpper>? popUpper;
+
 	private PlayerControl? targetPlayer;
 	private float targetRange;
-	private static TextPopUpper? popUpper;
 
 	public Mayor() : base(
 		RoleArgs.BuildCrewmate(
@@ -38,10 +42,7 @@ public sealed class Mayor :
 	{
 		this.CreateActivatingAbilityCountButton(
 			"mayorReveal",
-			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Mayor),
-			checkAbility: CheckAbility,
-			abilityOff: CleanUp,
-			forceAbilityOff: ForceAbilityOff);
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Mayor));
 		this.Button?.SetLabelToCrewmate();
 	}
 
@@ -72,58 +73,62 @@ public sealed class Mayor :
 	public bool CheckAbility()
 		=> IRoleAbility.IsCommonUse();
 
-	public void ForceAbilityOff()
-	{
-		ClearPopUp();
-	}
-
-	public void CleanUp()
-	{
-		ClearPopUp();
-	}
-
 	public static void Reveal(byte mayorId, byte targetId)
 	{
-		if (!Player.TryGetPlayerControl(mayorId, out var mayorPlayer) ||
-			!Player.TryGetPlayerControl(targetId, out var targetPlayer))
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (!ExtremeRoleManager.TryGetSafeCastedRole<Mayor>(mayorId, out var role) ||
+			!Player.TryGetPlayerControl(mayorId, out var mayorPlayer) ||
+			!Player.TryGetPlayerControl(targetId, out var targetPlayer) ||
+			localPlayer.IsInValid() ||
+			targetPlayer.IsInValid())
 		{
 			return;
 		}
 
-		if (PlayerControl.LocalPlayer == null)
-		{
-			return;
-		}
+		byte localId = localPlayer.PlayerId;
 
-		byte localId = PlayerControl.LocalPlayer.PlayerId;
+		var key = new TextKey(mayorId, targetId);
+
 		if (localId == mayorId)
 		{
-			string message = string.Format(Tr.GetString("mayorRevealToSelf"), targetPlayer.Data.PlayerName);
-			ShowPopUp(message, 60.0f);
-			Sound.PlaySound(Sound.Type.MayorReveal, 0.8f);
+			role.ShowPopUp(key, Tr.GetString("mayorRevealToSelf", targetPlayer.Data.DefaultOutfit.PlayerName), 5.0f);
 		}
 		else if (localId == targetId)
 		{
-			string message = string.Format(Tr.GetString("mayorRevealToTarget"), mayorPlayer.Data.PlayerName);
-			ShowPopUp(message, 3.0f);
-			Sound.PlaySound(Sound.Type.MayorReveal, 0.8f);
+			role.ShowPopUp(key, Tr.GetString("mayorRevealToTarget", mayorPlayer.Data.DefaultOutfit.PlayerName), 3.0f);
 		}
 	}
 
-	public static void ShowPopUp(string message, float disappearTime = 60.0f)
+	public void ShowPopUp(in TextKey key, string message, float disappearTime = 60.0f)
 	{
-		ClearPopUp();
-		popUpper = new TextPopUpper(
-			1, disappearTime,
-			new Vector3(-3.75f, -3.5f, -250.0f),
-			TMPro.TextAlignmentOptions.BottomLeft);
-		popUpper.AddText(message);
+		if (this.popUpper is null)
+		{
+			this.popUpper = [];
+		}
+
+		if (!this.popUpper.TryGetValue(key, out var text))
+		{
+			text = new TextPopUpper(
+				1, disappearTime,
+				new Vector3(0.0f, 1.25f, -250.0f),
+				TMPro.TextAlignmentOptions.Center);
+			this.popUpper[key] = text;
+		}
+		
+		text.AddText(message);
 	}
 
-	public static void ClearPopUp()
+	public void ClearPopUp()
 	{
-		popUpper?.Clear();
-		popUpper = null;
+		if (this.popUpper is null)
+		{
+			return;
+		}
+
+		foreach (var text in this.popUpper.Values)
+		{
+			text.Clear();
+		}
 	}
 
 	public void ResetOnMeetingStart()
@@ -143,8 +148,7 @@ public sealed class Mayor :
 		IRoleAbility.CreateAbilityCountOption(
 			factory,
 			defaultAbilityCount: 1,
-			maxAbilityCount: 10,
-			defaultActiveTime: 3.0f);
+			maxAbilityCount: 10);
 
 		factory.CreateFloatOption(
 			MayorOption.TargetRange,
@@ -155,5 +159,6 @@ public sealed class Mayor :
 	{
 		var loader = this.Loader;
 		this.targetRange = loader.GetValue<MayorOption, float>(MayorOption.TargetRange);
+		this.popUpper = [];
 	}
 }
