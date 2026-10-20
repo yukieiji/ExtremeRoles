@@ -26,24 +26,18 @@ public sealed class DarkpointerDarknessSystem(float range, IUnityObjectFactory f
 
 	public sealed class DarkCircle
 	{
-		public Vector2 Position { get; }
+		public Vector2 Position => this.visualObject.transform.position;
 
 		private readonly GameObject visualObject;
 
-		public DarkCircle(byte playerId, Vector2 position, float rnage, IUnityObjectFactory factory)
+		public DarkCircle(PlayerControl player, float rnage, IUnityObjectFactory factory)
 		{
-			this.Position = position;
-
-			this.visualObject = factory.CreateGameObject($"DarkCircle_{playerId}");
-			this.visualObject.transform.position = new Vector3(
-				this.Position.x,
-				this.Position.y,
-				this.Position.y / 1000f - 0.05f);
+			this.visualObject = factory.CreateGameObject($"DarkCircle_{player.PlayerId}");
+			this.visualObject.transform.SetParent(player.transform);
+			this.visualObject.transform.localPosition = new Vector3(0.0f, 0.0f, -20.0f);
 
 			var rend = this.visualObject.AddComponent<SpriteRenderer>();
 			rend.sprite = factory.LoadRoleSprite(ExtremeRoleId.Darkpointer, "DarkImg");
-			rend.color = Color.black;
-			rend.sortingOrder = 32767;
 			this.visualObject.transform.localScale = new Vector3(rnage, rnage, 1f);
 		}
 
@@ -85,14 +79,19 @@ public sealed class DarkpointerDarknessSystem(float range, IUnityObjectFactory f
 		return false;
 	}
 
-	public void PlaceDarkness(byte playerId, Vector2 position)
+	public void PlaceDarkness(byte playerId)
 	{
+		if (!Player.TryGetPlayerControl(playerId, out var player))
+		{
+			return;
+		}
+
 		if (this.activeCircles.TryGetValue(playerId, out var oldCircle))
 		{
 			oldCircle.Remove();
 		}
 
-		var circle = new DarkCircle(playerId, position, this.range, this.unityObjectFactory);
+		var circle = new DarkCircle(player, this.range, this.unityObjectFactory);
 		this.activeCircles[playerId] = circle;
 	}
 
@@ -105,14 +104,12 @@ public sealed class DarkpointerDarknessSystem(float range, IUnityObjectFactory f
 		}
 	}
 
-	public void RpcPlaceDarkness(byte playerId, Vector2 position)
+	public void RpcPlaceDarkness(byte playerId)
 	{
 		ExtremeSystemTypeManager.RpcUpdateSystem(Type, writer =>
 		{
 			writer.Write((byte)Ops.PlaceDarkness);
 			writer.Write(playerId);
-			writer.Write(position.x);
-			writer.Write(position.y);
 		});
 	}
 
@@ -144,7 +141,7 @@ public sealed class DarkpointerDarknessSystem(float range, IUnityObjectFactory f
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
-		if (timing is ResetTiming.MeetingStart or ResetTiming.ExiledEnd or ResetTiming.OnPlayer)
+		if (timing is ResetTiming.MeetingStart)
 		{
 			this.locker.UnLock((int)ButtonLockSystem.ConditionId.Darkpointer);
 			foreach (var circle in this.activeCircles.Values)
@@ -162,9 +159,7 @@ public sealed class DarkpointerDarknessSystem(float range, IUnityObjectFactory f
 		{
 			case Ops.PlaceDarkness:
 				byte playerId = msgReader.ReadByte();
-				float x = msgReader.ReadSingle();
-				float y = msgReader.ReadSingle();
-				PlaceDarkness(playerId, new Vector2(x, y));
+				PlaceDarkness(playerId);
 				break;
 			case Ops.RemoveDarkness:
 				byte removePlayerId = msgReader.ReadByte();

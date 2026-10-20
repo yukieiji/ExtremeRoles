@@ -1,8 +1,4 @@
-using Hazel;
-using UnityEngine;
-
 using ExtremeRoles.Extension.Player;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
@@ -17,8 +13,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor.Darkpointer;
 
 public sealed class DarkpointerRole :
 	SingleRoleBase,
-	IRoleAutoBuildAbility,
-	IRoleSpecialReset
+	IRoleAutoBuildAbility
 {
 	public enum Option
 	{
@@ -49,10 +44,9 @@ public sealed class DarkpointerRole :
 	public bool UseAbility()
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
-		if (!localPlayer.IsInValid())
+		if (localPlayer.IsAlive())
 		{
-			Vector2 pos = localPlayer.GetTruePosition();
-			this.system?.RpcPlaceDarkness(localPlayer.PlayerId, pos);
+			this.system?.RpcPlaceDarkness(localPlayer.PlayerId);
 		}
 		return true;
 	}
@@ -62,7 +56,7 @@ public sealed class DarkpointerRole :
 	public void CleanUp()
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
-		if (!localPlayer.IsInValid())
+		if (localPlayer.IsAlive())
 		{
 			this.system?.RpcRemoveDarkness(localPlayer.PlayerId);
 		}
@@ -77,12 +71,10 @@ public sealed class DarkpointerRole :
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null) { }
 
-	public void AllReset(PlayerControl rolePlayer) { }
-
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		IRoleAbility.CreateAbilityCountOption(factory, 1, 10, 10.0f);
-		factory.CreateFloatOption(Option.Range, 2.5f, 1.0f, 5.0f, 0.25f);
+		factory.CreateFloatOption(Option.Range, 10.0f, 1.0f, 50.0f, 0.5f);
 	}
 
 	protected override void RoleSpecificInit()
