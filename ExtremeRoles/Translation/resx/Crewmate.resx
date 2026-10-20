@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -65,20 +65,20 @@
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1618,7 +1618,7 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>口寄せ</value>
   </data>
   <data name="ItakoIntroDescription" xml:space="preserve">
-    <value/>
+    <value />
   </data>
   <data name="ItakoShortDescription" xml:space="preserve">
     <value>「死体」に「口寄せ」して役職を引き継げ</value>
@@ -1783,22 +1783,26 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>町長</value>
   </data>
   <data name="MayorFullDescription" xml:space="preserve">
-    <value>名乗ることで、自身がクルーであることを証明することができる。</value>
+    <value>自身が「町長」であることを他人に名乗れる役職
+
+ボタン能力「名乗り」:
+ - 一人を対象にして発動
+ - その人に自信が町長であることを表示するテキストを表示する</value>
   </data>
   <data name="MayorShortDescription" xml:space="preserve">
-    <value>自身がクルーであることを他人に証明せよ</value>
+    <value>「名乗り」を上げてクルー証明せよ</value>
   </data>
   <data name="MayorIntroDescription" xml:space="preserve">
-    <value>名乗りを上げてクルー証明せよ</value>
+    <value>「名乗り」を上げてクルー証明せよ</value>
   </data>
   <data name="MayorTargetRange" xml:space="preserve">
-    <value>「名乗り」の有効距離</value>
+    <value>「名乗り」を上げれる距離</value>
   </data>
   <data name="mayorRevealToSelf" xml:space="preserve">
-    <value>{0}に名乗った</value>
+    <value>"{0}"に名乗った</value>
   </data>
   <data name="mayorRevealToTarget" xml:space="preserve">
-    <value>{0}「私が町長です」</value>
+    <value>{0}「私が{1}です」</value>
   </data>
   <data name="mayorReveal" xml:space="preserve">
     <value>名乗り</value>
@@ -1808,8 +1812,5 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   </data>
   <data name="MayorAbilityCount" xml:space="preserve">
     <value>「名乗り」が使える回数</value>
-  </data>
-  <data name="MayorAbilityActiveTime" xml:space="preserve">
-    <value>「名乗り」にかかる時間</value>
   </data>
 </root>

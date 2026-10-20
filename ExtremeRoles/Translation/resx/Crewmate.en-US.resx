@@ -1730,7 +1730,4 @@ If used on non-Crewmate, boosts enemy team.</value>
   <data name="MayorAbilityCount" xml:space="preserve">
     <value>"Reveal" Charges</value>
   </data>
-  <data name="MayorAbilityActiveTime" xml:space="preserve">
-    <value>"Reveal" Active Time</value>
-  </data>
 </root>
