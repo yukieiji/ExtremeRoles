@@ -89,23 +89,25 @@ public sealed class RetaliatorTests
     }
 
     [Fact]
-    public void AbilityHandler_TryRolePlayerKillTo_WhenPreAwake_IncrementsKillCountAndAwakesWhenThresholdReached()
+    public void RetaliatorRole_TryRolePlayerKillTo_WhenPreAwake_IncrementsKillCountAndAwakesWhenThresholdReached()
     {
         // Arrange
+        var role = CreateAndInitRole(1);
         var status = new RetaliatorStatusModel(2, 3, 1, RetaliatorTargetTeam.CrewmateOnly, true);
-        var handler = new RetaliatorAbilityHandler(status);
+        typeof(RetaliatorRole).GetField("status", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.SetValue(role, status);
+
         var killer = new Mock<PlayerControl>().Object;
         var target = new Mock<PlayerControl>().Object;
 
         // Act 1
-        handler.TryRolePlayerKillTo(killer, target);
+        role.TryRolePlayerKillTo(killer, target);
 
         // Assert 1
         Assert.Equal(1, status.AwakeKillCount);
         Assert.False(status.IsAwake);
 
         // Act 2
-        handler.TryRolePlayerKillTo(killer, target);
+        role.TryRolePlayerKillTo(killer, target);
 
         // Assert 2
         Assert.Equal(0, status.AwakeKillCount);
@@ -203,7 +205,7 @@ public sealed class RetaliatorTests
         ExtremeRoleManager.GameRole[2] = targetRole;
 
         // Awaken Retaliator
-        ((ITryKillTo)role.AbilityClass!).TryRolePlayerKillTo(null!, null!);
+        role.TryRolePlayerKillTo(null!, null!);
 
         var mockPva = new Mock<PlayerVoteArea>(IntPtr.Zero);
         mockPva.SetupGet(p => p.PlayerId).Returns((byte)2);
@@ -247,7 +249,7 @@ public sealed class RetaliatorTests
         string untargetedTag = role.GetRolePlayerNameTag(crewmateRole, 3);
 
         // Assert
-        Assert.Contains("TestString", tag);
-        Assert.DoesNotContain("TestString", untargetedTag);
+        Assert.Contains("■", tag);
+        Assert.DoesNotContain("■", untargetedTag);
     }
 }
