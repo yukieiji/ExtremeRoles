@@ -12,8 +12,8 @@ public interface IUnityObjectFactory
 	public Material CreateSpriteMaterial();
 	public Vector3 CreateMapPos(Vector2 target, float offset = 1000.0f);
 	public Mesh CreateMesh();
-	public Sprite? LoadRoleSprite(ExtremeRoleId roleId);
-	public Sprite? LoadRoleSprite(ExtremeRoleId roleId, string img);
+	public Sprite LoadRoleSprite(ExtremeRoleId roleId);
+	public Sprite LoadRoleSprite(ExtremeRoleId roleId, string img);
 }
 
 public class DefaultUnityObjectFactory : IUnityObjectFactory
@@ -30,9 +30,9 @@ public class DefaultUnityObjectFactory : IUnityObjectFactory
 	public Mesh CreateMesh()
 		=> new Mesh();
 
-	public Sprite? LoadRoleSprite(ExtremeRoleId roleId)
+	public Sprite LoadRoleSprite(ExtremeRoleId roleId)
 		=> UnityObjectLoader.LoadFromResources(roleId);
 
-	public Sprite? LoadRoleSprite(ExtremeRoleId roleId, string img)
+	public Sprite LoadRoleSprite(ExtremeRoleId roleId, string img)
 		=> UnityObjectLoader.LoadFromResources(roleId, img);
 }

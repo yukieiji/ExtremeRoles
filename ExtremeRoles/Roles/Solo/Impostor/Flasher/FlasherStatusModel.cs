@@ -18,7 +18,7 @@ public enum FlasherColor
 /// <summary>
 /// フラッシャーが保持する状態と、オプション化しない固定値を保持する。
 /// </summary>
-public sealed class FlasherStatusModel : IStatusModel
+public sealed class FlasherStatusModel(bool isAffectImpostor, float range, FlasherColor flashColor) : IStatusModel
 {
 	/// <summary>チャージが満タンになるまでの時間</summary>
 	public const float ChargeTime = 3.0f;
@@ -27,22 +27,18 @@ public sealed class FlasherStatusModel : IStatusModel
 	public const float AfterglowMaxTime = 1.5f;
 
 	/// <summary>フラッシュが当たる距離</summary>
-	public float Range { get; }
+	public float Range { get; } = range;
 
 	/// <summary>フラッシュの色</summary>
-	public FlasherColor FlashColor { get; }
+	public FlasherColor FlashColor { get; } = flashColor;
+
+	public bool IsAffectImpostor { get; } = isAffectImpostor;
 
 	/// <summary>直前の発動で溜まっていたチャージ量(0.0f ~ 1.0f)</summary>
 	public float ChargeGage { get; private set; }
 
 	/// <summary>発動から余韻への移行または強制終了まで継続する</summary>
 	public bool IsSequenceActive { get; private set; }
-
-	public FlasherStatusModel(float range, FlasherColor flashColor)
-	{
-		this.Range = range;
-		this.FlashColor = flashColor;
-	}
 
 	/// <summary>
 	/// 演出シーケンスを開始する。

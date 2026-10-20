@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 
 using Hazel;
-
 using UnityEngine;
 
 using ExtremeRoles.Extension.Player;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Roles.API.Interface.Ability;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Helper;
+
+
 
 #nullable enable
 
@@ -20,7 +23,8 @@ public sealed class FlasherAbilityHandler(
 	FlasherStatusModel status,
 	FlasherRole role,
 	IFlashScreenEffect screenEffect,
-	float activeTime)
+	float activeTime,
+	IUnityObjectFactory factory)
 {
 	private readonly FlasherStatusModel status = status;
 	private readonly FlasherRole role = role;
@@ -29,6 +33,8 @@ public sealed class FlasherAbilityHandler(
 	/// <summary>画面の塗りつぶしが継続する時間、RPCが届かない場合の上限計算に使う</summary>
 	private readonly float activeTime = activeTime;
 
+	private readonly IUnityObjectFactory factory = factory;
+
 	/// <summary>
 	/// ボタン能力「フラッシュ」の挙動を生成する。
 	/// </summary>
@@ -36,7 +42,7 @@ public sealed class FlasherAbilityHandler(
 	{
 		var behavior = new ChargingAndActivatingCountBehaviour(
 			text: Tr.GetString("FlasherFlash"),
-			img: HudManager.Instance.KillButton.graphic.sprite,
+			img: this.factory.LoadRoleSprite(ExtremeRoleId.Flasher),
 			isUse: IsUse,
 			ability: TryFlash,
 			onCharge: OnCharge,
@@ -180,7 +186,7 @@ public sealed class FlasherAbilityHandler(
 		foreach (NetworkedPlayerInfo playerInfo in
 			GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			if (!Player.IsValidPlayer(this.role, localPlayer, playerInfo))
+			if (!IsValidPlayer(localPlayer, playerInfo))
 			{
 				continue;
 			}
@@ -226,5 +232,30 @@ public sealed class FlasherAbilityHandler(
 		this.screenEffect.StartHold(
 			this.activeTime + FlasherStatusModel.AfterglowMaxTime,
 			FlasherStatusModel.ToColor(flashColor));
+		Sound.PlaySound(Sound.Type.FlasherFlash, 0.875f);
+	}
+
+	public bool IsValidPlayer(
+		PlayerControl sourcePlayer,
+		NetworkedPlayerInfo targetPlayer)
+	{
+		if (targetPlayer == null)
+		{
+			return false;
+		}
+		byte targetPlayerId = targetPlayer.PlayerId;
+		byte sourcePlayerId = sourcePlayer.PlayerId;
+
+		return (
+			targetPlayerId != sourcePlayerId &&
+			targetPlayer.IsAlive() &&
+			!targetPlayer.Object.inVent &&
+			ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetPlayerRole) &&
+			(
+				!this.role.IsSameTeam(targetPlayerRole) ||
+				(this.status.IsAffectImpostor && targetPlayerRole.IsImpostor())
+			) &&
+			(targetPlayerRole.AbilityClass is not IInvincible invincible || invincible.IsValidAbilitySource(sourcePlayerId))
+		);
 	}
 }

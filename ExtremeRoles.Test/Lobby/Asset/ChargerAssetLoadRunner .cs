@@ -1,3 +1,4 @@
+using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class ChargerAssetLoadRunner
 	{
 		Log.LogInfo($"----- Unit:ChargerLoad Test -----");
 		LoadFromExR(ExtremeRoleId.Charger);
+		NullCheck(Sound.GetAudio(Sound.Type.ChargerCharge));
 		yield break;
 	}
 }

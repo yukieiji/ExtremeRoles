@@ -21,6 +21,7 @@ public sealed class FlasherRole : SingleRoleBase, IRoleAbility
 	public enum Option
 	{
 		Range,
+		IsAffectImpostor,
 		FlashColor,
 	}
 
@@ -97,6 +98,8 @@ public sealed class FlasherRole : SingleRoleBase, IRoleAbility
 			Option.Range,
 			5.0f, 0.5f, 25.0f, 0.1f);
 
+		factory.CreateBoolOption(Option.IsAffectImpostor, false);
+
 		factory.CreateSelectionOption<Option, FlasherColor>(
 			Option.FlashColor);
 	}
@@ -111,6 +114,7 @@ public sealed class FlasherRole : SingleRoleBase, IRoleAbility
 		var loader = this.Loader;
 
 		this.status = new FlasherStatusModel(
+			loader.GetValue<Option, bool>(Option.IsAffectImpostor),
 			loader.GetValue<Option, float>(Option.Range),
 			(FlasherColor)loader.GetValue<Option, int>(Option.FlashColor));
 
