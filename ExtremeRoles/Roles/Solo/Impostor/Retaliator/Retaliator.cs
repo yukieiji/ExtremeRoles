@@ -5,6 +5,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -16,7 +17,7 @@ using ExtremeRoles.Extension.Player;
 
 namespace ExtremeRoles.Roles.Solo.Impostor.Retaliator;
 
-public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleMeetingButtonAbility, IRoleResetMeeting
+public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleMeetingButtonAbility, IRoleResetMeeting, ITryKillTo
 {
     public sealed class RetaliatorTargetReportSerializer : IStringSerializer
     {
@@ -98,7 +99,8 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
     {
         factory.CreateIntOption(
             RetaliatorOption.AwakeKillCount,
-            1, 0, 10, 1);
+            1, 0, 10, 1,
+			format: OptionUnit.Shot);
 
         var maxAbilityUses = factory.CreateIntOption(
             RetaliatorOption.MaxAbilityUseCount,
@@ -173,6 +175,9 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
                 caller.WriteByte(targetPlayerId);
             }
             TargetPlayer(targetPlayerId);
+
+			// 本人だけタグが見えるようにしないといけないので更新処理を入れる
+			EventManager.Instance.Invoke(ModEvent.VisualUpdate);
         }
 
         return retaliateAction;
@@ -202,7 +207,21 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
     {
     }
 
-    public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
+	public bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
+	{
+		if (this.status is null)
+		{
+			return true;
+		}
+
+		if (!this.status.IsAwake)
+		{
+			this.status.IncrementKill();
+		}
+		return true;
+	}
+
+	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
     {
         if (this.status != null && this.status.IsTargeted(targetPlayerId))
         {

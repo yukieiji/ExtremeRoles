@@ -1924,6 +1924,7 @@ Lv2能力「ビームセーバー」
     <value>インポスターが「フラッシュ」の影響を受けるか</value>
   </data>
   <data name="RetaliatorTargetedNotification" xml:space="preserve">
-    <value>どうやら「リタニエイター」の「リタリエイト」の対象だったらしい・・・</value>
+    <value>どうやら「リタニエイター」の
+「リタリエイト」の対象だったらしい・・・</value>
   </data>
 </root>

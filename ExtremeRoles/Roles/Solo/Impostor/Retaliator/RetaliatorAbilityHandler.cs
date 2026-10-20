@@ -8,7 +8,7 @@ using ExtremeRoles.Roles.API.Interface.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Impostor.Retaliator;
 
-public class RetaliatorAbilityHandler(RetaliatorStatusModel status) : IAbility, IKilledFrom, ITryKillTo
+public class RetaliatorAbilityHandler(RetaliatorStatusModel status) : IAbility, IKilledFrom
 {
     private readonly RetaliatorStatusModel status = status;
 
@@ -51,14 +51,5 @@ public class RetaliatorAbilityHandler(RetaliatorStatusModel status) : IAbility, 
             ExtremeShipStatus.PlayerStatus.Retaliate);
 
         return false;
-    }
-
-    public bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
-    {
-        if (!this.status.IsAwake)
-        {
-            this.status.IncrementKill();
-        }
-        return true;
     }
 }
