@@ -95,7 +95,7 @@ public sealed class Mayor :
 		}
 		else if (localId == targetId)
 		{
-			role.ShowPopUp(key, Tr.GetString("mayorRevealToTarget", mayorPlayer.Data.DefaultOutfit.PlayerName), 3.0f);
+			role.ShowPopUp(key, Tr.GetString("mayorRevealToTarget", mayorPlayer.Data.DefaultOutfit.PlayerName), 7.5f);
 		}
 	}
 
@@ -110,7 +110,7 @@ public sealed class Mayor :
 		{
 			text = new TextPopUpper(
 				1, disappearTime,
-				new Vector3(0.0f, 1.25f, -250.0f),
+				new Vector3(0.0f, 0.75f, -250.0f),
 				TMPro.TextAlignmentOptions.Center);
 			this.popUpper[key] = text;
 		}
