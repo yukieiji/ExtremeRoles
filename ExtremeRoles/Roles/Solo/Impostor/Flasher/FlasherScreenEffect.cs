@@ -54,6 +54,9 @@ public static class FlasherScreenTimeline
 	/// <summary>縦方向の振幅の除数</summary>
 	public const float VerticalShakeDivider = 5.0f;
 
+
+	public const float VerticalMaxShakeDistance = MaxShakeDistance / VerticalShakeDivider;
+
 	/// <summary>シェイクの振動数</summary>
 	private const float ShakeFrequency = 25.0f;
 
@@ -93,7 +96,7 @@ public static class FlasherScreenTimeline
 		float decayY = 1.0f - progress;
 
 		float distanceX = MaxShakeDistance * decayX;
-		float distanceY = (MaxShakeDistance / VerticalShakeDivider) * decayY;
+		float distanceY = VerticalMaxShakeDistance * decayY;
 
 		float angle = elapsed * ShakeFrequency;
 
