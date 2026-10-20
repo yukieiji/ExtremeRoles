@@ -7,13 +7,15 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor.Darkpointer;
 
 public sealed class DarkpointerRole :
 	SingleRoleBase,
-	IRoleAutoBuildAbility
+	IRoleAutoBuildAbility,
+	IRoleSpecialReset
 {
 	public enum Option
 	{
@@ -70,6 +72,24 @@ public sealed class DarkpointerRole :
 	public void ResetOnMeetingStart() { }
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null) { }
+
+	public override void RolePlayerKilledAction(PlayerControl rolePlayer, PlayerControl killerPlayer)
+	{
+		reset(rolePlayer);
+	}
+
+	public void AllReset(PlayerControl rolePlayer)
+	{
+		reset(rolePlayer);
+	}
+
+	private void reset(PlayerControl rolePlayer)
+	{
+		if (rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+		{
+			CleanUp();
+		}
+	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{

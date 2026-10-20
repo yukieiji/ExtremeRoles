@@ -9,7 +9,6 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Module.Interface;
 
 #nullable enable
 
@@ -18,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor.Flasher;
 /// <summary>
 /// フラッシュで周囲の視界を奪うインポスター。
 /// </summary>
-public sealed class FlasherRole : SingleRoleBase, IRoleAbility
+public sealed class FlasherRole : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 {
 	public enum Option
 	{
@@ -127,5 +126,23 @@ public sealed class FlasherRole : SingleRoleBase, IRoleAbility
 
 		this.handler = new FlasherAbilityHandler(
 			this.status, this, new FlasherScreenEffect(), activeTime, new DefaultUnityObjectFactory());
+	}
+
+	public override void RolePlayerKilledAction(PlayerControl rolePlayer, PlayerControl killerPlayer)
+	{
+		reset(rolePlayer);
+	}
+
+	public void AllReset(PlayerControl rolePlayer)
+	{
+		reset(rolePlayer);
+	}
+
+	private void reset(PlayerControl rolePlayer)
+	{
+		if (rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+		{
+			this.handler?.ForceEnd();
+		}
 	}
 }
