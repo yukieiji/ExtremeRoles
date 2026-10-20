@@ -29,6 +29,7 @@ public class MapTests : IDisposable
 	static MapTests()
 	{
 		MockSetupHelper.SetupUnityCommonMocks();
+		MockSetupHelper.SetupMockExtremeRolePlugin();
 
 		var mockOptions = new Mock<IGameOptions>(IntPtr.Zero);
 		globalGameOptions = mockOptions.Object;
@@ -51,6 +52,8 @@ public class MapTests : IDisposable
 	private void ResetState()
 	{
 		currentMapId = 0;
+
+		MockSetupHelper.SetupCompatModManager();
 
 		Mock.Get(globalGameOptions).Reset();
 		Mock.Get(globalGameOptions)
