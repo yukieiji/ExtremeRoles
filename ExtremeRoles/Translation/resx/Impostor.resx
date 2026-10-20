@@ -1823,41 +1823,40 @@ Lv2能力「ビームセーバー」
     <value>リタリエイター</value>
   </data>
   <data name="RetaliatorFullDescription" xml:space="preserve">
-    <value>会議中にプレイヤーを選択し、次のタスクフェーズ中にそのプレイヤーが自分に対して行うキルを弾き返して返撃（自爆）させます。</value>
+    <value>選択したプレイヤーからのキルを弾き返します、覚醒インポスター役職
+
+会議ボタン能力「リタリエイト」:
+ - 会議中にプレイヤーを選択して発動
+ - そのプレイヤーによるキルボタンのキルを次の会議まで弾き返し、
+そのプレイヤーをキルする
+
+</value>
   </data>
   <data name="RetaliatorShortDescription" xml:space="preserve">
-    <value>キルを弾き返す</value>
+    <value>敵対してるやつからのキルを防げ</value>
   </data>
   <data name="RetaliatorIntroDescription" xml:space="preserve">
-    <value>会議中にプレイヤーを選択して、次のタスクフェーズ中そのプレイヤーからのキルを弾き返す</value>
+    <value>その殺意、そっくりそのままお返しだ</value>
   </data>
-  <data name="RetaliatorOptionAwakeKillCount" xml:space="preserve">
+  <data name="RetaliatorAwakeKillCount" xml:space="preserve">
     <value>覚醒に必要なキル数</value>
   </data>
-  <data name="RetaliatorOptionMaxAbilityUseCount" xml:space="preserve">
-    <value>最大能力使用回数</value>
+  <data name="RetaliatorMaxAbilityUseCount" xml:space="preserve">
+    <value>「リタリエイト」の発動回数</value>
   </data>
-  <data name="RetaliatorOptionMaxTargetPerMeeting" xml:space="preserve">
-    <value>1回の会議で選択可能な人数の上限</value>
+  <data name="RetaliatorMaxTargetPerMeeting" xml:space="preserve">
+    <value>1回の会議で発動出来る回数</value>
   </data>
-  <data name="RetaliatorOptionTargetTeam" xml:space="preserve">
-    <value>弾き返せる対象陣営</value>
+  <data name="RetaliatorTargetTeam" xml:space="preserve">
+    <value>キルを弾き返せる陣営</value>
   </data>
-  <data name="RetaliatorOptionNotifyTargetNextMeeting" xml:space="preserve">
-    <value>対象になっていたことを次の会議で通知する</value>
-  </data>
-  <data name="RetaliatorTargetTeamCrewmateOnly" xml:space="preserve">
-    <value>クルーのみ</value>
-  </data>
-  <data name="RetaliatorTargetTeamNeutralOnly" xml:space="preserve">
-    <value>ニュートラルのみ</value>
-  </data>
-  <data name="RetaliatorTargetTeamBothCrewAndNeutral" xml:space="preserve">
-    <value>クルー・ニュートラル両方</value>
+  <data name="RetaliatorNotifyTargetNextMeeting" xml:space="preserve">
+    <value>次の会議での「リタリエイト」の
+対象プレイヤーへの通知</value>
   </data>
   <data name="retaliatorUiInfo" xml:space="preserve">
-    <value>能力使用可能数：{0}回
-この会議で指定可能数：{1}人</value>
+    <value>残り発動回数：{0}回
+この会議での残り発動回数：{1}回</value>
   </data>
   <data name="Flasher" xml:space="preserve">
     <value>フラッシャー</value>
@@ -1923,5 +1922,8 @@ Lv2能力「ビームセーバー」
   </data>
   <data name="FlasherIsAffectImpostor" xml:space="preserve">
     <value>インポスターが「フラッシュ」の影響を受けるか</value>
+  </data>
+  <data name="RetaliatorTargetedNotification" xml:space="preserve">
+    <value>どうやら「リタニエイター」の「リタリエイト」の対象だったらしい・・・</value>
   </data>
 </root>

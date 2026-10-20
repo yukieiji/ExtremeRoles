@@ -52,9 +52,10 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
 
     public bool IsAwake => GameSystem.IsLobby || (this.status != null && this.status.IsAwake);
 
-    public Sprite AbilityImage => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Retaliator);
+	public Sprite AbilityImage => Resources.UnityObjectLoader.LoadSpriteFromResources(
+		ObjectPath.FencerCounter);
 
-    public RetaliatorRole() : base(
+	public RetaliatorRole() : base(
         RoleArgs.BuildImpostor(ExtremeRoleId.Retaliator))
     { }
 
@@ -205,7 +206,7 @@ public sealed class RetaliatorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRol
     {
         if (this.status != null && this.status.IsTargeted(targetPlayerId))
         {
-            return $" ({Design.ColoredString(Palette.ImpostorRed, Tr.GetString("RetaliatorTargetTag"))})";
+            return $" {Design.ColoredString(Palette.ImpostorRed, "■")}";
         }
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
     }

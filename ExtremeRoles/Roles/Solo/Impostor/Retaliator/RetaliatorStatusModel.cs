@@ -16,40 +16,29 @@ public enum RetaliatorTargetTeam
 	BothLiberalAndNeutral,
 }
 
-public class RetaliatorStatusModel : IStatusModel
+public class RetaliatorStatusModel(
+	int awakeKillCount,
+	int maxAbilityUses,
+	int maxTargetPerMeeting,
+	RetaliatorTargetTeam targetTeam,
+	bool notifyTargetNextMeeting) : IStatusModel
 {
-    public bool IsAwake { get; private set; }
+	public bool IsAwake { get; private set; } = awakeKillCount <= 0;
 	public bool CanUseAbility =>
 		IsAwake &&
 		RemainingAbilityUses > 0 &&
 		CurrentMeetingTargetCount > 0;
 
-    public int AwakeKillCount { get; private set; }
-    public int RemainingAbilityUses { get; private set; }
-    public int CurrentMeetingTargetCount { get; private set; }
-    public RetaliatorTargetTeam TargetTeam { get; }
-    public bool NotifyTargetNextMeeting { get; }
+	public int AwakeKillCount { get; private set; } = awakeKillCount;
+	public int RemainingAbilityUses { get; private set; } = maxAbilityUses;
+	public int CurrentMeetingTargetCount { get; private set; } = maxTargetPerMeeting;
+	public RetaliatorTargetTeam TargetTeam { get; } = targetTeam;
+	public bool NotifyTargetNextMeeting { get; } = notifyTargetNextMeeting;
 
-	private readonly int maxTargetPerMeeting;
+	private readonly int maxTargetPerMeeting = maxTargetPerMeeting;
 
 	private readonly HashSet<byte> targetedPlayerIds = new HashSet<byte>();
     public IReadOnlyCollection<byte> TargetedPlayerIds => this.targetedPlayerIds;
-
-    public RetaliatorStatusModel(
-        int awakeKillCount,
-        int maxAbilityUses,
-        int maxTargetPerMeeting,
-        RetaliatorTargetTeam targetTeam,
-        bool notifyTargetNextMeeting)
-    {
-        this.AwakeKillCount = awakeKillCount;
-        this.RemainingAbilityUses = maxAbilityUses;
-        this.maxTargetPerMeeting = maxTargetPerMeeting;
-        this.TargetTeam = targetTeam;
-        this.NotifyTargetNextMeeting = notifyTargetNextMeeting;
-        this.IsAwake = awakeKillCount <= 0;
-        this.CurrentMeetingTargetCount = this.maxTargetPerMeeting;
-    }
 
     public void TargetPlayer(byte playerId)
     {

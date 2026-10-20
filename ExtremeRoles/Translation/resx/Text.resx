@@ -1451,13 +1451,25 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="liberalIntroHide2" xml:space="preserve">
     <value>この中に潜んでいる同志へ、革命の灯火を掲げろ</value>
   </data>
-  <data name="RetaliatorRetaliate" xml:space="preserve">
-    <value>反撃</value>
+  <data name="CrewmateOnly" xml:space="preserve">
+    <value>クルーのみ</value>
   </data>
-  <data name="RetaliatorTargetTag" xml:space="preserve">
-    <value>反撃</value>
+  <data name="AllImpostorOther" xml:space="preserve">
+    <value>インポスター以外全て</value>
   </data>
-  <data name="RetaliatorTargetedNotification" xml:space="preserve">
-    <value>前回のタスクフェーズ中、リタリエイターの能力対象にされていました。</value>
+  <data name="NeutralOnly" xml:space="preserve">
+    <value>ニュートラルのみ</value>
+  </data>
+  <data name="LiberalOnly" xml:space="preserve">
+    <value>リベラルのみ</value>
+  </data>
+  <data name="BothCrewAndNeutral" xml:space="preserve">
+    <value>クルーとニュートラルのみ</value>
+  </data>
+  <data name="BothCrewAndLiberal" xml:space="preserve">
+    <value>クルーとリベラルのみ</value>
+  </data>
+  <data name="BothLiberalAndNeutral" xml:space="preserve">
+    <value>ニュートラルとリベラルのみ</value>
   </data>
 </root>

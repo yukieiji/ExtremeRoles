@@ -1434,13 +1434,4 @@ As a common setting for this faction, they are not affected by vision effects li
   <data name="ventKey" xml:space="preserve">
     <value>Vent</value>
   </data>
-  <data name="RetaliatorRetaliate" xml:space="preserve">
-    <value>Retaliate</value>
-  </data>
-  <data name="RetaliatorTargetTag" xml:space="preserve">
-    <value>Retaliate</value>
-  </data>
-  <data name="RetaliatorTargetedNotification" xml:space="preserve">
-    <value>You were targeted by the Retaliator during the previous task phase.</value>
-  </data>
 </root>

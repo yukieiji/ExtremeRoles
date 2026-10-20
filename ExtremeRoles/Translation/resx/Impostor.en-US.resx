@@ -1775,29 +1775,20 @@ The blackmailed player cannot speak, chat, or vote in the next meeting.</value>
   <data name="RetaliatorIntroDescription" xml:space="preserve">
     <value>Select a player during a meeting to retaliate against their kills in the next task phase.</value>
   </data>
-  <data name="RetaliatorOptionAwakeKillCount" xml:space="preserve">
+  <data name="RetaliatorAwakeKillCount" xml:space="preserve">
     <value>Kills required to awaken</value>
   </data>
-  <data name="RetaliatorOptionMaxAbilityUseCount" xml:space="preserve">
+  <data name="RetaliatorMaxAbilityUseCount" xml:space="preserve">
     <value>Max ability uses</value>
   </data>
-  <data name="RetaliatorOptionMaxTargetPerMeeting" xml:space="preserve">
+  <data name="RetaliatorMaxTargetPerMeeting" xml:space="preserve">
     <value>Max targets per meeting</value>
   </data>
-  <data name="RetaliatorOptionTargetTeam" xml:space="preserve">
+  <data name="RetaliatorTargetTeam" xml:space="preserve">
     <value>Targetable team</value>
   </data>
-  <data name="RetaliatorOptionNotifyTargetNextMeeting" xml:space="preserve">
+  <data name="RetaliatorNotifyTargetNextMeeting" xml:space="preserve">
     <value>Notify target in next meeting</value>
-  </data>
-  <data name="RetaliatorTargetTeamCrewmateOnly" xml:space="preserve">
-    <value>Crewmate Only</value>
-  </data>
-  <data name="RetaliatorTargetTeamNeutralOnly" xml:space="preserve">
-    <value>Neutral Only</value>
-  </data>
-  <data name="RetaliatorTargetTeamBothCrewAndNeutral" xml:space="preserve">
-    <value>Both Crewmate &amp; Neutral</value>
   </data>
   <data name="retaliatorUiInfo" xml:space="preserve">
     <value>Remaining ability uses: {0}
