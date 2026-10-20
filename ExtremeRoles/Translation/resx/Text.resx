@@ -1472,4 +1472,7 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="BothLiberalAndNeutral" xml:space="preserve">
     <value>ニュートラルとリベラルのみ</value>
   </data>
+  <data name="LiberalTab" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;リベラル役職設定/color&gt;</value>
+  </data>
 </root>
