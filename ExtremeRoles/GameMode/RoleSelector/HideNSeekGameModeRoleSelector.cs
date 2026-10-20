@@ -81,7 +81,8 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.TimeBreaker,
 			ExtremeRoleId.RemoteKiller,
 			ExtremeRoleId.YoYo,
-			ExtremeRoleId.Retaliator,
+			ExtremeRoleId.Flasher,
+			ExtremeRoleId.Darkpointer,
 
 			ExtremeRoleId.IronMate,
 			ExtremeRoleId.Heretic,

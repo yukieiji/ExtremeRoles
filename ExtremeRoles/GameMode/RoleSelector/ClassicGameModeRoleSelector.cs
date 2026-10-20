@@ -146,6 +146,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Blackmailer,
 			ExtremeRoleId.Retaliator,
 			ExtremeRoleId.Flasher,
+			ExtremeRoleId.Darkpointer,
 
 			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,
