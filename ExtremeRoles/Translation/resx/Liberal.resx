@@ -422,4 +422,18 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="DeltaAbilityName" xml:space="preserve">
     <value>ディスパリティ</value>
   </data>
+  <data name="Snatcher" xml:space="preserve">
+    <value>スナッチャー</value>
+  </data>
+  <data name="SnatcherFullDescription" xml:space="preserve">
+    <value>タイプ : ドーヴ
+
+自身のタスクがどのマップでも全て金庫タスクになる</value>
+  </data>
+  <data name="SnatcherShortDescription" xml:space="preserve">
+    <value>金庫から資金を獲得せよ</value>
+  </data>
+  <data name="SnatcherIntroDescription" xml:space="preserve">
+    <value>どんな金庫もお手の物</value>
+  </data>
 </root>
