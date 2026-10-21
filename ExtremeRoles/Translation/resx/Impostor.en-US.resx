@@ -1855,7 +1855,4 @@ Ability button "Flash"
   <data name="DarkpointerRange" xml:space="preserve">
     <value>Darkness Radius</value>
   </data>
-  <data name="DarkpointerActiveDuration" xml:space="preserve">
-    <value>Darkness Duration</value>
-  </data>
 </root>

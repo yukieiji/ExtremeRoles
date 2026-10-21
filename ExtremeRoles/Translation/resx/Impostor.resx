@@ -1903,22 +1903,24 @@ Lv2能力「ビームセーバー」
     <value>ダークポインター</value>
   </data>
   <data name="DarkpointerFullDescription" xml:space="preserve">
-    <value>視界と通報を遮る「闇」を纏える</value>
+    <value>視界と通報を遮る「闇」を纏えるインポスター
+
+ボタン能力「闇」:
+ - ボタンを押すと視界を遮る「闇」を纏える
+ - 「闇」の中では通報することは出来ない
+(ボタンは反応する)</value>
   </data>
   <data name="DarkpointerShortDescription" xml:space="preserve">
-    <value>視界と通報を遮る「闇」を纏える</value>
+    <value>視界と通報を遮る「闇」を纏え</value>
   </data>
   <data name="DarkpointerIntroDescription" xml:space="preserve">
-    <value>視界と通報を遮る「闇」を纏える</value>
+    <value>底知れぬ絶望の"闇"に沈め!</value>
   </data>
   <data name="DarkpointerAbility" xml:space="preserve">
     <value>闇</value>
   </data>
   <data name="DarkpointerRange" xml:space="preserve">
-    <value>闇の半径</value>
-  </data>
-  <data name="DarkpointerActiveDuration" xml:space="preserve">
-    <value>闇の持続時間</value>
+    <value>「闇」の半径</value>
   </data>
   <data name="FlasherIsAffectImpostor" xml:space="preserve">
     <value>インポスターが「フラッシュ」の影響を受けるか</value>
@@ -1926,5 +1928,14 @@ Lv2能力「ビームセーバー」
   <data name="RetaliatorTargetedNotification" xml:space="preserve">
     <value>どうやら「リタニエイター」の
 「リタリエイト」の対象だったらしい・・・</value>
+  </data>
+  <data name="DarkpointerAbilityCoolTime" xml:space="preserve">
+    <value>「闇」のクールタイム</value>
+  </data>
+  <data name="DarkpointerAbilityCount" xml:space="preserve">
+    <value>「闇」の使用回数</value>
+  </data>
+  <data name="DarkpointerAbilityActiveTime" xml:space="preserve">
+    <value>「闇」のアクティブ時間</value>
   </data>
 </root>

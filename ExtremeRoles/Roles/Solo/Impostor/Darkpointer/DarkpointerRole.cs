@@ -19,7 +19,6 @@ public sealed class DarkpointerRole :
 {
 	public enum Option
 	{
-		ActiveDuration,
 		Range,
 	}
 
