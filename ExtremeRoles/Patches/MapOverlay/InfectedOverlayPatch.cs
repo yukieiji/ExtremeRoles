@@ -3,6 +3,7 @@ using HarmonyLib;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Extension.UnityEvents;
+using UnityEngine;
 
 #nullable enable
 
@@ -42,12 +43,12 @@ public static class InfectedOverlayPatch
 
 	private static void UpdateSabotageButtonState(InfectedOverlay instance)
 	{
-		bool isBlocked = ExtremeSystemTypeManager.Instance.TryGet<ForestallerSystem>(ForestallerSystem.Type, out var system) &&
-			system.IsForestallActive;
+		bool isActive = !(ExtremeSystemTypeManager.Instance.TryGet<ForestallerSystem>(ForestallerSystem.Type, out var system) &&
+			system.IsForestallActive);
 
 		foreach (var button in instance.allButtons)
 		{
-			button.enabled = !isBlocked;
+			button.gameObject.SetActive(isActive);
 		}
 	}
 }

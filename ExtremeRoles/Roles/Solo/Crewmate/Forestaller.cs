@@ -132,8 +132,7 @@ public sealed class Forestaller :
 	{
 		this.CreateActivatingAbilityCountButton(
 			"forestall",
-			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton),
-			// UnityObjectLoader.LoadFromResources(ExtremeRoleId.Forestaller),
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Forestaller),
 			abilityOff: CleanUp,
 			forceAbilityOff: CleanUp);
 		this.Button?.SetLabelToCrewmate();
