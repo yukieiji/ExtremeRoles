@@ -132,7 +132,8 @@ public sealed class Forestaller :
 	{
 		this.CreateActivatingAbilityCountButton(
 			"forestall",
-			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Forestaller),
+			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton),
+			// UnityObjectLoader.LoadFromResources(ExtremeRoleId.Forestaller),
 			abilityOff: CleanUp,
 			forceAbilityOff: CleanUp);
 		this.Button?.SetLabelToCrewmate();
@@ -168,7 +169,7 @@ public sealed class Forestaller :
 
 		IRoleAbility.CreateAbilityCountOption(
 			factory,
-			defaultAbilityCount: 1,
+			defaultAbilityCount: 3,
 			maxAbilityCount: 10,
 			defaultActiveTime: 10.0f);
 	}

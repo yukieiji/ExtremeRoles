@@ -40,11 +40,7 @@ public sealed class ForestallerSystem : IExtremeSystemType
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
-		if (timing == ResetTiming.OnPlayer && resetPlayer != null)
-		{
-			this.activeForestallers.Remove(resetPlayer.PlayerId);
-		}
-		else
+		if (timing is ResetTiming.MeetingStart)
 		{
 			this.activeForestallers.Clear();
 		}
