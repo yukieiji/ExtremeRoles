@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.Solo.Crewmate;
+using System.Collections.Generic;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -107,6 +107,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Logger,
 			ExtremeRoleId.Charger,
 			ExtremeRoleId.Mayor,
+			ExtremeRoleId.Forestaller,
 
 			ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,

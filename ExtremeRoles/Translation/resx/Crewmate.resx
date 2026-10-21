@@ -1813,4 +1813,36 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="MayorAbilityCount" xml:space="preserve">
     <value>「名乗り」が使える回数</value>
   </data>
+  <data name="Forestaller" xml:space="preserve">
+    <value>フォーストーラー</value>
+  </data>
+  <data name="ForestallerFullDescription" xml:space="preserve">
+    <value>一定時間サボタージュの発動出来るクルー役職
+
+ボタン能力「フォーストール」:
+ - 発動中、サボタージュが一定時間全て
+発動できなくなる
+ - テロリストなどの特殊サボタージュは発動できる</value>
+  </data>
+  <data name="ForestallerShortDescription" xml:space="preserve">
+    <value>サボタージュの発動を阻止せよ</value>
+  </data>
+  <data name="ForestallerIntroDescription" xml:space="preserve">
+    <value>サボタージュを阻止せよ</value>
+  </data>
+  <data name="ForestallerAwakeTaskGage" xml:space="preserve">
+    <value>覚醒に必要なタスク進捗率</value>
+  </data>
+  <data name="ForestallerAbilityCoolTime" xml:space="preserve">
+    <value>「フォーストール」のクールタイム</value>
+  </data>
+  <data name="ForestallerAbilityActiveTime" xml:space="preserve">
+    <value>「フォーストール」の発動時間</value>
+  </data>
+  <data name="ForestallerAbilityCount" xml:space="preserve">
+    <value>「フォーストール」の回数</value>
+  </data>
+  <data name="forestall" xml:space="preserve">
+    <value>フォーストール</value>
+  </data>
 </root>
