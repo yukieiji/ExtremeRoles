@@ -132,10 +132,10 @@ public sealed class SnatcherAbilityHandler
 
 public sealed class Snatcher : SingleRoleBase, IRoleUpdate
 {
-	private DoveCommonAbilityHandler? handler;
+	private SnatcherAbilityHandler? handler;
 
 	public Snatcher() : base(
-		RoleArgs.BuildLiberalDove(ExtremeRoleId.SpecialDove))
+		RoleArgs.BuildLiberalDove(ExtremeRoleId.Snatcher))
 	{
 	}
 
@@ -165,6 +165,6 @@ public sealed class Snatcher : SingleRoleBase, IRoleUpdate
 	{
 		var liberalOption = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<LiberalDefaultOptionLoader>();
 		LiberalSettingOverrider.OverrideDefault(this, liberalOption);
-		this.handler = new DoveCommonAbilityHandler(liberalOption);
+		this.handler = new SnatcherAbilityHandler(liberalOption);
 	}
 }
