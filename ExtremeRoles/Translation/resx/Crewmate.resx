@@ -1837,7 +1837,7 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>「フォーストール」のクールタイム</value>
   </data>
   <data name="ForestallerAbilityActiveTime" xml:space="preserve">
-    <value>「フォーストール」のアクティブタイム</value>
+    <value>「フォーストール」の発動時間</value>
   </data>
   <data name="ForestallerAbilityCount" xml:space="preserve">
     <value>「フォーストール」の回数</value>
