@@ -1823,7 +1823,7 @@ Lv2能力「ビームセーバー」
     <value>リタリエイター</value>
   </data>
   <data name="RetaliatorFullDescription" xml:space="preserve">
-    <value>選択したプレイヤーからのキルを弾き返します、覚醒インポスター役職
+    <value>選択したプレイヤーからのキルを弾き返すインポスター
 
 会議ボタン能力「リタリエイト」:
  - 会議中にプレイヤーを選択して発動
