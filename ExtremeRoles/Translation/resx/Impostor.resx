@@ -173,7 +173,7 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>捕食中…</value>
   </data>
   <data name="Carrier" xml:space="preserve">
-    <value>キャリヤー</value>
+    <value>キャリアー</value>
   </data>
   <data name="CarrierAbilityCoolTime" xml:space="preserve">
     <value>「キャリー」のクールタイム</value>
