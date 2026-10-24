@@ -1,3 +1,5 @@
+using ExtremeRoles.GameMode;
+
 namespace ExtremeRoles.Roles.API;
 
 public abstract partial class SingleRoleBase
@@ -17,7 +19,7 @@ public abstract partial class SingleRoleBase
 
     public virtual bool IsSameTeam(SingleRoleBase targetRole)
     {
-        if (this.IsLiberal())
+        if (ExtremeGameModeManager.Instance.CanSeeOtherLiberal && this.IsLiberal())
         {
             return targetRole.IsLiberal();
         }

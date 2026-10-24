@@ -264,6 +264,7 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 
 		var mockContext = new Mock<IGameContext>();
 		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
+		mockContext.SetupGet(c => c.CanSeeOtherLiberal).Returns(true);
 
 		IGameContext? context = mockContext.Object;
 		runtime.Setup(r => r.TryGetGameContext(out context)).Returns(true);
@@ -569,6 +570,7 @@ public class IntroCutScenceBeginPatchTests : IDisposable
 
 		var mockContext = new Mock<IGameContext>();
 		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
+		mockContext.SetupGet(c => c.CanSeeOtherLiberal).Returns(true);
 
 		var patch = new IntroCutScenceBeginPatch(logger.Object, runtime.Object);
 		var mockTeamList = new Mock<PlayerIl2CppList>(IntPtr.Zero);

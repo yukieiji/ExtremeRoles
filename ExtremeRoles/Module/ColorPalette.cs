@@ -63,6 +63,12 @@ public static class ColorPalette
 	public readonly static Color CEOTzuShuiChing = new Color32(203, 175, 214, byte.MaxValue);
 	public readonly static Color EchoDarkAliceblue = new Color32(220, 228, 255, byte.MaxValue);
 	public readonly static Color InspectorAmberYellow = new Color32(255, 191, 0, byte.MaxValue);
+	public readonly static Color ItakoSkyBlue = new Color32(65, 140, 194, byte.MaxValue);
+	public readonly static Color ScreamerColor = new Color32(255, 99, 71, byte.MaxValue);
+	public readonly static Color LoggerGreen = new Color32(46, 139, 87, byte.MaxValue);
+	public readonly static Color ChargerElectricYellow = new Color32(255, 230, 0, byte.MaxValue);
+	public readonly static Color MayorOchre = new Color32(140, 95, 20, byte.MaxValue);
+	public readonly static Color ForestallerGreen = new Color32(34, 139, 34, byte.MaxValue);
 
 	public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
 	public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
@@ -83,6 +89,11 @@ public static class ColorPalette
 	public readonly static Color IronMateAluminium = new Color32(128, 140, 136, byte.MaxValue);
 	public readonly static Color MonikaRoseSaumon = new Color32(
 		244, 155, 131, byte.MaxValue);
+	public readonly static Color PunisherDarkGold = new Color32(77, 65, 0, byte.MaxValue);
+	public readonly static Color ImitaterColor = NeutralColor;
+	public readonly static Color MastermindSlateBlue = new Color32(106, 90, 205, byte.MaxValue);
+	public readonly static Color DeepOneDarkGreen = new Color32(57, 76, 61, byte.MaxValue);
+
 
 	public readonly static Color PoltergeistLightKenpou = new Color32(
 		84, 82, 75, byte.MaxValue);

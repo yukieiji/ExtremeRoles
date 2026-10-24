@@ -24,13 +24,13 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		List<BehaviorBase> behaviorors,
 		IButtonAutoActivator activator,
 		KeyCode hotKey,
-		IGameObjectFactory? gameObjectFactory = null,
+		IUnityObjectFactory? unityObjectFactory = null,
 		ISpriteLoader? spriteLoader = null) : base(
 			behaviorors[0],
 			activator,
 			hotKey)
 	{
-		gameObjectFactory ??= new DefaultGameObjectFactory();
+		unityObjectFactory ??= new DefaultUnityObjectFactory();
 		spriteLoader ??= new DefaultSpriteLoader();
 
 		this.allAbility = behaviorors.ToList();
@@ -47,7 +47,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 			}
 		}
 
-		var obj = gameObjectFactory.Create("MultiAbilityImg");
+		var obj = unityObjectFactory.CreateGameObject("MultiAbilityImg");
 		obj.transform.SetParent(this.Transform);
 		obj.transform.position = this.Transform.position;
 		obj.transform.localPosition = new Vector3(0.0f, 0.0f, 0.25f);

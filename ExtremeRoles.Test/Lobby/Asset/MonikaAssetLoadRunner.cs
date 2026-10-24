@@ -1,17 +1,17 @@
-﻿using ExtremeRoles.Roles;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Test.Lobby.Asset;
 
-public class MonikaAssetLoadRunner
+public class BlackmailerAssetLoadRunner
 	: AssetLoadRunner
 {
 	public override IEnumerator Run()
 	{
-		Log.LogInfo($"----- Unit:MonikaAsset Test -----");
+		Log.LogInfo($"----- Unit:BlackmailerAsset Test -----");
 
-		LoadFromExR(ExtremeRoleId.Monika);
-		LoadFromExR(ExtremeRoleId.Monika, ObjectPath.MeetingBk);
+		LoadFromExR(ExtremeRoleId.Blackmailer);
+		LoadFromExR(ExtremeRoleId.Blackmailer, ObjectPath.MeetingBk);
 		yield break;
 	}
 }

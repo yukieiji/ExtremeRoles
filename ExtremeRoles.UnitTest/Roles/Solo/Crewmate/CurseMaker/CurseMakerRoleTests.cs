@@ -430,7 +430,10 @@ public sealed class CurseMakerRoleTests : IDisposable
 
 		// Assert
 		var isRemoveDeadBodyField = typeof(CurseMakerRole).GetField("isRemoveDeadBody", BindingFlags.NonPublic | BindingFlags.Instance);
-		Assert.False((bool)isRemoveDeadBodyField!.GetValue(role)!);
+		Assert.NotNull(isRemoveDeadBodyField);
+		var val = isRemoveDeadBodyField.GetValue(role);
+		Assert.NotNull(val);
+		Assert.False((bool)val);
 	}
 
 	[Fact]
@@ -444,7 +447,10 @@ public sealed class CurseMakerRoleTests : IDisposable
 
 		// Assert
 		var isRemoveDeadBodyField = typeof(CurseMakerRole).GetField("isRemoveDeadBody", BindingFlags.NonPublic | BindingFlags.Instance);
-		Assert.True((bool)isRemoveDeadBodyField!.GetValue(role)!);
+		Assert.NotNull(isRemoveDeadBodyField);
+		var val = isRemoveDeadBodyField.GetValue(role);
+		Assert.NotNull(val);
+		Assert.True((bool)val);
 	}
 
 	[Fact]
@@ -545,7 +551,10 @@ public sealed class CurseMakerRoleTests : IDisposable
 		// Assert
 		Assert.True(result);
 		var deadBodyIdField = typeof(CurseMakerRole).GetField("deadBodyId", BindingFlags.NonPublic | BindingFlags.Instance);
-		Assert.Equal(targetId, (byte)deadBodyIdField!.GetValue(role)!);
+		Assert.NotNull(deadBodyIdField);
+		var deadBodyIdVal = deadBodyIdField.GetValue(role);
+		Assert.NotNull(deadBodyIdVal);
+		Assert.Equal(targetId, (byte)deadBodyIdVal);
 	}
 
 	[Fact]
@@ -646,7 +655,10 @@ public sealed class CurseMakerRoleTests : IDisposable
 
 		// Assert
 		Assert.False(deadBodyArrow.ContainsKey(playerId));
-		Assert.Equal(byte.MaxValue, (byte)deadBodyIdField.GetValue(role)!);
+		Assert.NotNull(deadBodyIdField);
+		var deadBodyIdVal = deadBodyIdField.GetValue(role);
+		Assert.NotNull(deadBodyIdVal);
+		Assert.Equal(byte.MaxValue, (byte)deadBodyIdVal);
 	}
 
 	[Fact]
@@ -690,7 +702,10 @@ public sealed class CurseMakerRoleTests : IDisposable
 		role.CleanUp();
 
 		// Assert
-		Assert.Equal(byte.MaxValue, (byte)deadBodyIdField.GetValue(role)!);
+		Assert.NotNull(deadBodyIdField);
+		var deadBodyIdVal = deadBodyIdField.GetValue(role);
+		Assert.NotNull(deadBodyIdVal);
+		Assert.Equal(byte.MaxValue, (byte)deadBodyIdVal);
 	}
 
 	[Fact]
@@ -899,10 +914,16 @@ public sealed class CurseMakerRoleTests : IDisposable
 
 		// Assert
 		var isRemoveDeadBodyField = typeof(CurseMakerRole).GetField("isRemoveDeadBody", BindingFlags.NonPublic | BindingFlags.Instance);
-		Assert.False((bool)isRemoveDeadBodyField!.GetValue(role)!);
+		Assert.NotNull(isRemoveDeadBodyField);
+		var removeVal = isRemoveDeadBodyField.GetValue(role);
+		Assert.NotNull(removeVal);
+		Assert.False((bool)removeVal);
 
 		var isReducedSearchTimeField = typeof(CurseMakerRole).GetField("isReducedSearchTime", BindingFlags.NonPublic | BindingFlags.Instance);
-		Assert.True((bool)isReducedSearchTimeField!.GetValue(role)!);
+		Assert.NotNull(isReducedSearchTimeField);
+		var reducedVal = isReducedSearchTimeField.GetValue(role);
+		Assert.NotNull(reducedVal);
+		Assert.True((bool)reducedVal);
 	}
 
 	[Fact]
