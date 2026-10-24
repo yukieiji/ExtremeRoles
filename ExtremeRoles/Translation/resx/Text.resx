@@ -1475,4 +1475,7 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="LiberalTab" xml:space="preserve">
     <value>&lt;color=#F9F06F&gt;リベラル役職設定/color&gt;</value>
   </data>
+  <data name="LiberalSettingCanSeeOtherLiberal" xml:space="preserve">
+    <value>リベラル同士の確認</value>
+  </data>
 </root>

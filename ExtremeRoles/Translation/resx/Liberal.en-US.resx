@@ -230,9 +230,6 @@ Place stakes with "Stake" ability to construct a polygon, then perform "Metsu" t
   <data name="EncloserIntroDescription" xml:space="preserve">
     <value>Can use Houi, Teiso, and Metsu barrier techniques</value>
   </data>
-  <data name="EncloserStakeCount" xml:space="preserve">
-    <value>Number of Stakes (Polygon Vertices)</value>
-  </data>
   <data name="EncloserMetsuLimit" xml:space="preserve">
     <value>"Metsu" Usage Limit</value>
   </data>

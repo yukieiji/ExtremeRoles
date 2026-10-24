@@ -1777,7 +1777,7 @@ Lv2能力「ビームセーバー」
 
 ボタン能力「恐喝」
  - プレイヤー一人の近くで発動(一定時間近くにいる必要あり)
- - そのプレイヤーは次の会議中(だけ)に発言およびチャット
+ - そのプレイヤーは次の会議中(だけ)、発言およびチャット
 　投票を行うことが不可能になる</value>
   </data>
   <data name="BlackmailerShortDescription" xml:space="preserve">
@@ -1891,7 +1891,7 @@ Lv2能力「ビームセーバー」
     <value>「フラッシュ」のクールタイム</value>
   </data>
   <data name="FlasherAbilityActiveTime" xml:space="preserve">
-    <value>「フラッシュ」で画面が白くなる時間</value>
+    <value>「フラッシュ」のアクティブ時間</value>
   </data>
   <data name="FlasherAbilityCount" xml:space="preserve">
     <value>「フラッシュ」の使用回数</value>

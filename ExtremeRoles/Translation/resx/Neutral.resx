@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -65,20 +65,20 @@
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1552,6 +1552,7 @@
     2. インポスター及びキル能力を持つ第三陣営が
 全滅しており、生存者の半数以上が同じ陣営。
 
+タスクは無限に追加される
 インポスター以外をキルすると、キルクールが永続増加
 タスクをすることでキルボタンが使用できたり、キルクール
 が短くなる</value>
@@ -1566,14 +1567,14 @@
     <value>ベントを使用できるか</value>
   </data>
   <data name="PunisherRequiredTaskNumToKill" xml:space="preserve">
-    <value>キルが可能になるタスク量</value>
+    <value>キルが可能になるタスク完了数</value>
   </data>
   <data name="PunisherNonImpostorKillCoolIncrease" xml:space="preserve">
     <value>インポスター以外をキルしたときの
 キルクール増加量</value>
   </data>
   <data name="PunisherTaskCompletionKillCoolReduce" xml:space="preserve">
-    <value>タスク完了時のキルクール減少量</value>
+    <value>キルクール減少量/タスク完了</value>
   </data>
   <data name="Imitater" xml:space="preserve">
     <value>イミテイター</value>
@@ -1582,7 +1583,7 @@
     <value>求源</value>
   </data>
   <data name="ImitaterRange" xml:space="preserve">
-    <value>「求源」を発動できる距離</value>
+    <value>「求源」が発動できる距離</value>
   </data>
   <data name="ImitaterAbilityCoolTime" xml:space="preserve">
     <value>「求源」のクールタイム</value>
@@ -1604,11 +1605,14 @@
 
 勝利条件: なし
 
-・自身に対してキル能力が使用された場合、
+・自身に対してキルボタンによるキルが使用された場合
 そのキルを無効化し相手の役職に変化する
 
 ・ボタン能力「求源」
-対象のキルを暴発させることができる</value>
+  - プレイヤー一人を対象に発動
+  - 一定時間近くに居た後、そのプレイヤーのキルボタン
+を自身に向けて暴発させる
+  - 相手がキルボタンを持っていなかった場合は失敗する</value>
   </data>
   <data name="Mastermind" xml:space="preserve">
     <value>マスターマインド</value>
@@ -1622,9 +1626,11 @@
 
 能力「特殊投票」：
 　・「特殊投票」の票数が1票以上の時発動できる
+    ・会議中にプレイヤーを選んで発動
 　・発動後専用のアイコンが使用したプレイヤーに表示される
 　・能力を使用すると対象となったプレイヤーに追加で票が入る
 　・1タスクを完了する事に「特殊投票」の票数が増える
+　・一度能力を使用すると「特殊投票」の票数は0になる
 　・特殊投票先は再度発動することで投票先を変更可能である</value>
   </data>
   <data name="MastermindShortDescription" xml:space="preserve">
@@ -1646,7 +1652,7 @@
     <value>タスクが追加されるタスク進捗率</value>
   </data>
   <data name="MastermindVoteGainPerTask" xml:space="preserve">
-    <value>1タスク完了あたり増加する特殊投票数</value>
+    <value>特殊投票数/1タスク完了</value>
   </data>
   <data name="MastermindInfiniteTasks" xml:space="preserve">
     <value>タスクが無限に追加されるか</value>
@@ -1658,7 +1664,18 @@
     <value>ディープワン</value>
   </data>
   <data name="DeepOneFullDescription" xml:space="preserve">
-    <value>タスクフェーズ中にカエル（生贄）を設置可能。\nカエルは使用ボタン連打で消去される。\n規定数のカエルが設置されると勝利。</value>
+    <value>- 勝利条件
+  - 指定個数「生贄」を設置する
+
+
+ボタン能力「生贄」
+  - ボタンを押したその場所に「生贄」を設置できる
+  - 「生贄」は全員が即座に見ることが出来る
+  - 「生贄」は使用ボタンを指定回数クリックすることで
+撤去することが可能である
+    - 「生贄」が撤去されるとボタンのクールタイムが
+伸びるデバフを受ける
+  - 「生贄」の設置個数によって様々なバフを得ることが出来る</value>
   </data>
   <data name="DeepOneShortDescription" xml:space="preserve">
     <value>カエル（生贄）を設置し勝利を目指せ</value>
@@ -1670,30 +1687,33 @@
     <value>死亡数によるクールタイム減少率</value>
   </data>
   <data name="DeepOneEnableKillBlock" xml:space="preserve">
-    <value>1本設置でキル無効</value>
+    <value>1体設置でキル無効</value>
   </data>
   <data name="DeepOneEnableVentUnlock" xml:space="preserve">
-    <value>3本設置でベント解放</value>
+    <value>3体設置でベント解放</value>
   </data>
   <data name="DeepOneRequiredClicks" xml:space="preserve">
     <value>生贄消去に必要な連打数</value>
   </data>
   <data name="DeepOneEnableMaxSpeed" xml:space="preserve">
-    <value>4本設置で最高移動速度</value>
+    <value>4体設置で最高移動速度</value>
   </data>
-  <data name="DeepOnePenaltyCooldown" xml:space="preserve">
+  <data name="DeepOneFrogsRemovePenalty" xml:space="preserve">
     <value>生贄消去時の追加クールタイム</value>
   </data>
   <data name="DeepOneEnableClickMultiplier" xml:space="preserve">
-    <value>5本以上で連打数倍増</value>
+    <value>5体以上で連打数倍増</value>
   </data>
   <data name="DeepOneRequiredWinFrogs" xml:space="preserve">
-    <value>勝利に必要な設置数</value>
+    <value>勝利に必要な生贄設置数</value>
   </data>
   <data name="DeepOneEnableExileBlock" xml:space="preserve">
-    <value>2本設置で追放無効</value>
+    <value>2体設置で追放無効</value>
   </data>
   <data name="sacrifice" xml:space="preserve">
     <value>生贄</value>
+  </data>
+  <data name="DeepOneAbilityCoolTime" xml:space="preserve">
+    <value>「生贄」のクールダウン</value>
   </data>
 </root>
