@@ -1681,7 +1681,7 @@
     <value>カエル（生贄）を設置し勝利を目指せ</value>
   </data>
   <data name="DeepOneIntroDescription" xml:space="preserve">
-    <value>カエル（生贄）を規定数設置せよ</value>
+    <value>「生贄」を規定数設置せよ</value>
   </data>
   <data name="DeepOneDeathCooldownReduction" xml:space="preserve">
     <value>死亡数によるクールタイム減少率</value>
