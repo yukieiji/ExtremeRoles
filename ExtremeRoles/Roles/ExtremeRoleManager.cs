@@ -111,6 +111,7 @@ public enum ExtremeRoleId : int
 	Charger,
 	Mayor,
 	Forestaller,
+	Scanner,
 
 	SpecialImpostor,
     Evolver,
@@ -378,6 +379,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Charger     , new Charger()},
 			{(int)ExtremeRoleId.Mayor       , new Mayor()},
 			{(int)ExtremeRoleId.Forestaller , new Forestaller()},
+			{(int)ExtremeRoleId.Scanner     , new ScannerRole()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
