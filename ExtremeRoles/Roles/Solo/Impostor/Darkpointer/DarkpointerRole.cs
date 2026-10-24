@@ -31,13 +31,11 @@ public sealed class DarkpointerRole :
 
 	public void CreateAbility()
 	{
-		this.CreateActivatingAbilityCountButton(
+		this.CreateReclickableCountAbilityButton(
 			Tr.GetString("DarkpointerAbility"),
 			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Darkpointer),
 			IsAbilityCheck,
-			CleanUp,
-			ForceCleanUp,
-			isReduceOnActive: true);
+			CleanUp);
 	}
 
 	public bool IsAbilityCheck() => true;
@@ -61,11 +59,6 @@ public sealed class DarkpointerRole :
 		{
 			this.system?.RpcRemoveDarkness(localPlayer.PlayerId);
 		}
-	}
-
-	public void ForceCleanUp()
-	{
-		CleanUp();
 	}
 
 	public void ResetOnMeetingStart() { }
