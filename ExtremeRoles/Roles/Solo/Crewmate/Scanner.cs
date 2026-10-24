@@ -31,7 +31,7 @@ public sealed class ScannerRole :
 {
 	public ExtremeAbilityButton? Button { get; set; }
 
-	private ModdedShapeShifterMinigameWrapper? minigameWrapper;
+	private ShapeShiftMinigameWrapper? minigameWrapper;
 	private SystemTypes? selectedRoom;
 	private bool isScanning;
 	private Vector2 prevPlayerPos;
@@ -175,16 +175,15 @@ public sealed class ScannerRole :
 
 	private bool openUI()
 	{
-		this.minigameWrapper ??= new ModdedShapeShifterMinigameWrapper();
+		this.minigameWrapper ??= new ShapeShiftMinigameWrapper();
 		if (this.minigameWrapper.IsOpen)
 		{
 			return true;
 		}
-		return this.minigameWrapper.Open<ScannerScanSelectorMinigame>(
-			minigame => minigame.OnSelectRoom = this.overrideSelectRoom);
+		return this.minigameWrapper.OpenUi(new RoomSelectPanelBuilder(selectRoom));
 	}
 
-	private void overrideSelectRoom(SystemTypes roomId)
+	private void selectRoom(SystemTypes roomId)
 	{
 		if (this.Button is null ||
 			!this.Button.Transform.TryGetComponent<PassiveButton>(out var button))

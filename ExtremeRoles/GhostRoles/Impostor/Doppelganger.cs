@@ -162,7 +162,7 @@ public sealed class Doppelganger : GhostRoleBase
 	private bool openUI()
 	{
 		this.minigame ??= new ShapeShiftMinigameWrapper();
-		return this.minigame.IsOpen || this.minigame.OpenUi(this.abilityCall);
+		return this.minigame.IsOpen || this.minigame.OpenUi(new DefaultPanelBuilder(this.abilityCall));
 	}
 
 	private bool isAbilityUse(bool isCharge, float _)
@@ -211,7 +211,8 @@ public sealed class Doppelganger : GhostRoleBase
 
 	private void abilityCall(PlayerControl target)
 	{
-		if (this.Button is null ||
+		if (target == null ||
+			this.Button is null ||
 			!this.Button.Transform.TryGetComponent<PassiveButton>(out var button))
 		{
 			return;
