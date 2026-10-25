@@ -2,7 +2,7 @@
 
 import math
 
-from color_wheel import wheel_point
+from color_wheel import LABEL_TEXT_HALF, MARGIN, label_points, wheel_point
 
 
 def test_wheel_point_places_hues_like_the_reference_wheel():
@@ -27,3 +27,17 @@ def test_wheel_point_radius_follows_saturation():
     # Assert
     assert center == 0.0
     assert math.isclose(outer, 1.0)
+
+
+def test_color_labels_fit_inside_the_canvas():
+    """色名ラベルがキャンバス幅に収まることのテスト。"""
+    # Arrange
+    radius = 138
+    limit = radius + MARGIN - LABEL_TEXT_HALF
+
+    # Act
+    positions = label_points(radius)
+
+    # Assert
+    assert len(positions) == 6
+    assert all(abs(x) <= limit and abs(y) <= limit for _, x, y in positions)

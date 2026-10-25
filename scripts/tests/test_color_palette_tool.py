@@ -9,9 +9,9 @@ from palette_colors import PaletteColor
 from pytest import CaptureFixture
 
 FIXTURE_PALETTE = (
-    PaletteColor(name="PureRed", rgb=Rgb(255, 0, 0), line=1),
-    PaletteColor(name="SkyBlue", rgb=Rgb(105, 165, 255), line=2),
-    PaletteColor(name="MiddleGray", rgb=Rgb(128, 128, 128), line=3),
+    PaletteColor(name="PureRed", rgb=Rgb(255, 0, 0), line=1, index=1),
+    PaletteColor(name="SkyBlue", rgb=Rgb(105, 165, 255), line=2, index=2),
+    PaletteColor(name="MiddleGray", rgb=Rgb(128, 128, 128), line=3, index=3),
 )
 
 

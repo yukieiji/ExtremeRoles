@@ -33,7 +33,7 @@ class MatrixView(tk.Canvas):
         self._on_select = on_select
         self._small = tkfont.Font(family="Yu Gothic UI", size=7)
         self._draw_grid()
-        self.redraw_cells()
+        self._redraw_cells()
         self.bind("<Button-1>", self._handle_click)
         self._tooltip = CellTooltip(self, self._tooltip_lines)
 
@@ -82,7 +82,7 @@ class MatrixView(tk.Canvas):
                 font=self._small,
             )
 
-    def redraw_cells(self) -> None:
+    def _redraw_cells(self) -> None:
         """全セルを描き直します。"""
         self.delete("cell")
         for row in range(self._matrix.rows):
@@ -129,15 +129,6 @@ class MatrixView(tk.Canvas):
             font=self._small,
             tags=("cell",),
         )
-        if self._matrix.cell_of(color.rgb) != cell:
-            self.create_text(
-                box.right - 7,
-                box.top + 7,
-                text="＊",
-                fill="#ffff00",
-                font=self._small,
-                tags=("cell",),
-            )
 
     @staticmethod
     def _cell_box(cell: Cell) -> Box:
@@ -178,7 +169,7 @@ class MatrixView(tk.Canvas):
         ]
         preferred = self._matrix.cell_of(color.rgb)
         if preferred != cell:
-            lines.append(f"＊元の座標 {preferred} が使用済みの為ここへ配置")
+            lines.append(f"元の座標 {preferred} は使用中の為ここへ配置")
         return lines
 
     def _cell_at(self, x: int, y: int) -> Cell | None:
@@ -193,7 +184,7 @@ class MatrixView(tk.Canvas):
         ):
             return None
 
-        cell = Cell(int(row), int(col))
+        cell = Cell(row, col)
         if not self._cell_box(cell).contains(x, y):
             return None
         return cell

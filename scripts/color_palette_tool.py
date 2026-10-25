@@ -14,11 +14,11 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-from color_matrix import Cell, ColorMatrix, NEAR_DELTA_E
+from color_matrix import MAX_LISTED_CANDIDATES, Cell, ColorMatrix, NEAR_DELTA_E
 from color_space import to_hex
 from palette_colors import COLORPALETTE_CS, load_palette
+from palette_overrides import apply_matrix_overrides
 
-MAX_LISTED_CANDIDATES = 6
 DEBUG_SHOT = "color_palette_debug.png"
 INITIAL_COLOR = "#69A5FF"
 
@@ -52,8 +52,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def build_matrix() -> ColorMatrix:
-    """ColorPalette.cs からマトリクスを構築します。"""
-    return ColorMatrix(load_palette(COLORPALETTE_CS))
+    """ColorPalette.cs からマトリクスを構築します (マトリクス専用の足し引きを適用)。"""
+    return ColorMatrix(apply_matrix_overrides(load_palette(COLORPALETTE_CS)))
 
 
 def format_report(text: str, matrix: ColorMatrix, near_threshold: float) -> str | None:

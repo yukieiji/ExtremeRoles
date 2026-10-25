@@ -40,7 +40,7 @@ def test_add_single_new_key(real_resx_file_copy: Path):
     content = real_resx_file_copy.read_text(encoding="utf-8")
 
     assert f'name="{new_key}"' in content
-    assert f"<value>STRMISS</value>" in content
+    assert "<value>STRMISS</value>" in content
 
 
 def test_add_multiple_new_keys(real_resx_file_copy: Path):

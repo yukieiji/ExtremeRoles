@@ -1,11 +1,13 @@
 """カラーパレットを明度×色相のマトリクスに配置し、近似色を判定します。
 
-マトリクスは 20 列 × 5 行です。行は明度 L* の分位、列は HSV 色相で決めます。
-1 セルには 1 色だけを入れ、同じセルに争われた場合は同列内の隣の空きセルへ繰ります。
+マトリクスは既定 20 列 × 5 行 (100 色を超えると 20 色ごとに 1 行増) です。
+行は明度 L* の件数分位、列は HSV 色相 (最終列は無彩色) で決めます。
+1 セルには 1 色だけを入れ、争われた場合は「同じ行の近い列」→「近い行の近い列」
+の順で空きセルへ繰り下げます。
 """
 
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
 
 from color_space import Rgb, chroma, delta_e76, hue, lightness, parse_color, to_hex
 from palette_colors import PaletteColor
@@ -32,6 +34,7 @@ HUE_LABELS = (
 )
 EXACT_DELTA_E = 1.0
 NEAR_DELTA_E = 25.0
+MAX_LISTED_CANDIDATES = 6
 
 
 @dataclass(frozen=True)
@@ -176,10 +179,9 @@ class ColorMatrix:
         return tuple(color.name for color in self._colors if color.rgb == rgb)
 
     def palette_position(self, color: PaletteColor) -> str:
-        """パレット（ColorPalette.cs）上の位置を表す文字列を返します。"""
-        return (
-            f"宣言順 {color.index}/{len(self._colors)} (ColorPalette.cs:{color.line})"
-        )
+        """パレット上の位置を表す文字列を返します (line=0 はソース外定義)。"""
+        location = f"ColorPalette.cs:{color.line}" if color.line > 0 else "定義元なし"
+        return f"宣言順 {color.index}/{len(self._colors)} ({location})"
 
     def cell_summary(self, color: PaletteColor) -> str:
         """実配置のマトリクス座標・色相名・明度 band をまとめた短い文字列を返します。"""
@@ -239,6 +241,7 @@ class ColorMatrix:
                 self._cells[cell] = color
                 self._assigned[color.name] = cell
                 return
+        # rows = max(PREFERRED_ROWS, ceil(件数 / COLUMNS)) なので空きは必ず存在する。
         raise ValueError("マトリクスに空きセルがありません。")
 
 

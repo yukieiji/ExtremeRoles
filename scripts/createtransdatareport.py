@@ -50,19 +50,19 @@ def get_trans_data_check(file_name: str) -> dict[str, list[str]]:
                 # i行目j列がデータ、jは2以上であり2が0(英語)である
                 for j in range(2, col + 1):
                     lang_enm = j - 2
-                    if not (lang_enm in SUPPORT_LANG) or (
+                    if lang_enm not in SUPPORT_LANG or (
                         lang_enm == 11
                         and (key == "langTranslate" or key == "translatorMember")
                     ):
                         continue
 
                     cell_data = sheat.index(i, j)
-                    if type(cell_data) != str:
+                    if not isinstance(cell_data, str):
                         continue
 
                     lang = SUPPORT_LANG[lang_enm]
 
-                    if not (lang in missing_data):
+                    if lang not in missing_data:
                         missing_data[lang] = []
 
                     if cell_data == "":
@@ -80,7 +80,7 @@ class ResXMissingData:
         self.data: dict[str, list[str]] = {}
 
     def append(self, lang: str, key: str):
-        if not (lang in self.data):
+        if lang not in self.data:
             self.data[lang] = []
         self.data[lang].append(key)
 

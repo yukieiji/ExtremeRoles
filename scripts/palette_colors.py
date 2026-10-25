@@ -57,7 +57,9 @@ def parse_source(source: str) -> tuple[list[PaletteColor], list[str]]:
     colors: list[PaletteColor] = []
     warnings: list[str] = []
 
-    for number, match in enumerate(_DECLARATION.finditer(_LINE_COMMENT.sub("", source)), 1):
+    for number, match in enumerate(
+        _DECLARATION.finditer(_LINE_COMMENT.sub("", source)), 1
+    ):
         line = source.count("\n", 0, match.start()) + 1
         name = match.group("name")
         value = " ".join(match.group("value").split())
@@ -65,7 +67,11 @@ def parse_source(source: str) -> tuple[list[PaletteColor], list[str]]:
         if isinstance(parsed, str):
             colors.append(
                 PaletteColor(
-                    name=name, rgb=Rgb(0, 0, 0), line=line, index=number, alias_of=parsed
+                    name=name,
+                    rgb=Rgb(0, 0, 0),
+                    line=line,
+                    index=number,
+                    alias_of=parsed,
                 )
             )
             continue
@@ -73,9 +79,7 @@ def parse_source(source: str) -> tuple[list[PaletteColor], list[str]]:
             warnings.append(f"{name} (line {line}): 解釈できない宣言 '{value}'")
             continue
         try:
-            colors.append(
-                PaletteColor(name=name, rgb=parsed, line=line, index=number)
-            )
+            colors.append(PaletteColor(name=name, rgb=parsed, line=line, index=number))
         except ValueError as error:
             warnings.append(f"{name} (line {line}): {error}")
 

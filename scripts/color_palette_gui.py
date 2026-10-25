@@ -5,7 +5,11 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import colorchooser
 
-from color_matrix import Analysis, ColorMatrix
+from color_matrix import (
+    MAX_LISTED_CANDIDATES,
+    Analysis,
+    ColorMatrix,
+)
 from color_matrix_view import MatrixView
 from color_palette_list import PaletteListBox
 from color_space import to_hex
@@ -16,6 +20,7 @@ from window_shot import capture_window
 WINDOW_TITLE = "ExtremeRoles ColorPalette Matrix"
 WHEEL_RADIUS = 138
 DEBUG_DELAY_MS = 900
+VERDICT_LINE = 2
 VERDICT_COLORS = {
     "ok": "#0a7d32",
     "near": "#b26a00",
@@ -35,9 +40,7 @@ class PaletteApp(tk.Tk):
         super().__init__()
         self.matrix = matrix
         self.near_threshold = near_threshold
-        self.debug_shot = debug_shot
         self.debug_status = 0
-        self.analysis: Analysis | None = None
 
         self.title(WINDOW_TITLE)
         self.geometry("2300x980")
@@ -54,9 +57,8 @@ class PaletteApp(tk.Tk):
         self.palette_list.pack(side=tk.LEFT, fill=tk.Y, padx=(0, 8))
         self._build_detail()
 
-        if self.debug_shot is not None:
-            shot = self.debug_shot
-            self.after(DEBUG_DELAY_MS, lambda: self._capture_debug_shot(shot))
+        if debug_shot is not None:
+            self.after(DEBUG_DELAY_MS, lambda: self._capture_debug_shot(debug_shot))
 
     # --- UI 構築 ---
 
@@ -90,15 +92,15 @@ class PaletteApp(tk.Tk):
         """入力文字列を解析してマトリクス・ホイール・詳細欄を更新します。"""
         rgb = self.matrix.resolve(text)
         if rgb is None:
-            self.analysis = None
             self.matrix_view.show(None)
             self.wheel.highlight((), None)
             self.palette_list.highlight((), None)
-            self.status.config(text=f"色を解釈できません: {text}", foreground="#a40000")
+            self.status.config(
+                text=f"色を解釈できません: {text}", foreground=VERDICT_COLORS["far"]
+            )
             return
 
         analysis = self.matrix.analyze(rgb, self.near_threshold)
-        self.analysis = analysis
         self.status.config(
             text=_verdict_text(analysis), foreground=_verdict_color(analysis)
         )
@@ -118,7 +120,7 @@ class PaletteApp(tk.Tk):
             f"  マトリクス  : {self.matrix.position_text_of(nearest.color)}",
             f"近似候補 ({len(analysis.near_matches)}件)",
         ]
-        for match in analysis.near_matches[:8]:
+        for match in analysis.near_matches[:MAX_LISTED_CANDIDATES]:
             lines.append(
                 f"  #{match.color.index:>3} {self.matrix.cell_summary(match.color):<16} {match}"
             )
@@ -128,7 +130,11 @@ class PaletteApp(tk.Tk):
         self.detail.config(state=tk.NORMAL)
         self.detail.delete("1.0", tk.END)
         self.detail.insert(tk.END, "\n".join(lines) + "\n")
-        self.detail.tag_add(_verdict_tag(analysis), "2.0", "3.0")
+        self.detail.tag_add(
+            _verdict_tag(analysis),
+            f"{VERDICT_LINE}.0",
+            f"{VERDICT_LINE + 1}.0",
+        )
         self.detail.config(state=tk.DISABLED)
 
     # --- イベント ---

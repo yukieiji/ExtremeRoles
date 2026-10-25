@@ -37,5 +37,13 @@ def test_write_png_writes_signature_and_header(tmp_path):
 @pytest.mark.skipif(sys.platform != "win32", reason="Windows のみの機能のため")
 def test_capture_window_without_window(tmp_path):
     """存在しないタイトルでは LookupError になることのテスト。"""
+    # Arrange
+    path = tmp_path / "存在しない" / "x.png"
+
+    # Act
+    def capture() -> None:
+        capture_window("このウィンドウは存在しません", path)
+
+    # Assert
     with pytest.raises(LookupError):
-        capture_window("このウィンドウは存在しません", tmp_path / "x.png")
+        capture()

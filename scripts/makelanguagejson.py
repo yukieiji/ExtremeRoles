@@ -1,6 +1,5 @@
 import os
 import json
-import glob
 
 from typing import Dict
 
@@ -55,7 +54,7 @@ def xlsx_to_json(file_name: str, output_file: str) -> None:
             for j in range(2, col + 1):
                 cell_data = sheat.index(i, j)
 
-                if type(cell_data) != str or cell_data == "":
+                if not isinstance(cell_data, str) or cell_data == "":
                     continue
 
                 # I hate excel why did I do this to myself

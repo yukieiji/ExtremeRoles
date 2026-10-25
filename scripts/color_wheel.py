@@ -12,9 +12,10 @@ SECTORS = 72
 RINGS = 12
 MARKER_RADIUS = 4.5
 SELECTED_RADIUS = 7.5
-MARGIN = 22
+MARGIN = 30
 MIN_MARKED_SATURATION = 0.05
-LABEL_RADIUS_RATIO = 1.16
+LABEL_RADIUS_RATIO = 1.1
+LABEL_TEXT_HALF = 12
 LABELS = (
     ("赤", 0.0),
     ("黄", 60.0),
@@ -33,6 +34,16 @@ def wheel_point(hue_degrees: float, saturation_value: float) -> tuple[float, flo
         saturation_value * math.cos(angle),
         -saturation_value * math.sin(angle),
     )
+
+
+def label_points(radius: int) -> list[tuple[str, float, float]]:
+    """色名ラベルの、ホイール中心からの相対座標を返します。"""
+    reach = radius * LABEL_RADIUS_RATIO
+    return [
+        (text, x * reach, y * reach)
+        for text, angle in LABELS
+        for x, y in [wheel_point(angle, 1.0)]
+    ]
 
 
 class ColorWheel(tk.Canvas):
@@ -100,11 +111,10 @@ class ColorWheel(tk.Canvas):
                     ),
                     outline="",
                 )
-        for text, angle in LABELS:
-            x, y = wheel_point(angle, LABEL_RADIUS_RATIO)
+        for text, x, y in label_points(self._radius):
             self.create_text(
-                self._center + x * self._radius,
-                self._center + y * self._radius,
+                self._center + x,
+                self._center + y,
                 text=text,
                 fill="#dddddd",
                 font=("Meiryo", 8),

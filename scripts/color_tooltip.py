@@ -16,12 +16,12 @@ class CellTooltip:
         self._label: tk.Label | None = None
 
         canvas.bind("<Motion>", self._on_motion, add=True)
-        canvas.bind("<Leave>", lambda _: self.hide(), add=True)
+        canvas.bind("<Leave>", lambda _: self._hide(), add=True)
 
     def _on_motion(self, event: tk.Event) -> None:
         lines = self._provider(event.x, event.y)
         if not lines:
-            self.hide()
+            self._hide()
             return
 
         window, label = self._ensure_window()
@@ -50,6 +50,6 @@ class CellTooltip:
             self._window, self._label = window, label
         return self._window, self._label
 
-    def hide(self) -> None:
+    def _hide(self) -> None:
         if self._window is not None:
             self._window.withdraw()

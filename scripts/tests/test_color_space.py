@@ -1,8 +1,74 @@
-"""color_space.py の HSV 変換のテスト。"""
+"""color_space.py の色変換・色表記のテスト。"""
 
 import pytest
 
-from color_space import Rgb, from_hsv, hue, saturation, to_hex, value
+from color_space import (
+    Rgb,
+    delta_e76,
+    from_hsv,
+    hue,
+    parse_color,
+    saturation,
+    to_hex,
+    value,
+)
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("#FF8C00", Rgb(255, 140, 0)),
+        ("ff8c00", Rgb(255, 140, 0)),
+        ("#F80", Rgb(255, 136, 0)),
+        ("FF8C0080", Rgb(255, 140, 0)),
+        ("255, 140, 0", Rgb(255, 140, 0)),
+        ("(255 140 0)", Rgb(255, 140, 0)),
+    ],
+)
+def test_parse_color_accepts_formats(text: str, expected: Rgb):
+    """各色表記が Rgb に変換できることのテスト。"""
+    # Act
+    actual = parse_color(text)
+
+    # Assert
+    assert actual == expected
+
+
+@pytest.mark.parametrize(
+    "text", ["", "  ", "notacolor", "#12345", "300,0,0", "1,2,3,4"]
+)
+def test_parse_color_rejects_invalid(text: str):
+    """不正な色表記は None になることのテスト。"""
+    # Act
+    actual = parse_color(text)
+
+    # Assert
+    assert actual is None
+
+
+def test_rgb_rejects_out_of_range_channel():
+    """Rgb は 0〜255 のチャンネル値だけを受け付けることのテスト。"""
+
+    # Act
+    def build_out_of_range() -> Rgb:
+        return Rgb(256, 0, 0)
+
+    # Assert
+    with pytest.raises(ValueError):
+        build_out_of_range()
+
+
+def test_to_hex_and_delta_e76():
+    """hex 表現と色差計算が正しいことのテスト。"""
+    # Act
+    hex_value = to_hex(Rgb(255, 140, 0))
+    same = delta_e76(Rgb(10, 20, 30), Rgb(10, 20, 30))
+    opposite = delta_e76(Rgb(0, 0, 0), Rgb(255, 255, 255))
+
+    # Assert
+    assert hex_value == "#FF8C00"
+    assert same == 0.0
+    assert opposite > 90.0
 
 
 def test_saturation_matches_hsv_definition():

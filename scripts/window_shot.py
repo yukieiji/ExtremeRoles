@@ -83,9 +83,6 @@ def gdi32() -> ctypes.WinDLL:
 
 def find_window(title: str) -> int | None:
     """タイトルが完全一致するウィンドウハンドルを返します。"""
-    if sys.platform != "win32":
-        return None
-
     return user32().FindWindowW(None, title) or None
 
 
@@ -124,23 +121,31 @@ def _grab_pixels(handle: int, width: int, height: int) -> bytes:
     if not window_dc:
         raise OSError("GetWindowDC に失敗しました")
 
-    memory_dc = gdi.CreateCompatibleDC(window_dc)
-    bitmap = gdi.CreateCompatibleBitmap(window_dc, width, height)
-    if not memory_dc or not bitmap:
-        gdi.DeleteDC(memory_dc)
-        user32().ReleaseDC(handle, window_dc)
-        raise OSError("メモリビットマップの作成に失敗しました")
-
-    original = gdi.SelectObject(memory_dc, bitmap)
+    memory_dc = None
+    bitmap = None
+    original = None
     try:
+        memory_dc = gdi.CreateCompatibleDC(window_dc)
+        bitmap = gdi.CreateCompatibleBitmap(window_dc, width, height)
+        if not memory_dc or not bitmap:
+            raise OSError("メモリビットマップの作成に失敗しました")
+
+        original = gdi.SelectObject(memory_dc, bitmap)
+        if original is None:
+            raise OSError("SelectObject に失敗しました")
         if not user32().PrintWindow(handle, memory_dc, PW_RENDERFULLCONTENT):
             raise OSError("PrintWindow に失敗しました")
 
         gdi.SelectObject(memory_dc, original)
+        original = None
         return _read_bitmap(memory_dc, bitmap, width, height)
     finally:
-        gdi.DeleteObject(bitmap)
-        gdi.DeleteDC(memory_dc)
+        if original is not None:
+            gdi.SelectObject(memory_dc, original)
+        if bitmap:
+            gdi.DeleteObject(bitmap)
+        if memory_dc:
+            gdi.DeleteDC(memory_dc)
         user32().ReleaseDC(handle, window_dc)
 
 
