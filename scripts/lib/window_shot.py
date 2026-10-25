@@ -1,4 +1,4 @@
-"""Win32 API で指定タイトルの子ウィンドウをキャプチャし PNG で保存します。"""
+"""Win32 API でウィンドウハンドル指定のキャプチャを行い PNG で保存します。"""
 
 import ctypes
 import struct
@@ -10,6 +10,8 @@ from pathlib import Path
 PW_RENDERFULLCONTENT = 0x00000002
 BI_RGB = 0
 DIB_RGB_COLORS = 0
+GA_ROOT = 2
+WINDOWS_ONLY_MESSAGE = "ウィンドウキャプチャは Windows のみ対応です"
 BYTES_PER_PIXEL = 4
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 
@@ -41,9 +43,10 @@ class BitmapInfoHeader(ctypes.Structure):
 
 def user32() -> ctypes.WinDLL:
     """署名を宣言済みの user32 を返します。"""
+    _require_windows()
     library = ctypes.windll.user32
-    library.FindWindowW.restype = wintypes.HWND
-    library.FindWindowW.argtypes = [wintypes.LPCWSTR, wintypes.LPCWSTR]
+    library.GetAncestor.restype = wintypes.HWND
+    library.GetAncestor.argtypes = [wintypes.HWND, wintypes.UINT]
     library.GetWindowRect.restype = wintypes.BOOL
     library.GetWindowRect.argtypes = [wintypes.HWND, ctypes.POINTER(Rect)]
     library.GetWindowDC.restype = wintypes.HDC
@@ -57,6 +60,7 @@ def user32() -> ctypes.WinDLL:
 
 def gdi32() -> ctypes.WinDLL:
     """署名を宣言済みの gdi32 を返します。"""
+    _require_windows()
     library = ctypes.windll.gdi32
     library.CreateCompatibleDC.restype = wintypes.HDC
     library.CreateCompatibleDC.argtypes = [wintypes.HDC]
@@ -81,19 +85,22 @@ def gdi32() -> ctypes.WinDLL:
     return library
 
 
-def find_window(title: str) -> int | None:
-    """タイトルが完全一致するウィンドウハンドルを返します。"""
-    return user32().FindWindowW(None, title) or None
+def root_handle(widget_id: int) -> int:
+    """Tk ウィジェットを含む最上位ウィンドウのハンドルを返します。"""
+    return user32().GetAncestor(widget_id, GA_ROOT) or 0
 
 
-def capture_window(title: str, path: Path) -> tuple[int, int]:
-    """タイトル一致のウィンドウを撮って PNG に書き、(幅, 高さ) を返します。"""
+def _require_windows() -> None:
+    """Windows 以外ではキャプチャ不可なので例外にします。"""
     if sys.platform != "win32":
-        raise OSError("ウィンドウキャプチャは Windows のみ対応です")
+        raise OSError(WINDOWS_ONLY_MESSAGE)
 
-    handle = find_window(title)
-    if handle is None:
-        raise LookupError(f"ウィンドウが見つかりません: {title}")
+
+def capture_window(handle: int, path: Path) -> tuple[int, int]:
+    """ウィンドウハンドルで対象を特定し、PNG に (幅, 高さ) を書き出します。"""
+    _require_windows()
+    if not handle:
+        raise LookupError("対象ウィンドウハンドルが 0 です")
 
     width, height = _window_size(handle)
     rgba = _grab_pixels(handle, width, height)

@@ -14,10 +14,10 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-from color_matrix import MAX_LISTED_CANDIDATES, Cell, ColorMatrix, NEAR_DELTA_E
-from color_space import to_hex
-from palette_colors import COLORPALETTE_CS, load_palette
-from palette_overrides import apply_matrix_overrides
+from lib.color_matrix import MAX_LISTED_CANDIDATES, Cell, ColorMatrix, NEAR_DELTA_E
+from lib.color_space import to_hex
+from lib.palette_colors import COLORPALETTE_CS, load_palette
+from lib.palette_overrides import apply_matrix_overrides
 
 DEBUG_SHOT = "color_palette_debug.png"
 INITIAL_COLOR = "#69A5FF"
@@ -130,7 +130,7 @@ def launch_gui(
     debug_shot: Path | None,
 ) -> int:
     """GUI を起動します。色が指定されていない場合は見本色を判定しておきます。"""
-    from color_palette_gui import PaletteApp
+    from lib.color_palette_gui import PaletteApp
 
     app = PaletteApp(matrix, near_threshold, debug_shot)
     for text in colors or (INITIAL_COLOR,):

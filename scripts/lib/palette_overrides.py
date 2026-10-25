@@ -6,17 +6,20 @@ DefaultColor の代わりに先頭へ ImpostorRed を据えます。
 from collections.abc import Sequence
 from dataclasses import replace
 
-from color_space import Rgb
-from palette_colors import PaletteColor
+from .color_space import Rgb
+from .palette_colors import PaletteColor
 
 MATRIX_EXCLUDED_NAMES = ("DefaultColor",)
+# index と line は apply_matrix_overrides で振り直す為のプレースホルダです。
 MATRIX_LEADING_COLORS = (
     PaletteColor(name="ImpostorRed", rgb=Rgb(255, 25, 25), line=0, index=0),
 )
 
 
-def apply_matrix_overrides(colors: Sequence[PaletteColor]) -> list[PaletteColor]:
+def apply_matrix_overrides(colors: Sequence[PaletteColor]) -> tuple[PaletteColor, ...]:
     """除外対象を除き、追加色を先頭へ足して宣言順を振り直します。"""
     kept = [color for color in colors if color.name not in MATRIX_EXCLUDED_NAMES]
     combined = [*MATRIX_LEADING_COLORS, *kept]
-    return [replace(color, index=number) for number, color in enumerate(combined, 1)]
+    return tuple(
+        replace(color, index=number) for number, color in enumerate(combined, 1)
+    )

@@ -1,6 +1,6 @@
 """cell_layout.Box のテスト。"""
 
-from cell_layout import Box
+from lib.cell_layout import Box
 
 
 def test_box_size_and_contains():

@@ -6,7 +6,7 @@ from xml.etree import ElementTree as ET
 
 from pylightxl import readxl
 
-from paths import REPO_ROOT as WORKING_DIR
+from lib.paths import REPO_ROOT as WORKING_DIR
 
 EXTREMERORLS_FILE = os.path.join(WORKING_DIR, "ExtremeRoles", "Translation", "resx")
 EXTREMESKIN_IN_FILE = os.path.join(WORKING_DIR, "ExtremeSkinsTransData.xlsx")

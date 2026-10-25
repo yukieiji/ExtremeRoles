@@ -2,9 +2,9 @@
 
 import pytest
 
-from color_matrix import ColorMatrix, NEAR_DELTA_E, is_achromatic
-from color_space import Rgb
-from palette_colors import COLORPALETTE_CS, PaletteColor, load_palette
+from lib.color_matrix import ColorMatrix, NEAR_DELTA_E, is_achromatic
+from lib.color_space import Rgb
+from lib.palette_colors import COLORPALETTE_CS, PaletteColor, load_palette
 
 FIXTURE_PALETTE = (
     PaletteColor(name="PureRed", rgb=Rgb(255, 0, 0), line=1, index=1),
@@ -66,6 +66,38 @@ def test_full_palette_is_indexed_by_its_assigned_cell(real_matrix: ColorMatrix):
 
     # Assert
     assert found == list(real_matrix.colors)
+
+
+def test_ideal_summary_reports_position_of_any_rgb(matrix: ColorMatrix):
+    """未登録の色でも理想位置の短い表示が出ることのテスト。"""
+    # Arrange
+    rgb = Rgb(128, 128, 128)
+    cell = matrix.cell_of(rgb)
+
+    # Act
+    summary = matrix.ideal_summary(rgb)
+
+    # Assert
+    assert summary == f"{cell} 無彩色 L{matrix.rows - cell.row}"
+
+
+def test_ideal_and_assigned_summary_differ_for_displaced_color(
+    real_matrix: ColorMatrix,
+):
+    """繰り下げた色では理想位置表示と実配置表示が違うことのテスト。"""
+    # Arrange
+    displaced = next(
+        color
+        for color in real_matrix.colors
+        if real_matrix.assigned_cell(color) != real_matrix.cell_of(color.rgb)
+    )
+
+    # Act
+    ideal = real_matrix.ideal_summary(displaced.rgb)
+    assigned = real_matrix.cell_summary(displaced)
+
+    # Assert
+    assert ideal != assigned
 
 
 def test_palette_position_marks_outside_source():

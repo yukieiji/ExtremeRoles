@@ -5,21 +5,24 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import colorchooser
 
-from color_matrix import (
+from .color_matrix import (
     MAX_LISTED_CANDIDATES,
     Analysis,
     ColorMatrix,
 )
-from color_matrix_view import MatrixView
-from color_palette_list import PaletteListBox
-from color_space import to_hex
-from color_wheel import ColorWheel
-from palette_colors import PaletteColor
-from window_shot import capture_window
+from .color_matrix_view import MatrixView
+from .color_palette_list import PaletteListBox
+from .color_space import to_hex
+from .color_wheel import ColorWheel
+from .palette_colors import PaletteColor
+from .window_shot import capture_window, root_handle
 
 WINDOW_TITLE = "ExtremeRoles ColorPalette Matrix"
 WHEEL_RADIUS = 138
 DEBUG_DELAY_MS = 900
+DEBUG_RETRY_DELAY_MS = 300
+DEBUG_MAX_ATTEMPTS = 6
+DEBUG_SIZE_RATIO = 0.9
 VERDICT_LINE = 2
 VERDICT_COLORS = {
     "ok": "#0a7d32",
@@ -58,7 +61,7 @@ class PaletteApp(tk.Tk):
         self._build_detail()
 
         if debug_shot is not None:
-            self.after(DEBUG_DELAY_MS, lambda: self._capture_debug_shot(debug_shot))
+            self.after(DEBUG_DELAY_MS, lambda: self._capture_debug_shot(debug_shot, 1))
 
     # --- UI 構築 ---
 
@@ -95,12 +98,14 @@ class PaletteApp(tk.Tk):
             self.matrix_view.show(None)
             self.wheel.highlight((), None)
             self.palette_list.highlight((), None)
+            self.palette_list.set_input_color(None)
             self.status.config(
                 text=f"色を解釈できません: {text}", foreground=VERDICT_COLORS["far"]
             )
             return
 
         analysis = self.matrix.analyze(rgb, self.near_threshold)
+        self.palette_list.set_input_color(rgb)
         self.status.config(
             text=_verdict_text(analysis), foreground=_verdict_color(analysis)
         )
@@ -153,14 +158,44 @@ class PaletteApp(tk.Tk):
             return
         self._set_entry(hex_value)
 
-    def _capture_debug_shot(self, path: Path) -> None:
+    def _capture_debug_shot(self, path: Path, attempt: int) -> None:
+        """ウィンドウが期待サイズで描画できるまで撮影を再試行します。"""
+        self.update_idletasks()
         try:
-            width, height = capture_window(WINDOW_TITLE, path)
-            print(f"スクリーンショット保存: {path} ({width}x{height})")
+            width, height = capture_window(root_handle(self.winfo_id()), path)
+            ready = is_rendered(width, height, self.winfo_width(), self.winfo_height())
+            result = f"スクリーンショット保存: {path} ({width}x{height})"
         except (OSError, LookupError) as error:
-            self.debug_status = 1
-            print(f"スクリーンショット失敗: {error}", file=sys.stderr)
+            ready = False
+            result = f"スクリーンショット失敗: {error}"
+
+        if not ready and attempt < DEBUG_MAX_ATTEMPTS:
+            self.after(
+                DEBUG_RETRY_DELAY_MS,
+                lambda: self._capture_debug_shot(path, attempt + 1),
+            )
+            return
+
+        self.debug_status = 0 if ready else 1
+        stream = sys.stdout if ready else sys.stderr
+        print(f"{result} [{attempt}回目]", file=stream)
         self.destroy()
+
+
+def is_rendered(
+    width: int, height: int, expected_width: int, expected_height: int
+) -> bool:
+    """撮影サイズがウィンドウの期待サイズに達しているかを返します。
+
+    Tk は未マッピングのウィジェット寸法を 1 と報告する為、期待値が 1 以下なら未描画とします。
+    """
+    if expected_width <= 1 or expected_height <= 1:
+        return False
+
+    return (
+        width >= expected_width * DEBUG_SIZE_RATIO
+        and height >= expected_height * DEBUG_SIZE_RATIO
+    )
 
 
 def _verdict_text(analysis: Analysis) -> str:

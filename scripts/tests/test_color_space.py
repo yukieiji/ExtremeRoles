@@ -2,7 +2,7 @@
 
 import pytest
 
-from color_space import (
+from lib.color_space import (
     Rgb,
     delta_e76,
     from_hsv,

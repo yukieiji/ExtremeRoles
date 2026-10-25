@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from color_space import Rgb
-from palette_colors import COLORPALETTE_CS, PaletteColor, load_palette, parse_source
+from lib.color_space import Rgb
+from lib.palette_colors import COLORPALETTE_CS, PaletteColor, load_palette, parse_source
 
 SAMPLE_SOURCE = """
 public static class ColorPalette

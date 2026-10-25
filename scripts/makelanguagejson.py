@@ -5,7 +5,7 @@ from typing import Dict
 
 from pylightxl import readxl
 
-from paths import REPO_ROOT as WORKING_DIR
+from lib.paths import REPO_ROOT as WORKING_DIR
 
 EXTREMERORLS_IN_FILE = os.path.join(WORKING_DIR, "ExtremeRolesTransData.xlsx")
 EXTREMERORLS_OUT_FILE = os.path.join(

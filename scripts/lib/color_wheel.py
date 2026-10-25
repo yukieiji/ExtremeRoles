@@ -4,9 +4,9 @@ import math
 import tkinter as tk
 from collections.abc import Callable, Iterable
 
-from color_space import Rgb, from_hsv, hue, saturation, to_hex
-from color_tooltip import CellTooltip
-from palette_colors import PaletteColor
+from .color_space import Rgb, from_hsv, hue, saturation, to_hex
+from .color_tooltip import CellTooltip
+from .palette_colors import PaletteColor
 
 SECTORS = 72
 RINGS = 12

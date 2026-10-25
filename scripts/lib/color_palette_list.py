@@ -4,9 +4,9 @@ import tkinter as tk
 from collections.abc import Callable, Iterable
 from tkinter import font as tkfont
 
-from color_matrix import ColorMatrix
-from color_space import to_hex
-from palette_colors import PaletteColor
+from .color_matrix import ColorMatrix
+from .color_space import Rgb, to_hex
+from .palette_colors import PaletteColor
 
 ROW_HEIGHT = 20
 LIST_WIDTH = 396
@@ -14,6 +14,8 @@ SWATCH_SIZE = 12
 ROW_COLOR = "#252525"
 ROW_MATCH_COLOR = "#4a3f18"
 ROW_SELECT_COLOR = "#1f4a63"
+ROW_INPUT_COLOR = "#3a2b45"
+POSITION_COLOR = "#9cdcfe"
 VISIBLE_LEAD = 6
 
 
@@ -32,20 +34,62 @@ class PaletteListBox(tk.Frame):
         self._row_backgrounds: dict[str, int] = {}
         self._orders: dict[str, int] = {}
 
+        self._face = tkfont.Font(family="Meiryo", size=9)
+        self._input = tk.Canvas(
+            self,
+            width=LIST_WIDTH,
+            height=ROW_HEIGHT,
+            bg=ROW_INPUT_COLOR,
+            highlightthickness=0,
+        )
+        self._input.grid(row=0, column=0, columnspan=2, sticky="ew")
+
         self._canvas = tk.Canvas(
             self, width=LIST_WIDTH, height=200, bg=ROW_COLOR, highlightthickness=0
         )
         bar = tk.Scrollbar(self, orient=tk.VERTICAL, command=self._canvas.yview)
         self._canvas.configure(yscrollcommand=bar.set)
-        self._canvas.grid(row=0, column=0, sticky="nsew")
-        bar.grid(row=0, column=1, sticky="ns")
-        self.grid_rowconfigure(0, weight=1)
+        self._canvas.grid(row=1, column=0, sticky="nsew")
+        bar.grid(row=1, column=1, sticky="ns")
+        self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
-        self._face = tkfont.Font(family="Meiryo", size=9)
         self._draw_rows()
         self._canvas.bind("<Button-1>", self._handle_click)
         self._canvas.bind("<MouseWheel>", self._handle_wheel)
+        self._input.bind("<MouseWheel>", self._handle_wheel)
+
+    def set_input_color(self, rgb: Rgb | None) -> None:
+        """判定中の入力色を一覧の最上段 (宣言順とは別枠) に表示します。"""
+        self._input.delete("all")
+        if rgb is None:
+            return
+
+        middle = ROW_HEIGHT // 2
+        self._input.create_rectangle(
+            6,
+            middle - SWATCH_SIZE // 2,
+            6 + SWATCH_SIZE,
+            middle + SWATCH_SIZE // 2,
+            fill=to_hex(rgb),
+            outline="#777777",
+        )
+        self._input.create_text(
+            28,
+            middle,
+            anchor="w",
+            font=self._face,
+            fill="#ffffff",
+            text=f"入力色 {to_hex(rgb)}",
+        )
+        self._input.create_text(
+            LIST_WIDTH - 10,
+            middle,
+            anchor="e",
+            font=self._face,
+            fill=POSITION_COLOR,
+            text=self._matrix.ideal_summary(rgb),
+        )
 
     def highlight(self, names: Iterable[str], selected: str | None) -> None:
         """近似候補を強調し、選択された項目を別色にしてその行へスクロールします。"""
@@ -96,7 +140,7 @@ class PaletteListBox(tk.Frame):
                 middle,
                 anchor="e",
                 font=self._face,
-                fill="#9cdcfe",
+                fill=POSITION_COLOR,
                 text=self._matrix.cell_summary(color),
             )
 

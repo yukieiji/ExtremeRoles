@@ -2,10 +2,16 @@
 
 import pytest
 
-from color_matrix import EXACT_DELTA_E, Analysis, MatchResult
-from color_palette_gui import VERDICT_COLORS, _verdict_color, _verdict_tag
-from color_space import Rgb
-from palette_colors import PaletteColor
+from lib.color_matrix import EXACT_DELTA_E, Analysis, MatchResult
+from lib.color_palette_gui import (
+    DEBUG_SIZE_RATIO,
+    VERDICT_COLORS,
+    _verdict_color,
+    _verdict_tag,
+    is_rendered,
+)
+from lib.color_space import Rgb
+from lib.palette_colors import PaletteColor
 
 TARGET = Rgb(105, 165, 255)
 NEAR_THRESHOLD = 25.0
@@ -56,3 +62,43 @@ def test_verdict_colors_cover_every_tag():
     # Assert
     assert tags == {"ok", "near", "far"}
     assert set(VERDICT_COLORS) == tags
+
+
+@pytest.mark.parametrize(
+    ("width", "height", "expected_width", "expected_height", "expected"),
+    [
+        (2316, 1019, 2300, 980, True),
+        (302, 68, 2300, 980, False),
+        (2316, 1019, 1, 1, False),
+        (2316, 1019, 1, 980, False),
+        (2000, 1019, 2300, 980, False),
+    ],
+)
+def test_is_rendered(
+    width: int,
+    height: int,
+    expected_width: int,
+    expected_height: int,
+    expected: bool,
+):
+    """撮影サイズが期待サイズに達したかの判定が正しいことのテスト。"""
+    # Act
+    actual = is_rendered(width, height, expected_width, expected_height)
+
+    # Assert
+    assert actual is expected
+
+
+def test_is_rendered_uses_the_shared_ratio():
+    """閾値境目が DEBUG_SIZE_RATIO と一致ことのテスト。"""
+    # Arrange
+    expected_width = 1000
+    just_enough = int(expected_width * DEBUG_SIZE_RATIO)
+
+    # Act
+    accepted = is_rendered(just_enough, 900, expected_width, 900)
+    rejected = is_rendered(just_enough - 1, 900, expected_width, 900)
+
+    # Assert
+    assert accepted is True
+    assert rejected is False

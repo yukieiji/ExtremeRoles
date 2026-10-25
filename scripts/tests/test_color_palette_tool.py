@@ -2,10 +2,10 @@
 
 import pytest
 
-from color_matrix import ColorMatrix
-from color_space import Rgb
-from color_palette_tool import format_matrix, format_report, main
-from palette_colors import PaletteColor
+from lib.color_matrix import ColorMatrix
+from lib.color_space import Rgb
+from color_palette_tool import build_matrix, format_matrix, format_report, main
+from lib.palette_colors import COLORPALETTE_CS, PaletteColor, load_palette
 from pytest import CaptureFixture
 
 FIXTURE_PALETTE = (
@@ -63,6 +63,22 @@ def test_format_matrix_lists_palette_by_cell(matrix: ColorMatrix):
     assert "PureRed #FF0000" in table
     assert "MiddleGray #808080" in table
     assert "無彩色" in table
+
+
+def test_build_matrix_places_every_color_once():
+    """overrides 適用後の実マトリクスが 1 セル 1 色であることを検証するテスト。"""
+    # Arrange
+    loaded = load_palette(COLORPALETTE_CS)
+
+    # Act
+    matrix = build_matrix()
+    cells = [matrix.assigned_cell(color) for color in matrix.colors]
+
+    # Assert
+    assert len(matrix.colors) == len(loaded)
+    assert matrix.colors[0].name == "ImpostorRed"
+    assert len(set(cells)) == len(cells)
+    assert all(color.index == number for number, color in enumerate(matrix.colors, 1))
 
 
 def test_main_reports_verdict_and_returns_zero(capsys: CaptureFixture[str]):

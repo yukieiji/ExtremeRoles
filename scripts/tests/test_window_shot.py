@@ -4,8 +4,15 @@ import struct
 import sys
 
 import pytest
+import tkinter as tk
 
-from window_shot import PNG_SIGNATURE, _to_rgba, capture_window, write_png
+from lib.window_shot import (
+    PNG_SIGNATURE,
+    _to_rgba,
+    capture_window,
+    root_handle,
+    write_png,
+)
 
 
 def test_to_rgba_swaps_blue_and_orders_alpha():
@@ -35,15 +42,31 @@ def test_write_png_writes_signature_and_header(tmp_path):
 
 
 @pytest.mark.skipif(sys.platform != "win32", reason="Windows のみの機能のため")
-def test_capture_window_without_window(tmp_path):
-    """存在しないタイトルでは LookupError になることのテスト。"""
+def test_capture_window_rejects_empty_handle(tmp_path):
+    """ハンドル 0 では LookupError になることのテスト。"""
     # Arrange
     path = tmp_path / "存在しない" / "x.png"
 
     # Act
     def capture() -> None:
-        capture_window("このウィンドウは存在しません", path)
+        capture_window(0, path)
 
     # Assert
     with pytest.raises(LookupError):
         capture()
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows のみの機能のため")
+def test_root_handle_finds_the_top_level(tk_root: object):
+    """Tk の子ウィジェットから最上位ウィンドウのハンドルを辿ることのテスト。"""
+    # Arrange
+    child = tk.Frame(tk_root)
+    tk_root.update_idletasks()
+
+    # Act
+    from_child = root_handle(child.winfo_id())
+    from_root = root_handle(tk_root.winfo_id())
+
+    # Assert
+    assert from_child != 0
+    assert from_child == from_root

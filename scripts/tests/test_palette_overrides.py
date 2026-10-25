@@ -1,8 +1,8 @@
 """palette_overrides.py のマトリクス専用足し引きのテスト。"""
 
-from color_space import Rgb
-from palette_colors import COLORPALETTE_CS, PaletteColor, load_palette
-from palette_overrides import apply_matrix_overrides
+from lib.color_space import Rgb
+from lib.palette_colors import COLORPALETTE_CS, PaletteColor, load_palette
+from lib.palette_overrides import apply_matrix_overrides
 
 
 def _fixture() -> list[PaletteColor]:

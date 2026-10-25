@@ -4,10 +4,10 @@ import tkinter as tk
 from collections.abc import Callable
 from tkinter import font as tkfont
 
-from cell_layout import Box
-from color_matrix import Analysis, Cell, ColorMatrix
-from color_space import to_hex
-from color_tooltip import CellTooltip
+from .cell_layout import Box
+from .color_matrix import Analysis, Cell, ColorMatrix
+from .color_space import to_hex
+from .color_tooltip import CellTooltip
 
 CELL_WIDTH = 66
 CELL_HEIGHT = 104

@@ -5,8 +5,8 @@ import sys
 from dataclasses import dataclass, replace
 from pathlib import Path
 
-from color_space import Rgb
-from paths import REPO_ROOT
+from .color_space import Rgb
+from .paths import REPO_ROOT
 
 COLORPALETTE_CS = REPO_ROOT / "ExtremeRoles" / "Module" / "ColorPalette.cs"
 

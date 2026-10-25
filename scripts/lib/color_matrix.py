@@ -9,8 +9,8 @@
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from color_space import Rgb, chroma, delta_e76, hue, lightness, parse_color, to_hex
-from palette_colors import PaletteColor
+from .color_space import Rgb, chroma, delta_e76, hue, lightness, parse_color, to_hex
+from .palette_colors import PaletteColor
 
 HUE_COLUMNS = 19
 ACHROMATIC_COLUMN = HUE_COLUMNS
@@ -185,7 +185,13 @@ class ColorMatrix:
 
     def cell_summary(self, color: PaletteColor) -> str:
         """実配置のマトリクス座標・色相名・明度 band をまとめた短い文字列を返します。"""
-        cell = self.assigned_cell(color)
+        return self._summary(self.assigned_cell(color))
+
+    def ideal_summary(self, rgb: Rgb) -> str:
+        """任意 RGB の理想位置の短い表示を返します (未登録の入力色用)。"""
+        return self._summary(self.cell_of(rgb))
+
+    def _summary(self, cell: Cell) -> str:
         return f"{cell} {self.column_name(cell)} L{self.rows - cell.row}"
 
     def resolve(self, text: str) -> Rgb | None:

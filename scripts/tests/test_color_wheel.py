@@ -2,7 +2,7 @@
 
 import math
 
-from color_wheel import LABEL_TEXT_HALF, MARGIN, label_points, wheel_point
+from lib.color_wheel import LABEL_TEXT_HALF, MARGIN, label_points, wheel_point
 
 
 def test_wheel_point_places_hues_like_the_reference_wheel():
