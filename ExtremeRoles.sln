@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.0.11012.119
@@ -47,12 +47,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gemini", "gemini", "{DDB4EF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{754F4E8E-6F66-4BEB-A8D6-0BADA9A0BBE1}"
 	ProjectSection(SolutionItems) = preProject
-		add_role_translation_keys.py = add_role_translation_keys.py
-		createtransdatareport.py = createtransdatareport.py
-		makelanguagejson.py = makelanguagejson.py
+		scripts\add_role_translation_keys.py = scripts\add_role_translation_keys.py
+		scripts\cell_layout.py = scripts\cell_layout.py
+		scripts\color_matrix_view.py = scripts\color_matrix_view.py
+		scripts\color_palette_gui.py = scripts\color_palette_gui.py
+		scripts\color_palette_list.py = scripts\color_palette_list.py
+		scripts\color_palette_tool.py = scripts\color_palette_tool.py
+		scripts\color_matrix.py = scripts\color_matrix.py
+		scripts\color_space.py = scripts\color_space.py
+		scripts\color_tooltip.py = scripts\color_tooltip.py
+		scripts\color_wheel.py = scripts\color_wheel.py
+		scripts\createtransdatareport.py = scripts\createtransdatareport.py
+		scripts\conftest.py = scripts\conftest.py
+		scripts\makelanguagejson.py = scripts\makelanguagejson.py
+		scripts\palette_colors.py = scripts\palette_colors.py
+		scripts\paths.py = scripts\paths.py
+		scripts\translation_keys_adder.py = scripts\translation_keys_adder.py
+		scripts\window_shot.py = scripts\window_shot.py
 		pyproject.toml = pyproject.toml
 		requirements.txt = requirements.txt
-		test_add_role_translation_keys.py = test_add_role_translation_keys.py
 		uv.lock = uv.lock
 	EndProjectSection
 EndProject
@@ -69,7 +82,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{159E0F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C5FBD511-285E-4BE3-8344-268E6BE48A12}"
 	ProjectSection(SolutionItems) = preProject
-		test_add_role_translation_keys.py = test_add_role_translation_keys.py
+		scripts\tests\test_add_role_translation_keys.py = scripts\tests\test_add_role_translation_keys.py
+		scripts\tests\test_cell_layout.py = scripts\tests\test_cell_layout.py
+		scripts\tests\test_color_matrix.py = scripts\tests\test_color_matrix.py
+		scripts\tests\test_color_palette_tool.py = scripts\tests\test_color_palette_tool.py
+		scripts\tests\test_color_space.py = scripts\tests\test_color_space.py
+		scripts\tests\test_color_wheel.py = scripts\tests\test_color_wheel.py
+		scripts\tests\test_palette_colors.py = scripts\tests\test_palette_colors.py
+		scripts\tests\test_translation_keys_adder.py = scripts\tests\test_translation_keys_adder.py
+		scripts\tests\test_window_shot.py = scripts\tests\test_window_shot.py
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtremeRoles.UnitTest", "ExtremeRoles.UnitTest\ExtremeRoles.UnitTest.csproj", "{928F0EF1-8CC9-20DB-33B3-2E3ADFAB7D3A}"

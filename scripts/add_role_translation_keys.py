@@ -157,7 +157,9 @@ def parse_options_from_class_body(
     return ParsedOptionsData(defined=defined_options, implemented=implemented_options)
 
 
-def generate_translation_keys(option_name_prefix: str, option_names: set[str]) -> list[str]:
+def generate_translation_keys(
+    option_name_prefix: str, option_names: set[str]
+) -> list[str]:
     """ロールの標準的な翻訳キーのリストを生成します。
 
     Args:
@@ -305,9 +307,7 @@ def main() -> None:
             print(f"- {opt}", file=sys.stderr)
         sys.exit(1)
 
-    keys = generate_translation_keys(
-        role_name, parsed_data.options.implemented
-    )
+    keys = generate_translation_keys(role_name, parsed_data.options.implemented)
 
     team_name = get_team_name_from_path(parsed_data.file_path)
 

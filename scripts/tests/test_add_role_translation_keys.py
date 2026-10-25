@@ -16,6 +16,7 @@ from add_role_translation_keys import (
 
 # --- Dynamically load ExtremeRoleId from C# source ---
 
+
 def get_extreme_role_ids() -> enum.Enum:
     """C#のソースファイルからExtremeRoleIdのenum値を読み込んでPythonのEnumを生成します。
 
@@ -72,7 +73,7 @@ def get_extreme_role_ids() -> enum.Enum:
                 role_names.update(enum_role_names)
     except Exception:
         pass  # ファイルがなくてもクラススキャンでカバーできていればOK
-    
+
     try:
         cs_enum_file_path = Path("ExtremeRoles/GhostRoles/ExtremeGhostRoleManager.cs")
         if cs_enum_file_path.exists():
@@ -89,13 +90,17 @@ def get_extreme_role_ids() -> enum.Enum:
                     for name in re.findall(
                         r"^\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*,?", enum_body, re.MULTILINE
                     )
-                    if name not in ["VanillaRole",]
+                    if name
+                    not in [
+                        "VanillaRole",
+                    ]
                 }
                 role_names.update(enum_role_names)
     except Exception:
         pass  # ファイルがなくてもクラススキャンでカバーできていればOK
 
     return enum.Enum("ExtremeRoleId", {name: name for name in sorted(list(role_names))})
+
 
 try:
     extreme_role_id = get_extreme_role_ids()
@@ -187,7 +192,9 @@ def valid_env(tmp_path: Path) -> Path:
     # Liberal役職用ディレクトリ
     liberal_roles_dir: Path = tmp_path / "ExtremeRoles" / "Roles" / "Solo" / "Liberal"
     liberal_roles_dir.mkdir(parents=True, exist_ok=True)
-    (liberal_roles_dir / "DummyLiberalRole.cs").write_text(DUMMY_CS_VALID.replace("DummyRole", "DummyLiberalRole"), encoding="utf-8")
+    (liberal_roles_dir / "DummyLiberalRole.cs").write_text(
+        DUMMY_CS_VALID.replace("DummyRole", "DummyLiberalRole"), encoding="utf-8"
+    )
 
     # ゴースト役職用ディレクトリ
     ghost_roles_dir: Path = tmp_path / "ExtremeRoles" / "GhostRoles" / "Crewmate"
@@ -325,7 +332,9 @@ def test_main_logic_with_liberal_role(
 ) -> None:
     """メインスクリプトのロジックがLiberal陣営のロールを正しく処理できるかテストします。"""
     monkeypatch.chdir(valid_env)
-    monkeypatch.setattr(sys, "argv", ["add_role_translation_keys.py", "DummyLiberalRole"])
+    monkeypatch.setattr(
+        sys, "argv", ["add_role_translation_keys.py", "DummyLiberalRole"]
+    )
     main()
     captured = capsys.readouterr()
     assert "役職クラス 'DummyLiberalRole' をファイル内で発見" in captured.out
@@ -335,9 +344,7 @@ def test_main_logic_with_liberal_role(
     )
 
     # resxファイルの内容を直接チェック
-    resx_path = (
-        valid_env / "ExtremeRoles" / "Translation" / "resx" / "Liberal.resx"
-    )
+    resx_path = valid_env / "ExtremeRoles" / "Translation" / "resx" / "Liberal.resx"
     content = resx_path.read_text(encoding="utf-8")
     assert 'name="DummyLiberalRole"' in content
 

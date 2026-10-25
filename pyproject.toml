@@ -12,3 +12,6 @@ dependencies = [
     "pytest-cov>=7.0.0",
     "ruff>=0.12.11",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["scripts/tests"]
