@@ -165,6 +165,7 @@ def _resolve_aliases(
                 name=color.name,
                 rgb=original.rgb,
                 line=color.line,
+                index=color.index,
                 alias_of=color.alias_of,
             )
         )
