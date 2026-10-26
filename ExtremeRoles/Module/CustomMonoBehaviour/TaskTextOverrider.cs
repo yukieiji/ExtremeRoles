@@ -26,9 +26,10 @@ public class TaskTextOverrider(IntPtr ptr) : MonoBehaviour(ptr)
 				sb.Append("<color=#FFFF00FF>");
 			}
 		}
-		sb.Append(DestroyableSingleton<TranslationController>.Instance.GetString(this.Room));
+		var trans = TranslationController.Instance;
+		sb.Append(trans.GetString(this.Room));
 		sb.Append(": ");
-		sb.Append(DestroyableSingleton<TranslationController>.Instance.GetString(this.Type));
+		sb.Append(trans.GetString(this.Type));
 		if (flag)
 		{
 			sb.Append("</color>");
