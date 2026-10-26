@@ -39,6 +39,7 @@ public sealed class EncloserMetsuAbilityHandler(
 		byte encloserPlayerId = localPlayer.PlayerId;
 
 		int nonLiberalKills = 0;
+		float timer = localPlayer.killTimer;
 
 		foreach (var pc in PlayerCache.AllPlayerControl)
 		{
@@ -84,6 +85,9 @@ public sealed class EncloserMetsuAbilityHandler(
 			caller.WriteByte((byte)EncloserRole.RpcOpsType.UseMetsu);
 		}
 		this.encloserStatus.ClearStake();
+
+		localPlayer.killTimer = timer;
+
 		return true;
 	}
 }
