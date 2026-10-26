@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from typing import cast
 import re
 from lxml import etree as ET
 from dataclasses import dataclass, field
@@ -203,7 +204,9 @@ def update_resx_file(file_path: str, keys_to_add: list[str]) -> int:
         root = ET.Element("root")
         tree = ET.ElementTree(root)
 
-    existing_keys = {data.get("name") for data in root.xpath("//data[@name]")}
+    # XPath は要素以外も返し得る型付けだが、//data[@name] は要素のみを返す。
+    data_nodes = cast(list[ET.ElementBase], root.xpath("//data[@name]"))
+    existing_keys = {data.get("name") for data in data_nodes}
 
     XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace"
     added_count = 0

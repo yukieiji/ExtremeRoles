@@ -3,9 +3,12 @@
 import sys
 from collections.abc import Callable, Iterator
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
 
 import pytest
+
+if TYPE_CHECKING:
+    from tkinter import Tk
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 TK_CREATE_ATTEMPTS = 3
@@ -14,7 +17,7 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 
-def create_tk_window(factory: Callable[[], Any]) -> Any:
+def create_tk_window[T](factory: Callable[[], T]) -> T:
     """Tk 系ウィンドウを作ります。一時的な Tcl 初期化失敗は再試行し、無理なら skip。"""
     try:
         import tkinter as tk
@@ -32,7 +35,7 @@ def create_tk_window(factory: Callable[[], Any]) -> Any:
 
 
 @pytest.fixture()
-def tk_root() -> Iterator[Any]:
+def tk_root() -> "Iterator[Tk]":
     """テストで使う非表示の Tk ルートを提供し、必ず破棄します。"""
     import tkinter as tk
 

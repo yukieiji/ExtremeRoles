@@ -1,11 +1,13 @@
-import pytest
-import sys
-import re
 import enum
+import re
 import shutil
+import sys
 from pathlib import Path
-from hypothesis import given, strategies as st, settings, HealthCheck
-from pytest import MonkeyPatch, CaptureFixture
+from typing import Any, cast
+
+import pytest
+from hypothesis import HealthCheck, given, settings, strategies as st
+from pytest import CaptureFixture, MonkeyPatch
 
 from add_role_translation_keys import (
     get_team_name_from_path,
@@ -17,7 +19,7 @@ from add_role_translation_keys import (
 # --- Dynamically load ExtremeRoleId from C# source ---
 
 
-def get_extreme_role_ids() -> enum.Enum:
+def get_extreme_role_ids() -> type[enum.Enum]:
     """C#のソースファイルからExtremeRoleIdのenum値を読み込んでPythonのEnumを生成します。
 
     Raises:
@@ -109,6 +111,9 @@ except (FileNotFoundError, ValueError) as e:
     print(f"Skipping property-based tests for roles: {e}", file=sys.stderr)
     # ストラテジーをNoneに設定し、テストをスキップできるようにする
     extreme_role_id_strategy = None
+
+# skipif が None のテストを弾く為、@given に渡るのは常にストラテジーです。
+EXTREME_ROLE_ID_STRATEGY = cast(st.SearchStrategy[Any], extreme_role_id_strategy)
 
 # --- Unit Tests ---
 
@@ -437,7 +442,7 @@ def find_role_file(role_name: str) -> Path | None:
     extreme_role_id_strategy is None,
     reason="Could not parse ExtremeRoleId from C# source",
 )
-@given(role_id=extreme_role_id_strategy)
+@given(role_id=EXTREME_ROLE_ID_STRATEGY)
 @settings(
     suppress_health_check=[HealthCheck.function_scoped_fixture],
     deadline=None,

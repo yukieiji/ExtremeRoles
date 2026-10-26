@@ -23,7 +23,7 @@ FIXTURE_PALETTE = (
 
 
 @pytest.fixture()
-def box(tk_root: object) -> Iterator[PaletteListBox]:
+def box(tk_root: tk.Misc) -> Iterator[PaletteListBox]:
     """非表示ウィンドウに配置した一覧ウィジェット。"""
     widget = PaletteListBox(tk_root, ColorMatrix(FIXTURE_PALETTE), lambda color: None)
     widget.update_idletasks()
@@ -32,7 +32,9 @@ def box(tk_root: object) -> Iterator[PaletteListBox]:
 
 def _input_row(box: PaletteListBox) -> tk.Canvas:
     """一覧の先頭にある入力色行のキャンバスを返します。"""
-    return box.winfo_children()[0]
+    row = box.winfo_children()[0]
+    assert isinstance(row, tk.Canvas)
+    return row
 
 
 def _text_items(canvas: tk.Canvas) -> list[str]:

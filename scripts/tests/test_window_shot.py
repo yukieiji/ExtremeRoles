@@ -57,7 +57,7 @@ def test_capture_window_rejects_empty_handle(tmp_path):
 
 
 @pytest.mark.skipif(sys.platform != "win32", reason="Windows のみの機能のため")
-def test_root_handle_finds_the_top_level(tk_root: object):
+def test_root_handle_finds_the_top_level(tk_root: tk.Misc):
     """Tk の子ウィジェットから最上位ウィンドウのハンドルを辿ることのテスト。"""
     # Arrange
     child = tk.Frame(tk_root)

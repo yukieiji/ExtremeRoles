@@ -1,8 +1,6 @@
 import os
 import json
 
-from typing import Dict
-
 from pylightxl import readxl
 
 from lib.paths import REPO_ROOT as WORKING_DIR
@@ -18,7 +16,7 @@ EXTREMESKIN_OUT_FILE = os.path.join(
 )
 
 
-def is_require_update(new_json: Dict[str, str], output_file: str) -> bool:
+def is_require_update(new_json: dict[str, dict[str, str]], output_file: str) -> bool:
     try:
         with open(output_file, "r") as f:
             old_json = json.load(f)
@@ -34,7 +32,7 @@ def is_require_update(new_json: Dict[str, str], output_file: str) -> bool:
 def xlsx_to_json(file_name: str, output_file: str) -> None:
     wb = readxl(file_name)
 
-    xlsx_data = {}
+    xlsx_data: dict[str, dict[str, str]] = {}
 
     for name in wb.ws_names:
         sheat = wb.ws(name)

@@ -114,10 +114,13 @@ def _parse_value(value: str) -> Rgb | str | None:
 
 def _parse_constructor(call: re.Match[str]) -> Rgb | None:
     channels = [_to_float(token) for token in _ARGUMENT.findall(call.group("args"))]
-    if len(channels) < 3 or any(channel is None for channel in channels[:3]):
+    if len(channels) < 3:
         return None
 
     red, green, blue = channels[0], channels[1], channels[2]
+    if red is None or green is None or blue is None:
+        return None
+
     if call.group("kind") == "Color32":
         return _rgb_or_none(red, green, blue)
 

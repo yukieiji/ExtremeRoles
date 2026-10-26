@@ -2,14 +2,14 @@ from pathlib import Path
 import re
 
 
-def add_keys_to_resx_text_based(file_path: str, keys: list[str]) -> None:
+def add_keys_to_resx_text_based(file_path: str | Path, keys: list[str]) -> None:
     """
     .resxファイルに新しいキーを追加します。
 
     テキストベースの操作で、コメントとスキーマを完全に保持します。
 
     Args:
-        file_path (str): .resxファイルへのパス。
+        file_path (str | Path): .resxファイルへのパス。
         keys (list[str]): 追加するキーのリスト。
     """
     try:

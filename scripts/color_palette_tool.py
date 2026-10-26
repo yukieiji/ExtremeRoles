@@ -10,6 +10,7 @@
 """
 
 import argparse
+import io
 import sys
 from collections.abc import Sequence
 from pathlib import Path
@@ -140,5 +141,6 @@ def launch_gui(
 
 
 if __name__ == "__main__":
-    sys.stdout.reconfigure(encoding="utf-8", errors="backslashreplace")
+    if isinstance(sys.stdout, io.TextIOWrapper):
+        sys.stdout.reconfigure(encoding="utf-8", errors="backslashreplace")
     raise SystemExit(main(sys.argv[1:]))
