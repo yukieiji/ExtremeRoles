@@ -45,8 +45,8 @@ public sealed class ExtremeTabSelector(IntPtr ptr) : OptionBehaviour(ptr)
 		this.origin = picker.MapButtonOrigin;
 		this.imgName = picker.MapName;
 
-		this.startX = picker.StartPosX - 1.9f;
-		this.spaceX = picker.SpacingX * 1.25f;
+		this.startX = picker.StartPosX - 2.075f;
+		this.spaceX = picker.SpacingX * 1.125f;
 
 		if (picker.mapButtons != null)
 		{
@@ -98,7 +98,7 @@ public sealed class ExtremeTabSelector(IntPtr ptr) : OptionBehaviour(ptr)
 			mapButton.SetImage(img, maskLayer);
 
 			var trans = mapButton.transform;
-			trans.localScale *= 1.15f;
+			trans.localScale *= 1.1f;
 			trans.localPosition = new Vector3(this.startX + (float)index * this.spaceX, 0.74f, -2f);
 
 			var button = mapButton.Button;
