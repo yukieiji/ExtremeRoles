@@ -112,7 +112,8 @@ except (FileNotFoundError, ValueError) as e:
     # ストラテジーをNoneに設定し、テストをスキップできるようにする
     extreme_role_id_strategy = None
 
-# skipif が None のテストを弾く為、@given に渡るのは常にストラテジーです。
+# @given は import 時に戦略を検査する為、役職解析に失敗した環境ではこのファイル自体が
+# collection error になる (repo root 外実行は不支持)。skipif は解決済みの役職数を弾く為のもの。
 EXTREME_ROLE_ID_STRATEGY = cast(st.SearchStrategy[Any], extreme_role_id_strategy)
 
 # --- Unit Tests ---

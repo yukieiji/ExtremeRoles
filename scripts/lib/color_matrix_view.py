@@ -1,4 +1,4 @@
-"""20×5 のカラーマトリクスを描画し、1 セル 1 色を表示・選択できるようにします。"""
+"""明度 band × 色相列のマトリクスを描画し、1 セル 1 色を表示・選択できるようにします。"""
 
 import tkinter as tk
 from collections.abc import Callable
@@ -162,15 +162,11 @@ class MatrixView(tk.Canvas):
         if color is None:
             return [f"{self._matrix.cell_label(cell)} / 空きセル"]
 
-        lines = [
+        return [
             f"{color.index:>3} {color.name} {to_rgb_text(color.rgb)}",
             self._matrix.palette_position(color),
             self._matrix.cell_label(cell),
         ]
-        preferred = self._matrix.cell_of(color.rgb)
-        if preferred != cell:
-            lines.append(f"元の座標 {preferred} は使用中の為ここへ配置")
-        return lines
 
     def _cell_at(self, x: int, y: int) -> Cell | None:
         """指定座標のセルを返します。セル間の隙間なら None。"""

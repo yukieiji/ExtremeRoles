@@ -59,6 +59,16 @@ def test_parse_source_supported_declarations(name: str, expected: Rgb):
     assert colors[name].rgb == expected
 
 
+def test_parse_source_keeps_the_aliased_source_name():
+    """別名のとき元項目名が残り、通常宣言では残らないことのテスト。"""
+    # Act
+    colors = parse_names(SAMPLE_SOURCE)
+
+    # Assert
+    assert colors["ImitaterColor"].alias_of == "NeutralColor"
+    assert colors["NeutralColor"].alias_of is None
+
+
 def test_parse_source_reports_unsupported_as_warning():
     """解釈できない宣言は警告になり、結果には含まれないことのテスト。"""
     # Act
@@ -103,4 +113,3 @@ def test_load_palette_matches_real_color_palette():
     assert colors["UmbrerRed"].rgb == Rgb(200, 0, 21)
     assert colors["LiberalColor"].rgb == Rgb(249, 240, 111)
     assert colors["NeutralColor"].rgb == Rgb(128, 128, 128)
-    assert colors["ImitaterColor"].alias_of == "NeutralColor"

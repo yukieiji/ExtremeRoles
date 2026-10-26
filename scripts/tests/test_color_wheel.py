@@ -1,12 +1,15 @@
 """カラーホイール座標のテスト。"""
 
 import math
+import sys
+import tkinter as tk
 
 import pytest
 
 from lib.color_wheel import (
     LABEL_TEXT_HALF,
     MARGIN,
+    ColorWheel,
     color_at,
     label_points,
     wheel_point,
@@ -101,3 +104,59 @@ def test_color_at_returns_none_outside_the_wheel():
 
     # Assert
     assert outside is None
+
+
+@pytest.mark.skipif(
+    sys.platform != "win32", reason="tkinter のウィンドウ生成が必要なため"
+)
+def test_show_target_marks_the_input_color(tk_root: tk.Misc):
+    """判定中の色がホイール上の該当位置に示されることのテスト。"""
+    # Arrange
+    radius = 100
+    wheel = ColorWheel(tk_root, radius, lambda _: None)
+
+    # Act
+    wheel.show_target(Rgb(255, 0, 0))
+    marked = wheel.find_withtag("target")
+    box = wheel.bbox(marked[0])
+
+    # Assert
+    assert len(marked) == 3
+    assert (box[0] + box[2]) / 2 == pytest.approx(MARGIN + radius + radius, abs=0.5)
+    assert (box[1] + box[3]) / 2 == pytest.approx(MARGIN + radius, abs=0.5)
+
+
+@pytest.mark.skipif(
+    sys.platform != "win32", reason="tkinter のウィンドウ生成が必要なため"
+)
+def test_show_target_replaces_the_previous_mark(tk_root: tk.Misc):
+    """別の色を判定すると古い目印が消えて動き直すことのテスト。"""
+    # Arrange
+    wheel = ColorWheel(tk_root, 100, lambda _: None)
+    wheel.show_target(Rgb(255, 0, 0))
+    placed = wheel.bbox(wheel.find_withtag("target")[0])
+
+    # Act
+    wheel.show_target(Rgb(0, 0, 255))
+    marked = wheel.find_withtag("target")
+    moved = wheel.bbox(marked[0])
+
+    # Assert
+    assert len(marked) == 3
+    assert moved != placed
+
+
+@pytest.mark.skipif(
+    sys.platform != "win32", reason="tkinter のウィンドウ生成が必要なため"
+)
+def test_show_target_clears_when_color_is_none(tk_root: tk.Misc):
+    """入力色なしではホイールの目印が消えることのテスト。"""
+    # Arrange
+    wheel = ColorWheel(tk_root, 100, lambda _: None)
+    wheel.show_target(Rgb(0, 255, 0))
+
+    # Act
+    wheel.show_target(None)
+
+    # Assert
+    assert wheel.find_withtag("target") == ()

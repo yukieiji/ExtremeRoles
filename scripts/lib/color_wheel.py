@@ -26,6 +26,8 @@ LABELS = (
 )
 NEARBY_PIXELS = 14.0
 RIM_TOLERANCE = 1e-6
+TARGET_RADIUS = 10.0
+TARGET_DOT_RADIUS = 3.5
 
 
 def wheel_point(hue_degrees: float, saturation_value: float) -> tuple[float, float]:
@@ -100,6 +102,43 @@ class ColorWheel(tk.Canvas):
                 )
                 self.itemconfigure(item, outline=outline, width=width)
 
+    def show_target(self, rgb: Rgb | None) -> None:
+        """判定中の色をホイール上のリングで示します。None では消去します。"""
+        self.delete("target")
+        if rgb is None:
+            return
+
+        center_x, center_y = self._marker_center(rgb)
+        self.create_oval(
+            center_x - TARGET_RADIUS,
+            center_y - TARGET_RADIUS,
+            center_x + TARGET_RADIUS,
+            center_y + TARGET_RADIUS,
+            outline="#000000",
+            width=4.0,
+            tags=("target",),
+        )
+        self.create_oval(
+            center_x - TARGET_RADIUS,
+            center_y - TARGET_RADIUS,
+            center_x + TARGET_RADIUS,
+            center_y + TARGET_RADIUS,
+            outline="#ffffff",
+            width=1.6,
+            tags=("target",),
+        )
+        self.create_oval(
+            center_x - TARGET_DOT_RADIUS,
+            center_y - TARGET_DOT_RADIUS,
+            center_x + TARGET_DOT_RADIUS,
+            center_y + TARGET_DOT_RADIUS,
+            fill=to_hex(rgb),
+            outline="#000000",
+            width=1.0,
+            tags=("target",),
+        )
+        self.tag_raise("target")
+
     def _draw_background(self) -> None:
         step_angle = 360.0 / SECTORS
         for ring in range(RINGS):
@@ -150,9 +189,10 @@ class ColorWheel(tk.Canvas):
                 tags=("marker",),
             )
             self._markers.setdefault(entry.name, []).append((item, center_x, center_y))
+        self.tag_raise("target")
 
     def _marker_center(self, rgb: Rgb) -> tuple[float, float]:
-        """パレット色のマーカー中心座標を返します (ホイール上の位置の唯一の定義)。"""
+        """指定色をホイール上に置いたときの中心座標 (パレットマーカーと目印で共通)。"""
         x, y = wheel_point(hue(rgb), max(saturation(rgb), MIN_MARKED_SATURATION))
         return (self._center + x * self._radius, self._center + y * self._radius)
 

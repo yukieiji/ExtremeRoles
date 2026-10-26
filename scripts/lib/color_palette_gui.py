@@ -103,6 +103,7 @@ class PaletteApp(tk.Tk):
         if rgb is None:
             self.matrix_view.show(None)
             self.wheel.highlight((), None)
+            self.wheel.show_target(None)
             self.palette_list.highlight((), None)
             self.palette_list.set_input_color(None)
             self.status.config(
@@ -112,6 +113,7 @@ class PaletteApp(tk.Tk):
 
         analysis = self.matrix.analyze(rgb, self.near_threshold)
         self.palette_list.set_input_color(rgb)
+        self.wheel.show_target(rgb)
         self.status.config(
             text=_verdict_text(analysis), foreground=_verdict_color(analysis)
         )

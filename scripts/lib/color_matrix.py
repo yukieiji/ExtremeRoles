@@ -1,6 +1,6 @@
 """カラーパレットを明度×色相のマトリクスに配置し、近似色を判定します。
 
-マトリクスは既定 20 列 × 5 行 (100 色を超えると 20 色ごとに 1 行増) です。
+マトリクスは既定 20 列 × 6 行 (120 色を超えると 20 色ごとに 1 行増) です。
 行は明度 L* の件数分位、列は HSV 色相 (最終列は無彩色) で決めます。
 1 セルには 1 色だけを入れ、争われた場合は「同じ行の近い列」→「近い行の近い列」
 の順で空きセルへ繰り下げます。
@@ -23,7 +23,7 @@ from .palette_colors import PaletteColor
 HUE_COLUMNS = 19
 ACHROMATIC_COLUMN = HUE_COLUMNS
 COLUMNS = 20
-PREFERRED_ROWS = 5
+PREFERRED_ROWS = 6
 HUE_DEGREES_PER_COLUMN = 360.0 / HUE_COLUMNS
 ACHROMATIC_CHROMA = 1.0
 HUE_LABELS = (
@@ -119,7 +119,7 @@ class ColorMatrix:
 
     @property
     def rows(self) -> int:
-        """マトリクスの行数（既定 5、100 色超では 20 列ごとに 1 行増）。"""
+        """マトリクスの行数（既定 6、120 色超では 20 色ごとに 1 行増）。"""
         return self._rows
 
     @property

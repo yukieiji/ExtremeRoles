@@ -121,8 +121,11 @@ def test_matrix_has_one_color_per_cell(real_matrix: ColorMatrix):
     # Assert
     assert len(set(cells)) == len(real_matrix.colors)
     assert real_matrix.columns == 20
-    assert real_matrix.rows == 5
-    assert all(0 <= cell.col < 20 and 0 <= cell.row < 5 for cell in cells)
+    assert real_matrix.rows == 6
+    assert all(
+        0 <= cell.col < real_matrix.columns and 0 <= cell.row < real_matrix.rows
+        for cell in cells
+    )
 
 
 def test_assigned_cell_stays_next_to_preferred_cell(real_matrix: ColorMatrix):
@@ -131,18 +134,20 @@ def test_assigned_cell_stays_next_to_preferred_cell(real_matrix: ColorMatrix):
     drifts = [_circular_drift(real_matrix, color) for color in real_matrix.colors]
 
     # Assert
-    assert max(drifts) <= 4
+    # 現行パレット用の見張り番: 帯内の混雑でずれは増える為、色追加で超えたら実測値へ更新する。
+    assert max(drifts) <= 6
 
 
 def _circular_drift(matrix: ColorMatrix, color: PaletteColor) -> int:
     """割り当て先のずれ幅を、色相列が循環する前提で返します。"""
     preferred = matrix.cell_of(color.rgb)
     assigned = matrix.assigned_cell(color)
+    row_distance = abs(assigned.row - preferred.row)
     hue_columns = matrix.columns - 1
     difference = abs(assigned.col - preferred.col)
     if hue_columns in (assigned.col, preferred.col):
-        return difference
-    return abs(assigned.row - preferred.row) + min(difference, hue_columns - difference)
+        return row_distance + difference
+    return row_distance + min(difference, hue_columns - difference)
 
 
 def test_analyze_reports_exact_match(matrix: ColorMatrix):
@@ -205,13 +210,22 @@ def test_resolve_accepts_the_displayed_rgb_text(matrix: ColorMatrix):
     assert resolved == color
 
 
-def test_names_with_rgb_lists_all_same_color_entries(real_matrix: ColorMatrix):
-    """同一 RGB の全項目名が列挙されることのテスト。"""
+def test_names_with_rgb_lists_all_same_color_entries():
+    """同一 RGB の全項目名が列挙されることのテスト (実パレットの重複に依存しない)。"""
+    # Arrange
+    gray = Rgb(128, 128, 128)
+    first = PaletteColor(name="FirstGray", rgb=gray, line=1, index=1)
+    second = PaletteColor(name="SecondGray", rgb=gray, line=2, index=2)
+    red = PaletteColor(name="PureRed", rgb=Rgb(255, 0, 0), line=3, index=3)
+    matrix = ColorMatrix((first, second, red))
+
     # Act
-    names = real_matrix.names_with_rgb(Rgb(128, 128, 128))
+    shared = matrix.names_with_rgb(gray)
+    single = matrix.names_with_rgb(Rgb(0, 255, 0))
 
     # Assert
-    assert set(names) >= {"NeutralColor", "ImitaterColor"}
+    assert shared == ("FirstGray", "SecondGray")
+    assert single == ()
 
 
 def test_position_text_contains_cell(matrix: ColorMatrix):
@@ -246,7 +260,7 @@ def test_palette_position_and_cell_summary(matrix: ColorMatrix):
 
 
 def test_rows_grow_when_palette_exceeds_grid():
-    """100 色を超えると行を増やして全項目を 1 セル 1 色に収めることのテスト。"""
+    """120 色を超えると行を増やして全項目を 1 セル 1 色に収めることのテスト。"""
     # Arrange
     palette = tuple(
         PaletteColor(

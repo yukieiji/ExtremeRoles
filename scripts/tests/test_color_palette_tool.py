@@ -59,7 +59,7 @@ def test_format_matrix_lists_palette_by_cell(matrix: ColorMatrix):
     table = format_matrix(matrix)
 
     # Assert
-    assert "--- 明度 L5" in table
+    assert "--- 明度 L6" in table
     assert "PureRed 255, 0, 0" in table
     assert "MiddleGray 128, 128, 128" in table
     assert "無彩色" in table
