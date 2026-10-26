@@ -19,14 +19,14 @@ public sealed class EncloserPolygonMeshBehaviour : MonoBehaviour
 		this.meshRenderer = base.GetComponent<MeshRenderer>();
 	}
 
-	public void FixedUpdate()
+	public void Update()
 	{
 		if (this.meshRenderer == null || this.meshRenderer.material == null)
 		{
 			return;
 		}
 
-		float alpha = Mathf.PingPong(Time.fixedDeltaTime * 2.0f, 0.5f) + 0.15f;
+		float alpha = Mathf.PingPong(Time.time * 3.5f, 0.5f) + 0.15f;
 		Color color = new Color(
 			ColorPalette.LiberalColor.r,
 			ColorPalette.LiberalColor.g,

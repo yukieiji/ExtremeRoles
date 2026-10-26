@@ -147,14 +147,14 @@ public sealed class EncloserPolygon(
 		for (int i = 0; i < count; i++)
 		{
 			Vector3 pos = this.stakeObjects[i].transform.position;
-			var linePos = this.factory.CreateMapPos(pos, 975.0f);
+			var linePos = this.factory.CreateMapPos(pos, 1100.0f);
 			this.lineRenderer.SetPosition(i, linePos);
 		}
 
 		if (this.IsCompleted)
 		{
 			Vector3 firstPos = this.stakeObjects[0].transform.position;
-			var firstLinePos = this.factory.CreateMapPos(firstPos, 975.0f);
+			var firstLinePos = this.factory.CreateMapPos(firstPos, 1100.0f);
 			this.lineRenderer.SetPosition(count, firstLinePos);
 			buildMesh();
 		}
@@ -182,7 +182,7 @@ public sealed class EncloserPolygon(
 		for (int i = 0; i < count; i++)
 		{
 			Vector3 pos = this.stakeObjects[i].transform.position;
-			vertices[i] = this.factory.CreateMapPos(pos, 950.0f);
+			vertices[i] = this.factory.CreateMapPos(pos, 1100.0f);
 		}
 
 		int triangleCount = (count - 2) * 3;
@@ -199,7 +199,7 @@ public sealed class EncloserPolygon(
 			ColorPalette.LiberalColor.r,
 			ColorPalette.LiberalColor.g,
 			ColorPalette.LiberalColor.b,
-			0.3f);
+			0.5f);
 
 		Il2CppStructArray<Color> colors = this.il2cppProvider.GetStructArray<Color>(count);
 		for (int i = 0; i < colors.Length; i++)
