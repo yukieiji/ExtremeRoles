@@ -8,6 +8,7 @@ namespace ExtremeRoles.Resources;
 public interface IResourcesProvider
 {
 	public Sprite LoadSprite(string objName);
+	public Sprite LoadButtonIcon<TEnum>(TEnum id, string iconName) where TEnum : Enum;
 	public Sprite LoadRoleSprite<TEnum>(TEnum id, string imageName) where TEnum : Enum;
 }
 
@@ -15,7 +16,6 @@ public class DefaultResourcesProvider : IResourcesProvider
 {
 	public Sprite LoadSprite(string objName)
 		=> UnityObjectLoader.LoadFromResources<Sprite>(objName);
-
 
 	public Sprite LoadButtonIcon<TEnum>(TEnum id, string iconName) where TEnum : Enum
 		=> UnityObjectLoader.LoadFromButtonIcon(id, iconName);

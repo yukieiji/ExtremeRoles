@@ -34,7 +34,7 @@ public sealed class EncloserPolygon(
 	{
 		var stake = this.factory.CreateGameObject($"EncloserStake_{this.stakeObjects.Count + 1}");
 		var sr = stake.AddComponent<SpriteRenderer>();
-		sr.sprite = this.resourcesProvider.LoadRoleSprite(ExtremeRoleId.Encloser, "Stake");
+		sr.sprite = this.resourcesProvider.LoadButtonIcon(ExtremeRoleId.Encloser, "Stake");
 		sr.color = ColorPalette.LiberalColor;
 		stake.transform.position = this.factory.CreateMapPos(pos);
 		this.stakeObjects.Add(stake);

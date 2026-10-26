@@ -27,10 +27,10 @@ public sealed class EncloserAbilityHandler(
 
 	public void CreateAbility()
 	{
-		var stakeSprite = this.resourcesProvider.LoadRoleSprite(ExtremeRoleId.Encloser, "Stake");
+		var stakeSprite = this.resourcesProvider.LoadButtonIcon(ExtremeRoleId.Encloser, "Stake");
 		var stakeGraphic = new ButtonGraphic(Tr.GetString("Stake"), stakeSprite);
 
-		var metsuSprite = this.resourcesProvider.LoadRoleSprite(ExtremeRoleId.Encloser, "Metsu");
+		var metsuSprite = this.resourcesProvider.LoadButtonIcon(ExtremeRoleId.Encloser, "Metsu");
 		var metsuGraphic = new ButtonGraphic(Tr.GetString("Metsu"), metsuSprite);
 
 		this.Button = RoleAbilityFactory.CreateCountAbility(
