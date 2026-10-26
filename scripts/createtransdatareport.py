@@ -6,6 +6,13 @@ from xml.etree import ElementTree as ET
 
 from pylightxl import readxl
 
+from pathlib import Path
+
+# シンボリックリンクを解決して、スクリプト本体の実際の親ディレクトリ（scripts/）をパスに追加
+script_dir = Path(__file__).resolve().parent
+if str(script_dir) not in sys.path:
+    sys.path.insert(0, str(script_dir))
+
 from lib.paths import REPO_ROOT as WORKING_DIR
 
 EXTREMERORLS_FILE = os.path.join(WORKING_DIR, "ExtremeRoles", "Translation", "resx")
