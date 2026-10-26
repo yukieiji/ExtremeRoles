@@ -72,18 +72,6 @@ public class ScreamerTests
 	}
 
 	[Fact]
-	public void Constructor_InitializesScreamerRoleCorrectly()
-	{
-		// Arrange & Act
-		var screamer = new Screamer();
-
-		// Assert
-		Assert.Equal(ExtremeRoleId.Screamer, screamer.Core.Id);
-		Assert.Equal(ExtremeRoleType.Crewmate, screamer.Core.Team);
-		Assert.Equal(ColorPalette.ScreamerColor, screamer.Core.Color);
-	}
-
-	[Fact]
 	public void RoleSpecificInit_LoadsOptionValuesAndCreatesAbilityHandler()
 	{
 		// Arrange

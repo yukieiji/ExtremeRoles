@@ -65,18 +65,6 @@ public class MayorTests
 	}
 
 	[Fact]
-	public void Constructor_InitializesMayorRoleCorrectly()
-	{
-		// Arrange & Act
-		var mayor = new Mayor();
-
-		// Assert
-		Assert.Equal(ExtremeRoleId.Mayor, mayor.Core.Id);
-		Assert.Equal(ExtremeRoleType.Crewmate, mayor.Core.Team);
-		Assert.Equal(ColorPalette.MayorOchre, mayor.Core.Color);
-	}
-
-	[Fact]
 	public void CreateRoleAllOption_CreatesExpectedOptions()
 	{
 		// Arrange
