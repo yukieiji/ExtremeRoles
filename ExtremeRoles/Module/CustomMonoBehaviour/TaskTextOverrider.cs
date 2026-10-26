@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
 [Il2CppRegister]
