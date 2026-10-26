@@ -15,12 +15,12 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from lib.color_matrix import MAX_LISTED_CANDIDATES, Cell, ColorMatrix, NEAR_DELTA_E
-from lib.color_space import to_hex
+from lib.color_space import to_rgb_text
 from lib.palette_colors import COLORPALETTE_CS, load_palette
 from lib.palette_overrides import apply_matrix_overrides
 
 DEBUG_SHOT = "color_palette_debug.png"
-INITIAL_COLOR = "#69A5FF"
+INITIAL_COLOR = "105, 165, 255"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -64,7 +64,7 @@ def format_report(text: str, matrix: ColorMatrix, near_threshold: float) -> str 
 
     analysis = matrix.analyze(rgb, near_threshold)
     lines = [
-        f"{to_hex(rgb)}: {analysis.verdict} -> {analysis.nearest}",
+        f"{to_rgb_text(rgb)}: {analysis.verdict} -> {analysis.nearest}",
         f"  入力色の位置: {matrix.position_text(rgb)}",
         f"  最近傍の位置: {matrix.position_text_of(analysis.nearest.color)}",
         f"  パレット上  : {matrix.palette_position(analysis.nearest.color)}",
@@ -91,7 +91,7 @@ def format_matrix(matrix: ColorMatrix) -> str:
             color = matrix.color_at(cell)
             if color is None:
                 continue
-            names = f"{color.name} {to_hex(color.rgb)}"
+            names = f"{color.name} {to_rgb_text(color.rgb)}"
             lines.append(f"{matrix.cell_label(cell):<34} {names}")
     return "\n".join(lines)
 
@@ -134,7 +134,7 @@ def launch_gui(
 
     app = PaletteApp(matrix, near_threshold, debug_shot)
     for text in colors or (INITIAL_COLOR,):
-        app.analyze_text(text)
+        app.set_color(text)
     app.mainloop()
     return app.debug_status
 

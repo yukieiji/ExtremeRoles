@@ -9,7 +9,15 @@
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from .color_space import Rgb, chroma, delta_e76, hue, lightness, parse_color, to_hex
+from .color_space import (
+    Rgb,
+    chroma,
+    delta_e76,
+    hue,
+    lightness,
+    parse_color,
+    to_rgb_text,
+)
 from .palette_colors import PaletteColor
 
 HUE_COLUMNS = 19
@@ -61,7 +69,7 @@ class MatchResult:
         return self.delta_e <= EXACT_DELTA_E
 
     def __str__(self) -> str:
-        return f"{self.color.name} {to_hex(self.color.rgb)} dE={self.delta_e:.2f}"
+        return f"{self.color.name} {to_rgb_text(self.color.rgb)} dE={self.delta_e:.2f}"
 
 
 @dataclass(frozen=True)

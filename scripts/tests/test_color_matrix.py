@@ -3,7 +3,7 @@
 import pytest
 
 from lib.color_matrix import ColorMatrix, NEAR_DELTA_E, is_achromatic
-from lib.color_space import Rgb
+from lib.color_space import Rgb, to_rgb_text
 from lib.palette_colors import COLORPALETTE_CS, PaletteColor, load_palette
 
 FIXTURE_PALETTE = (
@@ -191,6 +191,18 @@ def test_resolve_accepts_name_and_hex(matrix: ColorMatrix):
     assert by_name == Rgb(105, 165, 255)
     assert by_hex == Rgb(255, 140, 0)
     assert unknown is None
+
+
+def test_resolve_accepts_the_displayed_rgb_text(matrix: ColorMatrix):
+    """表示している RGB 文字列を入力へ戻しても同じ色になることのテスト。"""
+    # Arrange
+    color = Rgb(105, 165, 255)
+
+    # Act
+    resolved = matrix.resolve(to_rgb_text(color))
+
+    # Assert
+    assert resolved == color
 
 
 def test_names_with_rgb_lists_all_same_color_entries(real_matrix: ColorMatrix):

@@ -4,7 +4,7 @@ import math
 import tkinter as tk
 from collections.abc import Callable, Iterable
 
-from .color_space import Rgb, from_hsv, hue, saturation, to_hex
+from .color_space import Rgb, from_hsv, hue, saturation, to_hex, to_rgb_text
 from .color_tooltip import CellTooltip
 from .palette_colors import PaletteColor
 
@@ -25,6 +25,7 @@ LABELS = (
     ("マゼンタ", 300.0),
 )
 NEARBY_PIXELS = 14.0
+RIM_TOLERANCE = 1e-6
 
 
 def wheel_point(hue_degrees: float, saturation_value: float) -> tuple[float, float]:
@@ -34,6 +35,18 @@ def wheel_point(hue_degrees: float, saturation_value: float) -> tuple[float, flo
         saturation_value * math.cos(angle),
         -saturation_value * math.sin(angle),
     )
+
+
+def color_at(x: float, y: float, center: float, radius: float) -> Rgb | None:
+    """ホイール上の座標からの色を返します。円外 (右クリック無効) は None を返します。"""
+    offset_x = x - center
+    offset_y = y - center
+    distance = math.hypot(offset_x, offset_y)
+    if distance > radius + RIM_TOLERANCE:
+        return None
+
+    angle = math.degrees(math.atan2(-offset_y, offset_x)) % 360.0
+    return from_hsv(angle, min(distance / radius, 1.0), 1.0)
 
 
 def label_points(radius: int) -> list[tuple[str, float, float]]:
@@ -62,6 +75,7 @@ class ColorWheel(tk.Canvas):
 
         self._draw_background()
         self.bind("<Button-1>", self._handle_click)
+        self.bind("<Button-3>", self._handle_pick)
         self._tooltip = CellTooltip(self, self._tooltip_lines)
 
     def set_entries(self, entries: tuple[PaletteColor, ...]) -> None:
@@ -147,7 +161,8 @@ class ColorWheel(tk.Canvas):
         if not nearby:
             return []
         return [
-            f"{entry.index:>3} {entry.name} {to_hex(entry.rgb)}" for entry in nearby
+            f"{entry.index:>3} {entry.name} {to_rgb_text(entry.rgb)}"
+            for entry in nearby
         ]
 
     def _entries_near(self, x: int, y: int) -> list[PaletteColor]:
@@ -162,4 +177,10 @@ class ColorWheel(tk.Canvas):
     def _handle_click(self, event: tk.Event) -> None:
         nearby = self._entries_near(event.x, event.y)
         if nearby:
-            self._on_select(to_hex(nearby[0].rgb))
+            self._on_select(to_rgb_text(nearby[0].rgb))
+
+    def _handle_pick(self, event: tk.Event) -> None:
+        """右クリック位置のホイール上の色を判定対象にします。"""
+        picked = color_at(event.x, event.y, self._center, self._radius)
+        if picked is not None:
+            self._on_select(to_rgb_text(picked))

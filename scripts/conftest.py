@@ -1,8 +1,9 @@
-"""scripts 配下のテストがスクリプト本体を import できるようにします。"""
+"""scripts 配下のテスト共通部品。sys.path 設定と Tk ウィンドウ用 fixture を置きます。"""
 
 import sys
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -13,24 +14,29 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 
-def _create_tk_root():
-    """Tcl 初期化が一時的に失敗する環境がある為、作成を繰り返して返します。"""
-    import tkinter as tk
+def create_tk_window(factory: Callable[[], Any]) -> Any:
+    """Tk 系ウィンドウを作ります。一時的な Tcl 初期化失敗は再試行し、無理なら skip。"""
+    try:
+        import tkinter as tk
+    except ImportError as error:
+        pytest.skip(f"tkinter が利用できないため: {error}")
 
-    last_error: Exception = RuntimeError("Tk を 1 度も生成できていません")
+    last_error: Exception = RuntimeError("ウィンドウを 1 度も生成できていません")
     for _ in range(TK_CREATE_ATTEMPTS):
         try:
-            return tk.Tk()
-        except (ImportError, tk.TclError) as error:
+            return factory()
+        except tk.TclError as error:
             last_error = error
 
     pytest.skip(f"Tk を初期化できないため: {last_error}")
 
 
 @pytest.fixture()
-def tk_root() -> Iterator[object]:
+def tk_root() -> Iterator[Any]:
     """テストで使う非表示の Tk ルートを提供し、必ず破棄します。"""
-    root = _create_tk_root()
+    import tkinter as tk
+
+    root = create_tk_window(tk.Tk)
     root.withdraw()
     yield root
     root.destroy()

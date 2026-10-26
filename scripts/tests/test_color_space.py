@@ -10,6 +10,7 @@ from lib.color_space import (
     parse_color,
     saturation,
     to_hex,
+    to_rgb_text,
     value,
 )
 
@@ -69,6 +70,15 @@ def test_to_hex_and_delta_e76():
     assert hex_value == "#FF8C00"
     assert same == 0.0
     assert opposite > 90.0
+
+
+def test_to_rgb_text_uses_readable_decimal_form():
+    """表示用 RGB 文字列が「255, 140, 0」形になることのテスト。"""
+    # Act
+    text = to_rgb_text(Rgb(255, 140, 0))
+
+    # Assert
+    assert text == "255, 140, 0"
 
 
 def test_saturation_matches_hsv_definition():

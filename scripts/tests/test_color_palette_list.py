@@ -56,12 +56,12 @@ def test_set_input_color_draws_label_and_position(box: PaletteListBox):
     texts = _text_items(row)
 
     # Assert
-    assert any(text.startswith("入力色 #69A5FF") for text in texts)
+    assert any(text.startswith("入力色 105, 165, 255") for text in texts)
     assert matrix.ideal_summary(rgb) in texts
 
 
-def test_set_input_color_clears_when_unparsable(box: PaletteListBox):
-    """解釈失敗の入力色では行が空になることのテスト。"""
+def test_set_input_color_clears_the_row_when_color_is_none(box: PaletteListBox):
+    """入力色なしでは行が空になることのテスト。"""
     # Arrange
     row = _input_row(box)
     box.set_input_color(Rgb(1, 2, 3))

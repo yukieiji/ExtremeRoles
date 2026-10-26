@@ -6,7 +6,7 @@ from tkinter import font as tkfont
 
 from .cell_layout import Box
 from .color_matrix import Analysis, Cell, ColorMatrix
-from .color_space import to_hex
+from .color_space import to_hex, to_rgb_text
 from .color_tooltip import CellTooltip
 
 CELL_WIDTH = 66
@@ -124,7 +124,7 @@ class MatrixView(tk.Canvas):
         self.create_text(
             box.left + CELL_WIDTH // 2,
             box.bottom - 8,
-            text=to_hex(color.rgb),
+            text=to_rgb_text(color.rgb),
             fill="#9cdcfe",
             font=self._small,
             tags=("cell",),
@@ -163,7 +163,7 @@ class MatrixView(tk.Canvas):
             return [f"{self._matrix.cell_label(cell)} / 空きセル"]
 
         lines = [
-            f"{color.index:>3} {color.name} {to_hex(color.rgb)}",
+            f"{color.index:>3} {color.name} {to_rgb_text(color.rgb)}",
             self._matrix.palette_position(color),
             self._matrix.cell_label(cell),
         ]
@@ -195,7 +195,7 @@ class MatrixView(tk.Canvas):
             return
         color = self._matrix.color_at(cell)
         if color is not None:
-            self._on_select(to_hex(color.rgb))
+            self._on_select(to_rgb_text(color.rgb))
 
 
 def _shorten(name: str) -> str:

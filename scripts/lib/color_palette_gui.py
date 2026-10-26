@@ -2,6 +2,7 @@
 
 import sys
 import tkinter as tk
+import webbrowser
 from pathlib import Path
 from tkinter import colorchooser
 
@@ -12,7 +13,7 @@ from .color_matrix import (
 )
 from .color_matrix_view import MatrixView
 from .color_palette_list import PaletteListBox
-from .color_space import to_hex
+from .color_space import Rgb, to_hex, to_rgb_text
 from .color_wheel import ColorWheel
 from .palette_colors import PaletteColor
 from .window_shot import capture_window, root_handle
@@ -29,6 +30,8 @@ VERDICT_COLORS = {
     "near": "#b26a00",
     "far": "#a40000",
 }
+# apex (color-sample.com) は https 接続が切断される為 www 付きを使う。遷移先は colors/<16進>/ 形式。
+COLOR_SAMPLE_URL = "https://www.color-sample.com/colors/{hex_value}/"
 
 
 class PaletteApp(tk.Tk):
@@ -51,9 +54,9 @@ class PaletteApp(tk.Tk):
         self._build_controls()
         body = tk.Frame(self)
         body.pack(fill=tk.X)
-        self.matrix_view = MatrixView(body, matrix, self._set_entry)
+        self.matrix_view = MatrixView(body, matrix, self.set_color)
         self.matrix_view.pack(side=tk.LEFT, fill=tk.Y, padx=8)
-        self.wheel = ColorWheel(body, WHEEL_RADIUS, self._set_entry)
+        self.wheel = ColorWheel(body, WHEEL_RADIUS, self.set_color)
         self.wheel.pack(side=tk.LEFT, fill=tk.Y, padx=8)
         self.wheel.set_entries(matrix.colors)
         self.palette_list = PaletteListBox(body, matrix, self._select_palette_color)
@@ -68,7 +71,7 @@ class PaletteApp(tk.Tk):
     def _build_controls(self) -> None:
         bar = tk.Frame(self, padx=8, pady=6)
         bar.pack(fill=tk.X)
-        tk.Label(bar, text="色 (hex / r,g,b):").pack(side=tk.LEFT)
+        tk.Label(bar, text="色 (r, g, b / hex / 名前):").pack(side=tk.LEFT)
         self.entry = tk.Entry(bar, width=16)
         self.entry.pack(side=tk.LEFT, padx=4)
         self.entry.bind("<Return>", lambda _: self.analyze_text(self.entry.get()))
@@ -78,6 +81,9 @@ class PaletteApp(tk.Tk):
         tk.Button(bar, text="色を選ぶ…", command=self._pick_color).pack(
             side=tk.LEFT, padx=4
         )
+        tk.Button(
+            bar, text="color-sample.com で検索", command=self._open_color_sample
+        ).pack(side=tk.LEFT)
         self.status = tk.Label(bar, text="クリックでその色を判定", anchor=tk.W)
         self.status.pack(side=tk.LEFT, fill=tk.X, padx=10)
 
@@ -100,7 +106,7 @@ class PaletteApp(tk.Tk):
             self.palette_list.highlight((), None)
             self.palette_list.set_input_color(None)
             self.status.config(
-                text=f"色を解釈できません: {text}", foreground=VERDICT_COLORS["far"]
+                text=unparsable_text(text), foreground=VERDICT_COLORS["far"]
             )
             return
 
@@ -118,7 +124,7 @@ class PaletteApp(tk.Tk):
     def _write_detail(self, analysis: Analysis) -> None:
         nearest = analysis.nearest
         lines = [
-            f"入力色        : {to_hex(analysis.target)}  {self.matrix.position_text(analysis.target)}",
+            f"入力色        : {to_rgb_text(analysis.target)}  {self.matrix.position_text(analysis.target)}",
             f"判定          : {analysis.verdict} (dE={nearest.delta_e:.2f}, 閾値 {self.near_threshold:.0f})",
             f"最近傍パレット: {nearest}",
             f"  パレット上  : {self.matrix.palette_position(nearest.color)}",
@@ -144,19 +150,34 @@ class PaletteApp(tk.Tk):
 
     # --- イベント ---
 
-    def _set_entry(self, text: str) -> None:
+    def set_color(self, text: str) -> None:
+        """入力欄に色を表す文字列を載せて判定します。"""
         self.entry.delete(0, tk.END)
         self.entry.insert(tk.END, text)
         self.analyze_text(text)
 
     def _select_palette_color(self, color: PaletteColor) -> None:
-        self._set_entry(to_hex(color.rgb))
+        self.set_color(to_rgb_text(color.rgb))
 
     def _pick_color(self) -> None:
-        _, hex_value = colorchooser.askcolor(parent=self, title="判定したい色を選択")
-        if hex_value is None:
+        rgb_values, _ = colorchooser.askcolor(parent=self, title="判定したい色を選択")
+        if rgb_values is None:
             return
-        self._set_entry(hex_value)
+
+        red, green, blue = rgb_values
+        self.set_color(to_rgb_text(Rgb(round(red), round(green), round(blue))))
+
+    def _open_color_sample(self) -> None:
+        """color-sample.com の色詳細ページをブラウザで開きます。"""
+        rgb = self.matrix.resolve(self.entry.get())
+        if rgb is None:
+            self.status.config(
+                text=unparsable_text(self.entry.get()),
+                foreground=VERDICT_COLORS["far"],
+            )
+            return
+
+        webbrowser.open(color_sample_url(rgb))
 
     def _capture_debug_shot(self, path: Path, attempt: int) -> None:
         """ウィンドウが期待サイズで描画できるまで撮影を再試行します。"""
@@ -180,6 +201,16 @@ class PaletteApp(tk.Tk):
         stream = sys.stdout if ready else sys.stderr
         print(f"{result} [{attempt}回目]", file=stream)
         self.destroy()
+
+
+def color_sample_url(color: Rgb) -> str:
+    """color-sample.com の色詳細 URL を返します。"""
+    return COLOR_SAMPLE_URL.format(hex_value=to_hex(color).lstrip("#"))
+
+
+def unparsable_text(text: str) -> str:
+    """解釈できない入力を表す共通メッセージを返します。"""
+    return f"色を解釈できません: {text}"
 
 
 def is_rendered(

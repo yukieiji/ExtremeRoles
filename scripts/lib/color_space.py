@@ -79,6 +79,11 @@ def to_hex(rgb: Rgb) -> str:
     return f"#{rgb.r:02X}{rgb.g:02X}{rgb.b:02X}"
 
 
+def to_rgb_text(rgb: Rgb) -> str:
+    """表示用の RGB 文字列 (例: 255, 25, 25) を返します。"""
+    return f"{rgb.r}, {rgb.g}, {rgb.b}"
+
+
 def to_lab(rgb: Rgb) -> Lab:
     """sRGB を CIE L*a*b* (D65) に変換します。"""
     x, y, z = _to_xyz(rgb)

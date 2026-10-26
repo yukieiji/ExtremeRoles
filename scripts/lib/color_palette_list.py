@@ -5,7 +5,7 @@ from collections.abc import Callable, Iterable
 from tkinter import font as tkfont
 
 from .color_matrix import ColorMatrix
-from .color_space import Rgb, to_hex
+from .color_space import Rgb, to_hex, to_rgb_text
 from .palette_colors import PaletteColor
 
 ROW_HEIGHT = 20
@@ -80,7 +80,7 @@ class PaletteListBox(tk.Frame):
             anchor="w",
             font=self._face,
             fill="#ffffff",
-            text=f"入力色 {to_hex(rgb)}",
+            text=f"入力色 {to_rgb_text(rgb)}",
         )
         self._input.create_text(
             LIST_WIDTH - 10,
@@ -133,7 +133,7 @@ class PaletteListBox(tk.Frame):
                 anchor="w",
                 font=self._face,
                 fill="#eeeeee",
-                text=f"{color.index:>3} {color.name} {to_hex(color.rgb)}",
+                text=f"{color.index:>3} {color.name} {to_rgb_text(color.rgb)}",
             )
             self._canvas.create_text(
                 LIST_WIDTH - 10,

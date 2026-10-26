@@ -28,7 +28,7 @@ def test_format_report_shows_exact_verdict(matrix: ColorMatrix):
 
     # Assert
     assert report is not None
-    assert "#FF0000: 完全一致 -> PureRed #FF0000" in report
+    assert "255, 0, 0: 完全一致 -> PureRed 255, 0, 0" in report
     assert "入力色の位置:" in report
     assert "同一RGBのパレット項目: PureRed" in report
 
@@ -60,8 +60,8 @@ def test_format_matrix_lists_palette_by_cell(matrix: ColorMatrix):
 
     # Assert
     assert "--- 明度 L5" in table
-    assert "PureRed #FF0000" in table
-    assert "MiddleGray #808080" in table
+    assert "PureRed 255, 0, 0" in table
+    assert "MiddleGray 128, 128, 128" in table
     assert "無彩色" in table
 
 
@@ -89,7 +89,7 @@ def test_main_reports_verdict_and_returns_zero(capsys: CaptureFixture[str]):
 
     # Assert
     assert code == 0
-    assert "完全一致 -> UmbrerRed #C80015" in captured.out
+    assert "完全一致 -> UmbrerRed 200, 0, 21" in captured.out
 
 
 def test_main_returns_one_on_invalid_color(capsys: CaptureFixture[str]):
