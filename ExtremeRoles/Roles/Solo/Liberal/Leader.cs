@@ -137,6 +137,8 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	// リベラルがキルしたロジックはリーダーが全部引き受けるため
 	private readonly record struct KillSetting(int KillMoney, int LeadeKillMoney, float LeadeKillBoostDelta);
 
+	private readonly bool canSeeOtherLiberal;
+
 	public Leader(
 		LeaderVisual visual,
 		LeaderCoreOption leaderCoreOption,
@@ -148,6 +150,8 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 	{
 		this.visual = visual;
 		this.status = status;
+
+		this.canSeeOtherLiberal = option.CanSeeOtherLiberal;
 
 		this.abilityHandler = new LeaderAbilityHandler(leaderCoreOption, status);
 		this.revive = new ReviveSetting(leaderCoreOption.IsAutoExit, leaderCoreOption.IsAutoRevive);
@@ -189,6 +193,10 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
 		{
 			return GetRoleTag();
+		}
+		if (this.canSeeOtherLiberal && targetRole.IsLiberal())
+		{
+			return $" {targetRole.GetRoleTag()}";
 		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
@@ -298,7 +306,9 @@ public sealed class Leader : SingleRoleBase, IRoleVoteModifier, IRoleUpdate, IRo
 		}
 		
 		bool isLeader = role.Core.Id is ExtremeRoleId.Leader;
-		float money = isLeader ? this.killSetting.LeadeKillMoney : this.killSetting.KillMoney;
+		float money = 
+			ExtremeRoleManager.TrySafeCast<SpecialMilitant>(role, out var spMilitant) ? spMilitant.KillMoney :
+			isLeader ? this.killSetting.LeadeKillMoney : this.killSetting.KillMoney;
 		float delta = isLeader ? this.killSetting.LeadeKillBoostDelta : 0.0f;
 
 		LiberalMoneyBankSystem.RpcUpdateSystem(source.PlayerId, LiberalMoneyHistory.Reason.AddOnKill, money, delta);

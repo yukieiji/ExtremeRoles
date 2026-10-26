@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-    <data name="AvalonsRoles" xml:space="preserve">
+  <data name="AvalonsRoles" xml:space="preserve">
     <value>&lt;color=#FF1919FF&gt;阿&lt;/color&gt;瓦&lt;color=#00ffff&gt;隆&lt;/color&gt;</value>
   </data>
   <data name="Assassin" xml:space="preserve">
@@ -855,7 +855,7 @@
   <data name="scribble" xml:space="preserve">
     <value>鬼畫符</value>
   </data>
-  <data name="selfBomb" xml:space="preserve">
+  <data name="SelfBomb" xml:space="preserve">
     <value>自爆</value>
   </data>
   <data name="WispShortDescription" xml:space="preserve">

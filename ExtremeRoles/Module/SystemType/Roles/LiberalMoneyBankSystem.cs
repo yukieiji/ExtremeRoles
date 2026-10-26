@@ -3,6 +3,7 @@ using Hazel;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module.Event;
 
 #nullable enable
 
@@ -120,5 +121,10 @@ public class LiberalMoneyBankSystem(ILiberalOptionLoader option) : IDirtableSyst
 		float amount = this.boost * this.delta.Money;
 		this.Money += amount;
 		LiberalMoneyHistory.Add(new LiberalMoneyHistory.MoneyHistory(this.delta.Reason, this.delta.PlayerId, amount));
+		
+		if (MeetingHud.Instance != null)
+		{
+			EventManager.Instance.Invoke(ModEvent.VisualUpdate);
+		}
 	}
 }

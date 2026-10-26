@@ -62,6 +62,10 @@ public interface IRoleSelector
 		out var cate) &&
 		cate.GetValue<bool>((int)XionOption.UseXion);
 
+	public static bool CanSeeOtherLiberal => OptionManager.Instance.TryGetCategory(
+		OptionTab.GeneralTab, (int)SpawnOptionCategory.LiberalSetting, out var category) &&
+		category.GetValue<LiberalGlobalSetting, bool>(LiberalGlobalSetting.CanSeeOtherLiberal);
+
 	public static bool IsCommonOption(int id)
 	=> id == (int)SpawnOptionCategory.RoleSpawnCategory ||
 		id == (int)SpawnOptionCategory.GhostRoleSpawnCategory ||

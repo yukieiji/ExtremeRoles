@@ -1442,4 +1442,40 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="SpiritGuide" xml:space="preserve">
     <value>インフルエンサー</value>
   </data>
+  <data name="liberalIntroHide0" xml:space="preserve">
+    <value>この中に革新を否定する、裏切り者がいる</value>
+  </data>
+  <data name="liberalIntroHide1" xml:space="preserve">
+    <value>この中にいる変革を拒絶する者へ、正義の鉄槌を</value>
+  </data>
+  <data name="liberalIntroHide2" xml:space="preserve">
+    <value>この中に潜んでいる同志へ、革命の灯火を掲げろ</value>
+  </data>
+  <data name="CrewmateOnly" xml:space="preserve">
+    <value>クルーのみ</value>
+  </data>
+  <data name="AllImpostorOther" xml:space="preserve">
+    <value>インポスター以外全て</value>
+  </data>
+  <data name="NeutralOnly" xml:space="preserve">
+    <value>ニュートラルのみ</value>
+  </data>
+  <data name="LiberalOnly" xml:space="preserve">
+    <value>リベラルのみ</value>
+  </data>
+  <data name="BothCrewAndNeutral" xml:space="preserve">
+    <value>クルーとニュートラルのみ</value>
+  </data>
+  <data name="BothCrewAndLiberal" xml:space="preserve">
+    <value>クルーとリベラルのみ</value>
+  </data>
+  <data name="BothLiberalAndNeutral" xml:space="preserve">
+    <value>ニュートラルとリベラルのみ</value>
+  </data>
+  <data name="LiberalTab" xml:space="preserve">
+    <value>&lt;color=#F9F06F&gt;リベラル役職設定&lt;/color&gt;</value>
+  </data>
+  <data name="LiberalSettingCanSeeOtherLiberal" xml:space="preserve">
+    <value>リベラル同士の確認</value>
+  </data>
 </root>

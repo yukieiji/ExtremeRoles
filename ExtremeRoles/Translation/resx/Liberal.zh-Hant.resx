@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-    <data name="LeaderFullDescription" xml:space="preserve">
+  <data name="LeaderFullDescription" xml:space="preserve">
     <value>領袖屬於革命黨
 根據設置領袖可能是激進派或溫和派
 有任務就是溫和派
@@ -172,5 +172,53 @@
   </data>
   <data name="MilitantIntroDescription" xml:space="preserve">
     <value>槍桿子裡出政權！</value>
+  </data>
+  <data name="SpecialDove" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialDoveIntroDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialDoveShortDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialDoveFullDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialMilitant" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialMilitantIntroDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialMilitantShortDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="SpecialMilitantFullDescription" xml:space="preserve">
+    <value>STRMISS</value>
+  </data>
+  <data name="Addict" xml:space="preserve">
+    <value>成癮者</value>
+  </data>
+  <data name="AddictFullDescription" xml:space="preserve">
+    <value>類型：和平派
+
+被動“自爆計時器”
+・做任務、在管道中、停止移動等情況時自爆計時器會推進
+・在梯子、軟梯、滑索上時也會推進
+・歸零時自爆
+・持續移動一定時間以上時自爆計時器會恢復</value>
+  </data>
+  <data name="AddictShortDescription" xml:space="preserve">
+    <value>停止移動時自爆計時器推進</value>
+  </data>
+  <data name="AddictIntroDescription" xml:space="preserve">
+    <value>停止移動時自爆計時器推進</value>
+  </data>
+  <data name="AddictSelfKillTimerTime" xml:space="preserve">
+    <value>自爆計時器秒數</value>
+  </data>
+  <data name="AddictMovementTimeToRecover" xml:space="preserve">
+    <value>恢復計時器所需的連續移動時間</value>
   </data>
 </root>

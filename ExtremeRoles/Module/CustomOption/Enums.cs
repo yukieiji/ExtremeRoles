@@ -7,7 +7,7 @@ public enum OptionTab : byte
 	CrewmateTab,
 	ImpostorTab,
 	NeutralTab,
-	// LiberalTab,
+	LiberalTab,
 	CombinationTab,
 
 	GhostCrewmateTab,
