@@ -96,7 +96,7 @@ public sealed class LoggerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 	public LoggerRole() : base(
 		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Logger,
-			ColorPalette.LoggerGreen))
+			ColorPalette.LoggerLawngreen))
 	{
 	}
 

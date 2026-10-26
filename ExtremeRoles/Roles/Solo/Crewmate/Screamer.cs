@@ -125,7 +125,7 @@ public sealed class Screamer : SingleRoleBase
 	public Screamer() : base(
 		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Screamer,
-			ColorPalette.ScreamerColor))
+			ColorPalette.ScreamerTomato))
 	{
 	}
 

@@ -35,7 +35,7 @@ public sealed class Mayor :
 	public Mayor() : base(
 		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Mayor,
-			ColorPalette.MayorOchre))
+			ColorPalette.MayorOcre))
 	{ }
 
 	public void CreateAbility()

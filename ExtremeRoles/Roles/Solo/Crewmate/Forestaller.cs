@@ -40,7 +40,7 @@ public sealed class Forestaller :
 	public Forestaller() : base(
 		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Forestaller,
-			ColorPalette.ForestallerGreen))
+			ColorPalette.ForestallerSafeColor))
 	{ }
 
 	public override string GetColoredRoleName(bool isTruthColor = false)
