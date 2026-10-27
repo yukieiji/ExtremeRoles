@@ -60,7 +60,7 @@ public sealed class ScannerRole :
 				{
 					return IRoleAbility.IsCommonUseWithMinigame();
 				}
-				return IsAbilityUse();
+				return IsAbilityUse() && this.isScanning;
 			},
 			openUI,
 			(_) => UseAbility(),
@@ -97,14 +97,6 @@ public sealed class ScannerRole :
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (!GameProgressSystem.IsTaskPhase ||
-			Minigame.Instance != null ||
-			!rolePlayer.CanMove)
-		{
-			cancelScan();
-			return;
-		}
-
 		if (this.abilityText == null)
 		{
 			this.abilityText = Object.Instantiate(
