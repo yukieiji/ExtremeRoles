@@ -147,7 +147,6 @@ public sealed class DeepOne :
 	private float deathCooldownReduction = 0.0f;
 	private float removeFrogsPenalty = 0.0f;
 	private int requiredWinFrogs = 0;
-	private bool isSpeedApplied = false;
 
 	public DeepOne() : base(
 		RoleArgs.BuildNeutral(
@@ -165,6 +164,8 @@ public sealed class DeepOne :
 			return;
 		}
 
+		bool wasSpeedUp = this.status.IsSpeedUp;
+
 		if (this.status.UpdateStatus(frogCount) &&
 			this.Button is not null)
 		{
@@ -174,6 +175,20 @@ public sealed class DeepOne :
 			this.Button.SetCooldownTimer(this.Button.Timer + this.removeFrogsPenalty);
 		}
 		this.UseVent = this.status.UseVent;
+
+		if (this.status.IsSpeedUp != wasSpeedUp && PlayerControl.LocalPlayer != null)
+		{
+			byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+			if (this.status.IsSpeedUp)
+			{
+				PlayerSpeedSystem.Get().SetSpeed(localPlayerId, SpeedId, 3.0f);
+			}
+			else
+			{
+				PlayerSpeedSystem.Get().RemoveSpeed(localPlayerId, SpeedId);
+			}
+		}
+
 		if (frogCount >= this.requiredWinFrogs)
 		{
 			this.IsWin = true;
@@ -195,36 +210,13 @@ public sealed class DeepOne :
 
 	public void AllReset(PlayerControl rolePlayer)
 	{
-		if (this.isSpeedApplied)
-		{
-			PlayerSpeedSystem.Get().RemoveSpeed(rolePlayer.PlayerId, SpeedId);
-			this.isSpeedApplied = false;
-		}
+		PlayerSpeedSystem.Get().RemoveSpeed(rolePlayer.PlayerId, SpeedId);
 		this.status?.ResetStatus();
 		this.UseVent = false;
 	}
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (rolePlayer.IsInValid() ||
-			this.status is null)
-		{
-			return;
-		}
-
-		if (this.status.IsSpeedUp)
-		{
-			if (!this.isSpeedApplied)
-			{
-				PlayerSpeedSystem.Get().SetSpeed(rolePlayer.PlayerId, SpeedId, 3.0f);
-				this.isSpeedApplied = true;
-			}
-		}
-		else if (this.isSpeedApplied)
-		{
-			PlayerSpeedSystem.Get().RemoveSpeed(rolePlayer.PlayerId, SpeedId);
-			this.isSpeedApplied = false;
-		}
 	}
 
 	public void ModifiedVote(byte rolePlayerId, ref Dictionary<byte, byte> voteTarget, ref Dictionary<byte, int> voteResult)

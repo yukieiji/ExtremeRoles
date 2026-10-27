@@ -16,9 +16,7 @@ public sealed class SpeedMod : MonoBehaviour
 	public const string SpeedId = "SpeedMod_Speed";
 
 	private float timer;
-	private float speedMultiplier = 1.0f;
 	private SingleRoleBase? role;
-	private bool isSpeedApplied = false;
 
 	public SpeedMod(System.IntPtr ptr) : base(ptr) { }
 
@@ -26,8 +24,10 @@ public sealed class SpeedMod : MonoBehaviour
 	{
 		this.timer = timer;
 		this.role = ExtremeRoleManager.GetLocalPlayerRole();
-		this.speedMultiplier = speed;
-		applySpeed();
+		if (PlayerControl.LocalPlayer != null)
+		{
+			PlayerSpeedSystem.Get().SetSpeed(PlayerControl.LocalPlayer.PlayerId, SpeedId, speed);
+		}
 	}
 
 	public void FixedUpdate()
@@ -39,26 +39,14 @@ public sealed class SpeedMod : MonoBehaviour
 
 		if (this.timer <= 0.0f)
 		{
-			if (this.isSpeedApplied && PlayerControl.LocalPlayer != null)
+			if (PlayerControl.LocalPlayer != null)
 			{
 				PlayerSpeedSystem.Get().RemoveSpeed(PlayerControl.LocalPlayer.PlayerId, SpeedId);
-				this.isSpeedApplied = false;
 			}
+			Destroy(this);
 			return;
 		}
 
 		this.timer -= Time.fixedDeltaTime;
-
-		applySpeed();
-	}
-
-	[HideFromIl2Cpp]
-	private void applySpeed()
-	{
-		if (!this.isSpeedApplied && PlayerControl.LocalPlayer != null)
-		{
-			PlayerSpeedSystem.Get().SetSpeed(PlayerControl.LocalPlayer.PlayerId, SpeedId, this.speedMultiplier);
-			this.isSpeedApplied = true;
-		}
 	}
 }
