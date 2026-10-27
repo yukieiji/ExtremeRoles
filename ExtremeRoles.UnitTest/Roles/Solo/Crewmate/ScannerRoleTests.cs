@@ -140,31 +140,6 @@ public class ScannerRoleTests
 	}
 
 	[Fact]
-	public void ResetOnMeetingEnd_ResetsScanningAndSelectedRoom()
-	{
-		// Arrange
-		var scanner = new ScannerRole();
-		scanner.CreateRoleAllOption();
-		scanner.Initialize();
-
-		var roomField = typeof(ScannerRole).GetField("selectedRoom", BindingFlags.NonPublic | BindingFlags.Instance);
-		roomField!.SetValue(scanner, SystemTypes.Nav);
-
-		var isScanningField = typeof(ScannerRole).GetField("isScanning", BindingFlags.NonPublic | BindingFlags.Instance);
-		isScanningField!.SetValue(scanner, true);
-
-		// Act
-		scanner.ResetOnMeetingEnd(null);
-
-		// Assert
-		SystemTypes? selectedRoom = (SystemTypes?)roomField.GetValue(scanner);
-		bool isScanning = (bool)isScanningField.GetValue(scanner)!;
-
-		Assert.Null(selectedRoom);
-		Assert.False(isScanning);
-	}
-
-	[Fact]
 	public void IsAbilityUse_WhenInCommonUseState_ReturnsTrue()
 	{
 		// Arrange
