@@ -524,6 +524,8 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 {
+	public const string SpeedId = "Yardbird_Speed";
+
 	public sealed record Option(
 		int AddCommonTask,
 		int AddNormalTask,
@@ -551,7 +553,7 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		)
 	{
 		this.Loader = loader;
-		this.MoveSpeed = option.SpeedMod;
+		PlayerSpeedSystem.RpcSetSpeed(targetPlayerId, SpeedId, option.SpeedMod);
 		var addTasks = new List<int>(option.AddCommonTask + option.AddNormalTask + option.AddLongTask);
 
 		if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)

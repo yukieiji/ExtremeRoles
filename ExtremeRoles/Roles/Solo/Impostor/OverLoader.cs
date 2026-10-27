@@ -12,12 +12,14 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>, ITryKillTo
 {
+    public const string SpeedId = "OverLoader_Speed";
 
     public enum OverLoaderOption
     {
@@ -40,6 +42,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     public bool IsOverLoad;
 
     private float reduceRate;
+    private float moveSpeedMultiplier = 1.0f;
     private float defaultKillCool;
     private int defaultKillRange;
 
@@ -71,7 +74,14 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
         }
 
 		overLoader.IsOverLoad = activate;
-		overLoader.IsBoost = activate;
+		if (activate)
+		{
+			PlayerSpeedSystem.Get().SetSpeed(rolePlayerId, SpeedId, overLoader.moveSpeedMultiplier);
+		}
+		else
+		{
+			PlayerSpeedSystem.Get().RemoveSpeed(rolePlayerId, SpeedId);
+		}
 
 		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 	}
@@ -239,7 +249,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
         this.awakeKillCount = cate.GetValue<OverLoaderOption, int>(
             OverLoaderOption.AwakeKillCount);
 
-        this.MoveSpeed = cate.GetValue<OverLoaderOption, float>(
+        this.moveSpeedMultiplier = cate.GetValue<OverLoaderOption, float>(
             OverLoaderOption.MoveSpeed);
         this.reduceRate = cate.GetValue<OverLoaderOption, float>(
             OverLoaderOption.KillCoolReduceRate);

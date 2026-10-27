@@ -19,8 +19,6 @@ public sealed partial class Xion : SingleRoleBase
 			RolePropPresets.OptionalDefault | RoleProp.UseSabotage)
 		)
     {
-        this.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-            AmongUs.GameOptions.FloatOptionNames.PlayerSpeedMod);
         this.defaultCameraZoom = UnityEngine.Camera.main.orthographicSize;
         this.dummyDeadBody.Clear();
         PlayerId = xionPlayerId;

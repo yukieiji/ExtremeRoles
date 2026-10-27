@@ -1,9 +1,8 @@
-﻿using AmongUs.GameOptions;
-
 using UnityEngine;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.SystemType;
 
 using Il2CppInterop.Runtime.Attributes;
 
@@ -14,10 +13,12 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class SpeedMod : MonoBehaviour
 {
+	public const string SpeedId = "SpeedMod_Speed";
+
 	private float timer;
-	private float targetSpeed;
-	private float defaultSpeed = float.MinValue;
+	private float speedMultiplier = 1.0f;
 	private SingleRoleBase? role;
+	private bool isSpeedApplied = false;
 
 	public SpeedMod(System.IntPtr ptr) : base(ptr) { }
 
@@ -25,10 +26,8 @@ public sealed class SpeedMod : MonoBehaviour
 	{
 		this.timer = timer;
 		this.role = ExtremeRoleManager.GetLocalPlayerRole();
-		this.defaultSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-			FloatOptionNames.PlayerSpeedMod);
-		this.targetSpeed = this.defaultSpeed * speed;
-		updateSpeed(this.role);
+		this.speedMultiplier = speed;
+		applySpeed();
 	}
 
 	public void FixedUpdate()
@@ -40,23 +39,26 @@ public sealed class SpeedMod : MonoBehaviour
 
 		if (this.timer <= 0.0f)
 		{
-			if (this.role.IsBoost)
+			if (this.isSpeedApplied && PlayerControl.LocalPlayer != null)
 			{
-				this.role.IsBoost = false;
-				this.role.MoveSpeed = this.defaultSpeed;
+				PlayerSpeedSystem.Get().RemoveSpeed(PlayerControl.LocalPlayer.PlayerId, SpeedId);
+				this.isSpeedApplied = false;
 			}
 			return;
 		}
 
 		this.timer -= Time.fixedDeltaTime;
 
-		updateSpeed(this.role);
+		applySpeed();
 	}
 
 	[HideFromIl2Cpp]
-	private void updateSpeed(SingleRoleBase role)
+	private void applySpeed()
 	{
-		role.IsBoost = true;
-		role.MoveSpeed = this.targetSpeed;
+		if (!this.isSpeedApplied && PlayerControl.LocalPlayer != null)
+		{
+			PlayerSpeedSystem.Get().SetSpeed(PlayerControl.LocalPlayer.PlayerId, SpeedId, this.speedMultiplier);
+			this.isSpeedApplied = true;
+		}
 	}
 }

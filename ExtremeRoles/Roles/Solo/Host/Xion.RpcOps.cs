@@ -20,8 +20,11 @@ namespace ExtremeRoles.Roles.Solo.Host;
 
 public sealed partial class Xion
 {
+    public const string SpeedId = "Xion_Speed";
     public const float MaxSpeed = 20.0f;
     public const float MinSpeed = 0.01f;
+
+    private float xionSpeedMultiplier = 1.0f;
 
     public enum XionRpcOpsCode : byte
     {
@@ -344,22 +347,20 @@ public sealed partial class Xion
     private static void updateSpeed(
         Xion xion, SpeedOps ops)
     {
+        byte playerId = PlayerId;
         switch (ops)
         {
             case SpeedOps.Up:
-                xion.IsBoost = true;
-                float newBoostSpeed = xion.MoveSpeed * 1.25f;
-                xion.MoveSpeed = Mathf.Clamp(newBoostSpeed, MinSpeed, MaxSpeed);
+                xion.xionSpeedMultiplier = Mathf.Clamp(xion.xionSpeedMultiplier * 1.25f, MinSpeed, MaxSpeed);
+                PlayerSpeedSystem.Get().SetSpeed(playerId, SpeedId, xion.xionSpeedMultiplier);
                 break;
             case SpeedOps.Down:
-                xion.IsBoost = true;
-                float newDownSpeed = xion.MoveSpeed * 0.8f;
-                xion.MoveSpeed = Mathf.Clamp(newDownSpeed, MinSpeed, MaxSpeed);
+                xion.xionSpeedMultiplier = Mathf.Clamp(xion.xionSpeedMultiplier * 0.8f, MinSpeed, MaxSpeed);
+                PlayerSpeedSystem.Get().SetSpeed(playerId, SpeedId, xion.xionSpeedMultiplier);
                 break;
             case SpeedOps.Reset:
-                xion.IsBoost = false;
-                xion.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                    FloatOptionNames.PlayerSpeedMod);
+                xion.xionSpeedMultiplier = 1.0f;
+                PlayerSpeedSystem.Get().RemoveSpeed(playerId, SpeedId);
                 break;
             default:
                 break;

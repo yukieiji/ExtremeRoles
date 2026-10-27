@@ -33,9 +33,6 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     public bool IsApplyEnvironmentVision = true;
     public bool IsWin = false;
 
-    public bool IsBoost = false;
-    public float MoveSpeed = 1.0f;
-
     public float Vision = 0f;
     public float KillCoolTime = 0f;
     public int KillRange = 1;

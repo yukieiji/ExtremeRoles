@@ -360,18 +360,12 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 		mockGameDataHelper.Setup(h => h.Invoke()).Returns(mockGameData.Object);
 		MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
 
-		var role = new SpecialCrew();
-		role.IsBoost = true;
-		role.MoveSpeed = 1.5f;
+		var playerSpeedSystem = new PlayerSpeedSystem();
+		playerSpeedSystem.SetSpeed(PlayerControl.LocalPlayer.PlayerId, "TestSpeed", 1.5f);
 
-		var mockRoleContainer = new Mock<INomalGameRoleContainer>();
-		mockRoleContainer.Setup(r => r.GetLocalPlayerRole()).Returns(role);
-
-		var mockContext = new Mock<IGameContext>();
-		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
-
-		IGameContext? ctx = mockContext.Object;
-		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(true);
+		PlayerSpeedSystem? speedSysOut = playerSpeedSystem;
+		mockSystem.Setup(s => s.TryGet<PlayerSpeedSystem>(ExtremeSystemType.PlayerSpeedSystem, out speedSysOut))
+			.Returns(true);
 
 		var patchBody = new PlayerPhysicsFixedUpdatePatchBody(mockSystem.Object, mockProgress.Object, mockRuntime.Object);
 		var mockPhysics = CreateMockPhysics(out var mockBody, out var mockPlayer);

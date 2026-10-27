@@ -111,6 +111,8 @@ public sealed class DeepOne :
 	IRoleVoteModifier,
 	IRoleSpecialReset
 {
+	public const string SpeedId = "DeepOne_Speed";
+
 	public enum DeepOneOption
 	{
 		RequiredClicks,
@@ -145,6 +147,7 @@ public sealed class DeepOne :
 	private float deathCooldownReduction = 0.0f;
 	private float removeFrogsPenalty = 0.0f;
 	private int requiredWinFrogs = 0;
+	private bool isSpeedApplied = false;
 
 	public DeepOne() : base(
 		RoleArgs.BuildNeutral(
@@ -192,8 +195,11 @@ public sealed class DeepOne :
 
 	public void AllReset(PlayerControl rolePlayer)
 	{
-		this.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-			FloatOptionNames.PlayerSpeedMod);
+		if (this.isSpeedApplied)
+		{
+			PlayerSpeedSystem.Get().RemoveSpeed(rolePlayer.PlayerId, SpeedId);
+			this.isSpeedApplied = false;
+		}
 		this.status?.ResetStatus();
 		this.UseVent = false;
 	}
@@ -208,14 +214,16 @@ public sealed class DeepOne :
 
 		if (this.status.IsSpeedUp)
 		{
-			this.IsBoost = true;
-			this.MoveSpeed = 3.0f;
+			if (!this.isSpeedApplied)
+			{
+				PlayerSpeedSystem.Get().SetSpeed(rolePlayer.PlayerId, SpeedId, 3.0f);
+				this.isSpeedApplied = true;
+			}
 		}
-		else
+		else if (this.isSpeedApplied)
 		{
-			this.IsBoost = false;
-			this.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-				FloatOptionNames.PlayerSpeedMod);
+			PlayerSpeedSystem.Get().RemoveSpeed(rolePlayer.PlayerId, SpeedId);
+			this.isSpeedApplied = false;
 		}
 	}
 

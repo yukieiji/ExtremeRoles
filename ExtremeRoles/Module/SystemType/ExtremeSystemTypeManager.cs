@@ -69,6 +69,7 @@ public enum ExtremeSystemType : byte
 	DeepOneFrogsControlSystem,
 	DarkpointerDarkness,
 	ForestallerSystem,
+	PlayerSpeedSystem,
 }
 
 public enum ResetTiming : byte
@@ -319,6 +320,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IExtremeSystemTypeM
 		add<GlobalCheckpointSystem>(mng, GlobalCheckpointSystem.Type);
 		add<MeetingCountSystem>(mng, MeetingCountSystem.Type);
 		add<GameProgressSystem>(mng, ExtremeSystemType.GameProgress);
+		add<PlayerSpeedSystem>(mng, PlayerSpeedSystem.Type);
 	}
 
 	private static void add<T>(IExtremeSystemTypeManager mng, ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()

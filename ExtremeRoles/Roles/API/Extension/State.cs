@@ -81,23 +81,6 @@ namespace ExtremeRoles.Roles.API.Extension.State
         }
 
 
-        public static bool TryGetVelocity(this SingleRoleBase role, out float velocity)
-        {
-            velocity = role.MoveSpeed;
-            bool isBoost = role.IsBoost;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return isBoost;
-            }
-            else
-            {
-                float otherVelocity = multiAssignRole.AnotherRole.MoveSpeed;
-                velocity = velocity > otherVelocity ? velocity : otherVelocity;
-                return isBoost || multiAssignRole.AnotherRole.IsBoost;
-            }
-        }
-
         public static bool CanKill(this SingleRoleBase role)
         {
             bool canKill = role.CanKill;
