@@ -25,7 +25,7 @@ public class PlayerSpeedSystem : IExtremeSystemType
 		{
 			speed += mod;
 		}
-		return !isCloseToZero(speed);
+		return isNotZero(speed);
 	}
 
 	public void UpdateTo(byte target, float speed)
@@ -60,17 +60,17 @@ public class PlayerSpeedSystem : IExtremeSystemType
 	{
 		lock (this.speedMod)
 		{
-			if (isCloseToZero(newSpeed))
+			if (isNotZero(newSpeed))
 			{
-				this.speedMod.Remove(triggerPlayerId);
+				this.speedMod[triggerPlayerId] = newSpeed;
 			}
 			else
 			{
-				this.speedMod[triggerPlayerId] = newSpeed;
+				this.speedMod.Remove(triggerPlayerId);
 			}
 		}
 	}
 
-	private static bool isCloseToZero(float value)
-		=> value < epsilon;
+	private static bool isNotZero(float value)
+		=> value >= epsilon;
 }
