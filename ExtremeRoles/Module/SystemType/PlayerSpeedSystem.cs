@@ -25,7 +25,7 @@ public class PlayerSpeedSystem : IExtremeSystemType
 		{
 			speed += mod;
 		}
-		return isCloseToZero(speed);
+		return !isCloseToZero(speed);
 	}
 
 	public void UpdateTo(byte target, float speed)

@@ -26,6 +26,7 @@ public sealed class TimerSpeedMod : MonoBehaviour
 		if (this.timer <= 0.0f)
 		{
 			this.system?.UpdateSelfSpeed(0.0f);
+			Destroy(this);
 			return;
 		}
 
