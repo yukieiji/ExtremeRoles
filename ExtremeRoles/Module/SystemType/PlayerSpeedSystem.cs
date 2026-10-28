@@ -15,15 +15,13 @@ public class PlayerSpeedSystem : IExtremeSystemType
 	{
 	}
 
-	public static bool TryGetSpeed(byte targetPlayerId, out float speed)
+	public static PlayerSpeedSystem Get()
+		=> ExtremeSystemTypeManager.Instance.CreateOrGet<PlayerSpeedSystem>(Type);
+
+	public bool TryGetSpeed(byte targetPlayerId, out float speed)
 	{
 		speed = 0.0f;
-		if (!ExtremeSystemTypeManager.Instance.TryGet<PlayerSpeedSystem>(Type, out var system))
-		{
-			return false;
-		}
-
-		foreach (float mod in system.speedMod.Values)
+		foreach (float mod in this.speedMod.Values)
 		{
 			speed += mod;
 		}
