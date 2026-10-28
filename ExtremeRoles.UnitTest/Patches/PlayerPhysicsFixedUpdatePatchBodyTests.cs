@@ -361,6 +361,7 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 		MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
 
 		var speedSystem = new PlayerSpeedSystem();
+		float speed = 1.5f;
 		speedSystem.UpdateSelfSpeed(1.5f);
 
 		PlayerSpeedSystem? speedSystemOut = speedSystem;
@@ -371,6 +372,7 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 		var mockPhysics = CreateMockPhysics(out var mockBody, out var mockPlayer);
 		mockPhysics.SetupGet(p => p.AmOwner).Returns(true);
 		mockPlayer.SetupGet(p => p.PlayerId).Returns(PlayerControl.LocalPlayer.PlayerId);
+		mockPlayer.SetupGet(p => p.CanMove).Returns(true);
 
 		var initialVelocity = new Vector2(2.0f, 4.0f);
 		mockBody.SetupGet(b => b.velocity).Returns(initialVelocity);
@@ -379,7 +381,7 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 		patchBody.Postfix(mockPhysics.Object);
 
 		// Assert
-		var expectedVelocity = initialVelocity * 1.5f;
+		var expectedVelocity = initialVelocity * speed;
 		mockBody.VerifySet(b => b.velocity = It.Is<Vector2>(v => v.x == expectedVelocity.x && v.y == expectedVelocity.y), Times.Once);
 	}
 }
