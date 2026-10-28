@@ -360,23 +360,17 @@ public class PlayerPhysicsFixedUpdatePatchBodyTests : IDisposable
 		mockGameDataHelper.Setup(h => h.Invoke()).Returns(mockGameData.Object);
 		MockGameDataget_InstanceHelper.Instance = mockGameDataHelper.Object;
 
-		var role = new SpecialCrew();
-		role.IsBoost = true;
-		role.MoveSpeed = 1.5f;
+		var speedSystem = new PlayerSpeedSystem();
+		speedSystem.UpdateSelfSpeed(1.5f);
 
-		var mockRoleContainer = new Mock<INomalGameRoleContainer>();
-		mockRoleContainer.Setup(r => r.GetLocalPlayerRole()).Returns(role);
-
-		var mockContext = new Mock<IGameContext>();
-		mockContext.SetupGet(c => c.Roles).Returns(mockRoleContainer.Object);
-
-		IGameContext? ctx = mockContext.Object;
-		mockRuntime.Setup(r => r.TryGetGameContext(out ctx)).Returns(true);
+		PlayerSpeedSystem? speedSystemOut = speedSystem;
+		mockSystem.Setup(s => s.TryGet<PlayerSpeedSystem>(PlayerSpeedSystem.Type, out speedSystemOut))
+			.Returns(true);
 
 		var patchBody = new PlayerPhysicsFixedUpdatePatchBody(mockSystem.Object, mockProgress.Object, mockRuntime.Object);
 		var mockPhysics = CreateMockPhysics(out var mockBody, out var mockPlayer);
 		mockPhysics.SetupGet(p => p.AmOwner).Returns(true);
-		mockPlayer.SetupGet(p => p.CanMove).Returns(true);
+		mockPlayer.SetupGet(p => p.PlayerId).Returns(PlayerControl.LocalPlayer.PlayerId);
 
 		var initialVelocity = new Vector2(2.0f, 4.0f);
 		mockBody.SetupGet(b => b.velocity).Returns(initialVelocity);
