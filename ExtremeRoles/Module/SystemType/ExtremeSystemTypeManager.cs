@@ -38,6 +38,7 @@ public enum ExtremeSystemType : byte
 	SecurityDummySystem,
 	OnemanMeetingSystem,
 	VoteSwapSystem,
+	SpeedSystem,
 
 	AbilityButtonLockSystem,
 	ReportButtonLockSystem,
