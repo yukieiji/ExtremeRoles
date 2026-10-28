@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Linq;
 
 using ExtremeRoles.Helper;
@@ -65,21 +65,21 @@ public sealed partial class Xion
         if (Key.IsShift() &&
             Input.GetKeyDown(up))
         {
-            this.RpcSpeedUp();
+            this.speedUp();
         }
 
         // 低速移動
         if (Key.IsShift() &&
             Input.GetKeyDown(down))
         {
-            this.RpcSpeedDown();
+            this.speedDown();
         }
 
         // 移動速度リセット
         if (Key.IsShift() &&
             Input.GetKeyDown(reset))
         {
-            this.RpcResetSpeed();
+            this.resetSpeed();
         }
 
         // ズームイン
@@ -121,7 +121,7 @@ public sealed partial class Xion
 #endif
     }
 
-    public static bool IsAllPlyerDummy()
+	public static bool IsAllPlyerDummy()
     {
         foreach (var player in PlayerControl.AllPlayerControls)
         {
