@@ -27,49 +27,41 @@ public class BurgermonSystemTests
 	}
 
 	[Fact]
-	public void CalculateSpeedMod_ReturnsExpectedValues()
+	public void CalculateSpeedMod_PositiveAndNegative_ReturnsExpectedValues()
 	{
-		var system = new BurgermonSystem();
+		// Positive speed (e.g. +3% per burger)
+		var system1 = new BurgermonSystem(0.03f, 0.25f, true, true);
+		Assert.Equal(1.0f, system1.CalculateSpeedMod(0));
+		Assert.Equal(1.03f, system1.CalculateSpeedMod(1), 3);
+		Assert.Equal(1.06f, system1.CalculateSpeedMod(2), 3);
 
-		// Fast
-		system.SpeedMode = BurgermonSpeedMode.Fast;
-		system.SpeedValue = 0.03f;
-		Assert.Equal(1.0f, system.CalculateSpeedMod(0));
-		Assert.Equal(1.03f, system.CalculateSpeedMod(1), 3);
-		Assert.Equal(1.06f, system.CalculateSpeedMod(2), 3);
+		// Negative speed (e.g. -5% per burger)
+		var system2 = new BurgermonSystem(-0.05f, 0.25f, true, true);
+		Assert.Equal(0.95f, system2.CalculateSpeedMod(1), 3);
+		Assert.Equal(0.90f, system2.CalculateSpeedMod(2), 3);
 
-		// Slow
-		system.SpeedMode = BurgermonSpeedMode.Slow;
-		system.SpeedValue = 0.05f;
-		Assert.Equal(0.95f, system.CalculateSpeedMod(1), 3);
-		Assert.Equal(0.90f, system.CalculateSpeedMod(2), 3);
-
-		// None
-		system.SpeedMode = BurgermonSpeedMode.None;
-		Assert.Equal(1.0f, system.CalculateSpeedMod(5));
+		// Zero speed change
+		var system3 = new BurgermonSystem(0.0f, 0.25f, true, true);
+		Assert.Equal(1.0f, system3.CalculateSpeedMod(5));
 	}
 
 	[Fact]
-	public void CalculateScaleFactor_ReturnsExpectedValues()
+	public void CalculateScaleFactor_PositiveAndNegative_ReturnsExpectedValues()
 	{
-		var system = new BurgermonSystem();
+		// Positive size (e.g. +25% per burger)
+		var system1 = new BurgermonSystem(0.03f, 0.25f, true, true);
+		Assert.Equal(1.0f, system1.CalculateScaleFactor(0));
+		Assert.Equal(1.25f, system1.CalculateScaleFactor(1), 3);
+		Assert.Equal(1.50f, system1.CalculateScaleFactor(2), 3);
 
-		// Big
-		system.SizeMode = BurgermonSizeMode.Big;
-		system.SizeValue = 0.25f;
-		Assert.Equal(1.0f, system.CalculateScaleFactor(0));
-		Assert.Equal(1.25f, system.CalculateScaleFactor(1), 3);
-		Assert.Equal(1.50f, system.CalculateScaleFactor(2), 3);
+		// Negative size (e.g. -20% per burger)
+		var system2 = new BurgermonSystem(0.03f, -0.20f, true, true);
+		Assert.Equal(0.80f, system2.CalculateScaleFactor(1), 3);
+		Assert.Equal(0.60f, system2.CalculateScaleFactor(2), 3);
 
-		// Small
-		system.SizeMode = BurgermonSizeMode.Small;
-		system.SizeValue = 0.20f;
-		Assert.Equal(0.80f, system.CalculateScaleFactor(1), 3);
-		Assert.Equal(0.60f, system.CalculateScaleFactor(2), 3);
-
-		// None
-		system.SizeMode = BurgermonSizeMode.None;
-		Assert.Equal(1.0f, system.CalculateScaleFactor(3));
+		// Zero size change
+		var system3 = new BurgermonSystem(0.03f, 0.0f, true, true);
+		Assert.Equal(1.0f, system3.CalculateScaleFactor(3));
 	}
 
 	[Fact]
@@ -81,7 +73,6 @@ public class BurgermonSystemTests
 		Assert.Equal(0, system.GetTotalFedCount(targetId));
 		Assert.Equal(0, system.GetActiveFedCount(targetId));
 
-		// Simulate RPC UpdateSystem
 		var mockReader = new Mock<MessageReader>(IntPtr.Zero);
 		mockReader.SetupSequence(r => r.ReadByte())
 			.Returns((byte)BurgermonRpcOps.FeedBurger)
@@ -92,7 +83,6 @@ public class BurgermonSystemTests
 		Assert.Equal(1, system.GetTotalFedCount(targetId));
 		Assert.Equal(0, system.GetActiveFedCount(targetId));
 
-		// Reset on Meeting Start
 		system.Reset(ResetTiming.MeetingStart);
 
 		Assert.Equal(1, system.GetTotalFedCount(targetId));
@@ -175,9 +165,7 @@ public class BurgermonRoleTests
 
 		var system = BurgermonSystem.Get();
 
-		Assert.Equal(BurgermonSpeedMode.Fast, system.SpeedMode);
 		Assert.Equal(0.03f, system.SpeedValue, 3);
-		Assert.Equal(BurgermonSizeMode.Big, system.SizeMode);
 		Assert.Equal(0.25f, system.SizeValue, 3);
 		Assert.True(system.KeepAfterDeath);
 		Assert.True(system.AffectDeadBody);
@@ -193,11 +181,9 @@ public class BurgermonRoleTests
 		byte targetId = 3;
 		var system = BurgermonSystem.Get();
 
-		// Before feed
 		string tagBefore = burgermon.GetRolePlayerNameTag(burgermon, targetId);
 		Assert.Equal("", tagBefore);
 
-		// Feed 2 burgers
 		var mockReader = new Mock<MessageReader>(IntPtr.Zero);
 		mockReader.SetupSequence(r => r.ReadByte())
 			.Returns((byte)BurgermonRpcOps.FeedBurger)
@@ -210,7 +196,6 @@ public class BurgermonRoleTests
 			.Returns(targetId);
 		system.UpdateSystem(null!, mockReader.Object);
 
-		// After feed
 		string tagAfter = burgermon.GetRolePlayerNameTag(burgermon, targetId);
 		Assert.Contains("(2)", tagAfter);
 		Assert.Contains("#B16423", tagAfter);
@@ -228,7 +213,6 @@ public class BurgermonRoleTests
 		mockData.SetupGet(d => d.Tasks).Returns(mockTasks.Object);
 		mockPlayer.SetupGet(p => p.Data).Returns(mockData.Object);
 
-		// Should return gracefully without throwing
 		handler.Update(mockPlayer.Object);
 		handler.ClearTask(mockPlayer.Object);
 	}

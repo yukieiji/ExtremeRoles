@@ -24,9 +24,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 public enum BurgermonOption
 {
 	RequiredTaskNum,
-	SpeedMode,
 	SpeedValue,
-	SizeMode,
 	SizeValue,
 	KeepAfterDeath,
 	AffectDeadBody,
@@ -121,59 +119,42 @@ public sealed class BurgermonTaskHandler
 
 	private static NormalPlayerTask? GetBurgerTaskTemplate(PlayerControl player)
 	{
-		for (byte mapId = 0; mapId <= 5; mapId++)
+		var airShip = GameSystem.GetShipObj(4);
+		if (airShip == null)
 		{
-			var ship = GameSystem.GetShipObj(mapId);
-			if (ship == null)
-			{
-				continue;
-			}
-
-			NormalPlayerTask? target = ship.LongTasks.FirstOrDefault(x => x.TaskType == TaskTypes.MakeBurger);
-			if (target == null)
-			{
-				target = ship.CommonTasks.FirstOrDefault(x => x.TaskType == TaskTypes.MakeBurger);
-			}
-			if (target == null)
-			{
-				target = ship.ShortTasks.FirstOrDefault(x => x.TaskType == TaskTypes.MakeBurger);
-			}
-
-			if (target != null)
-			{
-				NormalPlayerTask template = UnityEngine.Object.Instantiate(target, player.transform);
-				template.gameObject.SetActive(false);
-				return template;
-			}
+			return null;
 		}
 
-		for (byte mapId = 0; mapId <= 5; mapId++)
+		NormalPlayerTask? target = airShip.LongTasks.FirstOrDefault(x => x.TaskType == TaskTypes.MakeBurger);
+		if (target == null)
 		{
-			var ship = GameSystem.GetShipObj(mapId);
-			if (ship == null)
-			{
-				continue;
-			}
-
-			NormalPlayerTask? target = ship.LongTasks.FirstOrDefault();
-			if (target == null)
-			{
-				target = ship.CommonTasks.FirstOrDefault();
-			}
-			if (target == null)
-			{
-				target = ship.ShortTasks.FirstOrDefault();
-			}
-
-			if (target != null)
-			{
-				NormalPlayerTask template = UnityEngine.Object.Instantiate(target, player.transform);
-				template.gameObject.SetActive(false);
-				return template;
-			}
+			target = airShip.CommonTasks.FirstOrDefault(x => x.TaskType == TaskTypes.MakeBurger);
+		}
+		if (target == null)
+		{
+			target = airShip.ShortTasks.FirstOrDefault(x => x.TaskType == TaskTypes.MakeBurger);
+		}
+		if (target == null)
+		{
+			target = airShip.LongTasks.FirstOrDefault();
+		}
+		if (target == null)
+		{
+			target = airShip.CommonTasks.FirstOrDefault();
+		}
+		if (target == null)
+		{
+			target = airShip.ShortTasks.FirstOrDefault();
 		}
 
-		return null;
+		if (target == null)
+		{
+			return null;
+		}
+
+		NormalPlayerTask normalPlayerTask = UnityEngine.Object.Instantiate(target, player.transform);
+		normalPlayerTask.gameObject.SetActive(false);
+		return normalPlayerTask;
 	}
 }
 
@@ -208,7 +189,7 @@ public sealed class Burgermon :
 			checkAbility: CheckAbility,
 			abilityOff: CleanUp,
 			forceAbilityOff: ResetTarget,
-			isReduceOnActive: false);
+			isReduceOnActive: true);
 		this.Button?.SetLabelToCrewmate();
 	}
 
@@ -237,11 +218,6 @@ public sealed class Burgermon :
 		{
 			byte targetId = this.currentTargetPlayer.PlayerId;
 			BurgermonSystem.Get().FeedBurger(targetId);
-
-			if (this.Button?.Behavior is ICountBehavior countBehavior)
-			{
-				countBehavior.SetAbilityCount(countBehavior.AbilityCount - 1);
-			}
 		}
 		ResetTarget();
 	}
@@ -313,10 +289,8 @@ public sealed class Burgermon :
 			defaultActiveTime: 3.0f,
 			minAbilityCount: 0);
 
-		factory.CreateSelectionOption<BurgermonOption, BurgermonSpeedMode>(BurgermonOption.SpeedMode);
-		factory.CreateFloatOption(BurgermonOption.SpeedValue, 0.03f, 0.01f, 0.20f, 0.01f, format: OptionUnit.Percentage);
-		factory.CreateSelectionOption<BurgermonOption, BurgermonSizeMode>(BurgermonOption.SizeMode);
-		factory.CreateFloatOption(BurgermonOption.SizeValue, 0.25f, 0.05f, 0.50f, 0.05f, format: OptionUnit.Percentage);
+		factory.CreateFloatOption(BurgermonOption.SpeedValue, 0.03f, -0.50f, 0.50f, 0.01f, format: OptionUnit.Percentage);
+		factory.CreateFloatOption(BurgermonOption.SizeValue, 0.25f, -0.50f, 0.50f, 0.05f, format: OptionUnit.Percentage);
 		factory.CreateBoolOption(BurgermonOption.KeepAfterDeath, true);
 		factory.CreateBoolOption(BurgermonOption.AffectDeadBody, true);
 	}
@@ -326,20 +300,14 @@ public sealed class Burgermon :
 		var loader = this.Loader;
 		this.requiredTaskNum = loader.GetValue<BurgermonOption, int>(BurgermonOption.RequiredTaskNum);
 
-		var speedMode = (BurgermonSpeedMode)loader.GetValue<BurgermonOption, int>(BurgermonOption.SpeedMode);
 		float speedValue = loader.GetValue<BurgermonOption, float>(BurgermonOption.SpeedValue);
-		var sizeMode = (BurgermonSizeMode)loader.GetValue<BurgermonOption, int>(BurgermonOption.SizeMode);
 		float sizeValue = loader.GetValue<BurgermonOption, float>(BurgermonOption.SizeValue);
 		bool keepAfterDeath = loader.GetValue<BurgermonOption, bool>(BurgermonOption.KeepAfterDeath);
 		bool affectDeadBody = loader.GetValue<BurgermonOption, bool>(BurgermonOption.AffectDeadBody);
 
-		var system = BurgermonSystem.Get();
-		system.SpeedMode = speedMode;
-		system.SpeedValue = speedValue;
-		system.SizeMode = sizeMode;
-		system.SizeValue = sizeValue;
-		system.KeepAfterDeath = keepAfterDeath;
-		system.AffectDeadBody = affectDeadBody;
+		ExtremeSystemTypeManager.Instance.CreateOrGet(
+			BurgermonSystem.Type,
+			() => new BurgermonSystem(speedValue, sizeValue, keepAfterDeath, affectDeadBody));
 
 		this.lastEarnedAbilityCount = 0;
 		this.taskHandler = new BurgermonTaskHandler();

@@ -11,20 +11,6 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public enum BurgermonSpeedMode : byte
-{
-	Fast,
-	Slow,
-	None,
-}
-
-public enum BurgermonSizeMode : byte
-{
-	Big,
-	Small,
-	None,
-}
-
 public enum BurgermonRpcOps : byte
 {
 	FeedBurger,
@@ -36,33 +22,62 @@ public sealed class BurgermonSystem : IExtremeSystemType
 
 	private readonly Dictionary<byte, int> fedCounts = new();
 	private readonly Dictionary<byte, int> pendingFedCounts = new();
+	private readonly PlayerSpeedSystem speedSystem;
 
-	public BurgermonSpeedMode SpeedMode { get; set; } = BurgermonSpeedMode.Fast;
-	public float SpeedValue { get; set; } = 0.03f; // 3%
+	public float SpeedValue { get; }
+	public float SizeValue { get; }
+	public bool KeepAfterDeath { get; }
+	public bool AffectDeadBody { get; }
 
-	public BurgermonSizeMode SizeMode { get; set; } = BurgermonSizeMode.Big;
-	public float SizeValue { get; set; } = 0.25f; // 25%
+	public BurgermonSystem()
+		: this(0.03f, 0.25f, true, true)
+	{
+	}
 
-	public bool KeepAfterDeath { get; set; } = true;
-	public bool AffectDeadBody { get; set; } = true;
+	public BurgermonSystem(
+		float speedValue,
+		float sizeValue,
+		bool keepAfterDeath,
+		bool affectDeadBody)
+	{
+		this.speedSystem = PlayerSpeedSystem.Get();
+		this.SpeedValue = speedValue;
+		this.SizeValue = sizeValue;
+		this.KeepAfterDeath = keepAfterDeath;
+		this.AffectDeadBody = affectDeadBody;
+	}
 
 	public static BurgermonSystem Get()
-		=> ExtremeSystemTypeManager.Instance.CreateOrGet<BurgermonSystem>(Type);
+	{
+		return ExtremeSystemTypeManager.Instance.CreateOrGet<BurgermonSystem>(Type);
+	}
 
 	public static bool TryGet([NotNullWhen(true)] out BurgermonSystem? system)
-		=> ExtremeSystemTypeManager.Instance.TryGet(Type, out system);
+	{
+		return ExtremeSystemTypeManager.Instance.TryGet(Type, out system);
+	}
 
 	public int GetTotalFedCount(byte targetId)
 	{
 		int count = 0;
-		if (this.fedCounts.TryGetValue(targetId, out int c1)) count += c1;
-		if (this.pendingFedCounts.TryGetValue(targetId, out int c2)) count += c2;
+		if (this.fedCounts.TryGetValue(targetId, out int c1))
+		{
+			count += c1;
+		}
+		if (this.pendingFedCounts.TryGetValue(targetId, out int c2))
+		{
+			count += c2;
+		}
 		return count;
 	}
 
 	public int GetActiveFedCount(byte targetId)
 	{
-		return this.fedCounts.TryGetValue(targetId, out int c) ? c : 0;
+		if (this.fedCounts.TryGetValue(targetId, out int c))
+		{
+			return c;
+		}
+		return 0;
 	}
 
 	public void FeedBurger(byte targetId)
@@ -90,7 +105,7 @@ public sealed class BurgermonSystem : IExtremeSystemType
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
-		if (timing is ResetTiming.OnPlayer)
+		if (timing == ResetTiming.OnPlayer)
 		{
 			if (resetPlayer == null)
 			{
@@ -103,9 +118,8 @@ public sealed class BurgermonSystem : IExtremeSystemType
 				this.pendingFedCounts.Remove(resetPlayer.PlayerId);
 			}
 		}
-		else if (timing is ResetTiming.MeetingStart)
+		else if (timing == ResetTiming.MeetingStart)
 		{
-			// Apply pending fed counts at meeting start
 			foreach (var (targetId, pendingCount) in this.pendingFedCounts)
 			{
 				if (!this.fedCounts.ContainsKey(targetId))
@@ -118,7 +132,7 @@ public sealed class BurgermonSystem : IExtremeSystemType
 
 			ApplyAllEffects();
 		}
-		else if (timing is ResetTiming.MeetingEnd)
+		else if (timing == ResetTiming.MeetingEnd)
 		{
 			ApplyAllEffects();
 		}
@@ -126,25 +140,24 @@ public sealed class BurgermonSystem : IExtremeSystemType
 
 	public void ApplyAllEffects()
 	{
-		var speedSystem = PlayerSpeedSystem.Get();
 		foreach (var player in PlayerCache.AllPlayerControl)
 		{
-			if (player.IsInValid()) continue;
+			if (player.IsInValid())
+			{
+				continue;
+			}
 
 			byte id = player.PlayerId;
 			int count = GetActiveFedCount(id);
 
-			// Handle death reset if KeepAfterDeath is false
 			if (!this.KeepAfterDeath && player.Data != null && player.Data.IsDead)
 			{
 				count = 0;
 			}
 
-			// Apply speed
 			float speedMod = CalculateSpeedMod(count);
-			speedSystem.UpdateTo(id, speedMod);
+			this.speedSystem.UpdateTo(id, speedMod);
 
-			// Apply scale
 			ApplyScaleToPlayer(player, count);
 		}
 
@@ -156,29 +169,30 @@ public sealed class BurgermonSystem : IExtremeSystemType
 
 	public float CalculateSpeedMod(int count)
 	{
-		if (count <= 0 || this.SpeedMode == BurgermonSpeedMode.None) return 1.0f;
-		return this.SpeedMode switch
+		if (count <= 0)
 		{
-			BurgermonSpeedMode.Fast => 1.0f + (this.SpeedValue * count),
-			BurgermonSpeedMode.Slow => Mathf.Max(0.1f, 1.0f - (this.SpeedValue * count)),
-			_ => 1.0f,
-		};
+			return 1.0f;
+		}
+		float mod = 1.0f + (this.SpeedValue * count);
+		return Mathf.Max(0.1f, mod);
 	}
 
 	public float CalculateScaleFactor(int count)
 	{
-		if (count <= 0 || this.SizeMode == BurgermonSizeMode.None) return 1.0f;
-		return this.SizeMode switch
+		if (count <= 0)
 		{
-			BurgermonSizeMode.Big => 1.0f + (this.SizeValue * count),
-			BurgermonSizeMode.Small => Mathf.Max(0.1f, 1.0f - (this.SizeValue * count)),
-			_ => 1.0f,
-		};
+			return 1.0f;
+		}
+		float factor = 1.0f + (this.SizeValue * count);
+		return Mathf.Max(0.1f, factor);
 	}
 
 	public void ApplyScaleToPlayer(PlayerControl player, int count)
 	{
-		if (player == null) return;
+		if (player == null)
+		{
+			return;
+		}
 
 		float scaleFactor = CalculateScaleFactor(count);
 
@@ -220,14 +234,23 @@ public sealed class BurgermonSystem : IExtremeSystemType
 
 	public void ApplyScaleToDeadBodies()
 	{
-		if (!this.AffectDeadBody) return;
+		if (!this.AffectDeadBody)
+		{
+			return;
+		}
 
 		var deadBodies = Object.FindObjectsOfType<DeadBody>();
-		if (deadBodies == null) return;
+		if (deadBodies == null)
+		{
+			return;
+		}
 
 		foreach (var body in deadBodies)
 		{
-			if (body == null) continue;
+			if (body == null)
+			{
+				continue;
+			}
 			byte victimId = body.ParentId;
 			int count = GetActiveFedCount(victimId);
 			float scaleFactor = CalculateScaleFactor(count);
@@ -238,7 +261,10 @@ public sealed class BurgermonSystem : IExtremeSystemType
 
 	public void ApplyScaleToPlayerVoteArea(PlayerVoteArea pva)
 	{
-		if (pva == null || pva.PlayerIcon == null) return;
+		if (pva == null || pva.PlayerIcon == null)
+		{
+			return;
+		}
 		byte targetId = pva.PlayerId;
 		int count = GetActiveFedCount(targetId);
 		float scaleFactor = CalculateScaleFactor(count);
