@@ -11,6 +11,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.SystemType.Roles;
 
 
 namespace ExtremeRoles.Patches.Player;
@@ -116,6 +117,11 @@ public static class PlayerControlMurderPlayerPatch
 
 		ExtremeRolesPlugin.ShipState.AddDeadInfo(
 			target, DeathReason.Kill, __instance);
+
+		if (BurgermonSystem.TryGet(out var burgermonSystem))
+		{
+			burgermonSystem.ApplyScaleToDeadBodies();
+		}
 
         if (!ExtremeRoleManager.TryGetRole(target.PlayerId, out var role))
         {

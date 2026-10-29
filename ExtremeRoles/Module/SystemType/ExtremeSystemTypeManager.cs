@@ -70,6 +70,7 @@ public enum ExtremeSystemType : byte
 	DeepOneFrogsControlSystem,
 	DarkpointerDarkness,
 	ForestallerSystem,
+	BurgermonSystem,
 }
 
 public enum ResetTiming : byte
