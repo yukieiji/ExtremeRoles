@@ -70,7 +70,10 @@ public sealed class BurgermonTaskHandler
 		if (this.taskTemplate == null)
 		{
 			this.taskTemplate = GetBurgerTaskTemplate(player);
-			if (this.taskTemplate == null) return;
+			if (this.taskTemplate == null)
+			{
+				return;
+			}
 		}
 
 		for (int i = 0; i < player.myTasks.Count; ++i)
@@ -121,11 +124,20 @@ public sealed class BurgermonTaskHandler
 		for (byte mapId = 0; mapId <= 5; mapId++)
 		{
 			var ship = GameSystem.GetShipObj(mapId);
-			if (ship == null) continue;
+			if (ship == null)
+			{
+				continue;
+			}
 
 			NormalPlayerTask? target = ship.LongTasks.FirstOrDefault(x => x.TaskType == TaskTypes.MakeBurger);
-			if (target == null) target = ship.CommonTasks.FirstOrDefault(x => x.TaskType == TaskTypes.MakeBurger);
-			if (target == null) target = ship.ShortTasks.FirstOrDefault(x => x.TaskType == TaskTypes.MakeBurger);
+			if (target == null)
+			{
+				target = ship.CommonTasks.FirstOrDefault(x => x.TaskType == TaskTypes.MakeBurger);
+			}
+			if (target == null)
+			{
+				target = ship.ShortTasks.FirstOrDefault(x => x.TaskType == TaskTypes.MakeBurger);
+			}
 
 			if (target != null)
 			{
@@ -138,11 +150,20 @@ public sealed class BurgermonTaskHandler
 		for (byte mapId = 0; mapId <= 5; mapId++)
 		{
 			var ship = GameSystem.GetShipObj(mapId);
-			if (ship == null) continue;
+			if (ship == null)
+			{
+				continue;
+			}
 
 			NormalPlayerTask? target = ship.LongTasks.FirstOrDefault();
-			if (target == null) target = ship.CommonTasks.FirstOrDefault();
-			if (target == null) target = ship.ShortTasks.FirstOrDefault();
+			if (target == null)
+			{
+				target = ship.CommonTasks.FirstOrDefault();
+			}
+			if (target == null)
+			{
+				target = ship.ShortTasks.FirstOrDefault();
+			}
 
 			if (target != null)
 			{
