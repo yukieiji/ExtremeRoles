@@ -52,11 +52,6 @@ public sealed partial class Xion
 
         switch (ops)
         {
-            case XionRpcOpsCode.UpdateSpeed:
-                SpeedOps speedOps = (SpeedOps)reader.ReadByte();
-                if (xion == null) { return; }
-                updateSpeed(xion, speedOps);
-                break;
             case XionRpcOpsCode.Teleport:
                 float x = reader.ReadSingle();
                 float y = reader.ReadSingle();
@@ -123,31 +118,6 @@ public sealed partial class Xion
             door.SetDoorway(true);
         }
     }
-
-    public void RpcSpeedUp()
-    {
-        MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
-        writer.Write((byte)SpeedOps.Up);
-        finishWrite(writer);
-        updateSpeed(this, SpeedOps.Up);
-    }
-
-    public void RpcSpeedDown()
-    {
-        MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
-        writer.Write((byte)SpeedOps.Down);
-        finishWrite(writer);
-        updateSpeed(this, SpeedOps.Down);
-    }
-
-    public void RpcResetSpeed()
-    {
-        MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
-        writer.Write((byte)SpeedOps.Reset);
-        finishWrite(writer);
-        updateSpeed(this, SpeedOps.Reset);
-    }
-
     public void RpcTestAbilityCall()
     {
 		MessageWriter writer = createWriter(XionRpcOpsCode.TestRpc);
@@ -338,31 +308,6 @@ public sealed partial class Xion
         if (isXion)
         {
             xionBuffer = (Xion)baseRole;
-        }
-    }
-
-    private static void updateSpeed(
-        Xion xion, SpeedOps ops)
-    {
-        switch (ops)
-        {
-            case SpeedOps.Up:
-                xion.IsBoost = true;
-                float newBoostSpeed = xion.MoveSpeed * 1.25f;
-                xion.MoveSpeed = Mathf.Clamp(newBoostSpeed, MinSpeed, MaxSpeed);
-                break;
-            case SpeedOps.Down:
-                xion.IsBoost = true;
-                float newDownSpeed = xion.MoveSpeed * 0.8f;
-                xion.MoveSpeed = Mathf.Clamp(newDownSpeed, MinSpeed, MaxSpeed);
-                break;
-            case SpeedOps.Reset:
-                xion.IsBoost = false;
-                xion.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                    FloatOptionNames.PlayerSpeedMod);
-                break;
-            default:
-                break;
         }
     }
 

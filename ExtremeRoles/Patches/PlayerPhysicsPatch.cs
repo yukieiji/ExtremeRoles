@@ -47,10 +47,10 @@ public class PlayerPhysicsFixedUpdatePatchBody(IExtremeSystemTypeManager system,
 			__instance.AmOwner &&
 			__instance.myPlayer.CanMove &&
 			GameData.Instance != null &&
-			_runtime.TryGetGameContext(out var ctx) &&
-			ctx.Roles.GetLocalPlayerRole().TryGetVelocity(out float velocity))
+			_system.TryGet<PlayerSpeedSystem>(PlayerSpeedSystem.Type, out var system) &&
+			system.TryGetSpeed(__instance.myPlayer.PlayerId, out float speed))
 		{
-			__instance.body.velocity *= velocity;
+			__instance.body.velocity *= speed;
 		}
 	}
 

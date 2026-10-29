@@ -107,7 +107,6 @@ public sealed class DeepOneStatus(
 public sealed class DeepOne :
 	SingleRoleBase,
 	IRoleAutoBuildAbility,
-	IRoleUpdate,
 	IRoleVoteModifier,
 	IRoleSpecialReset
 {
@@ -141,6 +140,7 @@ public sealed class DeepOne :
 
 	private DeepOneAbilityHandler? abilityHandler;
 	private DeepOneStatus? status;
+	private PlayerSpeedSystem? system;
 
 	private float deathCooldownReduction = 0.0f;
 	private float removeFrogsPenalty = 0.0f;
@@ -170,6 +170,13 @@ public sealed class DeepOne :
 			this.Button.OnMeetingEnd();
 			this.Button.SetCooldownTimer(this.Button.Timer + this.removeFrogsPenalty);
 		}
+
+		// ボタン持ってるのは本人だけなので本人の速度をいじる
+		if (this.Button is not null)
+		{
+			this.system?.UpdateSelfSpeed(this.status.IsSpeedUp ? 3.0f : 0.0f);
+		}
+
 		this.UseVent = this.status.UseVent;
 		if (frogCount >= this.requiredWinFrogs)
 		{
@@ -192,31 +199,14 @@ public sealed class DeepOne :
 
 	public void AllReset(PlayerControl rolePlayer)
 	{
-		this.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-			FloatOptionNames.PlayerSpeedMod);
+		
+		if (rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+		{
+			this.system?.UpdateSelfSpeed(0.0f);
+		}
+
 		this.status?.ResetStatus();
 		this.UseVent = false;
-	}
-
-	public void Update(PlayerControl rolePlayer)
-	{
-		if (rolePlayer.IsInValid() ||
-			this.status is null)
-		{
-			return;
-		}
-
-		if (this.status.IsSpeedUp)
-		{
-			this.IsBoost = true;
-			this.MoveSpeed = 3.0f;
-		}
-		else
-		{
-			this.IsBoost = false;
-			this.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-				FloatOptionNames.PlayerSpeedMod);
-		}
 	}
 
 	public void ModifiedVote(byte rolePlayerId, ref Dictionary<byte, byte> voteTarget, ref Dictionary<byte, int> voteResult)
@@ -345,6 +335,10 @@ public sealed class DeepOne :
 
 		this.abilityHandler = new DeepOneAbilityHandler(system, this.status);
 		this.AbilityClass = this.abilityHandler;
+
+
+
+		this.system = PlayerSpeedSystem.Get();
 
 		this.UseVent = false;
 		this.IsWin = false;
