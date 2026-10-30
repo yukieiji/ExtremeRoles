@@ -370,6 +370,10 @@ public static class PlayerVoteAreaSetCosmeticsPatch
         {
 			__instance.LevelNumberText.text = "99";
 		}
+		if (BurgermonSystem.TryGet(out var burgermonSystem))
+		{
+			burgermonSystem.ApplyScaleToPlayerVoteArea(__instance);
+		}
 	}
 }
 

@@ -1884,4 +1884,61 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   <data name="scanResultEmpty" xml:space="preserve">
     <value>「{0}」のスキャンが完了したが誰もいなかった</value>
   </data>
+  <data name="Burgermon" xml:space="preserve">
+    <value>バーガモン</value>
+  </data>
+  <data name="BurgermonFullDescription" xml:space="preserve">
+    <value>タスクをこなすとバーガーが貯まって、近くの1人に食べさせるとその人の体とスピードが変わる(次の会議開始時から反映)。タスクはすべてハンバーガータスク。</value>
+  </data>
+  <data name="BurgermonShortDescription" xml:space="preserve">
+    <value>仲間（？）にバーガーを食べさせて変化させよう</value>
+  </data>
+  <data name="BurgermonIntroDescription" xml:space="preserve">
+    <value>美味しいハンバーガーを召し上がれ</value>
+  </data>
+  <data name="BurgermonRequiredTaskNum" xml:space="preserve">
+    <value>能力回数が増加するタスク完了数</value>
+  </data>
+  <data name="BurgermonFeedTime" xml:space="preserve">
+    <value>食べさせる時間(秒)</value>
+  </data>
+  <data name="BurgermonSpeedMode" xml:space="preserve">
+    <value>速さの変化設定</value>
+  </data>
+  <data name="BurgermonSpeedValue" xml:space="preserve">
+    <value>バーガー1個あたりの速さ変化率</value>
+  </data>
+  <data name="BurgermonSizeMode" xml:space="preserve">
+    <value>大きさの変化設定</value>
+  </data>
+  <data name="BurgermonSizeValue" xml:space="preserve">
+    <value>バーガー1個あたりの大きさ変化率</value>
+  </data>
+  <data name="BurgermonKeepAfterDeath" xml:space="preserve">
+    <value>死亡後も効果を維持するか</value>
+  </data>
+  <data name="BurgermonAffectDeadBody" xml:space="preserve">
+    <value>死体にも大きさを反映するか</value>
+  </data>
+  <data name="feedBurger" xml:space="preserve">
+    <value>食べさせる</value>
+  </data>
+  <data name="feedingBurger" xml:space="preserve">
+    <value>食べさせ中...</value>
+  </data>
+  <data name="MakeBurger" xml:space="preserve">
+    <value>ハンバーガーを作る</value>
+  </data>
+  <data name="Fast" xml:space="preserve">
+    <value>速く</value>
+  </data>
+  <data name="Slow" xml:space="preserve">
+    <value>遅く</value>
+  </data>
+  <data name="Big" xml:space="preserve">
+    <value>デカく</value>
+  </data>
+  <data name="Small" xml:space="preserve">
+    <value>小さく</value>
+  </data>
 </root>
