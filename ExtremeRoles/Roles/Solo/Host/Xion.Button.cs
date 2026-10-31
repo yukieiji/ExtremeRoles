@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -42,7 +42,7 @@ public sealed partial class Xion
                 Tr.GetString("zoomIn")),
             new XionActionButton(
 				GetSprite("SpeedDown"),
-				this.RpcSpeedDown,
+				this.speedDown,
                 Tr.GetString("speedDown")),
         };
 
@@ -71,7 +71,7 @@ public sealed partial class Xion
 		this.funcButton.Add(
 			new XionActionButton(
 				GetSprite("SpeedUp"),
-				this.RpcSpeedUp,
+				this.speedUp,
 				Tr.GetString("speedUp")));
 
 
