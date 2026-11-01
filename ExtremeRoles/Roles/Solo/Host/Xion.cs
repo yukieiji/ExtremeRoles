@@ -30,18 +30,20 @@ public sealed partial class Xion : SingleRoleBase
 
 	public void speedUp()
 	{
-		if (speedSystem.TryGetSpeed(PlayerControl.LocalPlayer.PlayerId, out float curSpeed))
+		if (!speedSystem.TryGetSpeed(PlayerControl.LocalPlayer.PlayerId, out float curSpeed))
 		{
-			speedSystem.UpdateSelfSpeed(Mathf.Clamp(curSpeed * 1.25f, MinSpeed, MaxSpeed));
+			curSpeed = 1.0f;
 		}
+		speedSystem.UpdateSelfSpeed(Mathf.Clamp(curSpeed * 1.25f, MinSpeed, MaxSpeed));
 	}
 
 	public void speedDown()
 	{
-		if (speedSystem.TryGetSpeed(PlayerControl.LocalPlayer.PlayerId, out float curSpeed))
+		if (!speedSystem.TryGetSpeed(PlayerControl.LocalPlayer.PlayerId, out float curSpeed))
 		{
-			speedSystem.UpdateSelfSpeed(Mathf.Clamp(curSpeed * 0.75f, MinSpeed, MaxSpeed));
+			curSpeed = 1.0f;
 		}
+		speedSystem.UpdateSelfSpeed(Mathf.Clamp(curSpeed * 0.75f, MinSpeed, MaxSpeed));
 	}
 
 	public void resetSpeed()
