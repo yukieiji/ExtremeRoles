@@ -109,6 +109,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Mayor,
 			ExtremeRoleId.Forestaller,
 			ExtremeRoleId.Scanner,
+			ExtremeRoleId.Invisible,
 
 			ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,
