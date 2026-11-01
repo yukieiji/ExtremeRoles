@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -65,20 +65,20 @@
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1618,7 +1618,7 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>口寄せ</value>
   </data>
   <data name="ItakoIntroDescription" xml:space="preserve">
-    <value />
+    <value/>
   </data>
   <data name="ItakoShortDescription" xml:space="preserve">
     <value>「死体」に「口寄せ」して役職を引き継げ</value>
@@ -1883,5 +1883,36 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   </data>
   <data name="scanResultEmpty" xml:space="preserve">
     <value>「{0}」のスキャンが完了したが誰もいなかった</value>
+  </data>
+  <data name="Invisible" xml:space="preserve">
+    <value>インビジブル</value>
+  </data>
+  <data name="InvisibleFullDescription" xml:space="preserve">
+    <value>透明になって逃げれるクルー。
+ボタン能力「透明化」で一定時間透明になれる。</value>
+  </data>
+  <data name="InvisibleShortDescription" xml:space="preserve">
+    <value>透明になって逃げれるクルー</value>
+  </data>
+  <data name="InvisibleIntroDescription" xml:space="preserve">
+    <value>透明になって逃げ回れ！</value>
+  </data>
+  <data name="InvisibleHasHitbox" xml:space="preserve">
+    <value>透明化時の当たり判定の有無</value>
+  </data>
+  <data name="InvisibleSpeedMod" xml:space="preserve">
+    <value>透明化時の移動速度倍率</value>
+  </data>
+  <data name="invisibleAbility" xml:space="preserve">
+    <value>透明化</value>
+  </data>
+  <data name="InvisibleAbilityCoolTime" xml:space="preserve">
+    <value>「透明化」のクールタイム</value>
+  </data>
+  <data name="InvisibleAbilityActiveTime" xml:space="preserve">
+    <value>「透明化」の効果時間</value>
+  </data>
+  <data name="InvisibleAbilityCount" xml:space="preserve">
+    <value>「透明化」の使用回数</value>
   </data>
 </root>

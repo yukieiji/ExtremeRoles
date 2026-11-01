@@ -24,6 +24,7 @@ using ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 using ExtremeRoles.Roles.Solo.Liberal;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 using ExtremeRoles.Roles.Solo.Crewmate.Fencer;
+using ExtremeRoles.Roles.Solo.Crewmate.Invisible;
 using ExtremeRoles.Roles.Solo.Crewmate.Loner;
 using ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 using ExtremeRoles.Roles.Solo.Host;
@@ -112,6 +113,7 @@ public enum ExtremeRoleId : int
 	Mayor,
 	Forestaller,
 	Scanner,
+	Invisible,
 
 	SpecialImpostor,
     Evolver,
@@ -380,6 +382,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Mayor       , new Mayor()},
 			{(int)ExtremeRoleId.Forestaller , new Forestaller()},
 			{(int)ExtremeRoleId.Scanner     , new ScannerRole()},
+			{(int)ExtremeRoleId.Invisible   , new InvisibleRole()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
