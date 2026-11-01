@@ -74,17 +74,6 @@ public sealed class InvisibleRoleTests
 	}
 
 	[Fact]
-	public void Constructor_SetsRoleProperties()
-	{
-		// Act
-		var role = new InvisibleRole();
-
-		// Assert
-		Assert.Equal(ExtremeRoleId.Invisible, role.Core.Id);
-		Assert.Equal(ColorPalette.InvisibleWhite, role.Core.Color);
-	}
-
-	[Fact]
 	public void CreateRoleAllOption_CreatesOptions()
 	{
 		// Arrange

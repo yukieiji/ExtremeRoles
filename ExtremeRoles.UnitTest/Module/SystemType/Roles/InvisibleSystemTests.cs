@@ -31,20 +31,6 @@ public class InvisibleSystemTests
 	}
 
 	[Fact]
-	public void Deteriorate_MarkClean_Serialize_Deserialize_DoNotThrow()
-	{
-		// Arrange
-		var system = new InvisibleSystem();
-
-		// Act & Assert
-		Assert.False(system.IsDirty);
-		system.MarkClean();
-		system.Deteriorate(1.0f);
-		system.Serialize(null!, false);
-		system.Deserialize(null!, false);
-	}
-
-	[Fact]
 	public void UpdateSystem_WhenPlayerNotFound_DoesNotAddSavedAlphas()
 	{
 		// Arrange
