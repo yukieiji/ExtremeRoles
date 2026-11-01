@@ -12,7 +12,7 @@ using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Invisible;
 
-public sealed class InvisibleRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleResetMeeting, IRoleSpecialReset
+public sealed class InvisibleRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialReset
 {
 	public enum Option
 	{
@@ -25,19 +25,12 @@ public sealed class InvisibleRole : SingleRoleBase, IRoleAutoBuildAbility, IRole
 
 	private InvisibleStatusModel? status;
 	private InvisibleAbilityHandler? ability;
-	private InvisibleSystem? invisibleSystem;
-	private PlayerSpeedSystem? speedSystem;
 
 	public InvisibleRole() : base(
 		RoleArgs.BuildCrewmate(
 			ExtremeRoleId.Invisible,
 			ColorPalette.InvisibleWhite))
 	{
-	}
-
-	public void Update(PlayerControl rolePlayer)
-	{
-		this.ability?.Update();
 	}
 
 	public void CreateAbility()
@@ -81,7 +74,7 @@ public sealed class InvisibleRole : SingleRoleBase, IRoleAutoBuildAbility, IRole
 		var local = PlayerControl.LocalPlayer;
 		if (local != null)
 		{
-			this.ability?.Reset(local.PlayerId);
+			this.ability?.CleanUp(local.PlayerId);
 		}
 	}
 
@@ -93,7 +86,7 @@ public sealed class InvisibleRole : SingleRoleBase, IRoleAutoBuildAbility, IRole
 	{
 		if (rolePlayer != null)
 		{
-			this.ability?.Reset(rolePlayer.PlayerId);
+			this.ability?.CleanUp(rolePlayer.PlayerId);
 		}
 	}
 
@@ -120,11 +113,11 @@ public sealed class InvisibleRole : SingleRoleBase, IRoleAutoBuildAbility, IRole
 		float speedMod = loader.GetValue<Option, float>(Option.SpeedMod);
 		bool hasHitbox = loader.GetValue<Option, bool>(Option.HasHitbox);
 
-		this.invisibleSystem = InvisibleSystem.Get();
-		this.speedSystem = PlayerSpeedSystem.Get();
+		var invisibleSystem = InvisibleSystem.Get();
+		var speedSystem = PlayerSpeedSystem.Get();
 
 		this.status = new InvisibleStatusModel(speedMod, hasHitbox);
-		this.ability = new InvisibleAbilityHandler(this.invisibleSystem, this.speedSystem, this.status);
+		this.ability = new InvisibleAbilityHandler(invisibleSystem, speedSystem, this.status);
 		AbilityClass = this.ability;
 	}
 }

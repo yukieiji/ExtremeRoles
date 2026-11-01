@@ -8,5 +8,4 @@ public sealed class InvisibleStatusModel(float speedMod, bool hasHitbox) : IStat
 {
 	public float SpeedMod { get; } = speedMod;
 	public bool HasHitbox { get; } = hasHitbox;
-	public bool IsActiveInvisible { get; set; } = false;
 }

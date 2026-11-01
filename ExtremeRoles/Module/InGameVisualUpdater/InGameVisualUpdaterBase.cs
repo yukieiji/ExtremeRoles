@@ -1,6 +1,6 @@
-using UnityEngine;
-
+using ExtremeRoles.Module.SystemType.Roles;
 using TMPro;
+using UnityEngine;
 
 namespace ExtremeRoles.Module.InGameVisualUpdater;
 
@@ -48,7 +48,9 @@ public abstract class InGameVisualUpdaterBase(PlayerControl target)
 
 	protected void SetNameColor(Color color)
 	{
-		this.Owner.cosmetics.SetNameColor(color);
+		this.Owner.cosmetics.SetNameColor(
+			InvisibleSystem.TryGet(out var invisibleSystem) ? 
+				invisibleSystem.UpdateNameText(this.Owner, color) : color);
 	}
 
 	protected static bool InValid(PlayerControl pc)

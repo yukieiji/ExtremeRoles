@@ -14,17 +14,11 @@ public sealed class InvisibleAbilityHandler(
 	private readonly InvisibleSystem invisibleSystem = invisibleSystem;
 	private readonly PlayerSpeedSystem speedSystem = speedSystem;
 	private readonly InvisibleStatusModel status = status;
-
-	public bool IsActive => this.status.IsActiveInvisible;
-
-	public void Update()
-	{
-		this.invisibleSystem.Update();
-	}
+	private bool isActive = false;
 
 	public bool Execute(byte rolePlayerId)
 	{
-		this.status.IsActiveInvisible = true;
+		this.isActive = true;
 		this.invisibleSystem.SetInvisible(rolePlayerId, true);
 		this.speedSystem.UpdateSelfSpeed(this.status.SpeedMod);
 		return true;
@@ -32,45 +26,22 @@ public sealed class InvisibleAbilityHandler(
 
 	public void CleanUp(byte rolePlayerId)
 	{
-		if (!this.status.IsActiveInvisible)
+		if (!this.isActive)
 		{
 			return;
 		}
 
-		this.status.IsActiveInvisible = false;
+		this.isActive = false;
 		this.invisibleSystem.SetInvisible(rolePlayerId, false);
 		this.speedSystem.UpdateSelfSpeed(0.0f);
 	}
 
-	public void Reset(byte rolePlayerId)
-	{
-		CleanUp(rolePlayerId);
-	}
-
 	public bool IsBlockKillFrom(byte? fromPlayer)
-	{
-		if (!this.status.HasHitbox && this.status.IsActiveInvisible)
-		{
-			return true;
-		}
-		return false;
-	}
+		=> !this.status.HasHitbox && this.isActive;
 
 	public bool IsValidKillFromSource(byte source)
-	{
-		if (!this.status.HasHitbox && this.status.IsActiveInvisible)
-		{
-			return false;
-		}
-		return true;
-	}
+		=> !IsBlockKillFrom(source);
 
 	public bool IsValidAbilitySource(byte source)
-	{
-		if (!this.status.HasHitbox && this.status.IsActiveInvisible)
-		{
-			return false;
-		}
-		return true;
-	}
+		=> !IsBlockKillFrom(source);
 }
