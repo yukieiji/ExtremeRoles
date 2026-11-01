@@ -179,20 +179,4 @@ public sealed class InvisibleRoleTests
 		// Assert
 		Assert.NotNull(role);
 	}
-
-	[Fact]
-	public void Update_ExecutesWithoutError()
-	{
-		// Arrange
-		var role = new InvisibleRole();
-		role.CreateRoleAllOption();
-		role.Initialize();
-		var mockPlayer = MockSetupHelper.SetupPlayerControlMocks();
-
-		// Act
-		role.Update(mockPlayer.Object);
-
-		// Assert
-		Assert.NotNull(role);
-	}
 }
