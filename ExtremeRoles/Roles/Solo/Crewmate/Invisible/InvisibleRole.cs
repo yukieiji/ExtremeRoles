@@ -59,34 +59,23 @@ public sealed class InvisibleRole : SingleRoleBase, IRoleAutoBuildAbility, IRole
 	}
 
 	public void CleanUp()
-	{
-		var local = PlayerControl.LocalPlayer;
-		if (local == null)
-		{
-			return;
-		}
-
-		this.ability?.CleanUp(local.PlayerId);
-	}
+		=> reset(PlayerControl.LocalPlayer);
 
 	public void ResetOnMeetingStart()
-	{
-		var local = PlayerControl.LocalPlayer;
-		if (local != null)
-		{
-			this.ability?.CleanUp(local.PlayerId);
-		}
-	}
+		=> reset(PlayerControl.LocalPlayer);
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
 	}
 
 	public void AllReset(PlayerControl rolePlayer)
+		=> reset(rolePlayer);
+
+	private void reset(PlayerControl player)
 	{
-		if (rolePlayer != null)
+		if (player != null)
 		{
-			this.ability?.CleanUp(rolePlayer.PlayerId);
+			this.ability?.CleanUp(player.PlayerId);
 		}
 	}
 
