@@ -199,51 +199,39 @@ public sealed class FemmeFataleRole :
 		JoseRole jose = new JoseRole(
 			rolePlayerId, femme, targetRole, femme.JoseSelfKillTimer);
 
-		var core = targetRole.Core;
 		if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
 		{
 			HudManager.Instance.ReGridButtons();
 		}
 
-		if (core.Team != ExtremeRoleType.Neutral)
+		if (targetRole is VanillaRoleWrapper vanillaRole)
 		{
-			core.Team = ExtremeRoleType.Neutral;
+			vanillaRole.AnotherRole = null;
+			vanillaRole.CanHasAnotherRole = false;
+			vanillaRole.CanCallMeeting = true;
+			vanillaRole.CanUseAdmin = true;
+			vanillaRole.CanUseSecurity = true;
+			vanillaRole.CanUseVital = true;
 
-			if (targetRole is VanillaRoleWrapper vanillaRole)
-			{
-				vanillaRole.AnotherRole = null;
-				vanillaRole.CanHasAnotherRole = false;
-				vanillaRole.CanCallMeeting = true;
-				vanillaRole.CanUseAdmin = true;
-				vanillaRole.CanUseSecurity = true;
-				vanillaRole.CanUseVital = true;
+			jose.CanHasAnotherRole = true;
+			jose.SetAnotherRole(vanillaRole);
 
-				jose.CanHasAnotherRole = true;
-				jose.SetAnotherRole(vanillaRole);
+			ExtremeRoleManager.SetNewRole(targetPlayerId, jose);
+		}
+		else if (targetRole is MultiAssignRoleBase multiAssignRole)
+		{
+			multiAssignRole.AnotherRole = null;
 
-				ExtremeRoleManager.SetNewRole(targetPlayerId, jose);
-			}
-			else if (targetRole is MultiAssignRoleBase multiAssignRole)
-			{
-				multiAssignRole.AnotherRole = null;
+			multiAssignRole.CanHasAnotherRole = true;
+			jose.CanHasAnotherRole = false;
 
-				multiAssignRole.CanHasAnotherRole = true;
-				jose.CanHasAnotherRole = false;
-
-				ExtremeRoleManager.SetNewAnothorRole(targetPlayerId, jose);
-			}
-			else
-			{
-				jose.CanHasAnotherRole = true;
-				jose.SetAnotherRole(targetRole);
-
-				ExtremeRoleManager.SetNewRole(targetPlayerId, jose);
-			}
+			ExtremeRoleManager.SetNewAnothorRole(targetPlayerId, jose);
 		}
 		else
 		{
-			jose.CanHasAnotherRole = false;
-			resetRole(targetRole, targetPlayerId, targetPlayer);
+			jose.CanHasAnotherRole = true;
+			jose.SetAnotherRole(targetRole);
+
 			ExtremeRoleManager.SetNewRole(targetPlayerId, jose);
 		}
 
