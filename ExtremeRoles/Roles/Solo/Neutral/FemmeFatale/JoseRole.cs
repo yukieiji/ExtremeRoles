@@ -25,15 +25,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral.FemmeFatale;
 
 public sealed class JoseRole :
 	MultiAssignRoleBase,
-	IRoleAutoBuildAbility,
 	IRoleMurderPlayerHook,
 	IRoleUpdate,
 	IRoleResetMeeting,
 	ITryKillTo
 {
 	public const string RoleShowTag = "◯j";
-
-	public ExtremeAbilityButton? Button { get; set; }
 
 	private readonly byte femmeFatalePlayerId;
 	public override IOptionLoader Loader { get; }
@@ -94,18 +91,6 @@ public sealed class JoseRole :
 		KillRange = baseRole.KillRange;
 	}
 
-	public void SelfKillAbility(float coolTime)
-	{
-		Button = RoleAbilityFactory.CreateReusableAbility(
-			"selfKill",
-			UnityObjectLoader.LoadSpriteFromResources(
-				ObjectPath.SucideSprite),
-			IsAbilityUse,
-			UseAbility);
-		Button.Behavior.SetCoolTime(coolTime);
-		Button.OnMeetingEnd();
-	}
-
 	public void HookMurderPlayer(
 		PlayerControl source, PlayerControl target)
 	{
@@ -115,13 +100,6 @@ public sealed class JoseRole :
 			this.statusModel.Reset();
 		}
 	}
-
-	public void CreateAbility()
-	{
-		throw new Exception("Don't call this class method!!");
-	}
-
-	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
@@ -136,15 +114,6 @@ public sealed class JoseRole :
 			this.timerText.gameObject.SetActive(false);
 		}
 		this.statusModel.Reset();
-	}
-
-	public bool UseAbility()
-	{
-		byte playerId = PlayerControl.LocalPlayer.PlayerId;
-		Player.RpcUncheckMurderPlayer(
-			playerId, playerId, byte.MaxValue);
-
-		return true;
 	}
 
 	public override void OverrideAnotherRoleSetting()

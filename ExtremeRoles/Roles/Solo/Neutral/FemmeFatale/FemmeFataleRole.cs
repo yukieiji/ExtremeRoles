@@ -51,7 +51,6 @@ public sealed class FemmeFataleRole :
 
 	public enum RpcOps : byte
 	{
-		MarkJose,
 		SpecialVote,
 		CoverDead,
 	}
@@ -98,16 +97,6 @@ public sealed class FemmeFataleRole :
 		RpcOps ops = (RpcOps)reader.ReadByte();
 		switch (ops)
 		{
-			case RpcOps.MarkJose:
-			{
-				byte femmeId = reader.ReadByte();
-				byte targetId = reader.ReadByte();
-				if (ExtremeRoleManager.TryGetSafeCastedRole<FemmeFataleRole>(femmeId, out var femme))
-				{
-					femme.pendingJosePlayerId.Add(targetId);
-				}
-				break;
-			}
 			case RpcOps.SpecialVote:
 			{
 				byte femmeId = reader.ReadByte();
@@ -213,13 +202,6 @@ public sealed class FemmeFataleRole :
 		var core = targetRole.Core;
 		if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
 		{
-			if (core.Team != ExtremeRoleType.Neutral)
-			{
-				if (jose.Button != null)
-				{
-					jose.Button.HotKey = KeyCode.C;
-				}
-			}
 			HudManager.Instance.ReGridButtons();
 		}
 
@@ -391,16 +373,7 @@ public sealed class FemmeFataleRole :
 		}
 
 		byte targetId = this.Target.PlayerId;
-		byte localId = PlayerControl.LocalPlayer.PlayerId;
-
 		this.pendingJosePlayerId.Add(targetId);
-
-		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.FemmeFataleAbility))
-		{
-			caller.WriteByte((byte)RpcOps.MarkJose);
-			caller.WriteByte(localId);
-			caller.WriteByte(targetId);
-		}
 
 		return true;
 	}
@@ -428,10 +401,13 @@ public sealed class FemmeFataleRole :
 		if (this.pendingJosePlayerId.Count > 0)
 		{
 			byte localId = PlayerControl.LocalPlayer.PlayerId;
-			foreach (byte targetId in this.pendingJosePlayerId.ToArray())
+			if (ExtremeRoleManager.TryGetRole(localId, out var role) && role == this)
 			{
-				ExtremeRoleManager.RpcReplaceRole(
-					localId, targetId, ExtremeRoleManager.ReplaceOperation.CreateJose);
+				foreach (byte targetId in this.pendingJosePlayerId.ToArray())
+				{
+					ExtremeRoleManager.RpcReplaceRole(
+						localId, targetId, ExtremeRoleManager.ReplaceOperation.CreateJose);
+				}
 			}
 			this.pendingJosePlayerId.Clear();
 		}
