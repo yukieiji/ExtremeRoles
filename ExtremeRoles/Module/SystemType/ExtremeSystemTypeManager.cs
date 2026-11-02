@@ -71,6 +71,7 @@ public enum ExtremeSystemType : byte
 	DarkpointerDarkness,
 	ForestallerSystem,
 	InvisibleSystem,
+	Nullifier,
 }
 
 public enum ResetTiming : byte

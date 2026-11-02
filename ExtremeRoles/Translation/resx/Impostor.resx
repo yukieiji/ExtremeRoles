@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -65,20 +65,20 @@
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1937,5 +1937,51 @@ Lv2能力「ビームセーバー」
   </data>
   <data name="DarkpointerAbilityActiveTime" xml:space="preserve">
     <value>「闇」のアクティブ時間</value>
+  </data>
+  <data name="Nullifier" xml:space="preserve">
+    <value>ナリファイア</value>
+  </data>
+  <data name="NullifierFullDescription" xml:space="preserve">
+    <value>能力ボタンを封じる陣を設置できるインポスター
+ボタン能力「封印陣」：
+　・一定時間経過後に設置位置を予約
+　・会議終了後に封印陣が設置される
+設置物「封印陣」：
+　・範囲内に居る設定陣営の全ボタン能力を封じる
+　・一定回数使用ボタンを押すことで消せる
+　・最後に使用ボタンが押されてから指定秒後には元に戻る</value>
+  </data>
+  <data name="NullifierShortDescription" xml:space="preserve">
+    <value>能力ボタンを封じる陣を設置できる</value>
+  </data>
+  <data name="NullifierIntroDescription" xml:space="preserve">
+    <value>封印陣を設置し能力ボタンを封じよ！</value>
+  </data>
+  <data name="NullifierAbility" xml:space="preserve">
+    <value>封印陣</value>
+  </data>
+  <data name="NullifierAbilityCoolTime" xml:space="preserve">
+    <value>「封印陣」のクールタイム</value>
+  </data>
+  <data name="NullifierAbilityCount" xml:space="preserve">
+    <value>「封印陣」の使用回数</value>
+  </data>
+  <data name="NullifierAbilityActiveTime" xml:space="preserve">
+    <value>「封印陣」の詠唱時間</value>
+  </data>
+  <data name="NullifierTargetTeam" xml:space="preserve">
+    <value>「封印陣」の封印対象陣営</value>
+  </data>
+  <data name="NullifierRestoreTime" xml:space="preserve">
+    <value>「封印陣」の解除回数復元時間</value>
+  </data>
+  <data name="NullifierRequiredClicks" xml:space="preserve">
+    <value>「封印陣」の解除に必要な使用ボタン押下回数</value>
+  </data>
+  <data name="NullifierMaxSealCount" xml:space="preserve">
+    <value>「封印陣」の最大設置数</value>
+  </data>
+  <data name="NullifierRange" xml:space="preserve">
+    <value>「封印陣」の効果範囲</value>
   </data>
 </root>

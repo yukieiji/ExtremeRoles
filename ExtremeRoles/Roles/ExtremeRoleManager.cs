@@ -30,6 +30,7 @@ using ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Impostor.Darkpointer;
+using ExtremeRoles.Roles.Solo.Impostor.Nullifier;
 using ExtremeRoles.Roles.Solo.Impostor.Flasher;
 using ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
 using ExtremeRoles.Roles.Solo.Impostor.Retaliator;
@@ -154,6 +155,7 @@ public enum ExtremeRoleId : int
 	Retaliator,
 	Flasher,
 	Darkpointer,
+	Nullifier,
 
 	Alice,
     Jackal,
@@ -423,6 +425,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Retaliator     , new RetaliatorRole()},
 			{(int)ExtremeRoleId.Flasher        , new FlasherRole()},
 			{(int)ExtremeRoleId.Darkpointer    , new DarkpointerRole()},
+			{(int)ExtremeRoleId.Nullifier      , new NullifierRole()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new JackalRole()},
