@@ -1502,4 +1502,67 @@ Knows Impostors and Neutrals from the start. Loses if dead.
 
 - Cannot kill, vent, or sabotage.
 - Completing tasks gains special votes.
-- Displays a chat message at meeting start if alive.</value></data><data name="MastermindShortDescription" xml:space="preserve"><value>The mastermind of death games winning when 3 or fewer players remain</value></data><data name="MastermindIntroDescription" xml:space="preserve"><value>Survive until 3 or fewer players remain alive</value></data><data name="MastermindCanSeeImpostor" xml:space="preserve"><value>Mastermind: Can see Impostors</value></data><data name="MastermindCanSeeNeutral" xml:space="preserve"><value>Mastermind: Can see Neutrals</value></data><data name="MastermindCanSeeLiberal" xml:space="preserve"><value>Mastermind: Can see Liberals</value></data><data name="MastermindTaskAddProgressThreshold" xml:space="preserve"><value>Mastermind: Task progress threshold to add new tasks</value></data><data name="MastermindVoteGainPerTask" xml:space="preserve"><value>Mastermind: Special votes gained per completed task</value></data><data name="MastermindInfiniteTasks" xml:space="preserve"><value>Mastermind: Add infinite tasks</value></data><data name="mastermindAliveChat" xml:space="preserve"><value>Mastermind seems to be alive ({0} alive)</value></data></root>
+- Displays a chat message at meeting start if alive.</value></data><data name="MastermindShortDescription" xml:space="preserve"><value>The mastermind of death games winning when 3 or fewer players remain</value></data><data name="MastermindIntroDescription" xml:space="preserve"><value>Survive until 3 or fewer players remain alive</value></data><data name="MastermindCanSeeImpostor" xml:space="preserve"><value>Mastermind: Can see Impostors</value></data><data name="MastermindCanSeeNeutral" xml:space="preserve"><value>Mastermind: Can see Neutrals</value></data><data name="MastermindCanSeeLiberal" xml:space="preserve"><value>Mastermind: Can see Liberals</value></data><data name="MastermindTaskAddProgressThreshold" xml:space="preserve"><value>Mastermind: Task progress threshold to add new tasks</value></data><data name="MastermindVoteGainPerTask" xml:space="preserve"><value>Mastermind: Special votes gained per completed task</value></data><data name="MastermindInfiniteTasks" xml:space="preserve"><value>Mastermind: Add infinite tasks</value></data><data name="mastermindAliveChat" xml:space="preserve"><value>Mastermind seems to be alive ({0} alive)</value></data>  <data name="FemmeFatale" xml:space="preserve">
+    <value>Femme Fatale</value>
+  </data>
+  <data name="FemmeFataleFullDescription" xml:space="preserve">
+    <value>A Neutral role that wins by being the last player alive.
+- Has kill button.
+- Create Jose: Turns a target into Jose at the end of the next meeting.
+- Special Vote: Gains (Living Jose count * multiplier) extra votes during meetings.
+- Kill Cooldown: Decreases when Jose completes tasks or kills.
+- Kill Defense: When attacked, a living Jose dies in your place (once per Jose).
+- If Femme Fatale dies, all Jose effects are removed.</value>
+  </data>
+  <data name="FemmeFataleShortDescription" xml:space="preserve">
+    <value>Manipulate Jose and be the last one standing</value>
+  </data>
+  <data name="FemmeFataleIntroDescription" xml:space="preserve">
+    <value>Charm others and take everything for yourself</value>
+  </data>
+  <data name="FemmeFataleCanUseVent" xml:space="preserve">
+    <value>Can use vents</value>
+  </data>
+  <data name="FemmeFataleAbilityCount" xml:space="preserve">
+    <value>Create Jose ability count</value>
+  </data>
+  <data name="FemmeFataleRange" xml:space="preserve">
+    <value>Create Jose range</value>
+  </data>
+  <data name="FemmeFataleJoseKillKillCoolReduceRate" xml:space="preserve">
+    <value>Kill cooldown reduction on Jose kill (0% for off)</value>
+  </data>
+  <data name="FemmeFataleJoseTaskKillCoolReduceRate" xml:space="preserve">
+    <value>Kill cooldown reduction on Jose task completion (0% for off)</value>
+  </data>
+  <data name="FemmeFataleJoseTaskCompKillCoolReduceRate" xml:space="preserve">
+    <value>Permanent kill cooldown reduction on Jose all tasks completed (0% for off)</value>
+  </data>
+  <data name="FemmeFataleJoseSelfKillTimer" xml:space="preserve">
+    <value>Jose self-destruct timer</value>
+  </data>
+  <data name="FemmeFataleVoteMultiplier" xml:space="preserve">
+    <value>Special vote multiplier per living Jose</value>
+  </data>
+  <data name="FemmeFataleKillDefense" xml:space="preserve">
+    <value>Kill defense (Jose sacrifice) enabled</value>
+  </data>
+  <data name="femmeCreateJose" xml:space="preserve">
+    <value>Create Jose</value>
+  </data>
+  <data name="Jose" xml:space="preserve">
+    <value>Jose</value>
+  </data>
+  <data name="JoseFullDescription" xml:space="preserve">
+    <value>Working for Femme Fatale without knowing it.
+- Keeps original team and win conditions.
+- Has a 45s self-destruct timer reset by tasks, kills, or meetings.
+- Reverts to original role if Femme Fatale dies.</value>
+  </data>
+  <data name="JoseShortDescription" xml:space="preserve">
+    <value>Enthralled by Femme Fatale</value>
+  </data>
+  <data name="JoseIntroDescription" xml:space="preserve">
+    <value>Serve her until the end</value>
+  </data>
+</root>

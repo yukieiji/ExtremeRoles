@@ -207,6 +207,9 @@ public enum ExtremeRoleId : int
 	Snatcher,
 
 	Xion,
+
+	FemmeFatale,
+	Jose,
 }
 
 public enum CombinationRoleType : byte
@@ -296,6 +299,8 @@ public enum RoleGameOverReason
 	LiberalRevolution,
 
 	UnKnown = 100,
+
+	FemmeFataleKillAllOther,
 }
 
 public enum NeutralSeparateTeam
@@ -319,7 +324,9 @@ public enum NeutralSeparateTeam
 
 	JackalSub,
 	YandereSub,
-	QueenSub
+	QueenSub,
+
+	FemmeFatale,
 }
 
 public static class ExtremeRoleManager
@@ -513,6 +520,8 @@ public static class ExtremeRoleManager
 		RebornJackal,
 		ItakoInherit,
 		ImitaterInherit,
+		CreateJose,
+		RemoveJose,
 	}
 
 	private static IRoleProvider? provider;
@@ -721,6 +730,12 @@ public static class ExtremeRoleManager
 				break;
 			case ReplaceOperation.ImitaterInherit:
 				Imitater.InheritTargetRole(caller, targetId);
+				break;
+			case ReplaceOperation.CreateJose:
+				Solo.Neutral.FemmeFatale.FemmeFataleRole.TargetToJose(caller, targetId);
+				break;
+			case ReplaceOperation.RemoveJose:
+				Solo.Neutral.FemmeFatale.JoseRole.RemoveJose(targetId);
 				break;
 			default:
                 break;

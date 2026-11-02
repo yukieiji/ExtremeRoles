@@ -52,6 +52,8 @@ public interface IRoleVoteModifier
 
 		DelusionerCheckVote = 88659,
 		CEOOverrideVote,
+
+		FemmeFataleSpecialVote = 90000,
 	}
 
     public int Order { get; }
