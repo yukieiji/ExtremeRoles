@@ -1855,4 +1855,50 @@ Ability button "Flash"
   <data name="DarkpointerRange" xml:space="preserve">
     <value>Darkness Radius</value>
   </data>
+  <data name="Nullifier" xml:space="preserve">
+    <value>Nullifier</value>
+  </data>
+  <data name="NullifierFullDescription" xml:space="preserve">
+    <value>An Impostor who can deploy seals that block ability buttons.
+Ability: "Seal"
+- Reserves a seal position after a period of casting.
+- Placed after the meeting ends.
+Object: "Seal"
+- Blocks ability buttons of players belonging to configured teams within range.
+- Can be removed by pressing the Use button a set number of times.
+- Returns to initial state after m seconds from the last Use button press.</value>
+  </data>
+  <data name="NullifierShortDescription" xml:space="preserve">
+    <value>Can deploy seals that block ability buttons.</value>
+  </data>
+  <data name="NullifierIntroDescription" xml:space="preserve">
+    <value>Place seals and block ability buttons!</value>
+  </data>
+  <data name="NullifierAbility" xml:space="preserve">
+    <value>Seal</value>
+  </data>
+  <data name="NullifierAbilityCoolTime" xml:space="preserve">
+    <value>"Seal" Cooldown</value>
+  </data>
+  <data name="NullifierAbilityCount" xml:space="preserve">
+    <value>"Seal" Uses</value>
+  </data>
+  <data name="NullifierAbilityActiveTime" xml:space="preserve">
+    <value>"Seal" Cast Time</value>
+  </data>
+  <data name="NullifierTargetTeam" xml:space="preserve">
+    <value>Teams Blocked by "Seal"</value>
+  </data>
+  <data name="NullifierRestoreTime" xml:space="preserve">
+    <value>"Seal" Reset Time</value>
+  </data>
+  <data name="NullifierRequiredClicks" xml:space="preserve">
+    <value>Use Button Presses to Remove "Seal"</value>
+  </data>
+  <data name="NullifierMaxSealCount" xml:space="preserve">
+    <value>Max "Seal" Count</value>
+  </data>
+  <data name="NullifierRange" xml:space="preserve">
+    <value>"Seal" Radius</value>
+  </data>
 </root>
