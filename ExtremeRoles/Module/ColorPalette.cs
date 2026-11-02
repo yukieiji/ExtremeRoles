@@ -95,6 +95,7 @@ public static class ColorPalette
 	public readonly static Color ImitaterSafeColor = new Color32(204, 153, 255, byte.MaxValue);
 	public readonly static Color MastermindSlateBlue = new Color32(106, 90, 205, byte.MaxValue);
 	public readonly static Color DeepOneDarkGreen = new Color32(57, 76, 61, byte.MaxValue);
+	public readonly static Color FemmeFataleCrimson = new Color32(189, 0, 63, byte.MaxValue);
 
 
 	public readonly static Color PoltergeistLightKenpou = new Color32(

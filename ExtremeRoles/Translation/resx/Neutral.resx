@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -65,20 +65,20 @@
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1715,5 +1715,75 @@
   </data>
   <data name="DeepOneAbilityCoolTime" xml:space="preserve">
     <value>「生贄」のクールダウン</value>
+  </data>
+
+
+
+
+
+
+
+
+  <data name="FemmeFatale" xml:space="preserve">
+    <value>ファムファタール</value>
+  </data>
+  <data name="FemmeFataleFullDescription" xml:space="preserve">
+    <value>悪女ムーブでひっかき回す第三陣営役職
+勝利条件：最後の1人になること
+相手をホセにする能力を持ち、ホセの行動によってキルクールが短縮される
+会議では生存ホセの数に応じた特殊投票を行う
+キルボタンで狙われた際、生存ホセが身代わりとなる
+ファムが死ぬとホセは元の役職に戻る</value>
+  </data>
+  <data name="FemmeFataleShortDescription" xml:space="preserve">
+    <value>悪女ムーブでひっかき回し、最後の1人になれ</value>
+  </data>
+  <data name="FemmeFataleIntroDescription" xml:space="preserve">
+    <value>男を狂わせ、全てを奪え</value>
+  </data>
+  <data name="FemmeFataleCanUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="FemmeFataleAbilityCount" xml:space="preserve">
+    <value>ホセ作成可能回数</value>
+  </data>
+  <data name="FemmeFataleRange" xml:space="preserve">
+    <value>ホセ作成の発動可能距離</value>
+  </data>
+  <data name="FemmeFataleJoseKillKillCoolReduceRate" xml:space="preserve">
+    <value>ホセのキルによるファムのキルクール減少率(0%で無効)</value>
+  </data>
+  <data name="FemmeFataleJoseTaskKillCoolReduceRate" xml:space="preserve">
+    <value>ホセのタスク完了によるファムのキルクール減少率(0%で無効)</value>
+  </data>
+  <data name="FemmeFataleJoseTaskCompKillCoolReduceRate" xml:space="preserve">
+    <value>ホセの全タスク完了によるファムのキルクール永続減少率(0%で無効)</value>
+  </data>
+  <data name="FemmeFataleJoseSelfKillTimer" xml:space="preserve">
+    <value>ホセの自爆タイマー時間</value>
+  </data>
+  <data name="FemmeFataleVoteMultiplier" xml:space="preserve">
+    <value>生存ホセ数に対する特殊投票の倍率</value>
+  </data>
+  <data name="FemmeFataleKillDefense" xml:space="preserve">
+    <value>キル防御（ホセの身代わり）を有効にするか</value>
+  </data>
+  <data name="femmeCreateJose" xml:space="preserve">
+    <value>ホセ作成</value>
+  </data>
+  <data name="Jose" xml:space="preserve">
+    <value>ホセ</value>
+  </data>
+  <data name="JoseFullDescription" xml:space="preserve">
+    <value>知らずにファムのために働かされる役職
+陣営・勝利条件は元の役職のまま
+45秒の自爆タイマーを持ち、タスク完了やキル、会議でリセットされる
+ファムが死亡するとホセ状態は解除される</value>
+  </data>
+  <data name="JoseShortDescription" xml:space="preserve">
+    <value>ファムに狂わされた男</value>
+  </data>
+  <data name="JoseIntroDescription" xml:space="preserve">
+    <value>彼女のために尽くせ</value>
   </data>
 </root>
