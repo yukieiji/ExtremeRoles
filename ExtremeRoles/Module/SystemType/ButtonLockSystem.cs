@@ -15,6 +15,7 @@ public sealed class ButtonLockSystem(ExtremeSystemType type) : IExtremeSystemTyp
 	{
 		Exorcist,
 		Boxer,
+		Darkpointer,
 	}
 
 	public enum Ops

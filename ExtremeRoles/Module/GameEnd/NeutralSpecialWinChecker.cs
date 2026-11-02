@@ -28,6 +28,8 @@ public sealed class NeutralSpecialWinChecker : IGameEndChecker
 				ExtremeRoleId.Umbrer => RoleGameOverReason.UmbrerBiohazard,
 				ExtremeRoleId.Hatter => RoleGameOverReason.HatterEndlessTeaTime,
 				ExtremeRoleId.Artist => RoleGameOverReason.ArtistShipToArt,
+				ExtremeRoleId.Punisher => RoleGameOverReason.PunisherKilledImpostor,
+				ExtremeRoleId.DeepOne => RoleGameOverReason.DeepOneBecomeGod,
 				_ => RoleGameOverReason.UnKnown,
 			});
 			return true;

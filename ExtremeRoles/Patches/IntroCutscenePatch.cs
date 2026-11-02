@@ -122,7 +122,7 @@ public class IntroCutScenceBeginPatch(IModLogger logger, IGameRuntime gameRuntim
 		return false;
 	}
 
-	private static void setupIntroTeam(IGameContext ctx, IntroCutscene instance)
+	private void setupIntroTeam(IGameContext ctx, IntroCutscene instance)
 	{
 		var role = ctx.Roles.GetLocalPlayerRole();
 		var text = instance.TeamTitle;
@@ -154,7 +154,9 @@ public class IntroCutScenceBeginPatch(IModLogger logger, IGameRuntime gameRuntim
 		{
 			instance.BackgroundBar.material.color = ColorPalette.LiberalColor;
 			int targetIndex = RandomGenerator.Instance.Next(3);
-			instance.ImpostorText.text = Tr.GetString($"liberalIntro{targetIndex}");
+			instance.ImpostorText.text = 
+				ctx.CanSeeOtherLiberal ? 
+				Tr.GetString($"liberalIntro{targetIndex}") : Tr.GetString($"liberalIntroHide{targetIndex}");
 
 			text.text = Tr.GetString("Liberal");
 			text.color = ColorPalette.LiberalColor;
@@ -191,7 +193,7 @@ public class IntroCutScenceBeginPatch(IModLogger logger, IGameRuntime gameRuntim
 
 		var role = ctx.Roles.GetLocalPlayerRole();
 
-		if (role.IsLiberal())
+		if (ctx.CanSeeOtherLiberal && role.IsLiberal())
 		{
 			yourTeam.Clear();
 			foreach (var p in PlayerCache.AllPlayerControl)

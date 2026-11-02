@@ -306,6 +306,14 @@ public class ExtremeAbilityButton
 		this.Button.SetCoolDown(this.Timer, maxTimer);
 	}
 
+	public void SetCooldownTimer(float time)
+	{
+		if (this.State is AbilityState.CoolDown)
+		{
+			this.Timer = time;
+		}
+	}
+
 	protected void AddTimerOffset(in float offsetTime)
 	{
 		if (this.State is AbilityState.Ready)

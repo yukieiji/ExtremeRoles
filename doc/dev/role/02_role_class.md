@@ -6,6 +6,9 @@ Roleクラスは役職の中核となるクラスで、`SingleRoleBase`を継承
 
 以下は最も基本的なRoleクラスの実装例です。
 
+同じ役職でも違う人に割り当てられていると違う役職である事や同じ役職であることを判定するために`GameControlId`と呼ばれるものが使われています
+これはPlayerIdとは異なる別のものなので比較はしないで下さい
+
 ```csharp
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;

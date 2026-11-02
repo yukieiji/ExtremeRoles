@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Roles;
 using UnityEngine;
 
 namespace ExtremeRoles.Test.Lobby.Asset;
@@ -8,6 +7,21 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public abstract class AssetLoadRunner
 	: LobbyTestRunnerBase
 {
+	protected void LoadButtonIconFromExR<W>(W id, string name) where W : Enum
+	{
+		try
+		{
+			var sprite = UnityObjectLoader.LoadFromButtonIcon(id, name);
+			Log.LogInfo($"Img Loaded:{id}.ButtonIcon.{name}");
+			NullCheck(sprite);
+		}
+		catch (Exception ex)
+		{
+			Log.LogError(
+				$"Img:{id}.ButtonIcon.{name} not load   {ex.Message}");
+		}
+	}
+
 	protected void LoadFromExR<W>(W id) where W : Enum
 	{
 		try

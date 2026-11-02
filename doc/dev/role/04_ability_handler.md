@@ -30,6 +30,10 @@ public sealed class MyRoleAbilityHandler(MyRoleStatusModel status) : IAbility
 ## ボタン能力の実装
 
 プレイヤーがボタンを押して発動する能力を作るには、Roleクラスで `IRoleAutoBuildAbility` インターフェースを実装します。
+基本的にボタンのBehaviorがボタン本体のロジック(タイマー、回数、回数返却などを)をコントロールするため、それらのロジックを役職等に含める必要はありません
+
+IRoleAutoBuildAbilityで提供されるオプションファクトリ関数では能力のクールタイム、能力のアクティブ時間、使用回数などを設定できます。
+これで作成されたオプションは自動的に読み込み、注入されるのでそれらのロジックを記載する必要はありません
 
 ### 1. ボタンの生成 (Roleクラス)
 

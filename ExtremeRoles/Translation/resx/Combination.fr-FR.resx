@@ -738,7 +738,7 @@ Soutient actuellement :
   <data name="scribble" xml:space="preserve">
     <value>GRAFFITI</value>
   </data>
-  <data name="selfBomb" xml:space="preserve">
+  <data name="SelfBomb" xml:space="preserve">
     <value>EXPLOSION</value>
   </data>
   <data name="WispShortDescription" xml:space="preserve">
