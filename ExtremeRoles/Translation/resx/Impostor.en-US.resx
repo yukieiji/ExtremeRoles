@@ -1895,9 +1895,6 @@ Object: "Seal"
   <data name="NullifierRequiredClicks" xml:space="preserve">
     <value>Use Button Presses to Remove "Seal"</value>
   </data>
-  <data name="NullifierMaxSealCount" xml:space="preserve">
-    <value>Max "Seal" Count</value>
-  </data>
   <data name="NullifierRange" xml:space="preserve">
     <value>"Seal" Radius</value>
   </data>

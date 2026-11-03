@@ -108,7 +108,6 @@ public sealed class NullifierSystem : IDirtableSystemType
 	}
 
 	private readonly float range;
-	private readonly int maxSealCount;
 	private readonly int requiredClicks;
 	private readonly float restoreTime;
 	private readonly NullifierTargetTeam targetTeam;
@@ -124,24 +123,21 @@ public sealed class NullifierSystem : IDirtableSystemType
 
 	public NullifierSystem(
 		float range,
-		int maxSealCount,
 		int requiredClicks,
 		float restoreTime,
 		NullifierTargetTeam targetTeam)
-		: this(range, maxSealCount, requiredClicks, restoreTime, targetTeam, new DefaultUnityObjectFactory())
+		: this(range, requiredClicks, restoreTime, targetTeam, new DefaultUnityObjectFactory())
 	{
 	}
 
 	public NullifierSystem(
 		float range,
-		int maxSealCount,
 		int requiredClicks,
 		float restoreTime,
 		NullifierTargetTeam targetTeam,
 		IUnityObjectFactory unityObjectFactory)
 	{
 		this.range = range;
-		this.maxSealCount = maxSealCount;
 		this.requiredClicks = requiredClicks;
 		this.restoreTime = restoreTime;
 		this.targetTeam = targetTeam;
@@ -150,11 +146,6 @@ public sealed class NullifierSystem : IDirtableSystemType
 
 	public IReadOnlyDictionary<int, SealCircle> PlacedSeals => this.placedSeals;
 	public IReadOnlyList<Vector2> ScheduledReservations => this.scheduledReservations;
-
-	public bool CanReserve()
-	{
-		return (this.placedSeals.Count + this.scheduledReservations.Count) < this.maxSealCount;
-	}
 
 	public void ReserveSeal(Vector2 position)
 	{
@@ -262,10 +253,7 @@ public sealed class NullifierSystem : IDirtableSystemType
 			// 会議終了時に予約された位置に陣を設置
 			foreach (var pos in this.scheduledReservations)
 			{
-				if (this.placedSeals.Count < this.maxSealCount)
-				{
-					createSeal(this.nextSealId++, pos);
-				}
+				createSeal(this.nextSealId++, pos);
 			}
 			this.scheduledReservations.Clear();
 		}
