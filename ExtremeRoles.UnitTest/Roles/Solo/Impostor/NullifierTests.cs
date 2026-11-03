@@ -91,7 +91,6 @@ public sealed class NullifierTests
 
 		var system = new NullifierSystem(
 			2.5f,
-			2,
 			10,
 			10.0f,
 			NullifierTargetTeam.AllImpostorOther,
@@ -203,17 +202,32 @@ public sealed class NullifierTests
 	}
 
 	[Fact]
+	public void NullifierRole_CheckAbility_ReturnsFalseIfPlayerMoves()
+	{
+		var role = new NullifierRole();
+		InitializeRole(role);
+
+		this.mockLocalPlayer.Setup(p => p.GetTruePosition()).Returns(new Vector2(0f, 0f));
+		role.UseAbility();
+
+		// 静止している間はtrue
+		Assert.True(role.CheckAbility());
+
+		// 移動した場合はfalse（詠唱中断）
+		this.mockLocalPlayer.Setup(p => p.GetTruePosition()).Returns(new Vector2(1f, 1f));
+		Assert.False(role.CheckAbility());
+	}
+
+	[Fact]
 	public void NullifierSystem_ReserveSeal_PlacesAfterMeetingEnd()
 	{
 		var system = new NullifierSystem(
 			2.5f,
-			2,
 			10,
 			10.0f,
 			NullifierTargetTeam.AllImpostorOther,
 			this.mockFactory);
 
-		Assert.True(system.CanReserve());
 		system.ReserveSeal(new Vector2(1f, 2f));
 		Assert.Single(system.ScheduledReservations);
 		Assert.Empty(system.PlacedSeals);
@@ -224,31 +238,10 @@ public sealed class NullifierTests
 	}
 
 	[Fact]
-	public void NullifierSystem_MaxSealLimit_Respected()
-	{
-		var system = new NullifierSystem(
-			2.5f,
-			2,
-			10,
-			10.0f,
-			NullifierTargetTeam.AllImpostorOther,
-			this.mockFactory);
-
-		system.ReserveSeal(new Vector2(1f, 1f));
-		system.ReserveSeal(new Vector2(2f, 2f));
-		Assert.False(system.CanReserve());
-
-		system.Reset(ResetTiming.MeetingEnd);
-		Assert.Equal(2, system.PlacedSeals.Count);
-		Assert.False(system.CanReserve());
-	}
-
-	[Fact]
 	public void NullifierSystem_LocksAndUnlocksAbilityButton_ForCrewmate()
 	{
 		var system = new NullifierSystem(
 			2.5f,
-			2,
 			10,
 			10.0f,
 			NullifierTargetTeam.CrewmateOnly,
@@ -276,7 +269,6 @@ public sealed class NullifierTests
 	{
 		var system = new NullifierSystem(
 			2.5f,
-			2,
 			10,
 			10.0f,
 			NullifierTargetTeam.AllImpostorOther,

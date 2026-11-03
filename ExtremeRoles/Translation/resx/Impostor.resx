@@ -1978,9 +1978,6 @@ Lv2能力「ビームセーバー」
   <data name="NullifierRequiredClicks" xml:space="preserve">
     <value>「封印陣」の解除に必要な使用ボタン押下回数</value>
   </data>
-  <data name="NullifierMaxSealCount" xml:space="preserve">
-    <value>「封印陣」の最大設置数</value>
-  </data>
   <data name="NullifierRange" xml:space="preserve">
     <value>「封印陣」の効果範囲</value>
   </data>
