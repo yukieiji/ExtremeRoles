@@ -1,6 +1,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Extension.Vector;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
@@ -60,7 +61,7 @@ public sealed class NullifierRole :
 			return false;
 		}
 
-		return (localPlayer.GetTruePosition() - this.castOriginPos).magnitude < 0.05f;
+		return this.castOriginPos.IsCloseTo(localPlayer.GetTruePosition());
 	}
 
 	public bool UseAbility()
