@@ -63,7 +63,7 @@ public sealed class RemoteKillerPurgeHandler(RemoteKillerStatusModel status, Rem
 		this.selectedPurgeTarget = null;
 		this.minigame ??= new ShapeShiftMinigameWrapper();
 		return this.minigame.IsOpen || this.minigame.OpenUi(
-			OnPurgeTargetSelected, this.status.ExecutionTargets);
+			new PlayerFilltedSelectPanelBuilder(OnPurgeTargetSelected, this.status.ExecutionTargets));
 	}
 
 	public void OnPurgeTargetSelected(PlayerControl target)

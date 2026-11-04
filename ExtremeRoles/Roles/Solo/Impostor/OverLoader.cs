@@ -7,12 +7,13 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
 
+#nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -51,9 +52,11 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     private bool isAwakedHasOtherVision;
     private bool isAwakedHasOtherKillCool;
     private bool isAwakedHasOtherKillRange;
+	private float overLoadSpeed;
+	private PlayerSpeedSystem? system;
 
 
-    public ExtremeAbilityButton Button { get; set; }
+    public ExtremeAbilityButton? Button { get; set; }
 
 
     public OverLoader() : base(
@@ -71,7 +74,6 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
         }
 
 		overLoader.IsOverLoad = activate;
-		overLoader.IsBoost = activate;
 
 		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 	}
@@ -90,7 +92,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     public bool IsAbilityUse() =>
         this.IsAwake && IRoleAbility.IsCommonUse();
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -143,7 +145,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 		if (this.awakeImpNum >= impNum &&
 			this.killCount >= this.awakeKillCount)
 		{
-			this.Button.SetButtonShow(true);
+			this.Button?.SetButtonShow(true);
 			this.isAwake = true;
 			this.HasOtherVision = this.isAwakedHasOtherVision;
 			this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
@@ -239,10 +241,12 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
         this.awakeKillCount = cate.GetValue<OverLoaderOption, int>(
             OverLoaderOption.AwakeKillCount);
 
-        this.MoveSpeed = cate.GetValue<OverLoaderOption, float>(
+        this.overLoadSpeed = cate.GetValue<OverLoaderOption, float>(
             OverLoaderOption.MoveSpeed);
         this.reduceRate = cate.GetValue<OverLoaderOption, float>(
             OverLoaderOption.KillCoolReduceRate);
+
+		this.system = PlayerSpeedSystem.Get();
 
         this.killCount = 0;
 
@@ -283,6 +287,8 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     {
         byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
+		this.system?.UpdateSelfSpeed(this.overLoadSpeed);
+
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.OverLoaderSwitchAbility))
         {
@@ -296,7 +302,9 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     {
         byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
-        using (var caller = RPCOperator.CreateCaller(
+		this.system?.UpdateSelfSpeed(0);
+
+		using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.OverLoaderSwitchAbility))
         {
             caller.WriteByte(localPlayerId);
