@@ -49,20 +49,11 @@ public sealed class NullifierRole :
 	}
 
 	public bool IsAbilityUse()
-	{
-		return IRoleAbility.IsCommonUse();
-	}
+		=> IRoleAbility.IsCommonUse();
 
 	public bool CheckAbility()
-	{
-		var localPlayer = PlayerControl.LocalPlayer;
-		if (localPlayer.IsInValid() || !localPlayer.IsAlive())
-		{
-			return false;
-		}
-
-		return this.castOriginPos.IsCloseTo(localPlayer.GetTruePosition());
-	}
+		=> PlayerControl.LocalPlayer.IsAlive() &&
+			this.castOriginPos.IsCloseTo(PlayerControl.LocalPlayer.GetTruePosition());
 
 	public bool UseAbility()
 	{
@@ -111,7 +102,8 @@ public sealed class NullifierRole :
 
 	private void reset(PlayerControl rolePlayer)
 	{
-		if (PlayerControl.LocalPlayer != null && rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer != null && rolePlayer.PlayerId == localPlayer.PlayerId)
 		{
 			ForceCleanUp();
 		}
@@ -126,7 +118,7 @@ public sealed class NullifierRole :
 			defaultActiveTime: 3.0f);
 
 		factory.CreateSelectionOption<Option, NullifierTargetTeam>(Option.TargetTeam);
-		factory.CreateFloatOption(Option.Range, 2.5f, 1.0f, 10.0f, 0.5f);
+		factory.CreateFloatOption(Option.Range, 7.0f, 1.0f, 50.0f, 0.5f);
 		factory.CreateIntOption(Option.RequiredClicks, 10, 1, 50, 1);
 		factory.CreateFloatOption(Option.RestoreTime, 10.0f, 1.0f, 60.0f, 1.0f, format: OptionUnit.Second);
 	}
@@ -140,7 +132,7 @@ public sealed class NullifierRole :
 		float restoreTime = loader.GetValue<Option, float>(Option.RestoreTime);
 
 		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
-			ExtremeSystemType.Nullifier,
+			ExtremeSystemType.NullifierSystem,
 			() => new NullifierSystem(range, requiredClicks, restoreTime, targetTeam));
 	}
 }
