@@ -551,7 +551,6 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		)
 	{
 		this.Loader = loader;
-		this.MoveSpeed = option.SpeedMod;
 		var addTasks = new List<int>(option.AddCommonTask + option.AddNormalTask + option.AddLongTask);
 
 		if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
@@ -569,6 +568,11 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 				addTasks.Add(GameSystem.GetRandomLongTask());
 			}
 			this.allTask = addTasks.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
+
+
+			var speedSystem = PlayerSpeedSystem.Get();
+			speedSystem.UpdateSelfSpeed(option.SpeedMod);
+
 		}
 		else
 		{

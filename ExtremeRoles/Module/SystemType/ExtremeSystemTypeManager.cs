@@ -38,6 +38,7 @@ public enum ExtremeSystemType : byte
 	SecurityDummySystem,
 	OnemanMeetingSystem,
 	VoteSwapSystem,
+	SpeedSystem,
 
 	AbilityButtonLockSystem,
 	ReportButtonLockSystem,
@@ -69,6 +70,8 @@ public enum ExtremeSystemType : byte
 	DeepOneFrogsControlSystem,
 	DarkpointerDarkness,
 	ForestallerSystem,
+	InvisibleSystem,
+	NullifierSystem,
 }
 
 public enum ResetTiming : byte

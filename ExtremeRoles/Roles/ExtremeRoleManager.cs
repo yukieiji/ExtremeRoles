@@ -24,11 +24,13 @@ using ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 using ExtremeRoles.Roles.Solo.Liberal;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 using ExtremeRoles.Roles.Solo.Crewmate.Fencer;
+using ExtremeRoles.Roles.Solo.Crewmate.Invisible;
 using ExtremeRoles.Roles.Solo.Crewmate.Loner;
 using ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Impostor.Darkpointer;
+using ExtremeRoles.Roles.Solo.Impostor.Nullifier;
 using ExtremeRoles.Roles.Solo.Impostor.Flasher;
 using ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
 using ExtremeRoles.Roles.Solo.Impostor.Retaliator;
@@ -111,6 +113,8 @@ public enum ExtremeRoleId : int
 	Charger,
 	Mayor,
 	Forestaller,
+	Scanner,
+	Invisible,
 
 	SpecialImpostor,
     Evolver,
@@ -151,6 +155,7 @@ public enum ExtremeRoleId : int
 	Retaliator,
 	Flasher,
 	Darkpointer,
+	Nullifier,
 
 	Alice,
     Jackal,
@@ -378,6 +383,8 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Charger     , new Charger()},
 			{(int)ExtremeRoleId.Mayor       , new Mayor()},
 			{(int)ExtremeRoleId.Forestaller , new Forestaller()},
+			{(int)ExtremeRoleId.Scanner     , new ScannerRole()},
+			{(int)ExtremeRoleId.Invisible   , new InvisibleRole()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -418,6 +425,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Retaliator     , new RetaliatorRole()},
 			{(int)ExtremeRoleId.Flasher        , new FlasherRole()},
 			{(int)ExtremeRoleId.Darkpointer    , new DarkpointerRole()},
+			{(int)ExtremeRoleId.Nullifier      , new NullifierRole()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new JackalRole()},

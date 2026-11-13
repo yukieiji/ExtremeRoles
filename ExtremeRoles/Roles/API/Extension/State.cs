@@ -1,287 +1,268 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 using ExtremeRoles.Roles.Solo;
 using System.Runtime.CompilerServices;
 
-namespace ExtremeRoles.Roles.API.Extension.State
+namespace ExtremeRoles.Roles.API.Extension.State;
+
+public static class RoleState
 {
-    public static class RoleState
+    private static float killCoolOffset = 0.0f;
+
+    public static void Reset()
     {
-        private static float killCoolOffset = 0.0f;
+        killCoolOffset = 0.0f;
+    }
 
-        public static void Reset()
+    public static void AddKillCoolOffset(float offset)
+    {
+        killCoolOffset = killCoolOffset + offset;
+    }
+
+    public static bool TryGetVisionMod(this SingleRoleBase role,
+        out float vision, out bool isApplyEnvironmentVision)
+    {
+        vision = role.Vision;
+        isApplyEnvironmentVision = role.IsApplyEnvironmentVision;
+        bool isHasOterVision = role.HasOtherVision;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
         {
-            killCoolOffset = 0.0f;
+            return isHasOterVision; 
         }
-
-        public static void AddKillCoolOffset(float offset)
+        else
         {
-            killCoolOffset = killCoolOffset + offset;
+            float otherVision = multiAssignRole.AnotherRole.Vision;
+            vision = vision > otherVision ? vision : otherVision;
+            isApplyEnvironmentVision = role.IsApplyEnvironmentVision || multiAssignRole.AnotherRole.IsApplyEnvironmentVision;
+            return isHasOterVision || multiAssignRole.AnotherRole.HasOtherVision;
         }
+    }
 
-        public static bool TryGetVisionMod(this SingleRoleBase role,
-            out float vision, out bool isApplyEnvironmentVision)
+    public static bool TryGetKillCool(this SingleRoleBase role, out float killCoolTime)
+    {
+        killCoolTime = role.KillCoolTime;
+        bool hasOtherKillCool = role.HasOtherKillCool;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
         {
-            vision = role.Vision;
-            isApplyEnvironmentVision = role.IsApplyEnvironmentVision;
-            bool isHasOterVision = role.HasOtherVision;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
+            if (killCoolOffset != 0.0f)
             {
-                return isHasOterVision; 
+                killCoolTime = killCoolTime + killCoolOffset;
             }
-            else
-            {
-                float otherVision = multiAssignRole.AnotherRole.Vision;
-                vision = vision > otherVision ? vision : otherVision;
-                isApplyEnvironmentVision = role.IsApplyEnvironmentVision || multiAssignRole.AnotherRole.IsApplyEnvironmentVision;
-                return isHasOterVision || multiAssignRole.AnotherRole.HasOtherVision;
-            }
+            return hasOtherKillCool;
         }
-
-        public static bool TryGetKillCool(this SingleRoleBase role, out float killCoolTime)
+        else
         {
-            killCoolTime = role.KillCoolTime;
-            bool hasOtherKillCool = role.HasOtherKillCool;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
+            float otherKillCoolTime = multiAssignRole.AnotherRole.KillCoolTime;
+            killCoolTime = killCoolTime < otherKillCoolTime ? killCoolTime : otherKillCoolTime;
+            if (killCoolOffset != 0.0f)
             {
-                if (killCoolOffset != 0.0f)
-                {
-                    killCoolTime = killCoolTime + killCoolOffset;
-                }
-                return hasOtherKillCool;
+                killCoolTime = killCoolTime + killCoolOffset;
             }
-            else
-            {
-                float otherKillCoolTime = multiAssignRole.AnotherRole.KillCoolTime;
-                killCoolTime = killCoolTime < otherKillCoolTime ? killCoolTime : otherKillCoolTime;
-                if (killCoolOffset != 0.0f)
-                {
-                    killCoolTime = killCoolTime + killCoolOffset;
-                }
-                return hasOtherKillCool || multiAssignRole.AnotherRole.HasOtherKillCool;
-            }
+            return hasOtherKillCool || multiAssignRole.AnotherRole.HasOtherKillCool;
         }
+    }
 
-        public static bool TryGetKillRange(this SingleRoleBase role, out int killRange)
+    public static bool TryGetKillRange(this SingleRoleBase role, out int killRange)
+    {
+        killRange = role.KillRange;
+        bool hasOtherKillRange = role.HasOtherKillRange;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
         {
-            killRange = role.KillRange;
-            bool hasOtherKillRange = role.HasOtherKillRange;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return hasOtherKillRange;
-            }
-            else
-            {
-                int otherKillRange = multiAssignRole.AnotherRole.KillRange;
-                killRange = killRange > otherKillRange ? killRange : otherKillRange;
-                return hasOtherKillRange || multiAssignRole.AnotherRole.HasOtherKillRange;
-            }
+            return hasOtherKillRange;
         }
-
-
-        public static bool TryGetVelocity(this SingleRoleBase role, out float velocity)
+        else
         {
-            velocity = role.MoveSpeed;
-            bool isBoost = role.IsBoost;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return isBoost;
-            }
-            else
-            {
-                float otherVelocity = multiAssignRole.AnotherRole.MoveSpeed;
-                velocity = velocity > otherVelocity ? velocity : otherVelocity;
-                return isBoost || multiAssignRole.AnotherRole.IsBoost;
-            }
+            int otherKillRange = multiAssignRole.AnotherRole.KillRange;
+            killRange = killRange > otherKillRange ? killRange : otherKillRange;
+            return hasOtherKillRange || multiAssignRole.AnotherRole.HasOtherKillRange;
         }
+    }
 
-        public static bool CanKill(this SingleRoleBase role)
+    public static bool CanKill(this SingleRoleBase role)
+    {
+        bool canKill = role.CanKill;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
         {
-            bool canKill = role.CanKill;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return canKill;
-            }
-            else
-            {
-                return canKill || multiAssignRole.AnotherRole.CanKill;
-            }
+            return canKill;
         }
-
-        public static bool CanUseVent(this SingleRoleBase role)
+        else
         {
-            bool canUseVent = role.UseVent;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return canUseVent;
-            }
-            else
-            {
-                return canUseVent || multiAssignRole.AnotherRole.UseVent;
-            }
+            return canKill || multiAssignRole.AnotherRole.CanKill;
         }
+    }
 
-        public static bool HasTask(this SingleRoleBase role)
+    public static bool CanUseVent(this SingleRoleBase role)
+    {
+        bool canUseVent = role.UseVent;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
         {
-            bool hasTask = role.HasTask;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return hasTask;
-            }
-            else
-            {
-                return hasTask || multiAssignRole.AnotherRole.HasTask;
-            }
+            return canUseVent;
         }
-
-        public static bool CanUseSabotage(this SingleRoleBase role)
+        else
         {
-            bool useSabotage = role.UseSabotage;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return useSabotage;
-            }
-            else
-            {
-                return useSabotage || multiAssignRole.AnotherRole.UseSabotage;
-            }
+            return canUseVent || multiAssignRole.AnotherRole.UseVent;
         }
+    }
 
-        public static bool CanUseAdmin(this SingleRoleBase role)
+    public static bool HasTask(this SingleRoleBase role)
+    {
+        bool hasTask = role.HasTask;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
         {
-            bool useSabotage = role.CanUseAdmin;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return useSabotage;
-            }
-            else
-            {
-                return useSabotage || multiAssignRole.AnotherRole.CanUseAdmin;
-            }
+            return hasTask;
         }
-
-        public static bool CanUseSecurity(this SingleRoleBase role)
+        else
         {
-            bool canUseSecurity = role.CanUseSecurity;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return canUseSecurity;
-            }
-            else
-            {
-                return canUseSecurity || multiAssignRole.AnotherRole.CanUseSecurity;
-            }
+            return hasTask || multiAssignRole.AnotherRole.HasTask;
         }
+    }
 
-        public static bool CanUseVital(this SingleRoleBase role)
+    public static bool CanUseSabotage(this SingleRoleBase role)
+    {
+        bool useSabotage = role.UseSabotage;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
         {
-            bool canUseVital = role.CanUseVital;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return canUseVital;
-            }
-            else
-            {
-                return canUseVital || multiAssignRole.AnotherRole.CanUseVital;
-            }
+            return useSabotage;
         }
-
-        public static bool CanCallMeeting(this SingleRoleBase role)
+        else
         {
-            bool canCallMeeting = role.CanCallMeeting;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return canCallMeeting;
-            }
-            else
-            {
-                return canCallMeeting || multiAssignRole.AnotherRole.CanCallMeeting;
-            }
+            return useSabotage || multiAssignRole.AnotherRole.UseSabotage;
         }
+    }
 
-        public static bool CanRepairSabotage(this SingleRoleBase role)
+    public static bool CanUseAdmin(this SingleRoleBase role)
+    {
+        bool useSabotage = role.CanUseAdmin;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
         {
-            bool canRepairSabotage = role.CanRepairSabotage;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return canRepairSabotage;
-            }
-            else
-            {
-                return canRepairSabotage || multiAssignRole.AnotherRole.CanRepairSabotage;
-            }
+            return useSabotage;
         }
-
-        public static bool IsAssignGhostRole(this SingleRoleBase role)
+        else
         {
-            bool isAssignGhostRole = role.IsAssignGhostRole;
-
-            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return isAssignGhostRole;
-            }
-            else
-            {
-                return isAssignGhostRole && multiAssignRole.AnotherRole.IsAssignGhostRole;
-            }
+            return useSabotage || multiAssignRole.AnotherRole.CanUseAdmin;
         }
+    }
 
-        public static bool IsContainVanillaRole(this SingleRoleBase role)
+    public static bool CanUseSecurity(this SingleRoleBase role)
+    {
+        bool canUseSecurity = role.CanUseSecurity;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
         {
-            if (role.IsVanillaRole())
-            {
-                return true;
-            }
-            else if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
-            {
-                return false;
-            }
-            else
-            {
-                return multiAssignRole.AnotherRole.IsVanillaRole();
-            }
+            return canUseSecurity;
         }
-
-        public static bool TryGetVanillaRoleId(this SingleRoleBase role, out RoleTypes roleId)
+        else
         {
-            if (role is VanillaRoleWrapper vanillaRole)
-            {
-                roleId = vanillaRole.VanilaRoleId;
-                return true;
-            }
-            else if (
-                role is MultiAssignRoleBase multiAssignRole &&
-                multiAssignRole.AnotherRole is VanillaRoleWrapper anotherVanillaRole)
-            {
-                roleId = anotherVanillaRole.VanilaRoleId;
-                return true;
-            }
-            else
-            {
-                roleId = RoleTypes.Crewmate;
-                return false;
-            }
+            return canUseSecurity || multiAssignRole.AnotherRole.CanUseSecurity;
         }
+    }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static bool isNotMultiAssign(SingleRoleBase role, out MultiAssignRoleBase multiAssignRole)
+    public static bool CanUseVital(this SingleRoleBase role)
+    {
+        bool canUseVital = role.CanUseVital;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
         {
-            multiAssignRole = role as MultiAssignRoleBase;
-            return
-                multiAssignRole == null ||
-                multiAssignRole.AnotherRole == null;
+            return canUseVital;
         }
+        else
+        {
+            return canUseVital || multiAssignRole.AnotherRole.CanUseVital;
+        }
+    }
+
+    public static bool CanCallMeeting(this SingleRoleBase role)
+    {
+        bool canCallMeeting = role.CanCallMeeting;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
+        {
+            return canCallMeeting;
+        }
+        else
+        {
+            return canCallMeeting || multiAssignRole.AnotherRole.CanCallMeeting;
+        }
+    }
+
+    public static bool CanRepairSabotage(this SingleRoleBase role)
+    {
+        bool canRepairSabotage = role.CanRepairSabotage;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
+        {
+            return canRepairSabotage;
+        }
+        else
+        {
+            return canRepairSabotage || multiAssignRole.AnotherRole.CanRepairSabotage;
+        }
+    }
+
+    public static bool IsAssignGhostRole(this SingleRoleBase role)
+    {
+        bool isAssignGhostRole = role.IsAssignGhostRole;
+
+        if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
+        {
+            return isAssignGhostRole;
+        }
+        else
+        {
+            return isAssignGhostRole && multiAssignRole.AnotherRole.IsAssignGhostRole;
+        }
+    }
+
+    public static bool IsContainVanillaRole(this SingleRoleBase role)
+    {
+        if (role.IsVanillaRole())
+        {
+            return true;
+        }
+        else if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
+        {
+            return false;
+        }
+        else
+        {
+            return multiAssignRole.AnotherRole.IsVanillaRole();
+        }
+    }
+
+    public static bool TryGetVanillaRoleId(this SingleRoleBase role, out RoleTypes roleId)
+    {
+        if (role is VanillaRoleWrapper vanillaRole)
+        {
+            roleId = vanillaRole.VanilaRoleId;
+            return true;
+        }
+        else if (
+            role is MultiAssignRoleBase multiAssignRole &&
+            multiAssignRole.AnotherRole is VanillaRoleWrapper anotherVanillaRole)
+        {
+            roleId = anotherVanillaRole.VanilaRoleId;
+            return true;
+        }
+        else
+        {
+            roleId = RoleTypes.Crewmate;
+            return false;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool isNotMultiAssign(SingleRoleBase role, out MultiAssignRoleBase multiAssignRole)
+    {
+        multiAssignRole = role as MultiAssignRoleBase;
+        return
+            multiAssignRole == null ||
+            multiAssignRole.AnotherRole == null;
     }
 }
