@@ -179,7 +179,7 @@ public sealed class DeepOneFrogsControlSystem(
 
 		if (console.Image != null)
 		{
-			console.Image.sprite = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton);
+			console.Image.sprite = UnityObjectLoader.LoadFromResources(ExtremeRoleId.DeepOne);
 		}
 
 		var textObj = Object.Instantiate(

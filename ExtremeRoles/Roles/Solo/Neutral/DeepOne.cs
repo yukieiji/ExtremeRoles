@@ -181,7 +181,7 @@ public sealed class DeepOne :
 	{
 		this.CreateNormalAbilityButton(
 			"sacrifice",
-			UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton));
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.DeepOne));
 	}
 
 	public bool IsAbilityUse()
