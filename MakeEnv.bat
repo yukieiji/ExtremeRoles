@@ -11,7 +11,7 @@ if %errorlevel% == 0 (
 )
 
 git submodule update --init --recursive
-call run_python.bat makelanguagejson.py
+call run_python.bat scripts\makelanguagejson.py
 mkdir ExtremeRoles\Resources\Asset
 robocopy /mir UnityAsset\ExtremeRoles ExtremeRoles\Resources\Asset
 mkdir ExtremeSkins\Resources\Asset

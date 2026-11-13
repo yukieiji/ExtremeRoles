@@ -22,6 +22,7 @@ public static class Sound
 
         AgencyTakeTask,
 		CurseMakerCurse,
+		ChargerCharge,
 
 		CommanderReduceKillCool,
 		TeroristSabotageAnnounce,
@@ -29,6 +30,7 @@ public static class Sound
 		ScavengerFireNormalGun,
 		ScavengerFireBeam,
 		BoxerStraight,
+		FlasherFlash,
 
 		MinerMineSE,
 

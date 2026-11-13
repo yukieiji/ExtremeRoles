@@ -36,6 +36,9 @@ public class PlayerTests : IDisposable
 
     static PlayerTests()
     {
+        MockSetupHelper.SetupUnityCommonMocks();
+        MockSetupHelper.SetupPaletteHelpers();
+
         var mockOptions = new Mock<IGameOptions>(IntPtr.Zero);
         mockOptions.Setup(o => o.GetFloat(FloatOptionNames.KillCooldown)).Returns(25.0f);
         globalGameOptions = mockOptions.Object;
@@ -46,8 +49,6 @@ public class PlayerTests : IDisposable
 
         globalGameData = new Mock<GameData>().Object;
         globalShipStatus = new Mock<ShipStatus>().Object;
-
-        MockSetupHelper.SetupUnityCommonMocks();
     }
 
     public PlayerTests()

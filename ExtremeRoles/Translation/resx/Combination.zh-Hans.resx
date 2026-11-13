@@ -855,7 +855,7 @@
   <data name="scribble" xml:space="preserve">
     <value>鬼画符</value>
   </data>
-  <data name="selfBomb" xml:space="preserve">
+  <data name="SelfBomb" xml:space="preserve">
     <value>自爆</value>
   </data>
   <data name="WispShortDescription" xml:space="preserve">

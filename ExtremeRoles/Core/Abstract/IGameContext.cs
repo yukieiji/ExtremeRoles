@@ -7,4 +7,6 @@ public interface IGameContext : IDisposable
 {
 	public INomalGameRoleContainer Roles { get; }
 	public IShipGlobalOption GlobalOption { get; }
+
+	public bool CanSeeOtherLiberal { get; }
 }

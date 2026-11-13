@@ -384,3 +384,6 @@ ExtremeRoles.UnitTest/.mockbuilder/
 CoverageReport/
 TestResults/
 *.cobertura.xml
+
+# Color palette tool debug screenshot
+color_palette_debug.png

@@ -299,7 +299,8 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 					string showStr = Tr.GetString(
 						"OptionSettingChange",
 						tabName, category.TransedName,
-						option.TransedTitle, option.TransedValue);
+						option.TransedTitle.Replace("<br>", "").Replace("\n", "").Replace("\r", ""), // 改行を消す
+						option.TransedValue);
 
 					HudManager.Instance.Notifier.SettingsChangeMessageLogic(
 						key, string.Format(OptionChangeFontPlace, showStr),
