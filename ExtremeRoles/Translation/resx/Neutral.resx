@@ -1678,7 +1678,7 @@
   - 「生贄」の設置個数によって様々なバフを得ることが出来る</value>
   </data>
   <data name="DeepOneShortDescription" xml:space="preserve">
-    <value>カエル（生贄）を設置し勝利を目指せ</value>
+    <value>祭壇に生贄を、さすれば勝利は深淵のものだ</value>
   </data>
   <data name="DeepOneIntroDescription" xml:space="preserve">
     <value>「生贄」を規定数設置せよ</value>
