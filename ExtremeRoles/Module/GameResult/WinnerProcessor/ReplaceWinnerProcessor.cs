@@ -261,6 +261,10 @@ public sealed class ReplaceWinnerProcessor(int winGameControlId) : IWinnerProces
 				processor.CollectAllTargetRole(
 					ExtremeRoleId.Queen, ExtremeRoleId.Servant, ExtremeRoleId.Pawn);
 				break;
+			case RoleGameOverReason.FemmeFataleKillAllOther:
+				processor.ReplaceWinnerToSpecificNeutralRolePlayer(
+					ExtremeRoleId.FemmeFatale);
+				break;
 			default:
 				break;
 		}

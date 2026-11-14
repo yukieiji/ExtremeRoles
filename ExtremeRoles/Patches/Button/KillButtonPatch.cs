@@ -34,6 +34,7 @@ public static class KillButtonDoClickPatch
 		BlockedToSurrogator,
 		FinalConditionFail,
 		Success,
+		BlockedToJose,
 	}
 
     public static bool Prefix(KillButton __instance)
@@ -125,6 +126,10 @@ public static class KillButtonDoClickPatch
 		else if (SurrogatorRole.TryGurdOnesideLover(killer, target.PlayerId))
 		{
 			return KillResult.BlockedToSurrogator;
+		}
+		else if (ExtremeRoles.Roles.Solo.Neutral.FemmeFatale.FemmeFataleRole.TryRpcKillGuardedJose(killer.PlayerId, target.PlayerId))
+		{
+			return KillResult.BlockedToJose;
 		}
 		else if (IsMissMurderKill(killer, target))
 		{

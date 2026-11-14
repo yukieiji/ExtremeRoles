@@ -122,6 +122,8 @@ public static class RPCOperator
         UseGhostRoleAbility,
 
         XionAbility,
+
+        FemmeFataleAbility,
     }
 
     public sealed class RpcCaller : IDisposable
@@ -610,6 +612,11 @@ public static class RPCOperator
     {
         Roles.Solo.Crewmate.Resurrecter.RpcAbility(ref reader);
     }
+
+	public static void FemmeFataleAbility(ref MessageReader reader)
+	{
+		Roles.Solo.Neutral.FemmeFatale.FemmeFataleRole.HandleRpc(ref reader);
+	}
 
     public static void TeleporterSetPortal(
         byte teleporterId, float x, float y)
