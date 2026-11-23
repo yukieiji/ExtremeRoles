@@ -189,7 +189,10 @@ public sealed class FemmeFataleRole :
 		replaceVanilaRole(targetRole, targetPlayer);
 
 		JoseRole jose = new JoseRole(
-			rolePlayerId, femme, targetRole, femme.JoseSelfKillTimer);
+			targetPlayerId,
+			rolePlayerId,
+			femme,
+			targetRole);
 
 		if (targetRole is VanillaRoleWrapper vanillaRole)
 		{

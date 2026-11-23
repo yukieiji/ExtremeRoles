@@ -8,6 +8,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Roles.API.Extension.State;
 
 #nullable enable
 
@@ -24,17 +25,17 @@ public sealed class JoseRole :
 	private readonly JoseStatusModel statusModel;
 
 	public JoseRole(
+		byte josePlayerId,
 		byte femmeFatalePlayerId,
 		FemmeFataleRole femmeFatale,
-		SingleRoleBase baseRole,
-		float selfKillTimerTime) :
+		SingleRoleBase baseRole) :
 		base(
 			new RoleArgs(
 				new RoleCore(ExtremeRoleId.Jose, baseRole.Core.Team, ColorPalette.FemmeFataleCrimson),
 				createJoseRoleProp(baseRole)))
 	{
 		this.Loader = femmeFatale.Loader;
-		this.statusModel = new JoseStatusModel(selfKillTimerTime, femmeFatalePlayerId, femmeFatale);
+		this.statusModel = new JoseStatusModel(josePlayerId, femmeFatalePlayerId, femmeFatale);
 		SetControlId(femmeFatale.GameControlId);
 	}
 
@@ -106,6 +107,10 @@ public sealed class JoseRole :
 		if (role.IsImpostor())
 		{
 			prop |= RoleProp.CanKill;
+		}
+		if (role.HasTask())
+		{
+			prop |= RoleProp.HasTask;
 		}
 		return prop;
 	}

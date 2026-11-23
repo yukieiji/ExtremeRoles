@@ -1,8 +1,6 @@
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-using Sentry.Internal;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -24,16 +22,18 @@ public sealed class JoseStatusModel : IStatusModel, IParentChainStatus
 	private bool hasExploded = false;
 	private HashSet<uint> completedTasks = [];
 
-	public JoseStatusModel(float maxTimer, byte femmeFatalePlayerId, FemmeFataleRole femmeFatale)
+	public JoseStatusModel(byte josePlayerId, byte femmeFatalePlayerId, FemmeFataleRole femmeFatale)
 	{
 		this.Parent = femmeFatalePlayerId;
 		this.femmeFatale = femmeFatale;
+
+		float maxTimer = femmeFatale.JoseSelfKillTimer;
 		this.maxSelfKillTimer = maxTimer;
 		this.currentSelfKillTimer = maxTimer;
-		this.femmeFatale = femmeFatale;
-
+		
 		var hud = HudManager.Instance;
-		if (hud != null &&
+		if (josePlayerId == PlayerControl.LocalPlayer.PlayerId &&
+			hud != null &&
 			hud.KillButton != null &&
 			hud.KillButton.cooldownTimerText != null &&
 			hud.UseButton != null)
