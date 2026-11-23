@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using ExtremeRoles.Roles.Solo.Neutral.FemmeFatale;
 
 #nullable enable
 
@@ -127,7 +128,7 @@ public static class KillButtonDoClickPatch
 		{
 			return KillResult.BlockedToSurrogator;
 		}
-		else if (ExtremeRoles.Roles.Solo.Neutral.FemmeFatale.FemmeFataleRole.TryRpcKillGuardedJose(killer.PlayerId, target.PlayerId))
+		else if (FemmeFataleRole.TryRpcKillGuardedJose(killer.PlayerId, target.PlayerId))
 		{
 			return KillResult.BlockedToJose;
 		}

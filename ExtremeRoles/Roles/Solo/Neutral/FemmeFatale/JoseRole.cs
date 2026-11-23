@@ -19,11 +19,8 @@ public sealed class JoseRole :
 	IRoleUpdate,
 	IRoleResetMeeting
 {
-	public const string RoleShowTag = "◯j";
-
 	public override IOptionLoader Loader { get; }
-	public override IStatusModel Status => status;
-	private readonly JoseStatus status;
+	public override IStatusModel Status => statusModel;
 	private readonly JoseStatusModel statusModel;
 
 	public JoseRole(
@@ -37,28 +34,8 @@ public sealed class JoseRole :
 				createJoseRoleProp(baseRole)))
 	{
 		this.Loader = femmeFatale.Loader;
-		this.status = new JoseStatus(femmeFatalePlayerId, femmeFatale);
-		this.statusModel = new JoseStatusModel(selfKillTimerTime);
+		this.statusModel = new JoseStatusModel(selfKillTimerTime, femmeFatalePlayerId, femmeFatale);
 		SetControlId(femmeFatale.GameControlId);
-
-		CanKill = baseRole.CanKill;
-
-		if (baseRole.IsImpostor())
-		{
-			HasOtherVision = true;
-		}
-		else
-		{
-			HasOtherVision = baseRole.HasOtherVision;
-		}
-		Vision = baseRole.Vision;
-
-		IsApplyEnvironmentVision = baseRole.IsApplyEnvironmentVision;
-
-		HasOtherKillCool = baseRole.HasOtherKillCool;
-		KillCoolTime = baseRole.KillCoolTime;
-		HasOtherKillRange = baseRole.HasOtherKillRange;
-		KillRange = baseRole.KillRange;
 	}
 
 	public void HookMurderPlayer(
@@ -79,8 +56,6 @@ public sealed class JoseRole :
 	{
 		this.statusModel.OnMeetingStart();
 	}
-
-	public override string GetRoleTag() => RoleShowTag;
 
 	public void Update(PlayerControl rolePlayer)
 	{
@@ -123,22 +98,14 @@ public sealed class JoseRole :
 
 	private static RoleProp createJoseRoleProp(SingleRoleBase role)
 	{
-		var prop = RolePropPresets.OptionalDefault;
-		if (role.CanKill)
-		{
-			prop |= RoleProp.CanKill;
-		}
-		if (!role.IsImpostor() || role.HasTask)
+		var prop = RoleProp.None;
+		if (role.IsNeutral())
 		{
 			prop |= RoleProp.HasTask;
 		}
-		if (role.UseVent)
+		if (role.IsImpostor())
 		{
-			prop |= RoleProp.UseVent;
-		}
-		if (role.UseSabotage)
-		{
-			prop |= RoleProp.UseSabotage;
+			prop |= RoleProp.CanKill;
 		}
 		return prop;
 	}

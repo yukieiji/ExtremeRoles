@@ -1,27 +1,74 @@
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
+using Sentry.Internal;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.FemmeFatale;
 
 #nullable enable
 
-public sealed class JoseStatusModel(float maxTimer) : IStatusModel
+public sealed class JoseStatusModel : IStatusModel, IParentChainStatus
 {
-	private readonly float maxSelfKillTimer = maxTimer;
-	public float CurrentSelfKillTimer { get; private set; } = maxTimer;
+	public byte Parent { get; }
 
+	private readonly FemmeFataleRole femmeFatale;
+	private readonly float maxSelfKillTimer;
+	private readonly TextMeshPro? timerText;
+
+	private float currentSelfKillTimer;
 	private bool hasExploded = false;
-	private TextMeshPro? timerText;
-	private HashSet<uint> completedTasks = new();
+	private HashSet<uint> completedTasks = [];
+
+	public JoseStatusModel(float maxTimer, byte femmeFatalePlayerId, FemmeFataleRole femmeFatale)
+	{
+		this.Parent = femmeFatalePlayerId;
+		this.femmeFatale = femmeFatale;
+		this.maxSelfKillTimer = maxTimer;
+		this.currentSelfKillTimer = maxTimer;
+		this.femmeFatale = femmeFatale;
+
+		var hud = HudManager.Instance;
+		if (hud != null &&
+			hud.KillButton != null &&
+			hud.KillButton.cooldownTimerText != null &&
+			hud.UseButton != null)
+		{
+			var killButton = hud.KillButton;
+
+			this.timerText = Object.Instantiate(
+				killButton.cooldownTimerText,
+				killButton.transform.parent);
+			this.timerText.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+			this.timerText.transform.localPosition =
+				hud.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
+			this.timerText.gameObject.SetActive(true);
+
+			var timerInfoText = Object.Instantiate(
+				hud.KillButton.cooldownTimerText,
+				this.timerText.transform);
+			timerInfoText.enableWordWrapping = false;
+			timerInfoText.transform.localScale = Vector3.one * 0.5f;
+			timerInfoText.transform.localPosition += new Vector3(-0.05f, 0.6f, 0);
+			timerInfoText.gameObject.SetActive(true);
+
+			timerInfoText.text = Tr.GetString("untilSelfKill");
+		}
+
+	}
+
+	public void RemoveParent(byte rolePlayerId)
+	{
+		femmeFatale.RemoveJosePlayer(rolePlayerId);
+	}
 
 	public void Reset()
 	{
-		this.CurrentSelfKillTimer = this.maxSelfKillTimer;
+		this.currentSelfKillTimer = this.maxSelfKillTimer;
 	}
 
 	public void OnMeetingStart()
@@ -36,7 +83,6 @@ public sealed class JoseStatusModel(float maxTimer) : IStatusModel
 	public void OnMeetingEnd()
 	{
 		Reset();
-		this.completedTasks.Clear();
 	}
 
 	public void OnKill()
@@ -87,11 +133,11 @@ public sealed class JoseStatusModel(float maxTimer) : IStatusModel
 			return false;
 		}
 
-		this.CurrentSelfKillTimer -= deltaTime;
+		this.currentSelfKillTimer -= deltaTime;
 
-		if (this.CurrentSelfKillTimer <= 0.0f)
+		if (this.currentSelfKillTimer <= 0.0f)
 		{
-			this.CurrentSelfKillTimer = 0.0f;
+			this.currentSelfKillTimer = 0.0f;
 			this.hasExploded = true;
 			return true;
 		}
@@ -101,52 +147,22 @@ public sealed class JoseStatusModel(float maxTimer) : IStatusModel
 
 	public void Cleanup()
 	{
-		if (this.timerText != null)
+		if (this.timerText == null)
 		{
-			this.timerText.gameObject.SetActive(false);
-			Object.Destroy(this.timerText.gameObject);
-			this.timerText = null;
+			return;
 		}
+		this.timerText.gameObject.SetActive(false);
+		Object.Destroy(this.timerText.gameObject);
 	}
 
 	private void updateTimerText()
 	{
-		if (this.timerText == null &&
-			HudManager.Instance != null &&
-			HudManager.Instance.KillButton != null &&
-			HudManager.Instance.KillButton.cooldownTimerText != null &&
-			HudManager.Instance.UseButton != null)
+		if (this.timerText == null)
 		{
-			createTimerText(HudManager.Instance);
+			return;
 		}
 
-		if (this.timerText != null)
-		{
-			this.timerText.gameObject.SetActive(true);
-			this.timerText.text = $"{Mathf.CeilToInt(this.CurrentSelfKillTimer)}";
-		}
-	}
-
-	private void createTimerText(HudManager hud)
-	{
-		var killButton = hud.KillButton;
-
-		this.timerText = Object.Instantiate(
-			killButton.cooldownTimerText,
-			killButton.transform.parent);
-		this.timerText.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-		this.timerText.transform.localPosition =
-			hud.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
 		this.timerText.gameObject.SetActive(true);
-
-		var timerInfoText = Object.Instantiate(
-			hud.KillButton.cooldownTimerText,
-			this.timerText.transform);
-		timerInfoText.enableWordWrapping = false;
-		timerInfoText.transform.localScale = Vector3.one * 0.5f;
-		timerInfoText.transform.localPosition += new Vector3(-0.05f, 0.6f, 0);
-		timerInfoText.gameObject.SetActive(true);
-
-		timerInfoText.text = Tr.GetString("untilSelfKill");
+		this.timerText.text = $"{Mathf.CeilToInt(this.currentSelfKillTimer)}";
 	}
 }

@@ -13,13 +13,13 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 
 #nullable enable
 
@@ -31,7 +31,6 @@ public sealed class FemmeFataleRole :
 	IRoleSpecialReset,
 	IRoleMurderPlayerHook,
 	IRoleUpdate,
-	IRoleResetMeeting,
 	IRoleMeetingButtonAbility,
 	IRoleVoteModifier
 {
@@ -60,14 +59,9 @@ public sealed class FemmeFataleRole :
 	public Sprite AbilityImage => UnityObjectLoader.LoadSpriteFromResources(
 		ObjectPath.CaptainSpecialVote);
 
-	public ExtremeAbilityButton? Button
-	{
-		get => createJose;
-		set => createJose = value;
-	}
+	public ExtremeAbilityButton? Button { get; set; }
 
 	public PlayerControl? Target;
-	private ExtremeAbilityButton? createJose;
 	private float range;
 	private float killKillCoolReduceRate;
 	private float taskKillCoolReduceRate;
@@ -120,21 +114,18 @@ public sealed class FemmeFataleRole :
 
 	public static bool TryRpcKillGuardedJose(byte killerPlayerId, byte targetPlayerId)
 	{
-		if (!ExtremeRoleManager.TryGetSafeCastedRole<FemmeFataleRole>(targetPlayerId, out var femme))
+		if (!(
+				ExtremeRoleManager.TryGetSafeCastedRole<FemmeFataleRole>(targetPlayerId, out var femme) &&
+				femme.killDefense
+			))
 		{
 			return false;
 		}
 
-		if (!femme.killDefense)
-		{
-			return false;
-		}
-
-		List<byte> livingJoses = new();
+		List<byte> livingJoses = [];
 		foreach (byte jId in femme.josePlayerId)
 		{
-			var p = Player.GetPlayerControlById(jId);
-			if (p != null && p.IsAlive())
+			if (Player.TryGetPlayerInfo(jId, out var p) && p.IsAlive())
 			{
 				livingJoses.Add(jId);
 			}
@@ -155,7 +146,6 @@ public sealed class FemmeFataleRole :
 			caller.WriteByte(targetPlayerId);
 			caller.WriteByte(chosenJose);
 		}
-
 		coverDead(killerPlayerId, targetPlayerId, chosenJose);
 		return true;
 	}
@@ -163,7 +153,7 @@ public sealed class FemmeFataleRole :
 	private static void coverDead(byte killerPlayerId, byte prevTargetPlayerId, byte targetJosePlayerId)
 	{
 		byte localId = PlayerControl.LocalPlayer.PlayerId;
-		if (localId == targetJosePlayerId || localId == prevTargetPlayerId)
+		if (localId == prevTargetPlayerId)
 		{
 			Sound.PlaySound(Sound.Type.GuardianAngleGuard, 0.6f);
 		}
@@ -184,25 +174,22 @@ public sealed class FemmeFataleRole :
 
 	public static void TargetToJose(byte rolePlayerId, byte targetPlayerId)
 	{
-		FemmeFataleRole? femme = ExtremeRoleManager.GetSafeCastedRole<FemmeFataleRole>(rolePlayerId);
-		if (femme == null) { return; }
+		if (!(
+				ExtremeRoleManager.TryGetSafeCastedRole<FemmeFataleRole>(rolePlayerId, out var femme) &&
+				Player.TryGetPlayerControl(targetPlayerId, out var targetPlayer)
+			))
+		{
+			return;
+		}
 
-		var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-		if (targetPlayer == null) { return; }
 		var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
 		IParentChainStatus.PurgeParent(targetPlayerId);
 		resetTargetAnotherRole(targetRole, targetPlayerId, targetPlayer);
 		replaceVanilaRole(targetRole, targetPlayer);
-		resetAbility(targetRole, targetPlayerId);
 
 		JoseRole jose = new JoseRole(
 			rolePlayerId, femme, targetRole, femme.JoseSelfKillTimer);
-
-		if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
-		{
-			HudManager.Instance.ReGridButtons();
-		}
 
 		if (targetRole is VanillaRoleWrapper vanillaRole)
 		{
@@ -236,6 +223,11 @@ public sealed class FemmeFataleRole :
 		}
 
 		femme.AddJosePlayer(targetPlayerId);
+
+		if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
+		{
+			HudManager.Instance.ReGridButtons();
+		}
 	}
 
 	public void AddJosePlayer(byte playerId)
@@ -278,7 +270,8 @@ public sealed class FemmeFataleRole :
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (MeetingHud.Instance != null && rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+		if (GameProgressSystem.Is(GameProgressSystem.Progress.Meeting) &&
+			this.voteMultiplier > 0.0f)
 		{
 			if (meetingVoteText == null)
 			{
@@ -309,8 +302,10 @@ public sealed class FemmeFataleRole :
 
 		foreach (byte playerId in josePlayerId)
 		{
-			var player = Player.GetPlayerControlById(playerId);
-			if (player == null || !player) { continue; }
+			if (!Player.TryGetPlayerControl(playerId, out var player))
+			{
+				continue;
+			}
 
 			float gage = Player.GetPlayerTaskGage(player);
 			if (!joseTaskGage.ContainsKey(playerId))
@@ -320,10 +315,10 @@ public sealed class FemmeFataleRole :
 			float prevGage = joseTaskGage[playerId];
 			joseTaskGage[playerId] = gage;
 
-			float killcool = PlayerControl.LocalPlayer.killTimer;
+			float killcool = rolePlayer.killTimer;
 			if (gage > prevGage && killcool > 0.0f && taskKillCoolReduceRate < 1.0f)
 			{
-				PlayerControl.LocalPlayer.killTimer = killcool * taskKillCoolReduceRate;
+				rolePlayer.killTimer = killcool * taskKillCoolReduceRate;
 			}
 			if (gage >= 1.0f && !taskCompJose.Contains(playerId))
 			{
@@ -389,13 +384,10 @@ public sealed class FemmeFataleRole :
 		if (this.pendingJosePlayerId.Count > 0)
 		{
 			byte localId = PlayerControl.LocalPlayer.PlayerId;
-			if (ExtremeRoleManager.TryGetRole(localId, out var role) && role == this)
+			foreach (byte targetId in this.pendingJosePlayerId)
 			{
-				foreach (byte targetId in this.pendingJosePlayerId.ToArray())
-				{
-					ExtremeRoleManager.RpcReplaceRole(
-						localId, targetId, ExtremeRoleManager.ReplaceOperation.CreateJose);
-				}
+				ExtremeRoleManager.RpcReplaceRole(
+					localId, targetId, ExtremeRoleManager.ReplaceOperation.CreateJose);
 			}
 			this.pendingJosePlayerId.Clear();
 		}
@@ -424,24 +416,13 @@ public sealed class FemmeFataleRole :
 		pendingJosePlayerId.Clear();
 	}
 
-	public override Color GetTargetRoleSeeColor(
-		SingleRoleBase targetRole,
-		byte targetPlayerId)
-	{
-		if (josePlayerId.Contains(targetPlayerId) || pendingJosePlayerId.Contains(targetPlayerId))
-		{
-			return ColorPalette.FemmeFataleCrimson;
-		}
-
-		return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
-	}
-
 	public override string GetRoleTag() => RoleShowTag;
 
 	public override string GetRolePlayerNameTag(
 		SingleRoleBase targetRole, byte targetPlayerId)
 	{
-		if (josePlayerId.Contains(targetPlayerId) || pendingJosePlayerId.Contains(targetPlayerId))
+		if (josePlayerId.Contains(targetPlayerId) || 
+			pendingJosePlayerId.Contains(targetPlayerId))
 		{
 			return Design.ColoredString(
 				ColorPalette.FemmeFataleCrimson,
@@ -452,23 +433,7 @@ public sealed class FemmeFataleRole :
 	}
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
-	{
-		if (targetRole.Core.Id == Core.Id)
-		{
-			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-			{
-				return true;
-			}
-			else
-			{
-				return IsSameControlId(targetRole);
-			}
-		}
-		else
-		{
-			return base.IsSameTeam(targetRole);
-		}
-	}
+		=> this.IsNeutralSameTeam(targetRole);
 
 	public void SetTargetVote(byte targetPlayerId)
 	{
@@ -645,8 +610,10 @@ public sealed class FemmeFataleRole :
 		byte targetPlayerId,
 		PlayerControl targetPlayer)
 	{
-		var multiAssignRole = targetRole as MultiAssignRoleBase;
-		if (multiAssignRole == null) { return; }
+		if (targetRole is not MultiAssignRoleBase multiAssignRole)
+		{
+			return;
+		}
 
 		if (PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
 		{
@@ -685,48 +652,6 @@ public sealed class FemmeFataleRole :
 				RoleManager.Instance.SetRole(
 					targetPlayer, RoleTypes.Crewmate);
 				break;
-		}
-	}
-
-	private static void resetRole(
-		SingleRoleBase targetRole,
-		byte targetPlayerId,
-		PlayerControl targetPlayer)
-	{
-		if (PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
-		{
-			if (targetRole is IRoleAbility abilityRole)
-			{
-				abilityRole.Button.OnMeetingStart();
-			}
-			if (targetRole is IRoleResetMeeting meetingResetRole)
-			{
-				meetingResetRole.ResetOnMeetingStart();
-			}
-		}
-
-		if (targetRole is IRoleSpecialReset specialResetRole)
-		{
-			specialResetRole.AllReset(targetPlayer);
-		}
-	}
-
-	private static void resetAbility(
-		SingleRoleBase targetRole,
-		byte targetPlayerId)
-	{
-		if (PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
-		{
-			if (targetRole is IRoleAbility abilityRole)
-			{
-				abilityRole.Button.OnMeetingStart();
-				abilityRole.Button.OnMeetingEnd();
-			}
-			if (targetRole is IRoleResetMeeting meetingResetRole)
-			{
-				meetingResetRole.ResetOnMeetingStart();
-				meetingResetRole.ResetOnMeetingEnd();
-			}
 		}
 	}
 }
