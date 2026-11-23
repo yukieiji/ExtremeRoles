@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.SystemType;
@@ -10,6 +11,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral.FemmeFatale;
 /// <summary>
 /// ホセ・ホセ候補のタスク進捗・全タスク完了による
 /// ファムのキルクールタイム短縮を管理するハンドラ
+/// 死亡ホセ・死亡候補も対象(ゴーストタスク完了も含む)
 /// </summary>
 public sealed class FemmeFataleTaskCoolBoostHandler(
 	FemmeFataleRole role,
@@ -32,7 +34,7 @@ public sealed class FemmeFataleTaskCoolBoostHandler(
             return;
         }
 
-        foreach (byte playerId in statusModel.GetLivingJosesAndCandidates())
+        foreach (byte playerId in statusModel.JosePlayerIds.Concat(statusModel.JoseCandidatePlayerIds))
         {
             if (!Player.TryGetPlayerControl(playerId, out var player))
             {
@@ -52,20 +54,26 @@ public sealed class FemmeFataleTaskCoolBoostHandler(
             {
                 rolePlayer.killTimer = killcool * taskKillCoolReduceRate;
             }
-            if (gage >= 1.0f && !taskCompJose.Contains(playerId))
+            
+			if (gage < 1.0f || taskCompJose.Contains(playerId))
             {
-                taskCompJose.Add(playerId);
-                if (taskCompKillCoolReduceRate < 1.0f)
-                {
-                    if (!role.HasOtherKillCool)
-                    {
-                        role.KillCoolTime = Player.DefaultKillCoolTime;
-                    }
-                    role.HasOtherKillCool = true;
-                    role.KillCoolTime = role.KillCoolTime * taskCompKillCoolReduceRate;
-                }
+				continue;
             }
-        }
+
+			taskCompJose.Add(playerId);
+			
+			if (taskCompKillCoolReduceRate >= 1.0f)
+			{
+				continue;
+			}
+
+			if (!role.HasOtherKillCool)
+			{
+				role.KillCoolTime = Player.DefaultKillCoolTime;
+			}
+			role.HasOtherKillCool = true;
+			role.KillCoolTime = role.KillCoolTime * taskCompKillCoolReduceRate;
+		}
     }
 
     public void Reset()

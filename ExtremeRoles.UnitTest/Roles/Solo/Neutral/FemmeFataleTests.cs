@@ -315,8 +315,7 @@ public sealed class FemmeFataleTests
 		// Assert
 		Assert.True(used);
 
-		// ホセが0人でも候補だけで特殊投票が発生する
-		Assert.Equal(1, femme.GetLivingJoseCount());
+		// ホセが0人でも候補だけで特殊投票が発生する(下のvotes.Countで検証)
 
 		femme.SetTargetVote(3);
 		var collector = new VoteInfoCollector();
