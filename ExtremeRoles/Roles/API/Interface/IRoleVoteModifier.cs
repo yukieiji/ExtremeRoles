@@ -46,14 +46,13 @@ public interface IRoleVoteModifier
     {
         CaptainSpecialVote = 0,
 		MastermindSpecialVote,
+		FemmeFataleSpecialVote,
 		GamblerAddVote,
 
 		LegislatorSpecialVote,
 
 		DelusionerCheckVote = 88659,
 		CEOOverrideVote,
-
-		FemmeFataleSpecialVote = 90000,
 	}
 
     public int Order { get; }
