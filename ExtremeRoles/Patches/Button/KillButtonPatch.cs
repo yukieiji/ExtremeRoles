@@ -12,7 +12,6 @@ using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
-using ExtremeRoles.Roles.Solo.Neutral.FemmeFatale;
 
 #nullable enable
 
@@ -33,7 +32,6 @@ public static class KillButtonDoClickPatch
 		BlockedToTargetOtherRoleInvincible,
 		BlockedToBodyguard,
 		BlockedToSurrogator,
-		BlockedToJose,
 		FinalConditionFail,
 		Success,
 	}
@@ -127,10 +125,6 @@ public static class KillButtonDoClickPatch
 		else if (SurrogatorRole.TryGurdOnesideLover(killer, target.PlayerId))
 		{
 			return KillResult.BlockedToSurrogator;
-		}
-		else if (FemmeFataleRole.TryRpcKillGuardedJose(killer.PlayerId, target.PlayerId))
-		{
-			return KillResult.BlockedToJose;
 		}
 		else if (IsMissMurderKill(killer, target))
 		{

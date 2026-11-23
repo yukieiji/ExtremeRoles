@@ -1768,6 +1768,12 @@
   <data name="FemmeFataleKillDefense" xml:space="preserve">
     <value>キル防御（ホセの身代わり）を有効にするか</value>
   </data>
+  <data name="FemmeFataleJoseCandidateKillDefense" xml:space="preserve">
+    <value>キル防御（ホセ候補の身代わり）を有効にするか</value>
+  </data>
+  <data name="FemmeFataleJoseCandidatePromoteMeetingCount" xml:space="preserve">
+    <value>ホセ候補がホセになるまでの会議回数</value>
+  </data>
   <data name="femmeCreateJose" xml:space="preserve">
     <value>ホセ作成</value>
   </data>

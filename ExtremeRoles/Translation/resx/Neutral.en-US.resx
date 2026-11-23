@@ -1547,6 +1547,12 @@ Knows Impostors and Neutrals from the start. Loses if dead.
   <data name="FemmeFataleKillDefense" xml:space="preserve">
     <value>Kill defense (Jose sacrifice) enabled</value>
   </data>
+  <data name="FemmeFataleJoseCandidateKillDefense" xml:space="preserve">
+    <value>Kill defense (Jose candidate sacrifice) enabled</value>
+  </data>
+  <data name="FemmeFataleJoseCandidatePromoteMeetingCount" xml:space="preserve">
+    <value>Number of meetings until a Jose candidate becomes a Jose</value>
+  </data>
   <data name="femmeCreateJose" xml:space="preserve">
     <value>Create Jose</value>
   </data>
