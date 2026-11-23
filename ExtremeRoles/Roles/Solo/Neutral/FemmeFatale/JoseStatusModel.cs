@@ -32,32 +32,34 @@ public sealed class JoseStatusModel : IStatusModel, IParentChainStatus
 		this.currentSelfKillTimer = maxTimer;
 		
 		var hud = HudManager.Instance;
-		if (josePlayerId == PlayerControl.LocalPlayer.PlayerId &&
-			hud != null &&
-			hud.KillButton != null &&
-			hud.KillButton.cooldownTimerText != null &&
-			hud.UseButton != null)
+		if (josePlayerId != PlayerControl.LocalPlayer.PlayerId ||
+			hud == null ||
+			hud.KillButton == null ||
+			hud.KillButton.cooldownTimerText == null ||
+			hud.UseButton == null)
 		{
-			var killButton = hud.KillButton;
-
-			this.timerText = Object.Instantiate(
-				killButton.cooldownTimerText,
-				killButton.transform.parent);
-			this.timerText.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-			this.timerText.transform.localPosition =
-				hud.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
-			this.timerText.gameObject.SetActive(true);
-
-			var timerInfoText = Object.Instantiate(
-				hud.KillButton.cooldownTimerText,
-				this.timerText.transform);
-			timerInfoText.enableWordWrapping = false;
-			timerInfoText.transform.localScale = Vector3.one * 0.5f;
-			timerInfoText.transform.localPosition += new Vector3(-0.05f, 0.6f, 0);
-			timerInfoText.gameObject.SetActive(true);
-
-			timerInfoText.text = Tr.GetString("untilSelfKill");
+			return;
 		}
+
+		var killButton = hud.KillButton;
+
+		this.timerText = Object.Instantiate(
+			killButton.cooldownTimerText,
+			killButton.transform.parent);
+		this.timerText.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+		this.timerText.transform.localPosition =
+			hud.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
+		this.timerText.gameObject.SetActive(true);
+
+		var timerInfoText = Object.Instantiate(
+			hud.KillButton.cooldownTimerText,
+			this.timerText.transform);
+		timerInfoText.enableWordWrapping = false;
+		timerInfoText.transform.localScale = Vector3.one * 0.5f;
+		timerInfoText.transform.localPosition += new Vector3(-0.05f, 0.6f, 0);
+		timerInfoText.gameObject.SetActive(true);
+
+		timerInfoText.text = Tr.GetString("untilSelfKill");
 
 	}
 
