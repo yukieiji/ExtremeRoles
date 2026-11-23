@@ -734,10 +734,10 @@ public static class ExtremeRoleManager
 				Imitater.InheritTargetRole(caller, targetId);
 				break;
 			case ReplaceOperation.CreateJose:
-				Solo.Neutral.FemmeFatale.FemmeFataleRole.TargetToJose(caller, targetId);
+				FemmeFataleRole.TargetToJose(caller, targetId);
 				break;
 			case ReplaceOperation.RemoveJose:
-				Solo.Neutral.FemmeFatale.JoseRole.RemoveJose(targetId);
+				JoseRole.RemoveJose(targetId);
 				break;
 			default:
                 break;

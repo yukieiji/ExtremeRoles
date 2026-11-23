@@ -33,9 +33,9 @@ public static class KillButtonDoClickPatch
 		BlockedToTargetOtherRoleInvincible,
 		BlockedToBodyguard,
 		BlockedToSurrogator,
+		BlockedToJose,
 		FinalConditionFail,
 		Success,
-		BlockedToJose,
 	}
 
     public static bool Prefix(KillButton __instance)
