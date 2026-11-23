@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using UnityEngine;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.SystemType;
 
@@ -28,12 +30,22 @@ public sealed class FemmeFataleTaskCoolBoostHandler(
     private readonly Dictionary<byte, float> joseTaskGage = [];
     private readonly HashSet<byte> taskCompJose = [];
 
+    private float taskCheckTimer = 0.0f;
+
     public void Update(PlayerControl rolePlayer)
     {
         if (!GameProgressSystem.IsTaskPhase)
         {
             return;
         }
+
+        // 1秒ごとにのみタスク進捗をチェックする
+        this.taskCheckTimer += Time.deltaTime;
+        if (this.taskCheckTimer <= 1.0f)
+        {
+            return;
+        }
+        this.taskCheckTimer = 0.0f;
 
         foreach (byte playerId in statusModel.JosePlayerIds.Concat(statusModel.JoseCandidatePlayerIds))
         {
@@ -51,9 +63,9 @@ public sealed class FemmeFataleTaskCoolBoostHandler(
             joseTaskGage[playerId] = gage;
 
             float killcool = rolePlayer.killTimer;
-            if (gage > prevGage && killcool > 0.0f && taskKillCoolReduceRate < 1.0f)
+            if (gage > prevGage && taskKillCoolReduceRate < 1.0f)
             {
-                rolePlayer.killTimer = Math.Clamp(killcool * taskKillCoolReduceRate, 0.05f, killcool);
+                rolePlayer.killTimer = Math.Clamp(killcool * taskKillCoolReduceRate, 0.05f, 360.0f);
             }
             
 			if (gage < 1.0f || taskCompJose.Contains(playerId))
