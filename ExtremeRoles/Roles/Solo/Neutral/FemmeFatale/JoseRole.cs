@@ -42,7 +42,8 @@ public sealed class JoseRole :
 	public void HookMurderPlayer(
 		PlayerControl source, PlayerControl target)
 	{
-		if (source.PlayerId != target.PlayerId)
+		if (source.PlayerId == PlayerControl.LocalPlayer.PlayerId &&
+			source.PlayerId != target.PlayerId)
 		{
 			this.statusModel.OnKill();
 		}
