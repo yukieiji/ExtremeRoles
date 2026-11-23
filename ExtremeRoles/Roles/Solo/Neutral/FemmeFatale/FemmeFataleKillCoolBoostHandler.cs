@@ -17,14 +17,16 @@ public sealed class FemmeFataleKillCoolBoostHandler(
 
     public void HookMurderPlayer(PlayerControl source, PlayerControl target)
     {
-        if (source.PlayerId == target.PlayerId ||
+		var local = PlayerControl.LocalPlayer;
+        if (source.PlayerId != local.PlayerId ||
+			source.PlayerId == target.PlayerId ||
             !statusModel.IsJoseOrCandidate(source.PlayerId) ||
 			killKillCoolReduceRate >= 1.0f)
         {
             return;
         }
 
-        float killcool = PlayerControl.LocalPlayer.killTimer;
-		PlayerControl.LocalPlayer.killTimer = Math.Clamp(0.0f, killcool * killKillCoolReduceRate, 270f);
+        float killcool = local.killTimer;
+		local.killTimer = Math.Clamp(killcool * killKillCoolReduceRate, 0.05f, 360f);
     }
 }

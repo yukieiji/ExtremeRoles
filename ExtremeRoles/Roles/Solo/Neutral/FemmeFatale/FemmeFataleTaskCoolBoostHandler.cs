@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -52,7 +53,7 @@ public sealed class FemmeFataleTaskCoolBoostHandler(
             float killcool = rolePlayer.killTimer;
             if (gage > prevGage && killcool > 0.0f && taskKillCoolReduceRate < 1.0f)
             {
-                rolePlayer.killTimer = killcool * taskKillCoolReduceRate;
+                rolePlayer.killTimer = Math.Clamp(killcool * taskKillCoolReduceRate, 0.05f, killcool);
             }
             
 			if (gage < 1.0f || taskCompJose.Contains(playerId))
@@ -72,7 +73,7 @@ public sealed class FemmeFataleTaskCoolBoostHandler(
 				role.KillCoolTime = Player.DefaultKillCoolTime;
 			}
 			role.HasOtherKillCool = true;
-			role.KillCoolTime = role.KillCoolTime * taskCompKillCoolReduceRate;
+			role.KillCoolTime = Math.Clamp(role.KillCoolTime * taskCompKillCoolReduceRate, 0.05f, 360f);
 		}
     }
 

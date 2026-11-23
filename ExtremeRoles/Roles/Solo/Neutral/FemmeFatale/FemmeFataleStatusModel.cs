@@ -56,11 +56,6 @@ public sealed class FemmeFataleStatusModel : IStatusModel
         return getLiving(josePlayerId).ToList();
     }
 
-    public IReadOnlyList<byte> GetLivingCandidates()
-    {
-        return getLiving(joseCandidatePlayerId).ToList();
-    }
-
     public IReadOnlyList<byte> GetLivingJosesAndCandidates()
     {
 		var living = getLiving(josePlayerId).Concat(getLiving(joseCandidatePlayerId));
