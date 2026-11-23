@@ -46,6 +46,7 @@ public interface IRoleVoteModifier
     {
         CaptainSpecialVote = 0,
 		MastermindSpecialVote,
+		FemmeFataleSpecialVote,
 		GamblerAddVote,
 
 		LegislatorSpecialVote,

@@ -416,6 +416,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.XionAbility:
 				RPCOperator.XionAbility(ref reader);
 				break;
+			case RPCOperator.Command.FemmeFataleAbility:
+				RPCOperator.FemmeFataleAbility(ref reader);
+				break;
 			default:
 				break;
 		}

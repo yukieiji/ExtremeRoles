@@ -398,6 +398,9 @@ public static class EndGameManagerSetUpPatch
 			RoleGameOverReason.LiberalRevolution =>
 				new(ExtremeRoleType.Liberal, ColorPalette.LiberalColor),
 
+			RoleGameOverReason.FemmeFataleKillAllOther =>
+				new(ExtremeRoleId.FemmeFatale, ColorPalette.FemmeFataleCrimson),
+
 			_ => new(RoleGameOverReason.UnKnown, Color.black)
         };
 
