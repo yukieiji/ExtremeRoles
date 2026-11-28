@@ -24,11 +24,13 @@ using ExtremeRoles.Roles.Solo.Crewmate.Exorcist;
 using ExtremeRoles.Roles.Solo.Liberal;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 using ExtremeRoles.Roles.Solo.Crewmate.Fencer;
+using ExtremeRoles.Roles.Solo.Crewmate.Invisible;
 using ExtremeRoles.Roles.Solo.Crewmate.Loner;
 using ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Impostor.Darkpointer;
+using ExtremeRoles.Roles.Solo.Impostor.Nullifier;
 using ExtremeRoles.Roles.Solo.Impostor.Flasher;
 using ExtremeRoles.Roles.Solo.Impostor.RemoteKiller;
 using ExtremeRoles.Roles.Solo.Impostor.Retaliator;
@@ -42,6 +44,7 @@ using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using ExtremeRoles.Roles.Solo.Neutral.Yoko;
 using ExtremeRoles.Roles.Solo.Liberal.Encloser;
+using ExtremeRoles.Roles.Solo.Neutral.FemmeFatale;
 
 
 namespace ExtremeRoles.Roles;
@@ -111,6 +114,8 @@ public enum ExtremeRoleId : int
 	Charger,
 	Mayor,
 	Forestaller,
+	Scanner,
+	Invisible,
 
 	SpecialImpostor,
     Evolver,
@@ -151,6 +156,7 @@ public enum ExtremeRoleId : int
 	Retaliator,
 	Flasher,
 	Darkpointer,
+	Nullifier,
 
 	Alice,
     Jackal,
@@ -202,6 +208,9 @@ public enum ExtremeRoleId : int
 	Snatcher,
 
 	Xion,
+
+	FemmeFatale,
+	Jose,
 }
 
 public enum CombinationRoleType : byte
@@ -291,6 +300,8 @@ public enum RoleGameOverReason
 	LiberalRevolution,
 
 	UnKnown = 100,
+
+	FemmeFataleKillAllOther,
 }
 
 public enum NeutralSeparateTeam
@@ -314,7 +325,9 @@ public enum NeutralSeparateTeam
 
 	JackalSub,
 	YandereSub,
-	QueenSub
+	QueenSub,
+
+	FemmeFatale,
 }
 
 public static class ExtremeRoleManager
@@ -378,6 +391,8 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Charger     , new Charger()},
 			{(int)ExtremeRoleId.Mayor       , new Mayor()},
 			{(int)ExtremeRoleId.Forestaller , new Forestaller()},
+			{(int)ExtremeRoleId.Scanner     , new ScannerRole()},
+			{(int)ExtremeRoleId.Invisible   , new InvisibleRole()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -418,36 +433,38 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Retaliator     , new RetaliatorRole()},
 			{(int)ExtremeRoleId.Flasher        , new FlasherRole()},
 			{(int)ExtremeRoleId.Darkpointer    , new DarkpointerRole()},
+			{(int)ExtremeRoleId.Nullifier      , new NullifierRole()},
 
-			{(int)ExtremeRoleId.Alice     , new Alice()},
-            {(int)ExtremeRoleId.Jackal    , new JackalRole()},
-            {(int)ExtremeRoleId.TaskMaster, new TaskMaster()},
-            {(int)ExtremeRoleId.Missionary, new MissionaryRole()},
-            {(int)ExtremeRoleId.Jester    , new Jester()},
-            {(int)ExtremeRoleId.Yandere   , new YandereRole()},
-            {(int)ExtremeRoleId.Yoko      , new YokoRole()},
-            {(int)ExtremeRoleId.Totocalcio, new Totocalcio()},
-            {(int)ExtremeRoleId.Miner     , new Miner()},
-            {(int)ExtremeRoleId.Eater     , new Eater()},
-            {(int)ExtremeRoleId.Queen     , new QueenRole()},
-            {(int)ExtremeRoleId.Madmate   , new MadmateRole()},
-            {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
-			{(int)ExtremeRoleId.Hatter    , new Hatter()},
-			{(int)ExtremeRoleId.Artist    , new Artist()},
-			{(int)ExtremeRoleId.Tucker    , new TuckerRole()},
-			{(int)ExtremeRoleId.IronMate  , new IronMateRole()},
-			{(int)ExtremeRoleId.Monika    , new Monika()},
-			{(int)ExtremeRoleId.Heretic   , new Heretic()},
-			{(int)ExtremeRoleId.Shepherd  , new ShepherdRole()},
-			{(int)ExtremeRoleId.Furry     , new FurryRole()},
-			{(int)ExtremeRoleId.Intimate  , new IntimateRole() },
-			{(int)ExtremeRoleId.Surrogator, new SurrogatorRole()},
-			{(int)ExtremeRoleId.Knight    , new KnightRole()},
-			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
-			{(int)ExtremeRoleId.Punisher  , new Punisher()},
-			{(int)ExtremeRoleId.Imitater  , new Imitater()},
-			{(int)ExtremeRoleId.Mastermind, new Mastermind()},
-			{(int)ExtremeRoleId.DeepOne   , new DeepOne()},
+			{(int)ExtremeRoleId.Alice      , new Alice()},
+            {(int)ExtremeRoleId.Jackal     , new JackalRole()},
+            {(int)ExtremeRoleId.TaskMaster , new TaskMaster()},
+            {(int)ExtremeRoleId.Missionary , new MissionaryRole()},
+            {(int)ExtremeRoleId.Jester     , new Jester()},
+            {(int)ExtremeRoleId.Yandere    , new YandereRole()},
+            {(int)ExtremeRoleId.Yoko       , new YokoRole()},
+            {(int)ExtremeRoleId.Totocalcio , new Totocalcio()},
+            {(int)ExtremeRoleId.Miner      , new Miner()},
+            {(int)ExtremeRoleId.Eater      , new Eater()},
+            {(int)ExtremeRoleId.Queen      , new QueenRole()},
+            {(int)ExtremeRoleId.Madmate    , new MadmateRole()},
+            {(int)ExtremeRoleId.Umbrer     , new Umbrer()},
+			{(int)ExtremeRoleId.Hatter     , new Hatter()},
+			{(int)ExtremeRoleId.Artist     , new Artist()},
+			{(int)ExtremeRoleId.Tucker     , new TuckerRole()},
+			{(int)ExtremeRoleId.IronMate   , new IronMateRole()},
+			{(int)ExtremeRoleId.Monika     , new Monika()},
+			{(int)ExtremeRoleId.Heretic    , new Heretic()},
+			{(int)ExtremeRoleId.Shepherd   , new ShepherdRole()},
+			{(int)ExtremeRoleId.Furry      , new FurryRole()},
+			{(int)ExtremeRoleId.Intimate   , new IntimateRole() },
+			{(int)ExtremeRoleId.Surrogator , new SurrogatorRole()},
+			{(int)ExtremeRoleId.Knight     , new KnightRole()},
+			{(int)ExtremeRoleId.Pawn       , new PawnRole()},
+			{(int)ExtremeRoleId.Punisher   , new Punisher()},
+			{(int)ExtremeRoleId.Imitater   , new Imitater()},
+			{(int)ExtremeRoleId.Mastermind , new Mastermind()},
+			{(int)ExtremeRoleId.DeepOne    , new DeepOne()},
+			{(int)ExtremeRoleId.FemmeFatale, new FemmeFataleRole()},
 
 			{(int)ExtremeRoleId.SpecialDove    , new SpecialDove()},
 			{(int)ExtremeRoleId.SpecialMilitant, new SpecialMilitant()},
@@ -505,6 +522,8 @@ public static class ExtremeRoleManager
 		RebornJackal,
 		ItakoInherit,
 		ImitaterInherit,
+		CreateJose,
+		RemoveJose,
 	}
 
 	private static IRoleProvider? provider;
@@ -713,6 +732,12 @@ public static class ExtremeRoleManager
 				break;
 			case ReplaceOperation.ImitaterInherit:
 				Imitater.InheritTargetRole(caller, targetId);
+				break;
+			case ReplaceOperation.CreateJose:
+				FemmeFataleRole.TargetToJose(caller, targetId);
+				break;
+			case ReplaceOperation.RemoveJose:
+				JoseRole.RemoveJose(targetId);
 				break;
 			default:
                 break;

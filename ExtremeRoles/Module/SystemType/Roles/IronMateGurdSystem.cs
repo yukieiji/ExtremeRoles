@@ -1,10 +1,12 @@
-﻿using Hazel;
-
+using Hazel;
 using System.Collections.Generic;
+
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
+
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
@@ -12,7 +14,9 @@ public sealed class IronMateGurdSystem(float speedMod, float speedTime) : IExtre
 {
 	private readonly Dictionary<byte, int> shield = new Dictionary<byte, int>();
 
-	private readonly float speedMod = speedMod;
+	// 元の速度に対してどれだけ遅くするかなのでここでかけとく
+	private readonly float speedMod = speedMod * GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+		FloatOptionNames.PlayerSpeedMod);
 	private readonly float speedTime = speedTime;
 
 	public bool IsContains(byte playerId) => shield.ContainsKey(playerId);
@@ -56,7 +60,7 @@ public sealed class IronMateGurdSystem(float speedMod, float speedTime) : IExtre
 			return;
 		}
 
-		var speedMod = PlayerControl.LocalPlayer.gameObject.TryAddComponent<SpeedMod>();
+		var speedMod = PlayerControl.LocalPlayer.gameObject.TryAddComponent<TimerSpeedMod>();
 		speedMod.SetUp(this.speedMod, speedTime);
 	}
 }

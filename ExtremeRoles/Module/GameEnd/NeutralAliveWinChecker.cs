@@ -63,6 +63,8 @@ public sealed class NeutralAliveWinChecker(IPlayerStatistics statistics) : IGame
 				NeutralSeparateTeam.YandereSub => RoleGameOverReason.AllYandereWin,
 				NeutralSeparateTeam.QueenSub => RoleGameOverReason.AllQueenWin,
 
+				NeutralSeparateTeam.FemmeFatale => RoleGameOverReason.FemmeFataleKillAllOther,
+
 				_ => RoleGameOverReason.UnKnown
 			};
 		}

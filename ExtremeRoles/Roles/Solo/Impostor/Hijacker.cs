@@ -146,12 +146,13 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 	private bool openUI()
 	{
 		this.minigame ??= new ShapeShiftMinigameWrapper();
-		return this.minigame.IsOpen || this.minigame.OpenUi(this.overrideShapeshift);
+		return this.minigame.IsOpen || this.minigame.OpenUi(new DefaultPanelBuilder(this.overrideShapeshift));
 	}
 
 	private void overrideShapeshift(PlayerControl player)
 	{
-		if (this.Button is null ||
+		if (player == null ||
+			this.Button is null ||
 			!this.Button.Transform.TryGetComponent<PassiveButton>(out var button))
 		{
 			return;

@@ -35,6 +35,8 @@ public sealed class MyRole : SingleRoleBase, IRoleUpdate
             ExtremeRoleId.MyRole,
             ColorPalette.MyRoleColor))
     {
+        // コンストラクタ内での初期化は基本的に行わない
+        //// 技術的な負債のため、コンストラクタ内の初期化はゲーム起動時のみそれ以外はRoleSpecificInitで行う仕様であるためである
     }
 
     public void Update(PlayerControl rolePlayer)
